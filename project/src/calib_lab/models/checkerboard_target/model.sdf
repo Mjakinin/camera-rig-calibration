@@ -7,7 +7,6 @@
       <visual name="target_visual">
         <geometry>
           <box>
-            <!-- thickness, width, height -->
             <size>0.02 1.44 1.08</size>
           </box>
         </geometry>
@@ -18,7 +17,7 @@
           <specular>0.1 0.1 0.1 1</specular>
           <pbr>
             <metal>
-              <albedo_map>file:///workspaces/project/src/calib_lab/models/checkerboard_target/materials/textures/checkerboard_10x7.png</albedo_map>
+              <albedo_map>model://checkerboard_target/materials/textures/checkerboard_10x7.png</albedo_map>
               <roughness>0.8</roughness>
               <metalness>0.0</metalness>
             </metal>

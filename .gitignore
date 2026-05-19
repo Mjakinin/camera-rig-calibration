@@ -1,10 +1,23 @@
+# ROS / colcon build outputs
 build/
 install/
 log/
-.vscode/
+
+# rosbag2 recordings
+bags/
+project/bags/
+
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.swp
 *~
-bags/
+.vscode/
+# Local machine-specific scripts/config
+scripts/local_*.sh
+project/scripts/local_*.sh
+
+# Docker is local-only for now
+Dockerfile
+.dockerignore
