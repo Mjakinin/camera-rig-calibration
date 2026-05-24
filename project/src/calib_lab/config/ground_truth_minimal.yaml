@@ -1,0 +1,27 @@
+# Ground truth configuration for the current two-camera minimal Gazebo world.
+# Mirrors: src/calib_lab/worlds/minimal_calib_world.sdf
+
+world: minimal_calib_world
+
+checkerboard:
+  corners_x: 9
+  corners_y: 6
+  square_size: 0.12
+
+cameras:
+  camera_1:
+    image_topic: /camera_1/image
+    camera_info_topic: /camera_1/camera_info
+    pose_world_xyz_rpy: [0.0, -0.35, 1.0, 0.0, 0.0, 0.0]
+
+  camera_2:
+    image_topic: /camera_2/image
+    camera_info_topic: /camera_2/camera_info
+    pose_world_xyz_rpy: [0.0, 0.35, 1.0, 0.0, 0.0, 0.0]
+
+target:
+  pose_world_xyz_rpy: [1.8, 0.0, 1.0, 0.0, 0.0, 0.0]
+
+ground_truth:
+  expected_baseline_m: 0.70
+  expected_relative_rotation_deg: 0.0
