@@ -1,0 +1,19 @@
+[INFO] [1780413630.680680137] [checkerboard_rig_evaluator]: Checkerboard Rig Evaluator started.
+[INFO] [1780413630.681203163] [checkerboard_rig_evaluator]: Scenario: yaw_45deg
+[INFO] [1780413630.681610718] [checkerboard_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780413630.682003813] [checkerboard_rig_evaluator]: Output CSV: results/checkerboard/target_9x6_square0_12/res320x240/yaw/raw_results.csv
+[INFO] [1780413630.682469359] [checkerboard_rig_evaluator]: Debug dir: results/checkerboard/target_9x6_square0_12/res320x240/yaw/debug_images
+[INFO] [1780413630.682965305] [checkerboard_rig_evaluator]: Max valid samples: 1
+[INFO] [1780413630.683415741] [checkerboard_rig_evaluator]: Max attempts: 1
+[INFO] [1780413630.683887037] [checkerboard_rig_evaluator]: Ready timeout: 20.0 sec
+[INFO] [1780413630.684949720] [checkerboard_rig_evaluator]: Checkerboard pattern: (9, 6), square_size=0.12 m
+[INFO] [1780413630.685451466] [checkerboard_rig_evaluator]: Expected baseline: 0.7000 m
+[WARN] [1780413631.182187294] [checkerboard_rig_evaluator]: 
+================ CHECKERBOARD EVALUATION FAILURE ================
+scenario: yaw_45deg
+attempts: 1
+failure_reason: camera_1:SB;camera_2:checkerboard_not_found
+camera_1 image: results/checkerboard/target_9x6_square0_12/res320x240/yaw/debug_images/yaw_45deg_camera_1_SB.png
+camera_2 image: results/checkerboard/target_9x6_square0_12/res320x240/yaw/debug_images/yaw_45deg_camera_2_checkerboard_not_found.png
+=================================================================
+
