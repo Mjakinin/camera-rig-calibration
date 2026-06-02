@@ -1,0 +1,10 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+height_0_6m, height, valid, aruco/gray, aruco/gray, 4.970, 6.642
+height_0_8m, height, valid, aruco/gray, aruco/gray, 5.998, 5.847
+height_1_0m, height, pose_outlier, aruco/gray, aruco/gray, 69.042, 9.167
+height_1_2m, height, pose_outlier, aruco/gray, aruco/gray, 90.494, 5.991
+height_1_4m, height, pose_outlier, aruco/gray, aruco/gray, 16.686, 11.672
+
+Summary counts:
+height | pose_outlier: 3
+height | valid: 2

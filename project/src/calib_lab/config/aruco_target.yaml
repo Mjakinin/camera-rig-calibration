@@ -1,0 +1,12 @@
+aruco:
+  dictionary: DICT_4X4_50
+  markers_x: 6
+  markers_y: 4
+  marker_length: 0.15
+  marker_separation: 0.06
+  target_width: 1.2
+  target_height: 0.84
+  board_width: 1.2
+  board_height: 0.78
+  image_width_px: 1200
+  image_height_px: 840
