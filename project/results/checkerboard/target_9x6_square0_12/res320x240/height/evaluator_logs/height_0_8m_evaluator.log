@@ -1,0 +1,24 @@
+[INFO] [1780413651.943725896] [checkerboard_rig_evaluator]: Checkerboard Rig Evaluator started.
+[INFO] [1780413651.944411815] [checkerboard_rig_evaluator]: Scenario: height_0_8m
+[INFO] [1780413651.944932592] [checkerboard_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780413651.945468088] [checkerboard_rig_evaluator]: Output CSV: results/checkerboard/target_9x6_square0_12/res320x240/height/raw_results.csv
+[INFO] [1780413651.946004305] [checkerboard_rig_evaluator]: Debug dir: results/checkerboard/target_9x6_square0_12/res320x240/height/debug_images
+[INFO] [1780413651.946784765] [checkerboard_rig_evaluator]: Max valid samples: 1
+[INFO] [1780413651.947209010] [checkerboard_rig_evaluator]: Max attempts: 1
+[INFO] [1780413651.947714786] [checkerboard_rig_evaluator]: Ready timeout: 20.0 sec
+[INFO] [1780413651.948128091] [checkerboard_rig_evaluator]: Checkerboard pattern: (9, 6), square_size=0.12 m
+[INFO] [1780413651.948660938] [checkerboard_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780413652.449132773] [checkerboard_rig_evaluator]: 
+================ CHECKERBOARD EVALUATION SUCCESS ================
+scenario: height_0_8m
+attempts: 1
+camera_1_status: SB
+camera_2_status: SB
+estimated baseline: 0.7052 m
+baseline error: 0.0052 m (0.52 cm)
+rotation error: 0.2381 deg
+translation: [-0.7052, 0.0013, 0.0009]
+camera_1 image: results/checkerboard/target_9x6_square0_12/res320x240/height/debug_images/height_0_8m_camera_1_SB.png
+camera_2 image: results/checkerboard/target_9x6_square0_12/res320x240/height/debug_images/height_0_8m_camera_2_SB.png
+=================================================================
+

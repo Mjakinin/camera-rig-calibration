@@ -1,0 +1,13 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+yaw_0deg, yaw, valid, SB, SB, 0.597, 0.263
+yaw_10deg, yaw, valid, SB, SB, 5.034, 1.624
+yaw_20deg, yaw, valid, SB, SB, 0.456, 0.181
+yaw_30deg, yaw, valid, SB, SB, 1.475, 0.484
+yaw_35deg, yaw, failure, SB, checkerboard_not_found, , 
+yaw_40deg, yaw, failure, SB, checkerboard_not_found, , 
+yaw_45deg, yaw, failure, SB, checkerboard_not_found, , 
+yaw_50deg, yaw, failure, SB, checkerboard_not_found, , 
+
+Summary counts:
+yaw | failure: 4
+yaw | valid: 4
