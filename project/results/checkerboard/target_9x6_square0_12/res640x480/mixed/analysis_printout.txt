@@ -1,0 +1,11 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+far_2_4m_yaw_20deg, mixed, failure, checkerboard_not_found, checkerboard_not_found, , 
+far_2_4m_yaw_30deg, mixed, failure, checkerboard_not_found, checkerboard_not_found, , 
+close_1_4m_yaw_10deg, mixed, failure, checkerboard_not_found, checkerboard_not_found, , 
+shift_left_0_2m_yaw_20deg, shift, valid, SB, SB, 0.181, 0.062
+shift_right_0_2m_yaw_20deg, shift, failure, checkerboard_not_found, SB, , 
+
+Summary counts:
+mixed | failure: 3
+shift | failure: 1
+shift | valid: 1

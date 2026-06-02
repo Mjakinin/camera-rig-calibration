@@ -1,0 +1,24 @@
+[INFO] [1780413434.937160584] [checkerboard_rig_evaluator]: Checkerboard Rig Evaluator started.
+[INFO] [1780413434.937844352] [checkerboard_rig_evaluator]: Scenario: yaw_35deg
+[INFO] [1780413434.938399769] [checkerboard_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780413434.938948526] [checkerboard_rig_evaluator]: Output CSV: results/checkerboard/target_9x6_square0_12/res640x480/yaw/raw_results.csv
+[INFO] [1780413434.939510373] [checkerboard_rig_evaluator]: Debug dir: results/checkerboard/target_9x6_square0_12/res640x480/yaw/debug_images
+[INFO] [1780413434.940218912] [checkerboard_rig_evaluator]: Max valid samples: 1
+[INFO] [1780413434.940776129] [checkerboard_rig_evaluator]: Max attempts: 1
+[INFO] [1780413434.941381616] [checkerboard_rig_evaluator]: Ready timeout: 20.0 sec
+[INFO] [1780413434.941959293] [checkerboard_rig_evaluator]: Checkerboard pattern: (9, 6), square_size=0.12 m
+[INFO] [1780413434.942568411] [checkerboard_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780413435.489251317] [checkerboard_rig_evaluator]: 
+================ CHECKERBOARD EVALUATION SUCCESS ================
+scenario: yaw_35deg
+attempts: 1
+camera_1_status: SB
+camera_2_status: SB
+estimated baseline: 0.7031 m
+baseline error: 0.0031 m (0.31 cm)
+rotation error: 0.1326 deg
+translation: [-0.7031, -0.0026, 0.0020]
+camera_1 image: results/checkerboard/target_9x6_square0_12/res640x480/yaw/debug_images/yaw_35deg_camera_1_SB.png
+camera_2 image: results/checkerboard/target_9x6_square0_12/res640x480/yaw/debug_images/yaw_35deg_camera_2_SB.png
+=================================================================
+

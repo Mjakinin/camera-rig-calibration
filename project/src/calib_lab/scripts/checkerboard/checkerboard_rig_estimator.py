@@ -11,7 +11,11 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image, CameraInfo
 from cv_bridge import CvBridge
 
-from transform_utils import (
+import sys
+from pathlib import Path
+SCRIPTS_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(SCRIPTS_DIR))
+from common.transform_utils import (
     rvec_tvec_to_matrix,
     relative_transform_from_common_target,
     translation_norm,

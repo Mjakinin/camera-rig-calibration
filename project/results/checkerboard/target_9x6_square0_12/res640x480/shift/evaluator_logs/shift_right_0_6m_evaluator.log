@@ -1,0 +1,19 @@
+[INFO] [1780413457.310650302] [checkerboard_rig_evaluator]: Checkerboard Rig Evaluator started.
+[INFO] [1780413457.311190198] [checkerboard_rig_evaluator]: Scenario: shift_right_0_6m
+[INFO] [1780413457.311649774] [checkerboard_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780413457.312123220] [checkerboard_rig_evaluator]: Output CSV: results/checkerboard/target_9x6_square0_12/res640x480/shift/raw_results.csv
+[INFO] [1780413457.312579506] [checkerboard_rig_evaluator]: Debug dir: results/checkerboard/target_9x6_square0_12/res640x480/shift/debug_images
+[INFO] [1780413457.313043912] [checkerboard_rig_evaluator]: Max valid samples: 1
+[INFO] [1780413457.313466807] [checkerboard_rig_evaluator]: Max attempts: 1
+[INFO] [1780413457.313892072] [checkerboard_rig_evaluator]: Ready timeout: 20.0 sec
+[INFO] [1780413457.314367758] [checkerboard_rig_evaluator]: Checkerboard pattern: (9, 6), square_size=0.12 m
+[INFO] [1780413457.314879764] [checkerboard_rig_evaluator]: Expected baseline: 0.7000 m
+[WARN] [1780413457.840666500] [checkerboard_rig_evaluator]: 
+================ CHECKERBOARD EVALUATION FAILURE ================
+scenario: shift_right_0_6m
+attempts: 1
+failure_reason: camera_1:checkerboard_not_found;camera_2:SB
+camera_1 image: results/checkerboard/target_9x6_square0_12/res640x480/shift/debug_images/shift_right_0_6m_camera_1_checkerboard_not_found.png
+camera_2 image: results/checkerboard/target_9x6_square0_12/res640x480/shift/debug_images/shift_right_0_6m_camera_2_SB.png
+=================================================================
+

@@ -1,0 +1,142 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="res640x480_dist_2_4m">
+
+    <plugin
+      filename="ignition-gazebo-physics-system"
+      name="ignition::gazebo::systems::Physics">
+    </plugin>
+
+    <plugin
+      filename="ignition-gazebo-scene-broadcaster-system"
+      name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+
+    <plugin
+      filename="ignition-gazebo-sensors-system"
+      name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <light name="sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.5 0.5 0.5 1</specular>
+      <direction>-0.5 0.1 -1</direction>
+    </light>
+
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="ground_link">
+        <collision name="ground_collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="ground_visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>10 10</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.4 0.4 0.4 1</ambient>
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Calibration target: erstmal nur weiße Platte -->
+    <include>
+      <uri>model://checkerboard_target</uri>
+      <name>calibration_target</name>
+      <pose>2.400 0.000 1.000 0.000 0.000 0.000000</pose>
+    </include>
+
+    <!-- Camera 1 -->
+    <model name="camera_1">
+      <static>true</static>
+      <pose>0 -0.35 1.0 0 0 0</pose>
+      <link name="camera_1_link">
+
+        <visual name="camera_1_body">
+          <geometry>
+            <box>
+              <size>0.12 0.12 0.12</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0 0 1 1</ambient>
+            <diffuse>0 0 1 1</diffuse>
+          </material>
+        </visual>
+
+        <sensor name="camera_1_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <topic>/camera_1/image</topic>
+          <visualize>true</visualize>
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+        </sensor>
+
+      </link>
+    </model>
+
+    <!-- Camera 2 -->
+    <model name="camera_2">
+      <static>true</static>
+      <pose>0 0.35 1.0 0 0 0</pose>
+      <link name="camera_2_link">
+
+        <visual name="camera_2_body">
+          <geometry>
+            <box>
+              <size>0.12 0.12 0.12</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+
+        <sensor name="camera_2_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>10</update_rate>
+          <topic>/camera_2/image</topic>
+          <visualize>true</visualize>
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+        </sensor>
+
+      </link>
+    </model>
+
+  </world>
+</sdf>
