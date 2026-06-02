@@ -1,0 +1,10 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+far_2_4m_yaw_20deg, mixed, pose_outlier, aruco/gray, aruco/gray, 17.514, 12.429
+far_2_4m_yaw_30deg, mixed, pose_outlier, aruco/gray, aruco/gray, 25.486, 3.197
+close_1_4m_yaw_10deg, mixed, pose_outlier, aruco/gray, aruco/gray, 70.190, 23.696
+shift_left_0_2m_yaw_20deg, shift, pose_outlier, aruco/gray, aruco/gray, 19.771, 2.093
+shift_right_0_2m_yaw_20deg, shift, pose_outlier, aruco/gray, aruco/gray, 24.297, 3.881
+
+Summary counts:
+mixed | pose_outlier: 3
+shift | pose_outlier: 2

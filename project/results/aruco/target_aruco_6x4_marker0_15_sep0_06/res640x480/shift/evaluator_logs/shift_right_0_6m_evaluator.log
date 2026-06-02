@@ -1,0 +1,28 @@
+[INFO] [1780420448.916325329] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
+[INFO] [1780420448.917124320] [aruco_rig_evaluator]: Scenario: shift_right_0_6m
+[INFO] [1780420448.917596886] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780420448.918072372] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
+[INFO] [1780420448.918577229] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/raw_results.csv
+[INFO] [1780420448.919050975] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/debug_images
+[INFO] [1780420448.919565122] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
+[INFO] [1780420448.920073488] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780420448.920589445] [aruco_rig_evaluator]: Max attempts: 1
+[INFO] [1780420449.415983601] [aruco_rig_evaluator]: 
+================ ARUCO EVALUATION SUCCESS ================
+scenario: shift_right_0_6m
+attempts: 1
+camera_1: method=aruco/gray, markers=8, t_cam_target=[-1.3512, -0.3913, 1.5013] m
+camera_2: method=aruco/gray, markers=16, t_cam_target=[-0.8020, -0.3913, 1.4959] m
+
+Estimated relative transform from common ArUco target:
+T_camera_1_camera_2 translation = [-0.5705, -0.0005, -0.0060] m
+estimated baseline norm = 0.5705 m
+expected baseline norm  = 0.7000 m
+baseline error          = 0.1295 m (12.95 cm)
+estimated relative rotation angle = 0.8111 deg
+expected relative rotation angle  = 0.0000 deg
+rotation angle error              = 0.8111 deg
+camera_1 image: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/debug_images/shift_right_0_6m_camera_1_aruco_gray.png
+camera_2 image: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/debug_images/shift_right_0_6m_camera_2_aruco_gray.png
+==========================================================
+
