@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+
+<sdf version="1.8">
+  <model name="aruco_target">
+    <static>true</static>
+
+    <link name="aruco_target_link">
+
+      <visual name="aruco_target_visual">
+        <!-- Plane normal points toward camera direction -->
+        <pose>0 0 0 0 -1.5708 0</pose>
+
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>1.20 1.20</size>
+          </plane>
+        </geometry>
+
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0 0 0 1</specular>
+
+          <pbr>
+            <metal>
+              <albedo_map>materials/textures/aruco_6x6_250_id23.png</albedo_map>
+              <roughness>1.0</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+    </link>
+  </model>
+</sdf>
