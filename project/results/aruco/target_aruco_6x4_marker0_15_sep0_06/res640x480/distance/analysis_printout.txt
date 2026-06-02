@@ -1,0 +1,14 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+dist_1_2m, distance, valid, aruco/gray, aruco/gray, 7.435, 2.695
+dist_1_4m, distance, valid, aruco/gray, aruco/gray, 1.522, 5.041
+dist_1_6m, distance, valid, aruco/gray, aruco/gray, 7.621, 9.374
+dist_1_8m, distance, pose_outlier, aruco/gray, aruco/gray, 11.577, 11.456
+dist_2_0m, distance, pose_outlier, aruco/gray, aruco/gray, 18.878, 13.144
+dist_2_2m, distance, pose_outlier, aruco/gray, aruco/gray, 25.379, 14.294
+dist_2_4m, distance, pose_outlier, aruco/gray, aruco/gray, 25.379, 14.294
+dist_2_6m, distance, pose_outlier, aruco/gray, aruco/gray, 58.526, 20.548
+dist_2_8m, distance, pose_outlier, aruco/gray, aruco/gray, 64.335, 20.480
+
+Summary counts:
+distance | pose_outlier: 6
+distance | valid: 3

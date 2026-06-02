@@ -29,7 +29,7 @@ case "$METHOD" in
     EVALUATOR="src/calib_lab/scripts/checkerboard/checkerboard_rig_evaluator.py"
     ;;
   aruco)
-    TARGET_NAME="target_aruco_current"
+    TARGET_NAME="target_aruco_6x4_marker0_15_sep0_06"
     EVALUATOR="src/calib_lab/scripts/aruco/aruco_rig_evaluator.py"
     ;;
   charuco)
@@ -264,7 +264,7 @@ for G in distance yaw shift height mixed; do
     continue
   fi
 
-  if [ "$METHOD" = "checkerboard" ] && [ -f "$ANALYZER" ]; then
+  if [ -f "$ANALYZER" ]; then
     python3 "$ANALYZER" \
       --input_csv "$OUT_CSV" \
       --output_csv "$SUMMARY_CSV" \
