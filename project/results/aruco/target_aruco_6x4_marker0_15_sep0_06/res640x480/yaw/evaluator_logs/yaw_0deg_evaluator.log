@@ -1,28 +1,28 @@
-[INFO] [1780420417.329847508] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
-[INFO] [1780420417.331137645] [aruco_rig_evaluator]: Scenario: yaw_0deg
-[INFO] [1780420417.331636041] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
-[INFO] [1780420417.332546173] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
-[INFO] [1780420417.332995849] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/raw_results.csv
-[INFO] [1780420417.333499306] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/debug_images
-[INFO] [1780420417.333999722] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
-[INFO] [1780420417.334501249] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
-[INFO] [1780420417.334885464] [aruco_rig_evaluator]: Max attempts: 1
-[INFO] [1780420417.825658380] [aruco_rig_evaluator]: 
-================ ARUCO EVALUATION SUCCESS ================
+[INFO] [1780482160.592553862] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
+[INFO] [1780482160.613285005] [aruco_rig_evaluator]: Scenario: yaw_0deg
+[INFO] [1780482160.636209539] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780482160.660858261] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
+[INFO] [1780482160.685171110] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/raw_results.csv
+[INFO] [1780482160.706308109] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/debug_images
+[INFO] [1780482160.727475830] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
+[INFO] [1780482160.748881644] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780482160.775922813] [aruco_rig_evaluator]: Max attempts: 1
+[WARN] [1780482163.039158596] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482165.532591104] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482168.031734098] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482170.534734566] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482173.034256028] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482175.532232441] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482178.034092472] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482180.532319426] [aruco_rig_evaluator]: Waiting for input topics before detection attempt | missing=['camera_1:no_image', 'camera_2:no_image']
+[WARN] [1780482180.556555958] [aruco_rig_evaluator]: 
+================ ARUCO EVALUATION FAILURE ================
 scenario: yaw_0deg
-attempts: 1
-camera_1: method=aruco/gray, markers=16, t_cam_target=[-0.8755, -0.3928, 2.3176] m
-camera_2: method=aruco/gray, markers=16, t_cam_target=[-0.3095, -0.3925, 2.1043] m
-
-Estimated relative transform from common ArUco target:
-T_camera_1_camera_2 translation = [-1.3215, 0.0147, 0.2408] m
-estimated baseline norm = 1.3433 m
-expected baseline norm  = 0.7000 m
-baseline error          = 0.6433 m (64.33 cm)
-estimated relative rotation angle = 20.4802 deg
-expected relative rotation angle  = 0.0000 deg
-rotation angle error              = 20.4802 deg
-camera_1 image: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/debug_images/yaw_0deg_camera_1_aruco_gray.png
-camera_2 image: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/debug_images/yaw_0deg_camera_2_aruco_gray.png
+attempts: 0
+failure_reason: camera_1:no_image;camera_2:no_image
+camera_1 markers: 0
+camera_2 markers: 0
+camera_1 image: 
+camera_2 image: 
 ==========================================================
 

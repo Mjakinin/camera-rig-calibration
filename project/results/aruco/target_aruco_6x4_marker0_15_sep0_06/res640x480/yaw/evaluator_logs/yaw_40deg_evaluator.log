@@ -1,13 +1,13 @@
-[INFO] [1780420429.504256874] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
-[INFO] [1780420429.504761401] [aruco_rig_evaluator]: Scenario: yaw_40deg
-[INFO] [1780420429.505163676] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
-[INFO] [1780420429.505563212] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
-[INFO] [1780420429.506033908] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/raw_results.csv
-[INFO] [1780420429.506527004] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/debug_images
-[INFO] [1780420429.506990380] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
-[INFO] [1780420429.507459456] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
-[INFO] [1780420429.508180136] [aruco_rig_evaluator]: Max attempts: 1
-[INFO] [1780420430.010786096] [aruco_rig_evaluator]: 
+[INFO] [1780482219.618834058] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
+[INFO] [1780482219.637608361] [aruco_rig_evaluator]: Scenario: yaw_40deg
+[INFO] [1780482219.661630447] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780482219.679302059] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
+[INFO] [1780482219.696348457] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/raw_results.csv
+[INFO] [1780482219.713976646] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/yaw/debug_images
+[INFO] [1780482219.732698431] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
+[INFO] [1780482219.753129180] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780482219.772272262] [aruco_rig_evaluator]: Max attempts: 1
+[INFO] [1780482220.100502828] [aruco_rig_evaluator]: 
 ================ ARUCO EVALUATION SUCCESS ================
 scenario: yaw_40deg
 attempts: 1

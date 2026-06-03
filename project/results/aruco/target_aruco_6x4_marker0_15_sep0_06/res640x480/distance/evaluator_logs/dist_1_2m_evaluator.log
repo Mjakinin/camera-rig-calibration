@@ -1,13 +1,13 @@
-[INFO] [1780420395.285133596] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
-[INFO] [1780420395.285685323] [aruco_rig_evaluator]: Scenario: dist_1_2m
-[INFO] [1780420395.286168120] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
-[INFO] [1780420395.286626516] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
-[INFO] [1780420395.287141112] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/distance/raw_results.csv
-[INFO] [1780420395.287593478] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/distance/debug_images
-[INFO] [1780420395.288099355] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
-[INFO] [1780420395.288524291] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
-[INFO] [1780420395.288896925] [aruco_rig_evaluator]: Max attempts: 1
-[INFO] [1780420395.784616256] [aruco_rig_evaluator]: 
+[INFO] [1780482069.060414493] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
+[INFO] [1780482069.081499927] [aruco_rig_evaluator]: Scenario: dist_1_2m
+[INFO] [1780482069.104534591] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780482069.133953761] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
+[INFO] [1780482069.157067405] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/distance/raw_results.csv
+[INFO] [1780482069.179599412] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/distance/debug_images
+[INFO] [1780482069.204328409] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
+[INFO] [1780482069.232073560] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780482069.254885025] [aruco_rig_evaluator]: Max attempts: 1
+[INFO] [1780482069.528436883] [aruco_rig_evaluator]: 
 ================ ARUCO EVALUATION SUCCESS ================
 scenario: dist_1_2m
 attempts: 1

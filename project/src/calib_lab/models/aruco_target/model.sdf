@@ -7,7 +7,7 @@
       <visual name="target_visual">
         <geometry>
           <box>
-            <size>0.02 1.44 1.08</size>
+            <size>0.02 1.60 1.10</size>
           </box>
         </geometry>
 
@@ -28,7 +28,7 @@
       <collision name="target_collision">
         <geometry>
           <box>
-            <size>0.02 1.44 1.08</size>
+            <size>0.02 1.60 1.10</size>
           </box>
         </geometry>
       </collision>

@@ -94,11 +94,11 @@ def main():
     marker_length_m = 0.15
     marker_separation_m = 0.06
 
-    target_width_m = 1.20
-    target_height_m = 0.84
+    target_width_m = 1.60
+    target_height_m = 1.10
 
-    image_width_px = 1200
-    image_height_px = 840
+    image_width_px = 1600
+    image_height_px = 1100
 
     source_model = Path("src/calib_lab/models/checkerboard_target")
     target_model = Path("src/calib_lab/models/aruco_target")

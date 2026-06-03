@@ -4,9 +4,9 @@ aruco:
   markers_y: 4
   marker_length: 0.15
   marker_separation: 0.06
-  target_width: 1.2
-  target_height: 0.84
+  target_width: 1.6
+  target_height: 1.1
   board_width: 1.2
   board_height: 0.78
-  image_width_px: 1200
-  image_height_px: 840
+  image_width_px: 1600
+  image_height_px: 1100
