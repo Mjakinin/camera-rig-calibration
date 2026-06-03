@@ -37,14 +37,37 @@ def wait_for_service(cmd, service_name):
         time.sleep(1.0)
 
 
-def send_pose(cmd, req_type, rep_type, service_name, x, y, z, yaw):
-    qz = math.sin(yaw / 2.0)
-    qw = math.cos(yaw / 2.0)
+def rpy_to_quaternion(roll, pitch, yaw):
+    """
+    Convert roll, pitch, yaw to quaternion.
+
+    In our Gazebo setup:
+    - +X is the corridor direction
+    - +Z is upward
+    - positive pitch tilts the camera down toward the floor
+    """
+    cy = math.cos(yaw * 0.5)
+    sy = math.sin(yaw * 0.5)
+    cp = math.cos(pitch * 0.5)
+    sp = math.sin(pitch * 0.5)
+    cr = math.cos(roll * 0.5)
+    sr = math.sin(roll * 0.5)
+
+    qw = cr * cp * cy + sr * sp * sy
+    qx = sr * cp * cy - cr * sp * sy
+    qy = cr * sp * cy + sr * cp * sy
+    qz = cr * cp * sy - sr * sp * cy
+
+    return qx, qy, qz, qw
+
+
+def send_pose(cmd, req_type, rep_type, service_name, x, y, z, roll, pitch, yaw):
+    qx, qy, qz, qw = rpy_to_quaternion(roll, pitch, yaw)
 
     req = (
         f'name: "{MODEL_NAME}" '
         f'position: {{x: {x} y: {y} z: {z}}} '
-        f'orientation: {{x: 0 y: 0 z: {qz} w: {qw}}}'
+        f'orientation: {{x: {qx} y: {qy} z: {qz} w: {qw}}}'
     )
 
     result = subprocess.run(
@@ -80,21 +103,28 @@ def main():
 
     wait_for_service(cmd, service_name)
 
-    print("Moving camera along bus corridor with debug output.")
+    print("Moving camera along corridor while looking down at the floor.")
     print("Stop with CTRL + C.")
 
     start_time = time.time()
 
-    # Bewegung entlang der x-Achse:
-    # x pendelt zwischen -3.2 m und +3.2 m.
+    # Bewegung entlang des Korridors.
+    # x pendelt zwischen -3.4 m und +3.4 m.
     center_x = 0.0
-    amplitude = 3.2
-    speed = 0.25
+    amplitude = 3.4
+    speed = 0.22
 
+    # Kamera bleibt mittig im Korridor.
     y = 0.0
-    z = 1.3
 
-    # Kamera schaut konstant in +X-Richtung.
+    # Kamera-Höhe. Etwas höher, damit sie sinnvoll auf den Boden schaut.
+    z = 1.6
+
+    # Orientierung:
+    # yaw = 0 bedeutet Blickrichtung grob entlang +X.
+    # pitch = +80 Grad bedeutet stark nach unten Richtung Boden.
+    roll = 0.0
+    pitch = math.radians(80.0)
     yaw = 0.0
 
     while True:
@@ -102,8 +132,24 @@ def main():
 
         x = center_x + amplitude * math.sin(speed * t)
 
-        print(f"Setting {MODEL_NAME}: x={x:.2f}, y={y:.2f}, z={z:.2f}")
-        send_pose(cmd, req_type, rep_type, service_name, x, y, z, yaw)
+        print(
+            f"Setting {MODEL_NAME}: "
+            f"x={x:.2f}, y={y:.2f}, z={z:.2f}, "
+            f"pitch_down=80 deg"
+        )
+
+        send_pose(
+            cmd=cmd,
+            req_type=req_type,
+            rep_type=rep_type,
+            service_name=service_name,
+            x=x,
+            y=y,
+            z=z,
+            roll=roll,
+            pitch=pitch,
+            yaw=yaw,
+        )
 
         time.sleep(0.5)
 

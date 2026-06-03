@@ -209,7 +209,7 @@
 
     <!-- Moving camera: will be moved by external script -->
     <model name="moving_camera">
-      <static>false</static>
+      <static>true</static>
       <pose>-3.2 0 1.3 0 0 0</pose>
 
       <link name="camera_link">
