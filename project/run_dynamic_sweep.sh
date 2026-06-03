@@ -17,17 +17,32 @@ TIMEOUT_BIN="${TIMEOUT_BIN:-timeout}"
 
 if [ $# -lt 2 ]; then
   echo "Usage:"
-  echo "  ./run_dynamic_sweep.sh checkerboard|aruco|charuco res320x240|res640x480 [distance|yaw|shift|height|mixed|all]"
+  echo "  ./run_dynamic_sweep.sh checkerboard|aruco|charuco res320x240|res640x480 [distance|yaw|shift|height|mixed|all] [headless|gui]"
   exit 1
 fi
 
 METHOD="$1"
 RES_NAME="$2"
 REQUESTED_GROUP="${3:-all}"
+GAZEBO_MODE="${4:-${GAZEBO_MODE:-headless}}"
 
 if [ "$REQUESTED_GROUP" = "combination" ]; then
   REQUESTED_GROUP="mixed"
 fi
+
+case "$GAZEBO_MODE" in
+  gui|GUI|true|TRUE|1)
+    GAZEBO_MODE="gui"
+    ;;
+  headless|HEADLESS|false|FALSE|0)
+    GAZEBO_MODE="headless"
+    ;;
+  *)
+    echo "[ERROR] Invalid Gazebo mode: $GAZEBO_MODE"
+    echo "[INFO] Valid modes: headless gui"
+    exit 1
+    ;;
+esac
 
 for cmd in "$PYTHON_BIN" "$IGN_BIN" "$ROS2_BIN"; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
@@ -179,7 +194,20 @@ fi
 
 echo "[INFO] Starting one Gazebo instance:"
 echo "[INFO] $WORLD_FILE"
-"$IGN_BIN" gazebo -s "$WORLD_FILE" -r -v 1 > "$GAZEBO_LOG" 2>&1 &
+if [ "$GAZEBO_MODE" = "gui" ]; then
+  echo "[INFO] Starting Gazebo WITH GUI."
+  export QT_X11_NO_MITSHM="${QT_X11_NO_MITSHM:-1}"
+
+  if [ -z "${DISPLAY:-}" ]; then
+    echo "[WARN] DISPLAY is not set. Gazebo GUI may not open."
+    echo "[WARN] On WSLg this is usually set automatically. On X11 you may need export DISPLAY=:0."
+  fi
+
+  "${IGN_BIN:-ign}" gazebo "$WORLD_FILE" -r -v 2 > "$GAZEBO_LOG" 2>&1 &
+else
+  echo "[INFO] Starting Gazebo headless/server-only."
+  "${IGN_BIN:-ign}" gazebo -s "$WORLD_FILE" -r -v 1 > "$GAZEBO_LOG" 2>&1 &
+fi
 
 echo "[INFO] Waiting for set_pose service..."
 SET_POSE_SERVICE=""
