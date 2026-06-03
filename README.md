@@ -11,6 +11,8 @@ Current method status:
 - **ChArUco**: planned next.
 - **Targetless calibration**: optional later.
 
+Path convention in this README: commands use `$PROJECT_DIR` instead of a Docker-only path. In a devcontainer this is usually `/workspaces/project`; on local Ubuntu 22.04 it may be something like `$HOME/camera-rig-calibration/project`.
+
 ---
 
 ## 1. Core Pipeline
@@ -438,11 +440,23 @@ evaluator_logs/
 
 ## 11. Environment Setup
 
-Use the ROS 2 Humble environment. In the devcontainer, the project root is usually:
+Use the ROS 2 Humble environment. Define a project directory variable once per terminal session. This keeps all commands platform-independent.
+
+Docker / devcontainer example:
 
 ```bash
-cd /workspaces/project
+export PROJECT_DIR=/workspaces/project
+cd "$PROJECT_DIR"
 ```
+
+Local Ubuntu 22.04 example, after cloning the repository into your home directory:
+
+```bash
+export PROJECT_DIR="$HOME/camera-rig-calibration/project"
+cd "$PROJECT_DIR"
+```
+
+All commands below assume you are inside the `project/` folder. You can either `cd "$PROJECT_DIR"` once, or run the commands from the `project/` folder directly.
 
 Set the Gazebo model path:
 
@@ -469,14 +483,14 @@ pkill -9 -f "aruco_rig_evaluator.py" || true
 Generate Checkerboard:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 python3 src/calib_lab/scripts/tools/generate_checkerboard.py
 ```
 
 Generate ArUco:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 python3 src/calib_lab/scripts/tools/generate_aruco_target.py
 ```
 
@@ -494,7 +508,7 @@ src/calib_lab/config/aruco_target.yaml
 Checkerboard:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
   --method checkerboard \
@@ -510,7 +524,7 @@ python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
 ArUco:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
   --method aruco \
@@ -541,7 +555,7 @@ Use this when testing live detectors, pose scripts, or estimators manually.
 Checkerboard:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 export DISPLAY=:0
 export QT_X11_NO_MITSHM=1
@@ -553,7 +567,7 @@ ign gazebo src/calib_lab/worlds/dynamic/checkerboard_res640x480.sdf -r -v 4
 ArUco:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 export DISPLAY=:0
 export QT_X11_NO_MITSHM=1
@@ -571,14 +585,14 @@ ign gazebo -s src/calib_lab/worlds/dynamic/aruco_res640x480.sdf -r -v 2
 ### Terminal 2: Image Bridge
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 ros2 run ros_gz_image image_bridge /camera_1/image /camera_2/image
 ```
 
 ### Terminal 3: Camera Info + Clock Bridge
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 ros2 run ros_gz_bridge parameter_bridge \
   /camera_1/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
@@ -597,28 +611,28 @@ Run one of the scripts listed below.
 Live detector:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 python3 src/calib_lab/scripts/checkerboard/checkerboard_live_detector.py
 ```
 
 Pose live:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 python3 src/calib_lab/scripts/checkerboard/checkerboard_pose_live.py
 ```
 
 Rig estimator:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 python3 src/calib_lab/scripts/checkerboard/checkerboard_rig_estimator.py
 ```
 
 Manual evaluator test:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/checkerboard/checkerboard_rig_evaluator.py \
   --ros-args \
@@ -637,7 +651,7 @@ python3 src/calib_lab/scripts/checkerboard/checkerboard_rig_evaluator.py \
 Live detector:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/aruco/aruco_live_detector.py \
   --ros-args \
@@ -649,7 +663,7 @@ python3 src/calib_lab/scripts/aruco/aruco_live_detector.py \
 Pose live:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/aruco/aruco_pose_live.py \
   --ros-args \
@@ -661,7 +675,7 @@ python3 src/calib_lab/scripts/aruco/aruco_pose_live.py \
 Rig estimator:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/aruco/aruco_rig_estimator.py \
   --ros-args \
@@ -673,7 +687,7 @@ python3 src/calib_lab/scripts/aruco/aruco_rig_estimator.py \
 Manual evaluator test:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/aruco/aruco_rig_evaluator.py \
   --ros-args \
@@ -692,7 +706,7 @@ python3 src/calib_lab/scripts/aruco/aruco_rig_evaluator.py \
 Checkerboard, all groups:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 ./run_dynamic_sweep.sh checkerboard res320x240
 ./run_dynamic_sweep.sh checkerboard res640x480
@@ -711,7 +725,7 @@ Checkerboard, one group:
 ArUco, all groups:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 ./run_dynamic_sweep.sh aruco res320x240
 ./run_dynamic_sweep.sh aruco res640x480
@@ -734,7 +748,7 @@ ArUco, one group:
 Checkerboard:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/tools/aggregate_target_results.py \
   --target_dir results/checkerboard/target_9x6_square0_12
@@ -743,7 +757,7 @@ python3 src/calib_lab/scripts/tools/aggregate_target_results.py \
 ArUco:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 src/calib_lab/scripts/tools/aggregate_target_results.py \
   --target_dir results/aruco/target_aruco_6x4_marker0_15_sep0_06
@@ -764,7 +778,7 @@ comparison/counts_by_resolution.csv
 Checkerboard compact comparison:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 - <<'PY'
 import csv
@@ -785,7 +799,7 @@ PY
 ArUco compact comparison:
 
 ```bash
-cd /workspaces/project
+cd "$PROJECT_DIR"
 
 python3 - <<'PY'
 import csv
