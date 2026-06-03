@@ -1,0 +1,8 @@
+BUS ARUCO VISIBILITY SUMMARY
+============================
+front_static_camera detected: [4, 7]
+rear_static_camera detected:  [1, 6, 9]
+overlap IDs:                  []
+front count:                  2
+rear count:                   3
+overlap count:                0

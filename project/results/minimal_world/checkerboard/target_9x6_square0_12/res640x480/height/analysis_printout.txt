@@ -1,0 +1,10 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+height_0_6m, height, failure, checkerboard_not_found, checkerboard_not_found, , 
+height_0_8m, height, valid, SB, SB, 0.673, 0.228
+height_1_0m, height, valid, SB, SB, 0.673, 0.228
+height_1_2m, height, valid, SB, SB, 0.242, 0.086
+height_1_4m, height, valid, SB, SB, 0.045, 0.036
+
+Summary counts:
+height | failure: 1
+height | valid: 4
