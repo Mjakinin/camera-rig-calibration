@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <model name="aruco_marker_06">
+    <static>true</static>
+    <link name="link">
+
+      <visual name="white_outer_board">
+        <cast_shadows>false</cast_shadows>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.900000 0.900000 0.002000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="black_marker_base">
+        <cast_shadows>false</cast_shadows>
+        <pose>0 0 0.003000 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.600000 0.600000 0.004000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_1_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.150000 0.150000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_1_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.150000 0.150000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_2_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.150000 0.050000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_2_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.050000 0.050000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_2_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.050000 0.050000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_3_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.050000 -0.050000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_4_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.150000 -0.150000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_4_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.050000 -0.150000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+      <visual name="white_cell_4_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.050000 -0.150000 0.006500 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.102000 0.102000 0.003000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+    </link>
+  </model>
+</sdf>

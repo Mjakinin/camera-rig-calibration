@@ -1,0 +1,7 @@
+Bus model attribution:
+
+"BeIntelli Erklärbus" by BeIntelli
+License: Creative Commons Attribution
+Source: https://sketchfab.com/3d-models/beintelli-erklarbus-c7d9d04a8a8445e486d55470adb8c9f5
+
+Used in this project as a visual bus model for camera-rig calibration experiments.

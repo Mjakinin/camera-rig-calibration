@@ -1,0 +1,14 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+dist_1_2m, distance, failure, checkerboard_not_found, checkerboard_not_found, , 
+dist_1_4m, distance, failure, checkerboard_not_found, checkerboard_not_found, , 
+dist_1_6m, distance, valid, SB, SB, 0.159, 0.072
+dist_1_8m, distance, valid, SB, SB, 0.242, 0.086
+dist_2_0m, distance, valid, SB, SB, 0.095, 0.030
+dist_2_2m, distance, failure, checkerboard_not_found, checkerboard_not_found, , 
+dist_2_4m, distance, failure, checkerboard_not_found, checkerboard_not_found, , 
+dist_2_6m, distance, failure, checkerboard_not_found, checkerboard_not_found, , 
+dist_2_8m, distance, failure, no_camera_info, no_camera_info, , 
+
+Summary counts:
+distance | failure: 6
+distance | valid: 3

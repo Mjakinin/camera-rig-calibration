@@ -1,0 +1,21 @@
+front_static_camera:
+  x: -3.90
+  y: 0.0
+  z: 2.85
+  roll_deg: 0.0
+  pitch_deg: 45.0
+  yaw_deg: 0.0
+  horizontal_fov_deg: 100.0
+  width: 640
+  height: 480
+
+rear_static_camera:
+  x: 5.70
+  y: 0.0
+  z: 2.85
+  roll_deg: 0.0
+  pitch_deg: 40.0
+  yaw_deg: 180.0
+  horizontal_fov_deg: 100.0
+  width: 640
+  height: 480
