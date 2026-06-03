@@ -1,432 +1,147 @@
 # Camera Rig Calibration Lab
 
-Synthetic benchmark and evaluation pipeline for arbitrary camera-rig calibration using **ROS 2 Humble**, **Gazebo Sim / Ignition Fortress**, **OpenCV**, and **ros_gz** bridges.
+Synthetic benchmark and simulation lab for **arbitrary camera-rig calibration** using **ROS 2 Humble**, **Gazebo Sim / Ignition Fortress**, **OpenCV**, and `ros_gz` bridges.
 
-The project goal is to build a reproducible simulation benchmark for camera-rig calibration methods. Gazebo provides known ground-truth camera poses. The calibration methods only receive camera images, `camera_info`, and known target geometry. The estimated camera-to-camera transform is then compared against the Gazebo ground truth.
+The project investigates when different target-based calibration methods work, where they fail, and which experimental factors influence camera-rig calibration accuracy. The current repository is organized around three experiment worlds:
+
+1. **Minimal World**: controlled two-camera benchmark for Checkerboard, ArUco and ChArUco calibration pipelines.
+2. **Bus Corridor Relay**: placeholder for the simplified moving-camera relay calibration setup.
+3. **BeIntelli Bus Model**: full imported 3D bus model with static front/rear cameras and distributed ArUco landmarks.
+
+The repository root contains this overview. All executable project content is inside `project/`.
+
+---
+
+## 1. Project Goal
+
+The goal is to build a reproducible simulation pipeline for camera-rig calibration research.
+
+Gazebo provides:
+
+- synthetic camera images,
+- `camera_info` topics,
+- known ground-truth camera poses,
+- known target poses and object geometry.
+
+The calibration algorithms receive only:
+
+- camera images,
+- camera intrinsics from `camera_info`,
+- known target geometry.
+
+The estimated relative camera transform is then compared against the Gazebo ground truth.
+
+Core evaluation questions:
+
+- Which calibration method works best under which conditions?
+- How do distance, yaw, lateral shift, height, field of view and resolution affect calibration?
+- Where do the methods fail and why?
+- How can calibration be transferred to a bus-like camera layout with limited camera overlap?
+
+---
+
+## 2. Repository Layout
+
+```text
+camera-rig-calibration/
+├── README.md
+└── project/
+    ├── run/
+    │   ├── minimal_world/
+    │   │   └── run_dynamic_sweep.sh
+    │   ├── bus_corridor_relay/
+    │   └── beintelli_bus_model/
+    │       └── run_aruco_visibility_detector.sh
+    │
+    ├── results/
+    │   ├── minimal_world/
+    │   ├── bus_corridor_relay/
+    │   └── beintelli_bus_model/
+    │
+    └── src/
+        └── calib_lab/
+            ├── package.xml
+            ├── CMakeLists.txt
+            ├── common/
+            ├── minimal_world/
+            ├── bus_corridor_relay/
+            └── beintelli_bus_model/
+```
+
+Important convention:
+
+```text
+src/        = ROS workspace source folder
+calib_lab/  = ROS 2 package
+```
+
+Therefore `package.xml` and `CMakeLists.txt` must stay directly inside `project/src/calib_lab/`.
+
+---
+
+## 3. Experiment Worlds
+
+### 3.1 Minimal World
+
+Path:
+
+```text
+project/src/calib_lab/minimal_world/
+```
+
+Purpose:
+
+- controlled synthetic two-camera benchmark,
+- target-based calibration method comparison,
+- dynamic sweeps over distance, yaw, shift, height and mixed scenarios,
+- repeatable ablation study.
 
 Current method status:
 
-- **Checkerboard**: baseline implemented and evaluated.
-- **ArUco**: target generation, live detector, pose-live, rig estimator, and evaluator integration in progress.
-- **ChArUco**: planned next.
-- **Targetless calibration**: optional later.
-
-Path convention in this README: commands use `$PROJECT_DIR` instead of a Docker-only path. In a devcontainer this is usually `/workspaces/project`; on local Ubuntu 22.04 it may be something like `$HOME/camera-rig-calibration/project`.
-
----
-
-## 1. Core Pipeline
-
 ```text
-Gazebo simulation
-  -> camera images + camera_info
-  -> OpenCV target detection
-  -> solvePnP per camera
-  -> target pose in camera_1 and camera_2
-  -> relative camera_1 -> camera_2 transform
-  -> comparison against Gazebo ground truth
+Checkerboard: implemented and evaluated
+ArUco: implemented for target generation, detection, pose and rig evaluation
+ChArUco: structure prepared / planned extension
+Targetless: optional future extension
 ```
 
-Input available to the calibration method:
-
-```text
-- /camera_1/image
-- /camera_2/image
-- /camera_1/camera_info
-- /camera_2/camera_info
-- known calibration target geometry
-```
-
-Ground truth is used only for evaluation:
-
-```text
-estimated camera_1 -> camera_2
-vs.
-true Gazebo camera_1 -> camera_2
-```
-
-Main metrics:
-
-```text
-- detection success / failure
-- which camera failed
-- estimated camera baseline
-- baseline error in cm
-- relative rotation error in degrees
-- debug images for visual inspection
-```
-
----
-
-## 2. Current Minimal Setup
-
-The current setup contains two simulated cameras and one calibration target.
-
-```text
-camera_1 pose: y = -0.35 m
-camera_2 pose: y = +0.35 m
-expected baseline: 0.70 m
-expected relative rotation: 0 deg
-```
-
-Main ROS topics:
-
-```text
-/camera_1/image
-/camera_2/image
-/camera_1/camera_info
-/camera_2/camera_info
-/clock
-```
-
-Currently used resolutions:
-
-```text
-res320x240
-res640x480
-```
-
-Dynamic Gazebo worlds are generated for each method and resolution, for example:
-
-```text
-src/calib_lab/worlds/dynamic/checkerboard_res320x240.sdf
-src/calib_lab/worlds/dynamic/checkerboard_res640x480.sdf
-src/calib_lab/worlds/dynamic/aruco_res320x240.sdf
-src/calib_lab/worlds/dynamic/aruco_res640x480.sdf
-```
-
----
-
-## 3. Repository Structure
-
-Important files and folders inside `project/`:
-
-```text
-project/
-├── run_dynamic_sweep.sh
-├── README.md
-├── results/
-│   ├── checkerboard/
-│   ├── aruco/
-│   └── charuco/
-└── src/calib_lab/
-    ├── config/
-    │   ├── ground_truth_minimal.yaml
-    │   └── aruco_target.yaml
-    ├── models/
-    │   ├── checkerboard_target/
-    │   └── aruco_target/
-    ├── worlds/
-    │   ├── minimal_calib_world.sdf
-    │   └── dynamic/
-    └── scripts/
-        ├── common/
-        │   └── transform_utils.py
-        ├── checkerboard/
-        │   ├── checkerboard_live_detector.py
-        │   ├── checkerboard_pose_live.py
-        │   ├── checkerboard_rig_estimator.py
-        │   └── checkerboard_rig_evaluator.py
-        ├── aruco/
-        │   ├── aruco_live_detector.py
-        │   ├── aruco_pose_live.py
-        │   ├── aruco_rig_estimator.py
-        │   └── aruco_rig_evaluator.py
-        ├── charuco/
-        │   └── README.md
-        └── tools/
-            ├── aggregate_target_results.py
-            ├── analyze_checkerboard_results.py
-            ├── compare_resolution_sweeps.py
-            ├── generate_checkerboard.py
-            ├── generate_aruco_target.py
-            ├── generate_dynamic_worlds.py
-            └── set_gazebo_model_pose.py
-```
-
----
-
-## 4. Estimator vs Evaluator
-
-There are two script types.
-
-### Rig Estimator
-
-Examples:
-
-```text
-checkerboard_rig_estimator.py
-aruco_rig_estimator.py
-```
-
-Purpose: live sanity check. It continuously reads the current image pair, estimates the relative camera transform, and prints the result.
-
-Use it to answer:
-
-```text
-Does detection work right now?
-Does solvePnP work?
-Is the estimated baseline roughly correct?
-Do both cameras see the target?
-```
-
-### Rig Evaluator
-
-Examples:
-
-```text
-checkerboard_rig_evaluator.py
-aruco_rig_evaluator.py
-```
-
-Purpose: benchmark and ablation. It processes one scenario, writes CSV output, saves debug images, and exits. The dynamic sweep runner calls it repeatedly for all scenarios.
-
-Simple difference:
-
-```text
-estimator = does it work live?
-evaluator = how well does it work systematically?
-```
-
----
-
-## 5. Calibration Math
-
-For each camera:
-
-```text
-known 3D target points
-+ detected 2D image points
-+ camera intrinsics from camera_info
-  -> OpenCV solvePnP
-  -> T_camera_target
-```
-
-For two cameras observing the same target:
-
-```text
-T_camera1_camera2 = T_camera1_target * inverse(T_camera2_target)
-```
-
-Then the estimated baseline and rotation are compared against Gazebo ground truth:
-
-```text
-estimated baseline = norm(translation part of T_camera1_camera2)
-baseline error = abs(estimated baseline - ground truth baseline)
-rotation error = abs(estimated relative rotation - ground truth rotation)
-```
-
----
-
-## 6. Checkerboard Pipeline
-
-Current checkerboard target:
-
-```text
-target name: target_9x6_square0_12
-inner corners: 9 x 6
-square size: 0.12 m
-```
-
-Detector:
-
-```text
-cv2.findChessboardCornersSB
-```
-
-The checkerboard pipeline uses **SB-only** detection. The classic fallback is intentionally not used in the main evaluation pipeline because mixed detectors can produce inconsistent corner ordering and near-180-degree pose outliers in difficult views.
-
-Checkerboard scripts:
-
-```text
-checkerboard_live_detector.py
-    Live corner detector.
-
-checkerboard_pose_live.py
-    Per-camera checkerboard target pose using solvePnP.
-
-checkerboard_rig_estimator.py
-    Live two-camera checkerboard rig estimate.
-
-checkerboard_rig_evaluator.py
-    Scenario evaluator used by the dynamic sweep runner.
-```
-
----
-
-## 7. ArUco Pipeline
-
-Current ArUco target:
-
-```text
-target name: target_aruco_6x4_marker0_15_sep0_06
-dictionary: DICT_4X4_50
-markers: 6 x 4
-marker length: 0.15 m
-marker separation: 0.06 m
-target plane: about 1.20 m x 0.84 m
-```
-
-This target has a similar outer size to the checkerboard target, making the comparison more fair than comparing a large checkerboard against a single marker.
-
-ArUco scripts:
-
-```text
-generate_aruco_target.py
-    Generates the ArUco target texture, model, and config.
-
-aruco_live_detector.py
-    Detects markers in both cameras, optionally opens two GUI windows, logs marker IDs, and saves debug images.
-
-aruco_pose_live.py
-    Estimates ArUco target pose per camera using marker IDs and solvePnP.
-
-aruco_rig_estimator.py
-    Live two-camera ArUco rig estimation.
-
-aruco_rig_evaluator.py
-    Scenario evaluator for dynamic ArUco sweeps.
-```
-
----
-
-## 8. Dynamic Sweep System
-
-Older sweep scripts restarted Gazebo for each scenario. The current dynamic runner starts Gazebo and the bridges once, then moves the target inside the running simulation using Gazebo's `set_pose` service.
-
-Main command:
+Main runner:
 
 ```bash
-./run_dynamic_sweep.sh METHOD RESOLUTION [GROUP]
+cd project
+./run/minimal_world/run_dynamic_sweep.sh checkerboard res640x480 yaw gui
+```
+
+General syntax:
+
+```bash
+./run/minimal_world/run_dynamic_sweep.sh METHOD RESOLUTION [GROUP] [headless|gui]
+```
+
+Arguments:
+
+```text
+METHOD:      checkerboard | aruco | charuco
+RESOLUTION:  res320x240 | res640x480
+GROUP:       distance | yaw | shift | height | mixed | all
+MODE:        headless | gui
 ```
 
 Examples:
 
 ```bash
-./run_dynamic_sweep.sh checkerboard res640x480
-./run_dynamic_sweep.sh checkerboard res320x240
-./run_dynamic_sweep.sh checkerboard res640x480 yaw
-./run_dynamic_sweep.sh aruco res640x480
-./run_dynamic_sweep.sh aruco res320x240
+./run/minimal_world/run_dynamic_sweep.sh checkerboard res640x480 yaw gui
+./run/minimal_world/run_dynamic_sweep.sh checkerboard res640x480 all headless
+./run/minimal_world/run_dynamic_sweep.sh aruco res640x480 distance headless
 ```
 
-If no group is given, all groups run:
+Results are written to:
 
 ```text
-distance
-yaw
-shift
-height
-mixed
+project/results/minimal_world/<method>/<target>/<resolution>/<group>/
 ```
 
-Each group is saved into its own result folder.
-
----
-
-## 9. Scenario Groups
-
-### Distance
-
-```text
-dist_1_2m
-dist_1_4m
-dist_1_6m
-dist_1_8m
-dist_2_0m
-dist_2_2m
-dist_2_4m
-dist_2_6m
-dist_2_8m
-```
-
-### Yaw
-
-```text
-yaw_0deg
-yaw_10deg
-yaw_20deg
-yaw_30deg
-yaw_35deg
-yaw_40deg
-yaw_45deg
-yaw_50deg
-```
-
-### Shift
-
-```text
-shift_left_0_2m
-shift_left_0_4m
-shift_left_0_6m
-shift_right_0_2m
-shift_right_0_4m
-shift_right_0_6m
-```
-
-### Height
-
-```text
-height_0_6m
-height_0_8m
-height_1_0m
-height_1_2m
-height_1_4m
-```
-
-### Mixed
-
-```text
-close_1_4m_yaw_10deg
-far_2_4m_yaw_20deg
-far_2_4m_yaw_30deg
-shift_left_0_2m_yaw_20deg
-shift_right_0_2m_yaw_20deg
-```
-
----
-
-## 10. Results Structure
-
-Checkerboard results:
-
-```text
-results/checkerboard/target_9x6_square0_12/
-├── res320x240/
-│   ├── distance/
-│   ├── yaw/
-│   ├── shift/
-│   ├── height/
-│   └── mixed/
-├── res640x480/
-│   ├── distance/
-│   ├── yaw/
-│   ├── shift/
-│   ├── height/
-│   └── mixed/
-└── comparison/
-```
-
-ArUco results:
-
-```text
-results/aruco/target_aruco_6x4_marker0_15_sep0_06/
-├── res320x240/
-│   ├── distance/
-│   ├── yaw/
-│   ├── shift/
-│   ├── height/
-│   └── mixed/
-├── res640x480/
-│   ├── distance/
-│   ├── yaw/
-│   ├── shift/
-│   ├── height/
-│   └── mixed/
-└── comparison/
-```
-
-Each group folder contains:
+Each group folder usually contains:
 
 ```text
 raw_results.csv
@@ -438,520 +153,287 @@ evaluator_logs/
 
 ---
 
-## 11. Environment Setup
+### 3.2 Bus Corridor Relay
 
-Use the ROS 2 Humble environment. Define a project directory variable once per terminal session. This keeps all commands platform-independent.
-
-Docker / devcontainer example:
-
-```bash
-export PROJECT_DIR=/workspaces/project
-cd "$PROJECT_DIR"
-```
-
-Local Ubuntu 22.04 example, after cloning the repository into your home directory:
-
-```bash
-export PROJECT_DIR="$HOME/camera-rig-calibration/project"
-cd "$PROJECT_DIR"
-```
-
-All commands below assume you are inside the `project/` folder. You can either `cd "$PROJECT_DIR"` once, or run the commands from the `project/` folder directly.
-
-Set the Gazebo model path:
-
-```bash
-export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
-```
-
-If Gazebo, the bridges, or evaluator scripts are already running in other terminals, stop them before starting a new run:
-
-```bash
-pkill -9 -f "ign gazebo" || true
-pkill -9 -f "ign-gazebo" || true
-pkill -9 -f "ruby.*ign" || true
-pkill -9 -f "ros2 run ros_gz_image" || true
-pkill -9 -f "ros2 run ros_gz_bridge" || true
-pkill -9 -f "checkerboard_rig_evaluator.py" || true
-pkill -9 -f "aruco_rig_evaluator.py" || true
-```
-
----
-
-## 12. Generate Targets
-
-Generate Checkerboard:
-
-```bash
-cd "$PROJECT_DIR"
-python3 src/calib_lab/scripts/tools/generate_checkerboard.py
-```
-
-Generate ArUco:
-
-```bash
-cd "$PROJECT_DIR"
-python3 src/calib_lab/scripts/tools/generate_aruco_target.py
-```
-
-This creates:
+Path:
 
 ```text
-src/calib_lab/models/aruco_target/
-src/calib_lab/config/aruco_target.yaml
+project/src/calib_lab/bus_corridor_relay/
 ```
+
+Purpose:
+
+- future simplified bus-corridor world,
+- two static cameras with limited or no direct overlap,
+- moving virtual camera traveling through the corridor,
+- moving camera observes intermediate targets,
+- static cameras are connected through a relay / pose-graph style calibration structure.
+
+This is currently a placeholder experiment area. It is intentionally separate from the full BeIntelli bus mesh so the relay idea can be developed in a clean and simple environment first.
 
 ---
 
-## 13. Generate Dynamic Worlds
+### 3.3 BeIntelli Bus Model
 
-Checkerboard:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
-  --method checkerboard \
-  --resolution res320x240 \
-  --target_uri model://checkerboard_target
-
-python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
-  --method checkerboard \
-  --resolution res640x480 \
-  --target_uri model://checkerboard_target
-```
-
-ArUco:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
-  --method aruco \
-  --resolution res320x240 \
-  --target_uri model://aruco_target
-
-python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
-  --method aruco \
-  --resolution res640x480 \
-  --target_uri model://aruco_target
-```
-
-Check a generated world:
-
-```bash
-grep "<world name" src/calib_lab/worlds/dynamic/aruco_res640x480.sdf
-grep -n "aruco_target\|UserCommands" src/calib_lab/worlds/dynamic/aruco_res640x480.sdf | head -30
-```
-
----
-
-## 14. Manual Debug Workflow
-
-Use this when testing live detectors, pose scripts, or estimators manually.
-
-### Terminal 1: Gazebo
-
-Checkerboard:
-
-```bash
-cd "$PROJECT_DIR"
-
-export DISPLAY=:0
-export QT_X11_NO_MITSHM=1
-export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
-
-ign gazebo src/calib_lab/worlds/dynamic/checkerboard_res640x480.sdf -r -v 4
-```
-
-ArUco:
-
-```bash
-cd "$PROJECT_DIR"
-
-export DISPLAY=:0
-export QT_X11_NO_MITSHM=1
-export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
-
-ign gazebo src/calib_lab/worlds/dynamic/aruco_res640x480.sdf -r -v 4
-```
-
-Headless alternative:
-
-```bash
-ign gazebo -s src/calib_lab/worlds/dynamic/aruco_res640x480.sdf -r -v 2
-```
-
-### Terminal 2: Image Bridge
-
-```bash
-cd "$PROJECT_DIR"
-ros2 run ros_gz_image image_bridge /camera_1/image /camera_2/image
-```
-
-### Terminal 3: Camera Info + Clock Bridge
-
-```bash
-cd "$PROJECT_DIR"
-
-ros2 run ros_gz_bridge parameter_bridge \
-  /camera_1/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
-  /camera_2/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
-  /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
-```
-
-### Terminal 4: Detector / Pose / Estimator
-
-Run one of the scripts listed below.
-
----
-
-## 15. Run Checkerboard Scripts Manually
-
-Live detector:
-
-```bash
-cd "$PROJECT_DIR"
-python3 src/calib_lab/scripts/checkerboard/checkerboard_live_detector.py
-```
-
-Pose live:
-
-```bash
-cd "$PROJECT_DIR"
-python3 src/calib_lab/scripts/checkerboard/checkerboard_pose_live.py
-```
-
-Rig estimator:
-
-```bash
-cd "$PROJECT_DIR"
-python3 src/calib_lab/scripts/checkerboard/checkerboard_rig_estimator.py
-```
-
-Manual evaluator test:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/checkerboard/checkerboard_rig_evaluator.py \
-  --ros-args \
-  -p scenario_name:=manual_static \
-  -p output_csv:=results/checkerboard/manual_evaluator_test/raw_results.csv \
-  -p debug_dir:=results/checkerboard/manual_evaluator_test/debug_images \
-  -p max_valid_samples:=1 \
-  -p max_attempts:=1 \
-  -p ready_timeout_sec:=20.0
-```
-
----
-
-## 16. Run ArUco Scripts Manually
-
-Live detector:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/aruco/aruco_live_detector.py \
-  --ros-args \
-  -p show_gui:=true \
-  -p save_debug:=true \
-  -p save_every_n_frames:=30
-```
-
-Pose live:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/aruco/aruco_pose_live.py \
-  --ros-args \
-  -p show_gui:=true \
-  -p save_debug:=true \
-  -p save_every_n_frames:=30
-```
-
-Rig estimator:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/aruco/aruco_rig_estimator.py \
-  --ros-args \
-  -p show_gui:=true \
-  -p save_debug:=true \
-  -p save_every_n_successes:=10
-```
-
-Manual evaluator test:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/aruco/aruco_rig_evaluator.py \
-  --ros-args \
-  -p scenario_name:=manual_static \
-  -p output_csv:=results/aruco/manual_evaluator_test/raw_results.csv \
-  -p debug_dir:=results/aruco/manual_evaluator_test/debug_images \
-  -p max_valid_samples:=1 \
-  -p max_attempts:=1 \
-  -p ready_timeout_sec:=20.0
-```
-
----
-
-## 17. Run Dynamic Sweeps
-
-Checkerboard, all groups:
-
-```bash
-cd "$PROJECT_DIR"
-
-./run_dynamic_sweep.sh checkerboard res320x240
-./run_dynamic_sweep.sh checkerboard res640x480
-```
-
-Checkerboard, one group:
-
-```bash
-./run_dynamic_sweep.sh checkerboard res640x480 yaw
-./run_dynamic_sweep.sh checkerboard res640x480 distance
-./run_dynamic_sweep.sh checkerboard res640x480 shift
-./run_dynamic_sweep.sh checkerboard res640x480 height
-./run_dynamic_sweep.sh checkerboard res640x480 mixed
-```
-
-ArUco, all groups:
-
-```bash
-cd "$PROJECT_DIR"
-
-./run_dynamic_sweep.sh aruco res320x240
-./run_dynamic_sweep.sh aruco res640x480
-```
-
-ArUco, one group:
-
-```bash
-./run_dynamic_sweep.sh aruco res640x480 yaw
-./run_dynamic_sweep.sh aruco res640x480 distance
-./run_dynamic_sweep.sh aruco res640x480 shift
-./run_dynamic_sweep.sh aruco res640x480 height
-./run_dynamic_sweep.sh aruco res640x480 mixed
-```
-
----
-
-## 18. Aggregate Results
-
-Checkerboard:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/tools/aggregate_target_results.py \
-  --target_dir results/checkerboard/target_9x6_square0_12
-```
-
-ArUco:
-
-```bash
-cd "$PROJECT_DIR"
-
-python3 src/calib_lab/scripts/tools/aggregate_target_results.py \
-  --target_dir results/aruco/target_aruco_6x4_marker0_15_sep0_06
-```
-
-Aggregation output:
+Path:
 
 ```text
-comparison/all_results_long.csv
-comparison/resolution_comparison_wide.csv
-comparison/counts_by_resolution.csv
+project/src/calib_lab/beintelli_bus_model/
+```
+
+Purpose:
+
+- full imported BeIntelli 3D bus model,
+- static front/rear camera setup,
+- distributed individual ArUco landmarks,
+- visibility analysis for realistic bus-like camera placement,
+- later extension toward full bus calibration experiments.
+
+Main runner:
+
+```bash
+cd project
+./run/beintelli_bus_model/run_aruco_visibility_detector.sh gui results/beintelli_bus_model/aruco_visibility/current
+```
+
+Headless variant:
+
+```bash
+./run/beintelli_bus_model/run_aruco_visibility_detector.sh headless results/beintelli_bus_model/aruco_visibility/current
+```
+
+Main world:
+
+```text
+project/src/calib_lab/beintelli_bus_model/worlds/bus_individual_marker_visibility_test.sdf
+```
+
+Main detector:
+
+```text
+project/src/calib_lab/beintelli_bus_model/scripts/bus_aruco_visibility_detector.py
+```
+
+Results are written to:
+
+```text
+project/results/beintelli_bus_model/aruco_visibility/
 ```
 
 ---
 
-## 19. Quick Result Printout
+## 4. Calibration Pipeline
 
-Checkerboard compact comparison:
+For target-based calibration, the general pipeline is:
+
+```text
+Gazebo world
+  -> camera image topics
+  -> camera_info topics
+  -> OpenCV target detection
+  -> solvePnP per camera
+  -> target pose in each camera frame
+  -> relative camera-to-camera transform
+  -> comparison against Gazebo ground truth
+```
+
+For two cameras observing the same target:
+
+```text
+known target geometry
++ detected 2D target points
++ camera intrinsics from camera_info
+  -> OpenCV solvePnP
+  -> T_camera_target for each camera
+
+T_camera1_camera2 = T_camera1_target * inverse(T_camera2_target)
+```
+
+Main metrics:
+
+```text
+detection status
+valid sample count
+estimated baseline
+baseline error in cm
+estimated relative rotation
+rotation error in degrees
+visible marker IDs / target points
+debug images
+```
+
+---
+
+## 5. Environment Setup
+
+The project was developed for:
+
+```text
+Ubuntu 22.04
+ROS 2 Humble
+Gazebo Sim / Ignition Fortress
+OpenCV with aruco module
+ros_gz image and parameter bridges
+Python 3
+Git LFS
+```
+
+Before running experiments:
 
 ```bash
-cd "$PROJECT_DIR"
+source /opt/ros/humble/setup.bash
+cd /path/to/camera-rig-calibration/project
+export PROJECT_DIR="$(pwd)"
+```
 
+For WSLg / GUI Gazebo runs, `DISPLAY` is usually set automatically. If not:
+
+```bash
+export DISPLAY=:0
+export QT_X11_NO_MITSHM=1
+```
+
+---
+
+## 6. Git LFS Requirement
+
+The BeIntelli mesh files are large and are stored through **Git LFS**.
+
+Before cloning or pulling the repository, install Git LFS:
+
+```bash
+sudo apt update
+sudo apt install git-lfs -y
+git lfs install
+```
+
+After cloning:
+
+```bash
+git lfs pull
+```
+
+Check that LFS files are present:
+
+```bash
+git lfs ls-files
+```
+
+Expected large LFS-managed files include:
+
+```text
+beintelli_erklarbus.glb
+beintelli_erklarbus.dae
+scene.bin
+beintelli_erklarbus.obj
+beintelli_erklarbus.stl
+```
+
+If Gazebo cannot load the bus mesh, first verify that these files were downloaded correctly through LFS.
+
+---
+
+## 7. Sanity Tests
+
+Run these commands from `project/`.
+
+### 7.1 Validate Python scripts
+
+```bash
+find src/calib_lab -name "*.py" -print0 | xargs -0 -n1 python3 -m py_compile
+```
+
+### 7.2 Validate SDF/XML syntax
+
+```bash
 python3 - <<'PY'
-import csv
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
-path = Path("results/checkerboard/target_9x6_square0_12/comparison/resolution_comparison_wide.csv")
-with path.open(newline="", encoding="utf-8") as f:
-    rows = list(csv.DictReader(f))
+ok = True
+for path in Path("src/calib_lab").rglob("*.sdf"):
+    try:
+        ET.parse(path)
+        print("[OK] XML:", path)
+    except Exception as e:
+        ok = False
+        print("[ERROR] XML:", path, e)
 
-for r in rows:
-    print(r["group"], r["scenario"],
-          "| 320:", r.get("res320x240_pose_class", ""), r.get("res320x240_baseline_error_cm", ""),
-          "| 640:", r.get("res640x480_pose_class", ""), r.get("res640x480_baseline_error_cm", ""),
-          "| best:", r.get("best_resolution_by_error", ""))
+raise SystemExit(0 if ok else 1)
 PY
 ```
 
-ArUco compact comparison:
+### 7.3 Minimal world smoke test
 
 ```bash
-cd "$PROJECT_DIR"
+source /opt/ros/humble/setup.bash
+./run/minimal_world/run_dynamic_sweep.sh checkerboard res640x480 yaw gui
+```
 
-python3 - <<'PY'
-import csv
-from pathlib import Path
+Expected behavior:
 
-path = Path("results/aruco/target_aruco_6x4_marker0_15_sep0_06/comparison/resolution_comparison_wide.csv")
-with path.open(newline="", encoding="utf-8") as f:
-    rows = list(csv.DictReader(f))
+- Gazebo starts,
+- the target is moved through the yaw scenarios,
+- result folders are created under `results/minimal_world/`,
+- `raw_results.csv` and `summary.csv` are written.
 
-for r in rows:
-    print(r["group"], r["scenario"],
-          "| 320:", r.get("res320x240_pose_class", ""), r.get("res320x240_baseline_error_cm", ""),
-          "| 640:", r.get("res640x480_pose_class", ""), r.get("res640x480_baseline_error_cm", ""),
-          "| best:", r.get("best_resolution_by_error", ""))
-PY
+### 7.4 BeIntelli bus model smoke test
+
+```bash
+source /opt/ros/humble/setup.bash
+./run/beintelli_bus_model/run_aruco_visibility_detector.sh gui results/beintelli_bus_model/aruco_visibility/current
+```
+
+Expected behavior:
+
+- Gazebo starts with the BeIntelli bus model,
+- front and rear static camera topics are bridged,
+- ArUco marker visibility is evaluated,
+- CSV and summary text files are written.
+
+---
+
+## 8. Notes on Results
+
+`results/` contains generated experiment outputs. These files are useful for inspection, but the source of truth is the reproducible pipeline in `src/` and `run/`.
+
+For clean experiments, remove old result folders before rerunning large sweeps:
+
+```bash
+rm -rf results/minimal_world/checkerboard/target_9x6_square0_12/res640x480/yaw
+```
+
+The runners also clean the requested result group before writing new outputs.
+
+---
+
+## 9. Development Notes
+
+Recommended workflow:
+
+1. Keep experiment-specific files inside their world folder.
+2. Keep shared utilities inside `src/calib_lab/common/`.
+3. Keep large mesh files under Git LFS.
+4. Avoid committing temporary logs, caches and large debug result folders.
+5. Add new experiment worlds as separate folders instead of mixing scripts and models globally.
+
+Experiment folders:
+
+```text
+minimal_world       = controlled calibration benchmark
+bus_corridor_relay  = future moving-camera relay setup
+beintelli_bus_model = full imported bus model setup
+common              = shared utilities only
 ```
 
 ---
 
-## 20. Current Checkerboard Findings
+## 10. License / Attribution
 
-Current checkerboard results showed:
-
-```text
-Useful distance range:
-approximately 1.6 m to 2.0 m
-
-Too close:
-1.2 m and 1.4 m failed
-
-Too far:
-2.4 m and beyond usually failed
-
-Yaw:
-0° to 30° works
-35° works only at 640x480
-40° and above fails
-
-Shift:
-pure lateral shifts mostly fail
-
-Resolution:
-640x480 often improves accuracy and can rescue some borderline cases,
-but it does not solve visibility / field-of-view / overlap problems.
-```
-
-Interpretation:
+The BeIntelli bus model is stored with attribution information in:
 
 ```text
-Higher resolution improves corner localization and can improve robustness near detection limits. However, higher resolution cannot compensate for missing common field of view or severe target visibility limitations.
+project/src/calib_lab/beintelli_bus_model/models/beintelli_bus/ATTRIBUTION.txt
 ```
 
----
-
-## 21. Troubleshooting
-
-### Target appears black or missing
-
-Set the model path and restart Gazebo:
-
-```bash
-export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
-```
-
-### set_pose service missing
-
-Check:
-
-```bash
-ign service -l | grep set_pose
-```
-
-Expected examples:
-
-```text
-/world/dynamic_checkerboard_res640x480/set_pose
-/world/dynamic_aruco_res640x480/set_pose
-```
-
-If missing, regenerate the dynamic world using `generate_dynamic_worlds.py`.
-
-### Wrong result folder named `0`
-
-This means the scenario CSV is wrong or old. Regenerate dynamic worlds and check:
-
-```bash
-head -n 5 src/calib_lab/worlds/dynamic/scenario_poses.csv | cat -A
-```
-
-Expected:
-
-```text
-scenario,group,x,y,z,roll,pitch,yaw$
-```
-
-### High memory usage
-
-Use `run_dynamic_sweep.sh`. Avoid older restart-based sweep scripts for large sweeps.
-
----
-
-## 22. Next Steps
-
-Planned next steps:
-
-```text
-1. Finish and validate the ArUco evaluator.
-2. Run ArUco dynamic sweeps for res320x240 and res640x480.
-3. Aggregate ArUco results.
-4. Compare Checkerboard and ArUco.
-5. Implement ChArUco target and scripts.
-6. Run the same dynamic sweeps for ChArUco.
-7. Compare Checkerboard, ArUco, and ChArUco.
-8. Later extend the setup from two cameras to a 3+ camera rig and a bus-interior-inspired layout.
-```
-
-Longer-term evaluation questions:
-
-```text
-- Which method is most accurate under favorable views?
-- Which method is most robust under yaw?
-- Which method handles partial visibility better?
-- How much does resolution matter?
-- How much does target size / geometry matter?
-- How much common field of view is required?
-- When do methods fail and why?
-```
-
----
-
-## 23. Presentation Summary
-
-The current project story:
-
-```text
-We built a reproducible ROS 2 + Gazebo benchmark for camera rig calibration.
-Gazebo provides ground truth.
-OpenCV methods only receive camera images, camera_info, and target geometry.
-The pipeline estimates camera-to-camera extrinsics and compares them against ground truth.
-Checkerboard is the first completed baseline.
-ArUco is being integrated with the same structure.
-The dynamic sweep runner allows systematic ablation over distance, yaw, shift, height, mixed poses, and resolution.
-```
-
-The main contribution so far is a reusable evaluation framework:
-
-```text
-method-specific detector/evaluator
-+ common Gazebo scenario generation
-+ common dynamic runner
-+ common result structure
-+ common CSV aggregation
-+ debug images
-+ ground-truth metrics
-```
+Check this file before redistributing the mesh assets.
