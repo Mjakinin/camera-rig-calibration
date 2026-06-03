@@ -1,60 +1,73 @@
 # Camera Rig Calibration Lab
 
-This project builds a minimal synthetic benchmark pipeline for arbitrary camera rig calibration using:
+Synthetic benchmark and evaluation pipeline for arbitrary camera-rig calibration using **ROS 2 Humble**, **Gazebo Sim / Ignition Fortress**, **OpenCV**, and **ros_gz** bridges.
 
-- ROS 2 Humble
-- Gazebo Sim / Ignition Fortress
-- ros_gz_image
-- ros_gz_bridge
-- OpenCV
-- rosbag2
+The project goal is to build a reproducible simulation benchmark for camera-rig calibration methods. Gazebo provides known ground-truth camera poses. The calibration methods only receive camera images, `camera_info`, and known target geometry. The estimated camera-to-camera transform is then compared against the Gazebo ground truth.
 
-The current focus is a minimal two-camera setup with a checkerboard calibration target. The goal is to generate controlled synthetic camera images in Gazebo, process them with OpenCV-based calibration methods, and compare the estimated camera extrinsics against known ground truth from the simulation.
+Current method status:
+
+- **Checkerboard**: baseline implemented and evaluated.
+- **ArUco**: target generation, live detector, pose-live, rig estimator, and evaluator integration in progress.
+- **ChArUco**: planned next.
+- **Targetless calibration**: optional later.
 
 ---
 
-## 1. Project Goal
-
-The main idea is:
+## 1. Core Pipeline
 
 ```text
-Gazebo defines the true camera poses.
-These true poses are the ground truth.
-
-The calibration algorithm only sees:
-- camera images
-- camera_info / intrinsics
-- calibration target geometry
-
-The algorithm estimates:
-- target pose relative to camera_1
-- target pose relative to camera_2
-- camera_1 to camera_2 transformation
-
-Then we compare:
-estimated camera_1 -> camera_2
-against
-ground-truth camera_1 -> camera_2
+Gazebo simulation
+  -> camera images + camera_info
+  -> OpenCV target detection
+  -> solvePnP per camera
+  -> target pose in camera_1 and camera_2
+  -> relative camera_1 -> camera_2 transform
+  -> comparison against Gazebo ground truth
 ```
 
-This is the core of the camera rig calibration benchmark.
+Input available to the calibration method:
+
+```text
+- /camera_1/image
+- /camera_2/image
+- /camera_1/camera_info
+- /camera_2/camera_info
+- known calibration target geometry
+```
+
+Ground truth is used only for evaluation:
+
+```text
+estimated camera_1 -> camera_2
+vs.
+true Gazebo camera_1 -> camera_2
+```
+
+Main metrics:
+
+```text
+- detection success / failure
+- which camera failed
+- estimated camera baseline
+- baseline error in cm
+- relative rotation error in degrees
+- debug images for visual inspection
+```
 
 ---
 
 ## 2. Current Minimal Setup
 
-The current simulation contains:
+The current setup contains two simulated cameras and one calibration target.
 
 ```text
-Gazebo world:
-- ground plane
-- light source
-- camera_1
-- camera_2
-- checkerboard calibration target
+camera_1 pose: y = -0.35 m
+camera_2 pose: y = +0.35 m
+expected baseline: 0.70 m
+expected relative rotation: 0 deg
 ```
 
-Current ROS topics:
+Main ROS topics:
 
 ```text
 /camera_1/image
@@ -64,999 +77,867 @@ Current ROS topics:
 /clock
 ```
 
-Current camera resolution:
+Currently used resolutions:
 
 ```text
-width  = 320
-height = 240
-fps    ≈ 10 Hz
+res320x240
+res640x480
 ```
 
-Current checkerboard:
+Dynamic Gazebo worlds are generated for each method and resolution, for example:
 
 ```text
-10 x 7 squares
-9 x 6 inner corners
-square_size = 0.12 m
-```
-
-OpenCV pattern size:
-
-```python
-pattern_size = (9, 6)
+src/calib_lab/worlds/dynamic/checkerboard_res320x240.sdf
+src/calib_lab/worlds/dynamic/checkerboard_res640x480.sdf
+src/calib_lab/worlds/dynamic/aruco_res320x240.sdf
+src/calib_lab/worlds/dynamic/aruco_res640x480.sdf
 ```
 
 ---
 
 ## 3. Repository Structure
 
-The relevant files are inside the `project/` folder:
+Important files and folders inside `project/`:
 
 ```text
 project/
-├── src/
-│   └── calib_lab/
-│       ├── worlds/
-│       │   └── minimal_calib_world.sdf
-│       ├── models/
-│       │   └── checkerboard_target/
-│       │       ├── model.config
-│       │       ├── model.sdf
-│       │       └── materials/
-│       │           └── textures/
-│       │               └── checkerboard_10x7.png
-│       └── scripts/
-│           ├── generate_checkerboard.py
-│           ├── checkerboard_live_detector.py
-│           └── checkerboard_pose_live.py
-└── bags/                  # optional, generated rosbag2 recordings
+├── run_dynamic_sweep.sh
+├── README.md
+├── results/
+│   ├── checkerboard/
+│   ├── aruco/
+│   └── charuco/
+└── src/calib_lab/
+    ├── config/
+    │   ├── ground_truth_minimal.yaml
+    │   └── aruco_target.yaml
+    ├── models/
+    │   ├── checkerboard_target/
+    │   └── aruco_target/
+    ├── worlds/
+    │   ├── minimal_calib_world.sdf
+    │   └── dynamic/
+    └── scripts/
+        ├── common/
+        │   └── transform_utils.py
+        ├── checkerboard/
+        │   ├── checkerboard_live_detector.py
+        │   ├── checkerboard_pose_live.py
+        │   ├── checkerboard_rig_estimator.py
+        │   └── checkerboard_rig_evaluator.py
+        ├── aruco/
+        │   ├── aruco_live_detector.py
+        │   ├── aruco_pose_live.py
+        │   ├── aruco_rig_estimator.py
+        │   └── aruco_rig_evaluator.py
+        ├── charuco/
+        │   └── README.md
+        └── tools/
+            ├── aggregate_target_results.py
+            ├── analyze_checkerboard_results.py
+            ├── compare_resolution_sweeps.py
+            ├── generate_checkerboard.py
+            ├── generate_aruco_target.py
+            ├── generate_dynamic_worlds.py
+            └── set_gazebo_model_pose.py
 ```
 
 ---
 
-## 4. Prerequisites
+## 4. Estimator vs Evaluator
 
-This project assumes that ROS 2 Humble, Gazebo Sim / Ignition Fortress, and the required ROS-Gazebo bridge packages are already installed.
+There are two script types.
 
-Required packages include:
+### Rig Estimator
 
-```text
-ros-humble-ros-gz
-ros-humble-ros-gz-image
-ros-humble-ros-gz-bridge
-ros-humble-rqt-image-view
-ros-humble-cv-bridge
-python3-opencv
-python3-numpy
-```
-
-If `ros2`, `ign`, or one of the bridge commands is not found, check the local ROS/Gazebo installation first.
-
----
-
-## 5. Important Gazebo Model Path
-
-The checkerboard target is loaded as a local Gazebo model:
-
-```xml
-model://checkerboard_target
-```
-
-Therefore, Gazebo must be able to find the local model folder:
-
-```text
-project/src/calib_lab/models
-```
-
-If the checkerboard target appears black or is missing, run this once from inside the `project/` folder:
-
-```bash
-export IGN_GAZEBO_RESOURCE_PATH="$(pwd)/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH}"
-```
-
-This can also be added permanently to the local shell configuration, for example `.bashrc`.
-
----
-
-## 6. Recommended Terminal Layout
-
-Use four terminals while debugging:
-
-```text
-Terminal 1: Gazebo simulation
-Terminal 2: Image bridge
-Terminal 3: camera_info + clock bridge
-Terminal 4: Tests, visualization, OpenCV scripts, rosbag2
-```
-
-This is the manual debug workflow. Later, this can be replaced by launch files or start scripts.
-
----
-
-## 7. Terminal 1: Start Gazebo
-
-From the repository root:
-
-```bash
-cd project
-```
-
-Start the minimal calibration world:
-
-```bash
-ign gazebo src/calib_lab/worlds/minimal_calib_world.sdf -r -v 4
-```
-
-Expected:
-
-- Gazebo opens.
-- Two cameras are visible.
-- The checkerboard target is visible.
-- The simulation is running because of `-r`.
-
-If the checkerboard is black or missing, check the Gazebo model path:
-
-```bash
-export IGN_GAZEBO_RESOURCE_PATH="$(pwd)/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH}"
-```
-
-Then restart Gazebo.
-
----
-
-## 8. Terminal 2: Start Image Bridge
-
-From the repository root:
-
-```bash
-cd project
-```
-
-Start the image bridge:
-
-```bash
-ros2 run ros_gz_image image_bridge /camera_1/image /camera_2/image
-```
-
-Keep this terminal open.
-
-This provides the ROS image topics:
-
-```text
-/camera_1/image
-/camera_2/image
-```
-
----
-
-## 9. Terminal 3: Start camera_info and clock Bridge
-
-From the repository root:
-
-```bash
-cd project
-```
-
-Start the bridge for camera intrinsics and simulation time:
-
-```bash
-ros2 run ros_gz_bridge parameter_bridge \
-  /camera_1/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
-  /camera_2/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
-  /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
-```
-
-Keep this terminal open.
-
-This provides:
-
-```text
-/camera_1/camera_info
-/camera_2/camera_info
-/clock
-```
-
----
-
-## 10. Terminal 4: Check the Pipeline
-
-From the repository root:
-
-```bash
-cd project
-```
-
-List relevant topics:
-
-```bash
-ros2 topic list | grep -E "camera|clock"
-```
-
-Expected topics:
-
-```text
-/camera_1/camera_info
-/camera_1/image
-/camera_1/image/compressed
-/camera_1/image/compressedDepth
-/camera_1/image/theora
-/camera_2/camera_info
-/camera_2/image
-/camera_2/image/compressed
-/camera_2/image/compressedDepth
-/camera_2/image/theora
-/clock
-```
-
-If `/camera_1/image` or `/camera_2/image` is missing, check Terminal 2.
-
-If `/camera_1/camera_info` or `/camera_2/camera_info` is missing, check Terminal 3.
-
----
-
-## 11. Check Image Frequency
-
-Check camera 1:
-
-```bash
-ros2 topic hz /camera_1/image
-```
-
-Expected:
-
-```text
-average rate: about 9.5 to 10.0 Hz
-```
-
-Check camera 2:
-
-```bash
-ros2 topic hz /camera_2/image
-```
-
-Expected:
-
-```text
-average rate: about 9.5 to 10.0 Hz
-```
-
-Stop with:
-
-```text
-Ctrl+C
-```
-
----
-
-## 12. Check Image Resolution
-
-Check image width:
-
-```bash
-timeout 5 ros2 topic echo /camera_1/image --field width --once
-```
-
-Expected:
-
-```text
-320
----
-```
-
-Check image height:
-
-```bash
-timeout 5 ros2 topic echo /camera_1/image --field height --once
-```
-
-Expected:
-
-```text
-240
----
-```
-
----
-
-## 13. Check camera_info
-
-Check camera 1:
-
-```bash
-timeout 5 ros2 topic echo /camera_1/camera_info --once
-```
-
-Expected output contains:
-
-```text
-height: 240
-width: 320
-distortion_model: plumb_bob
-k:
-- ...
-```
-
-Short check:
-
-```bash
-timeout 5 ros2 topic echo /camera_1/camera_info --field width --once
-```
-
-Expected:
-
-```text
-320
----
-```
-
-Check camera 2:
-
-```bash
-timeout 5 ros2 topic echo /camera_2/camera_info --field width --once
-```
-
-Expected:
-
-```text
-320
----
-```
-
----
-
-## 14. Check /clock
-
-```bash
-timeout 5 ros2 topic echo /clock --once
-```
-
-Expected:
-
-```text
-clock:
-  sec: ...
-  nanosec: ...
----
-```
-
-`/clock` is the simulation time from Gazebo. It is useful for synchronized multi-camera data and reproducible rosbag2 replay.
-
----
-
-## 15. Visualize Images with rqt_image_view
-
-Start:
-
-```bash
-ros2 run rqt_image_view rqt_image_view
-```
-
-Then select:
-
-```text
-/camera_1/image
-```
-
-or:
-
-```text
-/camera_2/image
-```
-
-Expected:
-
-- Both cameras show the checkerboard target.
-- The checkerboard has a white margin.
-- The target is not completely black.
-
-Important: Moving the free Gazebo GUI camera does not change `/camera_1/image`. `rqt_image_view` shows the simulated sensor camera image, not the Gazebo editor viewport.
-
----
-
-## 16. Record a rosbag2 Dataset
-
-Make sure Gazebo and both bridges are running.
-
-From inside `project/`:
-
-```bash
-mkdir -p bags
-```
-
-Record:
-
-```bash
-ros2 bag record \
-  /camera_1/image \
-  /camera_2/image \
-  /camera_1/camera_info \
-  /camera_2/camera_info \
-  /clock \
-  -o bags/checkerboard_static_01
-```
-
-Let it run for 10 to 30 seconds.
-
-Stop with:
-
-```text
-Ctrl+C
-```
-
-Check the bag:
-
-```bash
-ros2 bag info bags/checkerboard_static_01
-```
-
-Expected topics:
-
-```text
-/camera_1/image
-/camera_2/image
-/camera_1/camera_info
-/camera_2/camera_info
-/clock
-```
-
----
-
-## 17. Replay a rosbag2 Dataset
-
-Stop Gazebo and all bridges first for a clean replay test.
-
-From inside `project/`:
-
-```bash
-ros2 bag play bags/checkerboard_static_01 --clock
-```
-
-In another terminal:
-
-```bash
-ros2 topic list | grep camera
-ros2 topic hz /camera_1/image
-```
-
-Expected:
-
-- Image topics appear.
-- `/camera_1/image` publishes at approximately the recorded rate.
-
----
-
-## 18. Checkerboard Texture Generation
-
-The checkerboard image is generated by:
-
-```bash
-python3 src/calib_lab/scripts/generate_checkerboard.py
-```
-
-Current board design:
-
-```text
-10 x 7 squares
-9 x 6 inner corners
-white margin around the board
-```
-
-The white margin is important. Without it, OpenCV may fail to detect the checkerboard even if it looks correct to humans.
-
-Texture path:
-
-```text
-src/calib_lab/models/checkerboard_target/materials/textures/checkerboard_10x7.png
-```
-
-If Gazebo shows a black target, check:
-
-```bash
-ls -lh src/calib_lab/models/checkerboard_target/materials/textures/
-```
-
-and:
-
-```bash
-echo $IGN_GAZEBO_RESOURCE_PATH
-```
-
-Gazebo may cache models and textures. If the texture changes, fully restart Gazebo.
-
----
-
-## 19. Checkerboard Detection Script
-
-Script:
-
-```text
-src/calib_lab/scripts/checkerboard_live_detector.py
-```
-
-Purpose:
-
-```text
-Checks whether OpenCV can detect the checkerboard in a live ROS image topic.
-```
-
-Run for camera 1:
-
-```bash
-python3 src/calib_lab/scripts/checkerboard_live_detector.py \
-  --ros-args \
-  -p image_topic:=/camera_1/image \
-  -p corners_x:=9 \
-  -p corners_y:=6
-```
-
-Expected:
-
-```text
-FOUND checkerboard | frame=... | corners=54 | success=...
-```
-
-Run for camera 2:
-
-```bash
-python3 src/calib_lab/scripts/checkerboard_live_detector.py \
-  --ros-args \
-  -p image_topic:=/camera_2/image \
-  -p corners_x:=9 \
-  -p corners_y:=6
-```
-
-Expected:
-
-```text
-FOUND checkerboard | frame=... | corners=54 | success=...
-```
-
-Important:
-
-```text
-54 corners = 9 x 6 inner corners
-```
-
-If detection fails:
-
-- check that `/camera_X/image` is running
-- check `rqt_image_view`
-- check that the checkerboard has a white margin
-- check that `corners_x=9`, `corners_y=6`
-- move target closer
-- increase target size
-- increase resolution later if needed
-
----
-
-## 20. Checkerboard Pose Script
-
-Script:
-
-```text
-src/calib_lab/scripts/checkerboard_pose_live.py
-```
-
-Purpose:
-
-```text
-Estimates the pose of the checkerboard relative to one camera using OpenCV solvePnP.
-```
-
-Inputs:
-
-```text
-/camera_X/image
-/camera_X/camera_info
-```
-
-Run for camera 1:
-
-```bash
-python3 src/calib_lab/scripts/checkerboard_pose_live.py \
-  --ros-args \
-  -p image_topic:=/camera_1/image \
-  -p camera_info_topic:=/camera_1/camera_info \
-  -p corners_x:=9 \
-  -p corners_y:=6 \
-  -p square_size:=0.12
-```
-
-Expected:
-
-```text
-POSE FOUND | method=SB | frame=... | t=[..., ..., ...] m | dist=... m
-```
-
-Example:
-
-```text
-POSE FOUND | method=SB | frame=1 | t=[0.130, 0.298, 1.785] m | dist=1.814 m
-```
-
-Run for camera 2:
-
-```bash
-python3 src/calib_lab/scripts/checkerboard_pose_live.py \
-  --ros-args \
-  -p image_topic:=/camera_2/image \
-  -p camera_info_topic:=/camera_2/camera_info \
-  -p corners_x:=9 \
-  -p corners_y:=6 \
-  -p square_size:=0.12
-```
-
-Important:
-
-If the script only prints:
-
-```text
-Image topic: ...
-CameraInfo topic: ...
-Pattern: ...
-```
-
-and then nothing else, then it is probably not receiving `camera_info`.
-
-Check:
-
-```bash
-ros2 topic list | grep camera_info
-```
-
-and:
-
-```bash
-timeout 5 ros2 topic echo /camera_1/camera_info --field width --once
-```
-
-If this fails, restart Terminal 3.
-
----
-
-## 21. Meaning of solvePnP Output
-
-OpenCV `solvePnP` estimates the pose of the checkerboard in the camera coordinate system.
-
-OpenCV camera coordinates are typically:
-
-```text
-x = right in the image
-y = down in the image
-z = forward from the camera
-```
-
-Example:
-
-```text
-t=[0.130, 0.298, 1.785] m
-```
-
-roughly means:
-
-```text
-The checkerboard is about 1.785 m in front of the camera,
-0.130 m sideways,
-and 0.298 m vertically in image/camera coordinates.
-```
-
-The distance:
-
-```text
-dist=1.814 m
-```
-
-is the Euclidean distance from the camera to the checkerboard origin.
-
----
-
-## 22. Ground Truth Concept
-
-In Gazebo, we know the actual poses because we define them in the SDF world file.
-
-Example current setup:
-
-```text
-camera_1 pose: x=0, y=-0.35, z=1.0
-camera_2 pose: x=0, y=+0.35, z=1.0
-target pose:   x≈1.8, y=0.0,   z=1.0
-```
-
-Therefore, the true camera baseline is approximately:
-
-```text
-camera_1 to camera_2 = 0.70 m lateral offset
-```
-
-The algorithm should estimate this from images.
-
-The final evaluation will compare:
-
-```text
-estimated T_camera1_camera2
-against
-ground-truth T_camera1_camera2
-```
-
-Metrics:
-
-```text
-translation error [m or cm]
-rotation error [deg]
-reprojection error [px]
-success rate [%]
-runtime [s]
-```
-
----
-
-## 23. Current Calibration Pipeline
-
-Current checkerboard pipeline:
-
-```text
-Gazebo renders checkerboard target
-↓
-ros_gz_image publishes camera images to ROS
-↓
-ros_gz_bridge publishes camera_info and clock
-↓
-OpenCV detects checkerboard corners
-↓
-OpenCV solvePnP estimates target pose per camera
-↓
-Next step: combine camera_1 and camera_2 target poses
-↓
-Estimate camera_1 -> camera_2 extrinsic transform
-↓
-Compare against Gazebo ground truth
-```
-
----
-
-## 24. Next Development Step
-
-Next script to implement:
+Examples:
 
 ```text
 checkerboard_rig_estimator.py
+aruco_rig_estimator.py
 ```
 
-It should subscribe to:
+Purpose: live sanity check. It continuously reads the current image pair, estimates the relative camera transform, and prints the result.
+
+Use it to answer:
 
 ```text
-/camera_1/image
-/camera_1/camera_info
-/camera_2/image
-/camera_2/camera_info
+Does detection work right now?
+Does solvePnP work?
+Is the estimated baseline roughly correct?
+Do both cameras see the target?
 ```
 
-Then:
+### Rig Evaluator
+
+Examples:
 
 ```text
-1. detect checkerboard in camera_1
-2. detect checkerboard in camera_2
-3. run solvePnP for both cameras
-4. compute T_cam1_target
-5. compute T_cam2_target
-6. compute estimated T_cam1_cam2
-7. compare to known Gazebo ground truth
-8. print translation and rotation errors
+checkerboard_rig_evaluator.py
+aruco_rig_evaluator.py
+```
+
+Purpose: benchmark and ablation. It processes one scenario, writes CSV output, saves debug images, and exits. The dynamic sweep runner calls it repeatedly for all scenarios.
+
+Simple difference:
+
+```text
+estimator = does it work live?
+evaluator = how well does it work systematically?
 ```
 
 ---
 
-## 25. Common Problems and Fixes
+## 5. Calibration Math
 
-### Problem: Checkerboard appears black or missing in Gazebo
+For each camera:
 
-Check the texture:
-
-```bash
-ls -lh src/calib_lab/models/checkerboard_target/materials/textures/
+```text
+known 3D target points
++ detected 2D image points
++ camera intrinsics from camera_info
+  -> OpenCV solvePnP
+  -> T_camera_target
 ```
 
-Check the Gazebo model path:
+For two cameras observing the same target:
 
-```bash
-echo $IGN_GAZEBO_RESOURCE_PATH
+```text
+T_camera1_camera2 = T_camera1_target * inverse(T_camera2_target)
 ```
 
-If needed, set it from inside the `project/` folder:
+Then the estimated baseline and rotation are compared against Gazebo ground truth:
 
-```bash
-export IGN_GAZEBO_RESOURCE_PATH="$(pwd)/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH}"
+```text
+estimated baseline = norm(translation part of T_camera1_camera2)
+baseline error = abs(estimated baseline - ground truth baseline)
+rotation error = abs(estimated relative rotation - ground truth rotation)
 ```
-
-Restart Gazebo fully.
 
 ---
 
-### Problem: ROS image topics are missing
+## 6. Checkerboard Pipeline
 
-Check that the image bridge is running:
+Current checkerboard target:
+
+```text
+target name: target_9x6_square0_12
+inner corners: 9 x 6
+square size: 0.12 m
+```
+
+Detector:
+
+```text
+cv2.findChessboardCornersSB
+```
+
+The checkerboard pipeline uses **SB-only** detection. The classic fallback is intentionally not used in the main evaluation pipeline because mixed detectors can produce inconsistent corner ordering and near-180-degree pose outliers in difficult views.
+
+Checkerboard scripts:
+
+```text
+checkerboard_live_detector.py
+    Live corner detector.
+
+checkerboard_pose_live.py
+    Per-camera checkerboard target pose using solvePnP.
+
+checkerboard_rig_estimator.py
+    Live two-camera checkerboard rig estimate.
+
+checkerboard_rig_evaluator.py
+    Scenario evaluator used by the dynamic sweep runner.
+```
+
+---
+
+## 7. ArUco Pipeline
+
+Current ArUco target:
+
+```text
+target name: target_aruco_6x4_marker0_15_sep0_06
+dictionary: DICT_4X4_50
+markers: 6 x 4
+marker length: 0.15 m
+marker separation: 0.06 m
+target plane: about 1.20 m x 0.84 m
+```
+
+This target has a similar outer size to the checkerboard target, making the comparison more fair than comparing a large checkerboard against a single marker.
+
+ArUco scripts:
+
+```text
+generate_aruco_target.py
+    Generates the ArUco target texture, model, and config.
+
+aruco_live_detector.py
+    Detects markers in both cameras, optionally opens two GUI windows, logs marker IDs, and saves debug images.
+
+aruco_pose_live.py
+    Estimates ArUco target pose per camera using marker IDs and solvePnP.
+
+aruco_rig_estimator.py
+    Live two-camera ArUco rig estimation.
+
+aruco_rig_evaluator.py
+    Scenario evaluator for dynamic ArUco sweeps.
+```
+
+---
+
+## 8. Dynamic Sweep System
+
+Older sweep scripts restarted Gazebo for each scenario. The current dynamic runner starts Gazebo and the bridges once, then moves the target inside the running simulation using Gazebo's `set_pose` service.
+
+Main command:
 
 ```bash
+./run_dynamic_sweep.sh METHOD RESOLUTION [GROUP]
+```
+
+Examples:
+
+```bash
+./run_dynamic_sweep.sh checkerboard res640x480
+./run_dynamic_sweep.sh checkerboard res320x240
+./run_dynamic_sweep.sh checkerboard res640x480 yaw
+./run_dynamic_sweep.sh aruco res640x480
+./run_dynamic_sweep.sh aruco res320x240
+```
+
+If no group is given, all groups run:
+
+```text
+distance
+yaw
+shift
+height
+mixed
+```
+
+Each group is saved into its own result folder.
+
+---
+
+## 9. Scenario Groups
+
+### Distance
+
+```text
+dist_1_2m
+dist_1_4m
+dist_1_6m
+dist_1_8m
+dist_2_0m
+dist_2_2m
+dist_2_4m
+dist_2_6m
+dist_2_8m
+```
+
+### Yaw
+
+```text
+yaw_0deg
+yaw_10deg
+yaw_20deg
+yaw_30deg
+yaw_35deg
+yaw_40deg
+yaw_45deg
+yaw_50deg
+```
+
+### Shift
+
+```text
+shift_left_0_2m
+shift_left_0_4m
+shift_left_0_6m
+shift_right_0_2m
+shift_right_0_4m
+shift_right_0_6m
+```
+
+### Height
+
+```text
+height_0_6m
+height_0_8m
+height_1_0m
+height_1_2m
+height_1_4m
+```
+
+### Mixed
+
+```text
+close_1_4m_yaw_10deg
+far_2_4m_yaw_20deg
+far_2_4m_yaw_30deg
+shift_left_0_2m_yaw_20deg
+shift_right_0_2m_yaw_20deg
+```
+
+---
+
+## 10. Results Structure
+
+Checkerboard results:
+
+```text
+results/checkerboard/target_9x6_square0_12/
+├── res320x240/
+│   ├── distance/
+│   ├── yaw/
+│   ├── shift/
+│   ├── height/
+│   └── mixed/
+├── res640x480/
+│   ├── distance/
+│   ├── yaw/
+│   ├── shift/
+│   ├── height/
+│   └── mixed/
+└── comparison/
+```
+
+ArUco results:
+
+```text
+results/aruco/target_aruco_6x4_marker0_15_sep0_06/
+├── res320x240/
+│   ├── distance/
+│   ├── yaw/
+│   ├── shift/
+│   ├── height/
+│   └── mixed/
+├── res640x480/
+│   ├── distance/
+│   ├── yaw/
+│   ├── shift/
+│   ├── height/
+│   └── mixed/
+└── comparison/
+```
+
+Each group folder contains:
+
+```text
+raw_results.csv
+summary.csv
+analysis_printout.txt
+debug_images/
+evaluator_logs/
+```
+
+---
+
+## 11. Environment Setup
+
+Use the ROS 2 Humble environment. In the devcontainer, the project root is usually:
+
+```bash
+cd /workspaces/project
+```
+
+Set the Gazebo model path:
+
+```bash
+export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
+```
+
+If Gazebo, the bridges, or evaluator scripts are already running in other terminals, stop them before starting a new run:
+
+```bash
+pkill -9 -f "ign gazebo" || true
+pkill -9 -f "ign-gazebo" || true
+pkill -9 -f "ruby.*ign" || true
+pkill -9 -f "ros2 run ros_gz_image" || true
+pkill -9 -f "ros2 run ros_gz_bridge" || true
+pkill -9 -f "checkerboard_rig_evaluator.py" || true
+pkill -9 -f "aruco_rig_evaluator.py" || true
+```
+
+---
+
+## 12. Generate Targets
+
+Generate Checkerboard:
+
+```bash
+cd /workspaces/project
+python3 src/calib_lab/scripts/tools/generate_checkerboard.py
+```
+
+Generate ArUco:
+
+```bash
+cd /workspaces/project
+python3 src/calib_lab/scripts/tools/generate_aruco_target.py
+```
+
+This creates:
+
+```text
+src/calib_lab/models/aruco_target/
+src/calib_lab/config/aruco_target.yaml
+```
+
+---
+
+## 13. Generate Dynamic Worlds
+
+Checkerboard:
+
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
+  --method checkerboard \
+  --resolution res320x240 \
+  --target_uri model://checkerboard_target
+
+python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
+  --method checkerboard \
+  --resolution res640x480 \
+  --target_uri model://checkerboard_target
+```
+
+ArUco:
+
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
+  --method aruco \
+  --resolution res320x240 \
+  --target_uri model://aruco_target
+
+python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
+  --method aruco \
+  --resolution res640x480 \
+  --target_uri model://aruco_target
+```
+
+Check a generated world:
+
+```bash
+grep "<world name" src/calib_lab/worlds/dynamic/aruco_res640x480.sdf
+grep -n "aruco_target\|UserCommands" src/calib_lab/worlds/dynamic/aruco_res640x480.sdf | head -30
+```
+
+---
+
+## 14. Manual Debug Workflow
+
+Use this when testing live detectors, pose scripts, or estimators manually.
+
+### Terminal 1: Gazebo
+
+Checkerboard:
+
+```bash
+cd /workspaces/project
+
+export DISPLAY=:0
+export QT_X11_NO_MITSHM=1
+export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
+
+ign gazebo src/calib_lab/worlds/dynamic/checkerboard_res640x480.sdf -r -v 4
+```
+
+ArUco:
+
+```bash
+cd /workspaces/project
+
+export DISPLAY=:0
+export QT_X11_NO_MITSHM=1
+export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
+
+ign gazebo src/calib_lab/worlds/dynamic/aruco_res640x480.sdf -r -v 4
+```
+
+Headless alternative:
+
+```bash
+ign gazebo -s src/calib_lab/worlds/dynamic/aruco_res640x480.sdf -r -v 2
+```
+
+### Terminal 2: Image Bridge
+
+```bash
+cd /workspaces/project
 ros2 run ros_gz_image image_bridge /camera_1/image /camera_2/image
 ```
 
-Then check:
+### Terminal 3: Camera Info + Clock Bridge
 
 ```bash
-ros2 topic list | grep image
-```
+cd /workspaces/project
 
----
-
-### Problem: camera_info topics are missing
-
-Check that the camera_info bridge is running:
-
-```bash
 ros2 run ros_gz_bridge parameter_bridge \
   /camera_1/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
   /camera_2/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
   /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
 ```
 
-Then check:
+### Terminal 4: Detector / Pose / Estimator
+
+Run one of the scripts listed below.
+
+---
+
+## 15. Run Checkerboard Scripts Manually
+
+Live detector:
 
 ```bash
-ros2 topic list | grep camera_info
+cd /workspaces/project
+python3 src/calib_lab/scripts/checkerboard/checkerboard_live_detector.py
+```
+
+Pose live:
+
+```bash
+cd /workspaces/project
+python3 src/calib_lab/scripts/checkerboard/checkerboard_pose_live.py
+```
+
+Rig estimator:
+
+```bash
+cd /workspaces/project
+python3 src/calib_lab/scripts/checkerboard/checkerboard_rig_estimator.py
+```
+
+Manual evaluator test:
+
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/checkerboard/checkerboard_rig_evaluator.py \
+  --ros-args \
+  -p scenario_name:=manual_static \
+  -p output_csv:=results/checkerboard/manual_evaluator_test/raw_results.csv \
+  -p debug_dir:=results/checkerboard/manual_evaluator_test/debug_images \
+  -p max_valid_samples:=1 \
+  -p max_attempts:=1 \
+  -p ready_timeout_sec:=20.0
 ```
 
 ---
 
-### Problem: Checkerboard visible but OpenCV does not detect it
+## 16. Run ArUco Scripts Manually
 
-Likely causes:
+Live detector:
 
-```text
-no white margin around board
-board too small
-board too far away
-wrong pattern size
-low image resolution
-texture not sharp enough
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/aruco/aruco_live_detector.py \
+  --ros-args \
+  -p show_gui:=true \
+  -p save_debug:=true \
+  -p save_every_n_frames:=30
 ```
 
-Fixes:
+Pose live:
 
-```text
-add white margin
-move target closer
-increase target size
-use pattern_size=(9, 6)
-increase resolution later if needed
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/aruco/aruco_pose_live.py \
+  --ros-args \
+  -p show_gui:=true \
+  -p save_debug:=true \
+  -p save_every_n_frames:=30
+```
+
+Rig estimator:
+
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/aruco/aruco_rig_estimator.py \
+  --ros-args \
+  -p show_gui:=true \
+  -p save_debug:=true \
+  -p save_every_n_successes:=10
+```
+
+Manual evaluator test:
+
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/aruco/aruco_rig_evaluator.py \
+  --ros-args \
+  -p scenario_name:=manual_static \
+  -p output_csv:=results/aruco/manual_evaluator_test/raw_results.csv \
+  -p debug_dir:=results/aruco/manual_evaluator_test/debug_images \
+  -p max_valid_samples:=1 \
+  -p max_attempts:=1 \
+  -p ready_timeout_sec:=20.0
 ```
 
 ---
 
-### Problem: Pose script prints only startup logs
+## 17. Run Dynamic Sweeps
 
-Example:
+Checkerboard, all groups:
 
-```text
-Image topic: /camera_1/image
-CameraInfo topic: /camera_1/camera_info
-Pattern: (9, 6), square_size=0.12 m
+```bash
+cd /workspaces/project
+
+./run_dynamic_sweep.sh checkerboard res320x240
+./run_dynamic_sweep.sh checkerboard res640x480
 ```
 
-but no pose output.
+Checkerboard, one group:
 
-Likely cause:
+```bash
+./run_dynamic_sweep.sh checkerboard res640x480 yaw
+./run_dynamic_sweep.sh checkerboard res640x480 distance
+./run_dynamic_sweep.sh checkerboard res640x480 shift
+./run_dynamic_sweep.sh checkerboard res640x480 height
+./run_dynamic_sweep.sh checkerboard res640x480 mixed
+```
+
+ArUco, all groups:
+
+```bash
+cd /workspaces/project
+
+./run_dynamic_sweep.sh aruco res320x240
+./run_dynamic_sweep.sh aruco res640x480
+```
+
+ArUco, one group:
+
+```bash
+./run_dynamic_sweep.sh aruco res640x480 yaw
+./run_dynamic_sweep.sh aruco res640x480 distance
+./run_dynamic_sweep.sh aruco res640x480 shift
+./run_dynamic_sweep.sh aruco res640x480 height
+./run_dynamic_sweep.sh aruco res640x480 mixed
+```
+
+---
+
+## 18. Aggregate Results
+
+Checkerboard:
+
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/tools/aggregate_target_results.py \
+  --target_dir results/checkerboard/target_9x6_square0_12
+```
+
+ArUco:
+
+```bash
+cd /workspaces/project
+
+python3 src/calib_lab/scripts/tools/aggregate_target_results.py \
+  --target_dir results/aruco/target_aruco_6x4_marker0_15_sep0_06
+```
+
+Aggregation output:
 
 ```text
-/camera_1/camera_info is not running
+comparison/all_results_long.csv
+comparison/resolution_comparison_wide.csv
+comparison/counts_by_resolution.csv
 ```
+
+---
+
+## 19. Quick Result Printout
+
+Checkerboard compact comparison:
+
+```bash
+cd /workspaces/project
+
+python3 - <<'PY'
+import csv
+from pathlib import Path
+
+path = Path("results/checkerboard/target_9x6_square0_12/comparison/resolution_comparison_wide.csv")
+with path.open(newline="", encoding="utf-8") as f:
+    rows = list(csv.DictReader(f))
+
+for r in rows:
+    print(r["group"], r["scenario"],
+          "| 320:", r.get("res320x240_pose_class", ""), r.get("res320x240_baseline_error_cm", ""),
+          "| 640:", r.get("res640x480_pose_class", ""), r.get("res640x480_baseline_error_cm", ""),
+          "| best:", r.get("best_resolution_by_error", ""))
+PY
+```
+
+ArUco compact comparison:
+
+```bash
+cd /workspaces/project
+
+python3 - <<'PY'
+import csv
+from pathlib import Path
+
+path = Path("results/aruco/target_aruco_6x4_marker0_15_sep0_06/comparison/resolution_comparison_wide.csv")
+with path.open(newline="", encoding="utf-8") as f:
+    rows = list(csv.DictReader(f))
+
+for r in rows:
+    print(r["group"], r["scenario"],
+          "| 320:", r.get("res320x240_pose_class", ""), r.get("res320x240_baseline_error_cm", ""),
+          "| 640:", r.get("res640x480_pose_class", ""), r.get("res640x480_baseline_error_cm", ""),
+          "| best:", r.get("best_resolution_by_error", ""))
+PY
+```
+
+---
+
+## 20. Current Checkerboard Findings
+
+Current checkerboard results showed:
+
+```text
+Useful distance range:
+approximately 1.6 m to 2.0 m
+
+Too close:
+1.2 m and 1.4 m failed
+
+Too far:
+2.4 m and beyond usually failed
+
+Yaw:
+0° to 30° works
+35° works only at 640x480
+40° and above fails
+
+Shift:
+pure lateral shifts mostly fail
+
+Resolution:
+640x480 often improves accuracy and can rescue some borderline cases,
+but it does not solve visibility / field-of-view / overlap problems.
+```
+
+Interpretation:
+
+```text
+Higher resolution improves corner localization and can improve robustness near detection limits. However, higher resolution cannot compensate for missing common field of view or severe target visibility limitations.
+```
+
+---
+
+## 21. Troubleshooting
+
+### Target appears black or missing
+
+Set the model path and restart Gazebo:
+
+```bash
+export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
+```
+
+### set_pose service missing
 
 Check:
 
 ```bash
-ros2 topic list | grep camera_info
+ign service -l | grep set_pose
 ```
 
-Restart Terminal 3.
+Expected examples:
+
+```text
+/world/dynamic_checkerboard_res640x480/set_pose
+/world/dynamic_aruco_res640x480/set_pose
+```
+
+If missing, regenerate the dynamic world using `generate_dynamic_worlds.py`.
+
+### Wrong result folder named `0`
+
+This means the scenario CSV is wrong or old. Regenerate dynamic worlds and check:
+
+```bash
+head -n 5 src/calib_lab/worlds/dynamic/scenario_poses.csv | cat -A
+```
+
+Expected:
+
+```text
+scenario,group,x,y,z,roll,pitch,yaw$
+```
+
+### High memory usage
+
+Use `run_dynamic_sweep.sh`. Avoid older restart-based sweep scripts for large sweeps.
 
 ---
 
-## 26. Current Status
+## 22. Next Steps
 
-Working:
+Planned next steps:
 
 ```text
-Gazebo minimal world
-two cameras
-checkerboard target
-ROS image topics
-camera_info topics
-/clock topic
-rqt_image_view
-rosbag2 recording
-rosbag2 replay
-OpenCV checkerboard detection
-OpenCV solvePnP pose estimation for camera_1
+1. Finish and validate the ArUco evaluator.
+2. Run ArUco dynamic sweeps for res320x240 and res640x480.
+3. Aggregate ArUco results.
+4. Compare Checkerboard and ArUco.
+5. Implement ChArUco target and scripts.
+6. Run the same dynamic sweeps for ChArUco.
+7. Compare Checkerboard, ArUco, and ChArUco.
+8. Later extend the setup from two cameras to a 3+ camera rig and a bus-interior-inspired layout.
 ```
 
-Next:
+Longer-term evaluation questions:
 
 ```text
-Run solvePnP for camera_2
-Implement camera_1 -> camera_2 estimation
-Add ground truth YAML
-Compute translation and rotation error
-Then add ArUco
-Then add ChArUco
-Then compare methods
+- Which method is most accurate under favorable views?
+- Which method is most robust under yaw?
+- Which method handles partial visibility better?
+- How much does resolution matter?
+- How much does target size / geometry matter?
+- How much common field of view is required?
+- When do methods fail and why?
 ```
 
 ---
 
-## 27. Quick Start Summary
+## 23. Presentation Summary
 
-From the repository root, enter the project folder:
+The current project story:
 
-```bash
-cd project
+```text
+We built a reproducible ROS 2 + Gazebo benchmark for camera rig calibration.
+Gazebo provides ground truth.
+OpenCV methods only receive camera images, camera_info, and target geometry.
+The pipeline estimates camera-to-camera extrinsics and compares them against ground truth.
+Checkerboard is the first completed baseline.
+ArUco is being integrated with the same structure.
+The dynamic sweep runner allows systematic ablation over distance, yaw, shift, height, mixed poses, and resolution.
 ```
 
-If the checkerboard model is not found by Gazebo, set the model path:
+The main contribution so far is a reusable evaluation framework:
 
-```bash
-export IGN_GAZEBO_RESOURCE_PATH="$(pwd)/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH}"
-```
-
-Start Gazebo:
-
-```bash
-ign gazebo src/calib_lab/worlds/minimal_calib_world.sdf -r -v 4
-```
-
-Start image bridge:
-
-```bash
-ros2 run ros_gz_image image_bridge /camera_1/image /camera_2/image
-```
-
-Start camera_info and clock bridge:
-
-```bash
-ros2 run ros_gz_bridge parameter_bridge \
-  /camera_1/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
-  /camera_2/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
-  /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock
-```
-
-Check image:
-
-```bash
-ros2 topic hz /camera_1/image
-```
-
-Check camera_info:
-
-```bash
-timeout 5 ros2 topic echo /camera_1/camera_info --field width --once
-```
-
-Run checkerboard detector:
-
-```bash
-python3 src/calib_lab/scripts/checkerboard_live_detector.py \
-  --ros-args \
-  -p image_topic:=/camera_1/image \
-  -p corners_x:=9 \
-  -p corners_y:=6
-```
-
-Run pose estimation:
-
-```bash
-python3 src/calib_lab/scripts/checkerboard_pose_live.py \
-  --ros-args \
-  -p image_topic:=/camera_1/image \
-  -p camera_info_topic:=/camera_1/camera_info \
-  -p corners_x:=9 \
-  -p corners_y:=6 \
-  -p square_size:=0.12
+```text
+method-specific detector/evaluator
++ common Gazebo scenario generation
++ common dynamic runner
++ common result structure
++ common CSV aggregation
++ debug images
++ ground-truth metrics
 ```
