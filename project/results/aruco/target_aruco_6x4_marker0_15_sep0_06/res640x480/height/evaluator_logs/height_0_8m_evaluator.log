@@ -1,13 +1,13 @@
-[INFO] [1780420453.844919189] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
-[INFO] [1780420453.845460226] [aruco_rig_evaluator]: Scenario: height_0_8m
-[INFO] [1780420453.845849621] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
-[INFO] [1780420453.846277916] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
-[INFO] [1780420453.846724382] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/height/raw_results.csv
-[INFO] [1780420453.847191238] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/height/debug_images
-[INFO] [1780420453.847619874] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
-[INFO] [1780420453.848074990] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
-[INFO] [1780420453.848565846] [aruco_rig_evaluator]: Max attempts: 1
-[INFO] [1780420454.350151663] [aruco_rig_evaluator]: 
+[INFO] [1780482271.632245949] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
+[INFO] [1780482271.639169272] [aruco_rig_evaluator]: Scenario: height_0_8m
+[INFO] [1780482271.647465590] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780482271.656574724] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
+[INFO] [1780482271.663063908] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/height/raw_results.csv
+[INFO] [1780482271.670517058] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/height/debug_images
+[INFO] [1780482271.677439188] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
+[INFO] [1780482271.683869818] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780482271.689883171] [aruco_rig_evaluator]: Max attempts: 1
+[INFO] [1780482272.628664748] [aruco_rig_evaluator]: 
 ================ ARUCO EVALUATION SUCCESS ================
 scenario: height_0_8m
 attempts: 1

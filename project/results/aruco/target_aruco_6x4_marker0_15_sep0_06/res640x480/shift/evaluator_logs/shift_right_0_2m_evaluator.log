@@ -1,13 +1,13 @@
-[INFO] [1780420444.100931428] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
-[INFO] [1780420444.101496815] [aruco_rig_evaluator]: Scenario: shift_right_0_2m
-[INFO] [1780420444.101970091] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
-[INFO] [1780420444.102400067] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
-[INFO] [1780420444.102859733] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/raw_results.csv
-[INFO] [1780420444.103270778] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/debug_images
-[INFO] [1780420444.103724824] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
-[INFO] [1780420444.104190490] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
-[INFO] [1780420444.104642066] [aruco_rig_evaluator]: Max attempts: 1
-[INFO] [1780420444.604719414] [aruco_rig_evaluator]: 
+[INFO] [1780482238.697093924] [aruco_rig_evaluator]: ArUco Rig Evaluator started.
+[INFO] [1780482238.703497914] [aruco_rig_evaluator]: Scenario: shift_right_0_2m
+[INFO] [1780482238.709572640] [aruco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780482238.715759402] [aruco_rig_evaluator]: ArUco config: src/calib_lab/config/aruco_target.yaml
+[INFO] [1780482238.722294659] [aruco_rig_evaluator]: Output CSV: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/raw_results.csv
+[INFO] [1780482238.728811958] [aruco_rig_evaluator]: Debug dir: results/aruco/target_aruco_6x4_marker0_15_sep0_06/res640x480/shift/debug_images
+[INFO] [1780482238.735908408] [aruco_rig_evaluator]: Board: 6x4, marker_length=0.15, separation=0.06, dictionary=DICT_4X4_50
+[INFO] [1780482238.743190005] [aruco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780482238.749654857] [aruco_rig_evaluator]: Max attempts: 1
+[INFO] [1780482239.197651575] [aruco_rig_evaluator]: 
 ================ ARUCO EVALUATION SUCCESS ================
 scenario: shift_right_0_2m
 attempts: 1
