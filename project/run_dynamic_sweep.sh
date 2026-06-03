@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -u
 
+# Platform-independent project root detection.
+# This script is expected to live in the project/ directory.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
+cd "$PROJECT_DIR" || {
+  echo "[ERROR] Could not cd into PROJECT_DIR=$PROJECT_DIR"
+  exit 1
+}
+
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+IGN_BIN="${IGN_BIN:-ign}"
+ROS2_BIN="${ROS2_BIN:-ros2}"
+TIMEOUT_BIN="${TIMEOUT_BIN:-timeout}"
+
 if [ $# -lt 2 ]; then
   echo "Usage:"
   echo "  ./run_dynamic_sweep.sh checkerboard|aruco|charuco res320x240|res640x480 [distance|yaw|shift|height|mixed|all]"
@@ -15,9 +29,20 @@ if [ "$REQUESTED_GROUP" = "combination" ]; then
   REQUESTED_GROUP="mixed"
 fi
 
-cd /workspaces/project || exit 1
+for cmd in "$PYTHON_BIN" "$IGN_BIN" "$ROS2_BIN"; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "[ERROR] Required command not found: $cmd"
+    echo "[INFO] Check ROS 2 / Gazebo environment setup."
+    exit 1
+  fi
+done
 
-export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
+if ! command -v "$TIMEOUT_BIN" >/dev/null 2>&1; then
+  echo "[WARN] Command '$TIMEOUT_BIN' not found. Evaluator timeout will be disabled."
+  TIMEOUT_BIN=""
+fi
+
+export IGN_GAZEBO_RESOURCE_PATH="$PROJECT_DIR/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
 
 WORLD_FILE="src/calib_lab/worlds/dynamic/${METHOD}_${RES_NAME}.sdf"
 WORLD_NAME="dynamic_${METHOD}_${RES_NAME}"
@@ -45,7 +70,7 @@ esac
 RESULT_BASE="results/${METHOD}/${TARGET_NAME}/${RES_NAME}"
 ANALYZER="src/calib_lab/scripts/tools/analyze_checkerboard_results.py"
 SET_POSE="src/calib_lab/scripts/tools/set_gazebo_model_pose.py"
-GAZEBO_LOG="/tmp/${METHOD}_${RES_NAME}_${REQUESTED_GROUP}_gazebo_dynamic.log"
+GAZEBO_LOG="${TMPDIR:-/tmp}/${METHOD}_${RES_NAME}_${REQUESTED_GROUP}_gazebo_dynamic.log"
 
 is_valid_group() {
   case "$1" in
@@ -99,19 +124,22 @@ fi
 
 if [ ! -f "$EVALUATOR" ]; then
   echo "[ERROR] Evaluator not found: $EVALUATOR"
-  echo "[INFO] Method '$METHOD' is not implemented yet."
+  echo "[INFO] Method '$METHOD' is not implemented yet or the script is in another location."
   exit 1
 fi
 
 if [ ! -f "$WORLD_FILE" ]; then
   echo "[ERROR] Dynamic world not found: $WORLD_FILE"
-  echo "[INFO] Generate it first, for example:"
-  echo "python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py --method $METHOD --resolution $RES_NAME --target_uri model://checkerboard_target"
+  echo "[INFO] Generate it first. Example for checkerboard:"
+  echo "  $PYTHON_BIN src/calib_lab/scripts/tools/generate_dynamic_worlds.py --method checkerboard --resolution $RES_NAME --target_uri model://checkerboard_target"
+  echo "[INFO] Example for aruco:"
+  echo "  $PYTHON_BIN src/calib_lab/scripts/tools/generate_dynamic_worlds.py --method aruco --resolution $RES_NAME --target_uri model://aruco_target"
   exit 1
 fi
 
 if [ ! -f "$POSE_CSV" ]; then
   echo "[ERROR] Pose CSV not found: $POSE_CSV"
+  echo "[INFO] Regenerate dynamic worlds with generate_dynamic_worlds.py."
   exit 1
 fi
 
@@ -125,11 +153,13 @@ fi
 
 trap cleanup EXIT
 
-echo "[INFO] Method:      $METHOD"
-echo "[INFO] Target:      $TARGET_NAME"
-echo "[INFO] Resolution:  $RES_NAME"
-echo "[INFO] Group:       $REQUESTED_GROUP"
-echo "[INFO] Result base: $RESULT_BASE"
+echo "[INFO] Project dir:  $PROJECT_DIR"
+echo "[INFO] Method:       $METHOD"
+echo "[INFO] Target:       $TARGET_NAME"
+echo "[INFO] Resolution:   $RES_NAME"
+echo "[INFO] Group:        $REQUESTED_GROUP"
+echo "[INFO] Result base:  $RESULT_BASE"
+echo "[INFO] Gazebo log:   $GAZEBO_LOG"
 
 echo "[INFO] Cleaning old processes..."
 cleanup
@@ -149,13 +179,13 @@ fi
 
 echo "[INFO] Starting one Gazebo instance:"
 echo "[INFO] $WORLD_FILE"
-ign gazebo -s "$WORLD_FILE" -r -v 1 > "$GAZEBO_LOG" 2>&1 &
+"$IGN_BIN" gazebo -s "$WORLD_FILE" -r -v 1 > "$GAZEBO_LOG" 2>&1 &
 
 echo "[INFO] Waiting for set_pose service..."
 SET_POSE_SERVICE=""
 
-for i in $(seq 1 30); do
-  SET_POSE_SERVICE="$(ign service -l 2>/dev/null | grep -E "/world/${WORLD_NAME}/set_pose$" | head -n 1 || true)"
+for _ in $(seq 1 30); do
+  SET_POSE_SERVICE="$($IGN_BIN service -l 2>/dev/null | grep -E "/world/${WORLD_NAME}/set_pose$" | head -n 1 || true)"
 
   if [ -n "$SET_POSE_SERVICE" ]; then
     echo "[INFO] Found set_pose service: $SET_POSE_SERVICE"
@@ -168,16 +198,16 @@ done
 if [ -z "$SET_POSE_SERVICE" ]; then
   echo "[ERROR] No set_pose service found for world: $WORLD_NAME"
   echo "[DEBUG] Available set_pose services:"
-  ign service -l | grep set_pose || true
+  "$IGN_BIN" service -l | grep set_pose || true
   echo "[DEBUG] Gazebo log:"
   tail -n 120 "$GAZEBO_LOG" || true
   exit 1
 fi
 
 echo "[INFO] Starting bridges once..."
-ros2 run ros_gz_image image_bridge /camera_1/image /camera_2/image > /dev/null 2>&1 &
+"$ROS2_BIN" run ros_gz_image image_bridge /camera_1/image /camera_2/image > /dev/null 2>&1 &
 
-ros2 run ros_gz_bridge parameter_bridge \
+"$ROS2_BIN" run ros_gz_bridge parameter_bridge \
   /camera_1/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
   /camera_2/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo \
   /clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock \
@@ -217,7 +247,7 @@ tail -n +2 "$POSE_CSV" | while IFS=, read -r SCENARIO SCENARIO_GROUP X Y Z ROLL 
   echo "[INFO] Output:   $RESULT_ROOT"
   echo "============================================================"
 
-  python3 "$SET_POSE" \
+  "$PYTHON_BIN" "$SET_POSE" \
     --service "$SET_POSE_SERVICE" \
     --model calibration_target \
     --x "$X" --y "$Y" --z "$Z" \
@@ -226,15 +256,27 @@ tail -n +2 "$POSE_CSV" | while IFS=, read -r SCENARIO SCENARIO_GROUP X Y Z ROLL 
 
   sleep 1
 
-  timeout 120s python3 "$EVALUATOR" \
-    --ros-args \
-    -p scenario_name:="$SCENARIO" \
-    -p max_valid_samples:=1 \
-    -p max_attempts:=1 \
-    -p ready_timeout_sec:=20.0 \
-    -p output_csv:="$OUT_CSV" \
-    -p debug_dir:="$DEBUG_DIR" \
-    > "${LOG_DIR}/${SCENARIO}_evaluator.log" 2>&1
+  if [ -n "$TIMEOUT_BIN" ]; then
+    "$TIMEOUT_BIN" 120s "$PYTHON_BIN" "$EVALUATOR" \
+      --ros-args \
+      -p scenario_name:="$SCENARIO" \
+      -p max_valid_samples:=1 \
+      -p max_attempts:=1 \
+      -p ready_timeout_sec:=20.0 \
+      -p output_csv:="$OUT_CSV" \
+      -p debug_dir:="$DEBUG_DIR" \
+      > "${LOG_DIR}/${SCENARIO}_evaluator.log" 2>&1
+  else
+    "$PYTHON_BIN" "$EVALUATOR" \
+      --ros-args \
+      -p scenario_name:="$SCENARIO" \
+      -p max_valid_samples:=1 \
+      -p max_attempts:=1 \
+      -p ready_timeout_sec:=20.0 \
+      -p output_csv:="$OUT_CSV" \
+      -p debug_dir:="$DEBUG_DIR" \
+      > "${LOG_DIR}/${SCENARIO}_evaluator.log" 2>&1
+  fi
 
   STATUS=$?
 
@@ -265,7 +307,7 @@ for G in distance yaw shift height mixed; do
   fi
 
   if [ -f "$ANALYZER" ]; then
-    python3 "$ANALYZER" \
+    "$PYTHON_BIN" "$ANALYZER" \
       --input_csv "$OUT_CSV" \
       --output_csv "$SUMMARY_CSV" \
       --max_error_cm 10 \
