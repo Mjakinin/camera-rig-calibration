@@ -1,0 +1,20 @@
+BUS DIRECT ARUCO RIG SUMMARY
+============================
+front detected IDs:          [0, 1, 2, 4, 5, 7]
+rear detected IDs:           [0, 1, 2, 5, 6, 9]
+common IDs:                  [0, 1, 2, 5]
+valid common pose markers:   4
+
+Estimated transform convention:
+  T_front_rear maps points from rear camera frame into front camera frame.
+
+mean translation x/y/z [m]:  -0.002790, -6.062276, 7.440659
+mean baseline norm [m]:      9.597635
+baseline std [m]:            0.068882
+translation std x/y/z [m]:   0.021375, 0.095703, 0.086484
+rotation spread mean [deg]:  1.087956
+rotation spread max [deg]:   1.391423
+
+per-marker CSV:              results/beintelli_bus_model/aruco_direct_rig/marker_size_0_58/per_marker_transforms.csv
+mean transform CSV:          results/beintelli_bus_model/aruco_direct_rig/marker_size_0_58/mean_transform_front_T_rear.csv
+debug dir:                   results/beintelli_bus_model/aruco_direct_rig/marker_size_0_58/debug_images
