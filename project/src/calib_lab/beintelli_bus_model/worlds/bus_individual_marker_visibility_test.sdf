@@ -96,7 +96,7 @@
     </include>
     <model name="front_static_camera">
       <static>true</static>
-      <pose>-3.90 0.0 2.85 0 0.78539816 0</pose>
+      <pose>-3.90 0.0 2.85 0 0.69813170 0</pose>
       <link name="link">
         <sensor name="front_static_camera" type="camera">
           <visualize>false</visualize>
@@ -104,7 +104,7 @@
           <update_rate>15</update_rate>
           <topic>/front_static_camera/image</topic>
           <camera>
-            <horizontal_fov>1.74532925</horizontal_fov>
+            <horizontal_fov>1.57079633</horizontal_fov>
             <image>
               <width>640</width>
               <height>480</height>
@@ -128,7 +128,7 @@
           <update_rate>15</update_rate>
           <topic>/rear_static_camera/image</topic>
           <camera>
-            <horizontal_fov>1.74532925</horizontal_fov>
+            <horizontal_fov>1.57079633</horizontal_fov>
             <image>
               <width>640</width>
               <height>480</height>
