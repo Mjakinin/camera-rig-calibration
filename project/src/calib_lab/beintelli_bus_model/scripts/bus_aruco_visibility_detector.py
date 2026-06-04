@@ -77,6 +77,28 @@ def remove_green_overlay_bgr(image):
     return cleaned, mask
 
 
+
+def parse_expected_marker_ids(spec: str):
+    """Parse marker id specification like '0-9' or '0,1,2,5'."""
+    spec = spec.strip()
+    if not spec:
+        return list(range(10))
+
+    ids = []
+    for part in spec.split(","):
+        part = part.strip()
+        if not part:
+            continue
+
+        if "-" in part:
+            a, b = part.split("-", 1)
+            ids.extend(range(int(a), int(b) + 1))
+        else:
+            ids.append(int(part))
+
+    return sorted(set(ids))
+
+
 class BusArucoVisibilityDetector(Node):
     def __init__(self, args):
         super().__init__("bus_aruco_visibility_detector")
@@ -204,6 +226,27 @@ class BusArucoVisibilityDetector(Node):
             writer.writeheader()
             writer.writerows(rows)
 
+        expected_marker_ids = parse_expected_marker_ids(self.args.expected_marker_ids)
+        matrix_rows = []
+        for marker_id in expected_marker_ids:
+            front_detected = marker_id in front_ids
+            rear_detected = marker_id in rear_ids
+            matrix_rows.append({
+                "marker_id": marker_id,
+                "front_detected": str(front_detected).lower(),
+                "rear_detected": str(rear_detected).lower(),
+                "overlap": str(front_detected and rear_detected).lower(),
+            })
+
+        matrix_path = self.output_dir / "marker_visibility_matrix.csv"
+        with matrix_path.open("w", newline="") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["marker_id", "front_detected", "rear_detected", "overlap"],
+            )
+            writer.writeheader()
+            writer.writerows(matrix_rows)
+
         summary_path = self.output_dir / "bus_aruco_visibility_summary.txt"
         summary_path.write_text(
             "BUS ARUCO VISIBILITY SUMMARY\n"
@@ -214,6 +257,7 @@ class BusArucoVisibilityDetector(Node):
             f"front count:                  {len(front_ids)}\n"
             f"rear count:                   {len(rear_ids)}\n"
             f"overlap count:                {len(overlap)}\n"
+            f"matrix CSV:                   {matrix_path}\n"
         )
 
         self.get_logger().info("")
@@ -223,6 +267,7 @@ class BusArucoVisibilityDetector(Node):
         self.get_logger().info(f"overlap IDs:                  {overlap}")
         self.get_logger().info(f"CSV:                          {csv_path}")
         self.get_logger().info(f"Summary:                      {summary_path}")
+        self.get_logger().info(f"Matrix CSV:                   {matrix_path}")
         self.get_logger().info(f"Debug dir:                    {self.debug_dir}")
         self.get_logger().info("======================================================")
 
@@ -237,6 +282,7 @@ def main():
     parser.add_argument("--output_dir", default="results/beintelli_bus_model/aruco_visibility")
     parser.add_argument("--wait_sec", type=float, default=5.0)
     parser.add_argument("--remove_green_overlay", action="store_true")
+    parser.add_argument("--expected_marker_ids", default="0-9", help="Expected marker IDs, e.g. 0-9 or 0,1,2,5")
     args = parser.parse_args()
 
     rclpy.init()
