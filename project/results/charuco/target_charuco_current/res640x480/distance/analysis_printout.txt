@@ -1,0 +1,15 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+dist_1_2m, distance, pose_outlier, charuco/gray, charuco/gray, 13.036, 10.688
+dist_1_4m, distance, valid, charuco/gray, charuco/gray, 3.257, 4.728
+dist_1_6m, distance, pose_outlier, charuco/gray, charuco/gray, 14.714, 6.812
+dist_1_8m, distance, valid, charuco/gray, charuco/gray, 7.168, 6.634
+dist_2_0m, distance, valid, charuco/gray, charuco/gray, 8.607, 2.190
+dist_2_2m, distance, valid, charuco/gray, charuco/gray, 7.325, 2.141
+dist_2_4m, distance, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
+dist_2_6m, distance, failure, charuco/gray, not_enough_charuco_corners/gray, , 
+dist_2_8m, distance, valid, charuco/gray, charuco/gray, 5.204, 1.389
+
+Summary counts:
+distance | failure: 2
+distance | pose_outlier: 2
+distance | valid: 5

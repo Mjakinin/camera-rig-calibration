@@ -1,0 +1,12 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+yaw_0deg, yaw, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
+yaw_10deg, yaw, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
+yaw_20deg, yaw, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/normalized, , 
+yaw_30deg, yaw, failure, not_enough_charuco_corners/normalized, not_enough_charuco_corners/normalized, , 
+yaw_35deg, yaw, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
+yaw_40deg, yaw, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/binary_60, , 
+yaw_45deg, yaw, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/binary_80, , 
+yaw_50deg, yaw, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/adaptive, , 
+
+Summary counts:
+yaw | failure: 8

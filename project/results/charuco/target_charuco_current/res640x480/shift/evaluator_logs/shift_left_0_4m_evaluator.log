@@ -1,0 +1,28 @@
+[INFO] [1780738594.041169445] [charuco_rig_evaluator]: ChArUco Rig Evaluator started.
+[INFO] [1780738594.041579282] [charuco_rig_evaluator]: Scenario: shift_left_0_4m
+[INFO] [1780738594.041856020] [charuco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780738594.042115356] [charuco_rig_evaluator]: ChArUco config: src/calib_lab/config/charuco_target.yaml
+[INFO] [1780738594.042513141] [charuco_rig_evaluator]: Output CSV: results/charuco/target_charuco_current/res640x480/shift/raw_results.csv
+[INFO] [1780738594.042959617] [charuco_rig_evaluator]: Debug dir: results/charuco/target_charuco_current/res640x480/shift/debug_images
+[INFO] [1780738594.043377700] [charuco_rig_evaluator]: Board: 7x5, square_length=0.12, marker_length=0.09, dictionary=DICT_4X4_50
+[INFO] [1780738594.043656763] [charuco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780738594.043918142] [charuco_rig_evaluator]: Max attempts: 1
+[INFO] [1780738594.564090419] [charuco_rig_evaluator]: 
+================ CHARUCO EVALUATION SUCCESS ================
+scenario: shift_left_0_4m
+attempts: 1
+camera_1: method=charuco/gray, markers=17, charuco_corners=24, t_cam_target=[-0.3789, 0.2928, 1.7118] m
+camera_2: method=charuco/gray, markers=12, charuco_corners=16, t_cam_target=[0.2887, 0.2936, 1.6662] m
+
+Estimated relative transform from common ChArUco target:
+T_camera_1_camera_2 translation = [-0.8152, -0.0229, 0.0822] m
+estimated baseline norm = 0.8196 m
+expected baseline norm  = 0.7000 m
+baseline error          = 0.1196 m (11.96 cm)
+estimated relative rotation angle = 5.2745 deg
+expected relative rotation angle  = 0.0000 deg
+rotation angle error              = 5.2745 deg
+camera_1 image: results/charuco/target_charuco_current/res640x480/shift/debug_images/shift_left_0_4m_camera_1_charuco_gray.png
+camera_2 image: results/charuco/target_charuco_current/res640x480/shift/debug_images/shift_left_0_4m_camera_2_charuco_gray.png
+============================================================
+

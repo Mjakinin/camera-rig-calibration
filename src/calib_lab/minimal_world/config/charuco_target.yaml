@@ -1,0 +1,14 @@
+charuco:
+  dictionary: DICT_4X4_50
+  squares_x: 7
+  squares_y: 5
+  square_length: 0.12
+  marker_length: 0.09
+  target_width: 1.2
+  target_height: 0.84
+  board_width: 0.84
+  board_height: 0.6
+  image_width_px: 1200
+  image_height_px: 840
+  min_markers: 1
+  min_charuco_corners: 15

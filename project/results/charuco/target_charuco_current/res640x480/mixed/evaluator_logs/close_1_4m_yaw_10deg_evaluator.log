@@ -1,0 +1,28 @@
+[INFO] [1780738421.018548809] [charuco_rig_evaluator]: ChArUco Rig Evaluator started.
+[INFO] [1780738421.019588666] [charuco_rig_evaluator]: Scenario: close_1_4m_yaw_10deg
+[INFO] [1780738421.020017940] [charuco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780738421.020987947] [charuco_rig_evaluator]: ChArUco config: src/calib_lab/config/charuco_target.yaml
+[INFO] [1780738421.022526959] [charuco_rig_evaluator]: Output CSV: results/charuco/target_charuco_current/res640x480/mixed/raw_results.csv
+[INFO] [1780738421.023559073] [charuco_rig_evaluator]: Debug dir: results/charuco/target_charuco_current/res640x480/mixed/debug_images
+[INFO] [1780738421.024354522] [charuco_rig_evaluator]: Board: 7x5, square_length=0.12, marker_length=0.09, dictionary=DICT_4X4_50
+[INFO] [1780738421.024849760] [charuco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780738421.025436328] [charuco_rig_evaluator]: Max attempts: 1
+[INFO] [1780738421.522336262] [charuco_rig_evaluator]: 
+================ CHARUCO EVALUATION SUCCESS ================
+scenario: close_1_4m_yaw_10deg
+attempts: 1
+camera_1: method=charuco/gray, markers=15, charuco_corners=20, t_cam_target=[-0.7502, 0.2976, 1.2607] m
+camera_2: method=charuco/gray, markers=17, charuco_corners=24, t_cam_target=[-0.0814, 0.2886, 1.2441] m
+
+Estimated relative transform from common ChArUco target:
+T_camera_1_camera_2 translation = [-0.6334, 0.1764, -0.0078] m
+estimated baseline norm = 0.6575 m
+expected baseline norm  = 0.7000 m
+baseline error          = 0.0425 m (4.25 cm)
+estimated relative rotation angle = 7.7511 deg
+expected relative rotation angle  = 0.0000 deg
+rotation angle error              = 7.7511 deg
+camera_1 image: results/charuco/target_charuco_current/res640x480/mixed/debug_images/close_1_4m_yaw_10deg_camera_1_charuco_gray.png
+camera_2 image: results/charuco/target_charuco_current/res640x480/mixed/debug_images/close_1_4m_yaw_10deg_camera_2_charuco_gray.png
+============================================================
+

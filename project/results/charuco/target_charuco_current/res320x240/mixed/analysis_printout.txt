@@ -1,0 +1,10 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+far_2_4m_yaw_20deg, mixed, failure, not_enough_charuco_corners/binary_60, not_enough_charuco_corners/gray, , 
+far_2_4m_yaw_30deg, mixed, failure, not_enough_charuco_corners/binary_80, not_enough_charuco_corners/adaptive, , 
+close_1_4m_yaw_10deg, mixed, failure, charuco/gray, not_enough_charuco_corners/gray, , 
+shift_left_0_2m_yaw_20deg, shift, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/binary_60, , 
+shift_right_0_2m_yaw_20deg, shift, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
+
+Summary counts:
+mixed | failure: 3
+shift | failure: 2

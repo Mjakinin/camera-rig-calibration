@@ -1,0 +1,14 @@
+scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
+yaw_0deg, yaw, valid, charuco/gray, charuco/gray, 7.168, 6.634
+yaw_10deg, yaw, pose_outlier, charuco/gray, charuco/gray, 23.804, 14.046
+yaw_20deg, yaw, pose_outlier, charuco/gray, charuco/gray, 14.017, 3.959
+yaw_30deg, yaw, valid, charuco/gray, charuco/gray, 0.582, 1.092
+yaw_35deg, yaw, failure, charuco/gray, not_enough_charuco_corners/gray, , 
+yaw_40deg, yaw, failure, charuco/gray, not_enough_charuco_corners/gray, , 
+yaw_45deg, yaw, failure, charuco/gray, not_enough_charuco_corners/gray, , 
+yaw_50deg, yaw, failure, charuco/gray, not_enough_charuco_corners/gray, , 
+
+Summary counts:
+yaw | failure: 4
+yaw | pose_outlier: 2
+yaw | valid: 2

@@ -1,0 +1,20 @@
+[INFO] [1780738523.692378485] [charuco_rig_evaluator]: ChArUco Rig Evaluator started.
+[INFO] [1780738523.692769186] [charuco_rig_evaluator]: Scenario: dist_2_4m
+[INFO] [1780738523.693198530] [charuco_rig_evaluator]: Config: src/calib_lab/config/ground_truth_minimal.yaml
+[INFO] [1780738523.693492561] [charuco_rig_evaluator]: ChArUco config: src/calib_lab/config/charuco_target.yaml
+[INFO] [1780738523.693754061] [charuco_rig_evaluator]: Output CSV: results/charuco/target_charuco_current/res640x480/distance/raw_results.csv
+[INFO] [1780738523.694108515] [charuco_rig_evaluator]: Debug dir: results/charuco/target_charuco_current/res640x480/distance/debug_images
+[INFO] [1780738523.694530964] [charuco_rig_evaluator]: Board: 7x5, square_length=0.12, marker_length=0.09, dictionary=DICT_4X4_50
+[INFO] [1780738523.694829103] [charuco_rig_evaluator]: Expected baseline: 0.7000 m
+[INFO] [1780738523.695208604] [charuco_rig_evaluator]: Max attempts: 1
+[WARN] [1780738524.200901420] [charuco_rig_evaluator]: 
+================ CHARUCO EVALUATION FAILURE ================
+scenario: dist_2_4m
+attempts: 1
+failure_reason: camera_1:not_enough_charuco_corners/gray;camera_2:not_enough_charuco_corners/gray
+camera_1 markers: 11, charuco_corners: 11
+camera_2 markers: 9, charuco_corners: 7
+camera_1 image: results/charuco/target_charuco_current/res640x480/distance/debug_images/dist_2_4m_camera_1_not_enough_charuco_corners_gray.png
+camera_2 image: results/charuco/target_charuco_current/res640x480/distance/debug_images/dist_2_4m_camera_2_not_enough_charuco_corners_gray.png
+============================================================
+
