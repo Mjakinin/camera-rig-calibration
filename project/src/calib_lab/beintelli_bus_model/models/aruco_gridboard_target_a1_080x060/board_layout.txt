@@ -1,0 +1,14 @@
+ARUCO GRIDBOARD TARGET METADATA
+===============================
+dictionary: DICT_4X4_50
+ids: [0, 1, 2, 3, 4, 5]
+cols: 3
+rows: 2
+board_width_m: 0.8
+board_height_m: 0.6
+marker_size_m: 0.166667
+gap_m: 0.044444
+texture_width_px: 1440
+texture_height_px: 1080
+marker_px: 300
+gap_px: 80

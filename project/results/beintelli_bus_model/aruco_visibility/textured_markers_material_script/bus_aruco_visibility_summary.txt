@@ -1,9 +1,0 @@
-BUS ARUCO VISIBILITY SUMMARY
-============================
-front_static_camera detected: []
-rear_static_camera detected:  []
-overlap IDs:                  []
-front count:                  0
-rear count:                   0
-overlap count:                0
-matrix CSV:                   results/beintelli_bus_model/aruco_visibility/textured_markers_material_script/marker_visibility_matrix.csv

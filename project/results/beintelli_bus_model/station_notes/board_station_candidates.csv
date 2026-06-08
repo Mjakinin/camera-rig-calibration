@@ -1,0 +1,2 @@
+station_name,description,board_pose,moving_pose,target_static_camera,front_result,rear_result,moving_result,notes
+R1_rear_left_seat_leaned,"Medium board leaned on/against left rear seat pair, facing rear camera","3.0 -0.85 1.65 0 0.4 3.14159265","TODO","rear","TODO","TODO","TODO","realistic seat-leaned rear station; does not block aisle"

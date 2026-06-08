@@ -1,0 +1,14 @@
+COLMAP TRAJECTORY VS GAZEBO GT
+==============================
+dataset:             results/beintelli_bus_model/colmap/moving_route_v6_anchor_optimized_static_world
+registered/common:   188
+similarity scale:    0.758324
+position RMSE [m]:   0.057847
+position mean [m]:   0.049324
+position median [m]: 0.059538
+position max [m]:    0.100740
+position RMSE [cm]:  5.78
+position mean [cm]:  4.93
+position max [cm]:   10.07
+
+CSV: results/beintelli_bus_model/colmap/moving_route_v6_anchor_optimized_static_world/trajectory_eval/colmap_vs_gt_trajectory.csv

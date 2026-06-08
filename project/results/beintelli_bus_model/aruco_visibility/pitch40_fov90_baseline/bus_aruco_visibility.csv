@@ -1,3 +1,0 @@
-camera,status,detected_ids,num_detected,debug_image
-front_static_camera,detected,0 1 2 4 7 5,6,results/beintelli_bus_model/aruco_visibility/pitch40_fov90_baseline/debug_images/front_static_camera_aruco_visibility.png
-rear_static_camera,detected,2 1 9 0 6 5,6,results/beintelli_bus_model/aruco_visibility/pitch40_fov90_baseline/debug_images/rear_static_camera_aruco_visibility.png

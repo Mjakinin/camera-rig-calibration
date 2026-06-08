@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.7">
+  <world name="bus_aruco_board_visibility_test">
+    <scene>
+      <ambient>0.90 0.90 0.90 1</ambient>
+      <background>0.70 0.70 0.70 1</background>
+      <shadows>false</shadows>
+    </scene>
+    <plugin filename="ignition-gazebo-physics-system" name="ignition::gazebo::systems::Physics">
+    </plugin>
+    <plugin filename="ignition-gazebo-user-commands-system" name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system" name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+    <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <light name="sun" type="directional">
+      <visualize>false</visualize>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.3 0.3 0.3 1</specular>
+      <direction>-0.5 0.2 -1</direction>
+    </light>
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>30 10 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.45 0.45 0.45 1</ambient>
+            <diffuse>0.45 0.45 0.45 1</diffuse>
+          </material>
+        </visual>
+      </link>
+      <pose>0 0 -0.025 0 0 0</pose>
+    </model>
+    <include>
+      <uri>model://beintelli_bus</uri>
+      <name>beintelli_bus</name>
+      <pose>-1.8927 25.7211 4.0344 1.5708 0 0</pose>
+    </include>
+    <include><uri>model://aruco_gridboard_target_a1_080x060</uri><name>calibration_board</name><pose>3.0 -0.85 1.65 0 0.4 3.14159265</pose></include><model name="front_static_camera">
+      <static>true</static>
+      <pose>-3.90 0.0 2.85 0 0.69813170 0</pose>
+      <link name="link">
+        <sensor name="front_static_camera" type="camera">
+          <visualize>false</visualize>
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/front_static_camera/image</topic>
+          <camera>
+            <horizontal_fov>1.57079633</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>30</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+    <model name="rear_static_camera">
+      <static>true</static>
+      <pose>5.70 0.0 2.85 0 0.69813170 3.14159265</pose>
+      <link name="link">
+        <sensor name="rear_static_camera" type="camera">
+          <visualize>false</visualize>
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/rear_static_camera/image</topic>
+          <camera>
+            <horizontal_fov>1.57079633</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>30</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+  
+    <model name="moving_calib_camera">
+      <static>true</static>
+      <pose>4.20 0.0 1.75 0 0 3.14159265</pose>
+      <link name="link">
+        <sensor name="moving_calib_camera" type="camera">
+          <always_on>true</always_on>
+          <update_rate>30</update_rate>
+          <visualize>false</visualize>
+          <topic>/moving_calib_camera/image</topic>
+          <camera>
+            <horizontal_fov>1.57079633</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+
+  </world>
+</sdf>
