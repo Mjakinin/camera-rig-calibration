@@ -1,0 +1,10 @@
+station_name,group,target_static_camera,description,board_pose,moving_pose,notes
+R1_rear_left_seat_leaned_occluded,rear,rear_static_camera,"Medium board leaned on/against left rear seat pair, facing rear camera; realistic but partially occluded",3.02 -0.75 1.55 0 0.3 3.14159265,4.20 0.0 1.75 0 0 3.14159265,corrected R1; rear valid with 5 markers RMSE 0.790 px; moving valid with 6 markers RMSE 0.764 px
+R2_rear_table_flat,rear,rear_static_camera,Medium board placed flat on rear table / rear table area,4.83 -0.09 1.52 1.57079633 1.57079633 3.14159265,,realistic table placement; test if rear sees enough markers
+R3_rear_right_seat_angled,rear,rear_static_camera,Medium board on/against right rear seat area with side angle,4.27 0.93 1.55 0 0.3 1.57079633,,right-side rear angled case
+F1_front_mid_far_seat_leaned,front,front_static_camera,Front-facing board on mid/far seat pair; distance and occlusion stress for front camera,1.89 -0.75 1.22 0 0.35 0,,front-facing but relatively far from front camera
+F2_front_mid_high_left_seat,front,front_static_camera,Front-facing board higher on left/mid seat pair; less occluded than low seat placement,1.97 0.71 1.5 0 0.35 0,,higher front-facing seat station
+F3_front_near_left_seat,front,front_static_camera,Front-facing board near front-left seat pair; close-range front reference,-3.25 0.71 1.5 0 0.35 0,,near front camera; may be large in image
+F4_front_right_table_or_box,front,front_static_camera,Front-facing board placed on right table/box/ledge; different angle and support surface,-2.46 -0.75 1.62 1.57079633 1.57079633 0,,right-side box/table placement
+G1_floor_mid_yaw_pi,floor,both,"Board on floor/table-height low middle station, yaw pi; low-angle/shared visibility stress case",1.5 0.0 0.39 1.57079633 1.57079633 3.14,,floor/low placement; evaluate front and rear
+G2_floor_mid_yaw_0,floor,both,"Board on floor/table-height low middle station, yaw 0; same physical floor case with flipped pattern orientation",1.5 0.0 0.39 1.57079633 1.57079633 0,,floor/low placement; evaluate front and rear

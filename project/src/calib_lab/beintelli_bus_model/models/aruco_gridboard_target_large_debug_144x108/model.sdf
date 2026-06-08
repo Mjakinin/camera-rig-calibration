@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.8">
+  <model name="aruco_gridboard_target">
+    <static>true</static>
+
+    <link name="target_link">
+      <visual name="target_visual">
+        <geometry>
+          <box>
+            <size>0.020000 1.440000 1.080000</size>
+          </box>
+        </geometry>
+
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>model://aruco_gridboard_target/materials/textures/aruco_board.png</albedo_map>
+              <roughness>0.8</roughness>
+              <metalness>0.0</metalness>
+            </metal>
+          </pbr>
+        </material>
+      </visual>
+
+      <collision name="target_collision">
+        <geometry>
+          <box>
+            <size>0.020000 1.440000 1.080000</size>
+          </box>
+        </geometry>
+      </collision>
+    <visual name="white_back_cover"><pose>0.0125 0 0 0 0 0</pose><cast_shadows>false</cast_shadows><geometry><box><size>0.003000 1.440000 1.080000</size></box></geometry><material><ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse><specular>0 0 0 1</specular><emissive>1 1 1 1</emissive></material></visual></link>
+  </model>
+</sdf>

@@ -1,9 +1,0 @@
-BUS ARUCO VISIBILITY SUMMARY
-============================
-front_static_camera detected: [0, 1, 2, 4, 5, 7]
-rear_static_camera detected:  [0, 1, 2, 5, 6, 9]
-overlap IDs:                  [0, 1, 2, 5]
-front count:                  6
-rear count:                   6
-overlap count:                4
-matrix CSV:                   results/beintelli_bus_model/aruco_visibility/pitch40_fov90_baseline/marker_visibility_matrix.csv
