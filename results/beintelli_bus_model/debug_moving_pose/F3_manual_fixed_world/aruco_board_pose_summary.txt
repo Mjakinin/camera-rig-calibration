@@ -1,0 +1,35 @@
+BUS ARUCO BOARD POSE SUMMARY
+============================
+
+camera:                 front_static_camera
+status:                 pose_valid
+detected_ids:           [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 30, 33, 34, 37, 38]
+used_ids:               [0, 2, 3, 4, 5]
+num_used_markers:       5
+num_points:             20
+reprojection_rmse_px:   0.500952
+tvec_xyz_m:             -0.71657909, 0.62255452, 1.36141536
+debug_image:            results/beintelli_bus_model/debug_moving_pose/F3_manual_fixed_world/debug_images/front_static_camera_aruco_board_pose.png
+
+camera:                 rear_static_camera
+status:                 failed_not_enough_markers
+detected_ids:           [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 42, 43, 45]
+used_ids:               []
+num_used_markers:       0
+num_points:             0
+reprojection_rmse_px:   
+tvec_xyz_m:             , , 
+debug_image:            results/beintelli_bus_model/debug_moving_pose/F3_manual_fixed_world/debug_images/rear_static_camera_aruco_board_pose.png
+
+camera:                 moving_calib_camera
+status:                 pose_valid
+detected_ids:           [0, 1, 2, 3, 4, 5, 30, 33, 37, 38, 41]
+used_ids:               [0, 1, 2, 3, 4, 5]
+num_used_markers:       6
+num_points:             24
+reprojection_rmse_px:   0.479412
+tvec_xyz_m:             -0.18146570, 0.14453625, 0.87552242
+debug_image:            results/beintelli_bus_model/debug_moving_pose/F3_manual_fixed_world/debug_images/moving_calib_camera_aruco_board_pose.png
+
+observations_csv:       results/beintelli_bus_model/debug_moving_pose/F3_manual_fixed_world/aruco_board_pose_observations.csv
+debug_dir:              results/beintelli_bus_model/debug_moving_pose/F3_manual_fixed_world/debug_images

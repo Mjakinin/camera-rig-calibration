@@ -1,0 +1,5 @@
+csv,valid,total,valid_percent,best_image,best_used_ids,best_rmse_px
+results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/aruco_no_gt_detections/F3_ids_00_05_moving_images.csv,18,350,5.14,moving_0004.jpg,"[0, 1, 2, 3, 4, 5]",0.479412
+results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/aruco_no_gt_detections/F4_ids_06_11_moving_images.csv,39,350,11.14,moving_0067.jpg,"[6, 7, 8, 9, 10, 11]",0.454079
+results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/aruco_no_gt_detections/R1_ids_24_29_moving_images.csv,74,350,21.14,moving_0338.jpg,"[24, 25, 26, 27, 28, 29]",0.505568
+results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/aruco_no_gt_detections/R3_ids_12_17_moving_images.csv,62,350,17.71,moving_0231.jpg,"[12, 13, 14, 15, 16, 17]",0.536168

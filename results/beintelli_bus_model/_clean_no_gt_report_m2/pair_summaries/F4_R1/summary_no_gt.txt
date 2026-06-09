@@ -1,0 +1,42 @@
+NO-GT ARUCO + COLMAP RELAY RESULT
+=================================
+
+Inputs:
+dataset_dir:                  results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards
+scale_board_detections_csv:   results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/aruco_no_gt_detections/F3_ids_00_05_moving_images.csv
+front_board_detections_csv:   results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/aruco_no_gt_detections/F4_ids_06_11_moving_images.csv
+rear_board_detections_csv:    results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/aruco_no_gt_detections/R1_ids_24_29_moving_images.csv
+front_static_obs_csv:         results/beintelli_bus_model/multi_static_8_station_visibility/F4_front_right_table_or_box_ids_06_11/aruco_board_pose_observations.csv
+rear_static_obs_csv:          results/beintelli_bus_model/multi_static_8_station_visibility/R1_rear_left_seat_leaned_occluded_ids_24_29/aruco_board_pose_observations.csv
+
+Selected anchor frames:
+front image:                  moving_0067.jpg
+front used ids:               [6, 7, 8, 9, 10, 11]
+front rmse px:                0.454079
+rear image:                   moving_0338.jpg
+rear used ids:                [24, 25, 26, 27, 28, 29]
+rear rmse px:                 0.505568
+
+Board-based Sim(3), no route_gt.csv:
+scale pairs:                  18
+scale:                        0.8131319894
+sim3 center rmse m:           0.001436
+
+Estimated T_front_rear:
+baseline norm m:              9.642243
+rotation angle deg:           179.323398
+
+T_front_rear_no_gt:
+  -0.9999090692  0.0026707914 -0.0132181766  0.0650126646
+  -0.0126043846  0.1633615121  0.9864857555 -6.2152668120
+   0.0047940390  0.9865626606 -0.1633129939  7.3715049226
+   0.0000000000  0.0000000000  0.0000000000  1.0000000000
+
+Outputs:
+T_front_rear_no_gt.csv:       results/beintelli_bus_model/no_gt_results/F4_R1_board_scaled_colmap/T_front_rear_no_gt.csv
+T_movingF_movingR csv:        results/beintelli_bus_model/no_gt_results/F4_R1_board_scaled_colmap/T_movingF_movingR_colmap_board_scaled.csv
+Sim3 csv:                     results/beintelli_bus_model/no_gt_results/F4_R1_board_scaled_colmap/Sim3_colmap_to_F3_board_metric.csv
+
+IMPORTANT:
+This computation does not use route_gt.csv.
+Ground truth may be used later only for evaluation, not for estimating the transform.

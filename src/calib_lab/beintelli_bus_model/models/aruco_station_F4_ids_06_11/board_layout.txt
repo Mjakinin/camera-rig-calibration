@@ -1,0 +1,18 @@
+GEOMETRY-BASED UNIQUE ARUCO 8-STATION BOARD METADATA
+====================================================
+station: F4_front_right_table_or_box
+model_name: aruco_station_F4_ids_06_11
+dictionary: DICT_4X4_50
+ids: [6, 7, 8, 9, 10, 11]
+first_id: 6
+cols: 3
+rows: 2
+board_width_m: 0.8
+board_height_m: 0.6
+texture_width_px_equivalent: 1440
+texture_height_px_equivalent: 1080
+marker_px_equivalent: 300
+gap_px_equivalent: 80
+marker_size_m: 0.166667
+gap_m: 0.044444
+black_cell_visuals: 134

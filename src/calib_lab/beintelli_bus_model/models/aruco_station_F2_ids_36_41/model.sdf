@@ -1,0 +1,2174 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <model name="aruco_station_F2_ids_36_41">
+    <static>true</static>
+    <link name="target_link">
+
+      <visual name="white_board_base">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.00000000 0.00000000 0.00000000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.02000000 0.80000000 0.60000000</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>1 1 1 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.21111111 0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r1_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.23888889 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r1_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.14166667 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.28055556 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r2_c2_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.18333333 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r3_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.26666667 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.14166667 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r4_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.26666667 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r4_c3_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.19722222 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r4_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.14166667 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id36_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.21111111 0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.21111111 0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r1_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.23888889 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r1_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.14166667 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.28055556 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r2_c2_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.18333333 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r3_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.26666667 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.14166667 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r4_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.26666667 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r4_c3_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.19722222 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r4_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.14166667 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id36_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.21111111 0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.00000000 0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r1_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.00000000 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r2_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.05555556 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r2_c3_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.04166667 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r3_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.06944444 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.06944444 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.06944444 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r4_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.06944444 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id37_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.00000000 0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.00000000 0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r1_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.00000000 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r2_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.05555556 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r2_c3_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.04166667 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r3_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.06944444 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.06944444 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.06944444 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r4_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.06944444 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id37_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.00000000 0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.21111111 0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r1_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.21111111 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.14166667 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r2_c3_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.22500000 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r2_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.28055556 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r3_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.14166667 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.28055556 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r4_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.15555556 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r4_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.26666667 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id38_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.21111111 0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.21111111 0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r1_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.21111111 0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.14166667 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r2_c3_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.22500000 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r2_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.28055556 0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r3_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.14166667 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.28055556 0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r4_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.15555556 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r4_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.26666667 0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id38_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.21111111 0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.21111111 -0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r1_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.23888889 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r1_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.14166667 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.28055556 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r2_c3_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.16944444 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r3_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.26666667 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r3_c3_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.19722222 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.14166667 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.28055556 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r4_c2_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.22500000 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r4_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.15555556 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id39_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.21111111 -0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.21111111 -0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r1_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.23888889 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r1_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.14166667 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.28055556 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r2_c3_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.16944444 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r3_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.26666667 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r3_c3_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.19722222 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.14166667 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.28055556 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r4_c2_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.22500000 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r4_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.15555556 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id39_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.21111111 -0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.00000000 -0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r1_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.02777778 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r1_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.06944444 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r2_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.05555556 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r2_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.06944444 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r3_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.02777778 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.06944444 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.06944444 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r4_c2_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.02777778 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id40_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 -0.00000000 -0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.00000000 -0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r1_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.02777778 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r1_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.06944444 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r2_c0_2">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.05555556 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r2_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.06944444 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r3_c0_4">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.02777778 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r3_c5_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.06944444 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.06944444 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r4_c2_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.02777778 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id40_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 0.00000000 -0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.21111111 -0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r1_c0_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.16944444 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r1_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.26666667 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.14166667 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r2_c2_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.19722222 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r2_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.26666667 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r3_c0_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.16944444 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r3_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.26666667 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.14166667 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r4_c2_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.23888889 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_front_plus_x_id41_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>0.01300000 0.21111111 -0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r0_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.21111111 -0.03611111 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r1_c0_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.16944444 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r1_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.26666667 -0.06388889 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r2_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.14166667 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r2_c2_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.19722222 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r2_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.26666667 -0.09166667 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r3_c0_3">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.16944444 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.08333333 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r3_c4_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.26666667 -0.11944444 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.05555556 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r4_c0_1">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.14166667 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.02777778 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r4_c2_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.23888889 -0.14722222 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.11111111 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+
+      <visual name="black_cell_back_minus_x_id41_r5_c0_6">
+        <cast_shadows>false</cast_shadows>
+        <pose>-0.01300000 -0.21111111 -0.17500000 0.00000000 0.00000000 0.00000000</pose>
+        <geometry>
+          <box>
+            <size>0.00400000 0.16666667 0.02777778</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+
+      <collision name="target_collision">
+        <geometry>
+          <box>
+            <size>0.02000000 0.80000000 0.60000000</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
