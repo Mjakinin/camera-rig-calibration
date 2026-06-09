@@ -1,0 +1,5 @@
+pair,baseline_est_m,baseline_gt_m,baseline_error_cm,translation_error_cm,rotation_error_deg,scale_pairs,scale,sim3_center_rmse_m,front_image,rear_image
+F3_R3,9.620700,9.600000,2.07,5.03,1.24,18,0.8131319894,0.001436,moving_0004.jpg,moving_0231.jpg
+F4_R3,9.611359,9.600000,1.14,7.02,1.35,18,0.8131319894,0.001436,moving_0067.jpg,moving_0231.jpg
+F3_R1,9.651548,9.600000,5.15,7.05,0.86,18,0.8131319894,0.001436,moving_0004.jpg,moving_0338.jpg
+F4_R1,9.642243,9.600000,4.22,8.07,0.98,18,0.8131319894,0.001436,moving_0067.jpg,moving_0338.jpg

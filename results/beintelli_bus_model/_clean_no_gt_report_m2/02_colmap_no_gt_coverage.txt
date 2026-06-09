@@ -1,0 +1,22 @@
+COLMAP V8 NO-GT DATASET COVERAGE
+================================
+
+dataset:
+  results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards
+
+total captured images:
+  350
+
+registered images:
+  346
+
+registration ratio:
+  98.86 %
+
+sparse points:
+  7966
+
+important files:
+  images:     results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/images
+  images.txt: results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/sparse_txt/images.txt
+  points3D:   results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/sparse_txt/points3D.txt

@@ -23,7 +23,7 @@ def quat_from_rpy(roll, pitch, yaw):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--world", default="bus_aruco_board_visibility_test")
+    parser.add_argument("--world", default="bus_multi_aruco_static_stations")
     parser.add_argument("--name", required=True)
     parser.add_argument("--pose", nargs=6, type=float, required=True, metavar=("X", "Y", "Z", "ROLL", "PITCH", "YAW"))
     parser.add_argument("--timeout", type=int, default=1000)
