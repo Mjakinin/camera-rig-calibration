@@ -1,0 +1,30 @@
+GT-MOVING ARUCO RELAY RESULT
+============================
+
+This is diagnostic / upper-bound.
+It uses route_commanded.csv for the moving-camera front-to-rear transform.
+It does NOT evaluate COLMAP trajectory quality.
+
+dataset_dir:             results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards
+route_commanded_csv:     results/beintelli_bus_model/colmap/moving_route_v8_static_8_aruco_boards/route_commanded.csv
+
+front image:             moving_0004.jpg
+front used ids:          [0, 1, 2, 3, 4, 5]
+front rmse px:           0.479412
+
+rear image:              moving_0231.jpg
+rear used ids:           [12, 13, 14, 15, 16, 17]
+rear rmse px:            0.536168
+
+Metrics against static-camera GT:
+  baseline_est_m:       9.676388
+  baseline_gt_m:        9.600000
+  baseline_error_cm:    7.64
+  translation_error_cm: 27.11
+  rotation_error_deg:   9.20
+
+T_front_rear_gt_moving_chain:
+[[-0.98718284  0.13673981 -0.08229376  0.26045336]
+ [-0.05855045  0.16938294  0.98380957 -6.23228495]
+ [ 0.14846509  0.97601826 -0.15920575  7.3975182 ]
+ [ 0.          0.          0.          1.        ]]

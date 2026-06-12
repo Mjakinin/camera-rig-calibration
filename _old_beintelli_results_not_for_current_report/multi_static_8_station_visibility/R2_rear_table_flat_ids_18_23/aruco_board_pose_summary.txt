@@ -1,0 +1,35 @@
+BUS ARUCO BOARD POSE SUMMARY
+============================
+
+camera:                 front_static_camera
+status:                 failed_not_enough_markers
+detected_ids:           [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 30, 33, 34, 37, 38]
+used_ids:               []
+num_used_markers:       0
+num_points:             0
+reprojection_rmse_px:   
+tvec_xyz_m:             , , 
+debug_image:            results/beintelli_bus_model/multi_static_8_station_visibility/R2_rear_table_flat_ids_18_23/debug_images/front_static_camera_aruco_board_pose.png
+
+camera:                 rear_static_camera
+status:                 pose_valid
+detected_ids:           [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 42, 43, 45]
+used_ids:               [18, 19, 20, 21, 22, 23]
+num_used_markers:       6
+num_points:             24
+reprojection_rmse_px:   0.642376
+tvec_xyz_m:             -0.09314896, 0.45030569, 1.52356528
+debug_image:            results/beintelli_bus_model/multi_static_8_station_visibility/R2_rear_table_flat_ids_18_23/debug_images/rear_static_camera_aruco_board_pose.png
+
+camera:                 moving_calib_camera
+status:                 failed_not_enough_markers
+detected_ids:           [23, 24, 25, 26]
+used_ids:               [23]
+num_used_markers:       1
+num_points:             4
+reprojection_rmse_px:   
+tvec_xyz_m:             , , 
+debug_image:            results/beintelli_bus_model/multi_static_8_station_visibility/R2_rear_table_flat_ids_18_23/debug_images/moving_calib_camera_aruco_board_pose.png
+
+observations_csv:       results/beintelli_bus_model/multi_static_8_station_visibility/R2_rear_table_flat_ids_18_23/aruco_board_pose_observations.csv
+debug_dir:              results/beintelli_bus_model/multi_static_8_station_visibility/R2_rear_table_flat_ids_18_23/debug_images

@@ -1,0 +1,17 @@
+CHAIN COMPONENT ABLATION
+========================
+
+case:        pnp_anchors_colmap_moving
+pair:        F3_R3
+front image: moving_0004.jpg
+rear image:  moving_0231.jpg
+
+scale used for COLMAP middle:
+  0.8131319894
+
+Metrics against static-camera GT:
+  baseline_est_m:       9.620700
+  baseline_gt_m:        9.600000
+  baseline_error_cm:    2.07
+  translation_error_cm: 5.03
+  rotation_error_deg:   1.24
