@@ -1,0 +1,61 @@
+FINAL CAMERA RIG EXTRINSICS
+===========================
+
+Reference camera: cam_edge_3
+
+Ground truth is used only for error evaluation.
+COLMAP relay uses no-GT metric scale from known 0.17 m ArUco markers.
+
+FINAL ESTIMATES
+---------------
+
+cam_edge_3 -> cam_edge_1
+  method:       Direct ArUco
+  chain:        marker=1
+  estimated t:  (-2.147, -0.136, +0.252) m
+  estimated r:  (+16.37, +48.87, +25.17) deg
+  GT t:         (-2.139, -0.129, +0.354) m
+  GT r:         (+16.17, +50.49, +24.59) deg
+  error:        10.19 cm, 1.68 deg
+
+cam_edge_3 -> cam_edge_0
+  method:       Relay COLMAP + ArUco scale
+  chain:        root_marker=7@frame=80, target_marker=4@frame=71
+  estimated t:  (+1.863, -1.099, +3.023) m
+  estimated r:  (+11.95, -51.18, -30.17) deg
+  GT t:         (+2.059, -1.165, +2.998) m
+  GT r:         (+12.73, -52.60, -32.45) deg
+  error:        20.91 cm, 2.24 deg
+
+cam_edge_3 -> cam_edge_5
+  method:       Relay COLMAP + ArUco scale
+  chain:        root_marker=7@frame=80, target_marker=12@frame=118
+  estimated t:  (+2.994, -3.112, +8.273) m
+  estimated r:  (+142.32, -11.86, +176.81) deg
+  GT t:         (+2.898, -3.102, +8.258) m
+  GT r:         (+141.71, -7.87, +176.34) deg
+  error:        9.72 cm, 4.08 deg
+
+ORACLE / SANITY BASELINES
+-------------------------
+These use GT moving-camera motion and are not real-life deployable.
+
+cam_edge_3 -> cam_edge_0
+  method:       Relay GT-motion oracle
+  chain:        root_marker=3@frame=62, target_marker=4@frame=71
+  error:        12.70 cm, 4.44 deg
+
+cam_edge_3 -> cam_edge_5
+  method:       Relay GT-motion oracle
+  chain:        root_marker=8@frame=91, target_marker=11@frame=130
+  error:        16.85 cm, 12.29 deg
+
+ALL CAMERA-TO-CAMERA PAIRS
+--------------------------
+Full pairwise camera-to-camera transforms are written to:
+  results/bus_real_data/07_final_extrinsics_cam3_reference/pairwise_extrinsics_summary.csv
+
+Files:
+  results/bus_real_data/07_final_extrinsics_cam3_reference/FINAL_CAMERA_RIG_OVERVIEW.txt
+  results/bus_real_data/07_final_extrinsics_cam3_reference/FINAL_CAMERA_RIG_OVERVIEW.md
+  results/bus_real_data/07_final_extrinsics_cam3_reference/pairwise_extrinsics_summary.csv

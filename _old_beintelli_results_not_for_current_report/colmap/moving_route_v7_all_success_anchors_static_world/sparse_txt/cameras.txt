@@ -1,4 +1,0 @@
-# Camera list with one line of data per camera:
-#   CAMERA_ID, MODEL, WIDTH, HEIGHT, PARAMS[]
-# Number of cameras: 1
-1 PINHOLE 640 480 321.07361757682941 320.82699386728228 320 240

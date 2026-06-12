@@ -1,8 +1,0 @@
-camera_model: PINHOLE
-width: 640
-height: 480
-fx: 320
-fy: 320
-cx: 320
-cy: 240
-params_for_colmap: 320,320,320,240

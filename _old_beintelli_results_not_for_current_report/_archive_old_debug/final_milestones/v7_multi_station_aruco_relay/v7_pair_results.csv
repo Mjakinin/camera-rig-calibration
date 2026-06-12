@@ -1,7 +1,0 @@
-pair,baseline_est_m,baseline_gt_m,baseline_error_cm,translation_error_cm,rotation_error_deg,notes
-F3-R1,9.667844,9.600000,6.78,9.34,1.88,baseline front near + rear left seat
-F3-R2,9.555828,9.600000,-4.42,8.95,1.38,front near + rear table
-F3-R3,9.590744,9.600000,-0.93,3.81,1.06,best translation; front near + rear right angled
-F4-R1,9.688351,9.600000,8.84,17.81,2.72,front table/box + rear left; worst tested success pair
-F4-R2,9.576663,9.600000,-2.33,7.93,0.21,best rotation; table-like front + rear table
-F4-R3,9.611293,9.600000,1.13,11.75,1.51,front table/box + rear right angled

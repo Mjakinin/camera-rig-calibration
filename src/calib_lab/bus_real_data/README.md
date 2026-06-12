@@ -1,24 +1,65 @@
-# bus_real_data
+# bus_real_data Setup
 
-Clean realistic Intellibus camera-rig calibration setup.
+This folder contains the Gazebo/Ignition setup for the current BeIntelli/Intellibus-style camera-rig calibration benchmark.
 
-Main idea:
-- reproduce the real Intellibus camera layout from target_transforms.json
-- use 1280x720 simulated color cameras
-- use realistic A4 sheets with one ArUco marker per sheet
-- marker side length: approximately 0.17 m
-- use a moving calibration camera as relay
-- use COLMAP as first trajectory backend
-- keep RTAB-Map as optional later trajectory backend
-- estimate pairwise static camera transforms, initially from cam_edge_0 to other edge cameras
+## Purpose
 
-Initial static cameras:
-- cam_edge_0
-- cam_edge_1
-- cam_edge_3
-- cam_edge_5
+Reference camera:
 
-Initial outputs:
-- T_edge0_edge1
-- T_edge0_edge3
-- T_edge0_edge5
+```text
+cam_edge_3
+```
+
+Calibration graph:
+
+```text
+cam_edge_3 -> cam_edge_1:
+  direct static ArUco calibration
+
+cam_edge_3 -> cam_edge_0:
+  moving-camera relay calibration
+
+cam_edge_3 -> cam_edge_5:
+  moving-camera relay calibration
+```
+
+## Folder structure
+
+```text
+config/
+```
+
+Camera intrinsics, marker placements, moving-camera route keyframes and alignment notes.
+
+```text
+models/
+```
+
+Local models and generated A4 ArUco marker assets.
+
+```text
+scripts/
+```
+
+World-generation scripts.
+
+```text
+worlds/
+```
+
+Gazebo/Ignition SDF worlds.
+
+## Main world
+
+```text
+worlds/bus_real_data_moving_camera.sdf
+```
+
+## Marker geometry
+
+```text
+A4 sheet:      0.210 m x 0.297 m
+ArUco marker: 0.170 m x 0.170 m
+```
+
+Ground truth is used only for simulation evaluation, not for the final no-GT COLMAP-motion relay estimate.
