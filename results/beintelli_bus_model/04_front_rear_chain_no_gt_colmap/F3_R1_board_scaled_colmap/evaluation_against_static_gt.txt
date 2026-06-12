@@ -1,0 +1,28 @@
+NO-GT RESULT EVALUATION AGAINST STATIC GAZEBO GT
+================================================
+
+Important:
+  This script evaluates the final result only.
+  It must not be used inside the estimation pipeline.
+
+Input:
+  T_est_csv: results/beintelli_bus_model/no_gt_results/F3_R1_board_scaled_colmap/T_front_rear_no_gt.csv
+
+Metrics:
+  baseline_est_m:       9.651548
+  baseline_gt_m:        9.600000
+  baseline_error_cm:    5.15
+  translation_error_cm: 7.05
+  rotation_error_deg:   0.86
+
+T_est:
+[[-9.99956573e-01  2.67125950e-03 -8.92842840e-03  4.15264923e-02]
+ [-8.37761170e-03  1.62043788e-01  9.86748005e-01 -6.22267041e+00]
+ [ 4.08265640e-03  9.86779953e-01 -1.62014373e-01  7.37760247e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00  1.00000000e+00]]
+
+T_gt:
+[[-1.00000000e+00  7.87187788e-17 -9.38133876e-17  0.00000000e+00]
+ [-7.87187788e-17  1.73648179e-01  9.84807753e-01 -6.17076105e+00]
+ [ 9.38133876e-17  9.84807753e-01 -1.73648179e-01  7.35402666e+00]
+ [ 0.00000000e+00  0.00000000e+00  0.00000000e+00  1.00000000e+00]]

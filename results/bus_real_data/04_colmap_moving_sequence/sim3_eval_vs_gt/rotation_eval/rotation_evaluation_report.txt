@@ -1,0 +1,20 @@
+COLMAP moving-camera rotation vs Ground Truth route
+===================================================
+
+Evaluation type: Sim(3)-rotation + constant camera-axis offset alignment.
+Important: This uses simulation Ground Truth and is for evaluation only.
+
+Evaluated registered frames: 92
+
+Rotation error is reported as geodesic SO(3) angle in degrees.
+This is more reliable than comparing Euler angles directly.
+
+RMSE_deg:   104.248061
+Mean_deg:   91.026532
+Median_deg: 75.355448
+Min_deg:    16.927536
+Max_deg:    176.104281
+
+CSV: results/bus_real_data/04_colmap_moving_sequence/sim3_eval_vs_gt/rotation_eval/rotation_errors_by_frame.csv
+Worst-first CSV: results/bus_real_data/04_colmap_moving_sequence/sim3_eval_vs_gt/rotation_eval/rotation_errors_sorted_worst_first.csv
+Camera-axis offset: results/bus_real_data/04_colmap_moving_sequence/sim3_eval_vs_gt/rotation_eval/estimated_camera_axis_offset.txt
