@@ -1,9 +1,0 @@
-scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
-height_0_6m, height, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
-height_0_8m, height, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
-height_1_0m, height, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
-height_1_2m, height, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
-height_1_4m, height, failure, not_enough_charuco_corners/gray, not_enough_charuco_corners/gray, , 
-
-Summary counts:
-height | failure: 5
