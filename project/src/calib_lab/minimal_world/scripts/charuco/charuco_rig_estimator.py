@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
+import sys
+
+CALIB_LAB_DIR = Path(__file__).resolve().parents[3]
+if str(CALIB_LAB_DIR) not in sys.path:
+    sys.path.insert(0, str(CALIB_LAB_DIR))
+
+
 import os
 import time
 import yaml
@@ -60,8 +68,8 @@ class CharucoRigEstimator(Node):
     def __init__(self):
         super().__init__("charuco_rig_estimator")
 
-        self.declare_parameter("config_path", "src/calib_lab/config/ground_truth_minimal.yaml")
-        self.declare_parameter("charuco_config_path", "src/calib_lab/config/charuco_target.yaml")
+        self.declare_parameter("config_path", "src/calib_lab/minimal_world/config/ground_truth_minimal.yaml")
+        self.declare_parameter("charuco_config_path", "src/calib_lab/minimal_world/config/charuco_target.yaml")
         self.declare_parameter("process_period_sec", 0.5)
         self.declare_parameter("min_markers", 1)
         self.declare_parameter("min_charuco_corners", 4)

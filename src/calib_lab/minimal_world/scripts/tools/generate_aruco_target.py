@@ -181,7 +181,7 @@ def main():
         }
     }
 
-    cfg_path = Path("src/calib_lab/config/aruco_target.yaml")
+    cfg_path = Path("src/calib_lab/minimal_world/config/aruco_target.yaml")
     cfg_path.parent.mkdir(parents=True, exist_ok=True)
     cfg_path.write_text(yaml.safe_dump(cfg, sort_keys=False))
 

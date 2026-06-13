@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
+import sys
+
+CALIB_LAB_DIR = Path(__file__).resolve().parents[3]
+if str(CALIB_LAB_DIR) not in sys.path:
+    sys.path.insert(0, str(CALIB_LAB_DIR))
+
+
 import os
 import csv
 import time
@@ -59,8 +67,8 @@ class CharucoRigEvaluator(Node):
     def __init__(self):
         super().__init__("charuco_rig_evaluator")
 
-        self.declare_parameter("config_path", "src/calib_lab/config/ground_truth_minimal.yaml")
-        self.declare_parameter("charuco_config_path", "src/calib_lab/config/charuco_target.yaml")
+        self.declare_parameter("config_path", "src/calib_lab/minimal_world/config/ground_truth_minimal.yaml")
+        self.declare_parameter("charuco_config_path", "src/calib_lab/minimal_world/config/charuco_target.yaml")
         self.declare_parameter("scenario_name", "charuco_static")
         self.declare_parameter("output_csv", "results/charuco/raw_results.csv")
         self.declare_parameter("debug_dir", "results/charuco/debug_images")

@@ -118,8 +118,8 @@ def main():
 
     # Prefer copying the checkerboard target, since it already has the correct model structure.
     source_candidates = [
-        Path("src/calib_lab/models/checkerboard_target"),
-        Path("src/calib_lab/models/aruco_target"),
+        Path("src/calib_lab/minimal_world/models/checkerboard_target"),
+        Path("src/calib_lab/minimal_world/models/aruco_target"),
     ]
     source_model = next((p for p in source_candidates if p.exists()), None)
 
@@ -129,7 +129,7 @@ def main():
             + ", ".join(str(p) for p in source_candidates)
         )
 
-    target_model = Path("src/calib_lab/models/charuco_target")
+    target_model = Path("src/calib_lab/minimal_world/models/charuco_target")
 
     if target_model.exists():
         shutil.rmtree(target_model)
@@ -191,7 +191,7 @@ def main():
         }
     }
 
-    cfg_path = Path("src/calib_lab/config/charuco_target.yaml")
+    cfg_path = Path("src/calib_lab/minimal_world/config/charuco_target.yaml")
     cfg_path.parent.mkdir(parents=True, exist_ok=True)
     cfg_path.write_text(yaml.safe_dump(cfg, sort_keys=False))
 

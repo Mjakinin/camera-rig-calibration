@@ -84,23 +84,23 @@ From the project root:
 ```bash
 cd ~/cam/project
 
-python3 src/calib_lab/scripts/tools/generate_charuco_target.py
+python3 src/calib_lab/minimal_world/scripts/tools/generate_charuco_target.py
 ```
 
 This should create:
 
 ```txt
-src/calib_lab/models/charuco_target/
-src/calib_lab/models/charuco_target/materials/textures/charuco_board.png
-src/calib_lab/config/charuco_target.yaml
+src/calib_lab/minimal_world/models/charuco_target/
+src/calib_lab/minimal_world/models/charuco_target/materials/textures/charuco_board.png
+src/calib_lab/minimal_world/config/charuco_target.yaml
 ```
 
 Check the generated files:
 
 ```bash
-ls src/calib_lab/models/charuco_target/materials/textures/
-cat src/calib_lab/config/charuco_target.yaml
-cat src/calib_lab/models/charuco_target/model.sdf
+ls src/calib_lab/minimal_world/models/charuco_target/materials/textures/
+cat src/calib_lab/minimal_world/config/charuco_target.yaml
+cat src/calib_lab/minimal_world/models/charuco_target/model.sdf
 ```
 
 Expected texture:
@@ -112,7 +112,7 @@ charuco_board.png
 Check for broken model names or wrong texture paths:
 
 ```bash
-grep -R "chcharuco\|chchcharuco\|checkerboard_10x7\|charuco_10x7" -n src/calib_lab/models/charuco_target
+grep -R "chcharuco\|chchcharuco\|checkerboard_10x7\|charuco_10x7" -n src/calib_lab/minimal_world/models/charuco_target
 ```
 
 Expected result: no output.
@@ -130,7 +130,7 @@ Expected `model.sdf` texture path:
 Generate the Gazebo world for ChArUco:
 
 ```bash
-python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
+python3 src/calib_lab/minimal_world/scripts/tools/generate_dynamic_worlds.py \
   --method charuco \
   --resolution res640x480
 ```
@@ -138,8 +138,8 @@ python3 src/calib_lab/scripts/tools/generate_dynamic_worlds.py \
 This creates:
 
 ```txt
-src/calib_lab/worlds/dynamic/charuco_res640x480.sdf
-src/calib_lab/worlds/dynamic/scenario_poses.csv
+src/calib_lab/minimal_world/worlds/dynamic/charuco_res640x480.sdf
+src/calib_lab/minimal_world/worlds/dynamic/scenario_poses.csv
 ```
 
 `scenario_poses.csv` contains the target poses used for the dynamic sweeps, for example:
@@ -173,9 +173,9 @@ Set the model path and start Gazebo:
 ```bash
 cd ~/cam/project
 
-export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
+export IGN_GAZEBO_RESOURCE_PATH="$PWD/src/calib_lab/minimal_world/models:${IGN_GAZEBO_RESOURCE_PATH:-}"
 
-ign gazebo -r src/calib_lab/worlds/dynamic/charuco_res640x480.sdf
+ign gazebo -r src/calib_lab/minimal_world/worlds/dynamic/charuco_res640x480.sdf
 ```
 
 The ChArUco target should be visible in the world.
@@ -214,7 +214,7 @@ Run:
 ```bash
 cd ~/cam/project
 
-python3 src/calib_lab/scripts/charuco/charuco_live_detector.py \
+python3 src/calib_lab/minimal_world/scripts/charuco/charuco_live_detector.py \
   --ros-args \
   -p show_gui:=false \
   -p save_debug:=true \
@@ -252,7 +252,7 @@ Run:
 ```bash
 cd ~/cam/project
 
-python3 src/calib_lab/scripts/charuco/charuco_pose_live.py \
+python3 src/calib_lab/minimal_world/scripts/charuco/charuco_pose_live.py \
   --ros-args \
   -p show_gui:=false \
   -p save_debug:=true \
@@ -284,7 +284,7 @@ Run:
 ```bash
 cd ~/cam/project
 
-python3 src/calib_lab/scripts/charuco/charuco_rig_estimator.py \
+python3 src/calib_lab/minimal_world/scripts/charuco/charuco_rig_estimator.py \
   --ros-args \
   -p show_gui:=false
 ```
@@ -341,7 +341,7 @@ Start with one group first:
 ```bash
 cd ~/cam/project
 
-./src/calib_lab/scripts/tools/run_dynamic_sweep.sh charuco res640x480 distance
+./src/calib_lab/minimal_world/scripts/tools/run_dynamic_sweep.sh charuco res640x480 distance
 ```
 
 If the sweep script is located directly in the project root, use:
@@ -364,16 +364,16 @@ all
 Examples:
 
 ```bash
-./src/calib_lab/scripts/tools/run_dynamic_sweep.sh charuco res640x480 yaw
-./src/calib_lab/scripts/tools/run_dynamic_sweep.sh charuco res640x480 shift
-./src/calib_lab/scripts/tools/run_dynamic_sweep.sh charuco res640x480 height
-./src/calib_lab/scripts/tools/run_dynamic_sweep.sh charuco res640x480 mixed
+./src/calib_lab/minimal_world/scripts/tools/run_dynamic_sweep.sh charuco res640x480 yaw
+./src/calib_lab/minimal_world/scripts/tools/run_dynamic_sweep.sh charuco res640x480 shift
+./src/calib_lab/minimal_world/scripts/tools/run_dynamic_sweep.sh charuco res640x480 height
+./src/calib_lab/minimal_world/scripts/tools/run_dynamic_sweep.sh charuco res640x480 mixed
 ```
 
 Run all groups:
 
 ```bash
-./src/calib_lab/scripts/tools/run_dynamic_sweep.sh charuco res640x480 all
+./src/calib_lab/minimal_world/scripts/tools/run_dynamic_sweep.sh charuco res640x480 all
 ```
 
 ---
@@ -520,7 +520,7 @@ cd ~/cam/project
 Then run:
 
 ```bash
-ls src/calib_lab/scripts/charuco/
+ls src/calib_lab/minimal_world/scripts/charuco/
 ```
 
 Expected files:
@@ -546,7 +546,7 @@ Unable to find file with URI [model://chcharuco_target/...]
 Check for broken paths:
 
 ```bash
-grep -R "chcharuco\|chchcharuco\|checkerboard_10x7\|charuco_10x7" -n src/calib_lab/models/charuco_target
+grep -R "chcharuco\|chchcharuco\|checkerboard_10x7\|charuco_10x7" -n src/calib_lab/minimal_world/models/charuco_target
 ```
 
 Expected model name:
@@ -577,8 +577,8 @@ then the board geometry or YAML config may not match the generated texture.
 Check:
 
 ```bash
-cat src/calib_lab/config/charuco_target.yaml
-cat src/calib_lab/models/charuco_target/model.sdf
+cat src/calib_lab/minimal_world/config/charuco_target.yaml
+cat src/calib_lab/minimal_world/models/charuco_target/model.sdf
 ```
 
 The physical board size and YAML values must match.
@@ -602,25 +602,25 @@ then OpenCV was installed without the contrib modules. You need an OpenCV build 
 Check the ChArUco model:
 
 ```bash
-grep -R "charuco_target\|charuco_board.png\|size" -n src/calib_lab/models/charuco_target
+grep -R "charuco_target\|charuco_board.png\|size" -n src/calib_lab/minimal_world/models/charuco_target
 ```
 
 Check for broken names:
 
 ```bash
-grep -R "chcharuco\|chchcharuco\|checkerboard_10x7\|charuco_10x7" -n src/calib_lab/models/charuco_target
+grep -R "chcharuco\|chchcharuco\|checkerboard_10x7\|charuco_10x7" -n src/calib_lab/minimal_world/models/charuco_target
 ```
 
 Check the config:
 
 ```bash
-cat src/calib_lab/config/charuco_target.yaml
+cat src/calib_lab/minimal_world/config/charuco_target.yaml
 ```
 
 Check the dynamic world:
 
 ```bash
-grep -R "charuco_target\|width\|height" -n src/calib_lab/worlds/dynamic/charuco_res640x480.sdf
+grep -R "charuco_target\|width\|height" -n src/calib_lab/minimal_world/worlds/dynamic/charuco_res640x480.sdf
 ```
 
 ---

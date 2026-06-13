@@ -36,7 +36,7 @@ class CharucoLiveDetector(Node):
     def __init__(self):
         super().__init__("charuco_live_detector")
 
-        self.declare_parameter("charuco_config_path", "src/calib_lab/config/charuco_target.yaml")
+        self.declare_parameter("charuco_config_path", "src/calib_lab/minimal_world/config/charuco_target.yaml")
         self.declare_parameter("camera_1_image_topic", "/camera_1/image")
         self.declare_parameter("camera_2_image_topic", "/camera_2/image")
         self.declare_parameter("show_gui", True)
