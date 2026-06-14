@@ -4,3 +4,9 @@ __pycache__/
 *.log
 .DS_Store
 project/
+
+# Generated image-degradation ablation sequences
+results/bus_real_data/03_moving_camera_sequence_*/
+
+# Generated relay debug images
+results/bus_real_data/06_moving_relay_chain_eval/debug_selected_frames/*.png
