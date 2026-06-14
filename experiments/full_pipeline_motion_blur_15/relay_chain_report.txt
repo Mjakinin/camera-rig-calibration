@@ -1,0 +1,34 @@
+Moving-camera relay chain evaluation
+====================================
+
+Root camera: cam_edge_3
+COLMAP poses loaded: 45
+COLMAP scale used from ArUco metric overlap, no GT: 0.266042139639
+
+Interpretation:
+- GT_motion uses commanded moving-camera poses.
+- COLMAP_motion uses COLMAP relative motion scaled from known-size ArUco marker overlap, without Gazebo GT.
+- Both still use ArUco/PnP anchors at the two chain ends.
+
+cam3_to_cam0 | GT_motion
+------------------------
+no valid chains
+
+cam3_to_cam0 | COLMAP_motion
+----------------------------
+no valid chains
+
+cam3_to_cam5 | GT_motion
+------------------------
+m05@f0080 -> m00@f0038 | trans= 153.53 cm | rot=  9.60 deg | root_static_dist=5.38 m | target_static_dist=8.77 m
+m06@f0076 -> m00@f0038 | trans= 177.83 cm | rot= 40.67 deg | root_static_dist=5.62 m | target_static_dist=8.77 m
+m07@f0075 -> m00@f0038 | trans= 195.53 cm | rot= 18.00 deg | root_static_dist=5.71 m | target_static_dist=8.77 m
+m03@f0062 -> m00@f0038 | trans= 213.42 cm | rot= 15.15 deg | root_static_dist=4.42 m | target_static_dist=8.77 m
+
+cam3_to_cam5 | COLMAP_motion
+----------------------------
+m03@f0062 -> m00@f0038 | trans= 147.94 cm | rot= 10.57 deg | root_static_dist=4.42 m | target_static_dist=8.77 m
+m06@f0076 -> m00@f0038 | trans= 160.26 cm | rot= 38.89 deg | root_static_dist=5.62 m | target_static_dist=8.77 m
+m05@f0080 -> m00@f0038 | trans= 173.57 cm | rot= 13.79 deg | root_static_dist=5.38 m | target_static_dist=8.77 m
+m07@f0075 -> m00@f0038 | trans= 225.22 cm | rot= 23.76 deg | root_static_dist=5.71 m | target_static_dist=8.77 m
+
