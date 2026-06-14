@@ -39,7 +39,7 @@ TARGETS = {
     },
 }
 
-ROOT_MARKERS = [1, 2, 3, 5, 6, 7, 8]
+ROOT_MARKERS = [7]
 
 # OpenCV optical frame -> Gazebo camera link frame correction
 # From previous direct-static convention fix:
