@@ -1,0 +1,7 @@
+{
+  "input_sequence": "results/bus_real_data/03_moving_camera_sequence",
+  "output_sequence": "results/bus_real_data/03_moving_camera_sequence_motion_blur_7",
+  "mode": "motion_blur",
+  "value": 7.0,
+  "num_images": 131
+}
