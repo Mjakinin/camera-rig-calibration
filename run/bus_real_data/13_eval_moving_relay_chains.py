@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import csv
 import math
 import re
@@ -39,7 +40,21 @@ TARGETS = {
     },
 }
 
-ROOT_MARKERS = [7]
+ROOT_MARKERS = [1, 2, 3, 5, 6, 7, 8]
+
+
+def parse_args():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--static-det", default=str(STATIC_DET))
+    ap.add_argument("--moving-det", default=str(MOVING_DET))
+    ap.add_argument("--best-moving", default=str(BEST_MOVING))
+    ap.add_argument("--world-sdf", default=str(WORLD_SDF))
+    ap.add_argument("--colmap-images", default=str(COLMAP_IMAGES))
+    ap.add_argument("--aruco-scale", default=str(ARUCO_SCALE_FILE))
+    ap.add_argument("--moving-debug", default=str(MOVING_DEBUG))
+    ap.add_argument("--out", default=str(OUT))
+    return ap.parse_args()
+
 
 # OpenCV optical frame -> Gazebo camera link frame correction
 # From previous direct-static convention fix:
@@ -407,6 +422,28 @@ def copy_debug_frames(rows):
 
 
 def main():
+    global STATIC_DET, MOVING_DET, BEST_MOVING, WORLD_SDF
+    global COLMAP_IMAGES, ARUCO_SCALE_FILE, MOVING_DEBUG, OUT
+
+    args = parse_args()
+    STATIC_DET = Path(args.static_det)
+    MOVING_DET = Path(args.moving_det)
+    BEST_MOVING = Path(args.best_moving)
+    WORLD_SDF = Path(args.world_sdf)
+    COLMAP_IMAGES = Path(args.colmap_images)
+    ARUCO_SCALE_FILE = Path(args.aruco_scale)
+    MOVING_DEBUG = Path(args.moving_debug)
+    OUT = Path(args.out)
+    OUT.mkdir(parents=True, exist_ok=True)
+
+    print("[INFO] static detections:", STATIC_DET)
+    print("[INFO] moving detections:", MOVING_DET)
+    print("[INFO] best moving frames:", BEST_MOVING)
+    print("[INFO] colmap images:", COLMAP_IMAGES)
+    print("[INFO] aruco scale:", ARUCO_SCALE_FILE)
+    print("[INFO] output:", OUT)
+    print()
+
     static_det = load_static_detections()
     moving_det = load_moving_detections()
     best = load_best_registered()

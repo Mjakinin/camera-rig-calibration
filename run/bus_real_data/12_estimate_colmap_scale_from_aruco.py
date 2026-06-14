@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import csv
 import math
 import re
@@ -210,7 +211,41 @@ def robust_median_scale(pairs):
     }
 
 
+
+def parse_args():
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--moving-det",
+        default=str(MOVING_DET),
+        help="moving_detections.csv to use for scale estimation",
+    )
+    ap.add_argument(
+        "--colmap-images",
+        default=str(COLMAP_IMAGES),
+        help="COLMAP sparse_txt_best/images.txt",
+    )
+    ap.add_argument(
+        "--out",
+        default=str(OUT),
+        help="Output folder for metric_scale.txt and scale pair CSVs",
+    )
+    return ap.parse_args()
+
+
 def main():
+    global MOVING_DET, COLMAP_IMAGES, OUT
+
+    args = parse_args()
+    MOVING_DET = Path(args.moving_det)
+    COLMAP_IMAGES = Path(args.colmap_images)
+    OUT = Path(args.out)
+    OUT.mkdir(parents=True, exist_ok=True)
+
+    print("[INFO] moving detections:", MOVING_DET)
+    print("[INFO] colmap images:", COLMAP_IMAGES)
+    print("[INFO] output:", OUT)
+    print()
+
     colmap_poses = load_colmap_poses()
     by_marker = load_observations(colmap_poses)
 

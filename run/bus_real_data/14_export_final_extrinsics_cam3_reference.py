@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import csv
 import json
 import math
@@ -14,6 +15,28 @@ RELAY_CSV = Path("results/bus_real_data/06_moving_relay_chain_eval/relay_chain_r
 
 OUT = Path("results/bus_real_data/07_final_extrinsics_cam3_reference")
 OUT.mkdir(parents=True, exist_ok=True)
+
+
+
+def parse_args():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--relay-csv", default=str(RELAY_CSV))
+    ap.add_argument("--out", default=str(OUT))
+    ap.add_argument("--static-det", default=None)
+    ap.add_argument("--moving-det", default=None)
+    ap.add_argument("--best-moving", default=None)
+    ap.add_argument("--world-sdf", default=None)
+    ap.add_argument("--colmap-images", default=None)
+    ap.add_argument("--aruco-scale", default=None)
+    return ap.parse_args()
+
+
+def try_append_relay(entries, m, pair, method):
+    try:
+        row = best_relay_row(pair, method)
+        entries.append(compute_relay_from_row(m, row))
+    except Exception as e:
+        print(f"[WARN] skipped final extrinsics for {pair} / {method}: {e}")
 
 
 def load_chain_module():
@@ -210,7 +233,31 @@ def strip_matrices(entry):
 
 
 def main():
+    global RELAY_CSV, OUT
+
+    args = parse_args()
+    RELAY_CSV = Path(args.relay_csv)
+    OUT = Path(args.out)
+    OUT.mkdir(parents=True, exist_ok=True)
+
     m = load_chain_module()
+
+    if args.static_det is not None:
+        m.STATIC_DET = Path(args.static_det)
+    if args.moving_det is not None:
+        m.MOVING_DET = Path(args.moving_det)
+    if args.best_moving is not None:
+        m.BEST_MOVING = Path(args.best_moving)
+    if args.world_sdf is not None:
+        m.WORLD_SDF = Path(args.world_sdf)
+    if args.colmap_images is not None:
+        m.COLMAP_IMAGES = Path(args.colmap_images)
+    if args.aruco_scale is not None:
+        m.ARUCO_SCALE_FILE = Path(args.aruco_scale)
+
+    print("[INFO] relay csv:", RELAY_CSV)
+    print("[INFO] output:", OUT)
+    print()
 
     entries = []
 
@@ -219,12 +266,12 @@ def main():
 
     # Final no-GT COLMAP relay estimates, selected here by best evaluation error for summary/reporting.
     # In a strict deployment setting, selection should be made by quality metrics only.
-    entries.append(compute_relay_from_row(m, best_relay_row("cam3_to_cam0", "COLMAP_motion")))
-    entries.append(compute_relay_from_row(m, best_relay_row("cam3_to_cam5", "COLMAP_motion")))
+    try_append_relay(entries, m, "cam3_to_cam0", "COLMAP_motion")
+    try_append_relay(entries, m, "cam3_to_cam5", "COLMAP_motion")
 
     # Oracle baselines for comparison
-    entries.append(compute_relay_from_row(m, best_relay_row("cam3_to_cam0", "GT_motion")))
-    entries.append(compute_relay_from_row(m, best_relay_row("cam3_to_cam5", "GT_motion")))
+    try_append_relay(entries, m, "cam3_to_cam0", "GT_motion")
+    try_append_relay(entries, m, "cam3_to_cam5", "GT_motion")
 
     json_entries = [strip_matrices(e) for e in entries]
 
