@@ -10,3 +10,8 @@ results/bus_real_data/03_moving_camera_sequence_*/
 
 # Generated relay debug images
 results/bus_real_data/06_moving_relay_chain_eval/debug_selected_frames/*.png
+
+# Generated full-pipeline ablation outputs
+results/bus_real_data/04_colmap_moving_sequence_*/
+results/bus_real_data/06_moving_relay_chain_eval_*/
+results/bus_real_data/07_final_extrinsics_cam3_reference_*/
