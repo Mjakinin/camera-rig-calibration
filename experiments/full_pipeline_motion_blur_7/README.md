@@ -1,7 +1,7 @@
 # Full Pipeline Ablation: Motion Blur length=7
 
 Branch: ablation-study
-Commit: ef8676e
+Commit: 37cadf2
 
 Degradation:
 - Mode: motion_blur
@@ -9,18 +9,14 @@ Degradation:
 - Input sequence: results/bus_real_data/03_moving_camera_sequence
 - Degraded sequence: results/bus_real_data/03_moving_camera_sequence_motion_blur_7
 
-Pipeline:
-- Detection: completed before this full-pipeline run
-- COLMAP reconstruction: completed
-- ArUco metric scale estimation: completed
-- Moving-camera relay evaluation: completed
-- Final extrinsics export: completed
-
-Key results:
-- Detection frames: 131
-- Detection total detections: 163
+Detection:
+- Frames: 131
+- Total detections: 163
 - Missing marker IDs: []
-- COLMAP poses loaded in relay: 106
+- Max consecutive frames without marker: 6
+
+COLMAP:
+- Registered poses loaded in relay: 106
 - ArUco COLMAP metric scale: 0.769679645756
 
 Final COLMAP-motion estimates:
@@ -40,7 +36,6 @@ Baseline comparison:
 
 Interpretation:
 - Motion blur length 7 reduces COLMAP registration from 129 baseline poses to 106 poses.
-- The effect on final extrinsics is not monotonic:
-  - cam3 -> cam0 improves in translation but worsens in rotation.
-  - cam3 -> cam5 worsens in translation but improves in rotation.
-- The selected relay chains changed compared with the baseline, indicating that moderate motion blur changes the set of usable anchor observations.
+- The selected relay chains changed compared with the baseline.
+- cam3 -> cam0 improves in translation but worsens in rotation.
+- cam3 -> cam5 worsens in translation but improves in rotation.
