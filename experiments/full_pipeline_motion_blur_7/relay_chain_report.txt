@@ -1,0 +1,58 @@
+Moving-camera relay chain evaluation
+====================================
+
+Root camera: cam_edge_3
+COLMAP poses loaded: 106
+COLMAP scale used from ArUco metric overlap, no GT: 0.769679645756
+
+Interpretation:
+- GT_motion uses commanded moving-camera poses.
+- COLMAP_motion uses COLMAP relative motion scaled from known-size ArUco marker overlap, without Gazebo GT.
+- Both still use ArUco/PnP anchors at the two chain ends.
+
+cam3_to_cam0 | GT_motion
+------------------------
+m03@f0062 -> m04@f0072 | trans=  20.19 cm | rot= 11.97 deg | root_static_dist=4.42 m | target_static_dist=2.54 m
+m07@f0075 -> m04@f0072 | trans=  41.02 cm | rot= 10.52 deg | root_static_dist=5.71 m | target_static_dist=2.54 m
+m08@f0091 -> m04@f0072 | trans=  41.95 cm | rot= 15.60 deg | root_static_dist=6.06 m | target_static_dist=2.54 m
+m05@f0086 -> m04@f0072 | trans=  52.78 cm | rot= 17.42 deg | root_static_dist=5.38 m | target_static_dist=2.54 m
+m01@f0019 -> m04@f0072 | trans=  58.37 cm | rot=  3.15 deg | root_static_dist=1.39 m | target_static_dist=2.54 m
+m02@f0017 -> m04@f0072 | trans=  83.36 cm | rot= 11.04 deg | root_static_dist=2.60 m | target_static_dist=2.54 m
+m06@f0082 -> m04@f0072 | trans= 139.51 cm | rot= 29.35 deg | root_static_dist=5.62 m | target_static_dist=2.54 m
+
+cam3_to_cam0 | COLMAP_motion
+----------------------------
+m08@f0091 -> m04@f0072 | trans=  14.92 cm | rot=  5.89 deg | root_static_dist=6.06 m | target_static_dist=2.54 m
+m01@f0019 -> m04@f0072 | trans=  24.90 cm | rot=  5.01 deg | root_static_dist=1.39 m | target_static_dist=2.54 m
+m03@f0062 -> m04@f0072 | trans=  26.81 cm | rot=  3.97 deg | root_static_dist=4.42 m | target_static_dist=2.54 m
+m05@f0086 -> m04@f0072 | trans=  29.90 cm | rot=  7.22 deg | root_static_dist=5.38 m | target_static_dist=2.54 m
+m02@f0017 -> m04@f0072 | trans=  38.58 cm | rot= 13.08 deg | root_static_dist=2.60 m | target_static_dist=2.54 m
+m07@f0075 -> m04@f0072 | trans=  54.05 cm | rot= 10.16 deg | root_static_dist=5.71 m | target_static_dist=2.54 m
+m06@f0082 -> m04@f0072 | trans= 139.67 cm | rot= 35.52 deg | root_static_dist=5.62 m | target_static_dist=2.54 m
+
+cam3_to_cam5 | GT_motion
+------------------------
+m08@f0091 -> m10@f0105 | trans=  19.68 cm | rot=  8.37 deg | root_static_dist=6.06 m | target_static_dist=3.64 m
+m03@f0062 -> m10@f0105 | trans=  30.56 cm | rot=  5.23 deg | root_static_dist=4.42 m | target_static_dist=3.64 m
+m07@f0075 -> m09@f0125 | trans=  36.14 cm | rot= 19.35 deg | root_static_dist=5.71 m | target_static_dist=3.12 m
+m08@f0091 -> m12@f0111 | trans=  45.42 cm | rot= 14.69 deg | root_static_dist=6.06 m | target_static_dist=2.86 m
+m05@f0086 -> m10@f0105 | trans=  47.19 cm | rot= 11.86 deg | root_static_dist=5.38 m | target_static_dist=3.64 m
+m07@f0075 -> m12@f0111 | trans=  52.60 cm | rot= 11.41 deg | root_static_dist=5.71 m | target_static_dist=2.86 m
+m05@f0086 -> m12@f0111 | trans=  53.40 cm | rot= 16.79 deg | root_static_dist=5.38 m | target_static_dist=2.86 m
+m03@f0062 -> m09@f0125 | trans=  53.51 cm | rot= 19.55 deg | root_static_dist=4.42 m | target_static_dist=3.12 m
+m07@f0075 -> m10@f0105 | trans=  58.04 cm | rot=  5.66 deg | root_static_dist=5.71 m | target_static_dist=3.64 m
+m06@f0082 -> m00@f0038 | trans=  64.92 cm | rot= 26.78 deg | root_static_dist=5.62 m | target_static_dist=8.77 m
+
+cam3_to_cam5 | COLMAP_motion
+----------------------------
+m08@f0091 -> m10@f0105 | trans=  22.14 cm | rot=  2.89 deg | root_static_dist=6.06 m | target_static_dist=3.64 m
+m01@f0019 -> m10@f0105 | trans=  26.81 cm | rot=  3.98 deg | root_static_dist=1.39 m | target_static_dist=3.64 m
+m01@f0019 -> m12@f0111 | trans=  32.54 cm | rot=  3.66 deg | root_static_dist=1.39 m | target_static_dist=2.86 m
+m05@f0086 -> m12@f0111 | trans=  34.64 cm | rot=  6.20 deg | root_static_dist=5.38 m | target_static_dist=2.86 m
+m07@f0075 -> m12@f0111 | trans=  37.05 cm | rot= 11.90 deg | root_static_dist=5.71 m | target_static_dist=2.86 m
+m05@f0086 -> m10@f0105 | trans=  39.11 cm | rot=  6.94 deg | root_static_dist=5.38 m | target_static_dist=3.64 m
+m07@f0075 -> m10@f0105 | trans=  39.67 cm | rot= 10.19 deg | root_static_dist=5.71 m | target_static_dist=3.64 m
+m03@f0062 -> m09@f0125 | trans=  41.69 cm | rot= 12.54 deg | root_static_dist=4.42 m | target_static_dist=3.12 m
+m03@f0062 -> m10@f0105 | trans=  43.12 cm | rot=  2.94 deg | root_static_dist=4.42 m | target_static_dist=3.64 m
+m08@f0091 -> m12@f0111 | trans=  43.28 cm | rot=  5.53 deg | root_static_dist=6.06 m | target_static_dist=2.86 m
+
