@@ -1,11 +1,11 @@
 # Full pipeline: external_sun_sensor_glare
 
-This experiment evaluates the moving-camera calibration pipeline under a realistic sunlight stress test.
+This experiment evaluates the bus camera-rig calibration pipeline under a realistic sunlight stress test.
 
 Setup:
 - Gazebo scene with an external sunlight source.
 - Additional camera-level glare/saturation applied to the rendered moving-camera sequence.
-- ArUco detection, COLMAP reconstruction, ArUco metric scale estimation, relay-chain evaluation, and final extrinsic export are run on the degraded sequence.
+- Full pipeline: ArUco detection, COLMAP reconstruction, ArUco metric scale estimation, relay-chain evaluation, and final extrinsic export.
 
 Key results:
 - Moving-camera ArUco detections: 141
@@ -18,4 +18,4 @@ Final extrinsic errors:
 - cam3 -> cam5 COLMAP relay: 112.49 cm, 7.94 deg
 
 Interpretation:
-The sunlight/glare degradation does not completely remove marker identities, but it strongly reduces temporal detection coverage and severely degrades COLMAP registration. The cam3->cam5 relay becomes unreliable, while cam3->cam0 remains partially usable.
+External Gazebo sunlight alone had only a small effect on ArUco detection. After adding camera-level glare and saturation, all marker IDs were still observed at least once, but temporal detection coverage dropped strongly and COLMAP registration collapsed to 32 images. The cam3->cam0 relay remains partially usable, while cam3->cam5 becomes unreliable.
