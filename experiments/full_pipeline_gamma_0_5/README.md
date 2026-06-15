@@ -1,27 +1,43 @@
 # Full Pipeline Ablation: Moving Camera Gamma 0.5
 
 Branch: ablation-study
-Commit: 95a66b7
+Commit: 7b3e332
 
 Degradation:
 - Type: moving-camera-only lighting degradation
 - Mode: gamma
 - Value: 0.5
 - Static camera detections: baseline / clean
-- Moving camera sequence: nonlinear gamma-adjusted sequence
+- Moving camera sequence: gamma-adjusted
 
-Purpose:
-This experiment evaluates whether the moving-camera relay pipeline remains
-valid under nonlinear lighting / contrast change.
+Detection:
+- Frames: 131
+- Total detections: 220
+- Missing marker IDs: []
+- Max consecutive frames without marker: 6
 
-Pipeline:
-- Moving ArUco detections are re-run on gamma-adjusted moving-camera frames.
-- COLMAP is re-run on the gamma-adjusted moving-camera sequence.
-- ArUco-based metric scale is estimated from the gamma-adjusted sequence.
-- Relay chains are evaluated using clean static anchors and degraded moving data.
-- Final extrinsics are exported relative to cam_edge_3.
+COLMAP:
+- Registered images in best model: 131
+- COLMAP poses loaded in relay: 131
+- ArUco metric scale: 0.728339316525
+
+Final COLMAP-motion estimates:
+- cam_edge_3 -> cam_edge_0:
+  - translation error: 17.54 cm
+  - rotation error: 5.29 deg
+  - selected chain: marker 2 frame 17 -> marker 4 frame 71
+
+- cam_edge_3 -> cam_edge_5:
+  - translation error: 11.80 cm
+  - rotation error: 2.58 deg
+  - selected chain: marker 1 frame 32 -> marker 10 frame 105
+
+Baseline comparison:
+- Baseline cam_edge_3 -> cam_edge_0 COLMAP: 20.91 cm, 2.24 deg
+- Baseline cam_edge_3 -> cam_edge_5 COLMAP: 9.72 cm, 4.08 deg
 
 Interpretation:
-This run isolates the effect of nonlinear lighting change on moving-camera
-marker detection, COLMAP reconstruction, metric scale estimation, relay-chain
-selection, and final extrinsics.
+The gamma_0_5 ablation preserves all ArUco marker IDs and allows COLMAP to
+register all moving-camera frames. Compared with linear brightness scaling,
+this gamma adjustment is less harmful for feature-based reconstruction. Final
+relay calibration remains valid for both cam_edge_0 and cam_edge_5.
