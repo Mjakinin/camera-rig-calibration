@@ -1,0 +1,37 @@
+Static-camera degradation detection report
+=========================================
+
+Input static folder: results/bus_real_data/01_static_a4_marker_detection
+Mode: motion_blur
+Value: 15
+Dictionary: DICT_4X4_50
+Marker length: 0.17 m
+
+cam_edge_0
+  baseline IDs: [3, 4, 7]
+  degraded IDs: []
+  missed IDs: [3, 4, 7]
+
+cam_edge_1
+  baseline IDs: [1, 2, 5, 6, 7, 8]
+  degraded IDs: [1]
+  missed IDs: [2, 5, 6, 7, 8]
+
+cam_edge_3
+  baseline IDs: [1, 2, 3, 5, 6, 7, 8]
+  degraded IDs: [1]
+  missed IDs: [2, 3, 5, 6, 7, 8]
+
+cam_edge_5
+  baseline IDs: [0, 9, 10, 11, 12, 13]
+  degraded IDs: [11]
+  missed IDs: [0, 9, 10, 12, 13]
+
+Global summary
+  baseline IDs across static cameras: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+  degraded IDs across static cameras: [1, 11]
+  globally missed IDs: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13]
+
+Legend for debug images:
+  green polygon: detected in degraded static image
+  red polygon: detected in baseline static image but missed after degradation

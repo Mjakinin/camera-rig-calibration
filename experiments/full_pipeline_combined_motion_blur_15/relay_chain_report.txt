@@ -1,0 +1,28 @@
+Moving-camera relay chain evaluation
+====================================
+
+Root camera: cam_edge_3
+COLMAP poses loaded: 87
+COLMAP scale used from ArUco metric overlap, no GT: 0.557285340105
+
+Interpretation:
+- GT_motion uses commanded moving-camera poses.
+- COLMAP_motion uses COLMAP relative motion scaled from known-size ArUco marker overlap, without Gazebo GT.
+- Both still use ArUco/PnP anchors at the two chain ends.
+
+cam3_to_cam0 | GT_motion
+------------------------
+no valid chains
+
+cam3_to_cam0 | COLMAP_motion
+----------------------------
+no valid chains
+
+cam3_to_cam5 | GT_motion
+------------------------
+no valid chains
+
+cam3_to_cam5 | COLMAP_motion
+----------------------------
+no valid chains
+

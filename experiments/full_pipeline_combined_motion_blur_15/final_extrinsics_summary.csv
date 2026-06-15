@@ -1,0 +1,2 @@
+name,target_camera,method,pair,root_marker,target_marker,root_frame,target_frame,translation_error_cm,rotation_error_deg,est_x_m,est_y_m,est_z_m,gt_x_m,gt_y_m,gt_z_m,notes
+cam_edge_3_to_cam_edge_1_direct_static,cam_edge_1,direct_static_aruco,,1,,,,28.844883429993956,4.418720700136486,-1.897931471787284,-0.02808431104738146,0.23176436966133318,-2.1393670482185616,-0.12854165103881288,0.3535014440640665,Direct static-to-static baseline using shared marker 1.

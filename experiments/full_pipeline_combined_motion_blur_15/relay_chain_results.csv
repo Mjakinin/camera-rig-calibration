@@ -1,0 +1,1 @@
+pair,method,root_cam,target_cam,root_marker,target_marker,root_frame,target_frame,translation_error_m,rotation_error_deg,est_x,est_y,est_z,gt_x,gt_y,gt_z,root_static_dist_m,target_static_dist_m,root_moving_dist_m,target_moving_dist_m,root_moving_score,target_moving_score
