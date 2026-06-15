@@ -1,0 +1,10 @@
+COLMAP moving sequence report
+=============================
+
+Sequence: results/bus_real_data/03_moving_camera_sequence_gamma_0_5
+Images: results/bus_real_data/03_moving_camera_sequence_gamma_0_5/images
+Matcher: exhaustive
+Camera model: PINHOLE
+Camera params: 929.46709573,929.46709573,640.00000000,360.00000000
+Best model txt: results/bus_real_data/04_colmap_moving_sequence_gamma_0_5/sparse_txt_best
+Registered images in best model: 131
