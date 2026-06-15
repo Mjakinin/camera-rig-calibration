@@ -15,3 +15,6 @@ results/bus_real_data/06_moving_relay_chain_eval/debug_selected_frames/*.png
 results/bus_real_data/04_colmap_moving_sequence_*/
 results/bus_real_data/06_moving_relay_chain_eval_*/
 results/bus_real_data/07_final_extrinsics_cam3_reference_*/
+
+# Generated static-camera degradation outputs
+results/bus_real_data/01_static_a4_marker_detection_*/
