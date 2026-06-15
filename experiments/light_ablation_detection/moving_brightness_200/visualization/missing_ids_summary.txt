@@ -1,0 +1,15 @@
+Detection failure visualization summary
+======================================
+
+Sequence: results/bus_real_data/03_moving_camera_sequence_brightness_200
+Baseline sequence: results/bus_real_data/03_moving_camera_sequence
+
+Expected IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+Detected IDs in degraded sequence: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+Global missing IDs in degraded sequence: []
+
+Baseline-visible frames for globally missing IDs:
+
+Legend:
+  green polygon: detected in degraded sequence
+  red polygon: detected in baseline at this frame, but missed in degraded sequence

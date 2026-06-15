@@ -1,0 +1,7 @@
+{
+  "input_sequence": "results/bus_real_data/03_moving_camera_sequence",
+  "output_sequence": "results/bus_real_data/03_moving_camera_sequence_gamma_0_5",
+  "mode": "gamma",
+  "value": 0.5,
+  "num_images": 131
+}

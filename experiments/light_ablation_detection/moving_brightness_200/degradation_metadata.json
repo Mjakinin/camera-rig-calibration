@@ -1,0 +1,7 @@
+{
+  "input_sequence": "results/bus_real_data/03_moving_camera_sequence",
+  "output_sequence": "results/bus_real_data/03_moving_camera_sequence_brightness_200",
+  "mode": "brightness",
+  "value": 200.0,
+  "num_images": 131
+}
