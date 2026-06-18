@@ -1,5 +1,5 @@
 camera,source_camera_info,num_detected,detected_ids,raw_image,debug_image,status
 cam_edge_0,center_left,3,3;4;7,results/bus_real_data/01_static_a4_marker_detection/raw_images/cam_edge_0.png,results/bus_real_data/01_static_a4_marker_detection/debug_images/cam_edge_0_debug.png,ok
-cam_edge_1,front_right,6,1;2;5;6;7;8,results/bus_real_data/01_static_a4_marker_detection/raw_images/cam_edge_1.png,results/bus_real_data/01_static_a4_marker_detection/debug_images/cam_edge_1_debug.png,ok
-cam_edge_3,front_left,7,1;2;3;5;6;7;8,results/bus_real_data/01_static_a4_marker_detection/raw_images/cam_edge_3.png,results/bus_real_data/01_static_a4_marker_detection/debug_images/cam_edge_3_debug.png,ok
+cam_edge_1,front_right,7,1;2;5;6;7;8;14,results/bus_real_data/01_static_a4_marker_detection/raw_images/cam_edge_1.png,results/bus_real_data/01_static_a4_marker_detection/debug_images/cam_edge_1_debug.png,ok
+cam_edge_3,front_left,8,1;2;3;5;6;7;8;14,results/bus_real_data/01_static_a4_marker_detection/raw_images/cam_edge_3.png,results/bus_real_data/01_static_a4_marker_detection/debug_images/cam_edge_3_debug.png,ok
 cam_edge_5,back_right,6,0;9;10;11;12;13,results/bus_real_data/01_static_a4_marker_detection/raw_images/cam_edge_5.png,results/bus_real_data/01_static_a4_marker_detection/debug_images/cam_edge_5_debug.png,ok
