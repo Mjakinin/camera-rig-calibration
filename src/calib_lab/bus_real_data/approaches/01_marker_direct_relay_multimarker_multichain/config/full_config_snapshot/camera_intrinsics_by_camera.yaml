@@ -1,0 +1,64 @@
+cam_edge_1:
+  source_camera_info: front_right
+  width: 1280
+  height: 720
+  fx: 929.5935668945312
+  fy: 930.330078125
+  cx: 655.2582397460938
+  cy: 353.51751708984375
+  distortion:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  horizontal_fov_deg: 69.09271747491788
+  vertical_fov_deg: 42.3088318526001
+cam_edge_3:
+  source_camera_info: front_left
+  width: 1280
+  height: 720
+  fx: 919.951171875
+  fy: 920.0068969726562
+  cx: 661.20947265625
+  cy: 356.6334228515625
+  distortion:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  horizontal_fov_deg: 69.65182951956672
+  vertical_fov_deg: 42.74095302362899
+cam_edge_0:
+  source_camera_info: center_left
+  width: 1280
+  height: 720
+  fx: 929.03515625
+  fy: 929.0380859375
+  cx: 636.6603393554688
+  cy: 365.6862487792969
+  distortion:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  horizontal_fov_deg: 69.12488229198584
+  vertical_fov_deg: 42.3624568171132
+cam_edge_5:
+  source_camera_info: back_right
+  width: 1280
+  height: 720
+  fx: 927.202392578125
+  fy: 927.3688354492188
+  cx: 651.477294921875
+  cy: 358.7645263671875
+  distortion:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  horizontal_fov_deg: 69.23063516122471
+  vertical_fov_deg: 42.431932431574616

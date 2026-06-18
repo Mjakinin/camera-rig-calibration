@@ -1,0 +1,36 @@
+No-GT COLMAP metric scale from ArUco overlap
+============================================
+
+Scale source: known ArUco marker side length, not Gazebo GT.
+Known marker side length [m]: 0.170
+
+COLMAP registered poses loaded: 204
+Markers with usable observations: 15
+Raw scale pairs: 1304
+Kept scale pairs after robust MAD trim: 1172
+
+Metric COLMAP scale: 0.762142493734
+Kept mean: 0.76445762352
+Kept std: 0.0207386434555
+Raw median: 0.763600130884
+Raw MAD: 0.0129511177646
+
+Per-marker kept scale medians:
+  marker 00: n=  80, median=0.768491155191, mean=0.770690505162, std=0.0286178824434
+  marker 01: n= 278, median=0.760020627259, mean=0.759558282609, std=0.0148009611495
+  marker 02: n=  19, median=0.751980941073, mean=0.75822705964, std=0.0284601521429
+  marker 03: n=  46, median=0.768044877641, mean=0.764608640992, std=0.0299132080983
+  marker 04: n=  15, median=0.752225162354, mean=0.754932753661, std=0.0199516821934
+  marker 05: n=   9, median=0.781934389133, mean=0.782966328505, std=0.0113596951457
+  marker 06: n=   9, median=0.737896891503, mean=0.746560439554, std=0.0283679140422
+  marker 07: n=  25, median=0.77651204645, mean=0.775512291948, std=0.025133956945
+  marker 08: n=  55, median=0.773712852745, mean=0.772526014576, std=0.0245542277735
+  marker 09: n=  65, median=0.781500247155, mean=0.776782114309, std=0.025175738655
+  marker 10: n= 130, median=0.773243368621, mean=0.775563727479, std=0.0185388852247
+  marker 11: n= 105, median=0.758848817387, mean=0.761003602001, std=0.00765291259639
+  marker 12: n= 293, median=0.758229898227, mean=0.757673796592, std=0.0163357458081
+  marker 14: n=  43, median=0.774427523282, mean=0.776027610159, std=0.0196893504333
+
+Wrote: results/bus_real_data/04_colmap_moving_sequence/aruco_metric_scale/metric_scale.txt
+Wrote: results/bus_real_data/04_colmap_moving_sequence/aruco_metric_scale/scale_pairs_all.csv
+Wrote: results/bus_real_data/04_colmap_moving_sequence/aruco_metric_scale/scale_pairs_kept_after_mad.csv

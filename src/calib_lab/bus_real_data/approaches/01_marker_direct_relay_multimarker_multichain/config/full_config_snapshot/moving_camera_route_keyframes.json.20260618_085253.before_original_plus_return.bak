@@ -1,0 +1,429 @@
+{
+  "description": "Run 3 moving calibration camera route. Updated by manual live inspection. Constant y/z, smoother 360 sweep and final turn.",
+  "pose_format": "x y z roll pitch yaw",
+  "notes": [
+    "Yaw is intentionally unwrapped and negative.",
+    "Do not wrap -6.6, -8.6, -9.7, -10.0 back into [-pi, pi].",
+    "Generator must interpolate both translation and rotation."
+  ],
+  "keyframes": [
+    {
+      "name": "kf_000_front_start",
+      "pose": [
+        -4.5,
+        0.0,
+        2.2,
+        0.0,
+        0.3,
+        0.0
+      ]
+    },
+    {
+      "name": "kf_001_front_scan_left",
+      "pose": [
+        -4.2,
+        -0.1,
+        2.2,
+        0.0,
+        0.4,
+        -0.1
+      ]
+    },
+    {
+      "name": "kf_002_front_scan_right",
+      "pose": [
+        -3.9,
+        0.1,
+        2.2,
+        0.0,
+        0.45,
+        -0.2
+      ]
+    },
+    {
+      "name": "kf_003_front_overlap",
+      "pose": [
+        -3.6,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -0.3
+      ]
+    },
+    {
+      "name": "kf_004_front_old_kf1",
+      "pose": [
+        -3.1,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -0.4
+      ]
+    },
+    {
+      "name": "kf_005_front_mid_scan_a",
+      "pose": [
+        -2.8,
+        -0.1,
+        2.2,
+        0.0,
+        0.55,
+        -0.9
+      ]
+    },
+    {
+      "name": "kf_006_front_mid_scan_b",
+      "pose": [
+        -2.5,
+        0.1,
+        2.2,
+        0.0,
+        0.6,
+        -1.4
+      ]
+    },
+    {
+      "name": "kf_007_front_mid_scan_c",
+      "pose": [
+        -2.2,
+        0.0,
+        2.2,
+        0.0,
+        0.65,
+        -1.9
+      ]
+    },
+    {
+      "name": "kf_008_front_mid_scan_d",
+      "pose": [
+        -1.9,
+        -0.1,
+        2.2,
+        0.0,
+        0.7,
+        -2.45
+      ]
+    },
+    {
+      "name": "kf_009_old_kf2_anchor",
+      "pose": [
+        -1.5,
+        0.0,
+        2.2,
+        0.0,
+        0.7,
+        -3.5
+      ]
+    },
+    {
+      "name": "kf_010_center_slow_a",
+      "pose": [
+        -1.2,
+        0.1,
+        2.2,
+        0.0,
+        0.75,
+        -4.0
+      ]
+    },
+    {
+      "name": "kf_011_center_slow_b",
+      "pose": [
+        -0.95,
+        -0.1,
+        2.2,
+        0.0,
+        0.8,
+        -4.5
+      ]
+    },
+    {
+      "name": "kf_012_ref14_soft_a",
+      "pose": [
+        -0.7,
+        0.0,
+        2.2,
+        0.0,
+        0.85,
+        -5.0
+      ]
+    },
+    {
+      "name": "kf_013_ref14_soft_b",
+      "pose": [
+        -0.45,
+        0.08,
+        2.2,
+        0.0,
+        0.8,
+        -5.2
+      ]
+    },
+    {
+      "name": "kf_014_center_old_direction",
+      "pose": [
+        -0.2,
+        -0.08,
+        2.2,
+        0.0,
+        0.65,
+        -5.3
+      ]
+    },
+    {
+      "name": "kf_015_old_kf4_anchor",
+      "pose": [
+        0.0,
+        0.0,
+        2.2,
+        0.0,
+        0.4,
+        -5.3
+      ]
+    },
+    {
+      "name": "kf_016_center_forward_a",
+      "pose": [
+        0.25,
+        0.1,
+        2.2,
+        0.0,
+        0.45,
+        -5.55
+      ]
+    },
+    {
+      "name": "kf_017_center_forward_b",
+      "pose": [
+        0.5,
+        0.0,
+        2.2,
+        0.0,
+        0.45,
+        -5.8
+      ]
+    },
+    {
+      "name": "kf_018_center_forward_c",
+      "pose": [
+        0.75,
+        -0.1,
+        2.2,
+        0.0,
+        0.5,
+        -6.1
+      ]
+    },
+    {
+      "name": "kf_019_center_forward_d",
+      "pose": [
+        1.0,
+        0.0,
+        2.2,
+        0.0,
+        0.55,
+        -6.35
+      ]
+    },
+    {
+      "name": "kf_020_old_kf6_anchor",
+      "pose": [
+        1.25,
+        0.1,
+        2.2,
+        0.0,
+        0.55,
+        -6.6
+      ]
+    },
+    {
+      "name": "kf_021_mid_back_a",
+      "pose": [
+        1.6,
+        -0.1,
+        2.2,
+        0.0,
+        0.55,
+        -6.6
+      ]
+    },
+    {
+      "name": "kf_022_mid_back_b",
+      "pose": [
+        2.0,
+        0.1,
+        2.2,
+        0.0,
+        0.55,
+        -6.6
+      ]
+    },
+    {
+      "name": "kf_023_old_mid_forward_overlap",
+      "pose": [
+        2.4,
+        0.0,
+        2.2,
+        0.0,
+        0.55,
+        -6.6
+      ]
+    },
+    {
+      "name": "kf_024_back_scan_a",
+      "pose": [
+        2.8,
+        -0.1,
+        2.2,
+        0.0,
+        0.55,
+        -7.0
+      ]
+    },
+    {
+      "name": "kf_025_back_scan_b",
+      "pose": [
+        3.2,
+        0.1,
+        2.2,
+        0.0,
+        0.6,
+        -7.4
+      ]
+    },
+    {
+      "name": "kf_026_back_scan_c",
+      "pose": [
+        3.6,
+        0.0,
+        2.2,
+        0.0,
+        0.6,
+        -7.85
+      ]
+    },
+    {
+      "name": "kf_027_back_scan_d",
+      "pose": [
+        4.0,
+        -0.1,
+        2.2,
+        0.0,
+        0.6,
+        -8.25
+      ]
+    },
+    {
+      "name": "kf_028_old_kf7_anchor",
+      "pose": [
+        4.5,
+        0.0,
+        2.2,
+        0.0,
+        0.6,
+        -8.6
+      ]
+    },
+    {
+      "name": "kf_029_back_end_scan_a",
+      "pose": [
+        4.6,
+        0.1,
+        2.2,
+        0.0,
+        0.6,
+        -9.0
+      ]
+    },
+    {
+      "name": "kf_030_back_end_scan_b",
+      "pose": [
+        4.55,
+        -0.1,
+        2.2,
+        0.0,
+        0.7,
+        -9.45
+      ]
+    },
+    {
+      "name": "kf_031_old_kf8_anchor",
+      "pose": [
+        4.6,
+        0.0,
+        2.2,
+        0.0,
+        0.8,
+        -10.0
+      ]
+    },
+    {
+      "name": "kf_032_loop_back_a",
+      "pose": [
+        4.2,
+        -0.1,
+        2.15,
+        0.0,
+        0.65,
+        -10.2
+      ]
+    },
+    {
+      "name": "kf_033_loop_back_b",
+      "pose": [
+        3.6,
+        0.1,
+        2.15,
+        0.0,
+        0.6,
+        -10.45
+      ]
+    },
+    {
+      "name": "kf_034_loop_back_c",
+      "pose": [
+        3.0,
+        0.0,
+        2.15,
+        0.0,
+        0.55,
+        -10.7
+      ]
+    },
+    {
+      "name": "kf_035_loop_back_d",
+      "pose": [
+        2.4,
+        -0.1,
+        2.15,
+        0.0,
+        0.55,
+        -10.95
+      ]
+    },
+    {
+      "name": "kf_036_loop_back_e",
+      "pose": [
+        1.8,
+        0.1,
+        2.15,
+        0.0,
+        0.55,
+        -11.2
+      ]
+    },
+    {
+      "name": "kf_037_loop_center",
+      "pose": [
+        1.2,
+        0.0,
+        2.15,
+        0.0,
+        0.55,
+        -11.45
+      ]
+    }
+  ]
+}

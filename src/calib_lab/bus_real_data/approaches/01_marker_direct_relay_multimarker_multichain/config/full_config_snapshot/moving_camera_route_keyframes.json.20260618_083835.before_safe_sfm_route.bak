@@ -1,0 +1,132 @@
+{
+  "description": "Run 3 moving calibration camera route. Updated by manual live inspection. Constant y/z, smoother 360 sweep and final turn.",
+  "pose_format": "x y z roll pitch yaw",
+  "notes": [
+    "Yaw is intentionally unwrapped and negative.",
+    "Do not wrap -6.6, -8.6, -9.7, -10.0 back into [-pi, pi].",
+    "Generator must interpolate both translation and rotation."
+  ],
+  "keyframes": [
+    {
+      "name": "kf_000_start_forward",
+      "pose": [
+        -4.5,
+        0.0,
+        2.2,
+        0.0,
+        0.3,
+        0.0
+      ]
+    },
+    {
+      "name": "kf_001_begin_turn_adjusted",
+      "pose": [
+        -3.1,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -0.4
+      ]
+    },
+    {
+      "name": "kf_002_mid_360_sweep",
+      "pose": [
+        -1.5,
+        0.0,
+        2.2,
+        0.0,
+        0.7,
+        -3.5
+      ]
+    },
+    {
+      "name": "kf_003_ref14_visibility_sweep",
+      "pose": [
+        -0.7,
+        0.0,
+        2.2,
+        0.0,
+        1.1,
+        -5.5
+      ]
+    },
+    {
+      "name": "kf_004_continue_from_ref14",
+      "pose": [
+        0.0,
+        0.0,
+        2.2,
+        0.0,
+        0.2,
+        -5.5
+      ]
+    },
+    {
+      "name": "kf_005_forward_turn",
+      "pose": [
+        0.5,
+        0.0,
+        2.2,
+        0.0,
+        0.4,
+        -5.8
+      ]
+    },
+    {
+      "name": "kf_006_finish_360_overturn",
+      "pose": [
+        0.6,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -6.6
+      ]
+    },
+    {
+      "name": "kf_007_mid_forward_overlap",
+      "pose": [
+        2.4,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -6.6
+      ]
+    },
+    {
+      "name": "kf_008_long_forward_final_turn",
+      "pose": [
+        4.5,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -8.6
+      ]
+    },
+    {
+      "name": "kf_009_near_end_turn",
+      "pose": [
+        4.6,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -9.7
+      ]
+    },
+    {
+      "name": "kf_010_end",
+      "pose": [
+        4.6,
+        0.0,
+        2.2,
+        0.0,
+        0.8,
+        -10.0
+      ]
+    }
+  ]
+}

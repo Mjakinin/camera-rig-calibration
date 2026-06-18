@@ -1,0 +1,155 @@
+{
+  "description": "Run 3 moving calibration camera route. Updated by manual live inspection. Constant y/z, smoother 360 sweep and final turn.",
+  "pose_format": "x y z roll pitch yaw",
+  "notes": [
+    "Yaw is intentionally unwrapped and negative.",
+    "Do not wrap -6.6, -8.6, -9.7, -10.0 back into [-pi, pi].",
+    "Generator must interpolate both translation and rotation."
+  ],
+  "keyframes": [
+    {
+      "name": "kf_000_start_forward",
+      "pose": [
+        -4.5,
+        0.0,
+        2.2,
+        0.0,
+        0.3,
+        0.0
+      ],
+      "comment": "start, forward view"
+    },
+    {
+      "name": "kf_001_begin_turn_adjusted",
+      "pose": [
+        -3.1,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -0.4
+      ],
+      "comment": "adjusted pitch, begin turn"
+    },
+    {
+      "name": "kf_002_mid_360_sweep",
+      "pose": [
+        -1.5,
+        0.0,
+        2.2,
+        0.0,
+        0.7,
+        -3.5
+      ],
+      "comment": "kept from previous run"
+    },
+    {
+      "name": "kf_003_continue_sweep_new",
+      "pose": [
+        -0.7,
+        0.0,
+        2.2,
+        0.0,
+        0.7,
+        -5.2
+      ],
+      "comment": "continue rotation sweep"
+    },
+    {
+      "name": "kf_004_ref_aruco_floor_view",
+      "pose": [
+        0.0,
+        0.0,
+        1.5,
+        0.0,
+        1.5,
+        1.5707963267948966
+      ],
+      "comment": "start, forward view"
+    },
+    {
+      "name": "kf_005_pitch_down_same_yaw",
+      "pose": [
+        0.0,
+        0.0,
+        2.2,
+        0.0,
+        0.2,
+        -5.2
+      ],
+      "comment": "same yaw, changed pitch"
+    },
+    {
+      "name": "kf_006_forward_turn",
+      "pose": [
+        0.5,
+        0.0,
+        2.2,
+        0.0,
+        0.4,
+        -5.8
+      ],
+      "comment": "move forward and turn"
+    },
+    {
+      "name": "kf_007_finish_360_overturn",
+      "pose": [
+        0.6,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -6.6
+      ],
+      "comment": "finish/continue full rotation smoothly"
+    },
+    {
+      "name": "kf_006b_mid_forward_overlap",
+      "pose": [
+        2.4,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -6.6
+      ],
+      "comment": "inserted between kf_006 and kf_007 to improve forward/rear overlap for COLMAP"
+    },
+    {
+      "name": "kf_009_long_forward_final_turn",
+      "pose": [
+        4.5,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -8.6
+      ],
+      "comment": "long forward segment with gradual turn"
+    },
+    {
+      "name": "kf_010_near_end_turn",
+      "pose": [
+        4.6,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -9.7
+      ],
+      "comment": "near end rotation"
+    },
+    {
+      "name": "kf_011_end",
+      "pose": [
+        4.6,
+        0.0,
+        2.2,
+        0.0,
+        0.8,
+        -10.0
+      ],
+      "comment": "final pose"
+    }
+  ]
+}
