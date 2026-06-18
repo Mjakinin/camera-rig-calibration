@@ -12,13 +12,13 @@ import numpy as np
 
 ROOT_CAM = "cam_edge_3"
 
-STATIC_DET_CSV = Path("results/bus_real_data/01_static_a4_marker_detection/detections.csv")
-MOVING_DET_CSV = Path("results/bus_real_data/03_moving_camera_sequence/moving_detections.csv")
-COLMAP_DIR = Path("results/bus_real_data/04_colmap_moving_sequence")
+STATIC_DET_CSV = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/01_static_a4_marker_detection/detections.csv")
+MOVING_DET_CSV = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence/moving_detections.csv")
+COLMAP_DIR = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence")
 WORLD_SDF = Path("src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf")
 ROUTE_JSON = Path("src/calib_lab/bus_real_data/config/moving_camera_route_interpolated.json")
 
-OUT = Path("results/bus_real_data/06_moving_relay_chain_eval")
+OUT = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval")
 OUT.mkdir(parents=True, exist_ok=True)
 
 PAIRS = {
@@ -393,7 +393,7 @@ def load_colmap_scale():
         "scale",
     ]
 
-    jsons = sorted(Path("results/bus_real_data").rglob("*scale*.json"))
+    jsons = sorted(Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain").rglob("*scale*.json"))
     for p in jsons:
         try:
             data = json.loads(p.read_text())
@@ -518,7 +518,7 @@ def load_moving_gt_poses():
 
 def load_best_registered():
     # Kept for backward compatibility with older export scripts.
-    p = Path("results/bus_real_data/03_moving_camera_sequence/best_marker_frames/best_registered_moving_frame_by_marker.csv")
+    p = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence/best_marker_frames/best_registered_moving_frame_by_marker.csv")
     if not p.exists():
         return {}
     out = {}

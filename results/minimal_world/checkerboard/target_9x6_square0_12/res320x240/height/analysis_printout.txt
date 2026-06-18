@@ -1,9 +1,0 @@
-scenario, group, pose_class, cam1, cam2, error_cm, rot_deg
-height_0_6m, height, valid, SB, SB, 2.838, 1.216
-height_0_8m, height, valid, SB, SB, 0.518, 0.238
-height_1_0m, height, valid, SB, SB, 0.597, 0.263
-height_1_2m, height, valid, SB, SB, 0.542, 0.248
-height_1_4m, height, valid, SB, SB, 0.623, 0.139
-
-Summary counts:
-height | valid: 5

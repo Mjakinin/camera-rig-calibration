@@ -108,7 +108,7 @@ def wait_for_image(node, min_counter, timeout):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--route", default="src/calib_lab/bus_real_data/config/moving_camera_route_interpolated.json")
-    ap.add_argument("--out", default="results/bus_real_data/03_moving_camera_sequence")
+    ap.add_argument("--out", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence")
     ap.add_argument("--world", default="bus_real_data_camera_layout")
     ap.add_argument("--name", default="moving_calib_camera")
     ap.add_argument("--settle", type=float, default=0.20)

@@ -14,3 +14,8 @@
 *.ply filter=lfs diff=lfs merge=lfs -text
 *.bag filter=lfs diff=lfs merge=lfs -text
 *.mcap filter=lfs diff=lfs merge=lfs -text
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.obj filter=lfs diff=lfs merge=lfs -text
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/dae/beintelli_erklarbus.dae filter=lfs diff=lfs merge=lfs -text
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.stl filter=lfs diff=lfs merge=lfs -text
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/beintelli_erklarbus.glb filter=lfs diff=lfs merge=lfs -text
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/gltf/scene.bin filter=lfs diff=lfs merge=lfs -text

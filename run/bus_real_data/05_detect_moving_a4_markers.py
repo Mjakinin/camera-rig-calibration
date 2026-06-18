@@ -110,7 +110,7 @@ def load_expected_ids():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sequence", default="results/bus_real_data/03_moving_camera_sequence")
+    ap.add_argument("--sequence", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence")
     ap.add_argument("--clean-debug", action="store_true")
     args = ap.parse_args()
 
