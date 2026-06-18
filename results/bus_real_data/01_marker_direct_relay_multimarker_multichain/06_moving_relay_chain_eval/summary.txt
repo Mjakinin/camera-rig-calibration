@@ -15,11 +15,11 @@ Final estimate:
   weighted mean of MAD inlier transforms, weighted by observable marker quality.
   GT is used only after aggregation for evaluation.
 
-cam3_to_cam0 / COLMAP_motion: candidates=9177, inliers=7304, outliers=1873, error=8.431 cm, 2.145 deg
-  oracle best individual candidate, eval-only: m1@f177 -> m7@f72, 1.420 cm, 0.884 deg
-cam3_to_cam0 / GT_motion: candidates=9177, inliers=7792, outliers=1385, error=38.077 cm, 4.779 deg
+cam3_to_cam0 / COLMAP_motion: candidates=8525, inliers=6579, outliers=1946, error=10.189 cm, 2.059 deg
+  oracle best individual candidate, eval-only: m1@f179 -> m3@f58, 1.694 cm, 1.632 deg
+cam3_to_cam0 / GT_motion: candidates=8525, inliers=7409, outliers=1116, error=36.704 cm, 3.943 deg
   oracle best individual candidate, eval-only: m14@f156 -> m3@f157, 4.053 cm, 1.594 deg
-cam3_to_cam5 / COLMAP_motion: candidates=22272, inliers=18262, outliers=4010, error=6.373 cm, 2.802 deg
-  oracle best individual candidate, eval-only: m7@f78 -> m12@f99, 0.948 cm, 2.629 deg
-cam3_to_cam5 / GT_motion: candidates=22272, inliers=20087, outliers=2185, error=107.380 cm, 4.558 deg
+cam3_to_cam5 / COLMAP_motion: candidates=21336, inliers=17367, outliers=3969, error=13.728 cm, 3.360 deg
+  oracle best individual candidate, eval-only: m7@f78 -> m12@f101, 1.950 cm, 2.748 deg
+cam3_to_cam5 / GT_motion: candidates=21336, inliers=19360, outliers=1976, error=101.319 cm, 4.239 deg
   oracle best individual candidate, eval-only: m14@f158 -> m11@f138, 6.100 cm, 2.164 deg

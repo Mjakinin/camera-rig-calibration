@@ -127,8 +127,8 @@ def apply_sim3(scale, R, t, X):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sequence", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/05_moving_camera_sequence_run3")
-    ap.add_argument("--colmap", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_colmap_moving_sequence_run3")
+    ap.add_argument("--sequence", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence")
+    ap.add_argument("--colmap", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 

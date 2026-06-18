@@ -13,7 +13,7 @@ import numpy as np
 ROOT_CAM = "cam_edge_3"
 REF14_ENTITY = "aruco_ref_floor_14"
 
-CHAIN_SCRIPT = Path("run/bus_real_data/13_eval_moving_relay_chains.py")
+CHAIN_SCRIPT = Path("run/bus_real_data/14_eval_moving_relay_chains.py")
 DIRECT_MULTI_CSV = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/05_direct_static_cam3_cam1_multimarker/05_multimarker_aggregate_estimates.csv")
 RELAY_MULTI_CSV = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv")
 WORLD_SDF = Path("src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf")
