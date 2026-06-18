@@ -1,5 +1,0 @@
-image_name,used_as,gt_x,gt_y,gt_z,colmap_x,colmap_y,colmap_z,err_norm_cm
-moving_0004.jpg,"F3_R1:front_board_frame, F3_R3:front_board_frame",-3.85588200,0.04576200,1.65000000,-3.74345132,0.03162829,1.65210114,11.33
-moving_0067.jpg,"F4_R1:front_board_frame, F4_R3:front_board_frame",-2.73699200,0.07494000,2.23636400,-2.64282647,0.09360478,2.29837295,11.43
-moving_0231.jpg,"F3_R3:rear_board_frame, F4_R3:rear_board_frame",3.99027100,-0.21583200,1.82272700,3.95953687,-0.17413956,1.79735075,5.77
-moving_0338.jpg,"F3_R1:rear_board_frame, F4_R1:rear_board_frame",4.16428600,0.04874600,1.65000000,4.32845374,0.06538965,1.65107205,16.50

@@ -139,7 +139,7 @@ def load_intrinsics(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--intrinsics", default="src/calib_lab/bus_real_data/config/camera_intrinsics_by_camera.yaml")
-    ap.add_argument("--out", default="results/bus_real_data/01_static_a4_marker_detection")
+    ap.add_argument("--out", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/01_static_a4_marker_detection")
     ap.add_argument("--timeout", type=float, default=10.0)
     ap.add_argument("--clean", action="store_true")
     args = ap.parse_args()

@@ -9,10 +9,10 @@ import cv2
 import numpy as np
 
 
-MOVING_DET = Path("results/bus_real_data/03_moving_camera_sequence/moving_detections.csv")
-COLMAP_IMAGES = Path("results/bus_real_data/04_colmap_moving_sequence/sparse_txt_best/images.txt")
+MOVING_DET = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence/moving_detections.csv")
+COLMAP_IMAGES = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence/sparse_txt_best/images.txt")
 
-OUT = Path("results/bus_real_data/04_colmap_moving_sequence/aruco_metric_scale")
+OUT = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence/aruco_metric_scale")
 OUT.mkdir(parents=True, exist_ok=True)
 
 # Documented marker geometry:

@@ -56,8 +56,8 @@ def count_registered_images(images_txt):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sequence", default="results/bus_real_data/05_moving_camera_sequence_run3")
-    ap.add_argument("--out", default="results/bus_real_data/06_colmap_moving_sequence_run3")
+    ap.add_argument("--sequence", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/05_moving_camera_sequence_run3")
+    ap.add_argument("--out", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_colmap_moving_sequence_run3")
     ap.add_argument("--clean", action="store_true")
     ap.add_argument("--matcher", choices=["exhaustive", "sequential"], default="exhaustive")
     ap.add_argument("--use-gpu", type=int, default=0)

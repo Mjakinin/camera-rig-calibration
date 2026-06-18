@@ -4,8 +4,8 @@ import csv
 from pathlib import Path
 
 
-IN_CSV = Path("results/bus_real_data/05_direct_static_cam3_cam1/02_all_shared_marker_estimates_best_convention.csv")
-OUT_DIR = Path("results/bus_real_data/05_direct_static_cam3_cam1")
+IN_CSV = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/05_direct_static_cam3_cam1/02_all_shared_marker_estimates_best_convention.csv")
+OUT_DIR = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/05_direct_static_cam3_cam1")
 OUT_TXT = OUT_DIR / "05_pretty_direct_static_cam3_cam1_report.txt"
 OUT_CSV = OUT_DIR / "05_pretty_direct_static_cam3_cam1_table.csv"
 

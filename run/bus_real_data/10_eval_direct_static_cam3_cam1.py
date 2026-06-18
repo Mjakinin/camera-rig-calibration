@@ -254,9 +254,9 @@ def write_csv(path, rows, fields):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--detections", default="results/bus_real_data/01_static_a4_marker_detection/detections.csv")
+    ap.add_argument("--detections", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/01_static_a4_marker_detection/detections.csv")
     ap.add_argument("--world-sdf", default="src/calib_lab/bus_real_data/worlds/bus_real_data_a4_markers.sdf")
-    ap.add_argument("--out", default="results/bus_real_data/05_direct_static_cam3_cam1")
+    ap.add_argument("--out", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/05_direct_static_cam3_cam1")
     args = ap.parse_args()
 
     out_dir = Path(args.out)

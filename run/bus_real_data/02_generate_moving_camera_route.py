@@ -6,7 +6,7 @@ from pathlib import Path
 
 KEYFRAME_PATH = Path("src/calib_lab/bus_real_data/config/moving_camera_route_keyframes.json")
 OUT_JSON = Path("src/calib_lab/bus_real_data/config/moving_camera_route_interpolated.json")
-OUT_CSV = Path("results/bus_real_data/02_moving_camera_route/moving_camera_route_interpolated.csv")
+OUT_CSV = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/02_moving_camera_route/moving_camera_route_interpolated.csv")
 
 # Smaller = more frames / smoother motion.
 MAX_TRANSLATION_STEP_M = 0.15

@@ -39,7 +39,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "--eval-dir",
-        default="results/bus_real_data/04_colmap_moving_sequence/sim3_eval_vs_gt",
+        default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence/sim3_eval_vs_gt",
     )
     args = ap.parse_args()
 
