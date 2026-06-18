@@ -24,6 +24,22 @@ Errors
   coordinate errors: dx=-0.74 cm, dy=-0.72 cm, dz=-10.14 cm
   marker distances: root=1.394 m, target=2.483 m
 
+Marker 14 [GOOD_INLIER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1602, y=-0.0142, z=0.2044
+  rotation [deg]: roll=16.941, pitch=48.936, yaw=24.235
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 18.91 cm
+  rotation error: 1.884 deg
+  coordinate errors: dx=-2.09 cm, dy=11.44 cm, dz=-14.92 cm
+  marker distances: root=4.174 m, target=4.639 m
+
 Marker 2 [WEAK_INLIER]
 ------------------------------------------------------------
 Estimated pose: cam_edge_1 in cam_edge_3
@@ -106,8 +122,8 @@ Errors
 
 Summary
 -------
-Total shared markers: 6
-Kept as inlier candidates: 2
+Total shared markers: 7
+Kept as inlier candidates: 3
 Rejected: 4
 
 Recommended direct-static decision for now:

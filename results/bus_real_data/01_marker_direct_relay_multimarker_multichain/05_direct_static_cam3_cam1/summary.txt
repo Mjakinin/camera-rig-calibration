@@ -1,19 +1,38 @@
 Direct static-to-static evaluation: cam_edge_3 -> cam_edge_1
 ====================================================================
 
-Common markers: [1, 2, 5, 6, 7, 8]
-Number of marker estimates: 6
+Common markers: [1, 2, 5, 6, 7, 8, 14]
+Number of marker estimates: 7
+
+GT frame convention test:
+- sdf_link_times_inverse_optical_to_link: median_t=0.6611 m, median_r=4.857 deg, mean_t=1.3979 m, mean_r=13.184 deg
+- sdf_link_times_optical_to_link: median_t=3.3081 m, median_r=87.221 deg, mean_t=3.6052 m, mean_r=83.213 deg
+- raw_sdf_model_pose_as_camera_frame: median_t=3.3827 m, median_r=87.678 deg, mean_t=3.7828 m, mean_r=85.802 deg
+
+Selected best GT convention: sdf_link_times_inverse_optical_to_link
 
 Best individual shared-marker estimate:
 - marker_id: 1
 - translation_error: 0.101915 m = 10.192 cm
 - rotation_error: 1.678836 deg
-- estimated cam1 position in cam_edge_3: x=-2.1467, y=-0.1357, z=0.2521
-- GT cam1 position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
+- estimated target position in cam_edge_3: x=-2.1467, y=-0.1357, z=0.2521
+- GT target position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
 
 Worst individual shared-marker estimate:
 - marker_id: 6
 - translation_error: 5.102137 m = 510.214 cm
 - rotation_error: 48.980915 deg
-- estimated cam1 position in cam_edge_3: x=2.8638, y=0.3270, z=-0.5369
-- GT cam1 position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
+- estimated target position in cam_edge_3: x=2.8638, y=0.3270, z=-0.5369
+- GT target position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
+
+Aggregate medoid estimate over all shared markers:
+- chosen medoid marker_id: 8
+- translation_error: 0.661123 m = 66.112 cm
+- rotation_error: 4.857386 deg
+- estimated target position in cam_edge_3: x=-2.7382, y=-0.3880, z=0.4591
+- GT target position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
+
+Interpretation:
+- This direct static-static test is the sanity check for OpenCV PnP and GT frame convention.
+- If errors are still meter-scale after the best convention, the PnP/SDF frame convention or marker coordinate convention is still wrong.
+- If errors are cm-scale / few degrees, we can continue to GT moving relay chains.

@@ -25,8 +25,8 @@ Those scripts build the Gazebo worlds and marker assets. This folder contains th
 10_eval_direct_static_cam3_cam1.py
 11_make_direct_static_report_cam3_cam1.py
 12_estimate_colmap_scale_from_aruco.py
-13_eval_moving_relay_chains.py
-14_export_final_extrinsics_cam3_reference.py
+14_eval_moving_relay_chains.py
+15_export_final_extrinsics_cam3_reference.py
 ```
 
 The two unnumbered scripts are manual helper tools:
@@ -70,8 +70,8 @@ python3 run/bus_real_data/10_eval_direct_static_cam3_cam1.py
 python3 run/bus_real_data/11_make_direct_static_report_cam3_cam1.py
 
 python3 run/bus_real_data/12_estimate_colmap_scale_from_aruco.py
-python3 run/bus_real_data/13_eval_moving_relay_chains.py
-python3 run/bus_real_data/14_export_final_extrinsics_cam3_reference.py
+python3 run/bus_real_data/14_eval_moving_relay_chains.py
+python3 run/bus_real_data/15_export_final_extrinsics_cam3_reference.py
 ```
 
 ## Script purpose
@@ -175,7 +175,7 @@ Output:
 results/bus_real_data/04_colmap_moving_sequence/aruco_metric_scale/
 ```
 
-### 13_eval_moving_relay_chains.py
+### 14_eval_moving_relay_chains.py
 
 Evaluates moving-camera relay calibration for:
 
@@ -190,7 +190,7 @@ Output:
 results/bus_real_data/06_moving_relay_chain_eval/
 ```
 
-### 14_export_final_extrinsics_cam3_reference.py
+### 15_export_final_extrinsics_cam3_reference.py
 
 Exports final extrinsics with `cam_edge_3` as reference.
 
@@ -205,5 +205,5 @@ results/bus_real_data/07_final_extrinsics_cam3_reference/
 After cleanup/renaming, this command should run successfully:
 
 ```bash
-python3 run/bus_real_data/14_export_final_extrinsics_cam3_reference.py
+python3 run/bus_real_data/15_export_final_extrinsics_cam3_reference.py
 ```

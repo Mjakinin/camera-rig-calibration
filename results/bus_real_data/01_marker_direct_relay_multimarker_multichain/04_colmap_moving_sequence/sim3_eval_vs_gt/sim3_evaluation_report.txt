@@ -1,0 +1,25 @@
+COLMAP moving-camera trajectory vs Ground Truth route
+=====================================================
+
+Evaluation type: Sim(3)-aligned position evaluation
+Important: This uses simulation Ground Truth and is for evaluation only.
+
+Sequence: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence
+COLMAP model: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence/sparse_txt_best/images.txt
+GT route: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence/route_commanded.csv
+
+Total GT frames: 204
+COLMAP registered frames: 204
+Common evaluated frames: 204
+
+Scale: 0.744997357612
+
+Position errors after Sim(3) alignment:
+RMSE_m:   0.637761
+Mean_m:   0.259998
+Median_m: 0.193626
+Min_m:    0.038846
+Max_m:    6.123896
+
+CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence/sim3_eval_vs_gt/sim3_aligned_trajectory_errors.csv
+Transform: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_colmap_moving_sequence/sim3_eval_vs_gt/sim3_transform.txt
