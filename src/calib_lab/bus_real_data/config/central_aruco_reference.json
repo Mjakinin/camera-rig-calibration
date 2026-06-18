@@ -1,0 +1,22 @@
+{
+  "reference_entity": "aruco_ref_floor_14",
+  "model_name": "a4_aruco_marker_014",
+  "marker_id": 14,
+  "description": "Central geometry-based ArUco marker used as BA/global reference marker.",
+  "a4_size_m": {
+    "width": 0.21,
+    "height": 0.297
+  },
+  "aruco_marker_size_m": 0.17,
+  "model_style": "same geometry-based A4 ArUco model as marker IDs 0-13",
+  "final_pose_world_sdf": {
+    "x": 0.0,
+    "y": 0.5,
+    "z": 0.4,
+    "roll": -1.5707963267948966,
+    "pitch": 0.0,
+    "yaw": 0.0
+  },
+  "pose_format": "x y z roll pitch yaw",
+  "note": "Reference marker moved to y=0.5, same y as marker 6, to improve visibility from cam_edge_1/cam_edge_3 and the moving camera."
+}

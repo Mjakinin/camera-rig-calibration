@@ -7,4 +7,4 @@ Matcher: exhaustive
 Camera model: PINHOLE
 Camera params: 929.46709573,929.46709573,640.00000000,360.00000000
 Best model txt: results/bus_real_data/04_colmap_moving_sequence/sparse_txt_best
-Registered images in best model: 129
+Registered images in best model: 204
