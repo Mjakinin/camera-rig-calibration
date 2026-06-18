@@ -39,7 +39,7 @@ unset GZ_SIM_RESOURCE_PATH
 
 REPO="$PWD"
 
-export IGN_GAZEBO_RESOURCE_PATH="$REPO/src/calib_lab/bus_real_data/models:$REPO/src/calib_lab/beintelli_bus_model/models:$REPO/src/calib_lab/minimal_world/models"
+export IGN_GAZEBO_RESOURCE_PATH="$REPO/src/calib_lab/bus_real_data/models:$REPO/src/calib_lab/beintelli_bus_model/models"
 export GZ_SIM_RESOURCE_PATH="$IGN_GAZEBO_RESOURCE_PATH"
 
 ign gazebo -r "$REPO/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf"
