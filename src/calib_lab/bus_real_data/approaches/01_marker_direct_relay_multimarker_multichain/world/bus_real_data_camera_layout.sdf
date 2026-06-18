@@ -1,0 +1,193 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <world name="bus_real_data_camera_layout">
+
+    <plugin filename="ignition-gazebo-physics-system"
+            name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="ignition-gazebo-user-commands-system"
+            name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system"
+            name="ignition::gazebo::systems::SceneBroadcaster"/>
+    <plugin filename="ignition-gazebo-sensors-system"
+            name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <physics name="default_physics" type="ignored">
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <scene>
+      <ambient>0.7 0.7 0.7 1</ambient>
+      <background>0.8 0.8 0.8 1</background>
+    </scene>
+
+    <light name="sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <include>
+      <uri>model://beintelli_bus</uri>
+      <name>beintelli_bus</name>
+      <pose>-1.8927 25.7211 4.0344 1.5708 0 0</pose>
+    </include>
+
+
+    <model name="cam_edge_0">
+      <static>true</static>
+      <pose>0.58780793 -1.23455526 2.48732830 -0.02832886 0.39717862 1.54540010</pose>
+
+      <link name="cam_edge_0_link">
+        <visual name="cam_edge_0_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+
+        <sensor name="cam_edge_0_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_0/image</topic>
+
+          <camera>
+            <horizontal_fov>1.2064567910</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="cam_edge_1">
+      <static>true</static>
+      <pose>-3.97416732 0.97508650 2.53154268 0.01397153 0.28558128 -0.42471064</pose>
+
+      <link name="cam_edge_1_link">
+        <visual name="cam_edge_1_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+
+        <sensor name="cam_edge_1_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_1/image</topic>
+
+          <camera>
+            <horizontal_fov>1.2058954091</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="cam_edge_3">
+      <static>true</static>
+      <pose>-3.22735583 -1.06321426 2.45421090 0.03640120 0.33821970 0.53742790</pose>
+
+      <link name="cam_edge_3_link">
+        <visual name="cam_edge_3_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+
+        <sensor name="cam_edge_3_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_3/image</topic>
+
+          <camera>
+            <horizontal_fov>1.2156537552</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+
+    <model name="cam_edge_5">
+      <static>true</static>
+      <pose>5.85885887 0.84841954 2.53876157 0.07529451 0.33545337 -2.70003495</pose>
+
+      <link name="cam_edge_5_link">
+        <visual name="cam_edge_5_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+
+        <sensor name="cam_edge_5_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_5/image</topic>
+
+          <camera>
+            <horizontal_fov>1.2083025268</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+
+  </world>
+</sdf>
