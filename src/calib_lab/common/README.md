@@ -5,9 +5,9 @@ Shared utilities used by more than one experiment world.
 Keep this folder small. Experiment-specific code should stay inside its experiment folder:
 
 ```text
-minimal_world/
+
 bus_corridor_relay/
-beintelli_bus_model/
+
 ```
 
 ---
