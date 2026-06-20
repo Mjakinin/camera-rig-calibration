@@ -3,7 +3,9 @@ set -euo pipefail
 
 cd /workspaces/project
 
-DATASET="results/bus_real_data/00_raw_images/bus_real_data_ref_marker_v1"
+export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
+
+DATASET="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images"
 OUT="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations"
 
 RUN_DETECT=1
