@@ -1,0 +1,17 @@
+Dataset: bus_real_data_ref_marker_v1
+Purpose: Shared raw-image dataset for AP01/AP02/AP03 fair comparisons.
+
+Canonical source:
+- static/: copied from results/bus_real_data/01_marker_direct_relay_multimarker_multichain/01_static_a4_marker_detection/raw_images
+- moving/: copied from results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence/images
+- camera_info/: generated from src/calib_lab/bus_real_data/config/camera_intrinsics_by_camera.yaml and AP01 moving COLMAP assumptions
+
+Contract:
+- This folder contains raw inputs and minimal metadata only.
+- Approach-specific detections/results stay in each approach result folder.
+- AP01 keeps its original internal paths; this script only exports a shared copy.
+- AP02/AP03 should read this folder as raw input.
+
+Counts:
+- static images: 4
+- moving images: 204

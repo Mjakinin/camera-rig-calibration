@@ -1,0 +1,16 @@
+AP02 ArUco detection summary
+============================
+
+Dataset: results/bus_real_data/00_raw_images/bus_real_data_ref_marker_v1
+Dictionary: DICT_4X4_50
+Marker length [m]: 0.17
+
+Static observations: 24
+Moving observations: 303
+All observations: 327
+
+Output files:
+- ap02_static_aruco_observations.csv
+- ap02_moving_aruco_observations.csv
+- ap02_all_aruco_observations.csv
+- debug_images/

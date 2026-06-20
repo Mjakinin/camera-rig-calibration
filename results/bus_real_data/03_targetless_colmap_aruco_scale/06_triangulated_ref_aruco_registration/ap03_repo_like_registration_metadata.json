@@ -1,0 +1,21 @@
+{
+  "approach": "AP03_targetless_colmap_repo_like_aruco_scale",
+  "best_colmap_model": "0",
+  "registered_images": 208,
+  "registered_static_cameras": 4,
+  "registered_moving_frames": 204,
+  "num_sparse_points3d": 9401,
+  "reference_marker_id": 14,
+  "marker_length_m": 0.17,
+  "min_area_px2": 2000.0,
+  "reproj_thresh_px": 5.0,
+  "scale_colmap_to_metric": 0.7933343433214812,
+  "corner_fit_errors_cm": [
+    0.4769462705853615,
+    0.33850561329770923,
+    0.3053145552257131,
+    0.436291961814294
+  ],
+  "camera_mean_translation_error_cm": 11.498177608712517,
+  "camera_mean_rotation_error_deg": 1.6714216656093528
+}

@@ -1,0 +1,12 @@
+initialized_type,initialized_id,from_type,from_id,observed_marker_id,quality
+static,cam_edge_1,marker,14,14,29.557563905320656
+static,cam_edge_3,marker,14,14,41.97615099976307
+marker,2,static,cam_edge_1,2,133.5507442688039
+marker,1,static,cam_edge_1,1,270.23708286523566
+marker,5,static,cam_edge_1,5,12.662225909470159
+marker,7,static,cam_edge_1,7,19.628870891050745
+marker,6,static,cam_edge_1,6,18.868243013325948
+marker,8,static,cam_edge_1,8,9.713200232802556
+marker,3,static,cam_edge_3,3,34.04967400132953
+static,cam_edge_0,marker,7,7,332.71685460239826
+marker,4,static,cam_edge_0,4,631.9773446840954

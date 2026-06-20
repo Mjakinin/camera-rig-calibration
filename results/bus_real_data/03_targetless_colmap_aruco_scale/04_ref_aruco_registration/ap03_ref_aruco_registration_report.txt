@@ -1,0 +1,46 @@
+AP03 Targetless COLMAP + Ref-ArUco Scale Registration
+=====================================================
+
+Method:
+- COLMAP reconstructs all images from natural image features.
+- The resulting reconstruction is in arbitrary COLMAP scale and coordinate frame.
+- Ref-ArUco marker 14 is detected after COLMAP only to estimate metric Sim(3) scale/registration.
+- Final static camera poses are expressed in the Ref-ArUco frame.
+
+COLMAP reconstruction:
+- best model: 0
+- registered images: 208
+- registered static cameras: 4 / 4
+- registered moving frames: 204
+- sparse 3D points: 9401
+
+Ref-ArUco registration:
+- ref marker id: 14
+- marker length [m]: 0.17
+- ref-marker anchor images: 26
+- estimated COLMAP-to-metric scale: 0.692220312
+- anchor mean translation residual [cm]: 63.142401
+- anchor median translation residual [cm]: 15.960804
+- anchor mean rotation residual [deg]: 6.652992
+- anchor median rotation residual [deg]: 1.648771
+
+GT evaluation of static cameras in Ref-ArUco frame:
+- mean translation error [cm]: 50.389197
+- median translation error [cm]: 51.863808
+- mean rotation error [deg]: 1.568433
+- median rotation error [deg]: 1.568038
+
+Per-camera:
+- cam_edge_0: 24.327 cm, 1.646 deg | est=(+0.764, -1.570, +2.118) m | gt=(+0.588, -1.735, +2.087) m
+- cam_edge_1: 73.502 cm, 1.570 deg | est=(-3.239, +0.483, +2.123) m | gt=(-3.974, +0.475, +2.132) m
+- cam_edge_3: 66.279 cm, 1.492 deg | est=(-2.602, -1.346, +2.079) m | gt=(-3.227, -1.563, +2.054) m
+- cam_edge_5: 37.449 cm, 1.567 deg | est=(+5.521, +0.187, +2.139) m | gt=(+5.859, +0.348, +2.139) m
+
+Output files:
+- results/bus_real_data/03_targetless_colmap_aruco_scale/04_ref_aruco_registration/ap03_static_camera_poses_ref_aruco.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/04_ref_aruco_registration/ap03_moving_frame_poses_ref_aruco.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/04_ref_aruco_registration/ap03_sparse_points3d_ref_aruco.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/04_ref_aruco_registration/ap03_ref_marker_anchor_residuals.csv
+- results/bus_real_data/90_approach_comparison_ref_aruco/03_targetless_colmap_aruco_scale/ap03_static_cameras_ref_aruco_vs_gt.csv
+- results/bus_real_data/90_approach_comparison_ref_aruco/combined/ap03_final_readable_summary.csv
+
