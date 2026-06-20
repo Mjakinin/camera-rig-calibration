@@ -107,21 +107,21 @@ Marker observations used: 18
 Scalar residual count: 144
 
 Initial reprojection error [px]:
-- mean: 25.504545
-- median: 0.273458
-- max: 330.448445
+- mean: 23.044864
+- median: 0.276509
+- max: 308.889371
 
 Final reprojection error [px]:
-- mean: 0.324256
-- median: 0.296412
-- max: 0.785459
+- mean: 0.457988
+- median: 0.393169
+- max: 1.585567
 
 Optimizer:
 - success: True
 - status: 2
 - message: `ftol` termination condition is satisfied.
-- nfev: 45
-- cost: 5.093823
+- nfev: 38
+- cost: 10.887310
 
 Outputs:
 - optimized_static_camera_poses_ref_marker.csv
@@ -144,21 +144,21 @@ Marker observations used: 85
 Scalar residual count: 680
 
 Initial reprojection error [px]:
-- mean: 34.157593
-- median: 0.385355
-- max: 330.448445
+- mean: 35.660163
+- median: 0.379462
+- max: 357.841373
 
 Final reprojection error [px]:
-- mean: 0.404951
-- median: 0.352782
-- max: 1.447793
+- mean: 0.434977
+- median: 0.349542
+- max: 1.944882
 
 Optimizer:
 - success: False
 - status: 0
 - message: The maximum number of function evaluations is exceeded.
 - nfev: 60
-- cost: 37.686303
+- cost: 46.846795
 
 Outputs:
 - optimized_static_camera_poses_ref_marker.csv

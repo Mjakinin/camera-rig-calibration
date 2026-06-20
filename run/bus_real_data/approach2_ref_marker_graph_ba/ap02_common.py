@@ -1,17 +1,36 @@
 #!/usr/bin/env python3
-
-import csv
-import json
-import math
 from pathlib import Path
+import json
+import sys
 
 import numpy as np
 
+BUS_RUN = Path(__file__).resolve().parents[1]
+if str(BUS_RUN) not in sys.path:
+    sys.path.insert(0, str(BUS_RUN))
+
+from _shared.common.constants import (
+    STATIC_CAMERAS,
+    SHARED_RAW_ROOT,
+    MARKER_LENGTH_M,
+    REF_MARKER_ID,
+)
+from _shared.common.io_utils import (
+    ensure_dir as _ensure_dir,
+    write_csv as _write_csv,
+    read_csv as _read_csv,
+)
+from _shared.common.geometry import (
+    make_T,
+    invT,
+    R_to_rpy_deg,
+    R_to_rvec,
+    rvec_to_R,
+)
+
 
 AP02_ROOT = Path("results/bus_real_data/02_ref_marker_graph_ba")
-SHARED_RAW_ROOT = Path("results/bus_real_data/00_raw_images/bus_real_data_ref_marker_v1")
 
-STATIC_CAMERAS = ["cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"]
 MOVING_CAMERA = "moving_calib_camera"
 
 IMAGE_TOPICS = {
@@ -30,29 +49,20 @@ CAMERA_INFO_TOPICS = {
     "moving_calib_camera": "/bus_real_data/moving_calib_camera/camera_info",
 }
 
-DEFAULT_MARKER_LENGTH_M = 0.170
-DEFAULT_REF_MARKER_ID = 14
+DEFAULT_MARKER_LENGTH_M = MARKER_LENGTH_M
+DEFAULT_REF_MARKER_ID = REF_MARKER_ID
 
 
 def ensure_dir(path: Path) -> Path:
-    path.mkdir(parents=True, exist_ok=True)
-    return path
+    return _ensure_dir(path)
 
 
 def write_csv(path: Path, rows, fields):
-    ensure_dir(path.parent)
-    with path.open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fields)
-        w.writeheader()
-        for r in rows:
-            w.writerow({k: r.get(k, "") for k in fields})
+    return _write_csv(path, rows, fields)
 
 
 def read_csv(path: Path):
-    if not path.exists():
-        raise RuntimeError(f"Missing file: {path}")
-    with path.open() as f:
-        return list(csv.DictReader(f))
+    return _read_csv(path)
 
 
 def safe_float(row, key, default=float("nan")):
@@ -92,76 +102,30 @@ def camera_info_to_dict(msg):
 
 
 def load_camera_info_json(path: Path):
+    path = Path(path)
     if not path.exists():
         raise RuntimeError(f"Missing camera_info JSON: {path}")
-    with path.open() as f:
-        return json.load(f)
+
+    data = json.loads(path.read_text())
+
+    # Compatibility with both AP02 raw JSON shape and normalized camera_io shape.
+    if "k" not in data and "K" in data:
+        data["k"] = data["K"]
+    if "d" not in data and "D" in data:
+        data["d"] = data["D"]
+    if "fx" not in data and "k" in data:
+        data["fx"] = float(data["k"][0])
+        data["fy"] = float(data["k"][4])
+        data["cx"] = float(data["k"][2])
+        data["cy"] = float(data["k"][5])
+
+    return data
 
 
 def write_json(path: Path, data):
+    path = Path(path)
     ensure_dir(path.parent)
-    with path.open("w") as f:
-        json.dump(data, f, indent=2, sort_keys=True)
-
-
-def rvec_to_R(rvec):
-    rvec = np.asarray(rvec, dtype=np.float64).reshape(3)
-    theta = float(np.linalg.norm(rvec))
-    if theta < 1e-12:
-        return np.eye(3, dtype=np.float64)
-
-    k = rvec / theta
-    K = np.array([
-        [0.0, -k[2], k[1]],
-        [k[2], 0.0, -k[0]],
-        [-k[1], k[0], 0.0],
-    ], dtype=np.float64)
-
-    return np.eye(3) + math.sin(theta) * K + (1.0 - math.cos(theta)) * (K @ K)
-
-
-def R_to_rvec(R):
-    R = np.asarray(R, dtype=np.float64)
-    arg = (float(np.trace(R)) - 1.0) / 2.0
-    arg = max(-1.0, min(1.0, arg))
-    theta = math.acos(arg)
-
-    if theta < 1e-12:
-        return np.zeros(3, dtype=np.float64)
-
-    denom = 2.0 * math.sin(theta)
-    axis = np.array([
-        (R[2, 1] - R[1, 2]) / denom,
-        (R[0, 2] - R[2, 0]) / denom,
-        (R[1, 0] - R[0, 1]) / denom,
-    ], dtype=np.float64)
-
-    return axis * theta
-
-
-def R_to_rpy_deg(R):
-    R = np.asarray(R, dtype=np.float64)
-    pitch = math.atan2(-R[2, 0], math.sqrt(R[0, 0] ** 2 + R[1, 0] ** 2))
-    roll = math.atan2(R[2, 1], R[2, 2])
-    yaw = math.atan2(R[1, 0], R[0, 0])
-    return [math.degrees(roll), math.degrees(pitch), math.degrees(yaw)]
-
-
-def make_T(R, t):
-    T = np.eye(4, dtype=np.float64)
-    T[:3, :3] = np.asarray(R, dtype=np.float64)
-    T[:3, 3] = np.asarray(t, dtype=np.float64).reshape(3)
-    return T
-
-
-def invT(T):
-    T = np.asarray(T, dtype=np.float64)
-    R = T[:3, :3]
-    t = T[:3, 3]
-    out = np.eye(4, dtype=np.float64)
-    out[:3, :3] = R.T
-    out[:3, 3] = -R.T @ t
-    return out
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
 
 
 def pose_row(entity_type, entity_id, T, source=""):
@@ -219,5 +183,7 @@ def make_observer_known_from_marker(T_ref_marker, T_observer_marker):
 
 
 def make_marker_known_from_observer(T_ref_observer, T_observer_marker):
-    # T_ref_marker = T_ref_observer @ T_observer_marker
+    # T_observer_marker maps marker coordinates into observer/camera optical coordinates.
+    # T_ref_observer maps observer/camera optical coordinates into reference-marker coordinates.
+    # Therefore: T_ref_marker = T_ref_observer @ T_observer_marker
     return T_ref_observer @ T_observer_marker

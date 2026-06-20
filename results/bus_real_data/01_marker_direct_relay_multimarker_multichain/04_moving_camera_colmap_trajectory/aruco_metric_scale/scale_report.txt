@@ -1,0 +1,36 @@
+No-GT COLMAP metric scale from ArUco overlap
+============================================
+
+Scale source: known ArUco marker side length, not Gazebo GT.
+Known marker side length [m]: 0.170
+
+COLMAP registered poses loaded: 204
+Markers with usable observations: 15
+Raw scale pairs: 1284
+Kept scale pairs after robust MAD trim: 1125
+
+Metric COLMAP scale: 0.760891525414
+Kept mean: 0.763490955589
+Kept std: 0.0204911042574
+Raw median: 0.762916871758
+Raw MAD: 0.0128821972597
+
+Per-marker kept scale medians:
+  marker 00: n=  67, median=0.765177385531, mean=0.768639651134, std=0.0275037341137
+  marker 01: n= 246, median=0.759454122419, mean=0.75906296787, std=0.0150218835535
+  marker 02: n=  19, median=0.763702384012, mean=0.765433151749, std=0.0280364462007
+  marker 03: n=  46, median=0.768994118455, mean=0.764980147165, std=0.0299909975515
+  marker 04: n=  15, median=0.754726376847, mean=0.757631010609, std=0.020151755603
+  marker 05: n=   9, median=0.782240650254, mean=0.783187694083, std=0.011210641182
+  marker 06: n=   9, median=0.735426494868, mean=0.746034996837, std=0.0283526030849
+  marker 07: n=  24, median=0.776746670211, mean=0.773691233422, std=0.0241023383187
+  marker 08: n=  55, median=0.774115070856, mean=0.77286951256, std=0.0246089085686
+  marker 09: n=  64, median=0.782436939839, mean=0.779197384634, std=0.0245121464595
+  marker 10: n= 133, median=0.769250288103, mean=0.769651598886, std=0.017932448387
+  marker 11: n= 105, median=0.757137019774, mean=0.759636901577, std=0.00817033362372
+  marker 12: n= 294, median=0.757331848037, mean=0.756710745721, std=0.0164639918065
+  marker 14: n=  39, median=0.774859661339, mean=0.776811546581, std=0.0205975740817
+
+Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/metric_scale.txt
+Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/scale_pairs_all.csv
+Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/scale_pairs_kept_after_mad.csv

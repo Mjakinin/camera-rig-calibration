@@ -1,21 +1,16 @@
 AP03 FINAL REPO-LIKE SCALE REGISTRATION REPORT
-=============================================
+=======================================================
 
 Approach:
-- AP03: Targetless COLMAP / SfM + ArUco-based metric scale registration
-- COLMAP reconstruction is already done and uses natural image features.
-- This step follows the aruco-estimator idea:
-  reconstruct/triangulate Ref-ArUco marker corners in COLMAP coordinates,
+- AP03: Targetless COLMAP / SfM + ArUco-based metric scale registration.
+- This final pipeline is split into explicit stages:
+  06a detection, 06b triangulation/Sim3, 06c application, 06d GT eval, 06e report.
+- The method follows the aruco-estimator-style idea:
+  triangulate Ref-ArUco marker corners in COLMAP coordinates,
   then map them to ideal metric marker corners with known side length.
 
-Important distinction:
-- AP01 uses ArUco geometry inside a target-based relay calibration pipeline.
-- AP02 uses ArUco geometry directly in every PnP/BA marker observation.
-- AP03 uses COLMAP as the main estimator and uses ArUco geometry only afterwards
-  to scale/register the arbitrary COLMAP model.
-
 Input COLMAP model:
-- model: 0
+- model: existing_outputs
 - registered images: 208
 - registered static cameras: 4 / 4
 - registered moving frames: 204
@@ -24,46 +19,33 @@ Input COLMAP model:
 Ref-ArUco scale registration:
 - reference marker id: 14
 - marker length: 0.170 m
-- min marker area used: 2000.0 px^2
-- Ref14 corner observations: 28
-- Ref14 anchor images: 7
-- estimated COLMAP-to-meter scale: 0.793334343
+- min marker area used: 1000.0 px^2
+- Ref14 corner observations: 60
+- Ref14 anchor images: 15
+- estimated COLMAP-to-meter scale: 0.791549044
 
 Triangulated Ref14 corner quality:
-- corner fit mean error: 0.389265 cm
-- corner fit median error: 0.387399 cm
-- mean corner reprojection error: 0.387335 px
-- median corner reprojection error: 0.400808 px
+- corner fit mean error: 0.074437 cm
+- corner fit median error: 0.077680 cm
+- mean corner reprojection error: 0.661643 px
+- median corner reprojection error: 0.612924 px
 
 corner | obs | inliers | mean_repr | med_repr | fit_cm | registered xyz [m]          | ideal xyz [m]              
 -------+-----+---------+-----------+----------+--------+-----------------------------+----------------------------
-0      | 7   | 7       | 0.349     | 0.333    | 0.4769 | (-0.0816, +0.0830, +0.0027) | (-0.0850, +0.0850, +0.0000)
-1      | 7   | 7       | 0.394     | 0.440    | 0.3385 | (+0.0838, +0.0866, -0.0027) | (+0.0850, +0.0850, +0.0000)
-2      | 7   | 7       | 0.454     | 0.476    | 0.3053 | (+0.0863, -0.0845, +0.0027) | (+0.0850, -0.0850, +0.0000)
-3      | 7   | 7       | 0.353     | 0.362    | 0.4363 | (-0.0884, -0.0851, -0.0027) | (-0.0850, -0.0850, +0.0000)
+0      | 15  | 15      | 0.687     | 0.606    | 0.0956 | (-0.0858, +0.0845, -0.0001) | (-0.0850, +0.0850, +0.0000)
+1      | 15  | 15      | 0.544     | 0.521    | 0.1067 | (+0.0860, +0.0846, +0.0001) | (+0.0850, +0.0850, +0.0000)
+2      | 15  | 15      | 0.765     | 0.705    | 0.0598 | (+0.0849, -0.0844, -0.0001) | (+0.0850, -0.0850, +0.0000)
+3      | 15  | 15      | 0.651     | 0.620    | 0.0356 | (-0.0851, -0.0847, +0.0001) | (-0.0850, -0.0850, +0.0000)
 
 Static camera GT evaluation in Ref-ArUco frame:
-- mean translation error: 11.498178 cm
-- median translation error: 9.757135 cm
-- mean rotation error: 1.671422 deg
-- median rotation error: 1.659104 deg
+- mean translation error: 7.501966 cm
+- median translation error: 5.805499 cm
+- mean rotation error: 0.367828 deg
+- median rotation error: 0.371288 deg
 
-camera     | t_err_cm | r_err_deg | dX     | dY     | dZ     | estimated xyz [m]        | GT xyz [m]              
------------+----------+-----------+--------+--------+--------+--------------------------+-------------------------
-cam_edge_0 | 9.127    | 1.760     | 0.107  | 2.834  | 8.675  | (+0.589, -1.706, +2.174) | (+0.588, -1.735, +2.087)
-cam_edge_1 | 10.387   | 1.672     | -9.929 | 1.810  | -2.455 | (-4.073, +0.493, +2.107) | (-3.974, +0.475, +2.132)
-cam_edge_3 | 5.495    | 1.646     | -4.650 | -1.400 | 2.571  | (-3.274, -1.577, +2.080) | (-3.227, -1.563, +2.054)
-cam_edge_5 | 20.983   | 1.607     | 11.243 | 13.650 | 11.295 | (+5.971, +0.485, +2.252) | (+5.859, +0.348, +2.139)
-
-Output files:
-- results/bus_real_data/03_targetless_colmap_aruco_scale/06_triangulated_ref_aruco_registration/ap03_triangulated_ref14_corners_colmap_and_registered.csv
-- results/bus_real_data/03_targetless_colmap_aruco_scale/06_triangulated_ref_aruco_registration/ap03_static_camera_poses_ref_aruco.csv
-- results/bus_real_data/03_targetless_colmap_aruco_scale/06_triangulated_ref_aruco_registration/ap03_static_cameras_ref_aruco_vs_gt.csv
-- results/bus_real_data/90_approach_comparison_ref_aruco/03_targetless_colmap_aruco_scale/ap03_static_cameras_ref_aruco_vs_gt_repo_like.csv
-- results/bus_real_data/90_approach_comparison_ref_aruco/combined/ap03_repo_like_final_summary.csv
-
-Interpretation:
-- This is the cleaner AP03 scale fix compared to the earlier PnP-anchor Sim(3) attempt.
-- The scale is estimated from the reconstructed Ref-ArUco marker geometry itself.
-- If translation error is still high, the issue is likely COLMAP pose/geometry bias or weak corner triangulation,
-  not simply missing metric scale.
+camera     | t_err_cm | r_err_deg | dX     | dY     | dZ    | estimated xyz [m]        | GT xyz [m]              
+-----------+----------+-----------+--------+--------+-------+--------------------------+-------------------------
+cam_edge_0 | 4.244    | 0.443     | 0.824  | -1.320 | 3.948 | (+0.596, -1.748, +2.127) | (+0.588, -1.735, +2.087)
+cam_edge_1 | 6.939    | 0.373     | -6.544 | 0.644  | 2.216 | (-4.040, +0.482, +2.154) | (-3.974, +0.475, +2.132)
+cam_edge_3 | 4.672    | 0.370     | -3.036 | -2.589 | 2.430 | (-3.258, -1.589, +2.079) | (-3.227, -1.563, +2.054)
+cam_edge_5 | 14.153   | 0.286     | 12.432 | 4.882  | 4.683 | (+5.983, +0.397, +2.186) | (+5.859, +0.348, +2.139)

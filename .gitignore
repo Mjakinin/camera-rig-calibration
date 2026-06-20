@@ -3,3 +3,8 @@ __pycache__/
 *.pyo
 *.log
 .DS_Store
+
+# Bus real-data generated caches/logs
+results/bus_real_data/**/.ap01_compat_cache/
+results/bus_real_data/**/_pipeline_logs/
+run/bus_real_data/**/__pycache__/
