@@ -128,7 +128,7 @@ class AP02CaptureNode(Node):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default="results/bus_real_data/00_raw_images/bus_real_data_ref_marker_v1")
+    ap.add_argument("--out", default="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images")
     ap.add_argument("--overwrite", action="store_true")
     ap.add_argument("--moving-frames", type=int, default=204)
     ap.add_argument("--moving-dt", type=float, default=0.10)

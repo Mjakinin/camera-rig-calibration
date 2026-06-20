@@ -3,7 +3,7 @@ AP03 COLMAP Dataset
 
 This dataset is prepared from the shared raw image dataset.
 
-Shared raw source: results/bus_real_data/00_raw_images/bus_real_data_ref_marker_v1
+Shared raw source: results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images
 
 Image naming:
 - static_cam_edge_X.png: static bus camera snapshots

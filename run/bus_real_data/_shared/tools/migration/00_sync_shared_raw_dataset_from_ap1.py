@@ -9,7 +9,7 @@ import yaml
 
 
 DEFAULT_AP1_ROOT = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain")
-DEFAULT_RAW_ROOT = Path("results/bus_real_data/00_raw_images/bus_real_data_ref_marker_v1")
+DEFAULT_RAW_ROOT = Path("results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images")
 DEFAULT_INTRINSICS = Path("src/calib_lab/bus_real_data/config/camera_intrinsics_by_camera.yaml")
 
 STATIC_CAMERAS = ["cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"]

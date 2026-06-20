@@ -16,11 +16,11 @@ Best C index: 18
 
 Rotation error is SO(3) geodesic angle in degrees.
 
-RMSE_deg:   16.682995
-Mean_deg:   7.595628
-Median_deg: 5.749540
-Min_deg:    0.329754
-Max_deg:    155.266710
+RMSE_deg:   16.683949
+Mean_deg:   7.599500
+Median_deg: 5.752741
+Min_deg:    0.283700
+Max_deg:    155.257992
 
 CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/rotation_eval_orientation_aligned/rotation_errors_by_frame.csv
 Worst-first CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/rotation_eval_orientation_aligned/rotation_errors_sorted_worst_first.csv

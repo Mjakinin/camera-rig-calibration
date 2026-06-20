@@ -14,17 +14,17 @@ cam_edge_1 | direct_static_aruco_multimarker_weighted_mad_inliers | error=12.597
   delta est-GT [cm]:             dx=-1.72  dy=+2.07  dz=-12.31
   direct candidates: 7 | inliers: 5 | outliers: 2
 
-cam_edge_0 | moving_relay_multichain_colmap_motion_aruco_metric_scale | error=8.121 cm, 2.113 deg
-  estimated target in cam3 [m]:  x=+2.0572  y=-1.1080  z=+3.0554
+cam_edge_0 | moving_relay_multichain_colmap_motion_aruco_metric_scale | error=8.174 cm, 2.078 deg
+  estimated target in cam3 [m]:  x=+2.0574  y=-1.1073  z=+3.0555
   GT target in cam3 [m]:         x=+2.0592  y=-1.1653  z=+2.9979
-  delta est-GT [cm]:             dx=-0.20  dy=+5.73  dz=+5.75
+  delta est-GT [cm]:             dx=-0.19  dy=+5.80  dz=+5.76
   multichain candidates: 8525 | inliers: 6761 | outliers: 1764
 
-cam_edge_5 | moving_relay_multichain_colmap_motion_aruco_metric_scale | error=5.135 cm, 2.790 deg
-  estimated target in cam3 [m]:  x=+2.9072  y=-3.1504  z=+8.2725
+cam_edge_5 | moving_relay_multichain_colmap_motion_aruco_metric_scale | error=4.888 cm, 2.739 deg
+  estimated target in cam3 [m]:  x=+2.9090  y=-3.1465  z=+8.2751
   GT target in cam3 [m]:         x=+2.8984  y=-3.1019  z=+8.2582
-  delta est-GT [cm]:             dx=+0.88  dy=-4.85  dz=+1.42
-  multichain candidates: 21336 | inliers: 17500 | outliers: 3836
+  delta est-GT [cm]:             dx=+1.06  dy=-4.46  dz=+1.69
+  multichain candidates: 21336 | inliers: 17498 | outliers: 3838
 
 2) REF14 GT-EVAL CAMERA POSES
 --------------------------------------------------------------------------------
@@ -41,15 +41,15 @@ cam_edge_1 | error=12.597 cm, 1.862 deg | dist_from_ref14_est=4.641 m | dist_GT=
   GT ref14->camera [m]:          x=-3.9742  y=-2.1315  z=+0.4751
   delta est-GT [cm]:             dx=-11.46  dy=-2.19  dz=-4.74
 
-cam_edge_0 | error=8.121 cm, 2.113 deg | dist_from_ref14_est=2.715 m | dist_GT=2.777 m
-  estimated ref14->camera [m]:   x=+0.6160  y=-2.0143  z=-1.7130
+cam_edge_0 | error=8.174 cm, 2.078 deg | dist_from_ref14_est=2.715 m | dist_GT=2.777 m
+  estimated ref14->camera [m]:   x=+0.6160  y=-2.0136  z=-1.7131
   GT ref14->camera [m]:          x=+0.5878  y=-2.0873  z=-1.7346
-  delta est-GT [cm]:             dx=+2.81  dy=+7.31  dz=+2.16
+  delta est-GT [cm]:             dx=+2.81  dy=+7.37  dz=+2.14
 
-cam_edge_5 | error=5.135 cm, 2.790 deg | dist_from_ref14_est=6.290 m | dist_GT=6.247 m
-  estimated ref14->camera [m]:   x=+5.8895  y=-2.1795  z=+0.3544
+cam_edge_5 | error=4.888 cm, 2.739 deg | dist_from_ref14_est=6.290 m | dist_GT=6.247 m
+  estimated ref14->camera [m]:   x=+5.8914  y=-2.1749  z=+0.3536
   GT ref14->camera [m]:          x=+5.8589  y=-2.1388  z=+0.3484
-  delta est-GT [cm]:             dx=+3.07  dy=-4.07  dz=+0.60
+  delta est-GT [cm]:             dx=+3.26  dy=-3.61  dz=+0.51
 
 3) MULTICHAIN RELAY DETAILS + ORACLE SANITY
 --------------------------------------------------------------------------------
@@ -60,13 +60,13 @@ Outlier rule:
 Final value:
   weighted mean of inlier transforms, weighted by observable marker quality.
 
-cam_edge_0 | COLMAP multichain | error=8.121 cm, 2.113 deg
+cam_edge_0 | COLMAP multichain | error=8.174 cm, 2.078 deg
   candidates/inliers/outliers: 8525 / 6761 / 1764
-  best individual candidate by GT, eval-only: m1@f177 -> m7@f74 | 1.150721178 cm, 1.094333247 deg
+  best individual candidate by GT, eval-only: m1@f177 -> m7@f74 | 1.276488757 cm, 1.101841289 deg
 
-cam_edge_5 | COLMAP multichain | error=5.135 cm, 2.790 deg
-  candidates/inliers/outliers: 21336 / 17500 / 3836
-  best individual candidate by GT, eval-only: m7@f78 -> m12@f99 | 0.610738590 cm, 2.608463960 deg
+cam_edge_5 | COLMAP multichain | error=4.888 cm, 2.739 deg
+  candidates/inliers/outliers: 21336 / 17498 / 3838
+  best individual candidate by GT, eval-only: m7@f78 -> m12@f99 | 0.456144732 cm, 2.632211675 deg
 
 cam_edge_0 | GT-motion multichain oracle | error=36.704 cm, 3.943 deg
   candidates/inliers/outliers: 8525 / 7409 / 1116
@@ -78,8 +78,8 @@ cam_edge_5 | GT-motion multichain oracle | error=101.319 cm, 4.239 deg
 --------------------------------------------------------------------------------
 Main deployable output:
   cam_edge_1: 12.597 cm, 1.862 deg via direct_static_aruco_multimarker_weighted_mad_inliers
-  cam_edge_0: 8.121 cm, 2.113 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
-  cam_edge_5: 5.135 cm, 2.790 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
+  cam_edge_0: 8.174 cm, 2.078 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
+  cam_edge_5: 4.888 cm, 2.739 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
 
 Ref14 output:
   Same estimates, transformed into the GT marker14 frame for simulation readability/evaluation.

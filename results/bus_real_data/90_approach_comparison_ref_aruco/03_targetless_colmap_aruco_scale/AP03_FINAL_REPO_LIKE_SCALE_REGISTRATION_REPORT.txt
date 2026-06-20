@@ -10,11 +10,11 @@ Approach:
   then map them to ideal metric marker corners with known side length.
 
 Input COLMAP model:
-- model: existing_outputs
+- model: 0
 - registered images: 208
 - registered static cameras: 4 / 4
 - registered moving frames: 204
-- sparse 3D points: 9401
+- sparse 3D points: 9363
 
 Ref-ArUco scale registration:
 - reference marker id: 14
@@ -22,30 +22,30 @@ Ref-ArUco scale registration:
 - min marker area used: 1000.0 px^2
 - Ref14 corner observations: 60
 - Ref14 anchor images: 15
-- estimated COLMAP-to-meter scale: 0.791549044
+- estimated COLMAP-to-meter scale: 0.789510545
 
 Triangulated Ref14 corner quality:
-- corner fit mean error: 0.074437 cm
-- corner fit median error: 0.077680 cm
-- mean corner reprojection error: 0.661643 px
-- median corner reprojection error: 0.612924 px
+- corner fit mean error: 0.066542 cm
+- corner fit median error: 0.071391 cm
+- mean corner reprojection error: 0.620835 px
+- median corner reprojection error: 0.550144 px
 
 corner | obs | inliers | mean_repr | med_repr | fit_cm | registered xyz [m]          | ideal xyz [m]              
 -------+-----+---------+-----------+----------+--------+-----------------------------+----------------------------
-0      | 15  | 15      | 0.687     | 0.606    | 0.0956 | (-0.0858, +0.0845, -0.0001) | (-0.0850, +0.0850, +0.0000)
-1      | 15  | 15      | 0.544     | 0.521    | 0.1067 | (+0.0860, +0.0846, +0.0001) | (+0.0850, +0.0850, +0.0000)
-2      | 15  | 15      | 0.765     | 0.705    | 0.0598 | (+0.0849, -0.0844, -0.0001) | (+0.0850, -0.0850, +0.0000)
-3      | 15  | 15      | 0.651     | 0.620    | 0.0356 | (-0.0851, -0.0847, +0.0001) | (-0.0850, -0.0850, +0.0000)
+0      | 15  | 15      | 0.616     | 0.538    | 0.0833 | (-0.0857, +0.0846, -0.0001) | (-0.0850, +0.0850, +0.0000)
+1      | 15  | 15      | 0.510     | 0.517    | 0.0991 | (+0.0859, +0.0847, +0.0001) | (+0.0850, +0.0850, +0.0000)
+2      | 15  | 15      | 0.751     | 0.648    | 0.0595 | (+0.0848, -0.0845, -0.0001) | (+0.0850, -0.0850, +0.0000)
+3      | 15  | 15      | 0.606     | 0.562    | 0.0242 | (-0.0850, -0.0848, +0.0001) | (-0.0850, -0.0850, +0.0000)
 
 Static camera GT evaluation in Ref-ArUco frame:
-- mean translation error: 7.501966 cm
-- median translation error: 5.805499 cm
-- mean rotation error: 0.367828 deg
-- median rotation error: 0.371288 deg
+- mean translation error: 7.207742 cm
+- median translation error: 5.596410 cm
+- mean rotation error: 0.400715 deg
+- median rotation error: 0.407232 deg
 
 camera     | t_err_cm | r_err_deg | dX     | dY     | dZ    | estimated xyz [m]        | GT xyz [m]              
 -----------+----------+-----------+--------+--------+-------+--------------------------+-------------------------
-cam_edge_0 | 4.244    | 0.443     | 0.824  | -1.320 | 3.948 | (+0.596, -1.748, +2.127) | (+0.588, -1.735, +2.087)
-cam_edge_1 | 6.939    | 0.373     | -6.544 | 0.644  | 2.216 | (-4.040, +0.482, +2.154) | (-3.974, +0.475, +2.132)
-cam_edge_3 | 4.672    | 0.370     | -3.036 | -2.589 | 2.430 | (-3.258, -1.589, +2.079) | (-3.227, -1.563, +2.054)
-cam_edge_5 | 14.153   | 0.286     | 12.432 | 4.882  | 4.683 | (+5.983, +0.397, +2.186) | (+5.859, +0.348, +2.139)
+cam_edge_0 | 4.801    | 0.403     | 0.604  | -2.250 | 4.197 | (+0.594, -1.757, +2.129) | (+0.588, -1.735, +2.087)
+cam_edge_1 | 6.392    | 0.411     | -6.053 | 0.288  | 2.033 | (-4.035, +0.478, +2.152) | (-3.974, +0.475, +2.132)
+cam_edge_3 | 4.657    | 0.428     | -2.775 | -2.740 | 2.546 | (-3.255, -1.591, +2.080) | (-3.227, -1.563, +2.054)
+cam_edge_5 | 12.981   | 0.360     | 10.968 | 5.307  | 4.480 | (+5.969, +0.401, +2.184) | (+5.859, +0.348, +2.139)
