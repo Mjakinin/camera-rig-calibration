@@ -12,14 +12,14 @@ Total GT frames: 204
 COLMAP registered frames: 204
 Common evaluated frames: 204
 
-Scale: 0.746218981662
+Scale: 0.745732090224
 
 Position errors after Sim(3) alignment:
-RMSE_m:   0.636948
-Mean_m:   0.258535
-Median_m: 0.190025
-Min_m:    0.030144
-Max_m:    6.120154
+RMSE_m:   0.636698
+Mean_m:   0.257950
+Median_m: 0.190120
+Min_m:    0.029389
+Max_m:    6.120610
 
 CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/sim3_aligned_trajectory_errors.csv
 Transform: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/sim3_transform.txt

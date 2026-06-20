@@ -4,7 +4,7 @@
   "model_dir": "results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0",
   "registered_images": 208,
   "registered_cameras": 208,
-  "num_sparse_points3d": 9363,
+  "num_sparse_points3d": 9378,
   "reference_marker_id": 14,
   "marker_length_m": 0.17,
   "min_area_px2": 1000.0,
