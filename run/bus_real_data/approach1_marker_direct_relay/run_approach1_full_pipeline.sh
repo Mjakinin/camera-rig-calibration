@@ -3,6 +3,8 @@ set -eo pipefail
 
 cd /workspaces/project
 
+export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
+
 # Do not use `set -u` before sourcing ROS setup files.
 # ROS setup scripts may reference optional unset variables.
 if [ -f /opt/ros/humble/setup.bash ]; then
