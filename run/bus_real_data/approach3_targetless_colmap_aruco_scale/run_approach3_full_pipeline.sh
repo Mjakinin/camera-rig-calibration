@@ -3,6 +3,8 @@ set -euo pipefail
 
 cd /workspaces/project
 
+export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
+
 RUN_PREPARE=1
 RUN_COLMAP=1
 RUN_INSPECT=1

@@ -8,3 +8,6 @@ __pycache__/
 results/bus_real_data/**/.ap01_compat_cache/
 results/bus_real_data/**/_pipeline_logs/
 run/bus_real_data/**/__pycache__/
+
+results/bus_real_data/_visible_full_pipeline_logs/
+results/bus_real_data/_overnight_pipeline_logs/

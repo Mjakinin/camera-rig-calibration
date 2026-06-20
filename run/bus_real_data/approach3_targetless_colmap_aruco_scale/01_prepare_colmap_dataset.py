@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 
-SHARED_RAW = Path("results/bus_real_data/00_raw_images/bus_real_data_ref_marker_v1")
+SHARED_RAW = Path("results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images")
 OUT_ROOT = Path("results/bus_real_data/03_targetless_colmap_aruco_scale")
 DATASET_ROOT = OUT_ROOT / "01_colmap_dataset"
 IMAGE_DIR = DATASET_ROOT / "images"
