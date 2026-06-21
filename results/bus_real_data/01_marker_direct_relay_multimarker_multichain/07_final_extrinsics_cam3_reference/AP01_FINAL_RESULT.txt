@@ -1,0 +1,33 @@
+AP01 FINAL RESULT — Marker Direct Relay / Multichain
+=====================================================
+
+Method:
+AP01 estimates a camera rig internally with cam_edge_3 as local root camera.
+GT is NOT used for AP01 aggregation.
+
+Final deployable Ref14-origin output:
+- Ref14 -> anchor camera is estimated from a real static ArUco/PnP observation.
+- Anchor camera used for Ref14 origin: cam_edge_3
+- All AP01 cam3-rooted camera transforms are chained into the Ref14 frame.
+- This answers: where are all static cameras relative to marker 14?
+- The old GT-based Ref14 table is not used, because it gave cam_edge_3 a fake zero error.
+
+Summary:
+metric                           | count | mean_t_cm | median_t_cm | mean_r_deg | median_r_deg
+-------------------------------- | ----- | --------- | ----------- | ---------- | ------------
+AP01 Ref14-origin static cameras | 4     | 12.019    | 9.135       | 2.003      | 1.727       
+
+Static camera poses relative to Ref14:
+camera     | method                                                   | t_cm   | r_deg | dX_cm   | dY_cm   | dZ_cm  | est_ref14_xyz_m         | gt_ref14_xyz_m         
+---------- | -------------------------------------------------------- | ------ | ----- | ------- | ------- | ------ | ----------------------- | -----------------------
+cam_edge_0 | moving_relay_multichain_colmap_motion_aruco_metric_scale | 5.694  | 1.022 | -2.636  | -5.045  | 0.145  | (0.561, -1.785, 2.089)  | (0.588, -1.735, 2.087) 
+cam_edge_1 | direct_static_aruco_multimarker_weighted_mad_inliers     | 12.483 | 1.460 | -12.279 | -0.811  | -2.094 | (-4.097, 0.467, 2.111)  | (-3.974, 0.475, 2.132) 
+cam_edge_3 | root_camera_chained_from_ref14_anchor                    | 5.787  | 1.994 | -5.363  | 1.830   | 1.173  | (-3.281, -1.545, 2.066) | (-3.227, -1.563, 2.054)
+cam_edge_5 | moving_relay_multichain_colmap_motion_aruco_metric_scale | 24.112 | 3.535 | 2.887   | -18.770 | 14.857 | (5.888, 0.161, 2.287)   | (5.859, 0.348, 2.139)  
+
+Method-internal cam_edge_3-rooted details:
+target     | method                                                   | t_cm   | r_deg | candidates | inliers | outliers
+---------- | -------------------------------------------------------- | ------ | ----- | ---------- | ------- | --------
+cam_edge_1 | direct_static_aruco_multimarker_weighted_mad_inliers     | 12.597 | 1.862 | 7          | 5       | 2       
+cam_edge_0 | moving_relay_multichain_colmap_motion_aruco_metric_scale | 8.254  | 2.040 | 8525       | 6757    | 1768    
+cam_edge_5 | moving_relay_multichain_colmap_motion_aruco_metric_scale | 5.512  | 2.749 | 21336      | 17494   | 3842    
