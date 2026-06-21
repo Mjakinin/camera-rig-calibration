@@ -1,60 +1,67 @@
 # bus_real_data Config
 
-This folder contains configuration files for the current bus_real_data setup.
+This folder contains configuration files for the current `bus_real_data` Gazebo setup.
+
+These files are source-of-truth inputs for world generation, marker placement, route generation and camera metadata. They should be treated as configuration, not generated calibration results.
 
 ## Important files
 
-### camera_intrinsics_by_camera.yaml
+```text
+camera_intrinsics_by_camera.yaml
+```
 
-Camera intrinsics used by OpenCV ArUco/PnP and moving-camera detection.
+Camera intrinsics used by the simulation setup and by OpenCV/PnP-based calibration steps.
 
-### a4_marker_placements.json
+```text
+a4_marker_placements.json
+```
 
-Current A4 ArUco marker placements in the bus world.
+A4 ArUco marker poses in the bus world. This controls where known markers appear in Gazebo.
 
-### moving_camera_route_keyframes.json
+```text
+central_aruco_reference.json
+```
 
-Manual moving-camera keyframes.
-
-Edit this file to change the moving-camera path.
-
-### moving_camera_route_interpolated.json
-
-Generated dense route used by capture and preview scripts.
-
-Generated from:
+Central/reference marker metadata used by the calibration setup. Marker 14 is the main Ref-ArUco anchor used in the current AP03 registration.
 
 ```text
 moving_camera_route_keyframes.json
 ```
 
-via:
+Manual keyframes for the moving calibration camera route.
 
-```bash
-python3 run/bus_real_data/02_generate_moving_camera_route.py
+```text
+moving_camera_route_interpolated.json
 ```
 
-### target_transforms.json
+Dense generated route used by preview/capture tooling.
 
-Reference camera transform information used when building the camera layout.
+```text
+target_transforms.json
+```
 
-### README_ALIGNMENT.md
+Camera/target transform configuration used by setup scripts.
 
-Notes about Gazebo link frames, OpenCV optical frames and transform conventions.
+```text
+README_ALIGNMENT.md
+```
+
+Notes about transform conventions, Gazebo link frames and OpenCV optical frames.
 
 ## Subfolders
 
-### camera_info/
+```text
+camera_info/
+```
 
-Original camera info files.
-
-### marker_snapshots/
-
-Baseline marker placement snapshot. Kept for reproducibility.
-
-## Marker geometry
+Camera-info YAML files for the named cameras.
 
 ```text
-A4 sheet:      0.210 m x 0.297 m
-ArUco marker: 0.170 m x 0.170 m
+marker_snapshots/
 ```
+
+Saved marker placement snapshots for reproducibility/debugging.
+
+## Editing rule
+
+Edit keyframes and placement config first, then regenerate worlds/scripts outputs. Do not manually edit generated result CSVs to compensate for configuration mistakes.

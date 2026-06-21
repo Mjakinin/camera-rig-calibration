@@ -1,45 +1,21 @@
 # Common Utilities
 
-Shared utilities used by more than one experiment world.
+`src/calib_lab/common` contains lightweight helper code shared by setup scripts in the simulation/source side of the project.
 
-Keep this folder small. Experiment-specific code should stay inside its experiment folder:
+The folder should stay small. Calibration-method-specific code belongs in `run/bus_real_data/`, and simulation-specific configuration belongs in `src/calib_lab/bus_real_data/`.
 
-```text
+## Current purpose
 
-bus_corridor_relay/
-
-```
-
----
+The important utility is transform and pose handling. It supports conversion and composition logic used by world-generation and calibration-support scripts.
 
 ## Files
 
 ```text
-common/scripts/transform_utils.py
+transform_utils.py
 ```
 
-Actual transform and pose math implementation used by the calibration scripts.
+Transform and pose helper functions. Keep API changes conservative because older scripts may still import from this location.
 
-```text
-common/transform_utils.py
-```
+## Design rule
 
-Compatibility wrapper for older imports:
-
-```python
-from common.transform_utils import ...
-```
-
-The wrapper forwards to:
-
-```python
-from common.scripts.transform_utils import *
-```
-
-This avoids breaking existing Checkerboard and ArUco scripts after the repository was reorganized.
-
----
-
-## Rule of Thumb
-
-Put code here only if it is truly shared by multiple experiment worlds. Otherwise, keep it in the corresponding experiment folder.
+Put code here only if it is reusable across multiple project areas. Otherwise place it next to the script or approach that uses it.

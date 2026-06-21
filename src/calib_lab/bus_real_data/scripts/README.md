@@ -1,42 +1,54 @@
 # bus_real_data World-Building Scripts
 
-These scripts generate or update the Gazebo/Ignition world files and marker assets.
+This folder contains setup/build scripts for generating marker models and SDF worlds.
 
-They are setup/build scripts, not the main experiment pipeline.
-
-The main calibration/evaluation pipeline is in:
+These scripts are not the main calibration pipelines. The calibration/evaluation pipelines live in:
 
 ```text
 run/bus_real_data/
 ```
 
-## Scripts
+## Typical scripts
 
-### 01_build_world_from_real_camera_layout.py
+```text
+01_build_world_from_real_camera_layout.py
+```
 
-Builds the static camera layout world.
+Builds the static camera layout world from the camera layout/configuration.
 
-### 02_generate_a4_single_aruco_marker_models.py
+```text
+02_generate_a4_single_aruco_marker_models.py
+```
 
-Generates A4 single ArUco marker models.
+Generates A4 single-marker Gazebo models.
 
-Marker geometry:
+```text
+03_build_world_with_a4_markers.py
+```
+
+Builds the static-camera world with A4 ArUco markers.
+
+```text
+04_build_world_with_moving_camera.py
+```
+
+Builds the current main world with static cameras, A4 markers and moving calibration camera.
+
+## Output
+
+The main generated world is:
+
+```text
+src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf
+```
+
+## Marker geometry
 
 ```text
 A4 sheet:      0.210 m x 0.297 m
 ArUco marker: 0.170 m x 0.170 m
 ```
 
-### 03_build_world_with_a4_markers.py
+## Editing rule
 
-Builds the world with static cameras and A4 ArUco markers.
-
-### 04_build_world_with_moving_camera.py
-
-Builds the current main world with static cameras, A4 markers and the moving calibration camera.
-
-## Main generated world
-
-```text
-src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf
-```
+Use these scripts to regenerate worlds after changing camera config, marker placements or route config. Do not treat generated worlds as independent source-of-truth unless a manual edit is explicitly intended.
