@@ -1,0 +1,5 @@
+dataset,num_images,detected_images,detection_rate_percent,avg_marker_count,total_detected_markers,num_unique_ids,all_ids,lost_ids_vs_original
+glare_pp,208,154,74.04,1.298,270,15,0 1 2 3 4 5 6 7 8 9 10 11 12 13 14,
+low_light_pp,208,161,77.4,1.216,253,15,0 1 2 3 4 5 6 7 8 9 10 11 12 13 14,
+original,208,164,78.85,1.572,327,15,0 1 2 3 4 5 6 7 8 9 10 11 12 13 14,
+side_light_pp,208,164,78.85,1.572,327,15,0 1 2 3 4 5 6 7 8 9 10 11 12 13 14,

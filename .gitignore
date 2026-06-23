@@ -11,3 +11,21 @@ run/bus_real_data/**/__pycache__/
 
 results/bus_real_data/_visible_full_pipeline_logs/
 results/bus_real_data/_overnight_pipeline_logs/
+# ROS build artifacts
+build/
+install/
+log/
+
+# Generated ablation images / annotations
+results/bus_real_data/ablation/*/images/
+results/bus_real_data/ablation/aruco_annotated*/
+results/bus_real_data/ablation/**/images/
+
+# Local mesh conversion artifacts / backups
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.dae
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.stl
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.bak
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.before_dae
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.obj_backup
+src/calib_lab/bus_real_data/worlds/ablation/
+src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera_ablation_light.sdf
