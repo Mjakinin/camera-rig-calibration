@@ -29,3 +29,9 @@ src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.before_dae
 src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.obj_backup
 src/calib_lab/bus_real_data/worlds/ablation/
 src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera_ablation_light.sdf
+
+# Ablation generated images after folder restructuring
+results/bus_real_data/ablation/**/images/
+results/bus_real_data/ablation/**/aruco_annotated*/
+results/bus_real_data/ablation/**/exposure_preview/
+results/bus_real_data/ablation/plots/
