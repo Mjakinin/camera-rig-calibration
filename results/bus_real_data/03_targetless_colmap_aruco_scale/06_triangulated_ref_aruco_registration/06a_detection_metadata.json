@@ -1,5 +1,6 @@
 {
-  "stage": "06a_detect_ref14_scale_observations",
+  "stage": "09_make_ap03_multi_aruco_final",
+  "registration_mode": "multi_aruco_known_marker_layout",
   "best_colmap_model": "0",
   "model_dir": "results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0",
   "registered_images": 208,
@@ -9,5 +10,24 @@
   "marker_length_m": 0.17,
   "min_area_px2": 1000.0,
   "ref14_corner_observation_count": 60,
-  "ref14_unique_anchor_images": 15
+  "ref14_unique_anchor_images": 15,
+  "all_aruco_corner_observation_count": 1112,
+  "all_aruco_unique_anchor_images": 157,
+  "detected_marker_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ]
 }

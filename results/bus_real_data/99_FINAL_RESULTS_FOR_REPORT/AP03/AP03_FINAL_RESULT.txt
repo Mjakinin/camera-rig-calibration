@@ -1,41 +1,32 @@
-AP03 FINAL RESULT — Targetless COLMAP + Ref14 Scale Registration
+AP03 FINAL RESULT — Targetless COLMAP + ArUco Sim(3) Registration
 ================================================================
-
-Method:
-COLMAP reconstructs static + moving cameras from natural image features.
-The reconstruction has arbitrary scale and coordinate frame.
-Ref14 is used after COLMAP to estimate metric scale and frame registration.
-
-Current scope:
-- uses only Ref14 for post-hoc scale/frame registration
-- other ArUcos are not used for AP03 scale registration
-- evaluates static camera poses relative to Ref14
-- does not export a full marker map
-
-COLMAP / scale:
-metric                         | value      
------------------------------- | -----------
-registered images              | 208        
-registered static cameras      | 4/4        
-registered moving frames       | 204        
-sparse 3D points               | 9378       
-reference marker id            | 14         
-marker length                  | 0.170 m    
-Ref14 corner observations      | 60         
-Ref14 anchor images            | 15         
-COLMAP-to-meter scale          | 0.778518183
-corner fit mean error          | 0.063336 cm
-mean corner reprojection error | 0.629429 px
-
 Summary:
-group   | count | mean_t_cm | median_t_cm | mean_r_deg | median_r_deg
-------- | ----- | --------- | ----------- | ---------- | ------------
-cameras | 4     | 5.756     | 5.753       | 0.436      | 0.440       
+variant      | n | mean_cam_err_cm | med_cam_err_cm | mean_rot_deg | med_rot_deg | mean_dist_err_cm
+------------ | - | --------------- | -------------- | ------------ | ----------- | ----------------
+Single Ref14 | 4 | 5.756           | 5.752          | 0.436        | 0.440       | 5.331           
+Multi-ArUco  | 4 | 1.287           | 0.763          | 0.162        | 0.153       | 0.973           
 
-Static cameras relative to Ref14:
-entity     | t_cm  | r_deg | dX_cm  | dY_cm  | dZ_cm | est_ref14_xyz_m         | gt_ref14_xyz_m         
----------- | ----- | ----- | ------ | ------ | ----- | ----------------------- | -----------------------
-cam_edge_0 | 3.981 | 0.458 | 0.434  | -1.117 | 3.796 | (0.592, -1.746, 2.125)  | (0.588, -1.735, 2.087) 
-cam_edge_1 | 7.537 | 0.409 | -7.001 | 1.121  | 2.557 | (-4.044, 0.486, 2.157)  | (-3.974, 0.475, 2.132) 
-cam_edge_3 | 4.464 | 0.436 | -2.545 | -2.824 | 2.340 | (-3.253, -1.591, 2.078) | (-3.227, -1.563, 2.054)
-cam_edge_5 | 7.041 | 0.443 | 4.945  | 3.747  | 3.330 | (5.908, 0.386, 2.172)   | (5.859, 0.348, 2.139)  
+AP03 real-life method output: estimated camera map in local Ref14 frame
+cam        | single_est_xyz          | single_dist_m | multi_est_xyz           | multi_dist_m
+---------- | ----------------------- | ------------- | ----------------------- | ------------
+cam_edge_0 | (0.592, -1.746, 2.125)  | 2.813         | (0.582, -1.737, 2.095)  | 2.783       
+cam_edge_1 | (-4.044, 0.486, 2.157)  | 4.609         | (-3.996, 0.494, 2.143)  | 4.562       
+cam_edge_3 | (-3.253, -1.591, 2.078) | 4.175         | (-3.223, -1.566, 2.056) | 4.131       
+cam_edge_5 | (5.908, 0.386, 2.172)   | 6.307         | (5.855, 0.347, 2.139)   | 6.243   
+
+Evaluation-only: GT camera map in Ref14 frame
+cam        | gt_ref14_xyz            | gt_dist_to_ref14_m
+---------- | ----------------------- | ------------------
+cam_edge_0 | (0.588, -1.735, 2.087)  | 2.777             
+cam_edge_1 | (-3.974, 0.475, 2.132)  | 4.535             
+cam_edge_3 | (-3.227, -1.563, 2.054) | 4.133             
+cam_edge_5 | (5.859, 0.348, 2.139)   | 6.247             
+
+Evaluation-only: camera GT-vs-estimated errors
+cam        | single_err_cm | multi_err_cm | gain_cm | single_rot | multi_rot | single_dist_err | multi_dist_err
+---------- | ------------- | ------------ | ------- | ---------- | --------- | --------------- | --------------
+cam_edge_0 | 3.981         | 1.019        | 2.962   | 0.458      | 0.215     | 3.648           | 0.640         
+cam_edge_1 | 7.537         | 3.168        | 4.369   | 0.409      | 0.178     | 7.456           | 2.696         
+cam_edge_3 | 4.464         | 0.507        | 3.957   | 0.436      | 0.129     | 4.221           | 0.142         
+cam_edge_5 | 7.041         | 0.456        | 6.585   | 0.443      | 0.128     | 5.998           | 0.413         
+

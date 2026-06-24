@@ -1,23 +1,12 @@
 AP02 FINAL RESULT — GT-Aligned Full-Map Evaluation
 =================================================
-
-Method:
-AP02 estimates a camera/marker graph from ArUco observations.
-GT is NOT used during optimization.
-For this final evaluation, the estimated AP02 map is aligned to the Gazebo GT map with a best-fit SE(3) transform.
-
-Alignment:
-- used for alignment: static cameras + markers 0-13
-- held out from alignment: marker 14 / aruco_ref_floor_14
-- result: marker 14 receives a real residual, not a fake coordinate-frame zero
-
 Summary:
 group        | count | mean_t_cm | median_t_cm | mean_r_deg | median_r_deg
 ------------ | ----- | --------- | ----------- | ---------- | ------------
 cameras      | 4     | 9.951     | 10.589      | 1.092      | 1.136       
 markers 0-14 | 15    | 8.178     | 7.959       | 1.323      | 1.126       
 
-Static cameras:
+Evaluation-only: GT-aligned static camera comparison
 entity     | t_cm   | r_deg | dX_cm   | dY_cm  | dZ_cm | est_aligned_xyz_m       | gt_xyz_m               
 ---------- | ------ | ----- | ------- | ------ | ----- | ----------------------- | -----------------------
 cam_edge_0 | 3.618  | 1.161 | -0.645  | -2.011 | 2.938 | (0.581, -1.255, 2.517)  | (0.588, -1.235, 2.487) 
@@ -25,7 +14,7 @@ cam_edge_1 | 15.008 | 0.932 | -14.629 | 1.394  | 3.046 | (-4.120, 0.989, 2.562) 
 cam_edge_3 | 9.055  | 1.117 | -8.743  | -2.045 | 1.174 | (-3.315, -1.084, 2.466) | (-3.227, -1.063, 2.454)
 cam_edge_5 | 12.124 | 1.156 | 12.085  | -0.784 | 0.578 | (5.980, 0.841, 2.545)   | (5.859, 0.848, 2.539)  
 
-Markers:
+Evaluation-only: GT-aligned marker-map comparison
 entity             | role     | t_cm   | r_deg | dX_cm   | dY_cm  | dZ_cm  | est_aligned_xyz_m       | gt_xyz_m               
 ------------------ | -------- | ------ | ----- | ------- | ------ | ------ | ----------------------- | -----------------------
 marker_000         | align    | 16.935 | 3.926 | -13.266 | 3.734  | -9.842 | (-2.683, 0.517, 1.082)  | (-2.550, 0.480, 1.180) 
