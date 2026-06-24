@@ -253,7 +253,7 @@ def main():
     )
 
     marker_table = make_text_table(
-        marker_rows,
+        marker_rows_no_ref,
         headers=["marker", "id", "t_err_cm", "r_err_deg", "dX", "dY", "dZ", "est xyz [m]", "gt xyz [m]"],
         keys=["marker", "marker_id", "trans_err_cm", "rot_err_deg", "dx_cm", "dy_cm", "dz_cm", "est_xyz", "gt_xyz"],
     )
@@ -309,6 +309,9 @@ STATIC CAMERA EXTRINSICS VS GT, REF-ARUCO FRAME
 
 MARKER MAP VS GT, REF-ARUCO FRAME
 ---------------------------------
+Reference marker 14 is the fixed gauge/reference frame and is excluded from this error table.
+It should not be interpreted as a zero-error estimated marker. Detection quality is evaluated via reprojection/corner residuals.
+
 {marker_table}
 
 CAMERA ERROR RANKING
@@ -343,7 +346,7 @@ Raw full evaluation CSVs:
     )
 
     md_marker_table = make_markdown_table(
-        marker_rows,
+        marker_rows_no_ref,
         headers=["marker", "id", "t err [cm]", "r err [deg]", "dX [cm]", "dY [cm]", "dZ [cm]", "est xyz [m]", "gt xyz [m]"],
         keys=["marker", "marker_id", "trans_err_cm", "rot_err_deg", "dx_cm", "dy_cm", "dz_cm", "est_xyz", "gt_xyz"],
     )
@@ -374,6 +377,8 @@ Raw full evaluation CSVs:
 {md_cam_table}
 
 ## Marker map vs GT
+
+Reference marker 14 is the fixed gauge/reference frame and is excluded from this table. It should not be interpreted as a zero-error estimated marker. Detection quality is evaluated via reprojection/corner residuals.
 
 {md_marker_table}
 """

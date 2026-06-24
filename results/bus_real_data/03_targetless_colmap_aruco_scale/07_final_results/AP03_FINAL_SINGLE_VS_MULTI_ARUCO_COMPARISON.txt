@@ -1,27 +1,27 @@
-AP03 FINAL RESULT — Targetless COLMAP Scale Registration
-========================================================
+AP03 FINAL RESULT — Single Ref14 vs Multi-ArUco Scale Registration
+==================================================================
 
 Method:
 COLMAP reconstructs static and moving cameras from natural image features.
 The reconstruction has arbitrary scale and coordinate frame.
 ArUco markers are used only after COLMAP for metric Sim(3) scale/frame registration.
 
-Compared registration variants:
+Compared variants:
 - AP03a Single Ref14 Sim(3): uses only marker 14 as metric reference.
 - AP03b Multi-ArUco Sim(3): uses all visible ArUco markers with the known marker layout.
 
 Important:
 - COLMAP itself remains targetless in both variants.
-- ArUco markers are not used during COLMAP reconstruction.
-- ArUco markers are only used for post-hoc metric scale/frame registration.
+- Multi-ArUco is not used during COLMAP reconstruction.
+- Multi-ArUco is used only for post-hoc metric registration.
 - GT camera poses are used only for final error evaluation.
-- AP03b Multi-ArUco is the main AP03 result.
+- AP03b is the current main AP03 result because it is more accurate and more robust.
 
 Summary:
-variant | registration        | count | mean_t_cm | median_t_cm | mean_r_deg | median_r_deg
-------- | ------------------- | ----- | --------- | ----------- | ---------- | ------------
-AP03a   | Single Ref14 Sim(3) | 4     | 5.756     | 5.753       | 0.436      | 0.440       
-AP03b   | Multi-ArUco Sim(3)  | 4     | 1.287     | 0.763       | 0.162      | 0.153       
+variant | registration        | count | mean_t_cm | median_t_cm | mean_r_deg | median_r_deg | role            
+------- | ------------------- | ----- | --------- | ----------- | ---------- | ------------ | ----------------
+AP03a   | Single Ref14 Sim(3) | 4     | 5.756     | 5.753       | 0.436      | 0.440        | baseline        
+AP03b   | Multi-ArUco Sim(3)  | 4     | 1.287     | 0.763       | 0.162      | 0.153        | main AP03 result
 
 Improvement from Single Ref14 to Multi-ArUco:
 metric             | single | multi | absolute_gain | relative_gain
@@ -39,9 +39,11 @@ cam_edge_1 | 7.537       | 3.168      | 4.369     | 57.969 % | 0.409        | 0.
 cam_edge_3 | 4.464       | 0.507      | 3.957     | 88.651 % | 0.436        | 0.129       | 0.307      | 70.394 %
 cam_edge_5 | 7.041       | 0.456      | 6.585     | 93.527 % | 0.443        | 0.128       | 0.315      | 71.115 %
 
-Main AP03 result:
-Use AP03b Multi-ArUco Sim(3) for the final method comparison.
-
 Interpretation:
 Multi-ArUco registration strongly improves AP03 because the Sim(3) scale/frame estimation is constrained by all visible marker corners instead of only one marker.
 This reduces sensitivity to noise in the single reference marker triangulation and produces a more stable metric registration.
+
+Files:
+- AP03_FINAL_SINGLE_REF14_RESULT.txt / .csv
+- AP03_FINAL_MULTI_ARUCO_RESULT.txt / .csv
+- AP03_FINAL_SINGLE_VS_MULTI_ARUCO_COMPARISON.txt / .csv
