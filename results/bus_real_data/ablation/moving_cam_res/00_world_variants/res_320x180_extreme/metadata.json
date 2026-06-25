@@ -1,0 +1,15 @@
+{
+  "ablation_type": "moving_cam_res",
+  "variant": "res_320x180_extreme",
+  "world_file": "src/calib_lab/bus_real_data/worlds/ablation/moving_cam_res/bus_real_data_moving_camera_res_320x180_extreme.sdf",
+  "changed_camera": "moving_calib_camera",
+  "static_cameras_unchanged": true,
+  "moving_camera_width": 320,
+  "moving_camera_height": 180,
+  "moving_camera_hfov_deg": 69.1,
+  "moving_camera_initial_pose": "0.000000 0.000000 1.600000 0.000000 0.000000 0.000000",
+  "trajectory_unchanged": true,
+  "world_geometry_unchanged": true,
+  "lighting_unchanged": true,
+  "note": "Only moving-camera render resolution is changed. FOV remains fixed."
+}

@@ -1,28 +1,123 @@
-AP03 FINAL RESULT — Targetless COLMAP + ArUco Sim(3) Registration
-================================================================
+AP03 FINAL RESULT — Targetless COLMAP Evaluation
+================================================
+
+Method:
+AP03 evaluates targetless COLMAP in three levels.
+
+AP03-0 Pure Targetless:
+COLMAP reconstructs the static camera rig from natural image features only.
+No ArUco markers, no known marker size, no known marker layout, and no metric reference are used.
+The output is a unitless camera rig in the arbitrary COLMAP coordinate frame.
+
+AP03-0 Scale-less Ratio Diagnostic:
+Because monocular COLMAP has arbitrary scale, raw distances are not metric.
+Therefore, we additionally evaluate scale-less geometry consistency using normalized distances and distance ratios.
+This checks whether COLMAP recovered the rig shape correctly up to scale.
+
+AP03a Single Ref14 Sim(3):
+COLMAP reconstruction is registered metrically using only Ref14 as metric reference.
+This requires known marker size.
+
+AP03b Multi-ArUco Sim(3):
+COLMAP reconstruction is registered metrically using all visible ArUco markers.
+This requires known marker size and known marker layout.
+In simulation, the known marker layout comes from the SDF.
+In real life, it would need to be defined or measured beforehand.
+
+Important:
+- COLMAP itself remains targetless.
+- ArUco is not used during COLMAP reconstruction.
+- ArUco is only used afterwards for metric Sim(3) registration.
+- Without any metric reference, AP03 cannot output meters.
+- Without metric reference, AP03 can only output relative unitless rig geometry.
+- AP03 does not estimate World -> Ref14.
+- GT positions and all error values are simulation-only evaluation.
+
+COLMAP model:
+- best model: 0
+- model dir: results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0
+- registered images: 208
+- sparse 3D points: 9378
+- static cameras: 4
+
+AP03-0 PURE TARGETLESS SCALE-LESS CAMERA RIG OUTPUT
+---------------------------------------------------
+
+Purpose:
+This is the pure targetless AP03 output without ArUco, without known marker size, without known marker layout, and without any metric reference.
+It uses only raw COLMAP static-camera poses.
+
+Coordinate convention:
+- root camera: cam_edge_3
+- cam_edge_3 is set to the local origin.
+- axes are inherited from the arbitrary COLMAP frame.
+- normalization: farthest static camera from cam_edge_3 has distance 1.0.
+- raw COLMAP units are kept as additional unitless output.
+
+Pure targetless camera rig output:
+cam        | raw_rel_xyz            | raw_dist | norm_xyz               | norm_dist
+---------- | ---------------------- | -------- | ---------------------- | ---------
+cam_edge_0 | (1.076, 2.341, -4.219) | 4.943    | (0.089, 0.194, -0.350) | 0.411    
+cam_edge_1 | (2.300, -1.101, 1.290) | 2.858    | (0.191, -0.091, 0.107) | 0.237    
+cam_edge_3 | (0.000, 0.000, 0.000)  | 0.000    | (0.000, 0.000, 0.000)  | 0.000    
+cam_edge_5 | (5.466, 5.002, -9.489) | 12.039   | (0.454, 0.416, -0.788) | 1.000    
+
+Interpretation:
+This is the deployable pure-targetless output if no metric reference is available.
+It tells us the relative static camera rig shape in arbitrary units.
+It does not provide meters or metric camera distances.
+
+AP03-0 SCALE-LESS RATIO DIAGNOSTIC
+----------------------------------
+
+Purpose:
+This diagnostic checks whether the raw COLMAP static-camera geometry is consistent up to scale.
+It is not a metric calibration output.
+It is only a scale-less evaluation of targetless geometry quality.
+
+Definition:
+Distance ratios compare relative camera-camera distances.
+For example:
+  ratio = distance(cam_i, cam_j) / distance(cam_k, cam_l)
+
+Because scale cancels out in ratios, this evaluates rig shape without requiring metric scale.
+
+Summary:
+metric                                   | value      
+---------------------------------------- | -----------
+static_camera_pairs                      | 6          
+distance_ratios                          | 15         
+eval_only_best_fit_distance_scale        | 0.769829733
+mean_scaled_distance_error_cm            | 1.507      
+median_scaled_distance_error_cm          | 1.566      
+mean_normalized_distance_rel_error_pct   | 0.412      
+median_normalized_distance_rel_error_pct | 0.283      
+mean_ratio_rel_error_pct                 | 0.667      
+median_ratio_rel_error_pct               | 0.450      
+
+Interpretation:
+The low normalized-distance and ratio errors indicate that raw COLMAP reconstructs the static camera rig geometry very accurately up to scale.
+Therefore, the targetless reconstruction itself is geometrically consistent.
+The remaining metric step is scale/frame registration, which requires an external metric reference.
+
+AP03 METRIC REGISTRATION RESULTS
+--------------------------------
+
 Summary:
 variant      | n | mean_cam_err_cm | med_cam_err_cm | mean_rot_deg | med_rot_deg | mean_dist_err_cm
 ------------ | - | --------------- | -------------- | ------------ | ----------- | ----------------
 Single Ref14 | 4 | 5.756           | 5.752          | 0.436        | 0.440       | 5.331           
 Multi-ArUco  | 4 | 1.287           | 0.763          | 0.162        | 0.153       | 0.973           
 
-AP03 real-life method output: estimated camera map in local Ref14 frame
+AP03 estimated output in local Ref14 / marker-layout frame:
 cam        | single_est_xyz          | single_dist_m | multi_est_xyz           | multi_dist_m
 ---------- | ----------------------- | ------------- | ----------------------- | ------------
 cam_edge_0 | (0.592, -1.746, 2.125)  | 2.813         | (0.582, -1.737, 2.095)  | 2.783       
 cam_edge_1 | (-4.044, 0.486, 2.157)  | 4.609         | (-3.996, 0.494, 2.143)  | 4.562       
 cam_edge_3 | (-3.253, -1.591, 2.078) | 4.175         | (-3.223, -1.566, 2.056) | 4.131       
-cam_edge_5 | (5.908, 0.386, 2.172)   | 6.307         | (5.855, 0.347, 2.139)   | 6.243   
+cam_edge_5 | (5.908, 0.386, 2.172)   | 6.307         | (5.855, 0.347, 2.139)   | 6.243       
 
-Evaluation-only: GT camera map in Ref14 frame
-cam        | gt_ref14_xyz            | gt_dist_to_ref14_m
----------- | ----------------------- | ------------------
-cam_edge_0 | (0.588, -1.735, 2.087)  | 2.777             
-cam_edge_1 | (-3.974, 0.475, 2.132)  | 4.535             
-cam_edge_3 | (-3.227, -1.563, 2.054) | 4.133             
-cam_edge_5 | (5.859, 0.348, 2.139)   | 6.247             
-
-Evaluation-only: camera GT-vs-estimated errors
+Evaluation-only: camera GT-vs-estimated errors:
 cam        | single_err_cm | multi_err_cm | gain_cm | single_rot | multi_rot | single_dist_err | multi_dist_err
 ---------- | ------------- | ------------ | ------- | ---------- | --------- | --------------- | --------------
 cam_edge_0 | 3.981         | 1.019        | 2.962   | 0.458      | 0.215     | 3.648           | 0.640         
@@ -30,3 +125,26 @@ cam_edge_1 | 7.537         | 3.168        | 4.369   | 0.409      | 0.178     | 7
 cam_edge_3 | 4.464         | 0.507        | 3.957   | 0.436      | 0.129     | 4.221           | 0.142         
 cam_edge_5 | 7.041         | 0.456        | 6.585   | 0.443      | 0.128     | 5.998           | 0.413         
 
+Evaluation-only: GT camera map in Ref14 frame:
+cam        | gt_ref14_xyz            | gt_dist_to_ref14_m
+---------- | ----------------------- | ------------------
+cam_edge_0 | (0.588, -1.735, 2.087)  | 2.777             
+cam_edge_1 | (-3.974, 0.475, 2.132)  | 4.535             
+cam_edge_3 | (-3.227, -1.563, 2.054) | 4.133             
+cam_edge_5 | (5.859, 0.348, 2.139)   | 6.247             
+
+Final interpretation:
+AP03-0 shows what pure targetless COLMAP can provide without any metric reference:
+a unitless relative camera rig shape.
+
+The scale-less ratio diagnostic confirms that this targetless rig shape is geometrically consistent up to scale.
+
+However, pure targetless COLMAP cannot recover metric scale from monocular images alone.
+To obtain metric camera poses in meters, an external metric reference is required.
+
+Single Ref14 provides metric registration from one known marker.
+Multi-ArUco provides a more stable metric registration from a known marker layout.
+
+Main AP03 result:
+AP03b Multi-ArUco achieves the best metric static-camera accuracy:
+1.287 cm mean camera error and 0.162° mean rotation error.

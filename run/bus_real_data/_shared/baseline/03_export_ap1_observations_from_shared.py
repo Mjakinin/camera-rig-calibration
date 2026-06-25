@@ -82,6 +82,42 @@ def make_moving_camera_matrix(width=WIDTH, height=HEIGHT, hfov_deg=HFOV_DEG):
     return K, D, fx, fy, cx, cy
 
 
+def make_moving_camera_matrix_from_json(path):
+    path = Path(path)
+    data = json.loads(path.read_text())
+
+    if "k" in data:
+        flat = data["k"]
+    elif "K" in data:
+        flat = data["K"]
+    elif "camera_matrix" in data:
+        cm = data["camera_matrix"]
+        flat = cm["data"] if isinstance(cm, dict) else cm
+    else:
+        fx = float(data["fx"])
+        fy = float(data.get("fy", fx))
+        cx = float(data["cx"])
+        cy = float(data["cy"])
+        flat = [fx, 0.0, cx, 0.0, fy, cy, 0.0, 0.0, 1.0]
+
+    K = np.asarray(flat, dtype=np.float64).reshape(3, 3)
+
+    if "D" in data:
+        D = np.asarray(data["D"], dtype=np.float64).reshape(-1, 1)
+    elif "d" in data:
+        D = np.asarray(data["d"], dtype=np.float64).reshape(-1, 1)
+    elif "distortion" in data:
+        D = np.asarray(data["distortion"], dtype=np.float64).reshape(-1, 1)
+    else:
+        D = np.zeros((5, 1), dtype=np.float64)
+
+    fx = float(K[0, 0])
+    fy = float(K[1, 1])
+    cx = float(K[0, 2])
+    cy = float(K[1, 2])
+    return K, D, fx, fy, cx, cy
+
+
 def solve_ap1_iterative_pnp(row, K, D):
     pts = np.array([
         [float(row["corner0_u"]), float(row["corner0_v"])],
@@ -265,7 +301,13 @@ def export_moving(shared_rows, shared_raw, shared_debug, sequence_dir, route_csv
     route_by_frame = load_route_commanded(route_csv)
     expected_ids = load_expected_ids()
 
-    K, D, fx, fy, cx, cy = make_moving_camera_matrix()
+    moving_info_json = Path(shared_raw) / "camera_info" / "moving_calib_camera.json"
+    if moving_info_json.exists():
+        K, D, fx, fy, cx, cy = make_moving_camera_matrix_from_json(moving_info_json)
+        print(f"[OK] AP01 moving intrinsics loaded from {moving_info_json}")
+    else:
+        K, D, fx, fy, cx, cy = make_moving_camera_matrix()
+        print("[WARN] AP01 moving intrinsics fallback: hardcoded baseline intrinsics")
 
     rows_by_frame = defaultdict(list)
     marker_to_frames = defaultdict(list)

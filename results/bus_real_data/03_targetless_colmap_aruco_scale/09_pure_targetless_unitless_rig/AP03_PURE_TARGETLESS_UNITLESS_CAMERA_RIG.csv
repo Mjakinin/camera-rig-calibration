@@ -1,0 +1,5 @@
+cam,root_camera,raw_rel_xyz_colmap_units,raw_dist_to_root_colmap_units,unitless_xyz_norm,unitless_dist_to_root_norm,normalization,metric_units,uses_aruco,uses_gt_for_output,image_name
+cam_edge_0,cam_edge_3,"(1.076, 2.341, -4.219)",4.943171214270212,"(0.089, 0.194, -0.350)",0.41059768036076383,root_camera_origin_and_farthest_static_camera_distance_equals_1,no,no,no,static_cam_edge_0.png
+cam_edge_1,cam_edge_3,"(2.300, -1.101, 1.290)",2.8577074333401105,"(0.191, -0.091, 0.107)",0.23737151565614795,root_camera_origin_and_farthest_static_camera_distance_equals_1,no,no,no,static_cam_edge_1.png
+cam_edge_3,cam_edge_3,"(0.000, 0.000, 0.000)",0.0,"(0.000, 0.000, 0.000)",0.0,root_camera_origin_and_farthest_static_camera_distance_equals_1,no,no,no,static_cam_edge_3.png
+cam_edge_5,cam_edge_3,"(5.466, 5.002, -9.489)",12.03896527113107,"(0.454, 0.416, -0.788)",1.0,root_camera_origin_and_farthest_static_camera_distance_equals_1,no,no,no,static_cam_edge_5.png

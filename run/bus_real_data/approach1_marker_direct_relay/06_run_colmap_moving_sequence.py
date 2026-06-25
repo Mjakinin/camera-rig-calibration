@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 import math
 import shutil
 import subprocess
@@ -21,6 +22,31 @@ def run(cmd):
 def fx_from_hfov(width, hfov_deg):
     hfov = math.radians(hfov_deg)
     return width / (2.0 * math.tan(hfov / 2.0))
+
+
+def camera_params_from_json(path):
+    path = Path(path)
+    data = json.loads(path.read_text())
+
+    if "k" in data:
+        flat = data["k"]
+    elif "K" in data:
+        flat = data["K"]
+    elif "camera_matrix" in data:
+        cm = data["camera_matrix"]
+        flat = cm["data"] if isinstance(cm, dict) else cm
+    else:
+        fx = float(data["fx"])
+        fy = float(data.get("fy", fx))
+        cx = float(data["cx"])
+        cy = float(data["cy"])
+        return fx, fy, cx, cy
+
+    fx = float(flat[0])
+    fy = float(flat[4])
+    cx = float(flat[2])
+    cy = float(flat[5])
+    return fx, fy, cx, cy
 
 
 def count_registered_images(images_txt):
@@ -57,6 +83,7 @@ def count_registered_images(images_txt):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sequence", default="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/moving")
+    ap.add_argument("--camera-info", default="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/camera_info/moving_calib_camera.json")
     ap.add_argument("--out", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory")
     ap.add_argument("--clean", action="store_true")
     ap.add_argument("--matcher", choices=["exhaustive", "sequential"], default="exhaustive")
@@ -82,10 +109,16 @@ def main():
     sparse_dir.mkdir(parents=True, exist_ok=True)
     sparse_txt_dir.mkdir(parents=True, exist_ok=True)
 
-    fx = fx_from_hfov(WIDTH, HFOV_DEG)
-    fy = fx
-    cx = WIDTH / 2.0
-    cy = HEIGHT / 2.0
+    camera_info = Path(args.camera_info)
+    if camera_info.exists():
+        fx, fy, cx, cy = camera_params_from_json(camera_info)
+        print("[OK] moving camera COLMAP intrinsics from:", camera_info)
+    else:
+        fx = fx_from_hfov(WIDTH, HFOV_DEG)
+        fy = fx
+        cx = WIDTH / 2.0
+        cy = HEIGHT / 2.0
+        print("[WARN] moving camera COLMAP intrinsics fallback: hardcoded baseline")
     camera_params = f"{fx:.8f},{fy:.8f},{cx:.8f},{cy:.8f}"
 
     print("[INFO] sequence:", seq_dir)
