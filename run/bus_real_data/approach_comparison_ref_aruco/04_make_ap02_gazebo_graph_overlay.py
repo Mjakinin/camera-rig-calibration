@@ -6,6 +6,8 @@ import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[3]
+
 import numpy as np
 
 
@@ -466,12 +468,12 @@ def make_overlay_sdf(name, full_debug=False):
 
 
 def make_spawn_script(script_path, sdf_path):
-    abs_sdf = Path("/workspaces/project") / sdf_path
+    abs_sdf = (REPO_ROOT / sdf_path).resolve()
 
     txt = f"""#!/usr/bin/env bash
 set -eo pipefail
 
-cd /workspaces/project
+cd "$REPO_ROOT"
 
 SDF="{abs_sdf}"
 
@@ -585,7 +587,7 @@ How to use
 Terminal 1: start the bus world normally.
 
 Terminal 2:
-  cd /workspaces/project
+  cd "$REPO_ROOT"
   bash results/bus_real_data/90_approach_comparison_ref_aruco/91_gazebo_ap02_graph_debug/spawn_clean_overlay.sh
 
 or:

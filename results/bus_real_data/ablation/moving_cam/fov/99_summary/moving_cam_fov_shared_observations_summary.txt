@@ -1,0 +1,15 @@
+MOVING CAMERA FOV — SHARED ARUCO OBSERVATIONS SUMMARY
+=====================================================
+
+variant            | all_observations | moving_observations | static_observations | unique_markers | unique_images_with_observations
+------------------ | ---------------- | ------------------- | ------------------- | -------------- | -------------------------------
+fov_40deg          | 133              | 109                 | 24                  | 15             | 0                              
+fov_50deg          | 191              | 167                 | 24                  | 15             | 0                              
+fov_60deg          | 248              | 224                 | 24                  | 15             | 0                              
+fov_69deg_baseline | 310              | 286                 | 24                  | 15             | 0                              
+fov_80deg          | 389              | 365                 | 24                  | 15             | 0                              
+fov_90deg          | 443              | 419                 | 24                  | 15             | 0                              
+fov_100deg         | 496              | 472                 | 24                  | 15             | 0                              
+fov_110deg         | 537              | 513                 | 24                  | 15             | 0                              
+fov_120deg         | 540              | 516                 | 24                  | 15             | 0                              
+fov_140deg_extreme | 555              | 531                 | 24                  | 15             | 0                              

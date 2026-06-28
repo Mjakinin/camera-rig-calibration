@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 RUN_SHARED_BASELINE=1
 RUN_GRAPH_INIT=1
 RUN_BA=1
 RUN_REPORT=1
 
-SHARED_OBS="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations"
-AP02_OBS="results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations"
+SHARED_OBS="${SHARED_OBS:-results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations}"
+AP02_OBS="${AP02_OBS:-results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in

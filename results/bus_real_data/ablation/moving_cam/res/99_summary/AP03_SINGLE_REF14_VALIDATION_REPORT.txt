@@ -1,0 +1,30 @@
+AP03-SINGLE-REF14 VALIDATION REPORT
+===================================
+
+Purpose:
+Validate whether AP03-SINGLE-REF14 outputs are source-complete and numerically stable.
+This report does not rerun COLMAP or change final comparison values.
+
+Validation logic:
+- OK: four-camera final CSV exists and no obvious single-marker degeneracy is detected.
+- UNSTABLE: four-camera final CSV exists, but the single-marker registration is outlier-dominated.
+- REJECT_UNSTABLE: four-camera final CSV exists, but the result is numerically degenerate.
+- FAILED: no valid four-camera final CSV exists.
+
+variant               | validation_status | has_csv | cams                                        | mean_t_cm | mean_r_deg | max_t_cm | max_r_deg | worst_cam  | sha16            | ref14_obs | ref14_unique_images | ref14_area_median_px2 | triangulated_corners | corner_fit_mean_cm | corner_fit_max_cm | corner_obs_min
+----------------------+-------------------+---------+---------------------------------------------+-----------+------------+----------+-----------+------------+------------------+-----------+---------------------+-----------------------+----------------------+--------------------+-------------------+---------------
+res_320x180_extreme   | FAILED            | no      | -                                           | -         | -          | -        | -         | -          | -                | 0         | 0                   | -                     | 0                    | -                  | -                 | -             
+res_640x360           | UNSTABLE          | yes     | cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 | 40.889    | 2.862      | 135.261  | 8.736     | cam_edge_5 | 252ca8fc960cfd15 | 8         | 2                   | 678.75                | 4                    | 0.267              | 0.347             | 2             
+res_960x540           | REJECT_UNSTABLE   | yes     | cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 | 148.942   | 2.129      | 559.287  | 6.156     | cam_edge_5 | 02ebbd4c436fad42 | 8         | 2                   | 678.75                | 4                    | 0.258              | 0.344             | 2             
+res_1280x720_baseline | OK                | yes     | cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 | 5.756     | 0.436      | 7.537    | 0.458     | cam_edge_1 | e26d43ccd051b9af | 8         | 2                   | 678.75                | 4                    | 0.258              | 0.336             | 2             
+res_1920x1080         | REJECT_UNSTABLE   | yes     | cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 | 619.397   | 97.271     | 1018.984 | 135.96    | cam_edge_0 | ec86f42b7e81b3b1 | 8         | 2                   | 678.75                | 4                    | 7.853              | 10.681            | 2             
+
+Duplicate final CSV hash check:
+- no duplicate AP03-SINGLE final CSV hashes detected among available variant snapshots
+
+Status file details:
+- res_320x180_extreme: AP03-SINGLE-REF14 rerun status: FAILED | variant: res_320x180_extreme | reason: no tested Ref14 min_area threshold produced a valid four-camera AP03_FINAL_SINGLE_REF14_RESULT.csv
+- res_640x360: AP03-SINGLE-REF14 rerun status: OK | variant: res_640x360 | min_area_px2: 500 | source: results/bus_real_data/ablation/moving_cam/res/04_ap03_results/res_640x360/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv
+- res_960x540: AP03-SINGLE-REF14 rerun status: OK | variant: res_960x540 | min_area_px2: 500 | source: results/bus_real_data/ablation/moving_cam/res/04_ap03_results/res_960x540/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv
+- res_1280x720_baseline: -
+- res_1920x1080: AP03-SINGLE-REF14 rerun status: OK | variant: res_1920x1080 | min_area_px2: 500 | source: results/bus_real_data/ablation/moving_cam/res/04_ap03_results/res_1920x1080/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv

@@ -1,0 +1,7 @@
+Recovered baseline raw_images/static from raw_images/reference/ndf_calib_data_beintelli.
+Mapping was selected by ORB image matching against existing ArUco debug detection images.
+
+cam_edge_0 <- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/reference/ndf_calib_data_beintelli/1779354644818007896.jpg
+cam_edge_1 <- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/reference/ndf_calib_data_beintelli/1779354645733616967.jpg
+cam_edge_3 <- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/reference/ndf_calib_data_beintelli/1779354645726136959.jpg
+cam_edge_5 <- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/reference/ndf_calib_data_beintelli/1779354644727961009.jpg

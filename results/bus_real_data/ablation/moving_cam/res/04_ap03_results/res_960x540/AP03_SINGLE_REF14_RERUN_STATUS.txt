@@ -1,0 +1,4 @@
+AP03-SINGLE-REF14 rerun status: OK
+variant: res_960x540
+min_area_px2: 500
+source: results/bus_real_data/ablation/moving_cam/res/04_ap03_results/res_960x540/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv

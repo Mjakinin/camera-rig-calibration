@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
 
@@ -14,6 +14,7 @@ fi
 set -eo pipefail
 
 RESULT_ROOT="results/bus_real_data/01_marker_direct_relay_multimarker_multichain"
+RUN_SHARED_BASELINE="${RUN_SHARED_BASELINE:-1}"
 LOG_DIR="$RESULT_ROOT/_pipeline_logs"
 
 mkdir -p "$LOG_DIR"
@@ -36,8 +37,15 @@ echo "AP01: Marker direct relay / multimarker / multichain"
 echo "Using shared baseline for raw images + ArUco detections."
 echo "================================================================================"
 
-run_step 00_shared_baseline \
-  bash run/bus_real_data/_shared/baseline/run_shared_preprocessing.sh
+if [ "$RUN_SHARED_BASELINE" = "1" ]; then
+  run_step 00_shared_baseline \
+    bash run/bus_real_data/_shared/baseline/run_shared_preprocessing.sh
+else
+  echo
+  echo "================================================================================"
+  echo "SKIPPING 00_shared_baseline because RUN_SHARED_BASELINE=0"
+  echo "================================================================================"
+fi
 
 run_step 01_prepare_ap1_adapter_cache \
   python3 run/bus_real_data/_shared/baseline/03_export_ap1_observations_from_shared.py \

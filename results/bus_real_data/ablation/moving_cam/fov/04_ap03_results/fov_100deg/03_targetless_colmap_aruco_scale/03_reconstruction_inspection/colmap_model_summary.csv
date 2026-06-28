@@ -1,0 +1,14 @@
+model,registered_images,registered_static_cameras,registered_moving_frames,num_3d_points,static_registered_list,static_missing_list,model_path
+0,22,0,22,47,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0
+1,85,2,83,6414,static_cam_edge_0.png;static_cam_edge_3.png,static_cam_edge_1.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/1
+10,29,0,29,1520,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/10
+11,25,0,25,1239,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/11
+12,35,2,33,1672,static_cam_edge_1.png;static_cam_edge_3.png,static_cam_edge_0.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/12
+2,23,0,23,1713,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/2
+3,27,1,26,2146,static_cam_edge_3.png,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/3
+4,26,0,26,2550,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/4
+5,46,2,44,3524,static_cam_edge_1.png;static_cam_edge_3.png,static_cam_edge_0.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/5
+6,31,0,31,2089,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/6
+7,22,0,22,1987,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/7
+8,24,0,24,1067,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/8
+9,26,0,26,1235,,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/9

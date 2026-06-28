@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
 

@@ -1,0 +1,16 @@
+AP03-SINGLE RERUN VALIDATION STATUS
+===================================
+
+status: REJECT_UNSTABLE
+mean_t_cm: 143.222
+mean_r_deg: 1.020
+max_t_cm: 541.308
+max_r_deg: 1.488
+
+Policy:
+- OK: four-camera final exists and no obvious single-marker degeneracy.
+- UNSTABLE: four-camera result exists but outlier-dominated.
+- REJECT_UNSTABLE: four-camera result exists but numerically degenerate; do not count as valid calibration.
+
+Interpretation:
+This rerun produced a four-camera AP03-SINGLE result, but it must not be accepted if status is REJECT_UNSTABLE.

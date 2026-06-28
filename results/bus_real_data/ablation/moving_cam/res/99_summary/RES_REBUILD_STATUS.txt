@@ -1,0 +1,37 @@
+MOVING-CAMERA RES ABLATION — REBUILD STATUS
+===========================================
+
+Rebuild status:
+- 00_captures restored/regenerated for all 5 RES variants.
+- 00_prepared_datasets restored/regenerated for all 5 RES variants.
+- 01_shared_observations restored/regenerated for all 5 RES variants.
+- AP01 outputs are present for all 5 RES variants.
+- AP02 outputs are present for all 5 RES variants.
+- AP03 was intentionally not rerun through the legacy full-run script.
+
+AP03 note:
+The legacy RES full-run script calls an old Ref14-only AP03 stage and aborts with:
+  RuntimeError: Too few Ref14 corner observations: 0
+
+This failed legacy AP03 stage is not the accepted final AP03 source.
+The final RES report uses source-gated AP03 Multi-ArUco final outputs:
+- valid: 640x360
+- valid: 960x540
+- valid: 1280x720
+- excluded: 320x180
+- excluded: 1920x1080
+
+Final report:
+results/bus_real_data/ablation/moving_cam/res/final_results/MOVING_CAM_RES_CLEAN_FINAL_COMPARISON.txt
+
+Do not delete:
+- 00_captures
+- 00_prepared_datasets
+- 00_world_variants
+- 01_shared_observations
+- 02_ap01_results
+- 03_ap02_results
+- 04_ap03_results
+- 99_summary
+
+Only final_results should stay report-clean.

@@ -1,0 +1,18 @@
+FOV AP03 rerun status
+=====================
+
+variant: fov_69deg_baseline
+
+AP03-SINGLE-REF14:
+  status: OK
+  min_area_px2: 500
+  source: results/bus_real_data/ablation/moving_cam/fov/04_ap03_results/fov_69deg_baseline/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv
+
+AP03-MULTI-ARUCO:
+  status: OK
+  source: results/bus_real_data/ablation/moving_cam/fov/04_ap03_results/fov_69deg_baseline/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_MULTI_ARUCO_RESULT.csv
+
+Notes:
+- COLMAP remains targetless.
+- ArUco is used only after reconstruction for metric registration.
+- GT is used only for final evaluation.

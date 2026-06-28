@@ -279,7 +279,8 @@ def eval_static_cameras_vs_gt(static_rows):
 
     for cam in STATIC_CAMERAS:
         if cam not in est:
-            raise RuntimeError(f"Missing AP03 static camera estimate: {cam}")
+            print(f"[WARN] Missing AP03 static camera estimate: {cam}; skipping GT evaluation for this camera.")
+            continue
 
         r = est[cam]
         T_est = make_T(

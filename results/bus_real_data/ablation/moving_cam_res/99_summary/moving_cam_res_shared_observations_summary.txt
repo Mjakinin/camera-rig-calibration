@@ -1,9 +1,0 @@
-MOVING CAMERA RESOLUTION — SHARED ARUCO OBSERVATIONS SUMMARY
-=============================================================
-
-variant               | all_observations | moving_observations | static_observations | unique_markers | unique_images_with_observations
---------------------- | ---------------- | ------------------- | ------------------- | -------------- | -------------------------------
-res_1280x720_baseline | 306              | 282                 | 24                  | 15             | 160                            
-res_1920x1080         | 308              | 284                 | 24                  | 15             | 165                            
-res_640x360           | 297              | 273                 | 24                  | 15             | 161                            
-res_960x540           | 315              | 291                 | 24                  | 15             | 166                            

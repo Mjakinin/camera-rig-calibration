@@ -1,0 +1,19 @@
+AP03 FINAL SINGLE-REF14 RESULT — BASELINE STANDARD RERUN
+========================================================
+
+Method: targetless COLMAP + single Ref14 metric registration
+COLMAP targetless: yes
+ArUco usage: post-reconstruction metric registration only
+GT usage: final evaluation only
+min_area_px2: 500
+
+mean translation error [cm]: 143.221801
+mean rotation error [deg]: 1.019806
+
+Per-camera:
+- cam_edge_0: 8.780581 cm / 0.953871 deg
+- cam_edge_1: 12.536828 cm / 0.809611 deg
+- cam_edge_3: 10.261870 cm / 0.827539 deg
+- cam_edge_5: 541.307925 cm / 1.488204 deg
+
+CSV: results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv

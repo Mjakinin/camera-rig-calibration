@@ -1,0 +1,93 @@
+{
+  "stage": "09_make_ap03_multi_aruco_final",
+  "registration_mode": "multi_aruco_known_marker_layout",
+  "best_colmap_model": "0",
+  "reference_frame": "aruco_marker_14",
+  "marker_length_m": 0.17,
+  "min_area_px2": 1000.0,
+  "reproj_thresh_px": 5.0,
+  "ransac_iters": 1000,
+  "min_inliers": 4,
+  "max_fit_error_cm": 20.0,
+  "requested_marker_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "detected_marker_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "corner_observation_count": 1344,
+  "unique_anchor_images": 176,
+  "triangulated_corner_count": 56,
+  "used_corner_count": 51,
+  "used_marker_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "scale_colmap_to_metric": 0.7586237811745746,
+  "R_ref_col": [
+    [
+      0.27651878302769733,
+      0.017266135735319748,
+      -0.9608533931821499
+    ],
+    [
+      0.9607193577568601,
+      -0.029491932531045442,
+      0.2759502519419588
+    ],
+    [
+      -0.023572828937728486,
+      -0.9994158826396319,
+      -0.024742984127198487
+    ]
+  ],
+  "t_ref_col": [
+    0.37896431063647773,
+    -0.5152799688978433,
+    1.7983540643689642
+  ],
+  "corner_fit_mean_error_cm": 0.5024595329664214,
+  "corner_fit_median_error_cm": 0.43561527709374004,
+  "corner_fit_max_error_cm": 1.2995344977015435,
+  "corner_triangulation_mean_reproj_px": 0.5602226862006917,
+  "corner_triangulation_median_reproj_px": 0.49789820137610247
+}

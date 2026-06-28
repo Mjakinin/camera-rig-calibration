@@ -535,8 +535,8 @@ def write_readme(entries):
         "  cam_edge_3",
         "",
         "Pipeline:",
-        "  1. cam_edge_3 -> cam_edge_1 via direct static ArUco multi-marker aggregation.",
-        "  2. cam_edge_3 -> cam_edge_0 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.",
+        "  1. cam_edge_3 -> cam_edge_0 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.",
+        "  2. cam_edge_3 -> cam_edge_1 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.",
         "  3. cam_edge_3 -> cam_edge_5 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.",
         "",
         "Main no-GT results:",
@@ -564,14 +564,15 @@ def main():
     m = load_chain_module()
 
     entries = [
-        load_direct_multimarker(m),
         load_relay_multichain("cam3_to_cam0", "COLMAP_motion", "main_no_gt"),
+        load_relay_multichain("cam3_to_cam1", "COLMAP_motion", "main_no_gt"),
         load_relay_multichain("cam3_to_cam5", "COLMAP_motion", "main_no_gt"),
     ]
 
     # Oracle rows if available.
     try:
         entries.append(load_relay_multichain("cam3_to_cam0", "GT_motion", "oracle_gt_motion"))
+        entries.append(load_relay_multichain("cam3_to_cam1", "GT_motion", "oracle_gt_motion"))
         entries.append(load_relay_multichain("cam3_to_cam5", "GT_motion", "oracle_gt_motion"))
     except Exception as e:
         print("[WARN] GT_motion multichain oracle not available:", e)

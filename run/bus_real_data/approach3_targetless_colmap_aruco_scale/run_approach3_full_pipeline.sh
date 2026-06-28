@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
 
@@ -93,7 +93,7 @@ fi
 if [[ "$RUN_REGISTRATION" == "1" ]]; then
   echo
   echo "=== 4/7 Detect Ref14 scale observations ==="
-  python3 run/bus_real_data/approach3_targetless_colmap_aruco_scale/06a_detect_ref14_scale_observations.py \
+  python3 run/bus_real_data/approach3_targetless_colmap_aruco_scale/06a_detect_ref14_scale_observations.py --min-area-px2 ${AP03_MIN_AREA_PX2:-100} \
     --out-root "$OUT" \
     --min-area-px2 "$MIN_AREA_PX2"
 

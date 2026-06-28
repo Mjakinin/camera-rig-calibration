@@ -1,0 +1,23 @@
+No-GT COLMAP metric scale from ArUco overlap
+============================================
+
+Scale source: known ArUco marker side length, not Gazebo GT.
+Known marker side length [m]: 0.170
+
+COLMAP registered poses loaded: 204
+Markers with usable observations: 3
+Raw scale pairs: 31
+Kept scale pairs after robust MAD trim: 30
+
+Metric COLMAP scale: 0.758090845565
+Kept mean: 0.758329170993
+Kept std: 0.0173823046864
+Raw median: 0.759017511873
+Raw MAD: 0.0118705893226
+
+Per-marker kept scale medians:
+  marker 01: n=  30, median=0.758090845565, mean=0.758329170993, std=0.0173823046864
+
+Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/metric_scale.txt
+Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/scale_pairs_all.csv
+Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/scale_pairs_kept_after_mad.csv

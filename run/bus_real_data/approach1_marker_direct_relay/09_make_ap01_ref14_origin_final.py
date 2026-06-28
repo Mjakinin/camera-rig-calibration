@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import csv
+import os
 import math
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -8,17 +9,22 @@ from pathlib import Path
 import numpy as np
 
 
-AP01 = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference")
+AP01 = Path(os.environ.get("AP01_DIR", "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference"))
 WORLD_SDF = Path("src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf")
-OBS_CSV = Path("results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_static_aruco_observations.csv")
+OBS_CSV = Path(os.environ.get("AP01_OBS_CSV", "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_static_aruco_observations.csv"))
 
-SRC_CANDIDATES = [
-    AP01 / "final_extrinsics_summary.csv",
-    AP01 / "99_ARCHIVE_EXTRA_OUTPUTS" / "final_extrinsics_summary.csv",
-]
+if os.environ.get("AP01_SOURCE_CSV"):
+    SRC_CANDIDATES = [Path(os.environ["AP01_SOURCE_CSV"])]
+else:
+    SRC_CANDIDATES = [
+        AP01 / "final_extrinsics_summary.csv",
+        AP01 / "99_ARCHIVE_EXTRA_OUTPUTS" / "final_extrinsics_summary.csv",
+    ]
 
-OUT_TXT = AP01 / "AP01_FINAL_RESULT.txt"
-OUT_CSV = AP01 / "AP01_FINAL_RESULT.csv"
+OUT_DIR = Path(os.environ.get("AP01_OUT_DIR", str(AP01)))
+OUT_TXT = OUT_DIR / "AP01_FINAL_RESULT.txt"
+OUT_CSV = OUT_DIR / "AP01_FINAL_RESULT.csv"
+OUT_TXT.parent.mkdir(parents=True, exist_ok=True)
 
 ROOT_CAM = "cam_edge_3"
 STATIC_CAMS = ["cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"]

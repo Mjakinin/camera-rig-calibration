@@ -1,0 +1,8 @@
+AP03 was not rerun by this resume script.
+
+Reason:
+The existing RES full-run script calls an older Ref14-only AP03 stage and aborts with:
+  RuntimeError: Too few Ref14 corner observations: 0
+
+The accepted final RES report uses source-gated AP03 Multi-ArUco final outputs, not this failing Ref14-only AP03 stage.
+Do not treat the failed Ref14-only run as the final AP03 source.

@@ -1,0 +1,1266 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <model name="ap02_graph_presentation_observation_overlay">
+    <static>true</static>
+    <link name="ap02_presentation_overlay_link">
+
+      <visual name="NODE_REF_ARUCO_14">
+        <pose>0.000000 0.500000 0.400000 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>1.000 0.850 0.050 1.000</ambient>
+            <diffuse>1.000 0.850 0.050 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_REF_ARUCO_14">
+        <pose>0.000000 0.500000 0.400000 -0.000000 -0.000000 0.000000</pose>
+        <geometry><box><size>0.2000 0.2000 0.0150</size></box></geometry>
+        
+          <material>
+            <ambient>1.000 0.850 0.050 1.000</ambient>
+            <diffuse>1.000 0.850 0.050 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_STATIC_CAMERA_cam_edge_0">
+        <pose>0.614323 -1.251895 2.532875 0 0 0</pose>
+        <geometry><sphere><radius>0.0950</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_ray_0">
+        <pose>0.547086 -1.097788 2.509408 1.709476 -0.000000 -2.730187</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_ray_1">
+        <pose>0.682010 -1.097368 2.513895 1.682831 -0.000000 2.728735</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_ray_2">
+        <pose>0.684676 -1.130825 2.436892 2.171701 -0.000000 2.615189</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_ray_3">
+        <pose>0.549751 -1.131245 2.432404 2.204116 -0.000000 -2.650183</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_rect_0">
+        <pose>0.614773 -0.943262 2.490428 1.537548 -0.000000 1.573911</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_rect_1">
+        <pose>0.752363 -0.976299 2.417912 2.730561 0.000000 0.079500</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_rect_2">
+        <pose>0.620104 -1.010175 2.336421 1.604045 -0.000000 -1.567682</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_0_frustum_rect_3">
+        <pose>0.482514 -0.977139 2.408937 0.411032 -0.000000 -3.062092</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_STATIC_CAMERA_cam_edge_1">
+        <pose>-4.083874 0.999618 2.503114 0 0 0</pose>
+        <geometry><sphere><radius>0.0950</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_ray_0">
+        <pose>-3.914203 0.994303 2.505086 1.559179 0.000000 1.539480</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_ray_1">
+        <pose>-3.971731 0.872174 2.504626 1.561888 0.000000 0.721622</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_ray_2">
+        <pose>-3.991283 0.881690 2.423490 2.058985 0.000000 0.665618</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_ray_3">
+        <pose>-3.933755 1.003818 2.423950 2.055920 -0.000000 1.598768</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_rect_0">
+        <pose>-3.802060 0.866859 2.506599 1.574203 -0.000000 -0.440213</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_rect_1">
+        <pose>-3.879140 0.754246 2.425002 -2.906676 -0.116742 1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_rect_2">
+        <pose>-3.841164 0.885890 2.344325 1.567390 -0.000000 2.701379</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_1_frustum_rect_3">
+        <pose>-3.764084 0.998503 2.425922 -0.234917 0.116742 -1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_STATIC_CAMERA_cam_edge_3">
+        <pose>-3.280583 -1.075010 2.432253 0 0 0</pose>
+        <geometry><sphere><radius>0.0950</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_ray_0">
+        <pose>-3.177546 -0.940302 2.424685 1.615386 -0.000000 2.488633</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_ray_1">
+        <pose>-3.111895 -1.058252 2.423102 1.624727 -0.000000 1.669814</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_ray_2">
+        <pose>-3.135903 -1.070547 2.343550 2.120578 -0.000000 1.601634</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_ray_3">
+        <pose>-3.201555 -0.952597 2.345134 2.109672 -0.000000 2.568329</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_rect_0">
+        <pose>-3.008858 -0.923544 2.415534 1.582529 0.000000 0.507897</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_rect_1">
+        <pose>-2.967215 -1.053789 2.334399 2.814688 -0.000000 -1.097510</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_rect_2">
+        <pose>-3.056875 -0.948134 2.256432 1.559064 -0.000000 -2.633696</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_3_frustum_rect_3">
+        <pose>-3.098518 -0.817888 2.337567 0.326905 -0.000000 2.044083</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_STATIC_CAMERA_cam_edge_5">
+        <pose>6.015453 0.834823 2.612785 0 0 0</pose>
+        <geometry><sphere><radius>0.0950</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_ray_0">
+        <pose>5.898478 0.711931 2.606908 1.605421 -0.000000 -0.760735</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_ray_1">
+        <pose>5.846646 0.835996 2.594809 1.676878 -0.000000 -1.577743</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_ray_2">
+        <pose>5.875947 0.840573 2.516218 2.175870 -0.000000 -1.611987</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_ray_3">
+        <pose>5.927778 0.716508 2.528317 2.091577 -0.000000 -0.637735</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.339531</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_rect_0">
+        <pose>5.729671 0.713104 2.588933 1.660535 -0.000000 -2.745854</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_rect_1">
+        <pose>5.707140 0.841746 2.498243 2.780773 -0.000000 1.725755</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_rect_2">
+        <pose>5.788272 0.722258 2.431750 1.481058 0.000000 0.395738</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.270000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_cam_edge_5_frustum_rect_3">
+        <pose>5.810803 0.593616 2.522440 0.360820 -0.000000 -1.415837</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.168000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_000">
+        <pose>-2.628536 0.514799 1.044231 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_000">
+        <pose>-2.628536 0.514799 1.044231 1.138665 0.032055 1.629509</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_001">
+        <pose>-2.297783 -0.541403 1.626415 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_001">
+        <pose>-2.297783 -0.541403 1.626415 0.019672 -0.009217 -1.570660</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_002">
+        <pose>-1.126415 -0.539103 1.100032 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_002">
+        <pose>-1.126415 -0.539103 1.100032 1.198715 -0.004348 -1.570891</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_003">
+        <pose>0.093963 1.219141 0.793485 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_003">
+        <pose>0.093963 1.219141 0.793485 1.566090 -0.010429 0.010513</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_004">
+        <pose>0.695934 1.231284 2.022931 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_004">
+        <pose>0.695934 1.231284 2.022931 1.539347 -0.004755 0.004632</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_005">
+        <pose>1.994678 -1.003182 1.131389 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_005">
+        <pose>1.994678 -1.003182 1.131389 1.185477 -0.018482 -1.580616</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_006">
+        <pose>2.001549 0.518513 1.405185 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_006">
+        <pose>2.001549 0.518513 1.405185 1.152672 -0.011886 -1.540578</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_007">
+        <pose>1.985723 0.957367 1.402695 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_007">
+        <pose>1.985723 0.957367 1.402695 1.175845 -0.010178 -1.546917</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_008">
+        <pose>2.746537 -0.528879 1.462962 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_008">
+        <pose>2.746537 -0.528879 1.462962 1.177056 -0.020010 -1.594475</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_009">
+        <pose>3.166194 0.468963 1.425178 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_009">
+        <pose>3.166194 0.468963 1.425178 1.140767 0.017436 1.559894</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_010">
+        <pose>3.156144 -1.010864 1.450220 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_010">
+        <pose>3.156144 -1.010864 1.450220 1.148899 0.032064 1.573952</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_011">
+        <pose>4.153288 -0.022874 1.571437 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_011">
+        <pose>4.153288 -0.022874 1.571437 -0.011593 0.017309 1.561211</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_012">
+        <pose>4.181390 -1.013180 1.472957 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_012">
+        <pose>4.181390 -1.013180 1.472957 1.194506 0.021951 3.135067</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_013">
+        <pose>4.211863 0.711244 1.294109 0 0 0</pose>
+        <geometry><sphere><radius>0.0520</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_013">
+        <pose>4.211863 0.711244 1.294109 -0.007458 0.009415 1.562709</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_ARUCO_MARKER_014">
+        <pose>0.000000 0.500000 0.400000 0 0 0</pose>
+        <geometry><sphere><radius>0.0700</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_ARUCO_MARKER_014">
+        <pose>0.000000 0.500000 0.400000 -0.000000 -0.000000 0.000000</pose>
+        <geometry><box><size>0.1700 0.1700 0.0100</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 0.920</ambient>
+            <diffuse>0.050 0.850 0.200 0.920</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_000_cam_edge_0_to_marker_003">
+        <pose>0.354143 -0.016377 1.663180 2.173969 -0.000000 -2.934042</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>3.066312</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_001_cam_edge_0_to_marker_004">
+        <pose>0.655128 -0.010305 2.277903 1.773233 -0.000000 3.108739</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>2.536312</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_002_cam_edge_0_to_marker_007">
+        <pose>1.300023 -0.147264 1.967785 1.980799 -0.000000 2.586055</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>2.835293</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_003_cam_edge_1_to_marker_001">
+        <pose>-3.190828 0.229107 2.064765 1.926619 0.000000 0.858924</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>2.516638</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_004_cam_edge_1_to_marker_002">
+        <pose>-2.605144 0.230258 1.801573 1.969160 0.000000 1.091053</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>3.617024</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_005_cam_edge_1_to_marker_005">
+        <pose>-1.044598 -0.001782 1.817252 1.781934 0.000000 1.252512</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>6.545351</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_006_cam_edge_1_to_marker_006">
+        <pose>-1.041163 0.759065 1.954150 1.748752 0.000000 1.491902</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>6.202360</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_007_cam_edge_1_to_marker_007">
+        <pose>-1.049076 0.978493 1.952905 1.750144 0.000000 1.563835</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>6.168688</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_008_cam_edge_1_to_marker_008">
+        <pose>-0.668668 0.235369 1.983038 1.718324 0.000000 1.350645</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>7.076209</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_009_cam_edge_1_to_marker_014">
+        <pose>-2.041937 0.749809 1.451557 2.043339 0.000000 1.449062</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>4.620685</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_010_cam_edge_3_to_marker_001">
+        <pose>-2.789183 -0.808207 2.029334 2.195202 -0.000000 2.068207</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>1.378407</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_011_cam_edge_3_to_marker_002">
+        <pose>-2.203499 -0.807057 1.766142 2.111323 -0.000000 1.814624</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>2.588909</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_012_cam_edge_3_to_marker_003">
+        <pose>-1.593310 0.072066 1.612869 1.952687 -0.000000 2.167864</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>4.397300</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_013_cam_edge_3_to_marker_005">
+        <pose>-0.642953 -1.039096 1.781821 1.812548 -0.000000 1.584411</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>5.433763</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_014_cam_edge_3_to_marker_006">
+        <pose>-0.639517 -0.278249 1.918719 1.754845 -0.000000 1.863795</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>5.612049</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_015_cam_edge_3_to_marker_007">
+        <pose>-0.647430 -0.058821 1.917474 1.751202 -0.000000 1.939107</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>5.737989</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_016_cam_edge_3_to_marker_008">
+        <pose>-0.267023 -0.801945 1.947607 1.729613 -0.000000 1.661162</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>6.128944</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_017_cam_edge_3_to_marker_014">
+        <pose>-1.640291 -0.287505 1.416126 2.080106 -0.000000 2.018398</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>4.168085</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_018_cam_edge_5_to_marker_000">
+        <pose>1.693459 0.674811 1.828508 1.750184 -0.000000 -1.533790</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>8.790980</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_019_cam_edge_5_to_marker_009">
+        <pose>4.590824 0.651893 2.018981 1.962816 -0.000000 -1.443090</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>3.108463</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_020_cam_edge_5_to_marker_010">
+        <pose>4.585798 -0.088020 2.031502 1.899971 -0.000000 -0.997590</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>3.596355</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_021_cam_edge_5_to_marker_011">
+        <pose>5.084371 0.405974 2.092111 2.040765 -0.000000 -1.139169</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>2.299502</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_022_cam_edge_5_to_marker_012">
+        <pose>5.098422 -0.089178 2.042871 1.983445 -0.000000 -0.781612</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>2.842202</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_STATIC_EDGE_023_cam_edge_5_to_marker_013">
+        <pose>5.113658 0.773033 1.953447 2.201001 -0.000000 -1.502385</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>2.237658</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.230</ambient>
+            <diffuse>1.000 0.450 0.050 0.230</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_REPRESENTATIVE_MOVING_FRAME_moving_frame_000070">
+        <pose>0.079529 0.012493 2.240201 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 0.820</ambient>
+            <diffuse>0.700 0.200 1.000 0.820</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_ray_0">
+        <pose>0.102735 0.146278 2.243017 1.550066 -0.000000 2.969849</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.271624</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_ray_1">
+        <pose>0.192990 0.086993 2.244834 1.536678 -0.000000 2.151810</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.271624</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_ray_2">
+        <pose>0.185026 0.072870 2.179620 2.033166 -0.000000 2.090607</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.271624</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_ray_3">
+        <pose>0.094771 0.132155 2.177802 2.048176 -0.000000 3.014904</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.271624</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_rect_0">
+        <pose>0.216195 0.220779 2.247649 1.553967 0.000000 0.989610</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.216000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_rect_1">
+        <pose>0.298486 0.147370 2.184252 -3.022802 0.213276 1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.134400</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_rect_2">
+        <pose>0.200267 0.192532 2.117220 1.587626 -0.000000 -2.151983</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.216000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="FRUSTUM_moving_frame_000070_frustum_rect_3">
+        <pose>0.117976 0.265940 2.180617 -0.118791 -0.213276 -1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.134400</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.550</ambient>
+            <diffuse>0.050 0.600 1.000 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_MOVING_EDGE_000_moving_frame_000070_to_marker_004">
+        <pose>0.387732 0.621889 2.131566 1.728553 -0.000000 2.673355</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>1.382972</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 0.220</ambient>
+            <diffuse>0.700 0.200 1.000 0.220</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_MOVING_EDGE_001_moving_frame_000070_to_marker_007">
+        <pose>1.032626 0.484930 1.821448 1.945819 -0.000000 2.030987</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>2.286433</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 0.220</ambient>
+            <diffuse>0.700 0.200 1.000 0.220</diffuse>
+          </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

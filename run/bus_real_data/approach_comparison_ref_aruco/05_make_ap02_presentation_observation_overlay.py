@@ -4,7 +4,7 @@ import importlib.util
 import csv
 import numpy as np
 
-ROOT = Path("/workspaces/project")
+ROOT = Path(__file__).resolve().parents[3]
 BASE_SCRIPT = ROOT / "run/bus_real_data/approach_comparison_ref_aruco/04_make_ap02_gazebo_graph_overlay.py"
 
 spec = importlib.util.spec_from_file_location("ap02_overlay_base", BASE_SCRIPT)
@@ -229,7 +229,7 @@ def make_spawn_script():
     txt = f"""#!/usr/bin/env bash
 set -eo pipefail
 
-cd /workspaces/project
+cd "$REPO_ROOT"
 
 SDF="{PRESENTATION_SDF}"
 

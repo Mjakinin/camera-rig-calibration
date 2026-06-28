@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 echo "=== AP02 Phase 2: sanity check AP02 Python independence ==="
 if grep -R "01_marker_direct_relay\|AP1_ROOT\|AP01_ROOT\|moving_detections.csv\|01_static_a4_marker_detection" -n \

@@ -1,0 +1,23 @@
+AP02 Presentation Observation Overlay
+====================================
+
+Meaning:
+- blue nodes/frustums: estimated static cameras
+- green nodes/planes: estimated ArUco marker map
+- yellow node/plane: reference marker 14
+- orange transparent lines: static camera -> marker observation edges
+- purple node/frustum: one representative moving-camera frame
+- purple transparent lines: moving frame -> marker observation edges
+
+Important:
+- No direct camera-camera edges are drawn.
+- No direct marker-marker edges are drawn.
+- AP02 connects entities through observation edges: camera/frame observes marker.
+
+Static observation edges shown: 24
+Representative moving frame: moving_frame_000070
+Moving observation edges shown: 2
+
+Moving edges:
+- moving_frame_000070 -> marker 4
+- moving_frame_000070 -> marker 7

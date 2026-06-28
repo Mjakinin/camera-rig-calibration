@@ -1,0 +1,3368 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <model name="ap02_graph_full_debug_overlay">
+    <static>true</static>
+    <link name="ap02_graph_overlay_link">
+
+      <visual name="NODE_REF_ARUCO_14_ORIGIN">
+        <pose>0.000000 0.500000 0.400000 0 0 0</pose>
+        <geometry><sphere><radius>0.1600</radius></sphere></geometry>
+        
+          <material>
+            <ambient>1.000 0.850 0.050 1.000</ambient>
+            <diffuse>1.000 0.850 0.050 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="REF_ARUCO_14_PLANE">
+        <pose>0.000000 0.500000 0.400000 -0.000000 -0.000000 0.000000</pose>
+        <geometry><box><size>0.2000 0.2000 0.0180</size></box></geometry>
+        
+          <material>
+            <ambient>1.000 0.850 0.050 1.000</ambient>
+            <diffuse>1.000 0.850 0.050 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_0_dist_2.84m">
+        <pose>0.636423 -1.271006 2.528467 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_0">
+        <pose>0.534993 -1.039664 2.496244 1.697678 -0.000000 -2.728393</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_1">
+        <pose>0.737383 -1.038636 2.502841 1.671603 -0.000000 2.731720</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_2">
+        <pose>0.741416 -1.087356 2.386711 2.161175 -0.000000 2.622241</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_3">
+        <pose>0.539026 -1.088384 2.380114 2.192697 -0.000000 -2.651640</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_0">
+        <pose>0.635954 -0.807294 2.470617 1.538214 -0.000000 1.575875</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_1">
+        <pose>0.842376 -0.854986 2.361084 2.743141 0.000000 0.082583</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_2">
+        <pose>0.644019 -0.904734 2.238358 1.603379 -0.000000 -1.565717</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_3">
+        <pose>0.437596 -0.857042 2.347891 0.398452 -0.000000 -3.059010</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_0_2.84m">
+        <pose>0.318212 -0.385503 1.464234 0.723989 0.000000 0.344986</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>2.841104</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_1_dist_4.62m">
+        <pose>-4.082467 0.971435 2.513292 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_0">
+        <pose>-3.827847 0.967963 2.514789 1.564919 0.000000 1.557163</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_1">
+        <pose>-3.910875 0.783284 2.512300 1.574691 0.000000 0.739402</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_2">
+        <pose>-3.941130 0.798521 2.390939 2.071996 0.000000 0.685253</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_3">
+        <pose>-3.858102 0.983200 2.393428 2.060887 -0.000000 1.623188</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_0">
+        <pose>-3.656255 0.779812 2.513797 1.583085 -0.000000 -0.422503</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_1">
+        <pose>-3.769538 0.610370 2.389948 -2.899106 -0.124899 1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_2">
+        <pose>-3.716765 0.810287 2.271075 1.558507 -0.000000 2.719090</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_3">
+        <pose>-3.603482 0.979729 2.394925 -0.242486 0.124899 -1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_1_4.62m">
+        <pose>-2.041234 0.735717 1.456646 1.095827 -0.000000 -1.685765</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>4.621125</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_3_dist_4.20m">
+        <pose>-3.302164 -1.085678 2.448533 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_0">
+        <pose>-3.151890 -0.880405 2.437292 1.614952 -0.000000 2.509666</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_1">
+        <pose>-3.049820 -1.055246 2.432984 1.631896 -0.000000 1.690813</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_2">
+        <pose>-3.086398 -1.073664 2.313825 2.128215 -0.000000 1.626421</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_3">
+        <pose>-3.188469 -0.898823 2.318134 2.108398 -0.000000 2.594969</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_0">
+        <pose>-2.899546 -0.849974 2.421743 1.592075 0.000000 0.528415</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_1">
+        <pose>-2.834054 -1.043232 2.298276 2.810552 -0.000000 -1.104344</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_2">
+        <pose>-2.972703 -0.886809 2.183426 1.549517 -0.000000 -2.613178</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_3">
+        <pose>-3.038195 -0.693550 2.306893 0.331041 -0.000000 2.037249</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_3_4.20m">
+        <pose>-1.651082 -0.292839 1.424267 1.060896 -0.000000 -1.123119</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>4.197041</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_5_dist_6.39m">
+        <pose>5.999649 0.815786 2.581473 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_0">
+        <pose>5.824921 0.630680 2.574302 1.598963 -0.000000 -0.756564</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_1">
+        <pose>5.746156 0.816454 2.557257 1.666038 -0.000000 -1.573428</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_2">
+        <pose>5.788795 0.823674 2.438911 2.164991 -0.000000 -1.608184</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_3">
+        <pose>5.867560 0.637900 2.455956 2.086223 -0.000000 -0.638712</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_0">
+        <pose>5.571428 0.631347 2.550085 1.655069 -0.000000 -2.740582</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_1">
+        <pose>5.535302 0.824341 2.414694 2.791246 -0.000000 1.738532</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_2">
+        <pose>5.656707 0.645787 2.313393 1.486524 0.000000 0.401011</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_3">
+        <pose>5.692833 0.452794 2.448784 0.350347 -0.000000 -1.403061</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_5_6.39m">
+        <pose>2.999824 0.657893 1.490737 1.222501 -0.000000 1.623382</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>6.391740</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_000_dist_2.78m">
+        <pose>-2.686544 0.550967 1.111090 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_000">
+        <pose>-2.686544 0.550967 1.111090 1.157338 0.028839 1.628115</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_000_2.78m">
+        <pose>-1.343272 0.525483 0.755545 1.312089 -0.000000 -1.589765</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.779526</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_001_dist_2.82m">
+        <pose>-2.309686 -0.546652 1.634184 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_001">
+        <pose>-2.309686 -0.546652 1.634184 0.019809 -0.006635 -1.569025</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_001_2.82m">
+        <pose>-1.154843 -0.023326 1.017092 1.117838 -0.000000 -1.145320</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.820167</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_002_dist_1.70m">
+        <pose>-1.137512 -0.543656 1.106877 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_002">
+        <pose>-1.137512 -0.543656 1.106877 1.200185 -0.002657 -1.568200</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_002_1.70m">
+        <pose>-0.568756 -0.021828 0.753439 1.141394 -0.000000 -0.828402</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>1.697889</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_003_dist_0.83m">
+        <pose>0.096675 1.222927 0.796906 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_003">
+        <pose>0.096675 1.222927 0.796906 1.564337 -0.011484 0.011479</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_003_0.83m">
+        <pose>0.048338 0.861464 0.598453 1.072431 -0.000000 3.008654</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>0.830364</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_004_dist_1.92m">
+        <pose>0.703540 1.218381 2.034280 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_004">
+        <pose>0.703540 1.218381 2.034280 1.553199 -0.003064 0.009531</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_004_1.92m">
+        <pose>0.351770 0.859191 1.217140 0.551564 -0.000000 2.366631</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>1.918831</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_005_dist_2.56m">
+        <pose>1.944673 -0.993675 1.140277 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_005">
+        <pose>1.944673 -0.993675 1.140277 1.174429 -0.014905 -1.588312</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_005_2.56m">
+        <pose>0.972336 -0.246837 0.770139 1.277602 0.000000 0.915821</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.561411</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_006_dist_2.24m">
+        <pose>2.003183 0.518717 1.408204 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_006">
+        <pose>2.003183 0.518717 1.408204 1.143275 -0.009070 -1.561859</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_006_2.24m">
+        <pose>1.001592 0.509359 0.904102 1.104529 -0.000000 1.580140</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.242670</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_007_dist_2.29m">
+        <pose>2.000276 0.960868 1.405285 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_007">
+        <pose>2.000276 0.960868 1.405285 1.167762 0.000509 -1.551107</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_007_2.29m">
+        <pose>1.000138 0.730434 0.902642 1.115389 -0.000000 1.797247</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.285629</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_008_dist_3.08m">
+        <pose>2.701254 -0.523603 1.465757 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_008">
+        <pose>2.701254 -0.523603 1.465757 1.162816 -0.016392 -1.599769</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_008_3.08m">
+        <pose>1.350627 -0.011801 0.932879 1.217348 0.000000 1.208579</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>3.079021</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_009_dist_3.29m">
+        <pose>3.124412 0.472690 1.425307 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_009">
+        <pose>3.124412 0.472690 1.425307 1.154003 0.011206 1.550695</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_009_3.29m">
+        <pose>1.562206 0.486345 0.912653 1.253720 0.000000 1.562056</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>3.288457</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_010_dist_3.61m">
+        <pose>3.112711 -1.003735 1.446398 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_010">
+        <pose>3.112711 -1.003735 1.446398 1.163213 0.027898 1.564120</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_010_3.61m">
+        <pose>1.556355 -0.251867 0.923199 1.276866 0.000000 1.120764</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>3.611805</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_011_dist_4.30m">
+        <pose>4.112536 -0.025524 1.556652 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_011">
+        <pose>4.112536 -0.025524 1.556652 0.002105 0.013400 1.556198</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_011_4.30m">
+        <pose>2.056268 0.237238 0.978326 1.298732 0.000000 1.443699</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>4.304297</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_012_dist_4.53m">
+        <pose>4.138366 -1.017390 1.454017 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_012">
+        <pose>4.138366 -1.017390 1.454017 1.190349 0.007951 3.125674</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_012_4.53m">
+        <pose>2.069183 -0.258695 0.927009 1.336078 0.000000 1.219354</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>4.532052</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_013_dist_4.27m">
+        <pose>4.171475 0.709063 1.282388 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_013">
+        <pose>4.171475 0.709063 1.282388 0.006116 0.004876 1.557526</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_013_4.27m">
+        <pose>2.085737 0.604532 0.841194 1.362594 -0.000000 1.620872</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>4.268901</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_REF_MARKER_14">
+        <pose>0.000000 0.500000 0.400000 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_014">
+        <pose>0.000000 0.500000 0.400000 -0.000000 -0.000000 0.000000</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000002">
+        <pose>-4.131956 -0.293878 3.898843 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000007">
+        <pose>-3.889671 -0.020656 2.185439 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000007">
+        <pose>-4.010814 -0.157267 3.042141 3.002848 -0.158130 1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>1.751887</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000012">
+        <pose>-3.178329 -0.018843 2.192017 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000012">
+        <pose>-3.534000 -0.019749 2.188728 1.561550 -0.000000 1.573345</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.711375</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000017">
+        <pose>-2.916447 -0.021503 2.200491 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000017">
+        <pose>-3.047388 -0.020173 2.196254 1.538450 0.000000 1.560639</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.262032</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000022">
+        <pose>-2.653877 -0.018304 2.197596 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000022">
+        <pose>-2.785162 -0.019904 2.199044 1.581819 -0.000000 1.582977</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.262606</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000033">
+        <pose>-2.088682 -0.019480 2.210210 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000033">
+        <pose>-2.371279 -0.018892 2.203903 1.548483 0.000000 1.568716</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.565337</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000039">
+        <pose>-1.831660 0.144062 2.161245 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000039">
+        <pose>-1.960171 0.062291 2.185727 1.730162 -0.000000 2.137479</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.308551</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000044">
+        <pose>-1.565951 0.163743 2.168593 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000044">
+        <pose>-1.698805 0.153902 2.164919 1.543226 -0.000000 1.644729</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.266539</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000049">
+        <pose>-1.338392 0.215821 2.190944 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000049">
+        <pose>-1.452171 0.189782 2.179768 1.475340 -0.000000 1.795778</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.234509</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000059">
+        <pose>-0.799578 -0.008726 2.181896 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000059">
+        <pose>-1.068985 0.103547 2.186420 1.586296 0.000000 1.175940</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.583802</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000065">
+        <pose>-0.293289 -0.006799 2.264781 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000065">
+        <pose>-0.546433 -0.007763 2.223338 1.408525 -0.000000 1.574603</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.513032</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000070">
+        <pose>0.090374 -0.002069 2.234205 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000070">
+        <pose>-0.101457 -0.004434 2.249493 1.650317 -0.000000 1.583124</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.384909</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000075">
+        <pose>0.534875 0.002765 2.271087 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000075">
+        <pose>0.312625 0.000348 2.252646 1.488018 -0.000000 1.581672</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.446054</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000080">
+        <pose>0.578530 0.007404 2.256783 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000080">
+        <pose>0.556703 0.005085 2.263935 1.885757 -0.000000 1.676656</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.046172</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000085">
+        <pose>0.911411 0.015052 2.239649 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000085">
+        <pose>0.744971 0.011228 2.248216 1.622211 -0.000000 1.593766</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.333409</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000090">
+        <pose>1.720547 0.033490 2.262536 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000090">
+        <pose>1.315979 0.024271 2.251092 1.542525 -0.000000 1.593580</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.809670</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000095">
+        <pose>2.493792 0.013619 2.229823 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000095">
+        <pose>2.107170 0.023554 2.246179 1.613063 0.000000 1.545103</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.774192</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000100">
+        <pose>3.028657 0.000058 2.220151 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000100">
+        <pose>2.761224 0.006838 2.224987 1.588871 0.000000 1.545449</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.535124</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000105">
+        <pose>3.558658 -0.008423 2.217382 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000105">
+        <pose>3.293657 -0.004183 2.218767 1.576020 0.000000 1.554794</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.530076</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000110">
+        <pose>4.082012 -0.011495 2.214565 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000110">
+        <pose>3.820335 -0.009959 2.215974 1.576179 0.000000 1.564927</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.523371</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000115">
+        <pose>4.614261 -0.023944 2.219626 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000115">
+        <pose>4.348137 -0.017719 2.217095 1.561291 0.000000 1.547412</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.532418</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000120">
+        <pose>4.661443 -0.011079 2.218860 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000120">
+        <pose>4.637852 -0.017511 2.219243 1.586455 -0.000000 1.836992</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.048910</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000125">
+        <pose>4.689300 -0.024047 2.249338 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000125">
+        <pose>4.675371 -0.017563 2.234099 0.789472 0.000000 1.135102</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.043279</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000130">
+        <pose>4.711549 -0.025762 2.230547 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000130">
+        <pose>4.700424 -0.024905 2.239942 2.270662 0.000000 1.493846</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.029174</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000135">
+        <pose>4.712631 -0.025190 2.229841 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000135">
+        <pose>4.712090 -0.025476 2.230194 2.094001 -0.000000 2.057352</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.001412</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000141">
+        <pose>4.264175 -0.007165 2.239951 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000141">
+        <pose>4.488403 -0.016178 2.234896 1.548274 -0.000000 -1.610968</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.448932</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000148">
+        <pose>3.258978 -0.027145 2.277936 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000148">
+        <pose>3.761576 -0.017155 2.258944 1.533033 -0.000000 -1.550922</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>1.006112</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000153">
+        <pose>2.533026 0.026066 2.210510 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000153">
+        <pose>2.896002 -0.000540 2.244223 1.663163 -0.000000 -1.643963</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.731016</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000158">
+        <pose>1.856120 0.007560 2.237122 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000158">
+        <pose>2.194573 0.016813 2.223816 1.531518 -0.000000 -1.543464</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.677681</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000163">
+        <pose>1.300052 0.201081 2.523928 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000163">
+        <pose>1.578086 0.104320 2.380525 1.117507 -0.000000 -1.905703</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.654920</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000171">
+        <pose>0.282257 0.264381 2.104200 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000171">
+        <pose>0.791154 0.232731 2.314064 1.961258 -0.000000 -1.632909</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>1.102763</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_MOVING_moving_frame_000180">
+        <pose>-1.074650 0.181197 2.169938 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.700 0.200 1.000 1.000</ambient>
+            <diffuse>0.700 0.200 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="TRAJ_moving_frame_000180">
+        <pose>-0.396196 0.222789 2.137069 1.522478 -0.000000 -1.509569</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>1.361042</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.750 0.200 1.000 0.800</ambient>
+            <diffuse>0.750 0.200 1.000 0.800</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0000_cam_edge_0_to_marker_003">
+        <pose>0.366549 -0.024039 1.662687 2.167014 -0.000000 -2.928455</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.083721</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0001_cam_edge_0_to_marker_007">
+        <pose>1.318350 -0.155069 1.966876 1.976402 -0.000000 2.593066</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.846559</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0002_cam_edge_0_to_marker_004">
+        <pose>0.669982 -0.026312 2.281374 1.766697 -0.000000 3.114638</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.538853</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0003_cam_edge_1_to_marker_014">
+        <pose>-2.041234 0.735717 1.456646 2.045766 0.000000 1.455828</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>4.621125</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0004_cam_edge_1_to_marker_002">
+        <pose>-2.609989 0.213889 1.810085 1.972382 0.000000 1.095640</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.598092</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0005_cam_edge_1_to_marker_001">
+        <pose>-3.196077 0.212391 2.073738 1.931022 0.000000 0.862638</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.494027</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0006_cam_edge_1_to_marker_005">
+        <pose>-1.068897 -0.011120 1.826785 1.784086 0.000000 1.255621</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.486389</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0007_cam_edge_1_to_marker_007">
+        <pose>-1.041095 0.966151 1.959288 1.750976 0.000000 1.569059</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.182844</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0008_cam_edge_1_to_marker_006">
+        <pose>-1.039642 0.745076 1.960748 1.749944 0.000000 1.496542</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.201719</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0009_cam_edge_1_to_marker_008">
+        <pose>-0.690607 0.223916 1.989525 1.720469 0.000000 1.353878</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>7.025051</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0010_cam_edge_3_to_marker_001">
+        <pose>-2.805925 -0.816165 2.041358 2.195505 -0.000000 2.068336</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.392382</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0011_cam_edge_3_to_marker_002">
+        <pose>-2.219838 -0.814667 1.777705 2.112127 -0.000000 1.816148</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.603757</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0012_cam_edge_3_to_marker_014">
+        <pose>-1.651082 -0.292839 1.424267 2.080696 -0.000000 2.018474</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>4.197041</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0013_cam_edge_3_to_marker_003">
+        <pose>-1.602745 0.068625 1.622720 1.953007 -0.000000 2.167449</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>4.428278</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0014_cam_edge_3_to_marker_005">
+        <pose>-0.678746 -1.039677 1.794405 1.815119 -0.000000 1.588330</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>5.408262</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0015_cam_edge_3_to_marker_006">
+        <pose>-0.649491 -0.283480 1.928368 1.756333 -0.000000 1.864464</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>5.639422</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0016_cam_edge_3_to_marker_007">
+        <pose>-0.650944 -0.062405 1.926909 1.752327 -0.000000 1.939144</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>5.778633</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0017_cam_edge_3_to_marker_008">
+        <pose>-0.300455 -0.804640 1.957145 1.732366 -0.000000 1.664150</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.109239</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0018_cam_edge_5_to_marker_013">
+        <pose>5.085562 0.762425 1.931931 2.187793 -0.000000 -1.512486</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.245269</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0019_cam_edge_5_to_marker_011">
+        <pose>5.056092 0.395131 2.069063 2.031242 -0.000000 -1.151425</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.306352</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0020_cam_edge_5_to_marker_012">
+        <pose>5.069007 -0.100802 2.017745 1.978219 -0.000000 -0.793006</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.845359</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0021_cam_edge_5_to_marker_009">
+        <pose>4.562031 0.644238 2.003390 1.950681 -0.000000 -1.452030</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.117919</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0022_cam_edge_5_to_marker_010">
+        <pose>4.556180 -0.093974 2.013936 1.891908 -0.000000 -1.008424</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.596313</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0023_cam_edge_5_to_marker_000">
+        <pose>1.656553 0.683377 1.846282 1.738408 -0.000000 -1.540318</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>8.813745</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0024_moving_frame_000002_to_marker_005">
+        <pose>-1.093642 -0.643776 2.519560 1.994467 0.000000 1.456139</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.710054</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0025_moving_frame_000002_to_marker_007">
+        <pose>-1.065840 0.333495 2.652064 1.949903 -0.000000 1.772625</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.737692</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0026_moving_frame_000002_to_marker_006">
+        <pose>-1.064387 0.112420 2.653524 1.953412 -0.000000 1.702479</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.671097</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0027_moving_frame_000007_to_marker_014">
+        <pose>-1.944835 0.239672 1.292719 1.997770 -0.000000 1.703861</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>4.311428</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0028_moving_frame_000007_to_marker_002">
+        <pose>-2.513591 -0.282156 1.646158 1.938311 0.000000 1.383003</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.001867</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0029_moving_frame_000007_to_marker_001">
+        <pose>-3.099679 -0.283654 1.909811 1.890478 0.000000 1.249425</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.754111</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0030_moving_frame_000007_to_marker_005">
+        <pose>-0.972499 -0.507165 1.662858 1.745690 0.000000 1.405543</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.006555</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0031_moving_frame_000007_to_marker_007">
+        <pose>-0.944697 0.470106 1.795362 1.700714 -0.000000 1.735923</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>6.021919</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0032_moving_frame_000007_to_marker_006">
+        <pose>-0.943244 0.249031 1.796821 1.701394 -0.000000 1.662072</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>5.968312</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0033_moving_frame_000012_to_marker_014">
+        <pose>-1.589165 0.240579 1.296008 2.078584 -0.000000 1.732613</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.685417</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0034_moving_frame_000012_to_marker_001">
+        <pose>-2.744008 -0.282747 1.913100 2.072732 0.000000 1.024789</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.159440</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0035_moving_frame_000012_to_marker_002">
+        <pose>-2.157920 -0.281249 1.649447 2.046343 0.000000 1.319092</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.370209</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0036_moving_frame_000012_to_marker_005">
+        <pose>-0.616828 -0.506259 1.666147 1.769805 0.000000 1.382759</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>5.319925</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0037_moving_frame_000012_to_marker_006">
+        <pose>-0.587573 0.249937 1.800110 1.720140 -0.000000 1.674172</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>5.267960</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0038_moving_frame_000017_to_marker_002">
+        <pose>-2.026980 -0.282579 1.653684 2.103736 0.000000 1.285295</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.152498</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0039_moving_frame_000017_to_marker_001">
+        <pose>-2.613067 -0.284077 1.917337 2.185347 0.000000 0.857375</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>0.982163</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0040_moving_frame_000022_to_marker_001">
+        <pose>-2.481781 -0.282478 1.915890 2.300008 0.000000 0.577391</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>0.845608</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0041_moving_frame_000033_to_marker_001">
+        <pose>-2.199184 -0.283066 1.922197 2.360031 -0.000000 -0.396971</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>0.811517</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0042_moving_frame_000039_to_marker_000">
+        <pose>-2.259102 0.347514 1.636168 2.407914 -0.000000 -2.015041</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.413939</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0043_moving_frame_000044_to_marker_000">
+        <pose>-2.126247 0.357355 1.639841 2.299145 -0.000000 -1.903504</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.588705</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0044_moving_frame_000049_to_marker_000">
+        <pose>-2.012468 0.383394 1.651017 2.231560 -0.000000 -1.814454</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.759523</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0045_moving_frame_000059_to_marker_003">
+        <pose>-0.351451 0.607100 1.489401 2.308695 -0.000000 2.512528</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.058746</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0046_moving_frame_000065_to_marker_004">
+        <pose>0.205126 0.605791 2.149531 1.715709 -0.000000 2.458603</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.596203</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0047_moving_frame_000070_to_marker_007">
+        <pose>1.045325 0.479399 1.819745 1.940517 -0.000000 2.037783</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.293923</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0048_moving_frame_000070_to_marker_004">
+        <pose>0.396957 0.608156 2.134243 1.716141 -0.000000 2.676019</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.380377</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0049_moving_frame_000075_to_marker_006">
+        <pose>1.269029 0.260741 1.839645 2.077040 -0.000000 1.908711</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.779523</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0050_moving_frame_000075_to_marker_007">
+        <pose>1.267576 0.481817 1.838186 2.030045 -0.000000 2.149849</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.953196</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0051_moving_frame_000080_to_marker_005">
+        <pose>1.261602 -0.493135 1.698530 2.153629 0.000000 0.938409</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.028569</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0052_moving_frame_000080_to_marker_007">
+        <pose>1.289403 0.484136 1.831034 2.032372 -0.000000 2.161537</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.911938</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0053_moving_frame_000080_to_marker_006">
+        <pose>1.290857 0.263061 1.832494 2.081761 -0.000000 1.915381</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.735271</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0054_moving_frame_000085_to_marker_005">
+        <pose>1.428042 -0.489312 1.689963 2.221511 0.000000 0.797413</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.814877</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0055_moving_frame_000085_to_marker_008">
+        <pose>1.806332 -0.254276 1.852703 1.963344 0.000000 1.278468</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.023016</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0056_moving_frame_000090_to_marker_008">
+        <pose>2.210900 -0.245056 1.864147 2.185826 0.000000 1.054199</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.380940</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0057_moving_frame_000090_to_marker_011">
+        <pose>2.916541 0.003983 1.909594 1.857672 0.000000 1.546130</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.494667</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0058_moving_frame_000095_to_marker_011">
+        <pose>3.303164 -0.005953 1.893237 1.964796 0.000000 1.546620</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.753574</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0059_moving_frame_000095_to_marker_012">
+        <pose>3.316079 -0.501886 1.841920 1.951033 0.000000 1.010821</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.090329</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0060_moving_frame_000100_to_marker_012">
+        <pose>3.583511 -0.508666 1.837084 2.041520 0.000000 0.828744</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.689265</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0061_moving_frame_000105_to_marker_010">
+        <pose>3.335684 -0.506079 1.831890 2.186141 -0.000000 -0.421229</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.335638</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0062_moving_frame_000105_to_marker_012">
+        <pose>3.848512 -0.512906 1.835700 2.151386 0.000000 0.521501</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.391690</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0063_moving_frame_000110_to_marker_012">
+        <pose>4.110189 -0.514442 1.834291 2.217431 0.000000 0.055965</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.262312</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0064_moving_frame_000110_to_marker_010">
+        <pose>3.597362 -0.507615 1.830482 2.076543 -0.000000 -0.773705</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.585612</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0065_moving_frame_000115_to_marker_012">
+        <pose>4.376313 -0.520667 1.836821 2.178178 -0.000000 -0.446735</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.341480</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0066_moving_frame_000115_to_marker_010">
+        <pose>3.863486 -0.513839 1.833012 1.977959 -0.000000 -0.992652</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.952569</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0067_moving_frame_000120_to_marker_010">
+        <pose>3.887077 -0.507407 1.832629 1.968356 -0.000000 -1.000811</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.995153</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0068_moving_frame_000120_to_marker_000">
+        <pose>0.987449 0.269944 1.664975 1.719998 -0.000000 -1.647137</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>7.452245</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0069_moving_frame_000125_to_marker_009">
+        <pose>3.906856 0.224322 1.837322 2.035960 -0.000000 -1.878163</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.837021</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0070_moving_frame_000130_to_marker_011">
+        <pose>4.412042 -0.025643 1.893599 2.414954 -0.000000 -1.571194</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>0.901638</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0071_moving_frame_000130_to_marker_013">
+        <pose>4.441512 0.341650 1.756468 2.375659 -0.000000 -2.507781</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.315543</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0072_moving_frame_000130_to_marker_009">
+        <pose>3.917981 0.223464 1.827927 2.021598 -0.000000 -1.875100</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.848207</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0073_moving_frame_000135_to_marker_013">
+        <pose>4.442053 0.341936 1.756115 2.375188 -0.000000 -2.506454</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.315160</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0074_moving_frame_000135_to_marker_011">
+        <pose>4.412583 -0.025357 1.893247 2.413538 -0.000000 -1.570240</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>0.901830</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0075_moving_frame_000135_to_marker_009">
+        <pose>3.918521 0.223750 1.827574 2.021052 -0.000000 -1.874577</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.848675</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0076_moving_frame_000141_to_marker_009">
+        <pose>3.694293 0.232762 1.832629 2.153297 -0.000000 -1.969286</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.480866</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0077_moving_frame_000148_to_marker_014">
+        <pose>1.629489 0.236428 1.338968 2.087990 -0.000000 -1.731159</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.798087</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0078_moving_frame_000153_to_marker_014">
+        <pose>1.266513 0.263033 1.305255 2.183245 -0.000000 -1.755760</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.149410</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0079_moving_frame_000153_to_marker_003">
+        <pose>1.314851 0.624497 1.503708 2.050920 -0.000000 -2.027421</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.060483</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0080_moving_frame_000158_to_marker_014">
+        <pose>0.928060 0.253780 1.318561 2.334052 -0.000000 -1.830128</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.657574</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0081_moving_frame_000158_to_marker_003">
+        <pose>0.976398 0.615244 1.517014 2.163515 -0.000000 -2.175299</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>2.578175</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0082_moving_frame_000163_to_marker_000">
+        <pose>-0.693246 0.376024 1.817509 1.910177 -0.000000 -1.658338</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>4.243993</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0083_moving_frame_000171_to_marker_000">
+        <pose>-1.202143 0.407674 1.607645 1.892218 -0.000000 -1.667031</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>3.143593</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="OBS_EDGE_0084_moving_frame_000180_to_marker_000">
+        <pose>-1.880597 0.366082 1.640514 2.140298 -0.000000 -1.796295</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00450</radius>
+            <length>1.963693</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.450 0.050 0.250</ambient>
+            <diffuse>1.000 0.450 0.050 0.250</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_CAMERA_cam_edge_0">
+        <pose>0.587808 -1.234555 2.487328 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_CAMERA_cam_edge_0_7.3cm">
+        <pose>0.612116 -1.252781 2.507898 0.975644 0.000000 0.927436</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01400</radius>
+            <length>0.073379</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_CAMERA_cam_edge_1">
+        <pose>-3.974167 0.975086 2.531543 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_CAMERA_cam_edge_1_11.0cm">
+        <pose>-4.028317 0.973261 2.522417 1.737654 -0.000000 -1.537089</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01400</radius>
+            <length>0.109888</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_CAMERA_cam_edge_3">
+        <pose>-3.227356 -1.063214 2.454211 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_CAMERA_cam_edge_3_7.8cm">
+        <pose>-3.264760 -1.074446 2.451372 1.643361 -0.000000 -1.279077</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01400</radius>
+            <length>0.078315</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_CAMERA_cam_edge_5">
+        <pose>5.858859 0.848420 2.538762 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_CAMERA_cam_edge_5_15.1cm">
+        <pose>5.929254 0.832103 2.560118 1.283438 0.000000 1.343033</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01400</radius>
+            <length>0.150702</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_000">
+        <pose>-2.550000 0.480000 1.180000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_000_16.9cm">
+        <pose>-2.618272 0.515483 1.145545 1.991822 -0.000000 -2.050108</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.168609</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_001">
+        <pose>-2.250000 -0.525000 1.630000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_001_6.4cm">
+        <pose>-2.279843 -0.535826 1.632092 1.505001 -0.000000 -1.222797</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.063630</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_002">
+        <pose>-1.100000 -0.525000 1.100000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_002_4.2cm">
+        <pose>-1.118756 -0.534328 1.103439 1.408096 -0.000000 -1.109277</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.042456</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_003">
+        <pose>0.100000 1.210000 0.800000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_003_1.4cm">
+        <pose>0.098338 1.216464 0.798453 1.798560 -0.000000 -2.889862</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.013702</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_004">
+        <pose>0.700000 1.210000 2.000000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_004_3.5cm">
+        <pose>0.701770 1.214191 2.017140 -0.099979 -0.239786 -1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.035467</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_005">
+        <pose>1.900000 -0.980000 1.100000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_005_6.2cm">
+        <pose>1.922336 -0.986837 1.120139 0.859311 0.000000 1.273741</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.061684</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_006">
+        <pose>1.970000 0.500000 1.370000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_006_5.4cm">
+        <pose>1.986592 0.509359 1.389102 0.784015 -0.000000 2.084372</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.053954</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_007">
+        <pose>1.970000 0.935000 1.370000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_007_5.3cm">
+        <pose>1.985138 0.947934 1.387642 0.845740 -0.000000 2.277838</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.053205</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_008">
+        <pose>2.650000 -0.525000 1.410000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_008_7.6cm">
+        <pose>2.675627 -0.524301 1.437879 0.743525 -0.000000 1.598053</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.075748</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_009">
+        <pose>3.020000 0.480000 1.420000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_009_10.5cm">
+        <pose>3.072206 0.476345 1.422653 1.520140 0.000000 1.500901</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.104802</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_010">
+        <pose>3.020000 -0.980000 1.420000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_010_9.9cm">
+        <pose>3.066355 -0.991867 1.433199 1.301651 0.000000 1.320172</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.099275</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_011">
+        <pose>4.000000 0.000000 1.530000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_011_11.8cm">
+        <pose>4.056268 -0.012762 1.543326 1.343812 0.000000 1.347759</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.118432</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_012">
+        <pose>4.040000 -0.980000 1.420000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_012_11.1cm">
+        <pose>4.089183 -0.998695 1.437009 1.258140 0.000000 1.207555</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.110594</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_013">
+        <pose>4.050000 0.730000 1.270000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+      <visual name="ERROR_VECTOR_MARKER_013_12.4cm">
+        <pose>4.110737 0.719532 1.276194 1.470633 0.000000 1.400118</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00800</radius>
+            <length>0.123887</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>1.000 0.050 0.050 0.900</ambient>
+            <diffuse>1.000 0.050 0.050 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_GT_MARKER_014">
+        <pose>0.000000 0.500000 0.400000 0 0 0</pose>
+        <geometry><sphere><radius>0.0450</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.050 0.050 0.750</ambient>
+            <diffuse>0.050 0.050 0.050 0.750</diffuse>
+          </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

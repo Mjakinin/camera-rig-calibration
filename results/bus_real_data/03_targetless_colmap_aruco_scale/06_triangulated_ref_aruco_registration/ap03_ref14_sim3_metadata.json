@@ -40,18 +40,15 @@
     10,
     11,
     12,
-    13,
-    14
+    13
   ],
-  "corner_observation_count": 1112,
-  "unique_anchor_images": 157,
-  "triangulated_corner_count": 60,
-  "used_corner_count": 60,
+  "corner_observation_count": 1056,
+  "unique_anchor_images": 153,
+  "triangulated_corner_count": 56,
+  "used_corner_count": 48,
   "used_marker_ids": [
-    0,
     1,
     2,
-    3,
     4,
     5,
     6,
@@ -61,35 +58,34 @@
     10,
     11,
     12,
-    13,
-    14
+    13
   ],
-  "scale_colmap_to_metric": 0.7706228599066489,
+  "scale_colmap_to_metric": 0.7333749130447448,
   "R_ref_col": [
     [
-      0.2620546634938957,
-      0.47408756603630076,
-      -0.8405761911158783
+      0.31097240181693375,
+      0.013690292807000765,
+      -0.9503203360925552
     ],
     [
-      0.9620047569137231,
-      -0.19750414407609643,
-      0.18851779955255515
+      0.9477362414507091,
+      0.07060763745214381,
+      0.31114398302764806
     ],
     [
-      -0.07664333641269672,
-      -0.8580402629262481,
-      -0.5078313757350812
+      0.07135952598700745,
+      -0.997410215215528,
+      0.008982239955846329
     ]
   ],
   "t_ref_col": [
-    0.332042967423708,
-    -0.5051818362933629,
-    1.8220464629185487
+    0.9054094788991367,
+    -0.5968972128768021,
+    1.817148231822749
   ],
-  "corner_fit_mean_error_cm": 0.7133080464380722,
-  "corner_fit_median_error_cm": 0.6901377471804669,
-  "corner_fit_max_error_cm": 1.4525898221958107,
-  "corner_triangulation_mean_reproj_px": 0.5978871169621554,
-  "corner_triangulation_median_reproj_px": 0.5055852024532914
+  "corner_fit_mean_error_cm": 5.298360871013804,
+  "corner_fit_median_error_cm": 1.4124262647965913,
+  "corner_fit_max_error_cm": 31.821018365254506,
+  "corner_triangulation_mean_reproj_px": 0.8608576033418142,
+  "corner_triangulation_median_reproj_px": 0.614465768702201
 }

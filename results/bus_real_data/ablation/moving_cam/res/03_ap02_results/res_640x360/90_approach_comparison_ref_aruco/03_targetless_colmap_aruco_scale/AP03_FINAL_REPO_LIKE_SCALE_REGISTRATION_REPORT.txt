@@ -1,0 +1,50 @@
+AP03 FINAL REPO-LIKE SCALE REGISTRATION REPORT
+=======================================================
+
+Approach:
+- AP03: Targetless COLMAP / SfM + ArUco-based metric scale registration.
+- This final pipeline is split into explicit stages:
+  06a detection, 06b triangulation/Sim3, 06c application, 06d GT eval, 06e report.
+- The method follows the aruco-estimator-style idea:
+  triangulate Ref-ArUco marker corners in COLMAP coordinates,
+  then map them to ideal metric marker corners with known side length.
+
+Input COLMAP model:
+- model: 2
+- registered images: 107
+- registered static cameras: 3 / 4
+- registered moving frames: 104
+- sparse 3D points: 8649
+
+Ref-ArUco scale registration:
+- reference marker id: 14
+- marker length: 0.170 m
+- min marker area used: 100.0 px^2
+- Ref14 corner observations: 8
+- Ref14 anchor images: 2
+- estimated COLMAP-to-meter scale: 0.502418276
+
+Triangulated Ref14 corner quality:
+- corner fit mean error: 0.257639 cm
+- corner fit median error: 0.260848 cm
+- mean corner reprojection error: 0.494058 px
+- median corner reprojection error: 0.470702 px
+
+corner | obs | inliers | mean_repr | med_repr | fit_cm | registered xyz [m]          | ideal xyz [m]              
+-------+-----+---------+-----------+----------+--------+-----------------------------+----------------------------
+0      | 2   | 2       | 0.120     | 0.120    | 0.1731 | (-0.0853, +0.0861, +0.0013) | (-0.0850, +0.0850, +0.0000)
+1      | 2   | 2       | 0.914     | 0.914    | 0.1941 | (+0.0846, +0.0864, -0.0013) | (+0.0850, +0.0850, +0.0000)
+2      | 2   | 2       | 0.484     | 0.484    | 0.3358 | (+0.0827, -0.0871, +0.0013) | (+0.0850, -0.0850, +0.0000)
+3      | 2   | 2       | 0.458     | 0.458    | 0.3276 | (-0.0820, -0.0854, -0.0013) | (-0.0850, -0.0850, +0.0000)
+
+Static camera GT evaluation in Ref-ArUco frame:
+- mean translation error: 10.387010 cm
+- median translation error: 11.122837 cm
+- mean rotation error: 0.819698 deg
+- median rotation error: 0.818972 deg
+
+camera     | t_err_cm | r_err_deg | dX      | dY     | dZ    | estimated xyz [m]        | GT xyz [m]              
+-----------+----------+-----------+---------+--------+-------+--------------------------+-------------------------
+cam_edge_0 | 7.526    | 0.819     | 1.656   | -1.577 | 7.170 | (+0.604, -1.750, +2.159) | (+0.588, -1.735, +2.087)
+cam_edge_1 | 12.512   | 0.831     | -11.838 | 1.309  | 3.836 | (-4.093, +0.488, +2.170) | (-3.974, +0.475, +2.132)
+cam_edge_3 | 11.123   | 0.809     | -8.516  | -4.289 | 5.726 | (-3.313, -1.606, +2.111) | (-3.227, -1.563, +2.054)

@@ -23,6 +23,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 PAIRS = {
     "cam3_to_cam0": "cam_edge_0",
+    "cam3_to_cam1": "cam_edge_1",
     "cam3_to_cam5": "cam_edge_5",
 }
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 AP3_ROOT="results/bus_real_data/03_targetless_colmap_aruco_scale"
 DATASET_ROOT="$AP3_ROOT/01_colmap_dataset"

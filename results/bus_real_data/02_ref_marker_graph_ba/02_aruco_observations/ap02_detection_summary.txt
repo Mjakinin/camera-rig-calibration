@@ -6,9 +6,9 @@ Dictionary: DICT_4X4_50
 Marker length [m]: 0.17
 
 Static observations: 24
-Moving observations: 303
-Total observations: 327
-PnP success: 327 / 327
+Moving observations: 286
+Total observations: 310
+PnP success: 310 / 310
 
 Output files:
 - results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_static_aruco_observations.csv

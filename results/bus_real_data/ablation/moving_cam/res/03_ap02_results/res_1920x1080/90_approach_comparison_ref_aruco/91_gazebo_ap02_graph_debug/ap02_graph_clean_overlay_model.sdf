@@ -1,0 +1,1033 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <model name="ap02_graph_clean_overlay">
+    <static>true</static>
+    <link name="ap02_graph_overlay_link">
+
+      <visual name="NODE_REF_ARUCO_14_ORIGIN">
+        <pose>0.000000 0.500000 0.400000 0 0 0</pose>
+        <geometry><sphere><radius>0.1600</radius></sphere></geometry>
+        
+          <material>
+            <ambient>1.000 0.850 0.050 1.000</ambient>
+            <diffuse>1.000 0.850 0.050 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="REF_ARUCO_14_PLANE">
+        <pose>0.000000 0.500000 0.400000 -0.000000 -0.000000 0.000000</pose>
+        <geometry><box><size>0.2000 0.2000 0.0180</size></box></geometry>
+        
+          <material>
+            <ambient>1.000 0.850 0.050 1.000</ambient>
+            <diffuse>1.000 0.850 0.050 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_0_dist_2.84m">
+        <pose>0.636423 -1.271006 2.528467 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_0">
+        <pose>0.534993 -1.039664 2.496244 1.697678 -0.000000 -2.728393</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_1">
+        <pose>0.737383 -1.038636 2.502841 1.671603 -0.000000 2.731720</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_2">
+        <pose>0.741416 -1.087356 2.386711 2.161175 -0.000000 2.622241</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_ray_3">
+        <pose>0.539026 -1.088384 2.380114 2.192697 -0.000000 -2.651640</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_0">
+        <pose>0.635954 -0.807294 2.470617 1.538214 -0.000000 1.575875</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_1">
+        <pose>0.842376 -0.854986 2.361084 2.743141 0.000000 0.082583</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_2">
+        <pose>0.644019 -0.904734 2.238358 1.603379 -0.000000 -1.565717</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_0_frustum_rect_3">
+        <pose>0.437596 -0.857042 2.347891 0.398452 -0.000000 -3.059010</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_0_2.84m">
+        <pose>0.318212 -0.385503 1.464234 0.723989 0.000000 0.344986</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>2.841104</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_1_dist_4.62m">
+        <pose>-4.082467 0.971435 2.513292 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_0">
+        <pose>-3.827847 0.967963 2.514789 1.564919 0.000000 1.557163</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_1">
+        <pose>-3.910875 0.783284 2.512300 1.574691 0.000000 0.739402</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_2">
+        <pose>-3.941130 0.798521 2.390939 2.071996 0.000000 0.685253</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_ray_3">
+        <pose>-3.858102 0.983200 2.393428 2.060887 -0.000000 1.623188</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_0">
+        <pose>-3.656255 0.779812 2.513797 1.583085 -0.000000 -0.422503</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_1">
+        <pose>-3.769538 0.610370 2.389948 -2.899106 -0.124899 1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_2">
+        <pose>-3.716765 0.810287 2.271075 1.558507 -0.000000 2.719090</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_1_frustum_rect_3">
+        <pose>-3.603482 0.979729 2.394925 -0.242486 0.124899 -1.570796</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_1_4.62m">
+        <pose>-2.041234 0.735717 1.456646 1.095827 -0.000000 -1.685765</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>4.621125</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_3_dist_4.20m">
+        <pose>-3.302164 -1.085678 2.448533 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_0">
+        <pose>-3.151890 -0.880405 2.437292 1.614952 -0.000000 2.509666</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_1">
+        <pose>-3.049820 -1.055246 2.432984 1.631896 -0.000000 1.690813</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_2">
+        <pose>-3.086398 -1.073664 2.313825 2.128215 -0.000000 1.626421</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_ray_3">
+        <pose>-3.188469 -0.898823 2.318134 2.108398 -0.000000 2.594969</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_0">
+        <pose>-2.899546 -0.849974 2.421743 1.592075 0.000000 0.528415</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_1">
+        <pose>-2.834054 -1.043232 2.298276 2.810552 -0.000000 -1.104344</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_2">
+        <pose>-2.972703 -0.886809 2.183426 1.549517 -0.000000 -2.613178</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_3_frustum_rect_3">
+        <pose>-3.038195 -0.693550 2.306893 0.331041 -0.000000 2.037249</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_3_4.20m">
+        <pose>-1.651082 -0.292839 1.424267 1.060896 -0.000000 -1.123119</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>4.197041</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_CAMERA_cam_edge_5_dist_6.39m">
+        <pose>5.999649 0.815786 2.581473 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.350 1.000 1.000</ambient>
+            <diffuse>0.050 0.350 1.000 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_0">
+        <pose>5.824921 0.630680 2.574302 1.598963 -0.000000 -0.756564</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_1">
+        <pose>5.746156 0.816454 2.557257 1.666038 -0.000000 -1.573428</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_2">
+        <pose>5.788795 0.823674 2.438911 2.164991 -0.000000 -1.608184</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_ray_3">
+        <pose>5.867560 0.637900 2.455956 2.086223 -0.000000 -0.638712</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00600</radius>
+            <length>0.509296</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_0">
+        <pose>5.571428 0.631347 2.550085 1.655069 -0.000000 -2.740582</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_1">
+        <pose>5.535302 0.824341 2.414694 2.791246 -0.000000 1.738532</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_2">
+        <pose>5.656707 0.645787 2.313393 1.486524 0.000000 0.401011</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.405000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="CAMERA_cam_edge_5_frustum_rect_3">
+        <pose>5.692833 0.452794 2.448784 0.350347 -0.000000 -1.403061</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.00500</radius>
+            <length>0.252000</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.600 1.000 0.900</ambient>
+            <diffuse>0.050 0.600 1.000 0.900</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_CAMERA_cam_edge_5_6.39m">
+        <pose>2.999824 0.657893 1.490737 1.222501 -0.000000 1.623382</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01800</radius>
+            <length>6.391740</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.450 1.000 0.850</ambient>
+            <diffuse>0.050 0.450 1.000 0.850</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_000_dist_2.78m">
+        <pose>-2.686544 0.550967 1.111090 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_000">
+        <pose>-2.686544 0.550967 1.111090 1.157338 0.028839 1.628115</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_000_2.78m">
+        <pose>-1.343272 0.525483 0.755545 1.312089 -0.000000 -1.589765</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.779526</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_001_dist_2.82m">
+        <pose>-2.309686 -0.546652 1.634184 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_001">
+        <pose>-2.309686 -0.546652 1.634184 0.019809 -0.006635 -1.569025</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_001_2.82m">
+        <pose>-1.154843 -0.023326 1.017092 1.117838 -0.000000 -1.145320</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.820167</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_002_dist_1.70m">
+        <pose>-1.137512 -0.543656 1.106877 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_002">
+        <pose>-1.137512 -0.543656 1.106877 1.200185 -0.002657 -1.568200</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_002_1.70m">
+        <pose>-0.568756 -0.021828 0.753439 1.141394 -0.000000 -0.828402</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>1.697889</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_003_dist_0.83m">
+        <pose>0.096675 1.222927 0.796906 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_003">
+        <pose>0.096675 1.222927 0.796906 1.564337 -0.011484 0.011479</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_003_0.83m">
+        <pose>0.048338 0.861464 0.598453 1.072431 -0.000000 3.008654</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>0.830364</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_004_dist_1.92m">
+        <pose>0.703540 1.218381 2.034280 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_004">
+        <pose>0.703540 1.218381 2.034280 1.553199 -0.003064 0.009531</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_004_1.92m">
+        <pose>0.351770 0.859191 1.217140 0.551564 -0.000000 2.366631</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>1.918831</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_005_dist_2.56m">
+        <pose>1.944673 -0.993675 1.140277 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_005">
+        <pose>1.944673 -0.993675 1.140277 1.174429 -0.014905 -1.588312</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_005_2.56m">
+        <pose>0.972336 -0.246837 0.770139 1.277602 0.000000 0.915821</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.561411</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_006_dist_2.24m">
+        <pose>2.003183 0.518717 1.408204 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_006">
+        <pose>2.003183 0.518717 1.408204 1.143275 -0.009070 -1.561859</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_006_2.24m">
+        <pose>1.001592 0.509359 0.904102 1.104529 -0.000000 1.580140</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.242670</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_007_dist_2.29m">
+        <pose>2.000276 0.960868 1.405285 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_007">
+        <pose>2.000276 0.960868 1.405285 1.167762 0.000509 -1.551107</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_007_2.29m">
+        <pose>1.000138 0.730434 0.902642 1.115389 -0.000000 1.797247</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>2.285629</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_008_dist_3.08m">
+        <pose>2.701254 -0.523603 1.465757 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_008">
+        <pose>2.701254 -0.523603 1.465757 1.162816 -0.016392 -1.599769</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_008_3.08m">
+        <pose>1.350627 -0.011801 0.932879 1.217348 0.000000 1.208579</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>3.079021</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_009_dist_3.29m">
+        <pose>3.124412 0.472690 1.425307 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_009">
+        <pose>3.124412 0.472690 1.425307 1.154003 0.011206 1.550695</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_009_3.29m">
+        <pose>1.562206 0.486345 0.912653 1.253720 0.000000 1.562056</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>3.288457</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_010_dist_3.61m">
+        <pose>3.112711 -1.003735 1.446398 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_010">
+        <pose>3.112711 -1.003735 1.446398 1.163213 0.027898 1.564120</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_010_3.61m">
+        <pose>1.556355 -0.251867 0.923199 1.276866 0.000000 1.120764</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>3.611805</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_011_dist_4.30m">
+        <pose>4.112536 -0.025524 1.556652 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_011">
+        <pose>4.112536 -0.025524 1.556652 0.002105 0.013400 1.556198</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_011_4.30m">
+        <pose>2.056268 0.237238 0.978326 1.298732 0.000000 1.443699</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>4.304297</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_012_dist_4.53m">
+        <pose>4.138366 -1.017390 1.454017 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_012">
+        <pose>4.138366 -1.017390 1.454017 1.190349 0.007951 3.125674</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_012_4.53m">
+        <pose>2.069183 -0.258695 0.927009 1.336078 0.000000 1.219354</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>4.532052</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_MARKER_013_dist_4.27m">
+        <pose>4.171475 0.709063 1.282388 0 0 0</pose>
+        <geometry><sphere><radius>0.0750</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_013">
+        <pose>4.171475 0.709063 1.282388 0.006116 0.004876 1.557526</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="EDGE_REF14_TO_MARKER_013_4.27m">
+        <pose>2.085737 0.604532 0.841194 1.362594 -0.000000 1.620872</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.01000</radius>
+            <length>4.268901</length>
+          </cylinder>
+        </geometry>
+        
+          <material>
+            <ambient>0.050 0.800 0.200 0.550</ambient>
+            <diffuse>0.050 0.800 0.200 0.550</diffuse>
+          </material>
+      </visual>
+      <visual name="NODE_EST_REF_MARKER_14">
+        <pose>0.000000 0.500000 0.400000 0 0 0</pose>
+        <geometry><sphere><radius>0.1200</radius></sphere></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+      <visual name="PLANE_EST_MARKER_014">
+        <pose>0.000000 0.500000 0.400000 -0.000000 -0.000000 0.000000</pose>
+        <geometry><box><size>0.1700 0.1700 0.0120</size></box></geometry>
+        
+          <material>
+            <ambient>0.050 0.850 0.200 1.000</ambient>
+            <diffuse>0.050 0.850 0.200 1.000</diffuse>
+          </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

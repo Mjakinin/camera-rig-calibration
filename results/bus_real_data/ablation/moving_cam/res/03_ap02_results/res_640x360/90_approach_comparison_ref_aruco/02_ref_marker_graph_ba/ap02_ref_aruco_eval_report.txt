@@ -1,0 +1,50 @@
+AP02 Ref-ArUco Evaluation vs Ground Truth
+=========================================
+
+Reference frame:
+- aruco marker 14 / aruco_ref_floor_14
+- all estimated and GT poses are expressed in this reference-marker coordinate frame
+
+Camera pose errors:
+- count: 4
+- mean translation error [cm]: 28.983653
+- median translation error [cm]: 11.879315
+- mean rotation error [deg]: 2.961507
+- median rotation error [deg]: 1.958665
+
+Per-camera:
+- cam_edge_0: 9.325 cm, 1.843 deg | est=(+0.583, -1.738, +2.180) m | gt=(+0.588, -1.735, +2.087) m
+- cam_edge_1: 14.434 cm, 1.884 deg | est=(-4.111, +0.500, +2.092) m | gt=(-3.974, +0.475, +2.132) m
+- cam_edge_3: 7.674 cm, 2.034 deg | est=(-3.299, -1.578, +2.032) m | gt=(-3.227, -1.563, +2.054) m
+- cam_edge_5: 84.502 cm, 6.085 deg | est=(+6.072, -0.454, +1.982) m | gt=(+5.859, +0.348, +2.139) m
+
+Marker-map pose errors:
+- count: 15
+- mean translation error [cm]: 25.253138
+- median translation error [cm]: 6.549978
+- mean rotation error [deg]: 3.135981
+- median rotation error [deg]: 2.640332
+
+Per-marker:
+- marker_000: 6.287 cm, 3.751 deg | est=(-2.599, -0.032, +0.742) m | gt=(-2.550, -0.020, +0.780) m
+- marker_001: 6.550 cm, 1.529 deg | est=(-2.312, -1.045, +1.227) m | gt=(-2.250, -1.025, +1.230) m
+- marker_002: 3.657 cm, 2.640 deg | est=(-1.132, -1.042, +0.701) m | gt=(-1.100, -1.025, +0.700) m
+- marker_003: 2.048 cm, 1.761 deg | est=(+0.081, +0.716, +0.396) m | gt=(+0.100, +0.710, +0.400) m
+- marker_004: 5.062 cm, 3.923 deg | est=(+0.679, +0.744, +1.632) m | gt=(+0.700, +0.710, +1.600) m
+- marker_005: 12.055 cm, 1.418 deg | est=(+2.008, -1.504, +0.748) m | gt=(+1.900, -1.480, +0.700) m
+- marker_006: 6.341 cm, 2.610 deg | est=(+2.005, +0.027, +1.016) m | gt=(+1.970, -0.000, +0.970) m
+- marker_007: 5.445 cm, 1.296 deg | est=(+1.983, +0.467, +1.012) m | gt=(+1.970, +0.435, +0.970) m
+- marker_008: 13.237 cm, 2.334 deg | est=(+2.761, -1.024, +1.082) m | gt=(+2.650, -1.025, +1.010) m
+- marker_009: 57.526 cm, 4.218 deg | est=(+3.130, -0.570, +0.890) m | gt=(+3.020, -0.020, +1.020) m
+- marker_010: 58.469 cm, 5.103 deg | est=(+3.002, -2.054, +0.911) m | gt=(+3.020, -1.480, +1.020) m
+- marker_011: 66.679 cm, 5.574 deg | est=(+4.094, -1.147, +1.002) m | gt=(+4.000, -0.500, +1.130) m
+- marker_012: 67.649 cm, 5.626 deg | est=(+4.031, -2.145, +0.895) m | gt=(+4.040, -1.480, +1.020) m
+- marker_013: 67.791 cm, 5.257 deg | est=(+4.202, -0.414, +0.722) m | gt=(+4.050, +0.230, +0.870) m
+- aruco_ref_floor_14: 0.000 cm, 0.000 deg | est=(+0.000, +0.000, +0.000) m | gt=(+0.000, +0.000, +0.000) m
+
+Output files:
+- results/bus_real_data/90_approach_comparison_ref_aruco/02_ref_marker_graph_ba/ap02_static_cameras_ref_aruco_vs_gt.csv
+- results/bus_real_data/90_approach_comparison_ref_aruco/02_ref_marker_graph_ba/ap02_markers_ref_aruco_vs_gt.csv
+- results/bus_real_data/90_approach_comparison_ref_aruco/02_ref_marker_graph_ba/ap02_all_entities_ref_aruco_vs_gt.csv
+- results/bus_real_data/90_approach_comparison_ref_aruco/combined/approach_ref_aruco_summary.csv
+

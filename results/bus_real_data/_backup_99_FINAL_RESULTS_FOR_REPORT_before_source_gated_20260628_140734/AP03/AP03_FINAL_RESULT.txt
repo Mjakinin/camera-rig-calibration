@@ -1,0 +1,18 @@
+AP03 FINAL RESULT — SOURCE-GATED SINGLE/MULTI SPLIT
+===================================================
+
+Baseline input: 1280x720_baseline
+
+Method policy:
+- AP03-SINGLE-REF14: targetless COLMAP + single Ref14 metric registration; GT evaluation-only.
+- AP03-MULTI-ARUCO: targetless COLMAP + Multi-ArUco metric registration; GT evaluation-only.
+
+Results:
+- AP03-SINGLE-REF14: 5.756 cm / 0.436 deg, status=OK
+- AP03-MULTI-ARUCO: 1.287 cm / 0.162 deg, status=OK
+
+Per-camera source CSV files:
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_SINGLE_REF14_RESULT.csv
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_MULTI_ARUCO_RESULT.csv
+
+GT camera poses are not used for AP03 fitting; GT is used only for final error evaluation.

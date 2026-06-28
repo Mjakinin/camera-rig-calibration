@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 echo "=== AP02 Phase 1 legacy wrapper ==="
 echo "AP02 no longer performs approach-specific ArUco detection."

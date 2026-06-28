@@ -15,55 +15,54 @@ Important:
 
 COLMAP input:
 - model: 0
-- registered images: 208
+- registered images: 180
 - registered static cameras: 4 / 4
-- registered moving frames: 204
-- sparse 3D points: 9378
+- registered moving frames: 176
+- sparse 3D points: 7696
 
 Multi-ArUco registration:
 - requested marker ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-- detected marker ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-- corner observations: 1112
-- unique anchor images: 157
-- triangulated marker corners: 60
-- used marker corners after filtering: 60
-- used marker ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-- estimated COLMAP-to-meter scale: 0.770622860
-- corner fit mean error: 0.713308 cm
-- corner fit median error: 0.690138 cm
-- corner fit max error: 1.452590 cm
-- mean corner reprojection error: 0.597887 px
-- median corner reprojection error: 0.505585 px
+- detected marker ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+- corner observations: 1056
+- unique anchor images: 153
+- triangulated marker corners: 56
+- used marker corners after filtering: 48
+- used marker ids: [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+- estimated COLMAP-to-meter scale: 0.733374913
+- corner fit mean error: 5.298361 cm
+- corner fit median error: 1.412426 cm
+- corner fit max error: 31.821018 cm
+- mean corner reprojection error: 0.860858 px
+- median corner reprojection error: 0.614466 px
 
 Marker contribution:
-marker             | triangulated_corners | used_corners | mean_fit_cm | mean_repr_px
------------------- | -------------------- | ------------ | ----------- | ------------
-marker_000         | 4                    | 4            | 0.881       | 0.511       
-marker_001         | 4                    | 4            | 0.419       | 1.032       
-marker_002         | 4                    | 4            | 0.282       | 0.546       
-marker_003         | 4                    | 4            | 0.573       | 0.579       
-marker_004         | 4                    | 4            | 0.600       | 0.577       
-marker_005         | 4                    | 4            | 0.969       | 0.492       
-marker_006         | 4                    | 4            | 1.214       | 0.469       
-marker_007         | 4                    | 4            | 0.957       | 0.494       
-marker_008         | 4                    | 4            | 0.701       | 0.404       
-marker_009         | 4                    | 4            | 1.224       | 0.459       
-marker_010         | 4                    | 4            | 0.957       | 0.640       
-marker_011         | 4                    | 4            | 0.193       | 0.814       
-marker_012         | 4                    | 4            | 0.635       | 0.519       
-marker_013         | 4                    | 4            | 0.876       | 0.802       
-aruco_ref_floor_14 | 4                    | 4            | 0.220       | 0.629       
+marker     | triangulated_corners | used_corners | mean_fit_cm | mean_repr_px
+---------- | -------------------- | ------------ | ----------- | ------------
+marker_000 | 4                    | 0            | 29.458      | 1.525       
+marker_001 | 4                    | 4            | 1.386       | 0.996       
+marker_002 | 4                    | 4            | 1.080       | 0.530       
+marker_003 | 4                    | 0            | 29.355      | 1.243       
+marker_004 | 4                    | 4            | 1.435       | 0.692       
+marker_005 | 4                    | 4            | 1.728       | 0.545       
+marker_006 | 4                    | 4            | 1.291       | 0.537       
+marker_007 | 4                    | 4            | 1.208       | 0.523       
+marker_008 | 4                    | 4            | 1.317       | 0.401       
+marker_009 | 4                    | 4            | 1.815       | 0.557       
+marker_010 | 4                    | 4            | 0.549       | 0.666       
+marker_011 | 4                    | 4            | 1.148       | 1.379       
+marker_012 | 4                    | 4            | 0.573       | 0.596       
+marker_013 | 4                    | 4            | 1.834       | 1.861       
 
 Static camera results relative to Ref14:
 - count: 4
-- mean translation error: 1.287401 cm
-- median translation error: 0.762988 cm
-- mean rotation error: 0.162299 deg
-- median rotation error: 0.153365 deg
+- mean translation error: 6.140251 cm
+- median translation error: 5.552634 cm
+- mean rotation error: 0.611841 deg
+- median rotation error: 0.526413 deg
 
 camera     | t_err_cm | r_err_deg | dX_cm  | dY_cm  | dZ_cm  | estimated xyz [m]       | GT xyz [m]             
 ---------- | -------- | --------- | ------ | ------ | ------ | ----------------------- | -----------------------
-cam_edge_0 | 1.019    | 0.215     | -0.582 | -0.264 | 0.794  | (0.582, -1.737, 2.095)  | (0.588, -1.735, 2.087) 
-cam_edge_1 | 3.168    | 0.178     | -2.222 | 1.941  | 1.154  | (-3.996, 0.494, 2.143)  | (-3.974, 0.475, 2.132) 
-cam_edge_3 | 0.507    | 0.129     | 0.409  | -0.249 | 0.166  | (-3.223, -1.566, 2.056) | (-3.227, -1.563, 2.054)
-cam_edge_5 | 0.456    | 0.128     | -0.429 | -0.155 | -0.006 | (5.855, 0.347, 2.139)   | (5.859, 0.348, 2.139)  
+cam_edge_0 | 7.098    | 1.054     | -4.873 | -3.138 | 4.098  | (0.539, -1.766, 2.128)  | (0.588, -1.735, 2.087) 
+cam_edge_1 | 2.954    | 0.359     | 0.085  | 2.792  | 0.962  | (-3.973, 0.503, 2.141)  | (-3.974, 0.475, 2.132) 
+cam_edge_3 | 4.007    | 0.340     | 3.952  | 0.615  | -0.234 | (-3.188, -1.557, 2.052) | (-3.227, -1.563, 2.054)
+cam_edge_5 | 10.502   | 0.694     | 10.137 | 0.796  | 2.626  | (5.960, 0.356, 2.165)   | (5.859, 0.348, 2.139)  

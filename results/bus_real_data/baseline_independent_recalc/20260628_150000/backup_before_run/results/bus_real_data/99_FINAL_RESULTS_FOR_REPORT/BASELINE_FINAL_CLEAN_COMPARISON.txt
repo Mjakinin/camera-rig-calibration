@@ -1,0 +1,35 @@
+BASELINE FINAL CLEAN COMPARISON — SOURCE-GATED
+==============================================
+
+Scope:
+Camera-to-GT comparison for the validated 1280x720 baseline input. Translation error in cm. Rotation error in degrees.
+Translation error in cm. Rotation error in degrees.
+
+Final source policy:
+- relative cam3-local camera-map; evaluation-only SE(3) alignment to GT camera map; no scale; no absolute-world-pose claim
+- official/full-map GT-aligned SE(3) evaluation; no scale; static cameras + markers 0..13 aligned, marker14 held out
+- targetless COLMAP reconstruction followed by single Ref14 metric registration; GT camera poses evaluation-only
+- targetless COLMAP reconstruction followed by Multi-ArUco metric registration; GT camera poses evaluation-only
+- This baseline report is generated from the validated moving_cam/res 1280x720 source-gated final layer, not from legacy global pipeline reports.
+
+Final comparison table:
+
+resolution        | method            | status | mean_t_cm | mean_r_deg | cam0_t | cam0_r | cam1_t | cam1_r | cam3_t | cam3_r | cam5_t | cam5_r | note                                           
+------------------+-------------------+--------+-----------+------------+--------+--------+--------+--------+--------+--------+--------+--------+------------------------------------------------
+baseline_1280x720 | AP01              | OK     | 9.663     | 6.941      | 6.592  | 6.195  | 17.556 | 6.876  | 12.52  | 8.093  | 1.985  | 6.602  | relative camera-map SE(3) eval-only            
+baseline_1280x720 | AP02              | OK     | 18.155    | 2.908      | 22.273 | 4.126  | 20.305 | 2.375  | 10.544 | 2.128  | 19.498 | 3.005  | official full-map SE(3)                        
+baseline_1280x720 | AP03-SINGLE-REF14 | OK     | 5.756     | 0.436      | 3.981  | 0.458  | 7.537  | 0.409  | 4.464  | 0.436  | 7.041  | 0.443  | baseline final Single-Ref14 metric registration
+baseline_1280x720 | AP03-MULTI-ARUCO  | OK     | 1.287     | 0.162      | 1.019  | 0.215  | 3.168  | 0.178  | 0.507  | 0.129  | 0.456  | 0.128  | validated baseline final Multi-ArUco           
+
+Compact interpretation:
+- AP01 is a relative camera-map result after evaluation-only SE(3) alignment; it is not an absolute world-pose estimate.
+- AP02 uses official/full-map SE(3) evaluation with marker14 held out from alignment.
+- AP03 is split into Single-Ref14 and Multi-ArUco metric registration.
+- AP03-MULTI-ARUCO is the robust AP03 baseline result.
+
+Reusable finalization workflow:
+1. Run or snapshot method outputs.
+2. Apply source gating and final evaluator policy.
+3. Write 99_FINAL_RESULTS_FOR_REPORT only from accepted final rows.
+4. Do not treat legacy intermediate reports as final metrics.
+

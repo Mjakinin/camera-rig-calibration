@@ -1,0 +1,26 @@
+AP01 FINAL RESULT — Marker Direct Relay / Multichain
+=====================================================
+Summary:
+AP01 real-life method output: estimated camera map in local Ref14 frame
+cam        | est_ref14_xyz           | est_dist_to_ref14_m
+---------- | ----------------------- | -------------------
+cam_edge_0 | (0.561, -1.785, 2.089)  | 2.804              
+cam_edge_1 | (-4.097, 0.467, 2.111)  | 4.632              
+cam_edge_3 | (-3.281, -1.545, 2.066) | 4.174              
+cam_edge_5 | (5.888, 0.161, 2.287)   | 6.319              
+
+Evaluation-only: comparison against GT camera map in Ref14 frame
+cam        | cam_gt_vs_est_cm | rot_deg | gt_ref14_xyz            | gt_dist_to_ref14_m | dist_err_cm
+---------- | ---------------- | ------- | ----------------------- | ------------------ | -----------
+cam_edge_0 | 5.694            | 1.022   | (0.588, -1.735, 2.087)  | 2.777              | 2.747      
+cam_edge_1 | 12.483           | 1.460   | (-3.974, 0.475, 2.132)  | 4.535              | 9.775      
+cam_edge_3 | 5.787            | 1.994   | (-3.227, -1.563, 2.054) | 4.132              | 4.153      
+cam_edge_5 | 24.112           | 3.535   | (5.859, 0.348, 2.139)   | 6.247              | 7.167      
+
+Method per camera:
+cam        | method                                                  
+---------- | --------------------------------------------------------
+cam_edge_0 | moving_relay_multichain_colmap_motion_aruco_metric_scale
+cam_edge_1 | direct_static_aruco_multimarker_weighted_mad_inliers    
+cam_edge_3 | root_camera_chained_from_ref14_anchor                   
+cam_edge_5 | moving_relay_multichain_colmap_motion_aruco_metric_scale

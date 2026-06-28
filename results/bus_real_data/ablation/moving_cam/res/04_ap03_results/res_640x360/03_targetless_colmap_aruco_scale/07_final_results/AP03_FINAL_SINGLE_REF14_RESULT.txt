@@ -1,0 +1,20 @@
+AP03 FINAL SINGLE-REF14 RESULT
+==============================
+
+Variant: res_640x360
+Method: Targetless COLMAP + Single Ref14 metric registration
+COLMAP targetless: yes
+ArUco usage: after reconstruction only
+GT usage: final evaluation only
+min_area_px2: 500
+
+mean translation error [cm]: 40.889100
+mean rotation error [deg]: 2.861884
+
+Per-camera:
+- cam_edge_0: 7.734167 cm / 0.922159 deg
+- cam_edge_1: 11.667008 cm / 0.889389 deg
+- cam_edge_3: 8.894560 cm / 0.900387 deg
+- cam_edge_5: 135.260663 cm / 8.735601 deg
+
+CSV: results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv

@@ -1,0 +1,70 @@
+{
+  "approach": "AP02_ref_marker_graph_ba",
+  "evaluation": "gt_aligned_full_map",
+  "world_sdf": "src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf",
+  "ap02_camera_input": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv",
+  "ap02_marker_input": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_marker_poses_ref_marker.csv",
+  "output_csv": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv",
+  "output_txt": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.txt",
+  "alignment": {
+    "type": "best_fit_SE3_from_entity_centers_without_scale",
+    "gt_used_only_after_optimization": true,
+    "used_entities_count": 18,
+    "used_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "used_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "held_out_marker_id": 14,
+    "held_out_marker_entity": "aruco_ref_floor_14",
+    "singular_values": [
+      139.7647053346931,
+      13.288048953279203,
+      4.631846158735351
+    ],
+    "T_gt_from_est_local": [
+      [
+        0.9992861838610959,
+        -0.03746035278635363,
+        0.004883104898472178,
+        -0.06338593551122718
+      ],
+      [
+        0.03745508244611338,
+        0.9992976315518041,
+        0.0011663506800041468,
+        0.5529945943777348
+      ],
+      [
+        -0.004923367067607799,
+        -0.0009826210234995247,
+        0.9999873973769078,
+        0.45223408514645236
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "important_note": "GT is used only after AP02 optimization for evaluation alignment. Marker 14 is held out from the alignment, so its error is a real residual and not a coordinate-frame zero."
+}

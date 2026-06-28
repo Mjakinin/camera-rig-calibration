@@ -1,0 +1,11 @@
+MOVING-CAMERA FOV AP03 SINGLE/MULTI RERUN STATUS
+================================================
+
+Rerun attempted for:
+fov_40deg fov_50deg fov_60deg fov_69deg_baseline fov_80deg fov_90deg fov_100deg fov_110deg fov_120deg fov_140deg_extreme
+
+See per-variant status files under:
+results/bus_real_data/ablation/moving_cam/fov/04_ap03_results/<variant>/AP03_SINGLE_MULTI_RERUN_STATUS.txt
+
+This script does not modify the RES ablation.
+This script restores the shared baseline and global AP03 workdir at exit.

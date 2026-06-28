@@ -1,0 +1,19 @@
+Orientation alignment model
+===========================
+
+R_gt ~= A * R_colmap_camera_to_world * C
+
+A is a global world-frame rotation estimated from orientation correspondences.
+C is the best right-handed axis-convention offset among 24 axis permutations.
+
+best_C_index: 18
+
+A:
+0.999946193887 0.007193813538 -0.007473846303
+0.010346648153 -0.639850898017 0.768429421078
+0.000745790703 -0.768465404136 -0.639890901985
+
+C:
+0.000000000000 -1.000000000000 0.000000000000
+0.000000000000 0.000000000000 -1.000000000000
+1.000000000000 0.000000000000 0.000000000000

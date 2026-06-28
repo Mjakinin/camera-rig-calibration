@@ -1,0 +1,2 @@
+model,registered_images,registered_static_cameras,registered_moving_frames,num_3d_points,static_registered_list,static_missing_list,model_path
+0,208,4,204,10440,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,,results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0

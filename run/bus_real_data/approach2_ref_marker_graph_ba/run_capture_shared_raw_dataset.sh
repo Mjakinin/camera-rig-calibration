@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 source /opt/ros/humble/setup.bash
 
 python3 run/bus_real_data/approach2_ref_marker_graph_ba/01_capture_shared_raw_dataset.py \

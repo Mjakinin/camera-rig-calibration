@@ -1,0 +1,92 @@
+{
+  "mode": "INDEPENDENT_GLOBAL_BASELINE_RERUN_NO_RES",
+  "run_root": "results/bus_real_data/baseline_independent_recalc/20260628_150000",
+  "forbidden_source": "results/bus_real_data/ablation/moving_cam/res",
+  "ap01_meta": {
+    "ap01_source": "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_camera_poses_ref14_gt_eval.csv",
+    "singular_values": [
+      27.165044343744746,
+      4.12920495255566,
+      0.006423146981756844
+    ],
+    "missing_rotation_source": false
+  },
+  "summaries": [
+    {
+      "method": "AP01",
+      "status": "OK",
+      "mean_t_cm": "205.21",
+      "mean_r_deg": "12.389",
+      "max_t_cm": "402.604",
+      "max_r_deg": "14.044",
+      "source": "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_camera_poses_ref14_gt_eval.csv",
+      "source_sha16": "fcec86d017e2a990",
+      "note": "global AP01 rerun; camera-map eval-only SE(3), no scale; rotation recomputed if pose rotations present",
+      "cam0_t": "115.819",
+      "cam0_r": "12.563",
+      "cam1_t": "176.425",
+      "cam1_r": "9.313",
+      "cam3_t": "125.991",
+      "cam3_r": "13.636",
+      "cam5_t": "402.604",
+      "cam5_r": "14.044"
+    },
+    {
+      "method": "AP02",
+      "status": "OK",
+      "mean_t_cm": "18.155",
+      "mean_r_deg": "2.909",
+      "max_t_cm": "22.273",
+      "max_r_deg": "4.126",
+      "source": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv",
+      "source_sha16": "2d307f82fc083a55",
+      "note": "global AP02 rerun; official/full-map GT-aligned SE(3) preferred; no RES source",
+      "cam0_t": "22.273",
+      "cam0_r": "4.126",
+      "cam1_t": "20.305",
+      "cam1_r": "2.375",
+      "cam3_t": "10.544",
+      "cam3_r": "2.128",
+      "cam5_t": "19.498",
+      "cam5_r": "3.005"
+    },
+    {
+      "method": "AP03-SINGLE-REF14",
+      "status": "OK",
+      "mean_t_cm": "15.621",
+      "mean_r_deg": "0.984",
+      "max_t_cm": "25.419",
+      "max_r_deg": "1.349",
+      "source": "results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv",
+      "source_sha16": "d752e5eb5451f61c",
+      "note": "global AP03 rerun; Single Ref14 metric registration; GT eval-only",
+      "cam0_t": "14.453",
+      "cam0_r": "1.349",
+      "cam1_t": "13.325",
+      "cam1_r": "0.861",
+      "cam3_t": "9.289",
+      "cam3_r": "0.954",
+      "cam5_t": "25.419",
+      "cam5_r": "0.773"
+    },
+    {
+      "method": "AP03-MULTI-ARUCO",
+      "status": "OK",
+      "mean_t_cm": "6.14",
+      "mean_r_deg": "0.612",
+      "max_t_cm": "10.502",
+      "max_r_deg": "1.054",
+      "source": "results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_MULTI_ARUCO_RESULT.csv",
+      "source_sha16": "e10d37c4893120c0",
+      "note": "global AP03 rerun; Multi-ArUco metric registration; GT eval-only",
+      "cam0_t": "7.098",
+      "cam0_r": "1.054",
+      "cam1_t": "2.954",
+      "cam1_r": "0.359",
+      "cam3_t": "4.007",
+      "cam3_r": "0.34",
+      "cam5_t": "10.502",
+      "cam5_r": "0.694"
+    }
+  ]
+}

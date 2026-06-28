@@ -1,0 +1,42 @@
+{
+  "scale_colmap_to_metric": 0.5024182755906444,
+  "R_ref_col": [
+    [
+      -0.19105446966091882,
+      -0.35422838305863835,
+      0.9154345647058822
+    ],
+    [
+      -0.9803023146202413,
+      0.02129866457251655,
+      -0.19635106018971527
+    ],
+    [
+      0.050055584831093944,
+      -0.9349163703364541,
+      -0.3513201088809565
+    ]
+  ],
+  "t_ref_col": [
+    -0.3633444723003609,
+    -0.48826713301272323,
+    1.8479227033360006
+  ],
+  "stage": "06b_triangulate_ref14_corners",
+  "best_colmap_model": "2",
+  "reference_marker_id": 14,
+  "marker_length_m": 0.17,
+  "reproj_thresh_px": 5.0,
+  "ransac_iters": 1000,
+  "min_inliers": 4,
+  "corner_fit_errors_cm": [
+    0.1730610238259116,
+    0.1940980209558488,
+    0.3357984471253518,
+    0.3275971418446135
+  ],
+  "corner_fit_mean_error_cm": 0.25763865843793143,
+  "corner_fit_median_error_cm": 0.2608475814002312,
+  "corner_triangulation_mean_reproj_px": 0.49405763133207437,
+  "corner_triangulation_median_reproj_px": 0.4707024643408677
+}

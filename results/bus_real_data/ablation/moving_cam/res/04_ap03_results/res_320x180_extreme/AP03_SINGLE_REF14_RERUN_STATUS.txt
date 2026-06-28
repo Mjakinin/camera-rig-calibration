@@ -1,0 +1,3 @@
+AP03-SINGLE-REF14 rerun status: FAILED
+variant: res_320x180_extreme
+reason: no tested Ref14 min_area threshold produced a valid four-camera AP03_FINAL_SINGLE_REF14_RESULT.csv

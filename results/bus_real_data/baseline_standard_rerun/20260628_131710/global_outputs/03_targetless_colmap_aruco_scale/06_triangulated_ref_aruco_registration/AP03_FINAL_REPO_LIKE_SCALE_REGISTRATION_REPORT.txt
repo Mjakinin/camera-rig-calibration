@@ -1,0 +1,68 @@
+AP03 FINAL RESULT — Targetless COLMAP + Multi-ArUco Scale Registration
+=====================================================================
+
+Method:
+COLMAP reconstructs static and moving cameras from natural image features.
+The COLMAP reconstruction has arbitrary scale and coordinate frame.
+Metric scale and Ref14-frame registration are now estimated using all visible ArUco markers with a known marker layout.
+
+Important:
+- COLMAP itself remains targetless.
+- ArUco markers are used only after COLMAP for Sim(3) metric registration.
+- This replaces the previous single-Ref14 registration with multi-ArUco registration.
+- Known marker layout is used as the metric calibration reference.
+- GT camera poses are used only for final error evaluation.
+
+COLMAP input:
+- model: 0
+- registered images: 208
+- registered static cameras: 4 / 4
+- registered moving frames: 204
+- sparse 3D points: 8990
+
+Multi-ArUco registration:
+- requested marker ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+- detected marker ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+- corner observations: 1080
+- unique anchor images: 159
+- triangulated marker corners: 56
+- used marker corners after filtering: 56
+- used marker ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+- estimated COLMAP-to-meter scale: 0.158667381
+- corner fit mean error: 198.106001 cm
+- corner fit median error: 210.361358 cm
+- corner fit max error: 351.536746 cm
+- mean corner reprojection error: 0.680366 px
+- median corner reprojection error: 0.526419 px
+
+Marker contribution:
+marker     | triangulated_corners | used_corners | mean_fit_cm | mean_repr_px
+---------- | -------------------- | ------------ | ----------- | ------------
+marker_000 | 4                    | 4            | 349.572     | 0.539       
+marker_001 | 4                    | 4            | 333.988     | 1.085       
+marker_002 | 4                    | 4            | 255.920     | 0.524       
+marker_003 | 4                    | 4            | 172.809     | 0.842       
+marker_004 | 4                    | 4            | 128.131     | 0.564       
+marker_005 | 4                    | 4            | 114.752     | 0.505       
+marker_006 | 4                    | 4            | 24.819      | 0.524       
+marker_007 | 4                    | 4            | 39.951      | 0.504       
+marker_008 | 4                    | 4            | 80.345      | 0.398       
+marker_009 | 4                    | 4            | 218.905     | 0.476       
+marker_010 | 4                    | 4            | 203.228     | 0.726       
+marker_011 | 4                    | 4            | 280.352     | 1.105       
+marker_012 | 4                    | 4            | 276.434     | 0.524       
+marker_013 | 4                    | 4            | 294.279     | 1.209       
+
+Static camera results relative to Ref14:
+- count: 4
+- mean translation error: 371.512552 cm
+- median translation error: 423.317999 cm
+- mean rotation error: 22.793159 deg
+- median rotation error: 22.797879 deg
+
+camera     | t_err_cm | r_err_deg | dX_cm    | dY_cm    | dZ_cm   | estimated xyz [m]      | GT xyz [m]             
+---------- | -------- | --------- | -------- | -------- | ------- | ---------------------- | -----------------------
+cam_edge_0 | 182.597  | 22.806    | 132.708  | 105.812  | -67.334 | (1.915, -0.676, 1.414) | (0.588, -1.735, 2.087) 
+cam_edge_1 | 456.818  | 22.757    | 434.959  | -101.539 | -95.828 | (0.375, -0.540, 1.173) | (-3.974, 0.475, 2.132) 
+cam_edge_3 | 415.544  | 22.790    | 404.120  | 51.796   | -81.739 | (0.814, -1.045, 1.237) | (-3.227, -1.563, 2.054)
+cam_edge_5 | 431.092  | 22.820    | -420.522 | -41.322  | -85.407 | (1.654, -0.065, 1.285) | (5.859, 0.348, 2.139)  

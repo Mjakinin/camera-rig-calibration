@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /workspaces/project
+cd "$(git rev-parse --show-toplevel)"
 
 SHARED_OBS="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations"
 AP02_OBS="results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations"
