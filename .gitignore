@@ -35,3 +35,4 @@ results/bus_real_data/ablation/**/images/
 results/bus_real_data/ablation/**/aruco_annotated*/
 results/bus_real_data/ablation/**/exposure_preview/
 results/bus_real_data/ablation/plots/
+results/**/backup_before_rerun/
