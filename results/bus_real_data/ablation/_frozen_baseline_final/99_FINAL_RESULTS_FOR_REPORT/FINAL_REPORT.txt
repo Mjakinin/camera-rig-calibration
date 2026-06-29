@@ -1,0 +1,258 @@
+FINAL BASELINE REPORT — CAMERA RIG CALIBRATION
+====================================================================================================
+
+Evaluation hierarchy:
+
+PRIMARY:
+- Pairwise static camera-to-camera extrinsic errors for AP01, AP02, AP03.
+- No GT map alignment is used in the primary metric.
+
+SECONDARY:
+- Ref14/world-frame static camera-map vs GT after evaluation-only SE(3) alignment.
+- This removes global frame offset and evaluates map consistency/shape.
+
+DIAGNOSTICS:
+- AP02 GT-aligned full marker-map evaluation.
+- AP03 COLMAP reconstruction coverage.
+- AP03 marker-size-only scale stability.
+
+Input rule:
+- GT/SDF is used only for evaluation, not as method input.
+- AP03 final uses targetless COLMAP + marker-size-only metric scale.
+- Known SDF marker map is not used as AP03 method input.
+- No values are copied from old RES ablation snapshots.
+
+====================================================================================================
+PRIMARY — PAIRWISE CAMERA-TO-CAMERA EXTRINSIC ERRORS
+====================================================================================================
+BASELINE FINAL RESULTS — PAIRWISE STATIC-CAMERA EXTRINSICS
+==========================================================
+
+Metric:
+T_i_j = inv(T_frame_cam_i) @ T_frame_cam_j.
+t_error_cm = ||t_est - t_gt|| * 100.
+r_error_deg = angle(R_gt^T R_est).
+baseline_error_cm = abs(||t_est|| - ||t_gt||) * 100.
+direction_error_deg = angle(t_est, t_gt).
+No GT map alignment is used for the main metric.
+
+Summary:
+method | status | mean_t_cm | mean_r_deg | worst_pair | worst_t_cm | worst_r_deg
+-------+--------+-----------+------------+------------+------------+------------
+AP01   | OK     | 52.14     | 6.88       | cam1-cam5  | 86.65      | 11.42      
+AP02   | OK     | 65.37     | 5.34       | cam3-cam5  | 93.15      | 7.21       
+AP03   | OK     | 10.85     | 0.24       | cam1-cam5  | 18.70      | 0.16       
+
+Pairwise detail: t_error/r_error, plus baseline and direction error.
+pair      | GT               | AP01                                    | AP02                                   | AP03                                  
+----------+------------------+-----------------------------------------+----------------------------------------+---------------------------------------
+cam0-cam1 | baseline 5.069 m | 29.09cm/2.35deg (b 22.15cm, d 2.18deg)  | 67.72cm/5.34deg (b 20.63cm, d 7.15deg) | 8.88cm/0.31deg (b 8.52cm, d 0.28deg)  
+cam0-cam3 | baseline 3.819 m | 12.74cm/2.77deg (b 7.34cm, d 1.55deg)   | 41.70cm/4.11deg (b 17.33cm, d 5.83deg) | 5.80cm/0.36deg (b 5.31cm, d 0.35deg)  
+cam0-cam5 | baseline 5.668 m | 71.89cm/10.38deg (b 51.52cm, d 5.32deg) | 66.46cm/3.98deg (b 53.05cm, d 4.25deg) | 10.73cm/0.40deg (b 10.63cm, d 0.15deg)
+cam1-cam3 | baseline 2.172 m | 39.82cm/4.09deg (b 34.34cm, d 5.79deg)  | 52.25cm/3.28deg (b 37.07cm, d 8.99deg) | 4.74cm/0.06deg (b 4.59cm, d 0.31deg)  
+cam1-cam5 | baseline 9.834 m | 86.65cm/11.42deg (b 77.24cm, d 2.38deg) | 70.91cm/8.14deg (b 28.69cm, d 3.84deg) | 18.70cm/0.16deg (b 18.59cm, d 0.12deg)
+cam3-cam5 | baseline 9.286 m | 72.63cm/10.31deg (b 53.13cm, d 3.15deg) | 93.15cm/7.21deg (b 65.64cm, d 4.23deg) | 16.26cm/0.15deg (b 16.20cm, d 0.09deg)
+
+Full estimated and GT pair transforms are in BASELINE_FINAL_PAIRWISE_DETAIL.csv.
+AP03 uses marker-size-only scale; no SDF marker map is used as method input.
+
+====================================================================================================
+SECONDARY — REF14/WORLD-FRAME CAMERA-MAP VS GT
+====================================================================================================
+SECONDARY REF14/WORLD-FRAME CAMERA-MAP VS GT EVALUATION
+======================================================
+
+What this evaluates:
+- estimated static-camera map vs GT static-camera map
+- each method map is aligned to the GT Ref14/world camera map with a best-fit SE(3) transform
+- no scale is estimated in this secondary evaluation
+- GT is used only after method estimation for evaluation
+- this is secondary; primary remains pairwise camera-to-camera extrinsics
+
+
+AP01
+----
+source: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv
+alignment cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
+- cam_edge_0: 22.766 cm, 2.613 deg | aligned_est=(+0.710, -1.734, +1.895) m | gt=(+0.588, -1.735, +2.087) m
+- cam_edge_1: 38.548 cm, 3.836 deg | aligned_est=(-3.678, +0.287, +2.292) m | gt=(-3.974, +0.475, +2.132) m
+- cam_edge_3: 12.757 cm, 3.039 deg | aligned_est=(-3.167, -1.458, +2.095) m | gt=(-3.227, -1.563, +2.054) m
+- cam_edge_5: 48.544 cm, 7.923 deg | aligned_est=(+5.381, +0.431, +2.130) m | gt=(+5.859, +0.348, +2.139) m
+summary: mean 30.654 cm / 4.353 deg, median 30.657 cm / 3.438 deg
+
+AP02
+----
+source: results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv
+alignment cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
+- cam_edge_0: 37.449 cm, 1.854 deg | aligned_est=(+0.715, -1.604, +1.760) m | gt=(+0.588, -1.735, +2.087) m
+- cam_edge_1: 27.879 cm, 3.806 deg | aligned_est=(-4.041, +0.596, +2.374) m | gt=(-3.974, +0.475, +2.132) m
+- cam_edge_3: 33.259 cm, 2.831 deg | aligned_est=(-2.926, -1.649, +1.942) m | gt=(-3.227, -1.563, +2.054) m
+- cam_edge_5: 44.389 cm, 4.649 deg | aligned_est=(+5.497, +0.183, +2.336) m | gt=(+5.859, +0.348, +2.139) m
+summary: mean 35.744 cm / 3.285 deg, median 35.354 cm / 3.318 deg
+
+AP03
+----
+source: results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv
+alignment cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
+- cam_edge_0: 1.493 cm, 0.262 deg | aligned_est=(+0.595, -1.745, +2.095) m | gt=(+0.588, -1.735, +2.087) m
+- cam_edge_1: 7.580 cm, 0.067 deg | aligned_est=(-4.048, +0.493, +2.136) m | gt=(-3.974, +0.475, +2.132) m
+- cam_edge_3: 5.067 cm, 0.106 deg | aligned_est=(-3.273, -1.584, +2.051) m | gt=(-3.227, -1.563, +2.054) m
+- cam_edge_5: 11.337 cm, 0.153 deg | aligned_est=(+5.971, +0.362, +2.131) m | gt=(+5.859, +0.348, +2.139) m
+summary: mean 6.369 cm / 0.147 deg, median 6.323 cm / 0.129 deg
+
+Output files:
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_DETAIL.csv
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_SUMMARY.csv
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_EVALUATION.txt
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_METADATA.json
+
+====================================================================================================
+DIAGNOSTIC — AP02 GT-ALIGNED FULL MARKER-MAP EVALUATION
+====================================================================================================
+AP02 GT-Aligned Full-Map Evaluation
+====================================
+
+What this evaluates:
+- AP02 estimated map is aligned to the Gazebo GT map with a best-fit SE(3) transform.
+- The alignment uses static cameras and markers 0..13.
+- Marker 14 / aruco_ref_floor_14 is held out from the alignment.
+- Therefore marker 14 receives a real residual/error instead of a forced coordinate-frame zero.
+- GT is used only after optimization for evaluation, not during AP02 estimation.
+
+Alignment:
+- used entities: 18
+- used static cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
+- used marker ids: 0..13
+- held-out marker: 14 / aruco_ref_floor_14
+
+Camera pose errors:
+- count: 4
+- mean translation error [cm]: 39.308518
+- median translation error [cm]: 36.802794
+- mean rotation error [deg]: 3.832121
+- median rotation error [deg]: 4.275659
+
+Marker-map pose errors:
+- count: 15
+- mean translation error [cm]: 41.906098
+- median translation error [cm]: 35.094924
+- mean rotation error [deg]: 7.769732
+- median rotation error [deg]: 5.006550
+
+Held-out reference marker result:
+- aruco_ref_floor_14: 34.500 cm, 6.449 deg
+
+Per-camera:
+- cam_edge_0: 35.880 cm, 2.162 deg | aligned_est=(+0.844, -1.127, +2.260) m | gt=(+0.588, -1.235, +2.487) m
+- cam_edge_1: 34.960 cm, 4.444 deg | aligned_est=(-3.973, +0.932, +2.878) m | gt=(-3.974, +0.975, +2.532) m
+- cam_edge_3: 48.669 cm, 4.615 deg | aligned_est=(-2.793, -1.282, +2.467) m | gt=(-3.227, -1.063, +2.454) m
+- cam_edge_5: 37.725 cm, 4.107 deg | aligned_est=(+5.572, +0.813, +2.782) m | gt=(+5.859, +0.848, +2.539) m
+
+Per-marker:
+- marker_000 [alignment]: 88.555 cm, 19.230 deg | aligned_est=(-1.671, +0.379, +1.148) m | gt=(-2.550, +0.480, +1.180) m
+- marker_001 [alignment]: 33.585 cm, 4.060 deg | aligned_est=(-1.979, -0.717, +1.677) m | gt=(-2.250, -0.525, +1.630) m
+- marker_002 [alignment]: 26.184 cm, 15.470 deg | aligned_est=(-0.853, -0.603, +1.064) m | gt=(-1.100, -0.525, +1.100) m
+- marker_003 [alignment]: 32.370 cm, 5.007 deg | aligned_est=(+0.320, +1.324, +0.592) m | gt=(+0.100, +1.210, +0.800) m
+- marker_004 [alignment]: 35.684 cm, 5.419 deg | aligned_est=(+0.895, +1.423, +1.791) m | gt=(+0.700, +1.210, +2.000) m
+- marker_005 [alignment]: 107.802 cm, 11.462 deg | aligned_est=(+0.871, -0.712, +1.279) m | gt=(+1.900, -0.980, +1.100) m
+- marker_006 [alignment]: 26.013 cm, 14.548 deg | aligned_est=(+2.043, +0.693, +1.212) m | gt=(+1.970, +0.500, +1.370) m
+- marker_007 [alignment]: 40.986 cm, 2.081 deg | aligned_est=(+2.227, +1.178, +1.163) m | gt=(+1.970, +0.935, +1.370) m
+- marker_008 [alignment]: 27.892 cm, 4.898 deg | aligned_est=(+2.662, -0.303, +1.242) m | gt=(+2.650, -0.525, +1.410) m
+- marker_009 [alignment]: 35.464 cm, 3.199 deg | aligned_est=(+2.684, +0.371, +1.444) m | gt=(+3.020, +0.480, +1.420) m
+- marker_010 [alignment]: 37.004 cm, 14.656 deg | aligned_est=(+2.702, -1.151, +1.502) m | gt=(+3.020, -0.980, +1.420) m
+- marker_011 [alignment]: 35.095 cm, 3.321 deg | aligned_est=(+3.696, -0.139, +1.635) m | gt=(+4.000, +0.000, +1.530) m
+- marker_012 [alignment]: 35.531 cm, 3.571 deg | aligned_est=(+3.763, -1.146, +1.568) m | gt=(+4.040, -0.980, +1.420) m
+- marker_013 [alignment]: 31.928 cm, 3.175 deg | aligned_est=(+3.755, +0.623, +1.328) m | gt=(+4.050, +0.730, +1.270) m
+- aruco_ref_floor_14 [held-out]: 34.500 cm, 6.449 deg | aligned_est=(+0.264, +0.595, +0.199) m | gt=(+0.000, +0.500, +0.400) m
+
+Output files:
+- results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv
+- results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.txt
+- results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION_metadata.json
+
+====================================================================================================
+DIAGNOSTIC — AP03 COLMAP RECONSTRUCTION INSPECTION
+====================================================================================================
+AP03 COLMAP Reconstruction Inspection
+=====================================
+
+AP03 Phase:
+- targetless COLMAP/SfM feasibility
+- no ArUco scale/registration yet
+- reconstruction scale is arbitrary
+
+Input dataset:
+- total images: 274
+- static images: 4
+- moving images: 270
+
+Number of COLMAP models: 1
+
+Models:
+- model 0: 268 images, 4/4 static cameras, 264 moving frames, 12971 3D points
+  static registered: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
+  static missing: none
+
+Best model by static-camera coverage:
+- model: 0
+- registered images: 268
+- registered static cameras: 4/4
+- registered moving frames: 264
+- 3D points: 12971
+
+Interpretation:
+- COLMAP registered all static cameras.
+- AP03 can proceed to scale/registration with a known metric reference.
+
+Important:
+- COLMAP poses are currently in arbitrary scale and arbitrary coordinate frame.
+- Metric scale and Ref-ArUco alignment are planned for AP03 Phase 2.
+
+Output files:
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/colmap_model_summary.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/registered_images_by_model.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/ap03_colmap_inspection_report.txt
+
+====================================================================================================
+DIAGNOSTIC — AP03 MARKER-SIZE-ONLY SCALE
+====================================================================================================
+AP03 MARKER-SIZE-ONLY SCALE
+===========================
+
+status: OK
+best_model: 0
+registered_static_cameras: 4 / 4
+registered_images: 268
+detected_corner_observations: 1924
+triangulated_marker_corners: 60
+scale_m_per_colmap_unit: 0.797461544806
+scale_observations_used/total: 90 / 90
+used_rel_std_scale: 0.010003
+
+Rule: AP03 scale is estimated only from known physical marker size, not from known marker-map positions.
+
+====================================================================================================
+REPRODUCIBILITY MANIFEST
+====================================================================================================
+result_type: normal_baseline_recalculated_from_shared_raw_images
+main_metric: pairwise_static_camera_extrinsics
+no_res_source_rule: No values copied from results/bus_real_data/ablation/moving_cam/res.
+
+Tracked inputs/outputs:
+- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images | directory | files=281 | tree_sha256=3e4858e70b223c8753f1dc999426792165a68d831aab8dd49d551c1ff0464c5e
+- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations | directory | files=278 | tree_sha256=28b3f5729ca81a8bc537cdc232285adbcb7f4c57eeeb1149686e2d6a6f13c609
+- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/metadata/route_commanded.csv | file | size=30607 | sha256=bbf4fc7e6cb06a7be7f59693dd582b3c241e6caf3bc14f9520020ad0a0aace77
+- results/bus_real_data/01_marker_direct_relay_multimarker_multichain | directory | files=77 | tree_sha256=07d475da36d5a25af79c5a1724ebae3435696bc73ace22ebf12f7ff9d5e42d15
+- results/bus_real_data/02_ref_marker_graph_ba | directory | files=43 | tree_sha256=ffd1180cbea1f9f3d4d71927a5656ec4d82ea724bd6c141b99a53cdfc1707f66
+- results/bus_real_data/03_targetless_colmap_aruco_scale | directory | files=292 | tree_sha256=ebfb65ed37e0644d80c119381fc6a0c85ca2e126f894bd0af6bf620aad799dbb
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/BASELINE_FINAL_CLEAN_COMPARISON.txt | file | size=2258 | sha256=9aee6a5c9e0a695a4e8ff75268a5ac0822c300f0d37c3f092ecee47783bfe63e
+- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/BASELINE_FINAL_PAIRWISE_DETAIL.csv | file | size=12040 | sha256=ad7a75f07762becd918efb9dfb2c6a9b0e2200943bad974c85869fb9eb9fa076
+
+====================================================================================================
+FINAL INTERPRETATION
+====================================================================================================
+The primary pairwise camera-to-camera metric is the main report result because it evaluates the calibrated rig extrinsics directly and avoids method-specific global frame anchoring.
+
+The secondary Ref14/world-frame camera-map evaluation is reported only as a diagnostic after evaluation-only SE(3) alignment to GT. It is useful for checking whether each estimated camera map has the correct global shape, but it is not the primary ranking metric.
+
+The final baseline is valid because AP01, AP02, and AP03 are all available in the primary pairwise report; AP03 registers all four static cameras in COLMAP; AP03 marker-size-only scale is OK; and no RES ablation snapshot is used as a source for final values.

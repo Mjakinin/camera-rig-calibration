@@ -1,0 +1,83 @@
+{
+  "camera_name": "moving_calib_camera",
+  "width": 160,
+  "height": 90,
+  "image_width": 160,
+  "image_height": 90,
+  "fx": 116.18338696617262,
+  "fy": 116.18338696617262,
+  "cx": 80.0,
+  "cy": 45.0,
+  "K": [
+    116.18338696617262,
+    0.0,
+    80.0,
+    0.0,
+    116.18338696617262,
+    45.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "k": [
+    116.18338696617262,
+    0.0,
+    80.0,
+    0.0,
+    116.18338696617262,
+    45.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "P": [
+    116.18338696617262,
+    0.0,
+    80.0,
+    0.0,
+    0.0,
+    116.18338696617262,
+    45.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0
+  ],
+  "p": [
+    929.467095729381,
+    0.0,
+    640.0,
+    0.0,
+    0.0,
+    929.467095729381,
+    360.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0
+  ],
+  "distortion": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "D": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "horizontal_fov_deg": 69.1,
+  "vertical_fov_deg": 42.34463611420132,
+  "model": "synthetic_pinhole_zero_distortion",
+  "ablation_resolution_source_width": 1280,
+  "ablation_resolution_source_height": 720,
+  "ablation_resolution_width": 160,
+  "ablation_resolution_height": 90,
+  "ablation_note": "Only moving camera image resolution is changed. Static cameras remain at baseline resolution."
+}

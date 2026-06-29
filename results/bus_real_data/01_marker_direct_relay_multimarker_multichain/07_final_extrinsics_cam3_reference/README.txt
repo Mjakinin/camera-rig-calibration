@@ -6,13 +6,13 @@ Main calibration root:
 
 Pipeline:
   1. cam_edge_3 -> cam_edge_0 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.
-  2. cam_edge_3 -> cam_edge_1 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.
+  2. cam_edge_3 -> cam_edge_1 via direct static ArUco multimarker overlap.
   3. cam_edge_3 -> cam_edge_5 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.
 
 Main no-GT results:
-  cam_edge_0: 10.154 cm, 2.198 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
-  cam_edge_1: 49.667 cm, 4.767 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
-  cam_edge_5: 552.320 cm, 3.927 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
+  cam_edge_0: 9.805 cm, 2.255 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
+  cam_edge_1: 12.597 cm, 1.862 deg via direct_static_aruco_multimarker_weighted_mad_inliers
+  cam_edge_5: 5.568 cm, 2.129 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
 
 Multichain rule:
   All valid marker/frame combinations are evaluated.

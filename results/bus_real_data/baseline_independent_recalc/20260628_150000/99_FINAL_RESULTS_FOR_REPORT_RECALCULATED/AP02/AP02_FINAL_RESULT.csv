@@ -1,5 +1,0 @@
-method,status,entity_type,entity_id,translation_error_cm,rotation_error_deg,source,source_sha16,note
-AP02,OK,camera,cam_edge_0,22.273,4.126,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv,2d307f82fc083a55,global AP02 rerun; official/full-map GT-aligned SE(3) preferred; no RES source
-AP02,OK,camera,cam_edge_1,20.305,2.375,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv,2d307f82fc083a55,global AP02 rerun; official/full-map GT-aligned SE(3) preferred; no RES source
-AP02,OK,camera,cam_edge_3,10.544,2.128,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv,2d307f82fc083a55,global AP02 rerun; official/full-map GT-aligned SE(3) preferred; no RES source
-AP02,OK,camera,cam_edge_5,19.498,3.005,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv,2d307f82fc083a55,global AP02 rerun; official/full-map GT-aligned SE(3) preferred; no RES source

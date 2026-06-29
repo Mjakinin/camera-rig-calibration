@@ -1,9 +1,0 @@
-method,status,entity_type,entity_id,translation_error_cm,rotation_error_deg,source_csv,source_csv_sha16,note
-AP03-SINGLE-REF14,OK,camera,cam_edge_0,3.981,0.458,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_SINGLE_REF14_RESULT.csv,e26d43ccd051b9af,targetless COLMAP + Single Ref14 metric registration; GT evaluation-only
-AP03-SINGLE-REF14,OK,camera,cam_edge_1,7.537,0.409,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_SINGLE_REF14_RESULT.csv,e26d43ccd051b9af,targetless COLMAP + Single Ref14 metric registration; GT evaluation-only
-AP03-SINGLE-REF14,OK,camera,cam_edge_3,4.464,0.436,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_SINGLE_REF14_RESULT.csv,e26d43ccd051b9af,targetless COLMAP + Single Ref14 metric registration; GT evaluation-only
-AP03-SINGLE-REF14,OK,camera,cam_edge_5,7.041,0.443,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_SINGLE_REF14_RESULT.csv,e26d43ccd051b9af,targetless COLMAP + Single Ref14 metric registration; GT evaluation-only
-AP03-MULTI-ARUCO,OK,camera,cam_edge_0,1.019,0.215,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_MULTI_ARUCO_RESULT.csv,23291ec01d576fc3,targetless COLMAP + Multi-ArUco metric registration; GT evaluation-only
-AP03-MULTI-ARUCO,OK,camera,cam_edge_1,3.168,0.178,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_MULTI_ARUCO_RESULT.csv,23291ec01d576fc3,targetless COLMAP + Multi-ArUco metric registration; GT evaluation-only
-AP03-MULTI-ARUCO,OK,camera,cam_edge_3,0.507,0.129,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_MULTI_ARUCO_RESULT.csv,23291ec01d576fc3,targetless COLMAP + Multi-ArUco metric registration; GT evaluation-only
-AP03-MULTI-ARUCO,OK,camera,cam_edge_5,0.456,0.128,results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/AP03/AP03_FINAL_MULTI_ARUCO_RESULT.csv,23291ec01d576fc3,targetless COLMAP + Multi-ArUco metric registration; GT evaluation-only

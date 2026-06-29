@@ -137,11 +137,11 @@ def load_direct_multimarker(m):
         "target_camera": "cam_edge_1",
         "method": "direct_static_aruco_multimarker_weighted_mad_inliers",
         "category": "main_no_gt",
-        "pair": "",
-        "root_marker": "",
-        "target_marker": "",
-        "root_frame": "",
-        "target_frame": "",
+        "pair": "cam3_to_cam1",
+        "root_marker": "COMMON_MARKERS",
+        "target_marker": "COMMON_MARKERS",
+        "root_frame": "STATIC_CAM3",
+        "target_frame": "STATIC_CAM1",
         "num_candidates": r.get("num_candidates", ""),
         "num_inliers": r.get("num_inliers", ""),
         "num_outliers": r.get("num_outliers", ""),
@@ -536,7 +536,7 @@ def write_readme(entries):
         "",
         "Pipeline:",
         "  1. cam_edge_3 -> cam_edge_0 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.",
-        "  2. cam_edge_3 -> cam_edge_1 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.",
+        "  2. cam_edge_3 -> cam_edge_1 via direct static ArUco multimarker overlap.",
         "  3. cam_edge_3 -> cam_edge_5 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.",
         "",
         "Main no-GT results:",
@@ -565,7 +565,7 @@ def main():
 
     entries = [
         load_relay_multichain("cam3_to_cam0", "COLMAP_motion", "main_no_gt"),
-        load_relay_multichain("cam3_to_cam1", "COLMAP_motion", "main_no_gt"),
+        load_direct_multimarker(m),
         load_relay_multichain("cam3_to_cam5", "COLMAP_motion", "main_no_gt"),
     ]
 

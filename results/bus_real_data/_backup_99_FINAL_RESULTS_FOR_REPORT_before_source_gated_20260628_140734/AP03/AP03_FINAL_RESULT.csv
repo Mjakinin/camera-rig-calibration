@@ -1,3 +1,0 @@
-method,status,mean_t_cm,mean_r_deg,cam0_t,cam0_r,cam1_t,cam1_r,cam3_t,cam3_r,cam5_t,cam5_r,source_policy,source_csv_sha16,note
-AP03-SINGLE-REF14,OK,5.756,0.436,3.981,0.458,7.537,0.409,4.464,0.436,7.041,0.443,targetless COLMAP reconstruction followed by single Ref14 metric registration; GT camera poses evaluation-only,e26d43ccd051b9af,baseline final Single-Ref14 metric registration
-AP03-MULTI-ARUCO,OK,1.287,0.162,1.019,0.215,3.168,0.178,0.507,0.129,0.456,0.128,targetless COLMAP reconstruction followed by Multi-ArUco metric registration; GT camera poses evaluation-only,23291ec01d576fc3,validated baseline final Multi-ArUco

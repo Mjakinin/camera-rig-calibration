@@ -1,0 +1,31 @@
+BASELINE FINAL RESULTS — PAIRWISE STATIC-CAMERA EXTRINSICS
+==========================================================
+
+Metric:
+T_i_j = inv(T_frame_cam_i) @ T_frame_cam_j.
+t_error_cm = ||t_est - t_gt|| * 100.
+r_error_deg = angle(R_gt^T R_est).
+baseline_error_cm = abs(||t_est|| - ||t_gt||) * 100.
+direction_error_deg = angle(t_est, t_gt).
+No GT map alignment is used for the main metric.
+
+Summary:
+method | status | mean_t_cm | mean_r_deg | worst_pair | worst_t_cm | worst_r_deg
+-------+--------+-----------+------------+------------+------------+------------
+AP01   | OK     | 35.06     | 2.19       | cam3-cam5  | 61.70      | 2.72       
+AP02   | FAILED | -         | -          |            | -          | -          
+AP03   | OK     | 28.28     | 0.53       | cam1-cam5  | 45.41      | 0.50       
+
+Pairwise detail: t_error/r_error, plus baseline and direction error.
+pair      | GT               | AP01                                   | AP02   | AP03                                  
+----------+------------------+----------------------------------------+--------+---------------------------------------
+cam0-cam1 | baseline 5.069 m | 19.77cm/0.79deg (b 1.33cm, d 2.23deg)  | FAILED | 28.65cm/0.43deg (b 28.51cm, d 0.31deg)
+cam0-cam3 | baseline 3.819 m | 21.51cm/2.45deg (b 7.85cm, d 3.04deg)  | FAILED | 19.24cm/0.60deg (b 18.94cm, d 0.49deg)
+cam0-cam5 | baseline 5.668 m | 48.41cm/2.78deg (b 47.12cm, d 1.17deg) | FAILED | 20.91cm/0.76deg (b 20.55cm, d 0.38deg)
+cam1-cam3 | baseline 2.172 m | 6.69cm/1.86deg (b 0.07cm, d 1.77deg)   | FAILED | 15.25cm/0.23deg (b 14.92cm, d 0.81deg)
+cam1-cam5 | baseline 9.834 m | 52.27cm/2.50deg (b 49.37cm, d 1.03deg) | FAILED | 45.41cm/0.50deg (b 45.31cm, d 0.16deg)
+cam3-cam5 | baseline 9.286 m | 61.70cm/2.72deg (b 58.54cm, d 1.24deg) | FAILED | 40.26cm/0.64deg (b 39.28cm, d 0.53deg)
+
+Full estimated and GT pair transforms are in BASELINE_FINAL_PAIRWISE_DETAIL.csv.
+AP03 uses marker-size-only scale; no SDF marker map is used as method input.
+

@@ -43,7 +43,15 @@ def set_pose(world, name, pose):
         "--req", req,
     ]
 
-    subprocess.run(cmd, check=False, capture_output=True, text=True)
+    proc = subprocess.run(cmd, check=False, capture_output=True, text=True, timeout=3)
+    out = (proc.stdout or "") + (proc.stderr or "")
+    ok = proc.returncode == 0 and "data: true" in out
+    if not ok:
+        raise RuntimeError(
+            f"set_pose failed for world={world!r}, name={name!r}, pose={pose}\n"
+            f"returncode={proc.returncode}\nstdout={proc.stdout}\nstderr={proc.stderr}"
+        )
+    return ok
 
 
 def main():

@@ -1,2 +1,0 @@
-dataset,num_images,detected_images,detection_rate_percent,avg_marker_count,total_detected_markers,num_unique_ids,all_ids,lost_ids_vs_original
-side_light,208,208,100.0,3.0,624,3,5 6 7,

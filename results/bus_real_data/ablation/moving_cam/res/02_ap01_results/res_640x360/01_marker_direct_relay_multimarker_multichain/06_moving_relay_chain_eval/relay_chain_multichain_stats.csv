@@ -1,7 +1,0 @@
-pair,target_camera,method,num_candidates,num_inliers,num_outliers,translation_deviation_median_m,translation_deviation_mad_scaled_m,translation_inlier_threshold_m,rotation_deviation_median_deg,rotation_deviation_mad_scaled_deg,rotation_inlier_threshold_deg,inlier_rule
-cam3_to_cam0,cam_edge_0,COLMAP_motion,6264,5287,977,0.389362813,0.427646775,1.672303138,10.050207416,9.760148523,39.330652986,"candidate deviation to robust consensus <= median + 3*MAD, with floors 0.30 m and 7 deg"
-cam3_to_cam0,cam_edge_0,GT_motion,6264,5579,685,0.610943281,0.495534077,2.097545513,15.567865484,11.670182562,50.578413169,"candidate deviation to robust consensus <= median + 3*MAD, with floors 0.30 m and 7 deg"
-cam3_to_cam1,cam_edge_1,COLMAP_motion,16320,14850,1470,2.347443760,2.072659910,8.565423490,21.582644015,19.504800766,80.097046314,"candidate deviation to robust consensus <= median + 3*MAD, with floors 0.30 m and 7 deg"
-cam3_to_cam1,cam_edge_1,GT_motion,16320,16281,39,2.481794188,2.144297553,8.914686849,22.350314706,16.401554387,71.554977866,"candidate deviation to robust consensus <= median + 3*MAD, with floors 0.30 m and 7 deg"
-cam3_to_cam5,cam_edge_5,COLMAP_motion,16714,13390,3324,0.865162128,0.907429753,3.587451386,10.018652754,8.971373711,36.932773887,"candidate deviation to robust consensus <= median + 3*MAD, with floors 0.30 m and 7 deg"
-cam3_to_cam5,cam_edge_5,GT_motion,16714,15250,1464,1.241614323,0.876888124,3.872278696,16.778327588,11.913780893,52.519670266,"candidate deviation to robust consensus <= median + 3*MAD, with floors 0.30 m and 7 deg"

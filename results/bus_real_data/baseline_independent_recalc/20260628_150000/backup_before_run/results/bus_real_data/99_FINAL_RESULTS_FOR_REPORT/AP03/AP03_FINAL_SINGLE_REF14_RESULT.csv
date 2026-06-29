@@ -1,5 +1,0 @@
-approach,entity_type,entity_id,marker_id,translation_error_cm,rotation_error_deg,dX_cm,dY_cm,dZ_cm,est_ref14_x_m,est_ref14_y_m,est_ref14_z_m,gt_ref14_x_m,gt_ref14_y_m,gt_ref14_z_m,note
-AP03_targetless_colmap_aruco_scale,camera,cam_edge_0,,3.981,0.458,0.434,-1.117,3.796,0.592152,-1.745730,2.125290,0.587808,-1.734555,2.087328,T_ref14_camera_est compared to T_ref14_camera_gt
-AP03_targetless_colmap_aruco_scale,camera,cam_edge_1,,7.537,0.409,-7.001,1.121,2.557,-4.044180,0.486299,2.157109,-3.974167,0.475086,2.131543,T_ref14_camera_est compared to T_ref14_camera_gt
-AP03_targetless_colmap_aruco_scale,camera,cam_edge_3,,4.464,0.436,-2.545,-2.824,2.340,-3.252807,-1.591450,2.077607,-3.227356,-1.563214,2.054211,T_ref14_camera_est compared to T_ref14_camera_gt
-AP03_targetless_colmap_aruco_scale,camera,cam_edge_5,,7.041,0.443,4.945,3.747,3.330,5.908304,0.385888,2.172065,5.858859,0.348420,2.138762,T_ref14_camera_est compared to T_ref14_camera_gt

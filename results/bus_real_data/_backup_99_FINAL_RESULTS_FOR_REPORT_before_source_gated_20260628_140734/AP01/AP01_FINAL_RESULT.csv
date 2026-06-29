@@ -1,5 +1,0 @@
-method,status,entity_type,entity_id,translation_error_cm,rotation_error_deg,source_policy,note
-AP01,OK,camera,cam_edge_0,6.592,6.195,relative cam3-local camera-map; evaluation-only SE(3) alignment to GT camera map; no scale; no absolute-world-pose claim,relative camera-map SE(3) eval-only
-AP01,OK,camera,cam_edge_1,17.556,6.876,relative cam3-local camera-map; evaluation-only SE(3) alignment to GT camera map; no scale; no absolute-world-pose claim,relative camera-map SE(3) eval-only
-AP01,OK,camera,cam_edge_3,12.52,8.093,relative cam3-local camera-map; evaluation-only SE(3) alignment to GT camera map; no scale; no absolute-world-pose claim,relative camera-map SE(3) eval-only
-AP01,OK,camera,cam_edge_5,1.985,6.602,relative cam3-local camera-map; evaluation-only SE(3) alignment to GT camera map; no scale; no absolute-world-pose claim,relative camera-map SE(3) eval-only

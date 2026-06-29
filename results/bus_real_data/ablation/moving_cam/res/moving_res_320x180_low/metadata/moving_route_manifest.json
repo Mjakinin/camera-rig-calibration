@@ -1,0 +1,8 @@
+{
+  "dataset": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1",
+  "moving_frames": 216,
+  "route_keyframes": "src/calib_lab/bus_real_data/config/moving_camera_route_keyframes.json",
+  "route_interpolated": "src/calib_lab/bus_real_data/config/moving_camera_route_interpolated.json",
+  "route_interpolated_sha256": "a4761714fb8d6bea33c6190981e5eaa702856632cf427705d3b88952256345a9",
+  "note": "New cam5 bridge route for AP03 targetless COLMAP 4/4 static-camera registration."
+}

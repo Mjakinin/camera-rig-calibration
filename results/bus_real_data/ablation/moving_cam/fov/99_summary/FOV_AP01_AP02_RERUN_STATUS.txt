@@ -1,7 +1,0 @@
-MOVING-CAMERA FOV AP01/AP02 RERUN STATUS
-========================================
-
-AP01/AP02 rerun attempted for:
-fov_40deg fov_50deg fov_60deg fov_69deg_baseline fov_80deg fov_90deg fov_100deg fov_110deg fov_120deg fov_140deg_extreme
-
-AP03 was not run in this script.

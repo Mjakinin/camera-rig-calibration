@@ -9,12 +9,11 @@ python3 run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_
   --max-nfev 80
 
 echo
-echo "=== AP02 Phase 3 FAST: Graph BA with_moving sparse ==="
-python3 run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_ba.py \
+echo "=== AP02 Phase 3 FAST: Graph BA with_moving stride=3 budgeted ==="
+python3 -u run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_ba.py \
   --mode with_moving \
-  --moving-stride 5 \
-  --max-moving-frames 40 \
-  --max-nfev 60
+  --moving-stride 3 \
+  --max-nfev 100
 
 echo
 echo "=== AP02 BA static_only summary ==="

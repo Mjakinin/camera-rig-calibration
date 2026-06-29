@@ -1,5 +1,0 @@
-method,status,entity_type,entity_id,translation_error_cm,rotation_error_deg,source_policy,note
-AP02,OK,camera,cam_edge_0,22.273,4.126,"official/full-map GT-aligned SE(3) evaluation; no scale; static cameras + markers 0..13 aligned, marker14 held out",official full-map SE(3)
-AP02,OK,camera,cam_edge_1,20.305,2.375,"official/full-map GT-aligned SE(3) evaluation; no scale; static cameras + markers 0..13 aligned, marker14 held out",official full-map SE(3)
-AP02,OK,camera,cam_edge_3,10.544,2.128,"official/full-map GT-aligned SE(3) evaluation; no scale; static cameras + markers 0..13 aligned, marker14 held out",official full-map SE(3)
-AP02,OK,camera,cam_edge_5,19.498,3.005,"official/full-map GT-aligned SE(3) evaluation; no scale; static cameras + markers 0..13 aligned, marker14 held out",official full-map SE(3)

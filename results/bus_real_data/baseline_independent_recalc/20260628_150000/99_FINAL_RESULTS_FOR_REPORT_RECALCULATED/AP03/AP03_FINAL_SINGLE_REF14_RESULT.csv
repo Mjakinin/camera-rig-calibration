@@ -1,5 +1,0 @@
-method,status,entity_type,entity_id,translation_error_cm,rotation_error_deg,source,source_sha16,note
-AP03-SINGLE-REF14,OK,camera,cam_edge_0,14.453,1.349,results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv,d752e5eb5451f61c,global AP03 rerun; Single Ref14 metric registration; GT eval-only
-AP03-SINGLE-REF14,OK,camera,cam_edge_1,13.325,0.861,results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv,d752e5eb5451f61c,global AP03 rerun; Single Ref14 metric registration; GT eval-only
-AP03-SINGLE-REF14,OK,camera,cam_edge_3,9.289,0.954,results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv,d752e5eb5451f61c,global AP03 rerun; Single Ref14 metric registration; GT eval-only
-AP03-SINGLE-REF14,OK,camera,cam_edge_5,25.419,0.773,results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_FINAL_SINGLE_REF14_RESULT.csv,d752e5eb5451f61c,global AP03 rerun; Single Ref14 metric registration; GT eval-only

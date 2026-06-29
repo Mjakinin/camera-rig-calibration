@@ -1,0 +1,102 @@
+FINAL REPORT — CAMERA RIG CALIBRATION
+
+generated_at: 2026-06-29T11:21:30
+
+Evaluation hierarchy:
+
+PRIMARY:
+- Pairwise static camera-to-camera extrinsic errors for AP01, AP02, AP03.
+- No GT map alignment is used in the primary metric.
+- This is the main report metric.
+
+SECONDARY:
+- Ref14/world-frame static camera-map vs GT after evaluation-only SE(3) alignment.
+- This evaluates global camera-map shape/consistency.
+- GT is used only after method estimation.
+
+DIAGNOSTICS:
+- AP02 graph-BA summary and optional GT-aligned full marker-map evaluation.
+- AP03 COLMAP reconstruction coverage.
+- AP03 marker-size-only scale stability.
+
+Input rule:
+- GT/SDF is used only for evaluation.
+- AP01/AP02/AP03 method inputs are images, intrinsics, detections/feature tracks, marker IDs/size as applicable.
+- AP03 does not use a known SDF marker map as method input.
+
+
+====================================================================================================
+PRIMARY — PAIRWISE CAMERA-TO-CAMERA EXTRINSIC ERRORS
+====================================================================================================
+BASELINE FINAL RESULTS — PAIRWISE STATIC-CAMERA EXTRINSICS
+==========================================================
+
+Metric:
+T_i_j = inv(T_frame_cam_i) @ T_frame_cam_j.
+t_error_cm = ||t_est - t_gt|| * 100.
+r_error_deg = angle(R_gt^T R_est).
+baseline_error_cm = abs(||t_est|| - ||t_gt||) * 100.
+direction_error_deg = angle(t_est, t_gt).
+No GT map alignment is used for the main metric.
+
+Summary:
+method | status | mean_t_cm | mean_r_deg | worst_pair | worst_t_cm | worst_r_deg
+-------+--------+-----------+------------+------------+------------+------------
+AP01   | FAILED | -         | -          |            | -          | -          
+AP02   | FAILED | -         | -          |            | -          | -          
+AP03   | FAILED | -         | -          |            | -          | -          
+
+Pairwise detail: t_error/r_error, plus baseline and direction error.
+pair      | GT | AP01   | AP02   | AP03  
+----------+----+--------+--------+-------
+cam0-cam1 | -  | FAILED | FAILED | FAILED
+cam0-cam3 | -  | FAILED | FAILED | FAILED
+cam0-cam5 | -  | FAILED | FAILED | FAILED
+cam1-cam3 | -  | FAILED | FAILED | FAILED
+cam1-cam5 | -  | FAILED | FAILED | FAILED
+cam3-cam5 | -  | FAILED | FAILED | FAILED
+
+Full estimated and GT pair transforms are in BASELINE_FINAL_PAIRWISE_DETAIL.csv.
+AP03 uses marker-size-only scale; no SDF marker map is used as method input.
+
+
+====================================================================================================
+SECONDARY — REF14/WORLD CAMERA-MAP VS GT, EVALUATION-ONLY SE(3) ALIGNMENT
+====================================================================================================
+[MISSING] results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_EVALUATION.txt
+
+
+====================================================================================================
+DIAGNOSTIC — AP02 WITH-MOVING BA SUMMARY
+====================================================================================================
+[MISSING] results/bus_real_data/02_ref_marker_graph_ba/07_graph_ba/with_moving/ba_summary.txt
+
+
+====================================================================================================
+DIAGNOSTIC — AP03 COLMAP RECONSTRUCTION
+====================================================================================================
+[MISSING] results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/DIAGNOSTIC_AP03_COLMAP_RECONSTRUCTION.txt
+
+
+====================================================================================================
+DIAGNOSTIC — AP03 MARKER-SIZE-ONLY SCALE
+====================================================================================================
+[MISSING] results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/DIAGNOSTIC_AP03_MARKER_SIZE_SCALE.txt
+
+
+====================================================================================================
+FILE INDEX
+====================================================================================================
+- BASELINE_FINAL_CLEAN_COMPARISON.txt
+- PRIMARY_PAIRWISE_SUMMARY.csv
+- PRIMARY_PAIRWISE_DETAIL.csv
+- SECONDARY_REF14_WORLD_CAMERA_MAP_SUMMARY.csv
+- SECONDARY_REF14_WORLD_CAMERA_MAP_DETAIL.csv
+- SECONDARY_REF14_WORLD_CAMERA_MAP_EVALUATION.txt
+- DIAGNOSTIC_AP03_COLMAP_RECONSTRUCTION.txt
+- DIAGNOSTIC_AP03_MARKER_SIZE_SCALE.txt
+- DIAGNOSTIC_AP03_MARKER_SIZE_SCALE.json
+- FINAL_REPORT.txt
+- README.txt
+- MANIFEST.json
+

@@ -1,8 +1,8 @@
 {
-  "metric_colmap_scale": 0.46111658755740936,
+  "metric_colmap_scale": 0.8751062564934453,
   "source": "12_estimate_colmap_scale_from_aruco.py",
   "note": "No-GT metric scale estimated from ArUco marker side length.",
-  "scale": 0.46111658755740936,
-  "metric_scale": 0.46111658755740936,
+  "scale": 0.8751062564934453,
+  "metric_scale": 0.8751062564934453,
   "scale_source": "aruco_metric_scale/metric_scale.txt"
 }

@@ -1,0 +1,2 @@
+method,status,mean_pair_t_cm,median_pair_t_cm,max_pair_t_cm,mean_pair_r_deg,median_pair_r_deg,max_pair_r_deg,mean_baseline_error_cm,mean_direction_error_deg,worst_pair,worst_pair_t_cm,worst_pair_r_deg,source,note
+AP02,OK,65.36561150351761,67.09054484832365,93.14885978019525,5.34258053237093,4.727351496146264,8.13511687288542,37.06732144413384,5.713823677427283,cam3-cam5,93.14885978019525,7.207446754254879,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv,

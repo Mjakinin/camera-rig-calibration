@@ -306,7 +306,7 @@ def run_ba(mode, ref_marker_id, max_nfev, moving_stride=1, max_moving_frames=0):
         loss="soft_l1",
         f_scale=3.0,
         max_nfev=max_nfev,
-        verbose=1,
+        verbose=2,
     )
 
     marker_opt, observer_opt = unpack_params(result.x, names, ref_marker_id)
