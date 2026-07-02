@@ -1,0 +1,32 @@
+ABLATION PARAMETER EFFECT SUMMARY — motion_blur
+================================================================================
+root: results/bus_real_data/ablation/moving_cam/motion_blur
+
+VARIANT: moving_blur_k00_baseline
+--------------------------------------------------------------------------------
+status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+
+VARIANT: moving_blur_k09_mild
+--------------------------------------------------------------------------------
+status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+
+VARIANT: moving_blur_k21_strong
+--------------------------------------------------------------------------------
+status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+
+VARIANT: moving_blur_k41_extreme
+--------------------------------------------------------------------------------
+status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+

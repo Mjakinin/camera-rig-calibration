@@ -1,0 +1,25 @@
+{
+  "method": "AP01",
+  "status": "PARTIAL_2_OF_4",
+  "camera_count": 2,
+  "available_cameras": [
+    "cam_edge_1",
+    "cam_edge_3"
+  ],
+  "missing_cameras": [
+    "cam_edge_0",
+    "cam_edge_5"
+  ],
+  "failures": [
+    {
+      "target_camera": "cam_edge_0",
+      "stage": "moving_relay_cam3_to_cam0",
+      "reason": "RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv"
+    },
+    {
+      "target_camera": "cam_edge_5",
+      "stage": "moving_relay_cam3_to_cam5",
+      "reason": "RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv"
+    }
+  ]
+}

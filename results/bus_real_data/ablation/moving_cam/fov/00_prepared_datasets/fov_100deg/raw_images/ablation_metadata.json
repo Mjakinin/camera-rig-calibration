@@ -1,0 +1,9 @@
+{
+  "ablation_scope": "moving_cam",
+  "ablation_study": "fov",
+  "variant": "fov_100deg",
+  "static_images": "copied from shared baseline",
+  "moving_images": "results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images",
+  "camera_info": "results/bus_real_data/ablation/moving_cam/fov/00_world_variants/fov_100deg/moving_calib_camera.json",
+  "resolution": "1280x720 constant"
+}

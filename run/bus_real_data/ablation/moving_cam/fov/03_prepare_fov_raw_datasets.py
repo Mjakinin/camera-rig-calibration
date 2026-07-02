@@ -10,14 +10,8 @@ OUT_ROOT = Path("results/bus_real_data/ablation/moving_cam/fov/00_prepared_datas
 
 VARIANTS = [
     "fov_40deg",
-    "fov_50deg",
-    "fov_60deg",
     "fov_69deg_baseline",
-    "fov_80deg",
-    "fov_90deg",
     "fov_100deg",
-    "fov_110deg",
-    "fov_120deg",
     "fov_140deg_extreme",
 ]
 

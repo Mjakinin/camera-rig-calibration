@@ -8,23 +8,11 @@ Interpretation:
 
 1) MAIN NO-GT RESULTS, cam_edge_3 reference
 --------------------------------------------------------------------------------
-cam_edge_0 | moving_relay_multichain_colmap_motion_aruco_metric_scale | error=9.805 cm, 2.255 deg
-  estimated target in cam3 [m]:  x=+2.0546  y=-1.1029  z=+3.0734
-  GT target in cam3 [m]:         x=+2.0592  y=-1.1653  z=+2.9979
-  delta est-GT [cm]:             dx=-0.46  dy=+6.24  dz=+7.55
-  multichain candidates: 16957 | inliers: 12799 | outliers: 4158
-
 cam_edge_1 | direct_static_aruco_multimarker_weighted_mad_inliers | error=12.597 cm, 1.862 deg
   estimated target in cam3 [m]:  x=-2.1566  y=-0.1078  z=+0.2304
   GT target in cam3 [m]:         x=-2.1394  y=-0.1285  z=+0.3535
   delta est-GT [cm]:             dx=-1.72  dy=+2.07  dz=-12.31
   direct candidates: 7 | inliers: 5 | outliers: 2
-
-cam_edge_5 | moving_relay_multichain_colmap_motion_aruco_metric_scale | error=5.568 cm, 2.129 deg
-  estimated target in cam3 [m]:  x=+2.8748  y=-3.1091  z=+8.3082
-  GT target in cam3 [m]:         x=+2.8984  y=-3.1019  z=+8.2582
-  delta est-GT [cm]:             dx=-2.36  dy=-0.72  dz=+4.99
-  multichain candidates: 46410 | inliers: 36846 | outliers: 9564
 
 2) REF14 GT-EVAL CAMERA POSES
 --------------------------------------------------------------------------------
@@ -36,20 +24,10 @@ cam_edge_3 | error=0.000 cm, 0.000 deg | dist_from_ref14_est=4.133 m | dist_GT=4
   GT ref14->camera [m]:          x=-3.2274  y=-2.0542  z=-1.5632
   delta est-GT [cm]:             dx=+0.00  dy=+0.00  dz=+0.00
 
-cam_edge_0 | error=9.805 cm, 2.255 deg | dist_from_ref14_est=2.703 m | dist_GT=2.777 m
-  estimated ref14->camera [m]:   x=+0.6278  y=-2.0036  z=-1.7028
-  GT ref14->camera [m]:          x=+0.5878  y=-2.0873  z=-1.7346
-  delta est-GT [cm]:             dx=+3.99  dy=+8.37  dz=+3.18
-
 cam_edge_1 | error=12.597 cm, 1.862 deg | dist_from_ref14_est=4.641 m | dist_GT=4.535 m
   estimated ref14->camera [m]:   x=-4.0888  y=-2.1535  z=+0.4277
   GT ref14->camera [m]:          x=-3.9742  y=-2.1315  z=+0.4751
   delta est-GT [cm]:             dx=-11.46  dy=-2.19  dz=-4.74
-
-cam_edge_5 | error=5.568 cm, 2.129 deg | dist_from_ref14_est=6.275 m | dist_GT=6.247 m
-  estimated ref14->camera [m]:   x=+5.8897  y=-2.1298  z=+0.3939
-  GT ref14->camera [m]:          x=+5.8589  y=-2.1388  z=+0.3484
-  delta est-GT [cm]:             dx=+3.08  dy=+0.89  dz=+4.55
 
 3) MULTICHAIN RELAY DETAILS + ORACLE SANITY
 --------------------------------------------------------------------------------
@@ -60,29 +38,10 @@ Outlier rule:
 Final value:
   weighted mean of inlier transforms, weighted by observable marker quality.
 
-cam_edge_0 | COLMAP multichain | error=9.805 cm, 2.255 deg
-  candidates/inliers/outliers: 16957 / 12799 / 4158
-  best individual candidate by GT, eval-only: m1@f240 -> m3@f76 | 1.740486224 cm, 1.309877230 deg
-
-cam_edge_5 | COLMAP multichain | error=5.568 cm, 2.129 deg
-  candidates/inliers/outliers: 46410 / 36846 / 9564
-  best individual candidate by GT, eval-only: m7@f95 -> m9@f169 | 2.171424557 cm, 2.097783406 deg
-
-cam_edge_0 | GT-motion multichain oracle | error=19.241 cm, 3.144 deg
-  candidates/inliers/outliers: 16957 / 12928 / 4029
-
-cam_edge_1 | GT-motion multichain oracle | error=41.486 cm, 4.584 deg
-  candidates/inliers/outliers: 38247 / 37187 / 1060
-
-cam_edge_5 | GT-motion multichain oracle | error=43.082 cm, 2.195 deg
-  candidates/inliers/outliers: 46410 / 37652 / 8758
-
 4) TAKEAWAY
 --------------------------------------------------------------------------------
 Main deployable output:
-  cam_edge_0: 9.805 cm, 2.255 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
   cam_edge_1: 12.597 cm, 1.862 deg via direct_static_aruco_multimarker_weighted_mad_inliers
-  cam_edge_5: 5.568 cm, 2.129 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
 
 Ref14 output:
   Same estimates, transformed into the GT marker14 frame for simulation readability/evaluation.

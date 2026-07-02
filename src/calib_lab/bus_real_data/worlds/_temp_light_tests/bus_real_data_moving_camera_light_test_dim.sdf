@@ -20,7 +20,7 @@
       <pose>0 0 10 0 0 0</pose>
       <diffuse>0.28 0.28 0.28 1.0</diffuse>
       <specular>0.08 0.08 0.08 1.0</specular>
-      <direction>0.0 -3.0 3</direction>
+      <direction>-0.35 0.05 -1.0</direction>
       <cast_shadows>true</cast_shadows>
     </light>
     <include>

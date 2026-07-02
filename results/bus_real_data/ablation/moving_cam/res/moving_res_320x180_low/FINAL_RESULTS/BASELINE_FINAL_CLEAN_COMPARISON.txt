@@ -12,19 +12,19 @@ No GT map alignment is used for the main metric.
 Summary:
 method | status | mean_t_cm | mean_r_deg | worst_pair | worst_t_cm | worst_r_deg
 -------+--------+-----------+------------+------------+------------+------------
-AP01   | OK     | 35.06     | 2.19       | cam3-cam5  | 61.70      | 2.72       
-AP02   | FAILED | -         | -          |            | -          | -          
-AP03   | OK     | 28.28     | 0.53       | cam1-cam5  | 45.41      | 0.50       
+AP01   | OK     | 151.61    | 13.54      | cam3-cam5  | 305.65     | 25.54      
+AP02   | OK     | 127.61    | 8.57       | cam3-cam5  | 245.49     | 16.47      
+AP03   | OK     | 38.10     | 1.73       | cam0-cam1  | 50.34      | 2.69       
 
 Pairwise detail: t_error/r_error, plus baseline and direction error.
-pair      | GT               | AP01                                   | AP02   | AP03                                  
-----------+------------------+----------------------------------------+--------+---------------------------------------
-cam0-cam1 | baseline 5.069 m | 19.77cm/0.79deg (b 1.33cm, d 2.23deg)  | FAILED | 28.65cm/0.43deg (b 28.51cm, d 0.31deg)
-cam0-cam3 | baseline 3.819 m | 21.51cm/2.45deg (b 7.85cm, d 3.04deg)  | FAILED | 19.24cm/0.60deg (b 18.94cm, d 0.49deg)
-cam0-cam5 | baseline 5.668 m | 48.41cm/2.78deg (b 47.12cm, d 1.17deg) | FAILED | 20.91cm/0.76deg (b 20.55cm, d 0.38deg)
-cam1-cam3 | baseline 2.172 m | 6.69cm/1.86deg (b 0.07cm, d 1.77deg)   | FAILED | 15.25cm/0.23deg (b 14.92cm, d 0.81deg)
-cam1-cam5 | baseline 9.834 m | 52.27cm/2.50deg (b 49.37cm, d 1.03deg) | FAILED | 45.41cm/0.50deg (b 45.31cm, d 0.16deg)
-cam3-cam5 | baseline 9.286 m | 61.70cm/2.72deg (b 58.54cm, d 1.24deg) | FAILED | 40.26cm/0.64deg (b 39.28cm, d 0.53deg)
+pair      | GT               | AP01                                       | AP02                                      | AP03                                  
+----------+------------------+--------------------------------------------+-------------------------------------------+---------------------------------------
+cam0-cam1 | baseline 5.069 m | 20.59cm/2.84deg (b 8.46cm, d 2.10deg)      | 14.28cm/0.73deg (b 12.19cm, d 0.83deg)    | 50.34cm/2.69deg (b 50.29cm, d 0.24deg)
+cam0-cam3 | baseline 3.819 m | 23.38cm/4.69deg (b 2.51cm, d 3.48deg)      | 7.78cm/1.20deg (b 4.56cm, d 0.94deg)      | 42.75cm/2.55deg (b 42.31cm, d 0.87deg)
+cam0-cam5 | baseline 5.668 m | 272.17cm/22.25deg (b 41.74cm, d 28.54deg)  | 240.14cm/16.28deg (b 41.86cm, d 23.23deg) | 22.91cm/2.34deg (b 6.17cm, d 2.24deg) 
+cam1-cam3 | baseline 2.172 m | 6.69cm/1.86deg (b 0.07cm, d 1.77deg)       | 12.85cm/0.54deg (b 8.37cm, d 2.52deg)     | 23.18cm/0.17deg (b 22.67cm, d 1.22deg)
+cam1-cam5 | baseline 9.834 m | 281.20cm/24.08deg (b 147.70cm, d 15.17deg) | 245.11cm/16.18deg (b 36.26cm, d 13.90deg) | 48.71cm/1.37deg (b 47.58cm, d 0.59deg)
+cam3-cam5 | baseline 9.286 m | 305.65cm/25.54deg (b 110.42cm, d 18.82deg) | 245.49cm/16.47deg (b 27.21cm, d 14.88deg) | 40.70cm/1.28deg (b 38.86cm, d 0.73deg)
 
 Full estimated and GT pair transforms are in BASELINE_FINAL_PAIRWISE_DETAIL.csv.
 AP03 uses marker-size-only scale; no SDF marker map is used as method input.

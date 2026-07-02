@@ -1,0 +1,10 @@
+variant,parameter,final_results_exists,AP01_STATUS,AP02_STATUS,AP03_STATUS,PAIRWISE_STATUS,SECONDARY_STATUS,AP01_mean_t_cm,AP01_mean_r_deg,AP01_worst_pair,AP01_worst_t_cm,AP01_worst_r_deg,AP02_mean_t_cm,AP02_mean_r_deg,AP02_worst_pair,AP02_worst_t_cm,AP02_worst_r_deg,AP03_mean_t_cm,AP03_mean_r_deg,AP03_worst_pair,AP03_worst_t_cm,AP03_worst_r_deg,AP01_delta_t_cm_vs_baseline,AP01_delta_r_deg_vs_baseline,AP02_delta_t_cm_vs_baseline,AP02_delta_r_deg_vs_baseline,AP03_delta_t_cm_vs_baseline,AP03_delta_r_deg_vs_baseline
+00_captures,fov,False,,,,,,,,,,,,,,,,,,,,,,,,,,
+00_prepared_datasets,fov,False,,,,,,,,,,,,,,,,,,,,,,,,,,
+00_world_variants,fov,False,,,,,,,,,,,,,,,,,,,,,,,,,,
+01_shared_observations,fov,False,,,,,,,,,,,,,,,,,,,,,,,,,,
+99_summary,fov,False,,,,,,,,,,,,,,,,,,,,,,,,,,
+fov_100deg,fov,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
+fov_140deg_extreme,fov,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
+fov_40deg,fov,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
+fov_69deg_baseline,fov,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,

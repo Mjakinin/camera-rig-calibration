@@ -16,12 +16,12 @@
       "alignment": "SE3_all_static_cameras_no_scale",
       "source_file": "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv",
       "camera_count": 4,
-      "mean_translation_error_cm": "7.355471",
-      "median_translation_error_cm": "6.799184",
-      "max_translation_error_cm": "10.779713",
-      "mean_rotation_error_deg": "1.321836",
-      "median_rotation_error_deg": "1.294881",
-      "max_rotation_error_deg": "1.600869"
+      "mean_translation_error_cm": "7.464805",
+      "median_translation_error_cm": "6.949862",
+      "max_translation_error_cm": "10.972906",
+      "mean_rotation_error_deg": "1.308739",
+      "median_rotation_error_deg": "1.265580",
+      "max_rotation_error_deg": "1.601827"
     },
     {
       "method": "AP02",
@@ -42,12 +42,12 @@
       "alignment": "SE3_all_static_cameras_no_scale",
       "source_file": "results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
       "camera_count": 4,
-      "mean_translation_error_cm": "7.191911",
-      "median_translation_error_cm": "7.000179",
-      "max_translation_error_cm": "11.890755",
-      "mean_rotation_error_deg": "0.080173",
-      "median_rotation_error_deg": "0.077694",
-      "max_rotation_error_deg": "0.107663"
+      "mean_translation_error_cm": "6.360968",
+      "median_translation_error_cm": "6.078174",
+      "max_translation_error_cm": "10.816880",
+      "mean_rotation_error_deg": "0.076540",
+      "median_rotation_error_deg": "0.071616",
+      "max_rotation_error_deg": "0.134082"
     }
   ]
 }

@@ -1,0 +1,11 @@
+{
+  "variant": "moving_res_160x90_extreme_pixel",
+  "parameter": "moving_camera_image_resolution_posthoc_resize",
+  "moving_width": 160,
+  "moving_height": 90,
+  "static_images": "unchanged from frozen baseline",
+  "moving_images": "resized from frozen baseline moving capture",
+  "source": "results/bus_real_data/ablation/_frozen_baseline_shared/bus_real_data_ref_marker_v1",
+  "raw_images": "results/bus_real_data/ablation/moving_cam/res/moving_res_160x90_extreme_pixel/raw_images",
+  "interpretation": "Post-hoc moving-camera image resize ablation. Low-resolution variants are meaningful for degradation sensitivity. Upscaled high-resolution variants do not add real image detail and must not be interpreted as true high-resolution Gazebo rendering."
+}

@@ -1,31 +1,36 @@
-BASELINE FINAL RESULTS — PAIRWISE STATIC-CAMERA EXTRINSICS
-==========================================================
+PARTIAL-AWARE PAIRWISE STATIC-CAMERA EVALUATION
+================================================
 
-Metric:
-T_i_j = inv(T_frame_cam_i) @ T_frame_cam_j.
-t_error_cm = ||t_est - t_gt|| * 100.
-r_error_deg = angle(R_gt^T R_est).
-baseline_error_cm = abs(||t_est|| - ||t_gt||) * 100.
-direction_error_deg = angle(t_est, t_gt).
-No GT map alignment is used for the main metric.
+OK_FULL requires all four cameras and all six camera pairs. PARTIAL results retain every evaluable camera pair.
 
 Summary:
-method | status | mean_t_cm | mean_r_deg | worst_pair | worst_t_cm | worst_r_deg
--------+--------+-----------+------------+------------+------------+------------
-AP01   | FAILED | -         | -          |            | -          | -          
-AP02   | FAILED | -         | -          |            | -          | -          
-AP03   | FAILED | -         | -          |            | -          | -          
+- AP01: PARTIAL_2_OF_4 | cameras=2/4 | pairs=1/6 | mean=6.69 cm / 1.86 deg | missing=cam_edge_0;cam_edge_5
+  reason: cam_edge_0: RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv; cam_edge_5: RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv
+- AP02: PARTIAL_3_OF_4 | cameras=3/4 | pairs=3/6 | mean=9.58 cm / 0.84 deg | missing=cam_edge_5
+- AP03: FAILED_NO_PAIR | cameras=0/4 | pairs=0/6 | mean=- cm / - deg | missing=cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
 
-Pairwise detail: t_error/r_error, plus baseline and direction error.
-pair      | GT | AP01   | AP02   | AP03  
-----------+----+--------+--------+-------
-cam0-cam1 | -  | FAILED | FAILED | FAILED
-cam0-cam3 | -  | FAILED | FAILED | FAILED
-cam0-cam5 | -  | FAILED | FAILED | FAILED
-cam1-cam3 | -  | FAILED | FAILED | FAILED
-cam1-cam5 | -  | FAILED | FAILED | FAILED
-cam3-cam5 | -  | FAILED | FAILED | FAILED
+Pairwise detail:
 
-Full estimated and GT pair transforms are in BASELINE_FINAL_PAIRWISE_DETAIL.csv.
-AP03 uses marker-size-only scale; no SDF marker map is used as method input.
+AP01
+  cam0-cam1: MISSING_CAMERA (missing cam_edge_0)
+  cam0-cam3: MISSING_CAMERA (missing cam_edge_0)
+  cam0-cam5: MISSING_CAMERA (missing cam_edge_0,cam_edge_5)
+  cam1-cam3: 6.69 cm / 1.86 deg
+  cam1-cam5: MISSING_CAMERA (missing cam_edge_5)
+  cam3-cam5: MISSING_CAMERA (missing cam_edge_5)
 
+AP02
+  cam0-cam1: 12.25 cm / 0.81 deg
+  cam0-cam3: 4.99 cm / 1.22 deg
+  cam0-cam5: MISSING_CAMERA (missing cam_edge_5)
+  cam1-cam3: 11.52 cm / 0.49 deg
+  cam1-cam5: MISSING_CAMERA (missing cam_edge_5)
+  cam3-cam5: MISSING_CAMERA (missing cam_edge_5)
+
+AP03
+  cam0-cam1: MISSING_CAMERA (missing cam_edge_0,cam_edge_1)
+  cam0-cam3: MISSING_CAMERA (missing cam_edge_0,cam_edge_3)
+  cam0-cam5: MISSING_CAMERA (missing cam_edge_0,cam_edge_5)
+  cam1-cam3: MISSING_CAMERA (missing cam_edge_1,cam_edge_3)
+  cam1-cam5: MISSING_CAMERA (missing cam_edge_1,cam_edge_5)
+  cam3-cam5: MISSING_CAMERA (missing cam_edge_3,cam_edge_5)

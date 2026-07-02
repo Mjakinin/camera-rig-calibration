@@ -1,17 +1,17 @@
 Shared ArUco detection summary
 ==============================
 
-Dataset: results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/raw_images
+Dataset: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/raw_images
 Dictionary: DICT_4X4_50
 Marker length [m]: 0.17
 
 Static observations: 24
-Moving observations: 459
-Total observations: 483
-PnP success: 483 / 483
+Moving observations: 5
+Total observations: 29
+PnP success: 29 / 29
 
 Output files:
-- results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/aruco_observations/shared_static_aruco_observations.csv
-- results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/aruco_observations/shared_moving_aruco_observations.csv
-- results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/aruco_observations/shared_all_aruco_observations.csv
-- results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/aruco_observations/debug_images
+- results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/aruco_observations/shared_static_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/aruco_observations/shared_moving_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/aruco_observations/shared_all_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/aruco_observations/debug_images

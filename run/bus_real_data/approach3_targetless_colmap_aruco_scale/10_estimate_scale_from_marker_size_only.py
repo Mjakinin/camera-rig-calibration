@@ -295,37 +295,105 @@ def main() -> None:
     args = ap.parse_args()
 
     ensure_dir(args.out_dir)
-
     marker_ids = set(parse_marker_ids(args.marker_ids))
-    best_model, model_dir, cameras, images, points3d = load_best_colmap_model()
 
+    best_model = None
+    model_dir = None
+    cameras = {}
+    images = {}
+    points3d = {}
     static_poses = {}
-    for image_name, payload in sorted(images.items()):
-        if image_name.startswith("static_"):
+
+    obs = []
+    corners_3d = {}
+    tri_rows = []
+    scale_rows = []
+    scaled_pose_rows = []
+
+    scale = None
+    failure_reason = ""
+    status = "FAILED_COLMAP"
+
+    scale_meta = {
+        "scale_m_per_colmap_unit": None,
+        "num_scale_observations_total": 0,
+        "num_scale_observations_used": 0,
+        "raw_median_scale": None,
+        "raw_mad_scale": None,
+        "raw_rel_mad_scale": None,
+        "used_mean_scale": None,
+        "used_std_scale": None,
+        "used_rel_std_scale": None,
+    }
+
+    try:
+        best_model, model_dir, cameras, images, points3d = load_best_colmap_model()
+
+        for image_name, payload in sorted(images.items()):
+            if not image_name.startswith("static_"):
+                continue
             cam = source_id_from_image_name(image_name)
             if cam in STATIC_CAMERAS:
                 static_poses[cam] = payload["T_col_cam"]
 
-    missing = [cam for cam in STATIC_CAMERAS if cam not in static_poses]
-    if missing:
-        raise RuntimeError(f"FAILED_NOT_ALL_STATIC_CAMS_REGISTERED: missing {missing}")
+        try:
+            obs = detect_marker_observations(
+                images, marker_ids, args.min_area_px2
+            )
+            corners_3d, tri_rows = triangulate_marker_corners(
+                obs, images, cameras, args
+            )
+            scale_rows_raw = compute_scale_observations(
+                corners_3d, args.marker_length_m
+            )
+            scale, scale_rows, scale_meta = robust_scale(scale_rows_raw)
+        except Exception as exc:
+            status = "FAILED_SCALE"
+            failure_reason = f"{type(exc).__name__}: {exc}"
 
-    obs = detect_marker_observations(images, marker_ids, args.min_area_px2)
-    corners_3d, tri_rows = triangulate_marker_corners(obs, images, cameras, args)
-    scale_rows_raw = compute_scale_observations(corners_3d, args.marker_length_m)
-    scale, scale_rows, scale_meta = robust_scale(scale_rows_raw)
+        if scale is not None:
+            for cam in sorted(static_poses):
+                T = np.array(static_poses[cam], dtype=np.float64).copy()
+                T[:3, 3] *= scale
+                scaled_pose_rows.append(
+                    pose_row(
+                        "static_camera",
+                        cam,
+                        T,
+                        "ap03_colmap_marker_size_scale_only",
+                    )
+                )
 
-    status = "OK"
-    if scale_meta["used_rel_std_scale"] > args.max_rel_scale_std_warn:
-        status = "SCALE_WEAK_CHECK_REQUIRED"
+            n = len(static_poses)
+            weak = (
+                scale_meta.get("used_rel_std_scale") is not None
+                and scale_meta["used_rel_std_scale"]
+                > args.max_rel_scale_std_warn
+            )
 
-    scaled_pose_rows = []
-    for cam in STATIC_CAMERAS:
-        T = np.array(static_poses[cam], dtype=np.float64).copy()
-        T[:3, 3] *= scale
-        scaled_pose_rows.append(
-            pose_row("static_camera", cam, T, "ap03_colmap_marker_size_scale_only")
-        )
+            if n == 4:
+                status = (
+                    "SCALE_WEAK_CHECK_REQUIRED"
+                    if weak
+                    else "OK_FULL"
+                )
+            elif n >= 2:
+                status = f"PARTIAL_{n}_OF_4"
+                if weak:
+                    status += "_SCALE_WEAK"
+            elif n == 1:
+                status = "FAILED_NO_PAIR_1_OF_4"
+            else:
+                status = "FAILED_NO_STATIC_CAMERAS"
+
+    except Exception as exc:
+        status = "FAILED_COLMAP"
+        failure_reason = f"{type(exc).__name__}: {exc}"
+
+    available_cameras = sorted(static_poses)
+    missing_cameras = sorted(
+        set(STATIC_CAMERAS) - set(available_cameras)
+    )
 
     write_csv(
         args.out_dir / "AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
@@ -359,12 +427,20 @@ def main() -> None:
     meta = {
         "approach": "AP03_targetless_colmap_marker_size_scale_only",
         "status": status,
-        "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
+        "failure_reason": failure_reason,
+        "important_rule": (
+            "No SDF marker map, no GT marker pose, no GT camera pose "
+            "used by this method output."
+        ),
         "best_model": best_model,
-        "model_dir": str(model_dir),
+        "model_dir": str(model_dir) if model_dir is not None else "",
         "registered_images": len(images),
         "registered_static_cameras": len(static_poses),
-        "registered_moving_frames": len([n for n in images if n.startswith("moving_")]),
+        "registered_moving_frames": len(
+            [n for n in images if n.startswith("moving_")]
+        ),
+        "available_static_cameras": available_cameras,
+        "missing_static_cameras": missing_cameras,
         "num_sparse_points3d": len(points3d),
         "marker_ids_requested": sorted(marker_ids),
         "marker_length_m": args.marker_length_m,
@@ -373,33 +449,60 @@ def main() -> None:
         **scale_meta,
     }
 
-    (args.out_dir / "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json").write_text(
-        json.dumps(meta, indent=2) + "\n",
-        encoding="utf-8",
+    metadata_path = (
+        args.out_dir / "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json"
+    )
+    metadata_path.write_text(json.dumps(meta, indent=2) + "\n")
+
+    scale_text = (
+        f"{float(scale):.12f}"
+        if scale is not None
+        else "UNAVAILABLE"
+    )
+    rel_std = scale_meta.get("used_rel_std_scale")
+    rel_std_text = (
+        f"{float(rel_std):.6f}"
+        if rel_std is not None
+        else "UNAVAILABLE"
     )
 
     report = [
-        "AP03 MARKER-SIZE-ONLY SCALE",
-        "===========================",
+        "AP03 MARKER-SIZE-ONLY SCALE / PARTIAL COVERAGE",
+        "================================================",
         "",
         f"status: {status}",
+        f"failure_reason: {failure_reason or '-'}",
         f"best_model: {best_model}",
         f"registered_static_cameras: {len(static_poses)} / 4",
+        f"available_static_cameras: {available_cameras}",
+        f"missing_static_cameras: {missing_cameras}",
         f"registered_images: {len(images)}",
         f"detected_corner_observations: {len(obs)}",
         f"triangulated_marker_corners: {len(corners_3d)}",
-        f"scale_m_per_colmap_unit: {scale:.12f}",
-        f"scale_observations_used/total: {scale_meta['num_scale_observations_used']} / {scale_meta['num_scale_observations_total']}",
-        f"used_rel_std_scale: {scale_meta['used_rel_std_scale']:.6f}",
+        f"scale_m_per_colmap_unit: {scale_text}",
+        (
+            "scale_observations_used/total: "
+            f"{scale_meta.get('num_scale_observations_used', 0)} / "
+            f"{scale_meta.get('num_scale_observations_total', 0)}"
+        ),
+        f"used_rel_std_scale: {rel_std_text}",
         "",
-        "Rule: AP03 scale is estimated only from known physical marker size, not from known marker-map positions.",
+        (
+            "Partial static-camera poses are exported when metric scale "
+            "is available. Missing cameras remain explicitly missing."
+        ),
+        (
+            "Rule: scale is estimated only from known physical marker "
+            "size, not from known marker-map positions."
+        ),
     ]
-    (args.out_dir / "AP03_MARKER_SIZE_SCALE_ONLY_REPORT.txt").write_text(
-        "\n".join(report) + "\n",
-        encoding="utf-8",
-    )
+
+    report_path = args.out_dir / "AP03_MARKER_SIZE_SCALE_ONLY_REPORT.txt"
+    report_path.write_text("\n".join(report) + "\n")
 
     print("\n".join(report))
+    print("[OK] wrote:", metadata_path)
+    print("[OK] wrote:", report_path)
 
 
 if __name__ == "__main__":

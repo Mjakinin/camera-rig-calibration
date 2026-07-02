@@ -1,0 +1,5 @@
+variant,all_observations,moving_observations,static_observations,unique_markers,unique_images_with_observations
+fov_40deg,184,160,24,15,0
+fov_69deg_baseline,479,455,24,15,0
+fov_100deg,680,656,24,15,0
+fov_140deg_extreme,715,691,24,15,0

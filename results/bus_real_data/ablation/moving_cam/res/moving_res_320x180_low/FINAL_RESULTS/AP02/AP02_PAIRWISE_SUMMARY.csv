@@ -1,2 +1,2 @@
 method,status,mean_pair_t_cm,median_pair_t_cm,max_pair_t_cm,mean_pair_r_deg,median_pair_r_deg,max_pair_r_deg,mean_baseline_error_cm,mean_direction_error_deg,worst_pair,worst_pair_t_cm,worst_pair_r_deg,source,note
-AP02,FAILED,,,,,,,,,,,,,Missing AP02 source: results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv
+AP02,OK,127.6089311239045,127.21099399375547,245.48813010260204,8.567626545402488,8.692135672014418,16.47356397931876,21.7409631826899,9.384349213675403,cam3-cam5,245.48813010260204,16.47356397931876,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv,

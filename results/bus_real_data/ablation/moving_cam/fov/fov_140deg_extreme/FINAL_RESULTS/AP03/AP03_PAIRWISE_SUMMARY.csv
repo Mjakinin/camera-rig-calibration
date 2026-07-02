@@ -1,0 +1,2 @@
+method,status,mean_pair_t_cm,median_pair_t_cm,max_pair_t_cm,mean_pair_r_deg,median_pair_r_deg,max_pair_r_deg,mean_baseline_error_cm,mean_direction_error_deg,worst_pair,worst_pair_t_cm,worst_pair_r_deg,source,note
+AP03,OK,18.954967475402345,17.110638649668417,31.478962219904787,0.12828364768504666,0.11108666766954585,0.21384500816924107,18.935826984778668,0.08009411285792327,cam1-cam5,31.478962219904787,0.11031946264655824,results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv,

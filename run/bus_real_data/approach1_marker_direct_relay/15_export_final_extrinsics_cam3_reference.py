@@ -563,27 +563,91 @@ def write_readme(entries):
 def main():
     m = load_chain_module()
 
-    entries = [
-        load_relay_multichain("cam3_to_cam0", "COLMAP_motion", "main_no_gt"),
-        load_direct_multimarker(m),
-        load_relay_multichain("cam3_to_cam5", "COLMAP_motion", "main_no_gt"),
+    entries = []
+    failures = []
+
+    loaders = [
+        (
+            "cam_edge_0",
+            "moving_relay_cam3_to_cam0",
+            lambda: load_relay_multichain(
+                "cam3_to_cam0", "COLMAP_motion", "main_no_gt"
+            ),
+        ),
+        (
+            "cam_edge_1",
+            "direct_static_cam3_to_cam1",
+            lambda: load_direct_multimarker(m),
+        ),
+        (
+            "cam_edge_5",
+            "moving_relay_cam3_to_cam5",
+            lambda: load_relay_multichain(
+                "cam3_to_cam5", "COLMAP_motion", "main_no_gt"
+            ),
+        ),
     ]
 
-    # Oracle rows if available.
-    try:
-        entries.append(load_relay_multichain("cam3_to_cam0", "GT_motion", "oracle_gt_motion"))
-        entries.append(load_relay_multichain("cam3_to_cam1", "GT_motion", "oracle_gt_motion"))
-        entries.append(load_relay_multichain("cam3_to_cam5", "GT_motion", "oracle_gt_motion"))
-    except Exception as e:
-        print("[WARN] GT_motion multichain oracle not available:", e)
+    for target_camera, stage, loader in loaders:
+        try:
+            entries.append(loader())
+            print(f"[OK] AP01 partial-aware export: {target_camera}")
+        except Exception as exc:
+            reason = f"{type(exc).__name__}: {exc}"
+            failures.append({
+                "target_camera": target_camera,
+                "stage": stage,
+                "reason": reason,
+            })
+            print(f"[WARN] AP01 missing {target_camera}: {reason}")
+
+    # Oracle rows are diagnostics only and must never block the deployable output.
+    for pair in ["cam3_to_cam0", "cam3_to_cam1", "cam3_to_cam5"]:
+        try:
+            entries.append(
+                load_relay_multichain(pair, "GT_motion", "oracle_gt_motion")
+            )
+        except Exception as exc:
+            print(f"[WARN] AP01 oracle unavailable for {pair}: {exc}")
+
+    main_entries = [e for e in entries if e.get("category") == "main_no_gt"]
+
+    available_cameras = sorted(
+        {ROOT_CAM} | {e["target_camera"] for e in main_entries}
+    )
+    missing_cameras = sorted(
+        {"cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"}
+        - set(available_cameras)
+    )
+
+    if len(available_cameras) == 4:
+        status = "OK_FULL"
+    elif len(available_cameras) >= 2:
+        status = f"PARTIAL_{len(available_cameras)}_OF_4"
+    else:
+        status = "FAILED_NO_PAIR"
 
     ref14_rows, ref14_meta = build_ref14_rows(m, entries)
 
+    # These writers now receive the available subset rather than nothing.
     write_final_summary(entries)
     write_ref14_csv(ref14_rows)
     write_json(entries, ref14_rows, ref14_meta)
     write_readme(entries)
     write_readable_report(entries, ref14_rows)
+
+    status_payload = {
+        "method": "AP01",
+        "status": status,
+        "camera_count": len(available_cameras),
+        "available_cameras": available_cameras,
+        "missing_cameras": missing_cameras,
+        "failures": failures,
+    }
+    status_path = OUT / "AP01_PARTIAL_STATUS.json"
+    status_path.write_text(json.dumps(status_payload, indent=2) + "\n")
+    print("[OK] wrote:", status_path)
+    print("[AP01 STATUS]", status)
 
 
 if __name__ == "__main__":

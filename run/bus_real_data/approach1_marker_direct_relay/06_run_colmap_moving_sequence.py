@@ -135,7 +135,9 @@ def main():
         "--ImageReader.camera_model", "PINHOLE",
         "--ImageReader.camera_params", camera_params,
         "--SiftExtraction.use_gpu", str(args.use_gpu),
-        "--SiftExtraction.max_num_features", "8192",
+        "--SiftExtraction.num_threads", "1",
+        "--SiftExtraction.max_num_features", "4096",
+        "--SiftExtraction.max_image_size", "1600",
     ])
 
     if args.matcher == "exhaustive":

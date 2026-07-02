@@ -1,0 +1,40 @@
+AP03 COLMAP Reconstruction Inspection
+=====================================
+
+AP03 Phase:
+- targetless COLMAP/SfM feasibility
+- no ArUco scale/registration yet
+- reconstruction scale is arbitrary
+
+Input dataset:
+- total images: 274
+- static images: 4
+- moving images: 270
+
+Number of COLMAP models: 1
+
+Models:
+- model 0: 268 images, 4/4 static cameras, 264 moving frames, 13050 3D points
+  static registered: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
+  static missing: none
+
+Best model by static-camera coverage:
+- model: 0
+- registered images: 268
+- registered static cameras: 4/4
+- registered moving frames: 264
+- 3D points: 13050
+
+Interpretation:
+- COLMAP registered all static cameras.
+- AP03 can proceed to scale/registration with a known metric reference.
+
+Important:
+- COLMAP poses are currently in arbitrary scale and arbitrary coordinate frame.
+- Metric scale and Ref-ArUco alignment are planned for AP03 Phase 2.
+
+Output files:
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/colmap_model_summary.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/registered_images_by_model.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/ap03_colmap_inspection_report.txt
+

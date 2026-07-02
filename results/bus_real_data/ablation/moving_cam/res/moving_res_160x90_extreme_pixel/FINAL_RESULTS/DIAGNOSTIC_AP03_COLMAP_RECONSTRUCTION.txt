@@ -1,0 +1,46 @@
+AP03 COLMAP Reconstruction Inspection
+=====================================
+
+AP03 Phase:
+- targetless COLMAP/SfM feasibility
+- no ArUco scale/registration yet
+- reconstruction scale is arbitrary
+
+Input dataset:
+- total images: 274
+- static images: 4
+- moving images: 270
+
+Number of COLMAP models: 3
+
+Models:
+- model 0: 13 images, 0/4 static cameras, 13 moving frames, 65 3D points
+  static registered: none
+  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
+- model 1: 21 images, 0/4 static cameras, 21 moving frames, 67 3D points
+  static registered: none
+  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
+- model 2: 13 images, 0/4 static cameras, 13 moving frames, 80 3D points
+  static registered: none
+  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
+
+Best model by static-camera coverage:
+- model: 1
+- registered images: 21
+- registered static cameras: 0/4
+- registered moving frames: 21
+- 3D points: 67
+
+Interpretation:
+- COLMAP did not register any static bus cameras.
+- Moving trajectory may reconstruct, but rig extrinsics are not available yet.
+
+Important:
+- COLMAP poses are currently in arbitrary scale and arbitrary coordinate frame.
+- Metric scale and Ref-ArUco alignment are planned for AP03 Phase 2.
+
+Output files:
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/colmap_model_summary.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/registered_images_by_model.csv
+- results/bus_real_data/03_targetless_colmap_aruco_scale/03_reconstruction_inspection/ap03_colmap_inspection_report.txt
+

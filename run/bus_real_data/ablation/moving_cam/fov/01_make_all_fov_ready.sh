@@ -6,14 +6,8 @@ cd "$REPO_ROOT"
 
 VARIANTS=(
   "fov_40deg"
-  "fov_50deg"
-  "fov_60deg"
   "fov_69deg_baseline"
-  "fov_80deg"
-  "fov_90deg"
   "fov_100deg"
-  "fov_110deg"
-  "fov_120deg"
   "fov_140deg_extreme"
 )
 
@@ -55,6 +49,11 @@ bash run/bus_real_data/ablation/moving_cam/fov/04_run_shared_observations_all_fo
 echo
 echo "=== 5/5 summarize shared observations ==="
 python3 run/bus_real_data/ablation/moving_cam/fov/05_summarize_shared_observations_fov.py
+
+echo
+echo
+echo "=== 6/6 materialize clean FOV variant structure ==="
+python3 run/bus_real_data/ablation/moving_cam/fov/06_materialize_clean_fov_structure.py
 
 echo
 echo "[DONE] moving_cam/fov ready."

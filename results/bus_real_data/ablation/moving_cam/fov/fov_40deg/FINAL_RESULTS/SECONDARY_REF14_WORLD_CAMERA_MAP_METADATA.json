@@ -1,0 +1,55 @@
+{
+  "evaluation": "partial_aware_secondary_ref14_world_map",
+  "minimum_cameras_for_se3_alignment": 3,
+  "primary_metric": "pairwise_static_camera_extrinsics",
+  "summary_rows": [
+    {
+      "method": "AP01",
+      "status": "PARTIAL_3_OF_4",
+      "alignment": "SE3_available_static_cameras_no_scale",
+      "source_file": "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv",
+      "camera_count": 3,
+      "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3",
+      "missing_cameras": "cam_edge_5",
+      "failure_reason": "cam_edge_5: RuntimeError: No relay multichain aggregate row found for cam3_to_cam5 / COLMAP_motion",
+      "mean_translation_error_cm": 6.819785995214407,
+      "median_translation_error_cm": 8.000799640825004,
+      "max_translation_error_cm": 8.353428748522653,
+      "mean_rotation_error_deg": 1.1303175855548473,
+      "median_rotation_error_deg": 1.1798299458621564,
+      "max_rotation_error_deg": 1.1880829067951446
+    },
+    {
+      "method": "AP02",
+      "status": "OK_FULL",
+      "alignment": "SE3_available_static_cameras_no_scale",
+      "source_file": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv",
+      "camera_count": 4,
+      "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
+      "missing_cameras": "",
+      "failure_reason": "",
+      "mean_translation_error_cm": 441.0439295084185,
+      "median_translation_error_cm": 298.0487675325755,
+      "max_translation_error_cm": 873.8438773498723,
+      "mean_rotation_error_deg": 43.25958679926539,
+      "median_rotation_error_deg": 15.886445941872513,
+      "max_rotation_error_deg": 126.03024128135152
+    },
+    {
+      "method": "AP03",
+      "status": "PARTIAL_3_OF_4",
+      "alignment": "SE3_available_static_cameras_no_scale",
+      "source_file": "results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+      "camera_count": 3,
+      "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3",
+      "missing_cameras": "cam_edge_5",
+      "failure_reason": "",
+      "mean_translation_error_cm": 8.093172282624357,
+      "median_translation_error_cm": 10.011624527992142,
+      "max_translation_error_cm": 10.987917117569639,
+      "mean_rotation_error_deg": 0.47301171967167405,
+      "median_rotation_error_deg": 0.4020723164307042,
+      "max_rotation_error_deg": 0.6766882286952471
+    }
+  ]
+}

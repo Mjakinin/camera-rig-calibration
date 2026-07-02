@@ -223,7 +223,7 @@ frame,segment,x,y,z,roll,pitch,yaw,image,set_pose_ok
 221,19,0.9555555555555555,0.0,2.2,0.0,0.4388888888888889,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0221.png,True
 222,19,0.8444444444444444,0.0,2.2,0.0,0.4111111111111111,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0222.png,True
 223,19,0.7333333333333334,0.0,2.2,0.0,0.38333333333333336,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0223.png,True
-224,19,0.6222222222222222,0.0,2.2,0.0,0.3555555555555555,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0224.png,False
+224,19,0.6222222222222222,0.0,2.2,0.0,0.3555555555555555,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0224.png,True
 225,19,0.5111111111111112,0.0,2.2,0.0,0.3277777777777778,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0225.png,True
 226,20,0.4,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0226.png,True
 227,20,0.28571428571428575,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_100deg/images/frame_0227.png,True

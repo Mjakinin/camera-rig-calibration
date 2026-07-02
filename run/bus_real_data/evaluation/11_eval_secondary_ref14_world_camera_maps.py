@@ -256,11 +256,32 @@ def main():
     report.append("")
 
     for method in ["AP01", "AP02", "AP03"]:
-        src, est = discover_pose_file(method)
-        cams = [c for c in STATIC_CAMS if c in est and c in gt]
-
-        if len(cams) < 3:
-            raise RuntimeError(f"{method}: need at least 3 cameras for SE3 alignment, got {cams}")
+        try:
+            src, est = discover_pose_file(method)
+            cams = [c for c in STATIC_CAMS if c in est and c in gt]
+            if len(cams) < 3:
+                raise RuntimeError(f"{method}: need at least 3 cameras for SE3 alignment, got {cams}")
+        except Exception as e:
+            print(f"[WARN] skipping {method} in secondary evaluator: {e}")
+            report.append("")
+            report.append(f"{method}")
+            report.append("-" * len(method))
+            report.append(f"status: FAILED_MISSING_SOURCE")
+            report.append(f"reason: {e}")
+            summary_rows.append({
+                "method": method,
+                "mean_translation_error_cm": "",
+                "mean_rotation_error_deg": "",
+                "median_translation_error_cm": "",
+                "median_rotation_error_deg": "",
+                "max_translation_error_cm": "",
+                "max_rotation_error_deg": "",
+                "status": "FAILED_MISSING_SOURCE",
+                "source_file": "",
+                "camera_count": 0,
+                "alignment": "SKIPPED",
+            })
+            continue
 
         T_A = estimate_world_alignment(est, gt, cams)
 
@@ -338,12 +359,14 @@ def main():
     meta_json = FINAL / "SECONDARY_REF14_WORLD_CAMERA_MAP_METADATA.json"
 
     with detail_csv.open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(detail_rows[0].keys()))
+        fieldnames = sorted({k for row in detail_rows for k in row.keys()})
+        w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         w.writeheader()
         w.writerows(detail_rows)
 
     with summary_csv.open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(summary_rows[0].keys()))
+        fieldnames = sorted({k for row in summary_rows for k in row.keys()})
+        w = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         w.writeheader()
         w.writerows(summary_rows)
 

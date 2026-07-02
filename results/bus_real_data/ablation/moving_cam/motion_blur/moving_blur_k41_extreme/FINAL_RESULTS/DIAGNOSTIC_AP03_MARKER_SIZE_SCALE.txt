@@ -1,0 +1,18 @@
+AP03 MARKER-SIZE-ONLY SCALE / PARTIAL COVERAGE
+================================================
+
+status: FAILED_SCALE
+failure_reason: RuntimeError: Too few marker-size scale observations: 0
+best_model: 0
+registered_static_cameras: 0 / 4
+available_static_cameras: []
+missing_static_cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+registered_images: 25
+detected_corner_observations: 0
+triangulated_marker_corners: 0
+scale_m_per_colmap_unit: UNAVAILABLE
+scale_observations_used/total: 0 / 0
+used_rel_std_scale: UNAVAILABLE
+
+Partial static-camera poses are exported when metric scale is available. Missing cameras remain explicitly missing.
+Rule: scale is estimated only from known physical marker size, not from known marker-map positions.

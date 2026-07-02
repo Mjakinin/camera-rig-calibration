@@ -1,0 +1,14 @@
+AP03 MARKER-SIZE-ONLY SCALE
+===========================
+
+status: OK
+best_model: 0
+registered_static_cameras: 4 / 4
+registered_images: 274
+detected_corner_observations: 2720
+triangulated_marker_corners: 60
+scale_m_per_colmap_unit: 0.609301303084
+scale_observations_used/total: 57 / 90
+used_rel_std_scale: 0.011931
+
+Rule: AP03 scale is estimated only from known physical marker size, not from known marker-map positions.

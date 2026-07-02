@@ -1,0 +1,77 @@
+{
+  "mode": "PAIRWISE_STATIC_CAMERA_EXTRINSIC_EVALUATION",
+  "gt_source": {
+    "method": "GT",
+    "source": "src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf",
+    "pose_frame": "GT_ref14"
+  },
+  "methods": {
+    "AP01": {
+      "status": "OK",
+      "method": "AP01",
+      "source": "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv",
+      "pose_frame": "cam_edge_3_local",
+      "note": "AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment."
+    },
+    "AP02": {
+      "status": "OK",
+      "method": "AP02",
+      "source": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv",
+      "pose_frame": "method_local_or_metric_frame",
+      "note": ""
+    },
+    "AP03": {
+      "status": "OK",
+      "method": "AP03",
+      "source": "results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+      "pose_frame": "method_local_or_metric_frame",
+      "note": "",
+      "scale_metadata": {
+        "approach": "AP03_targetless_colmap_marker_size_scale_only",
+        "status": "OK",
+        "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
+        "best_model": "0",
+        "model_dir": "results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0",
+        "registered_images": 266,
+        "registered_static_cameras": 4,
+        "registered_moving_frames": 262,
+        "num_sparse_points3d": 48543,
+        "marker_ids_requested": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "marker_length_m": 0.17,
+        "detected_corner_observations": 1924,
+        "triangulated_marker_corners": 60,
+        "scale_m_per_colmap_unit": 0.8628467848691637,
+        "num_scale_observations_total": 90,
+        "num_scale_observations_used": 90,
+        "raw_median_scale": 0.8628467848691637,
+        "raw_mad_scale": 0.00490155315349422,
+        "raw_rel_mad_scale": 0.00568067615183553,
+        "used_mean_scale": 0.8624074846596709,
+        "used_std_scale": 0.009048099337818152,
+        "used_rel_std_scale": 0.010486333722840661
+      }
+    }
+  },
+  "forbidden_method_inputs": [
+    "GT camera poses during method estimation",
+    "GT marker poses during method estimation",
+    "SDF marker map during AP03 method estimation",
+    "ablation/res snapshots for baseline final"
+  ]
+}

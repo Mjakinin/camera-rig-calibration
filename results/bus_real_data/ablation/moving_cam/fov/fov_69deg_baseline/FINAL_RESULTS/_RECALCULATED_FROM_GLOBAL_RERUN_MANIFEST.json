@@ -35,7 +35,7 @@
         "registered_images": 268,
         "registered_static_cameras": 4,
         "registered_moving_frames": 264,
-        "num_sparse_points3d": 13004,
+        "num_sparse_points3d": 13043,
         "marker_ids_requested": [
           0,
           1,
@@ -56,15 +56,15 @@
         "marker_length_m": 0.17,
         "detected_corner_observations": 1924,
         "triangulated_marker_corners": 60,
-        "scale_m_per_colmap_unit": 0.796685934796739,
+        "scale_m_per_colmap_unit": 0.7960239738639687,
         "num_scale_observations_total": 90,
         "num_scale_observations_used": 90,
-        "raw_median_scale": 0.796685934796739,
-        "raw_mad_scale": 0.005926109824735071,
-        "raw_rel_mad_scale": 0.007438451673239365,
-        "used_mean_scale": 0.7965152769991152,
-        "used_std_scale": 0.00835109957760294,
-        "used_rel_std_scale": 0.010482298246841252
+        "raw_median_scale": 0.7960239738639687,
+        "raw_mad_scale": 0.0071179065540113995,
+        "raw_rel_mad_scale": 0.008941824351671809,
+        "used_mean_scale": 0.7956659220333294,
+        "used_std_scale": 0.008930378121452087,
+        "used_rel_std_scale": 0.011218730106963067
       }
     }
   },

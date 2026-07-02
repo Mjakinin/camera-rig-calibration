@@ -53,17 +53,10 @@ run_step 01_prepare_ap1_adapter_cache \
     --sequence "$RESULT_ROOT/.ap01_compat_cache/moving_observations" \
     --route-csv "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/metadata/route_commanded.csv"
 
-run_step 06_run_colmap_moving_sequence \
-  python3 run/bus_real_data/approach1_marker_direct_relay/06_run_colmap_moving_sequence.py
-
-run_step 07_evaluate_colmap_position_vs_gt \
-  python3 run/bus_real_data/approach1_marker_direct_relay/07_evaluate_colmap_position_vs_gt.py
-
-run_step 08_make_colmap_error_tables \
-  python3 run/bus_real_data/approach1_marker_direct_relay/08_make_colmap_error_tables.py
-
-run_step 09_evaluate_colmap_rotation_vs_gt \
-  python3 run/bus_real_data/approach1_marker_direct_relay/09_evaluate_colmap_rotation_vs_gt.py
+# -----------------------------------------------------------------------------
+# Static branch first.
+# These results do not depend on the moving-camera COLMAP reconstruction.
+# -----------------------------------------------------------------------------
 
 run_step 10_eval_direct_static_cam3_cam1 \
   python3 run/bus_real_data/approach1_marker_direct_relay/10_eval_direct_static_cam3_cam1.py
@@ -71,15 +64,56 @@ run_step 10_eval_direct_static_cam3_cam1 \
 run_step 11_make_direct_static_report_cam3_cam1 \
   python3 run/bus_real_data/approach1_marker_direct_relay/11_make_direct_static_report_cam3_cam1.py
 
-run_step 12_estimate_colmap_scale_from_aruco \
-  python3 run/bus_real_data/approach1_marker_direct_relay/12_estimate_colmap_scale_from_aruco.py
-
 run_step 13_eval_direct_static_cam3_cam1_multimarker \
   python3 run/bus_real_data/approach1_marker_direct_relay/13_eval_direct_static_cam3_cam1_multimarker.py
 
-run_step 14_eval_moving_relay_chains \
-  python3 run/bus_real_data/approach1_marker_direct_relay/14_eval_moving_relay_chains.py
+# -----------------------------------------------------------------------------
+# Moving branch is best-effort.
+# Failure here must not delete the valid direct cam3-cam1 result.
+# -----------------------------------------------------------------------------
 
+COLMAP_OK=0
+SCALE_OK=0
+
+if run_step 06_run_colmap_moving_sequence \
+  python3 run/bus_real_data/approach1_marker_direct_relay/06_run_colmap_moving_sequence.py
+then
+  COLMAP_OK=1
+else
+  echo "[WARN] AP01 moving COLMAP failed; retaining static direct results."
+fi
+
+if [ "$COLMAP_OK" = "1" ]; then
+  run_step 07_evaluate_colmap_position_vs_gt \
+    python3 run/bus_real_data/approach1_marker_direct_relay/07_evaluate_colmap_position_vs_gt.py \
+    || echo "[WARN] AP01 COLMAP position diagnostic failed."
+
+  run_step 08_make_colmap_error_tables \
+    python3 run/bus_real_data/approach1_marker_direct_relay/08_make_colmap_error_tables.py \
+    || echo "[WARN] AP01 COLMAP error-table diagnostic failed."
+
+  run_step 09_evaluate_colmap_rotation_vs_gt \
+    python3 run/bus_real_data/approach1_marker_direct_relay/09_evaluate_colmap_rotation_vs_gt.py \
+    || echo "[WARN] AP01 COLMAP rotation diagnostic failed."
+
+  if run_step 12_estimate_colmap_scale_from_aruco \
+    python3 run/bus_real_data/approach1_marker_direct_relay/12_estimate_colmap_scale_from_aruco.py
+  then
+    SCALE_OK=1
+  else
+    echo "[WARN] AP01 moving metric scale failed; retaining static direct results."
+  fi
+fi
+
+if [ "$SCALE_OK" = "1" ]; then
+  run_step 14_eval_moving_relay_chains \
+    python3 run/bus_real_data/approach1_marker_direct_relay/14_eval_moving_relay_chains.py \
+    || echo "[WARN] AP01 moving relay evaluation incomplete."
+else
+  echo "[WARN] AP01 moving relay skipped because metric moving scale is unavailable."
+fi
+
+# Patched exporter catches missing relay rows and always exports the available subset.
 run_step 15_export_final_extrinsics_cam3_reference \
   python3 run/bus_real_data/approach1_marker_direct_relay/15_export_final_extrinsics_cam3_reference.py
 

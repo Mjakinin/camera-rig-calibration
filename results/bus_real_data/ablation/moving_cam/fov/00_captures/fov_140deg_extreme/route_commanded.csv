@@ -120,7 +120,7 @@ frame,segment,x,y,z,roll,pitch,yaw,image,set_pose_ok
 118,7,2.6,-0.1,2.2,0.0,0.525,-6.362388975,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0118.png,True
 119,7,2.7,-0.15000000000000002,2.2,0.0,0.5375,-6.4019908125,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0119.png,True
 120,7,2.8,-0.2,2.2,0.0,0.55,-6.4415926500000005,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0120.png,True
-121,7,2.9000000000000004,-0.25,2.2,0.0,0.5625,-6.4811944875,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0121.png,False
+121,7,2.9000000000000004,-0.25,2.2,0.0,0.5625,-6.4811944875,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0121.png,True
 122,7,3.0,-0.30000000000000004,2.2,0.0,0.575,-6.520796325,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0122.png,True
 123,7,3.1,-0.35000000000000003,2.2,0.0,0.5875,-6.560398162499999,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0123.png,True
 124,8,3.2,-0.4,2.2,0.0,0.6,-6.6,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0124.png,True
@@ -148,7 +148,7 @@ frame,segment,x,y,z,roll,pitch,yaw,image,set_pose_ok
 146,8,4.4222222222222225,-0.4,2.2,0.0,0.47777777777777775,-8.326253198247954,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0146.png,True
 147,8,4.477777777777778,-0.4,2.2,0.0,0.4722222222222222,-8.40471925271377,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0147.png,True
 148,8,4.533333333333333,-0.4,2.2,0.0,0.4666666666666667,-8.483185307179586,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0148.png,True
-149,8,4.588888888888889,-0.4,2.2,0.0,0.46111111111111114,-8.561651361645403,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0149.png,False
+149,8,4.588888888888889,-0.4,2.2,0.0,0.46111111111111114,-8.561651361645403,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0149.png,True
 150,8,4.644444444444445,-0.4,2.2,0.0,0.4555555555555556,-8.640117416111218,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0150.png,True
 151,8,4.7,-0.4,2.2,0.0,0.45,-8.718583470577034,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0151.png,True
 152,8,4.7555555555555555,-0.4,2.2,0.0,0.4444444444444444,-8.797049525042851,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0152.png,True
@@ -258,7 +258,7 @@ frame,segment,x,y,z,roll,pitch,yaw,image,set_pose_ok
 256,22,-3.0666666666666664,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0256.png,True
 257,22,-3.1777777777777776,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0257.png,True
 258,22,-3.2888888888888888,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0258.png,True
-259,23,-3.4,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0259.png,False
+259,23,-3.4,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0259.png,True
 260,23,-3.51,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0260.png,True
 261,23,-3.62,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0261.png,True
 262,23,-3.73,0.0,2.2,0.0,0.3,-9.42477796076938,results/bus_real_data/ablation/moving_cam/fov/00_captures/fov_140deg_extreme/images/frame_0262.png,True

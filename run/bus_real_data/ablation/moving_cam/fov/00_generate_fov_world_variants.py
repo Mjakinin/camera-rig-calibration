@@ -18,14 +18,8 @@ HEIGHT = 720
 
 VARIANTS = [
     ("fov_40deg", 40.0),
-    ("fov_50deg", 50.0),
-    ("fov_60deg", 60.0),
     ("fov_69deg_baseline", 69.1),
-    ("fov_80deg", 80.0),
-    ("fov_90deg", 90.0),
     ("fov_100deg", 100.0),
-    ("fov_110deg", 110.0),
-    ("fov_120deg", 120.0),
     ("fov_140deg_extreme", 140.0),
 ]
 

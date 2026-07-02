@@ -1,0 +1,36 @@
+PARTIAL-AWARE PAIRWISE STATIC-CAMERA EVALUATION
+================================================
+
+OK_FULL requires all four cameras and all six camera pairs. PARTIAL results retain every evaluable camera pair.
+
+Summary:
+- AP01: PARTIAL_3_OF_4 | cameras=3/4 | pairs=3/6 | mean=9.61 cm / 1.96 deg | missing=cam_edge_5
+  reason: cam_edge_5: RuntimeError: No relay multichain aggregate row found for cam3_to_cam5 / COLMAP_motion
+- AP02: OK_FULL | cameras=4/4 | pairs=6/6 | mean=593.13 cm / 71.67 deg | missing=-
+- AP03: PARTIAL_3_OF_4 | cameras=3/4 | pairs=3/6 | mean=15.13 cm / 0.79 deg | missing=cam_edge_5
+
+Pairwise detail:
+
+AP01
+  cam0-cam1: 14.85 cm / 1.88 deg
+  cam0-cam3: 7.29 cm / 2.14 deg
+  cam0-cam5: MISSING_CAMERA (missing cam_edge_5)
+  cam1-cam3: 6.69 cm / 1.86 deg
+  cam1-cam5: MISSING_CAMERA (missing cam_edge_5)
+  cam3-cam5: MISSING_CAMERA (missing cam_edge_5)
+
+AP02
+  cam0-cam1: 19.78 cm / 2.27 deg
+  cam0-cam3: 12.58 cm / 2.15 deg
+  cam0-cam5: 1169.47 cm / 142.28 deg
+  cam1-cam3: 14.37 cm / 0.59 deg
+  cam1-cam5: 1166.15 cm / 141.49 deg
+  cam3-cam5: 1176.44 cm / 141.25 deg
+
+AP03
+  cam0-cam1: 20.89 cm / 1.06 deg
+  cam0-cam3: 14.34 cm / 0.99 deg
+  cam0-cam5: MISSING_CAMERA (missing cam_edge_5)
+  cam1-cam3: 10.15 cm / 0.31 deg
+  cam1-cam5: MISSING_CAMERA (missing cam_edge_5)
+  cam3-cam5: MISSING_CAMERA (missing cam_edge_5)

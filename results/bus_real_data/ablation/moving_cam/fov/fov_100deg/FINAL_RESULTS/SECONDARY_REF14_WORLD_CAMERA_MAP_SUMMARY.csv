@@ -1,0 +1,4 @@
+alignment,camera_count,max_rotation_error_deg,max_translation_error_cm,mean_rotation_error_deg,mean_translation_error_cm,median_rotation_error_deg,median_translation_error_cm,method,source_file,status
+SE3_all_static_cameras_no_scale,4,1.826134,11.460165,1.380261,7.853343,1.346863,7.607488,AP01,results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv,OK
+SE3_all_static_cameras_no_scale,4,96.408319,753.131469,39.020301,399.994213,27.483303,288.374536,AP02,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv,OK
+SE3_all_static_cameras_no_scale,4,34.626995,439.062102,16.845798,223.420185,10.928278,159.382771,AP03,results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv,OK

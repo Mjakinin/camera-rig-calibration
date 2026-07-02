@@ -49,6 +49,5 @@
     1.0
   ],
   "source": "AP01 camera_intrinsics_by_camera.yaml",
-  "width": 1280,
-  "ablation_note": "Static camera info unchanged for moving-camera resolution ablation."
+  "width": 1280
 }
