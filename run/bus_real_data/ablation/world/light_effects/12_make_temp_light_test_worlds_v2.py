@@ -132,7 +132,7 @@ def main():
         "bus_real_data_moving_camera_light_v2_side_sun.sdf": {
             "ambient": [0.38, 0.38, 0.36, 1.0],
             "background": [0.72, 0.78, 0.88, 1.0],
-            "sun_diffuse": [1.45, 1.35, 1.15, 1.0],
+            "sun_diffuse": [1.00, 0.93, 0.79, 1.0],
             "sun_specular": [0.35, 0.33, 0.28, 1.0],
             "sun_direction": [-1.0, 0.05, -0.015],
         },

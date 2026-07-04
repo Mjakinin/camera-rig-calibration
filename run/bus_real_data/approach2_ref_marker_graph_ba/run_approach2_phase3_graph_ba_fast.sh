@@ -12,7 +12,7 @@ echo
 echo "=== AP02 Phase 3 FAST: Graph BA with_moving stride=3 budgeted ==="
 python3 -u run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_ba.py \
   --mode with_moving \
-  --moving-stride 3 \
+  --moving-stride 1 \
   --max-nfev 100
 
 echo
