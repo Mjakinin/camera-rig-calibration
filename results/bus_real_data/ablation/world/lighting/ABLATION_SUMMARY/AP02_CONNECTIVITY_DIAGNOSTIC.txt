@@ -1,0 +1,122 @@
+
+==============================================================================================================
+ceiling_dark_extreme
+==============================================================================================================
+valid observations: 393
+Ref14 observations: 4
+Ref14 observers:    ['moving_frame_000223', 'moving_frame_000224', 'moving_frame_000225', 'moving_frame_000226']
+cam5 observations:   5
+cam5 marker IDs:     [9, 10, 11, 12, 13]
+cam5 median area:    2748.50 px²
+cam5 median distance:2.848 m
+cam_edge_0  : M:14 -> O:moving_frame_000225 -> M:3 -> O:cam_edge_0
+               bottleneck quality=255.416413
+                observer=moving_frame_000225      marker=14 frame=225      area=  3997.00 dist=  2.404 q=691.460541
+                observer=moving_frame_000225      marker=3  frame=225      area=  3940.00 dist=  2.310 q=738.385748
+                observer=cam_edge_0               marker=3  frame=static   area=  2433.00 dist=  3.086 q=255.416413
+cam_edge_1  : M:14 -> O:moving_frame_000225 -> M:3 -> O:cam_edge_0 -> M:7 -> O:cam_edge_1
+               bottleneck quality=19.628871
+                observer=moving_frame_000225      marker=14 frame=225      area=  3997.00 dist=  2.404 q=691.460541
+                observer=moving_frame_000225      marker=3  frame=225      area=  3940.00 dist=  2.310 q=738.385748
+                observer=cam_edge_0               marker=3  frame=static   area=  2433.00 dist=  3.086 q=255.416413
+                observer=cam_edge_0               marker=7  frame=static   area=  2726.50 dist=  2.863 q=332.716855
+                observer=cam_edge_1               marker=7  frame=static   area=   790.50 dist=  6.346 q=19.628871
+cam_edge_3  : M:14 -> O:moving_frame_000225 -> M:3 -> O:cam_edge_0 -> M:7 -> O:cam_edge_3
+               bottleneck quality=21.413684
+                observer=moving_frame_000225      marker=14 frame=225      area=  3997.00 dist=  2.404 q=691.460541
+                observer=moving_frame_000225      marker=3  frame=225      area=  3940.00 dist=  2.310 q=738.385748
+                observer=cam_edge_0               marker=3  frame=static   area=  2433.00 dist=  3.086 q=255.416413
+                observer=cam_edge_0               marker=7  frame=static   area=  2726.50 dist=  2.863 q=332.716855
+                observer=cam_edge_3               marker=7  frame=static   area=   708.00 dist=  5.750 q=21.413684
+cam_edge_5  : M:14 -> O:moving_frame_000225 -> M:3 -> O:cam_edge_0 -> M:7 -> O:cam_edge_1 -> M:8 -> O:moving_frame_000118 -> M:11 -> O:cam_edge_5
+               bottleneck quality=9.713200
+                observer=moving_frame_000225      marker=14 frame=225      area=  3997.00 dist=  2.404 q=691.460541
+                observer=moving_frame_000225      marker=3  frame=225      area=  3940.00 dist=  2.310 q=738.385748
+                observer=cam_edge_0               marker=3  frame=static   area=  2433.00 dist=  3.086 q=255.416413
+                observer=cam_edge_0               marker=7  frame=static   area=  2726.50 dist=  2.863 q=332.716855
+                observer=cam_edge_1               marker=7  frame=static   area=   790.50 dist=  6.346 q=19.628871
+                observer=cam_edge_1               marker=8  frame=static   area=   502.00 dist=  7.189 q=9.713200
+                observer=moving_frame_000118      marker=8  frame=118      area= 11972.00 dist=  1.459 q=5627.556848
+                observer=moving_frame_000118      marker=11 frame=118      area=  1165.50 dist=  2.565 q=177.214135
+                observer=cam_edge_5               marker=11 frame=static   area=  2142.50 dist=  2.327 q=395.667037
+
+==============================================================================================================
+ceiling_low
+==============================================================================================================
+valid observations: 482
+Ref14 observations: 33
+Ref14 observers:    ['cam_edge_1', 'cam_edge_3', 'moving_frame_000007', 'moving_frame_000008', 'moving_frame_000009', 'moving_frame_000010', 'moving_frame_000011', 'moving_frame_000012', 'moving_frame_000013', 'moving_frame_000014', 'moving_frame_000015', 'moving_frame_000016', 'moving_frame_000017', 'moving_frame_000018', 'moving_frame_000206', 'moving_frame_000207', 'moving_frame_000208', 'moving_frame_000209', 'moving_frame_000211', 'moving_frame_000212', 'moving_frame_000213', 'moving_frame_000214', 'moving_frame_000215', 'moving_frame_000216', 'moving_frame_000217', 'moving_frame_000218', 'moving_frame_000219', 'moving_frame_000220', 'moving_frame_000221', 'moving_frame_000222', 'moving_frame_000223', 'moving_frame_000224', 'moving_frame_000225']
+cam5 observations:   6
+cam5 marker IDs:     [0, 9, 10, 11, 12, 13]
+cam5 median area:    2445.50 px²
+cam5 median distance:2.995 m
+cam_edge_0  : M:14 -> O:cam_edge_1 -> M:7 -> O:cam_edge_0
+               bottleneck quality=19.628871
+                observer=cam_edge_1               marker=14 frame=static   area=   622.50 dist=  4.589 q=29.557564
+                observer=cam_edge_1               marker=7  frame=static   area=   790.50 dist=  6.346 q=19.628871
+                observer=cam_edge_0               marker=7  frame=static   area=  2726.50 dist=  2.863 q=332.716855
+cam_edge_1  : M:14 -> O:cam_edge_1
+               bottleneck quality=29.557564
+                observer=cam_edge_1               marker=14 frame=static   area=   622.50 dist=  4.589 q=29.557564
+cam_edge_3  : M:14 -> O:cam_edge_3
+               bottleneck quality=41.976151
+                observer=cam_edge_3               marker=14 frame=static   area=   735.00 dist=  4.184 q=41.976151
+cam_edge_5  : M:14 -> O:moving_frame_000206 -> M:0 -> O:cam_edge_5
+               bottleneck quality=5.109091
+                observer=moving_frame_000206      marker=14 frame=206      area=   871.50 dist=  3.916 q=56.832104
+                observer=moving_frame_000206      marker=0  frame=206      area=   650.00 dist=  6.163 q=17.112494
+                observer=cam_edge_5               marker=0  frame=static   area=   399.00 dist=  8.837 q=5.109091
+
+==============================================================================================================
+ceiling_normal
+==============================================================================================================
+valid observations: 504
+Ref14 observations: 33
+Ref14 observers:    ['cam_edge_1', 'cam_edge_3', 'moving_frame_000008', 'moving_frame_000009', 'moving_frame_000010', 'moving_frame_000011', 'moving_frame_000012', 'moving_frame_000013', 'moving_frame_000014', 'moving_frame_000015', 'moving_frame_000016', 'moving_frame_000017', 'moving_frame_000018', 'moving_frame_000019', 'moving_frame_000206', 'moving_frame_000207', 'moving_frame_000208', 'moving_frame_000210', 'moving_frame_000211', 'moving_frame_000212', 'moving_frame_000213', 'moving_frame_000214', 'moving_frame_000215', 'moving_frame_000216', 'moving_frame_000217', 'moving_frame_000218', 'moving_frame_000219', 'moving_frame_000220', 'moving_frame_000221', 'moving_frame_000222', 'moving_frame_000223', 'moving_frame_000224', 'moving_frame_000225']
+cam5 observations:   6
+cam5 marker IDs:     [0, 9, 10, 11, 12, 13]
+cam5 median area:    2445.50 px²
+cam5 median distance:2.995 m
+cam_edge_0  : M:14 -> O:cam_edge_1 -> M:7 -> O:cam_edge_0
+               bottleneck quality=19.628871
+                observer=cam_edge_1               marker=14 frame=static   area=   622.50 dist=  4.589 q=29.557564
+                observer=cam_edge_1               marker=7  frame=static   area=   790.50 dist=  6.346 q=19.628871
+                observer=cam_edge_0               marker=7  frame=static   area=  2726.50 dist=  2.863 q=332.716855
+cam_edge_1  : M:14 -> O:cam_edge_1
+               bottleneck quality=29.557564
+                observer=cam_edge_1               marker=14 frame=static   area=   622.50 dist=  4.589 q=29.557564
+cam_edge_3  : M:14 -> O:cam_edge_3
+               bottleneck quality=41.976151
+                observer=cam_edge_3               marker=14 frame=static   area=   735.00 dist=  4.184 q=41.976151
+cam_edge_5  : M:14 -> O:moving_frame_000206 -> M:0 -> O:cam_edge_5
+               bottleneck quality=5.109091
+                observer=moving_frame_000206      marker=14 frame=206      area=   871.50 dist=  3.916 q=56.832104
+                observer=moving_frame_000206      marker=0  frame=206      area=   650.00 dist=  6.163 q=17.112494
+                observer=cam_edge_5               marker=0  frame=static   area=   399.00 dist=  8.837 q=5.109091
+
+==============================================================================================================
+ceiling_bright
+==============================================================================================================
+valid observations: 502
+Ref14 observations: 34
+Ref14 observers:    ['cam_edge_1', 'cam_edge_3', 'moving_frame_000008', 'moving_frame_000009', 'moving_frame_000010', 'moving_frame_000011', 'moving_frame_000012', 'moving_frame_000013', 'moving_frame_000014', 'moving_frame_000015', 'moving_frame_000016', 'moving_frame_000017', 'moving_frame_000018', 'moving_frame_000019', 'moving_frame_000020', 'moving_frame_000206', 'moving_frame_000207', 'moving_frame_000208', 'moving_frame_000209', 'moving_frame_000211', 'moving_frame_000212', 'moving_frame_000213', 'moving_frame_000214', 'moving_frame_000215', 'moving_frame_000216', 'moving_frame_000217', 'moving_frame_000218', 'moving_frame_000219', 'moving_frame_000220', 'moving_frame_000221', 'moving_frame_000222', 'moving_frame_000223', 'moving_frame_000224', 'moving_frame_000225']
+cam5 observations:   6
+cam5 marker IDs:     [0, 9, 10, 11, 12, 13]
+cam5 median area:    2445.50 px²
+cam5 median distance:2.995 m
+cam_edge_0  : M:14 -> O:cam_edge_1 -> M:7 -> O:cam_edge_0
+               bottleneck quality=19.628871
+                observer=cam_edge_1               marker=14 frame=static   area=   622.50 dist=  4.589 q=29.557564
+                observer=cam_edge_1               marker=7  frame=static   area=   790.50 dist=  6.346 q=19.628871
+                observer=cam_edge_0               marker=7  frame=static   area=  2726.50 dist=  2.863 q=332.716855
+cam_edge_1  : M:14 -> O:cam_edge_1
+               bottleneck quality=29.557564
+                observer=cam_edge_1               marker=14 frame=static   area=   622.50 dist=  4.589 q=29.557564
+cam_edge_3  : M:14 -> O:cam_edge_3
+               bottleneck quality=41.976151
+                observer=cam_edge_3               marker=14 frame=static   area=   735.00 dist=  4.184 q=41.976151
+cam_edge_5  : M:14 -> O:moving_frame_000206 -> M:0 -> O:cam_edge_5
+               bottleneck quality=5.109091
+                observer=moving_frame_000206      marker=14 frame=206      area=   871.50 dist=  3.916 q=56.832104
+                observer=moving_frame_000206      marker=0  frame=206      area=   650.00 dist=  6.163 q=17.112494
+                observer=cam_edge_5               marker=0  frame=static   area=   399.00 dist=  8.837 q=5.109091

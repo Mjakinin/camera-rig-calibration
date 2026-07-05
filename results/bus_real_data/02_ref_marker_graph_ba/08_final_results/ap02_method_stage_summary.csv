@@ -3,4 +3,4 @@ single_ref_marker_pnp,2,Only cameras directly seeing reference marker 14 can be 
 graph_initialization_static_only,3,Static-only graph misses cam_edge_5.
 graph_initialization_with_moving,4,Moving-camera observations connect all static cameras and all markers.
 graph_ba_static_only,3,Bundle adjustment on static-only connected component.
-graph_ba_with_moving_sparse,3,Sparse moving-frame BA. Main AP02 result.
+graph_ba_with_moving_sparse,4,Sparse moving-frame BA. Main AP02 result.

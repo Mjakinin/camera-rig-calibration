@@ -1,0 +1,740 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+import json
+import math
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from typing import Sequence
+
+
+BASE_WORLD = Path(
+    "src/calib_lab/bus_real_data/worlds/"
+    "bus_real_data_moving_camera.sdf"
+)
+
+OUTPUT_DIR = Path(
+    "src/calib_lab/bus_real_data/worlds/lighting"
+)
+
+# Two long LED strips, one on each side of the center aisle.
+PANEL_X = 0.70
+PANEL_Y_VALUES = (-0.45, 0.45)
+PANEL_Z = 2.70
+PANEL_LENGTH = 10.40
+PANEL_WIDTH = 0.14
+PANEL_THICKNESS = 0.025
+
+# Five hidden light sources per strip approximate a long area light.
+LIGHT_X_VALUES = (-3.80, -2.00, -0.20, 1.60, 3.40, 5.20)
+LIGHT_Z = 2.66
+
+# Local ceiling luminaire above the door / marker transition.
+# Door light is centered between marker 3 and marker 4 in x, but shifted inward from the side wall for better incidence.
+DOOR_LIGHT_X = 0.40
+DOOR_LIGHT_Y = 0.80
+DOOR_LIGHT_Z = 2.58
+
+DOOR_PANEL_Z = 2.70
+DOOR_PANEL_LENGTH = 0.72
+DOOR_PANEL_WIDTH = 0.34
+DOOR_PANEL_THICKNESS = 0.025
+
+# Lighting geometry is identical for every ablation stage.
+COMMON_LIGHT = {
+    "range_m": 4.80,
+    "constant": 0.55,
+    "linear": 0.050,
+    "quadratic": 0.010,
+    "inner_angle": 0.78,
+    "outer_angle": 1.38,
+    "falloff": 0.28,
+}
+
+# Only illumination strength and simulated indirect illumination change.
+VARIANTS = {
+    "ceiling_low": {
+        "ambient": (0.025, 0.026, 0.032, 1.000),
+        "light_diffuse": (0.10, 0.10, 0.11, 1.0),
+        "light_specular": (0.008, 0.008, 0.010, 1.0),
+        "panel_emissive": (0.06, 0.06, 0.065, 1.0),
+    },
+    "ceiling_baseline": {
+        "ambient": (0.140, 0.140, 0.150, 1.000),
+        "light_diffuse": (0.48, 0.46, 0.41, 1.0),
+        "light_specular": (0.050, 0.048, 0.043, 1.0),
+        "panel_emissive": (0.32, 0.31, 0.28, 1.0),
+    },
+    "ceiling_bright": {
+        "ambient": (0.220, 0.220, 0.230, 1.000),
+        "light_diffuse": (0.82, 0.78, 0.68, 1.0),
+        "light_specular": (0.105, 0.100, 0.088, 1.0),
+        "panel_emissive": (0.68, 0.65, 0.56, 1.0),
+    },
+    "ceiling_extreme": {
+        "ambient": (0.300, 0.300, 0.310, 1.000),
+        "light_diffuse": (1.00, 0.95, 0.82, 1.0),
+        "light_specular": (0.180, 0.170, 0.145, 1.0),
+        "panel_emissive": (1.00, 0.96, 0.84, 1.0),
+    },
+}
+
+
+def find_world(root: ET.Element) -> ET.Element:
+    world = root.find("world")
+
+    if world is None:
+        world = next(root.iter("world"), None)
+
+    if world is None:
+        raise RuntimeError("No <world> element found")
+
+    return world
+
+
+def set_child(
+    parent: ET.Element,
+    tag: str,
+    text: str,
+) -> ET.Element:
+    node = parent.find(tag)
+
+    if node is None:
+        node = ET.SubElement(parent, tag)
+
+    node.text = text
+    return node
+
+
+def rgba(values: Sequence[float]) -> str:
+    if len(values) != 4:
+        raise ValueError(f"Expected RGBA vector, got {values}")
+
+    for value in values:
+        if not 0.0 <= float(value) <= 1.0:
+            raise ValueError(
+                f"RGBA component outside [0,1]: {value}"
+            )
+
+    return " ".join(
+        f"{float(value):.6f}"
+        for value in values
+    )
+
+
+def normalized_direction(values: Sequence[float]) -> str:
+    if len(values) != 3:
+        raise ValueError(
+            f"Expected three direction components, got {values}"
+        )
+
+    norm = math.sqrt(
+        sum(float(value) ** 2 for value in values)
+    )
+
+    if norm <= 1e-12:
+        raise ValueError("Direction vector must not be zero")
+
+    return " ".join(
+        f"{float(value) / norm:.9f}"
+        for value in values
+    )
+
+
+def remove_existing_lights(world: ET.Element) -> None:
+    for light in list(world.findall("light")):
+        world.remove(light)
+
+
+def remove_existing_panel_model(world: ET.Element) -> None:
+    for model in list(world.findall("model")):
+        if model.get("name") == "bus_ceiling_led_panels":
+            world.remove(model)
+
+
+def configure_scene(
+    world: ET.Element,
+    ambient: Sequence[float],
+) -> None:
+    scene = world.find("scene")
+
+    if scene is None:
+        scene = ET.SubElement(world, "scene")
+
+    set_child(scene, "ambient", rgba(ambient))
+
+    # Keep background constant so it is not another ablation variable.
+    set_child(
+        scene,
+        "background",
+        rgba((0.48, 0.52, 0.60, 1.0)),
+    )
+
+    set_child(scene, "shadows", "true")
+
+
+def add_panel_visual(
+    link: ET.Element,
+    *,
+    name: str,
+    y: float,
+    emissive: Sequence[float],
+) -> None:
+    visual = ET.SubElement(
+        link,
+        "visual",
+        {"name": name},
+    )
+
+    set_child(
+        visual,
+        "pose",
+        f"{PANEL_X:.6f} {y:.6f} {PANEL_Z:.6f} 0 0 0",
+    )
+
+    geometry = ET.SubElement(visual, "geometry")
+    box = ET.SubElement(geometry, "box")
+
+    set_child(
+        box,
+        "size",
+        (
+            f"{PANEL_LENGTH:.6f} "
+            f"{PANEL_WIDTH:.6f} "
+            f"{PANEL_THICKNESS:.6f}"
+        ),
+    )
+
+    material = ET.SubElement(visual, "material")
+
+    set_child(
+        material,
+        "ambient",
+        rgba(emissive),
+    )
+    set_child(
+        material,
+        "diffuse",
+        rgba(emissive),
+    )
+    set_child(
+        material,
+        "specular",
+        rgba((0.12, 0.12, 0.11, 1.0)),
+    )
+    set_child(
+        material,
+        "emissive",
+        rgba(emissive),
+    )
+
+
+def scale_rgba(
+    values: Sequence[float],
+    factor: float,
+) -> tuple[float, float, float, float]:
+    return (
+        min(1.0, max(0.0, float(values[0]) * factor)),
+        min(1.0, max(0.0, float(values[1]) * factor)),
+        min(1.0, max(0.0, float(values[2]) * factor)),
+        float(values[3]),
+    )
+
+
+def add_door_panel_visual(
+    link: ET.Element,
+    emissive: Sequence[float],
+) -> None:
+    panel_color = scale_rgba(emissive, 0.90)
+
+    visual = ET.SubElement(
+        link,
+        "visual",
+        {"name": "door_ceiling_led_panel"},
+    )
+
+    set_child(
+        visual,
+        "pose",
+        (
+            f"{DOOR_LIGHT_X:.6f} "
+            f"{DOOR_LIGHT_Y:.6f} "
+            f"{DOOR_PANEL_Z:.6f} "
+            "0 0 0"
+        ),
+    )
+
+    geometry = ET.SubElement(visual, "geometry")
+    box = ET.SubElement(geometry, "box")
+
+    set_child(
+        box,
+        "size",
+        (
+            f"{DOOR_PANEL_LENGTH:.6f} "
+            f"{DOOR_PANEL_WIDTH:.6f} "
+            f"{DOOR_PANEL_THICKNESS:.6f}"
+        ),
+    )
+
+    material = ET.SubElement(visual, "material")
+
+    set_child(material, "ambient", rgba(panel_color))
+    set_child(material, "diffuse", rgba(panel_color))
+    set_child(
+        material,
+        "specular",
+        rgba((0.10, 0.10, 0.09, 1.0)),
+    )
+    set_child(material, "emissive", rgba(panel_color))
+
+
+def add_panel_model(
+    world: ET.Element,
+    emissive: Sequence[float],
+) -> None:
+    model = ET.SubElement(
+        world,
+        "model",
+        {"name": "bus_ceiling_led_panels"},
+    )
+
+    set_child(model, "static", "true")
+
+    link = ET.SubElement(
+        model,
+        "link",
+        {"name": "ceiling_led_panel_link"},
+    )
+
+    add_panel_visual(
+        link,
+        name="left_ceiling_led_strip",
+        y=PANEL_Y_VALUES[0],
+        emissive=emissive,
+    )
+
+    add_panel_visual(
+        link,
+        name="right_ceiling_led_strip",
+        y=PANEL_Y_VALUES[1],
+        emissive=emissive,
+    )
+
+    add_door_panel_visual(
+        link,
+        emissive=emissive,
+    )
+
+
+def add_downward_spot(
+    world: ET.Element,
+    *,
+    name: str,
+    x: float,
+    y: float,
+    diffuse: Sequence[float],
+    specular: Sequence[float],
+) -> None:
+    light = ET.SubElement(
+        world,
+        "light",
+        {
+            "name": name,
+            "type": "spot",
+        },
+    )
+
+    set_child(
+        light,
+        "pose",
+        f"{x:.6f} {y:.6f} {LIGHT_Z:.6f} 0 0 0",
+    )
+
+    # Diffused bus LED panels should not produce ten separate,
+    # hard-edged shadows.
+    set_child(light, "cast_shadows", "false")
+    set_child(light, "diffuse", rgba(diffuse))
+    set_child(light, "specular", rgba(specular))
+    set_child(
+        light,
+        "direction",
+        normalized_direction((0.0, 0.0, -1.0)),
+    )
+
+    attenuation = ET.SubElement(light, "attenuation")
+
+    set_child(
+        attenuation,
+        "range",
+        f"{COMMON_LIGHT['range_m']:.6f}",
+    )
+    set_child(
+        attenuation,
+        "constant",
+        f"{COMMON_LIGHT['constant']:.6f}",
+    )
+    set_child(
+        attenuation,
+        "linear",
+        f"{COMMON_LIGHT['linear']:.6f}",
+    )
+    set_child(
+        attenuation,
+        "quadratic",
+        f"{COMMON_LIGHT['quadratic']:.6f}",
+    )
+
+    spot = ET.SubElement(light, "spot")
+
+    set_child(
+        spot,
+        "inner_angle",
+        f"{COMMON_LIGHT['inner_angle']:.6f}",
+    )
+    set_child(
+        spot,
+        "outer_angle",
+        f"{COMMON_LIGHT['outer_angle']:.6f}",
+    )
+    set_child(
+        spot,
+        "falloff",
+        f"{COMMON_LIGHT['falloff']:.6f}",
+    )
+
+
+def add_door_point_light(
+    world: ET.Element,
+    *,
+    diffuse: Sequence[float],
+    specular: Sequence[float],
+) -> None:
+    # A local point source approximates the broad hemispherical output
+    # of a door-area ceiling panel. Unlike another spotlight, it also
+    # illuminates vertical marker and door surfaces.
+    light = ET.SubElement(
+        world,
+        "light",
+        {
+            "name": "door_ceiling_fill_light",
+            "type": "point",
+        },
+    )
+
+    set_child(
+        light,
+        "pose",
+        (
+            f"{DOOR_LIGHT_X:.6f} "
+            f"{DOOR_LIGHT_Y:.6f} "
+            f"{DOOR_LIGHT_Z:.6f} "
+            "0 0 0"
+        ),
+    )
+
+    set_child(light, "cast_shadows", "false")
+    set_child(
+        light,
+        "diffuse",
+        rgba(scale_rgba(diffuse, 0.82)),
+    )
+    set_child(
+        light,
+        "specular",
+        rgba(scale_rgba(specular, 0.55)),
+    )
+
+    attenuation = ET.SubElement(light, "attenuation")
+
+    # Limited range keeps this a local door-area luminaire.
+    set_child(attenuation, "range", "3.400000")
+    set_child(attenuation, "constant", "0.650000")
+    set_child(attenuation, "linear", "0.070000")
+    set_child(attenuation, "quadratic", "0.018000")
+
+
+def add_ceiling_light_array(
+    world: ET.Element,
+    *,
+    diffuse: Sequence[float],
+    specular: Sequence[float],
+) -> None:
+    index = 0
+
+    for y in PANEL_Y_VALUES:
+        for x in LIGHT_X_VALUES:
+            add_downward_spot(
+                world,
+                name=f"ceiling_panel_spot_{index:02d}",
+                x=x,
+                y=y,
+                diffuse=diffuse,
+                specular=specular,
+            )
+            index += 1
+
+    add_door_point_light(
+        world,
+        diffuse=diffuse,
+        specular=specular,
+    )
+
+
+def validate_generated_world(
+    root: ET.Element,
+    variant: str,
+) -> None:
+    world = find_world(root)
+
+    lights = world.findall("light")
+
+    spot_lights = [
+        light
+        for light in lights
+        if light.get("type") == "spot"
+    ]
+
+    point_lights = [
+        light
+        for light in lights
+        if light.get("type") == "point"
+    ]
+
+    if len(lights) != 13:
+        raise RuntimeError(
+            f"{variant}: expected 13 lights, found {len(lights)}"
+        )
+
+    if len(spot_lights) != 12:
+        raise RuntimeError(
+            f"{variant}: expected 12 strip spots, "
+            f"found {len(spot_lights)}"
+        )
+
+    if len(point_lights) != 1:
+        raise RuntimeError(
+            f"{variant}: expected one door point light, "
+            f"found {len(point_lights)}"
+        )
+
+    door_light = point_lights[0]
+
+    if door_light.get("name") != "door_ceiling_fill_light":
+        raise RuntimeError(
+            f"{variant}: unexpected point light name"
+        )
+
+    if door_light.findtext("cast_shadows") != "false":
+        raise RuntimeError(
+            f"{variant}: door light must not cast hard shadows"
+        )
+
+    for light in spot_lights:
+        cast_shadows = light.findtext("cast_shadows")
+
+        if cast_shadows != "false":
+            raise RuntimeError(
+                f"{variant}: ceiling light unexpectedly casts shadows"
+            )
+
+        light_direction = light.findtext("direction", "").strip()
+
+        if light_direction != "0.000000000 0.000000000 -1.000000000":
+            raise RuntimeError(
+                f"{variant}: incorrect strip-light direction: "
+                f"{light_direction}"
+            )
+
+    panel_models = [
+        model
+        for model in world.findall("model")
+        if model.get("name") == "bus_ceiling_led_panels"
+    ]
+
+    if len(panel_models) != 1:
+        raise RuntimeError(
+            f"{variant}: expected exactly one LED panel model"
+        )
+
+    visuals = list(panel_models[0].iter("visual"))
+
+    if len(visuals) != 3:
+        raise RuntimeError(
+            f"{variant}: expected two strips and one door panel"
+        )
+
+    color_tags = {
+        "ambient",
+        "background",
+        "diffuse",
+        "specular",
+        "emissive",
+    }
+
+    for node in root.iter():
+        if node.tag not in color_tags or not node.text:
+            continue
+
+        values = [
+            float(value)
+            for value in node.text.split()
+        ]
+
+        if len(values) != 4:
+            raise RuntimeError(
+                f"{variant}: invalid <{node.tag}> vector"
+            )
+
+        for value in values:
+            if not 0.0 <= value <= 1.0:
+                raise RuntimeError(
+                    f"{variant}: <{node.tag}> outside [0,1]: {value}"
+                )
+
+
+def write_variant(
+    variant: str,
+    config: dict,
+) -> None:
+    tree = ET.parse(BASE_WORLD)
+    root = tree.getroot()
+    world = find_world(root)
+
+    remove_existing_lights(world)
+    remove_existing_panel_model(world)
+
+    configure_scene(
+        world,
+        config["ambient"],
+    )
+
+    add_panel_model(
+        world,
+        config["panel_emissive"],
+    )
+
+    add_ceiling_light_array(
+        world,
+        diffuse=config["light_diffuse"],
+        specular=config["light_specular"],
+    )
+
+    validate_generated_world(
+        root,
+        variant,
+    )
+
+    ET.indent(tree, space="  ")
+
+    output = OUTPUT_DIR / (
+        f"bus_real_data_moving_camera_light_{variant}.sdf"
+    )
+
+    tree.write(
+        output,
+        encoding="utf-8",
+        xml_declaration=True,
+    )
+
+    # Parse the completed file once more to catch malformed XML.
+    ET.parse(output)
+
+    print(
+        f"[OK] {variant:20s} -> {output} "
+        f"(2 strips + 1 door panel, "
+        f"12 spots + 1 door point)"
+    )
+
+
+def main() -> None:
+    if not BASE_WORLD.exists():
+        raise SystemExit(
+            f"[ERROR] Missing base world: {BASE_WORLD}"
+        )
+
+    OUTPUT_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    for old_file in OUTPUT_DIR.glob(
+        "bus_real_data_moving_camera_light_*.sdf"
+    ):
+        old_file.unlink()
+
+    for variant, config in VARIANTS.items():
+        write_variant(
+            variant,
+            config,
+        )
+
+    metadata = {
+        "experiment": "physical_ceiling_light_intensity_ablation",
+        "panel_count": 2,
+        "spot_lights_per_panel": 6,
+        "door_panel_count": 1,
+        "door_point_light_count": 1,
+        "door_light_x_m": DOOR_LIGHT_X,
+        "door_light_y_m": DOOR_LIGHT_Y,
+        "panel_y_m": list(PANEL_Y_VALUES),
+        "panel_z_m": PANEL_Z,
+        "panel_length_m": PANEL_LENGTH,
+        "light_x_m": list(LIGHT_X_VALUES),
+        "light_direction": [0.0, 0.0, -1.0],
+        "common_light_parameters": COMMON_LIGHT,
+        "variants": VARIANTS,
+        "interpretation": {
+            "ambient": (
+                "Approximation of indirect light bounce because the "
+                "Gazebo raster renderer does not provide full global "
+                "illumination."
+            ),
+            "panel_emissive": (
+                "Makes the panel visually luminous; it does not itself "
+                "illuminate the scene."
+            ),
+            "spot_lights": (
+                "Provide the actual physical illumination."
+            ),
+        },
+    }
+
+    metadata_path = OUTPUT_DIR / "LIGHTING_VARIANTS.json"
+
+    metadata_path.write_text(
+        json.dumps(
+            metadata,
+            indent=2,
+        )
+        + "\n"
+    )
+
+    readme = OUTPUT_DIR / "LIGHTING_VARIANTS.txt"
+
+    readme.write_text(
+        "Two-strip physical ceiling-light ablation\n"
+        "=========================================\n\n"
+        "Visual layout:\n"
+        "  Two continuous LED strips, left and right of the aisle.\n\n"
+        "Lighting implementation:\n"
+        "  Six downward spot lights below each strip.\n"
+        "  Twelve spot lights total.\n"
+        "  Ceiling lights do not cast ten separate hard shadows.\n"
+        "  Scene ambient approximates indirect light reflections.\n\n"
+        "Brightness stages:\n"
+        "  ceiling_low\n"
+        "  ceiling_baseline\n"
+        "  ceiling_bright\n"
+        "  ceiling_extreme\n\n"
+        "Panel positions, spot positions, cone geometry and\n"
+        "attenuation remain identical across every stage.\n"
+    )
+
+    print(f"[OK] wrote {metadata_path}")
+    print(f"[OK] wrote {readme}")
+
+
+if __name__ == "__main__":
+    main()

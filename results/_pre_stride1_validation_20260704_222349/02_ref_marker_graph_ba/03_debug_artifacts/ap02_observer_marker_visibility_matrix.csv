@@ -1,0 +1,10 @@
+observer_id,marker_0,marker_1,marker_2,marker_3,marker_4,marker_5,marker_6,marker_7,marker_8,marker_9,marker_10,marker_11,marker_12,marker_13,marker_14
+cam_edge_0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0
+cam_edge_1,0,1,1,0,0,1,1,1,1,0,0,0,0,0,1
+cam_edge_3,0,1,1,1,0,1,1,1,1,0,0,0,0,0,1
+cam_edge_5,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0
+moving_frame_000038,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+moving_frame_000039,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+moving_frame_000040,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+moving_frame_000041,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+moving_frame_000042,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0

@@ -18,11 +18,11 @@ python3 run/bus_real_data/approach2_ref_marker_graph_ba/04_single_ref_marker_pnp
 
 echo
 echo "=== AP02 Phase 2: graph initialization static_only ==="
-python3 run/bus_real_data/approach2_ref_marker_graph_ba/05_initialize_ref_marker_pose_graph.py --mode static_only
+python3 run/bus_real_data/approach2_ref_marker_graph_ba/05_initialize_ref_marker_pose_graph_v2.py --mode static_only
 
 echo
 echo "=== AP02 Phase 2: graph initialization with_moving ==="
-python3 run/bus_real_data/approach2_ref_marker_graph_ba/05_initialize_ref_marker_pose_graph.py --mode with_moving
+python3 run/bus_real_data/approach2_ref_marker_graph_ba/05_initialize_ref_marker_pose_graph_v2.py --mode with_moving
 
 echo
 echo "=== AP02 Phase 2: compare graph initialization variants ==="

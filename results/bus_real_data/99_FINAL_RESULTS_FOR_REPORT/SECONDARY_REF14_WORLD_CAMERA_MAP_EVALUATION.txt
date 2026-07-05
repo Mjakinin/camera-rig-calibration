@@ -13,12 +13,13 @@ Use the retained primary pairwise result for this subset.
 
 AP02
 ----
-available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3']
-missing cameras: ['cam_edge_5']
-- cam_edge_0: 6.223 cm / 0.757 deg
-- cam_edge_1: 8.022 cm / 0.243 deg
-- cam_edge_3: 3.688 cm / 0.588 deg
-summary: PARTIAL_3_OF_4 | mean 5.978 cm / 0.530 deg
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+- cam_edge_0: 4.148 cm / 0.647 deg
+- cam_edge_1: 9.455 cm / 0.196 deg
+- cam_edge_3: 6.987 cm / 0.328 deg
+- cam_edge_5: 13.457 cm / 0.357 deg
+summary: OK_FULL | mean 8.512 cm / 0.382 deg
 
 AP03
 ----

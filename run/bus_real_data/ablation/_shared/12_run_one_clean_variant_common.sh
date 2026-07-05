@@ -3,12 +3,15 @@ set -u -o pipefail
 
 # ABLATION_PREFLIGHT_COLMAP_GIT
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH:-}"
-git config --global --add safe.directory /workspaces/project >/dev/null 2>&1 || true
 
-if ! git -C /workspaces/project rev-parse --show-toplevel >/dev/null 2>&1; then
-  echo "[ERROR] git repository not accessible; check safe.directory"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+
+if [[ -z "$REPO_ROOT" ]]; then
+  echo "[ERROR] current directory is not inside a git repository"
   exit 2
 fi
+
+git config --global --add safe.directory "$REPO_ROOT" >/dev/null 2>&1 || true
 
 if ! command -v colmap >/dev/null 2>&1; then
   echo "[ERROR] colmap not found in PATH=$PATH"

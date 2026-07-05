@@ -35,14 +35,14 @@ Interpretation:
 
 
 Static-only graph initialization:
-AP02 reference-marker pose graph initialization
-================================================
+AP02 maximum-bottleneck pose graph initialization
+=================================================
 
 Mode: static_only
 Reference marker id: 14
 
 Raw observations in mode: 24
-Best observer-marker observations: 24
+Quality-valid observer-marker edges: 24
 Used initialization edges: 11
 
 Initialized static cameras: 3 / 4
@@ -52,45 +52,47 @@ Initialized markers: 9 / 15
 Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3']
 Missing static cameras: ['cam_edge_5']
 
+Camera path bottlenecks: {'cam_edge_0': 7.435431762211728, 'cam_edge_1': 9.760939671081772, 'cam_edge_3': 9.760939671081772}
+
 Initialized markers: [1, 2, 3, 4, 5, 6, 7, 8, 14]
 Missing markers: [0, 9, 10, 11, 12, 13]
 
 Missing moving frames count: 0
 
 Interpretation:
-- static_only shows what can be connected using only static camera images.
-- with_moving shows whether moving-camera observations connect additional markers/cameras to the reference marker.
-- No AP01 result files are used in this pipeline.
+- Every entity is initialized through the path whose weakest observation has the highest possible quality.
+- This replaces first-hit BFS and avoids committing cam5 to the first weak bridge encountered.
 
 
 
 With-moving graph initialization:
-AP02 reference-marker pose graph initialization
-================================================
+AP02 maximum-bottleneck pose graph initialization
+=================================================
 
 Mode: with_moving
 Reference marker id: 14
 
-Raw observations in mode: 29
-Best observer-marker observations: 29
-Used initialization edges: 16
+Raw observations in mode: 486
+Quality-valid observer-marker edges: 486
+Used initialization edges: 226
 
-Initialized static cameras: 3 / 4
-Initialized moving frames: 5 / 5
-Initialized markers: 9 / 15
+Initialized static cameras: 4 / 4
+Initialized moving frames: 208 / 208
+Initialized markers: 15 / 15
 
-Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3']
-Missing static cameras: ['cam_edge_5']
+Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+Missing static cameras: []
 
-Initialized markers: [1, 2, 3, 4, 5, 6, 7, 8, 14]
-Missing markers: [0, 9, 10, 11, 12, 13]
+Camera path bottlenecks: {'cam_edge_0': 20.51077792303175, 'cam_edge_1': 13.731176553971533, 'cam_edge_3': 13.731176553971533, 'cam_edge_5': 16.63843459626715}
+
+Initialized markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+Missing markers: []
 
 Missing moving frames count: 0
 
 Interpretation:
-- static_only shows what can be connected using only static camera images.
-- with_moving shows whether moving-camera observations connect additional markers/cameras to the reference marker.
-- No AP01 result files are used in this pipeline.
+- Every entity is initialized through the path whose weakest observation has the highest possible quality.
+- This replaces first-hit BFS and avoids committing cam5 to the first weak bridge encountered.
 
 
 
@@ -107,21 +109,21 @@ Marker observations used: 18
 Scalar residual count: 144
 
 Initial reprojection error [px]:
-- mean: 23.044864
-- median: 0.276509
-- max: 308.889371
+- mean: 4.596536
+- median: 0.292208
+- max: 24.196123
 
 Final reprojection error [px]:
-- mean: 0.457988
-- median: 0.393169
-- max: 1.585567
+- mean: 0.324256
+- median: 0.296413
+- max: 0.785459
 
 Optimizer:
 - success: True
 - status: 2
 - message: `ftol` termination condition is satisfied.
-- nfev: 38
-- cost: 10.887310
+- nfev: 22
+- cost: 5.093823
 
 Outputs:
 - optimized_static_camera_poses_ref_marker.csv
@@ -138,27 +140,27 @@ AP02 Reference-marker Graph Bundle Adjustment
 Mode: with_moving
 Reference marker id: 14
 
-Optimized variable poses: 13
-Parameter count: 78
-Marker observations used: 20
-Scalar residual count: 160
+Optimized variable poses: 143
+Parameter count: 858
+Marker observations used: 358
+Scalar residual count: 2864
 
 Initial reprojection error [px]:
-- mean: 21.076425
-- median: 0.330702
-- max: 308.889371
+- mean: 5.680680
+- median: 2.798996
+- max: 55.870636
 
 Final reprojection error [px]:
-- mean: 0.701647
-- median: 0.430159
-- max: 5.221221
+- mean: 0.396632
+- median: 0.363404
+- max: 3.116472
 
 Optimizer:
 - success: True
 - status: 2
 - message: `ftol` termination condition is satisfied.
-- nfev: 40
-- cost: 42.086933
+- nfev: 25
+- cost: 153.642502
 
 Outputs:
 - optimized_static_camera_poses_ref_marker.csv

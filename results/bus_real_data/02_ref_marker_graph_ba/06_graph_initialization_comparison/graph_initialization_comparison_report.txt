@@ -11,11 +11,11 @@ Mode: static_only
 - missing static cameras: ['cam_edge_5']
 
 Mode: with_moving
-- static camera poses: 3
-- moving frame poses: 5
-- marker poses: 9
-- initialized static cameras: 3 / 4
-- missing static cameras: ['cam_edge_5']
+- static camera poses: 4
+- moving frame poses: 208
+- marker poses: 15
+- initialized static cameras: 4 / 4
+- missing static cameras: []
 
 Main question:
 Does adding moving-camera observations connect more static cameras and markers to the reference ArUco?

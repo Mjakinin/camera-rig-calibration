@@ -1,0 +1,236 @@
+ABLATION RESULT AUDIT
+========================================================================================================================
+Found summary files: 12
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/fov/fov_100deg
+SUMMARY: results/bus_real_data/ablation/moving_cam/fov/fov_100deg/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/fov/fov_100deg/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/fov/fov_100deg/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=13.442140060823625 | median_pair_t_cm=12.793847514613187 | max_pair_t_cm=23.876045842788184 | mean_pair_r_deg=2.22275918904253 | median_pair_r_deg=2.4903235572496785 | max_pair_r_deg=2.7388077506434785 | mean_baseline_error_cm=7.458157507471555 | mean_direction_error_deg=1.0898941758265301 | worst_pair=cam1-cam5 | worst_pair_t_cm=23.876045842788184 | worst_pair_r_deg=2.7333944572710145 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=615.8335642423535 | median_pair_t_cm=637.4524597265627 | max_pair_t_cm=1098.8078545798433 | mean_pair_r_deg=66.18324007769323 | median_pair_r_deg=62.313637547069675 | max_pair_r_deg=124.26807081184184 | mean_baseline_error_cm=239.48848595887299 | mean_direction_error_deg=66.48322251787859 | worst_pair=cam3-cam5 | worst_pair_t_cm=1098.8078545798433 | worst_pair_r_deg=124.26807081184184 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=310.9047932154887 | median_pair_t_cm=310.261813978441 | max_pair_t_cm=619.9239198748074 | mean_pair_r_deg=22.840841427015153 | median_pair_r_deg=22.858455621340326 | max_pair_r_deg=45.556938717148185 | mean_baseline_error_cm=245.52313756306702 | mean_direction_error_deg=20.34486866189913 | worst_pair=cam0-cam5 | worst_pair_t_cm=619.9239198748074 | worst_pair_r_deg=45.55297736658846 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=13.442140061
+  MEAN_R_DEG=2.222759189
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=615.833564242
+  MEAN_R_DEG=66.183240078
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=310.904793215
+  MEAN_R_DEG=22.840841427
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/fov/fov_140deg_extreme
+SUMMARY: results/bus_real_data/ablation/moving_cam/fov/fov_140deg_extreme/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/fov/fov_140deg_extreme/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/fov/fov_140deg_extreme/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=15.432193391257123 | median_pair_t_cm=17.071689085100314 | max_pair_t_cm=20.93791865947034 | mean_pair_r_deg=2.632967951041923 | median_pair_r_deg=2.6604175384853166 | max_pair_r_deg=3.5682097775676502 | mean_baseline_error_cm=6.9906327849680245 | mean_direction_error_deg=1.4665044280868023 | worst_pair=cam0-cam5 | worst_pair_t_cm=20.93791865947034 | worst_pair_r_deg=3.2125275058265386 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=315.2200971497253 | median_pair_t_cm=312.716495757423 | max_pair_t_cm=628.7951092710005 | mean_pair_r_deg=18.65035065466031 | median_pair_r_deg=18.633086340528475 | max_pair_r_deg=36.369451592631066 | mean_baseline_error_cm=126.05799785504735 | mean_direction_error_deg=19.42979637425891 | worst_pair=cam0-cam5 | worst_pair_t_cm=628.7951092710005 | worst_pair_r_deg=36.369451592631066 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=18.954967475402345 | median_pair_t_cm=17.110638649668417 | max_pair_t_cm=31.478962219904787 | mean_pair_r_deg=0.12828364768504666 | median_pair_r_deg=0.11108666766954585 | max_pair_r_deg=0.21384500816924107 | mean_baseline_error_cm=18.935826984778668 | mean_direction_error_deg=0.08009411285792327 | worst_pair=cam1-cam5 | worst_pair_t_cm=31.478962219904787 | worst_pair_r_deg=0.11031946264655824 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=15.432193391
+  MEAN_R_DEG=2.632967951
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=315.220097150
+  MEAN_R_DEG=18.650350655
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=18.954967475
+  MEAN_R_DEG=0.128283648
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/fov/fov_40deg
+SUMMARY: results/bus_real_data/ablation/moving_cam/fov/fov_40deg/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/fov/fov_40deg/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/fov/fov_40deg/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=PARTIAL_3_OF_4 | camera_count=3 | available_cameras=cam_edge_0;cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_5 | pair_count_ok=3 | pair_count_total=6 | pair_coverage=0.5 | mean_pair_t_cm=9.609117794113425 | median_pair_t_cm=7.288205483244867 | max_pair_t_cm=14.845608942647859 | mean_pair_r_deg=1.9581498575465333 | median_pair_r_deg=1.877309392382426 | max_pair_r_deg=2.1355094683663003 | mean_baseline_error_cm=6.396122745096451 | mean_direction_error_deg=1.0503075627343843 | worst_pair=cam0-cam1 | worst_pair_t_cm=14.845608942647859 | worst_pair_r_deg=1.877309392382426 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | failure_reason=cam_edge_5: RuntimeError: No relay multichain aggregate row found for cam3_to_cam5 / COLMAP_motion | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+SUMMARY ROW:
+  method=AP02 | status=OK_FULL | camera_count=4 | available_cameras=cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5 | missing_cameras= | pair_count_ok=6 | pair_count_total=6 | pair_coverage=1.0 | mean_pair_t_cm=593.1314519266799 | median_pair_t_cm=592.9634850895341 | max_pair_t_cm=1176.4402278055504 | mean_pair_r_deg=71.67034179272116 | median_pair_r_deg=71.76139094763343 | max_pair_r_deg=142.27604099938844 | mean_baseline_error_cm=236.8851890278687 | mean_direction_error_deg=62.7249465422552 | worst_pair=cam3-cam5 | worst_pair_t_cm=1176.4402278055504 | worst_pair_r_deg=141.25426678453934 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | failure_reason= | note=
+SUMMARY ROW:
+  method=AP03 | status=PARTIAL_3_OF_4 | camera_count=3 | available_cameras=cam_edge_0;cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_5 | pair_count_ok=3 | pair_count_total=6 | pair_coverage=0.5 | mean_pair_t_cm=15.128432107313197 | median_pair_t_cm=14.344206977504676 | max_pair_t_cm=20.893207434673506 | mean_pair_r_deg=0.788056416231426 | median_pair_r_deg=0.9928328811828058 | max_pair_r_deg=1.059879424832758 | mean_baseline_error_cm=13.350980784578253 | mean_direction_error_deg=1.1170417649949111 | worst_pair=cam0-cam1 | worst_pair_t_cm=20.893207434673506 | worst_pair_r_deg=1.059879424832758 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | failure_reason= | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+RECOMPUTED AP01: OK_PAIRS=3/6 | MEAN_T_CM=9.609117794
+  MEAN_R_DEG=1.958149858
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=593.131451927
+  MEAN_R_DEG=71.670341793
+RECOMPUTED AP03: OK_PAIRS=3/6 | MEAN_T_CM=15.128432107
+  MEAN_R_DEG=0.788056416
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/fov/fov_69deg_baseline
+SUMMARY: results/bus_real_data/ablation/moving_cam/fov/fov_69deg_baseline/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/fov/fov_69deg_baseline/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/fov/fov_69deg_baseline/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=12.39309687274325 | median_pair_t_cm=11.107621921475406 | max_pair_t_cm=26.133539106382482 | mean_pair_r_deg=2.1091446016278046 | median_pair_r_deg=2.2745569396089547 | max_pair_r_deg=2.6247914226215263 | mean_baseline_error_cm=6.733822006341214 | mean_direction_error_deg=1.003002693008818 | worst_pair=cam1-cam5 | worst_pair_t_cm=26.133539106382482 | worst_pair_r_deg=2.6247914226215263 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=14.90709527356074 | median_pair_t_cm=15.38105805969193 | max_pair_t_cm=18.940222030384543 | mean_pair_r_deg=1.4571638400604296 | median_pair_r_deg=1.5382883182005034 | max_pair_r_deg=2.200019513098523 | mean_baseline_error_cm=9.470286075091476 | mean_direction_error_deg=1.2079377107565608 | worst_pair=cam1-cam5 | worst_pair_t_cm=18.940222030384543 | worst_pair_r_deg=1.2100712147359423 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=10.454470691566339 | median_pair_t_cm=9.705691712006118 | max_pair_t_cm=17.534967270920465 | mean_pair_r_deg=0.12640760750382182 | median_pair_r_deg=0.11283730935619776 | max_pair_r_deg=0.20672402529245656 | mean_baseline_error_cm=10.412093345371462 | mean_direction_error_deg=0.09392096218382114 | worst_pair=cam1-cam5 | worst_pair_t_cm=17.534967270920465 | worst_pair_r_deg=0.08041100553613646 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=12.393096873
+  MEAN_R_DEG=2.109144602
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=14.907095274
+  MEAN_R_DEG=1.457163840
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=10.454470692
+  MEAN_R_DEG=0.126407608
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k00_baseline
+SUMMARY: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k00_baseline/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k00_baseline/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k00_baseline/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=12.759115397956782 | median_pair_t_cm=11.2874646425445 | max_pair_t_cm=27.17790587329415 | mean_pair_r_deg=2.17911643257816 | median_pair_r_deg=2.3649989769671222 | max_pair_r_deg=2.708160146230774 | mean_baseline_error_cm=7.076659163037436 | mean_direction_error_deg=1.0090943780174617 | worst_pair=cam1-cam5 | worst_pair_t_cm=27.17790587329415 | worst_pair_r_deg=2.708160146230774 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=14.90709527356074 | median_pair_t_cm=15.38105805969193 | max_pair_t_cm=18.940222030384543 | mean_pair_r_deg=1.4571638400604296 | median_pair_r_deg=1.5382883182005034 | max_pair_r_deg=2.200019513098523 | mean_baseline_error_cm=9.470286075091476 | mean_direction_error_deg=1.2079377107565608 | worst_pair=cam1-cam5 | worst_pair_t_cm=18.940222030384543 | worst_pair_r_deg=1.2100712147359423 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=10.9185971935769 | median_pair_t_cm=10.205956260446968 | max_pair_t_cm=18.30953289807968 | mean_pair_r_deg=0.11400942057579978 | median_pair_r_deg=0.12084832837583401 | max_pair_r_deg=0.17167285967826862 | mean_baseline_error_cm=10.871680258387215 | mean_direction_error_deg=0.10376282675780164 | worst_pair=cam1-cam5 | worst_pair_t_cm=18.30953289807968 | worst_pair_r_deg=0.0773698496391217 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=12.759115398
+  MEAN_R_DEG=2.179116433
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=14.907095274
+  MEAN_R_DEG=1.457163840
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=10.918597194
+  MEAN_R_DEG=0.114009421
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k09_mild
+SUMMARY: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k09_mild/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k09_mild/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k09_mild/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=16.58936874204704 | median_pair_t_cm=16.37780821890621 | max_pair_t_cm=24.692866384231735 | mean_pair_r_deg=2.6425818130868595 | median_pair_r_deg=2.4704022187236907 | max_pair_r_deg=3.970708610769569 | mean_baseline_error_cm=8.550543274815599 | mean_direction_error_deg=1.5387385021452096 | worst_pair=cam0-cam1 | worst_pair_t_cm=24.692866384231735 | worst_pair_r_deg=2.769834242084643 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=77.65765543576548 | median_pair_t_cm=76.9803165837323 | max_pair_t_cm=148.79541558732606 | mean_pair_r_deg=6.161489153309635 | median_pair_r_deg=6.401216962098758 | max_pair_r_deg=10.915934771338502 | mean_baseline_error_cm=22.54358205537034 | mean_direction_error_deg=6.068730230842445 | worst_pair=cam0-cam5 | worst_pair_t_cm=148.79541558732606 | worst_pair_r_deg=10.915934771338502 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=3.511994739931494 | median_pair_t_cm=3.762772539189175 | max_pair_t_cm=5.6301924851597125 | mean_pair_r_deg=0.20611468259347424 | median_pair_r_deg=0.21650525487847044 | max_pair_r_deg=0.30730099965540075 | mean_baseline_error_cm=3.3485449294073564 | mean_direction_error_deg=0.10297931568641834 | worst_pair=cam1-cam5 | worst_pair_t_cm=5.6301924851597125 | worst_pair_r_deg=0.25134579862060474 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=16.589368742
+  MEAN_R_DEG=2.642581813
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=77.657655436
+  MEAN_R_DEG=6.161489153
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=3.511994740
+  MEAN_R_DEG=0.206114683
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k21_strong
+SUMMARY: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k21_strong/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k21_strong/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k21_strong/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=PARTIAL_3_OF_4 | camera_count=3 | available_cameras=cam_edge_1;cam_edge_3;cam_edge_5 | missing_cameras=cam_edge_0 | pair_count_ok=3 | pair_count_total=6 | pair_coverage=0.5 | mean_pair_t_cm=53.35881868504698 | median_pair_t_cm=75.9232161714219 | max_pair_t_cm=77.45970092727148 | mean_pair_r_deg=3.425529371329654 | median_pair_r_deg=4.015352131085874 | max_pair_r_deg=4.3996052710122155 | mean_baseline_error_cm=43.82169865990744 | mean_direction_error_deg=2.077577940949006 | worst_pair=cam1-cam5 | worst_pair_t_cm=77.45970092727148 | worst_pair_r_deg=4.015352131085874 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | failure_reason=cam_edge_0: RuntimeError: No relay multichain aggregate row found for cam3_to_cam0 / COLMAP_motion | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+SUMMARY ROW:
+  method=AP02 | status=PARTIAL_3_OF_4 | camera_count=3 | available_cameras=cam_edge_0;cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_5 | pair_count_ok=3 | pair_count_total=6 | pair_coverage=0.5 | mean_pair_t_cm=9.766474932661568 | median_pair_t_cm=11.487994148300775 | max_pair_t_cm=12.496774007776597 | mean_pair_r_deg=0.9263170992249407 | median_pair_r_deg=0.9591629077664062 | max_pair_r_deg=1.333835607405499 | mean_baseline_error_cm=8.104961230576771 | mean_direction_error_deg=0.9812556143177119 | worst_pair=cam0-cam1 | worst_pair_t_cm=12.496774007776597 | worst_pair_r_deg=0.9591629077664062 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | failure_reason= | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+SUMMARY ROW:
+  method=AP03 | status=PARTIAL_3_OF_4 | camera_count=3 | available_cameras=cam_edge_0;cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_5 | pair_count_ok=3 | pair_count_total=6 | pair_coverage=0.5 | mean_pair_t_cm=47.69449382144354 | median_pair_t_cm=51.01299565635687 | max_pair_t_cm=65.41242492492046 | mean_pair_r_deg=1.9576180418488178 | median_pair_r_deg=2.3795245719605065 | max_pair_r_deg=2.901409095072073 | mean_baseline_error_cm=46.759145521665744 | mean_direction_error_deg=1.3741476239538783 | worst_pair=cam0-cam1 | worst_pair_t_cm=65.41242492492046 | worst_pair_r_deg=2.901409095072073 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | failure_reason= | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+RECOMPUTED AP01: OK_PAIRS=3/6 | MEAN_T_CM=53.358818685
+  MEAN_R_DEG=3.425529371
+RECOMPUTED AP02: OK_PAIRS=3/6 | MEAN_T_CM=9.766474933
+  MEAN_R_DEG=0.926317099
+RECOMPUTED AP03: OK_PAIRS=3/6 | MEAN_T_CM=47.694493821
+  MEAN_R_DEG=1.957618042
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme
+SUMMARY: results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=PARTIAL_2_OF_4 | camera_count=2 | available_cameras=cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_0;cam_edge_5 | pair_count_ok=1 | pair_count_total=6 | pair_coverage=0.16666666666666666 | mean_pair_t_cm=6.693538956447548 | median_pair_t_cm=6.693538956447548 | max_pair_t_cm=6.693538956447548 | mean_pair_r_deg=1.8616307118908735 | median_pair_r_deg=1.8616307118908735 | max_pair_r_deg=1.8616307118908735 | mean_baseline_error_cm=0.06579721552970597 | mean_direction_error_deg=1.7658104034511908 | worst_pair=cam1-cam3 | worst_pair_t_cm=6.693538956447548 | worst_pair_r_deg=1.8616307118908735 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | failure_reason=cam_edge_0: RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv; cam_edge_5: RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+SUMMARY ROW:
+  method=AP02 | status=PARTIAL_3_OF_4 | camera_count=3 | available_cameras=cam_edge_0;cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_5 | pair_count_ok=3 | pair_count_total=6 | pair_coverage=0.5 | mean_pair_t_cm=9.766473103833265 | median_pair_t_cm=11.487997479596949 | max_pair_t_cm=12.496765605934906 | mean_pair_r_deg=0.9263183989444158 | median_pair_r_deg=0.9591656158245431 | max_pair_r_deg=1.3338373017277638 | mean_baseline_error_cm=8.104955791698387 | mean_direction_error_deg=0.9812566503076257 | worst_pair=cam0-cam1 | worst_pair_t_cm=12.496765605934906 | worst_pair_r_deg=0.9591656158245431 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | failure_reason= | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+SUMMARY ROW:
+  method=AP03 | status=FAILED_NO_PAIR | camera_count=0 | available_cameras= | missing_cameras=cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5 | pair_count_ok=0 | pair_count_total=6 | pair_coverage=0.0 | mean_pair_t_cm= | median_pair_t_cm= | max_pair_t_cm= | mean_pair_r_deg= | median_pair_r_deg= | max_pair_r_deg= | mean_baseline_error_cm= | mean_direction_error_deg= | worst_pair= | worst_pair_t_cm= | worst_pair_r_deg= | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | failure_reason=RuntimeError: Too few marker-size scale observations: 0 | note=RuntimeError: Too few marker-size scale observations: 0
+RECOMPUTED AP01: OK_PAIRS=1/6 | MEAN_T_CM=6.693538956
+  MEAN_R_DEG=1.861630712
+RECOMPUTED AP02: OK_PAIRS=3/6 | MEAN_T_CM=9.766473104
+  MEAN_R_DEG=0.926318399
+RECOMPUTED AP03: OK_PAIRS=0/6 | MEAN_T_CM=N/A
+  MEAN_R_DEG=N/A
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/res/moving_res_1280x720_baseline
+SUMMARY: results/bus_real_data/ablation/moving_cam/res/moving_res_1280x720_baseline/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/res/moving_res_1280x720_baseline/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/res/moving_res_1280x720_baseline/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=12.241702545514203 | median_pair_t_cm=11.081061448446977 | max_pair_t_cm=25.630955101266157 | mean_pair_r_deg=2.132840402474641 | median_pair_r_deg=2.293010012755321 | max_pair_r_deg=2.6184225708866444 | mean_baseline_error_cm=6.515033369487125 | mean_direction_error_deg=1.000195746678079 | worst_pair=cam1-cam5 | worst_pair_t_cm=25.630955101266157 | worst_pair_r_deg=2.6184225708866444 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=14.90709527356074 | median_pair_t_cm=15.38105805969193 | max_pair_t_cm=18.940222030384543 | mean_pair_r_deg=1.4571638400604296 | median_pair_r_deg=1.5382883182005034 | max_pair_r_deg=2.200019513098523 | mean_baseline_error_cm=9.470286075091476 | mean_direction_error_deg=1.2079377107565608 | worst_pair=cam1-cam5 | worst_pair_t_cm=18.940222030384543 | worst_pair_r_deg=1.2100712147359423 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=11.871473044565223 | median_pair_t_cm=10.931235997177499 | max_pair_t_cm=19.91788971783133 | mean_pair_r_deg=0.12984098565236335 | median_pair_r_deg=0.12279042477039395 | max_pair_r_deg=0.17686331238456002 | mean_baseline_error_cm=11.817337311744458 | mean_direction_error_deg=0.11360183807116908 | worst_pair=cam1-cam5 | worst_pair_t_cm=19.91788971783133 | worst_pair_r_deg=0.17203253068156746 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=12.241702546
+  MEAN_R_DEG=2.132840402
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=14.907095274
+  MEAN_R_DEG=1.457163840
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=11.871473045
+  MEAN_R_DEG=0.129840986
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/res/moving_res_160x90_extreme_pixel
+SUMMARY: results/bus_real_data/ablation/moving_cam/res/moving_res_160x90_extreme_pixel/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/res/moving_res_160x90_extreme_pixel/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/res/moving_res_160x90_extreme_pixel/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=PARTIAL_2_OF_4 | camera_count=2 | available_cameras=cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_0;cam_edge_5 | pair_count_ok=1 | pair_count_total=6 | pair_coverage=0.16666666666666666 | mean_pair_t_cm=6.693538956447548 | median_pair_t_cm=6.693538956447548 | max_pair_t_cm=6.693538956447548 | mean_pair_r_deg=1.8616307118908735 | median_pair_r_deg=1.8616307118908735 | max_pair_r_deg=1.8616307118908735 | mean_baseline_error_cm=0.06579721552970597 | mean_direction_error_deg=1.7658104034511908 | worst_pair=cam1-cam3 | worst_pair_t_cm=6.693538956447548 | worst_pair_r_deg=1.8616307118908735 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | failure_reason=cam_edge_0: RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv; cam_edge_5: RuntimeError: Missing CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/06_moving_relay_chain_eval/relay_chain_multichain_aggregate.csv | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+SUMMARY ROW:
+  method=AP02 | status=PARTIAL_3_OF_4 | camera_count=3 | available_cameras=cam_edge_0;cam_edge_1;cam_edge_3 | missing_cameras=cam_edge_5 | pair_count_ok=3 | pair_count_total=6 | pair_coverage=0.5 | mean_pair_t_cm=9.583056174661872 | median_pair_t_cm=11.5153480722148 | max_pair_t_cm=12.246031148469905 | mean_pair_r_deg=0.8438793218185383 | median_pair_r_deg=0.8145762924515466 | max_pair_r_deg=1.223050644965692 | mean_baseline_error_cm=7.901477816378918 | mean_direction_error_deg=0.9911570217334488 | worst_pair=cam0-cam1 | worst_pair_t_cm=12.246031148469905 | worst_pair_r_deg=0.8145762924515466 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | failure_reason= | note=Metrics are computed over available pairs only. Partial means are not directly comparable with full six-pair means.
+SUMMARY ROW:
+  method=AP03 | status=FAILED_NO_PAIR | camera_count=0 | available_cameras= | missing_cameras=cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5 | pair_count_ok=0 | pair_count_total=6 | pair_coverage=0.0 | mean_pair_t_cm= | median_pair_t_cm= | max_pair_t_cm= | mean_pair_r_deg= | median_pair_r_deg= | max_pair_r_deg= | mean_baseline_error_cm= | mean_direction_error_deg= | worst_pair= | worst_pair_t_cm= | worst_pair_r_deg= | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | failure_reason= | note=
+RECOMPUTED AP01: OK_PAIRS=1/6 | MEAN_T_CM=6.693538956
+  MEAN_R_DEG=1.861630712
+RECOMPUTED AP02: OK_PAIRS=3/6 | MEAN_T_CM=9.583056175
+  MEAN_R_DEG=0.843879322
+RECOMPUTED AP03: OK_PAIRS=0/6 | MEAN_T_CM=N/A
+  MEAN_R_DEG=N/A
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled
+SUMMARY: results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/res/moving_res_2560x1440_upscaled/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=12.404453502316377 | median_pair_t_cm=10.477766903350286 | max_pair_t_cm=28.23964650475899 | mean_pair_r_deg=2.100755303988434 | median_pair_r_deg=2.0878464631553486 | max_pair_r_deg=2.948185551933823 | mean_baseline_error_cm=6.484980583149931 | mean_direction_error_deg=1.0246908001028794 | worst_pair=cam1-cam5 | worst_pair_t_cm=28.23964650475899 | worst_pair_r_deg=2.948185551933823 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=47.61859966326901 | median_pair_t_cm=44.37599069754439 | max_pair_t_cm=86.42787422342775 | mean_pair_r_deg=8.467738879716705 | median_pair_r_deg=8.655970937672446 | max_pair_r_deg=15.651295357627312 | mean_baseline_error_cm=25.854842240630635 | mean_direction_error_deg=4.473387890616954 | worst_pair=cam0-cam3 | worst_pair_t_cm=86.42787422342775 | worst_pair_r_deg=12.889490552987757 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=6.414516585561535 | median_pair_t_cm=5.438210478538101 | max_pair_t_cm=11.246122897338266 | mean_pair_r_deg=0.26554272651018745 | median_pair_r_deg=0.24464061105913554 | max_pair_r_deg=0.4424934712879797 | mean_baseline_error_cm=6.175420724758696 | mean_direction_error_deg=0.1292830364909459 | worst_pair=cam3-cam5 | worst_pair_t_cm=11.246122897338266 | worst_pair_r_deg=0.4424934712879797 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=12.404453502
+  MEAN_R_DEG=2.100755304
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=47.618599663
+  MEAN_R_DEG=8.467738880
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=6.414516586
+  MEAN_R_DEG=0.265542727
+
+########################################################################################################################
+VARIANT: results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low
+SUMMARY: results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_SUMMARY.csv
+DETAIL : results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/FINAL_RESULTS/BASELINE_FINAL_PAIRWISE_DETAIL.csv
+STATUS : results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/FINAL_RESULTS/RUN_STATUS.txt
+------------------------------------------------------------------------------------------------------------------------
+SUMMARY ROW:
+  method=AP01 | status=OK | mean_pair_t_cm=151.61472910966677 | median_pair_t_cm=147.77466313834228 | max_pair_t_cm=305.64715920831514 | mean_pair_r_deg=13.544396086735217 | median_pair_r_deg=13.471870932209171 | max_pair_r_deg=25.54090078249612 | mean_baseline_error_cm=51.81580647912608 | mean_direction_error_deg=11.646116597681754 | worst_pair=cam3-cam5 | worst_pair_t_cm=305.64715920831514 | worst_pair_r_deg=25.54090078249612 | source=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | note=AP01 pairwise uses cam3-local camera map; no Ref14/world GT anchor and no map alignment.
+SUMMARY ROW:
+  method=AP02 | status=OK | mean_pair_t_cm=127.6089311239045 | median_pair_t_cm=127.21099399375547 | max_pair_t_cm=245.48813010260204 | mean_pair_r_deg=8.567626545402488 | median_pair_r_deg=8.692135672014418 | max_pair_r_deg=16.47356397931876 | mean_baseline_error_cm=21.7409631826899 | mean_direction_error_deg=9.384349213675403 | worst_pair=cam3-cam5 | worst_pair_t_cm=245.48813010260204 | worst_pair_r_deg=16.47356397931876 | source=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | note=
+SUMMARY ROW:
+  method=AP03 | status=OK | mean_pair_t_cm=38.09569534159867 | median_pair_t_cm=41.72265499288516 | max_pair_t_cm=50.335266599789804 | mean_pair_r_deg=1.7346539449660126 | median_pair_r_deg=1.8556401511471479 | max_pair_r_deg=2.689290538320499 | mean_baseline_error_cm=34.64542421172177 | mean_direction_error_deg=0.9820844308667844 | worst_pair=cam0-cam1 | worst_pair_t_cm=50.335266599789804 | worst_pair_r_deg=2.689290538320499 | source=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | note=
+RECOMPUTED AP01: OK_PAIRS=6/6 | MEAN_T_CM=151.614729110
+  MEAN_R_DEG=13.544396087
+RECOMPUTED AP02: OK_PAIRS=6/6 | MEAN_T_CM=127.608931124
+  MEAN_R_DEG=8.567626545
+RECOMPUTED AP03: OK_PAIRS=6/6 | MEAN_T_CM=38.095695342
+  MEAN_R_DEG=1.734653945
+
+========================================================================================================================
+AUDIT PROBLEMS
+========================================================================================================================
+[OK] No structural problems detected.

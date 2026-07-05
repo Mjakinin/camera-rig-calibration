@@ -21,6 +21,8 @@ from ap02_common import (
     pose_fields,
 )
 
+from ap02_observation_quality import select_smart_moving_observations
+
 
 OBS_CSV = AP02_ROOT / "02_aruco_observations" / "ap02_all_aruco_observations.csv"
 INIT_ROOT = AP02_ROOT / "05_graph_initialization"
@@ -256,7 +258,16 @@ def reprojection_error_rows(observations, marker_poses, observer_poses):
     return rows, np.array(all_abs, dtype=np.float64)
 
 
-def run_ba(mode, ref_marker_id, max_nfev, moving_stride=1, max_moving_frames=0):
+def run_ba(
+    mode,
+    ref_marker_id,
+    max_nfev,
+    moving_stride=1,
+    max_moving_frames=0,
+    moving_selection="smart",
+    top_per_marker=8,
+    top_per_pair=4,
+):
     out = ensure_dir(AP02_ROOT / "07_graph_ba" / mode)
 
     marker_init, observer_init = load_initial_poses(mode)
@@ -264,28 +275,132 @@ def run_ba(mode, ref_marker_id, max_nfev, moving_stride=1, max_moving_frames=0):
     observations = filter_observations(all_rows, mode, marker_init, observer_init)
 
     if mode == "with_moving":
-        # Keep all static observations, but subsample moving frames.
-        static_obs = [r for r in observations if r.get("observer_type") == "static"]
-        moving_obs = [r for r in observations if r.get("observer_type") == "moving"]
+        static_obs = [
+            row
+            for row in observations
+            if row.get("observer_type") == "static"
+        ]
 
-        moving_frame_ids = sorted({r["observer_id"] for r in moving_obs})
-        if moving_stride > 1:
-            moving_frame_ids = moving_frame_ids[::moving_stride]
-        if max_moving_frames and max_moving_frames > 0:
-            moving_frame_ids = moving_frame_ids[:max_moving_frames]
+        moving_obs = [
+            row
+            for row in observations
+            if row.get("observer_type") == "moving"
+        ]
 
-        keep_moving = set(moving_frame_ids)
-        observations = static_obs + [r for r in moving_obs if r["observer_id"] in keep_moving]
+        selection_fields = [
+            "observer_id",
+            "frame_number",
+            "marker_ids",
+            "marker_count",
+            "frame_score",
+            "reference_marker_seen",
+            "selection_reasons",
+        ]
 
-        used_observers = {r["observer_id"] for r in observations}
-        observer_init = {k: v for k, v in observer_init.items() if k in used_observers}
+        if moving_selection == "smart":
+            selected_moving, selection_report = (
+                select_smart_moving_observations(
+                    moving_obs,
+                    ref_marker_id=ref_marker_id,
+                    top_per_marker=top_per_marker,
+                    top_per_pair=top_per_pair,
+                    max_frames=max_moving_frames,
+                )
+            )
 
-        used_markers = {int(float(r["marker_id"])) for r in observations}
-        marker_init = {k: v for k, v in marker_init.items() if k in used_markers or k == ref_marker_id}
+        elif moving_selection in {"all", "stride"}:
+            frame_ids = sorted({
+                row["observer_id"]
+                for row in moving_obs
+            })
 
-        print(f"[INFO] with_moving subsampling: stride={moving_stride}, max_moving_frames={max_moving_frames}")
-        print(f"[INFO] kept moving frames={len(keep_moving)}")
-        print(f"[INFO] kept observations={len(observations)}")
+            if moving_selection == "stride":
+                frame_ids = frame_ids[::max(1, moving_stride)]
+
+            if max_moving_frames > 0:
+                frame_ids = frame_ids[:max_moving_frames]
+
+            keep = set(frame_ids)
+
+            selected_moving = [
+                row
+                for row in moving_obs
+                if row["observer_id"] in keep
+            ]
+
+            selection_report = [
+                {
+                    "observer_id": observer_id,
+                    "frame_number": observer_id.rsplit("_", 1)[-1],
+                    "marker_ids": "",
+                    "marker_count": "",
+                    "frame_score": "",
+                    "reference_marker_seen": "",
+                    "selection_reasons": moving_selection,
+                }
+                for observer_id in frame_ids
+            ]
+
+        else:
+            raise RuntimeError(
+                f"Unknown moving selection mode: {moving_selection}"
+            )
+
+        observations = static_obs + selected_moving
+
+        keep_moving = {
+            row["observer_id"]
+            for row in selected_moving
+        }
+
+        used_observers = {
+            row["observer_id"]
+            for row in observations
+        }
+
+        observer_init = {
+            key: value
+            for key, value in observer_init.items()
+            if key in used_observers
+        }
+
+        used_markers = {
+            int(float(row["marker_id"]))
+            for row in observations
+        }
+
+        marker_init = {
+            key: value
+            for key, value in marker_init.items()
+            if key in used_markers
+            or key == ref_marker_id
+        }
+
+        write_csv(
+            out / "moving_frame_selection.csv",
+            selection_report,
+            selection_fields,
+        )
+
+        print(
+            "[INFO] with_moving selection:"
+            f" mode={moving_selection},"
+            f" top_per_marker={top_per_marker},"
+            f" top_per_pair={top_per_pair},"
+            f" max_frames={max_moving_frames}"
+        )
+        print(
+            f"[INFO] available moving frames="
+            f"{len({r['observer_id'] for r in moving_obs})}"
+        )
+        print(
+            f"[INFO] selected moving frames="
+            f"{len(keep_moving)}"
+        )
+        print(
+            f"[INFO] kept observations="
+            f"{len(observations)}"
+        )
 
     if len(observations) == 0:
         raise RuntimeError(f"No valid observations for mode {mode}")
@@ -391,11 +506,43 @@ def main():
     ap.add_argument("--max-nfev", type=int, default=80)
     ap.add_argument("--moving-stride", type=int, default=1,
                     help="Use only every Nth moving frame for with_moving BA.")
-    ap.add_argument("--max-moving-frames", type=int, default=0,
-                    help="Maximum number of moving frames to use. 0 means no limit.")
+    ap.add_argument(
+        "--max-moving-frames",
+        type=int,
+        default=0,
+        help="Maximum selected moving frames. 0 means no limit.",
+    )
+    ap.add_argument(
+        "--moving-selection",
+        choices=["smart", "all", "stride"],
+        default="smart",
+        help=(
+            "smart keeps reference-marker, per-marker and "
+            "marker-pair bridge keyframes."
+        ),
+    )
+    ap.add_argument(
+        "--top-per-marker",
+        type=int,
+        default=8,
+    )
+    ap.add_argument(
+        "--top-per-pair",
+        type=int,
+        default=4,
+    )
     args = ap.parse_args()
 
-    run_ba(args.mode, args.ref_marker_id, args.max_nfev, args.moving_stride, args.max_moving_frames)
+    run_ba(
+        args.mode,
+        args.ref_marker_id,
+        args.max_nfev,
+        args.moving_stride,
+        args.max_moving_frames,
+        args.moving_selection,
+        args.top_per_marker,
+        args.top_per_pair,
+    )
 
 
 if __name__ == "__main__":

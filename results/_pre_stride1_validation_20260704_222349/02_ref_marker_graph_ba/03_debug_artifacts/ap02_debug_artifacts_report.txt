@@ -1,0 +1,12 @@
+AP02 debug artifact report
+==========================
+
+Input observations: 29
+Observers: 9
+Markers: 15
+
+Generated:
+- ap02_observer_marker_visibility_matrix.csv
+- ap02_observer_marker_visibility_matrix.png
+- ap02_marker_observation_counts.csv
+- ap02_marker_observation_counts.png

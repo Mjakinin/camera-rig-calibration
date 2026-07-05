@@ -1,27 +1,28 @@
-AP02 reference-marker pose graph initialization
-================================================
+AP02 maximum-bottleneck pose graph initialization
+=================================================
 
 Mode: with_moving
 Reference marker id: 14
 
-Raw observations in mode: 29
-Best observer-marker observations: 29
-Used initialization edges: 16
+Raw observations in mode: 486
+Quality-valid observer-marker edges: 486
+Used initialization edges: 226
 
-Initialized static cameras: 3 / 4
-Initialized moving frames: 5 / 5
-Initialized markers: 9 / 15
+Initialized static cameras: 4 / 4
+Initialized moving frames: 208 / 208
+Initialized markers: 15 / 15
 
-Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3']
-Missing static cameras: ['cam_edge_5']
+Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+Missing static cameras: []
 
-Initialized markers: [1, 2, 3, 4, 5, 6, 7, 8, 14]
-Missing markers: [0, 9, 10, 11, 12, 13]
+Camera path bottlenecks: {'cam_edge_0': 20.51077792303175, 'cam_edge_1': 13.731176553971533, 'cam_edge_3': 13.731176553971533, 'cam_edge_5': 16.63843459626715}
+
+Initialized markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+Missing markers: []
 
 Missing moving frames count: 0
 
 Interpretation:
-- static_only shows what can be connected using only static camera images.
-- with_moving shows whether moving-camera observations connect additional markers/cameras to the reference marker.
-- No AP01 result files are used in this pipeline.
+- Every entity is initialized through the path whose weakest observation has the highest possible quality.
+- This replaces first-hit BFS and avoids committing cam5 to the first weak bridge encountered.
 
