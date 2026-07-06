@@ -1,0 +1,46 @@
+AP02 V1 VS AP02 V2 — FINAL COMPARISON
+=======================================
+
+Variants discovered: 16
+Variants completed:  16
+Incomplete:          0
+
+CLEAN BASELINE — ALL METHODS
+============================
+
+Method  Status                Mean t [cm]    Mean r [deg]   Worst pair
+--------------------------------------------------------------------------------
+AP01    OK_FULL               12.18          2.18           cam1-cam5
+AP02    OK_FULL               14.28          0.61           cam1-cam5
+AP03    OK_FULL               9.77           0.14           cam1-cam5
+
+ALL ABLATIONS
+=============
+
+Ablation                       Variant                      Result           V1 t     V2 t     Δt %     V1 r     V2 r     Δr %  Status V1 -> V2
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+moving_cam/fov                 fov_100deg                   BETTER         615.83    16.11     97.4    66.18     0.96     98.6  OK -> OK_FULL
+moving_cam/fov                 fov_140deg_extreme           BETTER         315.22    22.09     93.0    18.65     1.18     93.7  OK -> OK_FULL
+moving_cam/fov                 fov_40deg                    SIMILAR        593.13   594.40     -0.2    71.67    71.85     -0.2  OK_FULL -> OK_FULL
+moving_cam/fov                 fov_69deg_baseline           WORSE           14.91    17.40    -16.7     1.46     1.29     11.3  OK -> OK_FULL
+moving_cam/motion_blur         moving_blur_k00_baseline     WORSE           14.91    17.40    -16.7     1.46     1.29     11.3  OK -> OK_FULL
+moving_cam/motion_blur         moving_blur_k09_mild         BETTER          77.66    35.14     54.8     6.16     4.14     32.9  OK -> OK_FULL
+moving_cam/motion_blur         moving_blur_k21_strong       SIMILAR          9.77     9.77      0.0     0.93     0.93      0.0  PARTIAL_3_OF_4 -> PARTIAL_3_OF_4
+moving_cam/motion_blur         moving_blur_k41_extreme      SIMILAR          9.77     9.77      0.0     0.93     0.93      0.0  PARTIAL_3_OF_4 -> PARTIAL_3_OF_4
+moving_cam/res                 moving_res_1280x720_baseline WORSE           14.91    17.40    -16.7     1.46     1.29     11.3  OK -> OK_FULL
+moving_cam/res                 moving_res_160x90_extreme_pixWORSE            9.58    12.87    -34.3     0.84     0.64     24.2  PARTIAL_3_OF_4 -> PARTIAL_3_OF_4
+moving_cam/res                 moving_res_2560x1440_upscaledBETTER          47.62    14.10     70.4     8.47     1.37     83.8  OK -> OK_FULL
+moving_cam/res                 moving_res_320x180_low       BETTER         127.61    23.78     81.4     8.57     1.44     83.2  OK -> OK_FULL
+world/lighting                 ceiling_bright               BETTER         100.87    14.82     85.3     7.50     0.68     90.9  OK_FULL -> OK_FULL
+world/lighting                 ceiling_dark_extreme         RECOVERED           -    16.44        -        -     0.95        -  FAILED_NO_PAIR -> OK_FULL
+world/lighting                 ceiling_low                  BETTER          70.64    14.64     79.3     5.25     0.69     86.9  OK_FULL -> OK_FULL
+world/lighting                 ceiling_normal               BETTER          62.90    14.31     77.2     9.79     0.66     93.2  OK_FULL -> OK_FULL
+
+COUNTS
+======
+- BETTER:    8
+- SIMILAR:   3
+- WORSE:     4
+- RECOVERED: 1
+- LOST:      0
+- NO_RESULT: 0

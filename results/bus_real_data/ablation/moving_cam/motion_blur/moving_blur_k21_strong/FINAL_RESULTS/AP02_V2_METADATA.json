@@ -1,0 +1,13 @@
+{
+  "variant": "moving_blur_k21_strong",
+  "method": "AP02",
+  "version": "v2",
+  "pipeline_return_code": 0,
+  "primary_status": "PARTIAL_3_OF_4",
+  "graph_initialization": "rooted_maximum_spanning_tree",
+  "moving_frame_selection": "marker_aware_smart_selection",
+  "top_per_marker": 8,
+  "top_per_marker_pair": 4,
+  "uniform_stride_used": false,
+  "updated_utc": "2026-07-05T22:11:40.453259+00:00"
+}

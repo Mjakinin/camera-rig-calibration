@@ -1,0 +1,10 @@
+{
+  "ap02_root": "results/bus_real_data/02_ref_marker_graph_ba",
+  "reference_marker_id": 14,
+  "final_selected_result": "graph_ba_with_moving_sparse",
+  "final_static_camera_pose_file": "ap02_with_moving_static_camera_poses_ref_marker.csv",
+  "transform_convention": "T_ref_marker_cam maps camera coordinates into the reference-marker coordinate frame.",
+  "static_camera_count_final": 4,
+  "marker_count_final": 15,
+  "moving_frame_count_final": 131
+}

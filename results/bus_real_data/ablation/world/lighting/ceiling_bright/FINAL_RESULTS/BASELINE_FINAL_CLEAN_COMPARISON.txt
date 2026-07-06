@@ -5,7 +5,7 @@ OK_FULL requires all four cameras and all six camera pairs. PARTIAL results reta
 
 Summary:
 - AP01: OK_FULL | cameras=4/4 | pairs=6/6 | mean=12.84 cm / 2.09 deg | missing=-
-- AP02: OK_FULL | cameras=4/4 | pairs=6/6 | mean=100.87 cm / 7.50 deg | missing=-
+- AP02: OK_FULL | cameras=4/4 | pairs=6/6 | mean=14.82 cm / 0.68 deg | missing=-
 - AP03: OK_FULL | cameras=4/4 | pairs=6/6 | mean=11.34 cm / 0.12 deg | missing=-
 
 Pairwise detail:
@@ -19,12 +19,12 @@ AP01
   cam3-cam5: 9.73 cm / 2.25 deg
 
 AP02
-  cam0-cam1: 20.52 cm / 2.37 deg
-  cam0-cam3: 26.34 cm / 3.79 deg
-  cam0-cam5: 170.18 cm / 11.35 deg
-  cam1-cam3: 30.72 cm / 2.76 deg
-  cam1-cam5: 180.63 cm / 12.96 deg
-  cam3-cam5: 176.84 cm / 11.80 deg
+  cam0-cam1: 15.50 cm / 0.94 deg
+  cam0-cam3: 13.43 cm / 1.09 deg
+  cam0-cam5: 12.93 cm / 1.01 deg
+  cam1-cam3: 3.21 cm / 0.18 deg
+  cam1-cam5: 23.12 cm / 0.41 deg
+  cam3-cam5: 20.73 cm / 0.47 deg
 
 AP03
   cam0-cam1: 10.51 cm / 0.12 deg

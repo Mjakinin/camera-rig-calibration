@@ -4,6 +4,94 @@
   "important_note": "GT is evaluation only. Marker14 frame is evaluation-only.",
   "extrinsics_cam3_reference": [
     {
+      "name": "cam_edge_3_to_cam_edge_0_COLMAP_motion_multichain",
+      "target_camera": "cam_edge_0",
+      "method": "moving_relay_multichain_colmap_motion_aruco_metric_scale",
+      "category": "main_no_gt",
+      "translation_error_m": 0.12051536848571828,
+      "rotation_error_deg": 2.876383149679861,
+      "estimated_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 2.080348142,
+          "y": -1.111225275,
+          "z": 3.103542701
+        },
+        "rotation_rpy_deg": {
+          "roll": 15.612252945,
+          "pitch": -54.288397998,
+          "yaw": -33.20391323999999
+        },
+        "matrix_4x4": [
+          [
+            0.4884022191779489,
+            0.3445736898366346,
+            -0.801705834190086,
+            2.080348142
+          ],
+          [
+            -0.31964910029991656,
+            0.9255223541770088,
+            0.20305867279213027,
+            -1.111225275
+          ],
+          [
+            0.8119653471543652,
+            0.15709024218904966,
+            0.5621698416221534,
+            3.103542701
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "ground_truth_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 2.059231906,
+          "y": -1.165296833,
+          "z": 2.997928662
+        },
+        "rotation_rpy_deg": {
+          "roll": 12.727597349,
+          "pitch": -52.595332864,
+          "yaw": -32.453865269
+        },
+        "matrix_4x4": [
+          [
+            0.5125727963118669,
+            0.3757560030086873,
+            -0.7720599424163702,
+            2.059231906
+          ],
+          [
+            -0.3259649492540877,
+            0.9170044981502203,
+            0.22989041352357975,
+            -1.165296833
+          ],
+          [
+            0.7943651429530462,
+            0.13382890784579327,
+            0.5925148463000642,
+            2.997928662
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "num_candidates": "17227",
+      "num_inliers": "13034",
+      "num_outliers": "4193",
+      "notes": "Moving relay multichain aggregation over all valid marker/frame combinations. No GT is used for aggregation; GT is evaluation only."
+    },
+    {
       "name": "cam_edge_3_to_cam_edge_1_direct_static_multimarker",
       "target_camera": "cam_edge_1",
       "method": "direct_static_aruco_multimarker_weighted_mad_inliers",
@@ -90,6 +178,358 @@
       "num_inliers": "5",
       "num_outliers": "2",
       "notes": "Direct static robust multi-marker aggregation. No GT candidate selection."
+    },
+    {
+      "name": "cam_edge_3_to_cam_edge_5_COLMAP_motion_multichain",
+      "target_camera": "cam_edge_5",
+      "method": "moving_relay_multichain_colmap_motion_aruco_metric_scale",
+      "category": "main_no_gt",
+      "translation_error_m": 0.10507181782796794,
+      "rotation_error_deg": 2.8365806032950096,
+      "estimated_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 2.80074708,
+          "y": -3.126371998,
+          "z": 8.288391127
+        },
+        "rotation_rpy_deg": {
+          "roll": 139.722162675,
+          "pitch": -6.747362707,
+          "yaw": 178.30626969900004
+        },
+        "matrix_4x4": [
+          [
+            -0.992639992528963,
+            0.0984740476114891,
+            -0.0704890571586156,
+            2.80074708
+          ],
+          [
+            0.029352150373824302,
+            0.760340066561614,
+            0.6488616450750596,
+            -3.126371998
+          ],
+          [
+            0.11749168694223777,
+            0.642017013114209,
+            -0.7576343830446034,
+            8.288391127
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "ground_truth_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 2.898374813,
+          "y": -3.101877728,
+          "z": 8.258242439
+        },
+        "rotation_rpy_deg": {
+          "roll": 141.705018098,
+          "pitch": -7.86654591,
+          "yaw": 176.343482701
+        },
+        "matrix_4x4": [
+          [
+            -0.9885730083857338,
+            0.13469725834363822,
+            -0.0676761086786691,
+            2.898374813
+          ],
+          [
+            0.06317480403382598,
+            0.7778237491037571,
+            0.6252992559290818,
+            -3.101877728
+          ],
+          [
+            0.13686617999515996,
+            0.6138785416716264,
+            -0.7774450365451244,
+            8.258242439
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "num_candidates": "47304",
+      "num_inliers": "41742",
+      "num_outliers": "5562",
+      "notes": "Moving relay multichain aggregation over all valid marker/frame combinations. No GT is used for aggregation; GT is evaluation only."
+    },
+    {
+      "name": "cam_edge_3_to_cam_edge_0_GT_motion_multichain",
+      "target_camera": "cam_edge_0",
+      "method": "moving_relay_multichain_gt_motion_oracle",
+      "category": "oracle_gt_motion",
+      "translation_error_m": 0.731942428426473,
+      "rotation_error_deg": 7.37355765631229,
+      "estimated_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 1.388996859,
+          "y": -1.070600557,
+          "z": 3.276419803
+        },
+        "rotation_rpy_deg": {
+          "roll": 23.715339387,
+          "pitch": -55.88117220899999,
+          "yaw": -42.964424857000004
+        },
+        "matrix_4x4": [
+          [
+            0.4104618293645286,
+            0.38033432375187026,
+            -0.8287743292422443,
+            1.388996859
+          ],
+          [
+            -0.38228564690403444,
+            0.8969130084438125,
+            0.22227176936226817,
+            -1.070600557
+          ],
+          [
+            0.8278760600511942,
+            0.22559445352330143,
+            0.5135449072219823,
+            3.276419803
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "ground_truth_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 2.059231906,
+          "y": -1.165296833,
+          "z": 2.997928662
+        },
+        "rotation_rpy_deg": {
+          "roll": 12.727597349,
+          "pitch": -52.595332864,
+          "yaw": -32.453865269
+        },
+        "matrix_4x4": [
+          [
+            0.5125727963118669,
+            0.3757560030086873,
+            -0.7720599424163702,
+            2.059231906
+          ],
+          [
+            -0.3259649492540877,
+            0.9170044981502203,
+            0.22989041352357975,
+            -1.165296833
+          ],
+          [
+            0.7943651429530462,
+            0.13382890784579327,
+            0.5925148463000642,
+            2.997928662
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "num_candidates": "17227",
+      "num_inliers": "16635",
+      "num_outliers": "592",
+      "notes": "Moving relay multichain aggregation over all valid marker/frame combinations. No GT is used for aggregation; GT is evaluation only."
+    },
+    {
+      "name": "cam_edge_3_to_cam_edge_1_GT_motion_multichain",
+      "target_camera": "cam_edge_1",
+      "method": "moving_relay_multichain_gt_motion_oracle",
+      "category": "oracle_gt_motion",
+      "translation_error_m": 0.4565542035579553,
+      "rotation_error_deg": 4.600701890759111,
+      "estimated_transform_cam3_to_target": {
+        "translation_m": {
+          "x": -1.760327784,
+          "y": -0.382728813,
+          "z": 0.340857718
+        },
+        "rotation_rpy_deg": {
+          "roll": 11.532371102000003,
+          "pitch": 47.189935367,
+          "yaw": 22.062817803
+        },
+        "matrix_4x4": [
+          [
+            0.6298070152506186,
+            -0.232115123797657,
+            0.7412595313690782,
+            -1.760327784
+          ],
+          [
+            0.2552621301893579,
+            0.9631533804764134,
+            0.08471605850161179,
+            -0.382728813
+          ],
+          [
+            -0.7336105018552409,
+            0.13586071905173913,
+            0.6658509567361497,
+            0.340857718
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "ground_truth_transform_cam3_to_target": {
+        "translation_m": {
+          "x": -2.139367048,
+          "y": -0.128541651,
+          "z": 0.353501444
+        },
+        "rotation_rpy_deg": {
+          "roll": 16.174286863,
+          "pitch": 50.492062643,
+          "yaw": 24.587819285
+        },
+        "matrix_4x4": [
+          [
+            0.5784987621694943,
+            -0.2041868487073088,
+            0.7897131839999516,
+            -2.139367048
+          ],
+          [
+            0.2647086623292735,
+            0.9627576492713312,
+            0.055018477417929035,
+            -0.128541651
+          ],
+          [
+            -0.7715364581510128,
+            0.17721579947769645,
+            0.6110041359592187,
+            0.353501444
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "num_candidates": "41065",
+      "num_inliers": "40074",
+      "num_outliers": "991",
+      "notes": "Moving relay multichain aggregation over all valid marker/frame combinations. No GT is used for aggregation; GT is evaluation only."
+    },
+    {
+      "name": "cam_edge_3_to_cam_edge_5_GT_motion_multichain",
+      "target_camera": "cam_edge_5",
+      "method": "moving_relay_multichain_gt_motion_oracle",
+      "category": "oracle_gt_motion",
+      "translation_error_m": 2.092887513909403,
+      "rotation_error_deg": 12.06613115379647,
+      "estimated_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 0.820675583,
+          "y": -3.232060325,
+          "z": 8.473641016
+        },
+        "rotation_rpy_deg": {
+          "roll": 139.726100797,
+          "pitch": 3.50722884,
+          "yaw": 172.901583104
+        },
+        "matrix_4x4": [
+          [
+            -0.990476796033821,
+            0.05503976064732397,
+            0.12619960882055786,
+            0.820675583
+          ],
+          [
+            0.12334261487123359,
+            0.7620018814074206,
+            0.6357198534639907,
+            -3.232060325
+          ],
+          [
+            -0.06117447078073569,
+            0.6452315533817581,
+            -0.7615339300682934,
+            8.473641016
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "ground_truth_transform_cam3_to_target": {
+        "translation_m": {
+          "x": 2.898374813,
+          "y": -3.101877728,
+          "z": 8.258242439
+        },
+        "rotation_rpy_deg": {
+          "roll": 141.705018098,
+          "pitch": -7.86654591,
+          "yaw": 176.343482701
+        },
+        "matrix_4x4": [
+          [
+            -0.9885730083857338,
+            0.13469725834363822,
+            -0.0676761086786691,
+            2.898374813
+          ],
+          [
+            0.06317480403382598,
+            0.7778237491037571,
+            0.6252992559290818,
+            -3.101877728
+          ],
+          [
+            0.13686617999515996,
+            0.6138785416716264,
+            -0.7774450365451244,
+            8.258242439
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "num_candidates": "47304",
+      "num_inliers": "44897",
+      "num_outliers": "2407",
+      "notes": "Moving relay multichain aggregation over all valid marker/frame combinations. No GT is used for aggregation; GT is evaluation only."
     }
   ],
   "marker14_gt_eval_reference": {
@@ -227,6 +667,89 @@
       "notes": "EVAL_ONLY GT anchor for expressing cam3-root estimates in marker14 frame."
     },
     {
+      "camera": "cam_edge_0",
+      "method": "moving_relay_multichain_colmap_motion_aruco_metric_scale",
+      "translation_error_m": 0.12051536868147353,
+      "rotation_error_deg": 2.8763831494301386,
+      "estimated_pose_ref14_to_camera": {
+        "translation_m": {
+          "x": 0.6675679478380543,
+          "y": -2.000585302949353,
+          "z": -1.7092976641985438
+        },
+        "rotation_rpy_deg": {
+          "roll": -20.5042529133798,
+          "pitch": -0.8075313617476426,
+          "yaw": -0.8684922205265124
+        },
+        "matrix_4x4": [
+          [
+            0.999785810471734,
+            0.019133285526010346,
+            -0.007889902683693162,
+            0.6675679478380543
+          ],
+          [
+            -0.01515596287583365,
+            0.9364637614497906,
+            0.3504367564634395,
+            -2.000585302949353
+          ],
+          [
+            0.014093614464867954,
+            -0.3502421175077176,
+            0.9365531640836124,
+            -1.7092976641985438
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "ground_truth_pose_ref14_to_camera": {
+        "translation_m": {
+          "x": 0.58780793,
+          "y": -2.087328299644237,
+          "z": -1.734555260428118
+        },
+        "rotation_rpy_deg": {
+          "roll": -22.78646724884941,
+          "pitch": 0.8268176937293654,
+          "yaw": -1.4968996111615367
+        },
+        "matrix_4x4": [
+          [
+            0.9995546549155893,
+            0.018497213292307618,
+            0.023416766151545254,
+            0.58780793
+          ],
+          [
+            -0.026120134891358896,
+            0.9217860222744905,
+            0.3868181325799369,
+            -2.087328299644237
+          ],
+          [
+            -0.01443019022170161,
+            -0.38725751411662923,
+            0.9218586591069013,
+            -1.734555260428118
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "notes": "EVAL_ONLY marker14 GT frame. Calibration itself is cam3-rooted."
+    },
+    {
       "camera": "cam_edge_1",
       "method": "direct_static_aruco_multimarker_weighted_mad_inliers",
       "translation_error_m": 0.12597123913166802,
@@ -298,6 +821,89 @@
             0.1288013038902744,
             -0.39536803216915684,
             0.47508649956281324
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "notes": "EVAL_ONLY marker14 GT frame. Calibration itself is cam3-rooted."
+    },
+    {
+      "camera": "cam_edge_5",
+      "method": "moving_relay_multichain_colmap_motion_aruco_metric_scale",
+      "translation_error_m": 0.10507181833817965,
+      "rotation_error_deg": 2.836580602870057,
+      "estimated_pose_ref14_to_camera": {
+        "translation_m": {
+          "x": 5.841791031203142,
+          "y": -2.155200969062432,
+          "z": 0.4507841919004658
+        },
+        "rotation_rpy_deg": {
+          "roll": 163.14546332643894,
+          "pitch": -65.6372620493663,
+          "yaw": 175.47051869103367
+        },
+        "matrix_4x4": [
+          [
+            -0.41122373856335026,
+            0.3388789022966771,
+            -0.8462009964660764,
+            5.841791031203142
+          ],
+          [
+            0.032576922846377025,
+            0.9331965211180302,
+            0.3578868495363676,
+            -2.155200969062432
+          ],
+          [
+            0.9109521287860534,
+            0.11960494367460156,
+            -0.3947921940828527,
+            0.4507841919004658
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "ground_truth_pose_ref14_to_camera": {
+        "translation_m": {
+          "x": 5.85885887,
+          "y": -2.138761570071462,
+          "z": 0.34841953956133265
+        },
+        "rotation_rpy_deg": {
+          "roll": 169.84558517209157,
+          "pitch": -65.79832111031813,
+          "yaw": 170.02221061104052
+        },
+        "matrix_4x4": [
+          [
+            -0.40374926792622234,
+            0.32892635993725283,
+            -0.8536943120271262,
+            5.85885887
+          ],
+          [
+            0.07103052151589695,
+            0.9415857902552689,
+            0.32919730345575515,
+            -2.138761570071462
+          ],
+          [
+            0.9121081041533505,
+            0.07227481807510597,
+            -0.40352838439196703,
+            0.34841953956133265
           ],
           [
             0.0,

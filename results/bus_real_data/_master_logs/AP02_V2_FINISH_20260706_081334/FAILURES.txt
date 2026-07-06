@@ -1,0 +1,1 @@
+[ERROR] Git staged diff check failed.

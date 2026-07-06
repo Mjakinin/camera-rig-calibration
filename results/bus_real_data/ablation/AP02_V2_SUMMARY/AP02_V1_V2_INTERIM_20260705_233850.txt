@@ -1,0 +1,21 @@
+INTERIM AP02 V1 VS AP02 V2
+===========================
+
+Discovered variants: 16
+Completed comparisons: 4
+Pending/not yet merged: 12
+
+Ablation                         Variant                        Result          V1 t      V2 t     Δt %     V1 r     V2 r     Δr % Status V1 -> V2
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+moving_cam/fov                   fov_100deg                     BETTER        615.83     16.11     97.4    66.18     0.96     98.6 OK -> OK_FULL
+moving_cam/fov                   fov_140deg_extreme             BETTER        315.22     22.09     93.0    18.65     1.18     93.7 OK -> OK_FULL
+moving_cam/fov                   fov_40deg                      SIMILAR       593.13    594.40     -0.2    71.67    71.85     -0.2 OK_FULL -> OK_FULL
+moving_cam/fov                   fov_69deg_baseline             WORSE          14.91     17.40    -16.7     1.46     1.29     11.3 OK -> OK_FULL
+
+Interpretation:
+- Positive Δt/Δr percentages mean AP02 v2 is better.
+- RECOVERED means v1 had no metric result and v2 now has one.
+- WORSE means the mean translation error increased by more than 5%.
+- This is an interim snapshot; unfinished variants are intentionally absent.
+
+CSV: results/bus_real_data/ablation/AP02_V2_SUMMARY/AP02_V1_V2_INTERIM_20260705_233850.csv

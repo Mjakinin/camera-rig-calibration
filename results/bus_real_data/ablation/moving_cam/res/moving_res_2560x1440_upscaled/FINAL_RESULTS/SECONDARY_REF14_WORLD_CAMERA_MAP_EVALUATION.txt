@@ -1,46 +1,26 @@
-SECONDARY REF14/WORLD-FRAME CAMERA-MAP VS GT EVALUATION
-======================================================
+PARTIAL-AWARE SECONDARY REF14/WORLD CAMERA-MAP EVALUATION
+==========================================================
 
-What this evaluates:
-- estimated static-camera map vs GT static-camera map
-- each method map is aligned to the GT Ref14/world camera map with a best-fit SE(3) transform
-- no scale is estimated in this secondary evaluation
-- GT is used only after method estimation for evaluation
-- this is secondary; primary remains pairwise camera-to-camera extrinsics
-
+SE(3) alignment is evaluated only when at least three static cameras are available.
 
 AP01
 ----
-source: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv
-alignment cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
-- cam_edge_0: 6.725 cm, 1.082 deg | aligned_est=(+0.630, -1.708, +2.042) m | gt=(+0.588, -1.735, +2.087) m
-- cam_edge_1: 11.402 cm, 1.242 deg | aligned_est=(-4.079, +0.446, +2.165) m | gt=(-3.974, +0.475, +2.132) m
-- cam_edge_3: 4.806 cm, 1.124 deg | aligned_est=(-3.228, -1.551, +2.101) m | gt=(-3.227, -1.563, +2.054) m
-- cam_edge_5: 7.359 cm, 1.776 deg | aligned_est=(+5.923, +0.338, +2.104) m | gt=(+5.859, +0.348, +2.139) m
-summary: mean 7.573 cm / 1.306 deg, median 7.042 cm / 1.183 deg
+available cameras: []
+missing cameras: []
+summary: OK | mean 7.57 cm / 1.31 deg
 
 AP02
 ----
-source: results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv
-alignment cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
-- cam_edge_0: 53.300 cm, 10.361 deg | aligned_est=(+0.311, -1.887, +1.658) m | gt=(+0.588, -1.735, +2.087) m
-- cam_edge_1: 21.376 cm, 3.033 deg | aligned_est=(-4.031, +0.499, +2.336) m | gt=(-3.974, +0.475, +2.132) m
-- cam_edge_3: 21.251 cm, 2.696 deg | aligned_est=(-3.151, -1.552, +2.252) m | gt=(-3.227, -1.563, +2.054) m
-- cam_edge_5: 28.411 cm, 5.637 deg | aligned_est=(+6.116, +0.465, +2.166) m | gt=(+5.859, +0.348, +2.139) m
-summary: mean 31.084 cm / 5.432 deg, median 24.893 cm / 4.335 deg
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+- cam_edge_0: 4.34 cm / 1.34 deg
+- cam_edge_1: 8.96 cm / 0.73 deg
+- cam_edge_3: 2.28 cm / 0.84 deg
+- cam_edge_5: 8.91 cm / 0.51 deg
+summary: OK_FULL | mean 6.12 cm / 0.85 deg
 
 AP03
 ----
-source: results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv
-alignment cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
-- cam_edge_0: 1.555 cm, 0.106 deg | aligned_est=(+0.602, -1.741, +2.086) m | gt=(+0.588, -1.735, +2.087) m
-- cam_edge_1: 3.983 cm, 0.099 deg | aligned_est=(-4.014, +0.473, +2.136) m | gt=(-3.974, +0.475, +2.132) m
-- cam_edge_3: 3.948 cm, 0.244 deg | aligned_est=(-3.266, -1.569, +2.057) m | gt=(-3.227, -1.563, +2.054) m
-- cam_edge_5: 6.652 cm, 0.199 deg | aligned_est=(+5.923, +0.364, +2.133) m | gt=(+5.859, +0.348, +2.139) m
-summary: mean 4.035 cm / 0.162 deg, median 3.966 cm / 0.153 deg
-
-Output files:
-- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_DETAIL.csv
-- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_SUMMARY.csv
-- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_EVALUATION.txt
-- results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/SECONDARY_REF14_WORLD_CAMERA_MAP_METADATA.json
+available cameras: []
+missing cameras: []
+summary: OK | mean 4.03 cm / 0.16 deg

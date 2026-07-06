@@ -1,31 +1,35 @@
-BASELINE FINAL RESULTS — PAIRWISE STATIC-CAMERA EXTRINSICS
-==========================================================
+PARTIAL-AWARE PAIRWISE STATIC-CAMERA EVALUATION
+================================================
 
-Metric:
-T_i_j = inv(T_frame_cam_i) @ T_frame_cam_j.
-t_error_cm = ||t_est - t_gt|| * 100.
-r_error_deg = angle(R_gt^T R_est).
-baseline_error_cm = abs(||t_est|| - ||t_gt||) * 100.
-direction_error_deg = angle(t_est, t_gt).
-No GT map alignment is used for the main metric.
+OK_FULL requires all four cameras and all six camera pairs. PARTIAL results retain every evaluable camera pair.
 
 Summary:
-method | status | mean_t_cm | mean_r_deg | worst_pair | worst_t_cm | worst_r_deg
--------+--------+-----------+------------+------------+------------+------------
-AP01   | OK     | 15.43     | 2.63       | cam0-cam5  | 20.94      | 3.21       
-AP02   | OK     | 315.22    | 18.65      | cam0-cam5  | 628.80     | 36.37      
-AP03   | OK     | 18.95     | 0.13       | cam1-cam5  | 31.48      | 0.11       
+- AP01: OK | cameras=/4 | pairs=/6 | mean=15.43 cm / 2.63 deg | missing=-
+- AP02: OK_FULL | cameras=4/4 | pairs=6/6 | mean=22.09 cm / 1.18 deg | missing=-
+- AP03: OK | cameras=/4 | pairs=/6 | mean=18.95 cm / 0.13 deg | missing=-
 
-Pairwise detail: t_error/r_error, plus baseline and direction error.
-pair      | GT               | AP01                                   | AP02                                       | AP03                                  
-----------+------------------+----------------------------------------+--------------------------------------------+---------------------------------------
-cam0-cam1 | baseline 5.069 m | 15.69cm/1.83deg (b 13.17cm, d 0.95deg) | 17.64cm/1.97deg (b 15.62cm, d 0.91deg)     | 14.41cm/0.11deg (b 14.41cm, d 0.03deg)
-cam0-cam3 | baseline 3.819 m | 18.45cm/3.57deg (b 7.25cm, d 2.52deg)  | 9.33cm/1.92deg (b 6.75cm, d 0.96deg)       | 11.64cm/0.07deg (b 11.63cm, d 0.06deg)
-cam0-cam5 | baseline 5.668 m | 20.94cm/3.21deg (b 4.08cm, d 2.08deg)  | 628.80cm/36.37deg (b 223.90cm, d 52.06deg) | 19.81cm/0.21deg (b 19.80cm, d 0.07deg)
-cam1-cam3 | baseline 2.172 m | 6.69cm/1.86deg (b 0.07cm, d 1.77deg)   | 12.76cm/0.56deg (b 8.47cm, d 2.47deg)      | 5.63cm/0.08deg (b 5.60cm, d 0.16deg)  
-cam1-cam5 | baseline 9.834 m | 20.62cm/2.64deg (b 13.77cm, d 0.89deg) | 615.01cm/35.79deg (b 294.60cm, d 27.87deg) | 31.48cm/0.11deg (b 31.44cm, d 0.09deg)
-cam3-cam5 | baseline 9.286 m | 10.20cm/2.68deg (b 3.61cm, d 0.59deg)  | 607.79cm/35.30deg (b 207.01cm, d 32.31deg) | 30.75cm/0.19deg (b 30.74cm, d 0.06deg)
+Pairwise detail:
 
-Full estimated and GT pair transforms are in BASELINE_FINAL_PAIRWISE_DETAIL.csv.
-AP03 uses marker-size-only scale; no SDF marker map is used as method input.
+AP01
+  cam0-cam1: 15.69 cm / 1.83 deg
+  cam0-cam3: 18.45 cm / 3.57 deg
+  cam0-cam5: 20.94 cm / 3.21 deg
+  cam1-cam3: 6.69 cm / 1.86 deg
+  cam1-cam5: 20.62 cm / 2.64 deg
+  cam3-cam5: 10.20 cm / 2.68 deg
 
+AP02
+  cam0-cam1: 15.81 cm / 1.29 deg
+  cam0-cam3: 7.68 cm / 1.48 deg
+  cam0-cam5: 23.20 cm / 1.32 deg
+  cam1-cam3: 13.67 cm / 0.55 deg
+  cam1-cam5: 39.06 cm / 1.04 deg
+  cam3-cam5: 33.09 cm / 1.39 deg
+
+AP03
+  cam0-cam1: 14.41 cm / 0.11 deg
+  cam0-cam3: 11.64 cm / 0.07 deg
+  cam0-cam5: 19.81 cm / 0.21 deg
+  cam1-cam3: 5.63 cm / 0.08 deg
+  cam1-cam5: 31.48 cm / 0.11 deg
+  cam3-cam5: 30.75 cm / 0.19 deg

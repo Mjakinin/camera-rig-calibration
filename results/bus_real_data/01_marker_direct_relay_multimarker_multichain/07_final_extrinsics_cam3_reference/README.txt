@@ -10,7 +10,9 @@ Pipeline:
   3. cam_edge_3 -> cam_edge_5 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.
 
 Main no-GT results:
+  cam_edge_0: 12.052 cm, 2.876 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
   cam_edge_1: 12.597 cm, 1.862 deg via direct_static_aruco_multimarker_weighted_mad_inliers
+  cam_edge_5: 10.507 cm, 2.837 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
 
 Multichain rule:
   All valid marker/frame combinations are evaluated.

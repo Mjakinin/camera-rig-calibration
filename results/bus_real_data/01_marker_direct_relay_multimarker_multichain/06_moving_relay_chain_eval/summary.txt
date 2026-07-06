@@ -1,0 +1,29 @@
+Moving relay multichain aggregation
+================================================================================
+
+Candidate generation:
+  All valid combinations are evaluated:
+  root_marker × root_moving_frame × target_marker × target_moving_frame
+  A candidate is valid if both moving frames are registered in COLMAP and all PnP observations exist.
+
+Outlier rule, no GT:
+  Compute robust consensus from all candidates.
+  Candidate is inlier if translation and rotation deviation are <= median + 3*MAD.
+  Floors: 0.30 m and 7 deg.
+
+Final estimate:
+  weighted mean of MAD inlier transforms, weighted by observable marker quality.
+  GT is used only after aggregation for evaluation.
+
+cam3_to_cam0 / COLMAP_motion: candidates=17227, inliers=13034, outliers=4193, error=12.052 cm, 2.876 deg
+  oracle best individual candidate, eval-only: m2@f20 -> m3@f82, 0.086 cm, 1.725 deg
+cam3_to_cam0 / GT_motion: candidates=17227, inliers=16635, outliers=592, error=73.194 cm, 7.374 deg
+  oracle best individual candidate, eval-only: m14@f209 -> m3@f212, 3.601 cm, 1.876 deg
+cam3_to_cam1 / COLMAP_motion: candidates=41065, inliers=40164, outliers=901, error=39.297 cm, 4.182 deg
+  oracle best individual candidate, eval-only: m3@f214 -> m14@f17, 5.370 cm, 0.451 deg
+cam3_to_cam1 / GT_motion: candidates=41065, inliers=40074, outliers=991, error=45.655 cm, 4.601 deg
+  oracle best individual candidate, eval-only: m1@f239 -> m1@f247, 8.118 cm, 1.240 deg
+cam3_to_cam5 / COLMAP_motion: candidates=47304, inliers=41742, outliers=5562, error=10.507 cm, 2.837 deg
+  oracle best individual candidate, eval-only: m7@f98 -> m12@f125, 1.852 cm, 2.456 deg
+cam3_to_cam5 / GT_motion: candidates=47304, inliers=44897, outliers=2407, error=209.289 cm, 12.066 deg
+  oracle best individual candidate, eval-only: m2@f17 -> m0@f58, 2.755 cm, 4.880 deg

@@ -1,0 +1,14 @@
+results/bus_real_data/ablation/moving_cam/fov
+results/bus_real_data/ablation/moving_cam/fov
+results/bus_real_data/ablation/moving_cam/fov
+results/bus_real_data/ablation/moving_cam/fov
+results/bus_real_data/ablation/moving_cam/motion_blur
+results/bus_real_data/ablation/moving_cam/motion_blur
+results/bus_real_data/ablation/moving_cam/motion_blur
+results/bus_real_data/ablation/moving_cam/motion_blur
+results/bus_real_data/ablation/moving_cam/res
+results/bus_real_data/ablation/moving_cam/res
+results/bus_real_data/ablation/moving_cam/res
+results/bus_real_data/ablation/moving_cam/res
+results/bus_real_data/ablation/world/lighting
+results/bus_real_data/ablation/world/lighting
