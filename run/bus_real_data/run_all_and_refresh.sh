@@ -8,15 +8,18 @@ export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
 
 RUN_METHODS=0
 REUSE_AP03=0
+MODE_SET=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --run-methods)
       RUN_METHODS=1
+      MODE_SET=1
       shift
       ;;
     --refresh-only)
       RUN_METHODS=0
+      MODE_SET=1
       shift
       ;;
     --reuse-ap03)
@@ -33,6 +36,23 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ "$MODE_SET" != "1" ]]; then
+  echo "[ERROR] Choose an explicit execution mode."
+  echo
+  echo "Usage:"
+  echo "  $0 --refresh-only"
+  echo "  $0 --run-methods [--reuse-ap03]"
+  echo
+  echo "--refresh-only rebuilds evaluation and reports from existing method outputs."
+  echo "--run-methods executes shared preprocessing plus AP01, AP02 and AP03 first."
+  exit 2
+fi
+
+if [[ "$REUSE_AP03" == "1" && "$RUN_METHODS" != "1" ]]; then
+  echo "[ERROR] --reuse-ap03 is only valid together with --run-methods."
+  exit 2
+fi
 
 if [[ "$RUN_METHODS" == "1" ]]; then
   echo "================================================================================"
