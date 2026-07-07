@@ -52,4 +52,11 @@ else
 fi
 
 echo
+echo "=== Attach complete camera models to observations ==="
+python3 \
+  run/bus_real_data/_shared/baseline/04_attach_camera_models_to_observations.py \
+  --dataset "$DATASET" \
+  --observations "$OUT"
+
+echo
 echo "[OK] shared preprocessing complete."
