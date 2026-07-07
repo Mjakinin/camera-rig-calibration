@@ -125,15 +125,14 @@ else
   echo "[WARN] AP01 moving relay skipped because metric moving scale is unavailable."
 fi
 
-# Patched exporter catches missing relay rows and always exports the available subset.
-run_step 15_export_final_extrinsics_cam3_reference \
-  python3 run/bus_real_data/approach1_marker_direct_relay/15_export_final_extrinsics_cam3_reference.py
+# Export estimator poses only. The canonical scientific outputs are generated
+# later by the shared Primary and Secondary evaluators.
+run_step 15_export_final_extrinsics_primary_only \
+  python3 run/bus_real_data/approach1_marker_direct_relay/15_export_final_extrinsics_primary_only.py
 
 echo
 echo "================================================================================"
 echo "[OK] Full Approach 01 pipeline completed."
 echo "================================================================================"
-
-echo
-echo "Final report:"
-cat "$RESULT_ROOT/07_final_extrinsics_cam3_reference/FINAL_READABLE_REPORT.txt"
+echo "[INFO] AP01 estimator outputs are ready."
+echo "[INFO] Use results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT for Primary/Secondary results."
