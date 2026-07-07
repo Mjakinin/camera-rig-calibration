@@ -3,18 +3,20 @@ set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
 
-echo "=== AP02 Phase 3: Graph BA static_only ==="
+BA_SCRIPT="run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_ba_distortion.py"
+
+echo "=== AP02 Phase 3: distortion-aware graph BA static_only ==="
 
 python3 \
-  run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_ba.py \
+  "$BA_SCRIPT" \
   --mode static_only \
   --max-nfev 100
 
 echo
-echo "=== AP02 Phase 3: marker-aware with_moving BA ==="
+echo "=== AP02 Phase 3: distortion-aware marker-aware with_moving BA ==="
 
 python3 -u \
-  run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_ba.py \
+  "$BA_SCRIPT" \
   --mode with_moving \
   --moving-selection smart \
   --top-per-marker 8 \
@@ -45,24 +47,16 @@ path = Path(
     "results/bus_real_data/02_ref_marker_graph_ba/"
     "07_graph_ba/with_moving/moving_frame_selection.csv"
 )
-
 rows = list(csv.DictReader(path.open()))
-
 print(f"selected frames: {len(rows)}")
-
 ref_rows = [
     row
     for row in rows
-    if str(row.get("reference_marker_seen", "")).lower()
-    in {"true", "1"}
+    if str(row.get("reference_marker_seen", "")).lower() in {"true", "1"}
 ]
-
 print(f"selected Ref14 frames: {len(ref_rows)}")
-print(
-    "Ref14 frame IDs:",
-    [row["observer_id"] for row in ref_rows],
-)
+print("Ref14 frame IDs:", [row["observer_id"] for row in ref_rows])
 PY
 
 echo
-echo "[OK] AP02 marker-aware graph BA complete."
+echo "[OK] AP02 distortion-aware marker-aware graph BA complete."
