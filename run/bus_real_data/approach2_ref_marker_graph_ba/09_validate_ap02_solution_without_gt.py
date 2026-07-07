@@ -12,6 +12,7 @@ import argparse
 import csv
 import json
 import math
+import os
 from collections import defaultdict, deque
 from pathlib import Path
 
@@ -120,7 +121,17 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-median-reproj-px", type=float, default=2.0)
     parser.add_argument("--min-positive-depth-fraction", type=float, default=0.99)
-    parser.add_argument("--max-rig-diameter-m", type=float, default=6.0)
+    parser.add_argument(
+        "--max-rig-diameter-m",
+        type=float,
+        default=float(os.environ.get("AP02_MAX_RIG_DIAMETER_M", "12.0")),
+        help=(
+            "Maximum plausible distance between static cameras. The bus "
+            "benchmark spans about ten metres, so the default is 12 m. "
+            "Override with AP02_MAX_RIG_DIAMETER_M or this argument for "
+            "other physical rigs."
+        ),
+    )
     parser.add_argument("--min-pair-baseline-m", type=float, default=0.02)
     parser.add_argument("--ref-marker-id", type=int, default=14)
     args = parser.parse_args()
