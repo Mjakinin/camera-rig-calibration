@@ -9,17 +9,17 @@ COLMAP model: results/bus_real_data/01_marker_direct_relay_multimarker_multichai
 GT route: results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/metadata/route_commanded.csv
 
 Total GT frames: 270
-COLMAP registered frames: 264
-Common evaluated frames: 264
+COLMAP registered frames: 137
+Common evaluated frames: 137
 
-Scale: 0.750431259352
+Scale: 0.738309010767
 
 Position errors after Sim(3) alignment:
-RMSE_m:   0.528445
-Mean_m:   0.442746
-Median_m: 0.358122
-Min_m:    0.036689
-Max_m:    1.653590
+RMSE_m:   0.718977
+Mean_m:   0.410361
+Median_m: 0.211745
+Min_m:    0.002251
+Max_m:    3.254529
 
 CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/sim3_aligned_trajectory_errors.csv
 Transform: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/sim3_transform.txt

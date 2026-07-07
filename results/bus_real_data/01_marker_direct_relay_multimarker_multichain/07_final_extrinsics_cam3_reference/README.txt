@@ -1,23 +1,19 @@
-Final extrinsics summary, cam_edge_3 reference
-================================================
+AP01 calibration estimate output
+================================
 
-Main calibration root:
-  cam_edge_3
+Reference camera: cam_edge_3
 
-Pipeline:
-  1. cam_edge_3 -> cam_edge_0 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.
-  2. cam_edge_3 -> cam_edge_1 via direct static ArUco multimarker overlap.
-  3. cam_edge_3 -> cam_edge_5 via moving-camera relay multichain + COLMAP motion + ArUco metric scale.
+This directory contains estimator outputs, not the canonical
+scientific comparison report.
 
-Main no-GT results:
-  cam_edge_0: 12.052 cm, 2.876 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
-  cam_edge_1: 12.597 cm, 1.862 deg via direct_static_aruco_multimarker_weighted_mad_inliers
-  cam_edge_5: 10.507 cm, 2.837 deg via moving_relay_multichain_colmap_motion_aruco_metric_scale
+Canonical evaluation:
+- Primary: static camera-to-camera extrinsics for all six pairs.
+- Secondary: SE(3)-aligned full static-camera map.
 
-Multichain rule:
-  All valid marker/frame combinations are evaluated.
-  Outliers are removed without GT using median+3*MAD consistency filtering.
-  Final relay estimate is the weighted mean of inlier transforms.
+The former Ref14 GT-anchor report is intentionally disabled
+because it assigned zero error to the anchor camera by construction.
 
-Marker14:
-  Marker14 export is GT/evaluation-only and does not replace the cam_edge_3-rooted pipeline.
+Available AP01 target estimates:
+- cam_edge_0 via moving_relay_multichain_colmap_motion_aruco_metric_scale
+- cam_edge_1 via direct_static_aruco_multimarker_weighted_mad_inliers
+- cam_edge_5 via moving_relay_multichain_colmap_motion_aruco_metric_scale

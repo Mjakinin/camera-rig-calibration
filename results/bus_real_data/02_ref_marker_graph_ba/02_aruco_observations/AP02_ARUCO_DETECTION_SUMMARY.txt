@@ -1,17 +1,17 @@
 Shared ArUco detection summary
 ==============================
 
-Dataset: results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images
+Dataset: results/bus_real_data/ablation/moving_cam/fov/fov_40deg/raw_images
 Dictionary: DICT_4X4_50
 Marker length [m]: 0.17
 
 Static observations: 24
-Moving observations: 462
-Total observations: 486
-PnP success: 486 / 486
+Moving observations: 160
+Total observations: 184
+PnP success: 184 / 184
 
 Output files:
-- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_static_aruco_observations.csv
-- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_moving_aruco_observations.csv
-- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_all_aruco_observations.csv
-- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/debug_images
+- results/bus_real_data/ablation/moving_cam/fov/fov_40deg/aruco_observations/shared_static_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/fov/fov_40deg/aruco_observations/shared_moving_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/fov/fov_40deg/aruco_observations/shared_all_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/fov/fov_40deg/aruco_observations/debug_images

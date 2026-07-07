@@ -10,21 +10,21 @@ Marker observations used: 18
 Scalar residual count: 144
 
 Initial reprojection error [px]:
-- mean: 4.596536
-- median: 0.292208
-- max: 24.196123
+- mean: 4.893484
+- median: 0.293337
+- max: 19.709407
 
 Final reprojection error [px]:
-- mean: 0.324256
-- median: 0.296413
-- max: 0.785459
+- mean: 0.457989
+- median: 0.393160
+- max: 1.585567
 
 Optimizer:
 - success: True
 - status: 2
 - message: `ftol` termination condition is satisfied.
-- nfev: 22
-- cost: 5.093823
+- nfev: 19
+- cost: 10.887310
 
 Outputs:
 - optimized_static_camera_poses_ref_marker.csv

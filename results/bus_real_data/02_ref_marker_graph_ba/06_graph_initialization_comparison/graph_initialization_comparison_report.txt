@@ -12,7 +12,7 @@ Mode: static_only
 
 Mode: with_moving
 - static camera poses: 4
-- moving frame poses: 208
+- moving frame poses: 115
 - marker poses: 15
 - initialized static cameras: 4 / 4
 - missing static cameras: []

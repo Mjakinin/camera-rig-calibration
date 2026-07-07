@@ -6,14 +6,14 @@ BASELINE PRIMARY
 - status: OK_FULL
 - cameras: 4/4
 - pairs: 6/6
-- mean translation: 9.77 cm
-- mean rotation: 0.14 deg
+- mean translation: 9.39 cm
+- mean rotation: 0.09 deg
 
 BASELINE OPTIONAL SECONDARY
 ----------------------------------------------------------------------------------------------------------------
 - status: OK_FULL
-- mean translation: 5.85 cm
-- mean rotation: 0.09 deg
+- mean translation: 5.70 cm
+- mean rotation: 0.06 deg
 
 ABLATIONS
 ----------------------------------------------------------------------------------------------------------------

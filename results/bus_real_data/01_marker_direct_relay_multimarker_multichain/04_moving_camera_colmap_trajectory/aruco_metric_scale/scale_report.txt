@@ -4,32 +4,22 @@ No-GT COLMAP metric scale from ArUco overlap
 Scale source: known ArUco marker side length, not Gazebo GT.
 Known marker side length [m]: 0.170
 
-COLMAP registered poses loaded: 264
-Markers with usable observations: 15
-Raw scale pairs: 2890
-Kept scale pairs after robust MAD trim: 2381
+COLMAP registered poses loaded: 137
+Markers with usable observations: 5
+Raw scale pairs: 463
+Kept scale pairs after robust MAD trim: 444
 
-Metric COLMAP scale: 0.77135776599
-Kept mean: 0.773435070975
-Kept std: 0.0244802143294
-Raw median: 0.773127740775
-Raw MAD: 0.0166756418767
+Metric COLMAP scale: 0.787483304776
+Kept mean: 0.786252111675
+Kept std: 0.0270631228463
+Raw median: 0.787876132021
+Raw MAD: 0.0176594441922
 
 Per-marker kept scale medians:
-  marker 00: n= 119, median=0.778417382653, mean=0.780802113197, std=0.0282050291931
-  marker 01: n= 444, median=0.772662748379, mean=0.77177819963, std=0.0128636990217
-  marker 02: n=  54, median=0.763444212309, mean=0.763449735087, std=0.0398873578303
-  marker 03: n=  71, median=0.782414287638, mean=0.77532751313, std=0.0319573136142
-  marker 04: n=  94, median=0.789044742637, mean=0.778851689258, std=0.0274663464951
-  marker 06: n=   8, median=0.756469171214, mean=0.778221837096, std=0.0407085378073
-  marker 07: n=  16, median=0.779476384548, mean=0.780421064645, std=0.0316272133475
-  marker 08: n=   7, median=0.820747514218, mean=0.814123512778, std=0.0181909948328
-  marker 09: n=  43, median=0.75644683227, mean=0.765385998244, std=0.0367204540646
-  marker 10: n= 635, median=0.779072690483, mean=0.775643092478, std=0.0305901953089
-  marker 11: n= 179, median=0.766677371892, mean=0.768089233623, std=0.0111322022459
-  marker 12: n= 632, median=0.767906087995, mean=0.770153686551, std=0.0177678653161
-  marker 13: n=   3, median=0.79434551194, mean=0.78721966652, std=0.0194209807772
-  marker 14: n=  76, median=0.79584197128, mean=0.789924135292, std=0.0269374435433
+  marker 00: n=  10, median=0.75388981356, mean=0.763182883601, std=0.027811484842
+  marker 03: n=   9, median=0.78118272145, mean=0.783135619039, std=0.0285731194548
+  marker 10: n= 369, median=0.787582765575, mean=0.786430267719, std=0.0284750105845
+  marker 11: n=  56, median=0.788576654542, mean=0.7896985605, std=0.0092847254787
 
 Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/metric_scale.txt
 Wrote: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/aruco_metric_scale/scale_pairs_all.csv
