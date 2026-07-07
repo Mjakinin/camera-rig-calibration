@@ -8,6 +8,7 @@ RUN_GRAPH_INIT=1
 RUN_BA=1
 RUN_REPORT=1
 RUN_GT_EVAL=1
+RUN_GT_FREE_GATE=1
 
 SHARED_OBS="${SHARED_OBS:-results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations}"
 AP02_OBS="${AP02_OBS:-results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations}"
@@ -32,6 +33,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --skip-gt-eval)
       RUN_GT_EVAL=0
+      shift
+      ;;
+    --skip-gt-free-gate)
+      RUN_GT_FREE_GATE=0
       shift
       ;;
     *)
@@ -65,39 +70,49 @@ import_shared_observations_for_ap02() {
   echo "[OK] AP02 now uses shared ArUco baseline."
 }
 
-echo "=== AP02: Ref-marker graph + BA pipeline ==="
+echo "=== AP02: Ref-marker graph + distortion-aware BA pipeline ==="
 
 if [[ "$RUN_SHARED_BASELINE" == "1" ]]; then
   echo
-  echo "=== 1/5 Shared baseline preprocessing ==="
+  echo "=== 1/6 Shared baseline preprocessing ==="
   bash run/bus_real_data/_shared/baseline/run_shared_preprocessing.sh
 else
   echo
-  echo "=== 1/5 Skip shared baseline preprocessing ==="
+  echo "=== 1/6 Skip shared baseline preprocessing ==="
 fi
 
 import_shared_observations_for_ap02
 
 echo
-echo "=== 2/5 AP02 debug artifacts from shared observations ==="
+echo "=== 2/6 AP02 debug artifacts from shared observations ==="
 python3 run/bus_real_data/approach2_ref_marker_graph_ba/03_make_ap02_debug_artifacts.py
 
 if [[ "$RUN_GRAPH_INIT" == "1" ]]; then
   echo
-  echo "=== 3/5 Graph initialization ==="
+  echo "=== 3/6 Graph initialization ==="
   bash run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_phase2_graph_init.sh
 else
   echo
-  echo "=== 3/5 Skip graph initialization ==="
+  echo "=== 3/6 Skip graph initialization ==="
 fi
 
 if [[ "$RUN_BA" == "1" ]]; then
   echo
-  echo "=== 4/5 Graph bundle adjustment fast ==="
+  echo "=== 4/6 Distortion-aware graph bundle adjustment ==="
   bash run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_phase3_graph_ba_fast.sh
 else
   echo
-  echo "=== 4/5 Skip graph BA ==="
+  echo "=== 4/6 Skip graph BA ==="
+fi
+
+if [[ "$RUN_GT_FREE_GATE" == "1" ]]; then
+  echo
+  echo "=== 5/6 GT-free deployment validity gate ==="
+  python3 \
+    run/bus_real_data/approach2_ref_marker_graph_ba/09_validate_ap02_solution_without_gt.py
+else
+  echo
+  echo "=== 5/6 Skip GT-free deployment validity gate ==="
 fi
 
 echo
@@ -138,7 +153,7 @@ printf 'status=%s\n' "$AP02_GT_EVAL_STATUS" \
 
 if [[ "$RUN_REPORT" == "1" ]]; then
   echo
-  echo "=== 5/5 AP02 exported report ==="
+  echo "=== 6/6 AP02 exported report ==="
 
   AP02_REPORT="$AP02_GT_EVAL_OUT/ap02_final_results_report.txt"
 
@@ -149,7 +164,7 @@ if [[ "$RUN_REPORT" == "1" ]]; then
   fi
 else
   echo
-  echo "=== 5/5 Skip report announcement ==="
+  echo "=== 6/6 Skip report announcement ==="
 fi
 
 echo
