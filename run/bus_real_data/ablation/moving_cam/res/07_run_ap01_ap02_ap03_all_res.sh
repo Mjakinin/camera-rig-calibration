@@ -25,7 +25,6 @@ OBS_ROOT="$ABL_ROOT/01_shared_observations"
 AP01_RESULT="results/bus_real_data/01_marker_direct_relay_multimarker_multichain"
 AP02_RESULT="results/bus_real_data/02_ref_marker_graph_ba"
 AP03_RESULT="results/bus_real_data/03_targetless_colmap_aruco_scale"
-CMP_RESULT="results/bus_real_data/90_approach_comparison_ref_aruco"
 
 AP01_OUT="$ABL_ROOT/02_ap01_results"
 AP02_OUT="$ABL_ROOT/03_ap02_results"
@@ -142,14 +141,12 @@ snapshot_results() {
       rm -rf "$out"
       mkdir -p "$out"
       if [ -d "$AP02_RESULT" ]; then cp -a "$AP02_RESULT" "$out/"; fi
-      if [ -d "$CMP_RESULT" ]; then cp -a "$CMP_RESULT" "$out/" || true; fi
       ;;
     AP03)
       local out="$AP03_OUT/$variant"
       rm -rf "$out"
       mkdir -p "$out"
       if [ -d "$AP03_RESULT" ]; then cp -a "$AP03_RESULT" "$out/"; fi
-      if [ -d "$CMP_RESULT" ]; then cp -a "$CMP_RESULT" "$out/" || true; fi
       ;;
   esac
 }

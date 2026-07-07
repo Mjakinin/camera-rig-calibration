@@ -1,11 +1,6 @@
-# Shared Common Python Utilities
+# Shared Common Utilities
 
-Reusable Python modules for geometry, camera I/O, COLMAP I/O, ArUco helpers, SDF parsing, and projection utilities.
+Reusable Python helpers for rigid transforms, rotations, CSV/JSON handling,
+camera naming, metadata, paths and validation.
 
-Import style:
-
-```python
-from _shared.common import ...
-```
-
-Use `PYTHONPATH=run/bus_real_data` when running scripts directly from the repository root.
+Scientific method decisions remain in AP01, AP02 or AP03.

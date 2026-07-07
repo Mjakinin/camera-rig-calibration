@@ -5,7 +5,7 @@ from pathlib import Path
 
 import cv2
 
-SRC = Path("results/bus_real_data/ablation/_frozen_baseline_shared/bus_real_data_ref_marker_v1")
+SRC = Path("results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1")
 OUT_ROOT = Path("results/bus_real_data/ablation/moving_cam/res")
 
 # Extreme but interpretable post-hoc moving-camera image resolution variants.
@@ -86,7 +86,7 @@ def copytree_clean(src, dst):
 def main():
     src_raw = SRC / "raw_images"
     if not src_raw.exists():
-        raise SystemExit(f"Missing frozen source: {src_raw}")
+        raise SystemExit(f"Missing canonical shared baseline source: {src_raw}")
 
     for name, (w, h) in VARIANTS.items():
         root = OUT_ROOT / name
@@ -125,8 +125,8 @@ def main():
             "parameter": "moving_camera_image_resolution_posthoc_resize",
             "moving_width": w,
             "moving_height": h,
-            "static_images": "unchanged from frozen baseline",
-            "moving_images": "resized from frozen baseline moving capture",
+            "static_images": "unchanged from canonical shared baseline",
+            "moving_images": "resized from canonical shared baseline moving capture",
             "source": str(SRC),
             "raw_images": str(raw),
             "interpretation": (

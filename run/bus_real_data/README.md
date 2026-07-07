@@ -1,44 +1,93 @@
-# Bus Real-Data Calibration Pipelines
+# Bus Real-Data Camera-Rig Calibration
 
-This directory contains executable scripts for the bus real-data camera-rig calibration experiments.
+Canonical execution, evaluation, ablation and reporting root for the bus
+real-data camera-rig calibration experiments.
+
+## Project structure
 
 ```text
 run/bus_real_data/
-  _shared/
-    baseline/                 # shared preprocessing and neutral ArUco observation export
-    common/                   # reusable Python utilities
-    tools/
-      capture/                # dataset acquisition / preview / capture helpers
-      live_sim/               # Gazebo/live marker pose helpers
-      migration/              # one-off migration helpers
-  approach1_marker_direct_relay/
-  approach2_ref_marker_graph_ba/
-  approach3_targetless_colmap_aruco_scale/
-  approach_comparison_ref_aruco/
+├── _shared/
+│   ├── baseline/
+│   ├── common/
+│   └── tools/
+├── approach1_marker_direct_relay/
+├── approach2_ref_marker_graph_ba/
+├── approach3_targetless_colmap_aruco_scale/
+├── ablation/
+│   ├── _shared/
+│   ├── moving_cam/
+│   │   ├── fov/
+│   │   ├── motion_blur/
+│   │   └── res/
+│   └── world/
+│       └── lighting/
+├── evaluation/
+├── reporting/
+│   └── visualization/
+├── README.md
+└── run_all_and_refresh.sh
 ```
 
-## Approaches
+## Responsibilities
 
-| ID | Directory | Method |
-|---|---|---|
-| AP01 | `approach1_marker_direct_relay/` | Direct marker relay + COLMAP moving-camera trajectory + multichain aggregation |
-| AP02 | `approach2_ref_marker_graph_ba/` | Reference-marker pose graph and bundle adjustment |
-| AP03 | `approach3_targetless_colmap_aruco_scale/` | Targetless COLMAP/SfM plus ArUco Ref14 metric scale registration |
+- `_shared/`: method-independent preprocessing and reusable utilities.
+- `approach1_marker_direct_relay/`: AP01.
+- `approach2_ref_marker_graph_ba/`: AP02.
+- `approach3_targetless_colmap_aruco_scale/`: AP03.
+- `ablation/`: controlled dataset variants and common orchestration.
+- `evaluation/`: numerical metrics.
+- `reporting/`: canonical human-readable and machine-readable reports.
 
-## Shared baseline
+Evaluation and reporting remain separate.
 
-Shared/raw data and method-independent ArUco observations are generated under:
+## Canonical results
 
 ```text
-results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/
+results/bus_real_data/
+├── 00_shared_baseline/
+├── 01_marker_direct_relay_multimarker_multichain/
+├── 02_ref_marker_graph_ba/
+├── 03_targetless_colmap_aruco_scale/
+├── 99_FINAL_RESULTS_FOR_REPORT/
+└── ablation/
+    ├── moving_cam/
+    └── world/
 ```
 
-Approach-specific outputs remain in their own result directories.
+Each of the four principal roots contains one generated
+`RESULTS_SUMMARY.txt`. Detailed comparison data belongs in
+`99_FINAL_RESULTS_FOR_REPORT/`.
 
-## Quick smoke tests
+## Metrics
+
+Primary: pairwise static camera-to-camera extrinsic error against ground truth,
+without global map alignment.
+
+Secondary: available static-camera map after best-fit rigid SE(3) alignment,
+without scale optimization.
+
+AP02 FOV40 has complete numeric coverage but invalid global geometry and must
+remain classified as `INVALID_FULL_COVERAGE`.
+
+## Reporting
+
+Validation only:
 
 ```bash
-cd /workspaces/project
-PYTHONPATH=run/bus_real_data find run/bus_real_data -name "*.py" -print0 | xargs -0 python3 -m py_compile
-bash run/bus_real_data/approach3_targetless_colmap_aruco_scale/run_approach3_full_pipeline.sh --reuse-existing
+bash run/bus_real_data/reporting/run_refresh_final_results.sh --reuse-baseline
 ```
+
+Promotion:
+
+```bash
+bash run/bus_real_data/reporting/run_refresh_final_results.sh   --reuse-baseline --promote
+```
+
+Full execution:
+
+```bash
+bash run/bus_real_data/run_all_and_refresh.sh --run-methods
+```
+
+A clean full run requires Python, COLMAP and the project ROS/Gazebo runtime.

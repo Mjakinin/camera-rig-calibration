@@ -6,7 +6,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-SRC = Path("results/bus_real_data/ablation/_frozen_baseline_shared/bus_real_data_ref_marker_v1")
+SRC = Path("results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1")
 OUT_ROOT = Path("results/bus_real_data/ablation/moving_cam/motion_blur")
 
 VARIANTS = {

@@ -19,6 +19,15 @@ LOG_DIR="$RESULT_ROOT/_pipeline_logs"
 
 mkdir -p "$LOG_DIR"
 
+if ! command -v colmap >/dev/null 2>&1; then
+  echo "[ERROR] COLMAP is required for a clean AP01 run."
+  echo "[ERROR] No AP01 result directory was modified."
+  exit 127
+fi
+
+# A fresh AP01 run must never reuse stale moving-camera or relay outputs.
+rm -rf   "$RESULT_ROOT/04_moving_camera_colmap_trajectory"   "$RESULT_ROOT/06_moving_relay_chain_eval"   "$RESULT_ROOT/07_final_extrinsics_cam3_reference"
+
 run_step () {
   STEP="$1"
   shift

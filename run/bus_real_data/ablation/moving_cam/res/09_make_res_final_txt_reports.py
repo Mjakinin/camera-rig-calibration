@@ -39,7 +39,7 @@ INCLUDE_DIR_RE = re.compile(
     r"(04_moving_camera_colmap_trajectory|05_direct|06_moving|07_final|"
     r"05_graph_initialization|07_graph_ba|08_final_results|"
     r"03_reconstruction_inspection|06_triangulated_ref_aruco_registration|"
-    r"90_approach_comparison_ref_aruco)",
+    r"99_FINAL_RESULTS_FOR_REPORT)",
     re.IGNORECASE,
 )
 

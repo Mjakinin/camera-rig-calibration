@@ -1,12 +1,14 @@
-# Shared Bus Real-Data Infrastructure
+# Shared Infrastructure
 
-Shared code and tools used by several bus real-data calibration approaches.
+Method-independent components shared by AP01, AP02, AP03, evaluation and
+ablations.
 
 ```text
 _shared/
-  baseline/       # shared preprocessing and neutral observation export
-  common/         # reusable Python modules
-  tools/          # data capture, live simulation, and migration tools
+├── baseline/
+├── common/
+└── tools/
 ```
 
-The shared layer should stay method-independent. It may generate raw images, camera info, route metadata, and neutral ArUco observations, but it should not contain AP01/AP02/AP03-specific estimation outputs.
+Shared results are written below
+`results/bus_real_data/00_shared_baseline/`.

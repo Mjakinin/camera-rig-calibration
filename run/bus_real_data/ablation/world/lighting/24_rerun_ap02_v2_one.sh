@@ -20,7 +20,6 @@ VAR_ROOT="$ROOT/$VARIANT"
 SHARED="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1"
 
 AP02_RESULT="results/bus_real_data/02_ref_marker_graph_ba"
-COMPARE_RESULT="results/bus_real_data/90_approach_comparison_ref_aruco"
 FINAL_RESULT="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
 
 OUT="$VAR_ROOT/AP02_V2"
@@ -33,7 +32,6 @@ PRESERVE=(
   "$SHARED/aruco_observations"
   "$SHARED/metadata"
   "$AP02_RESULT"
-  "$COMPARE_RESULT"
   "$FINAL_RESULT"
 )
 
@@ -118,11 +116,6 @@ cp -a \
   "$AP02_RESULT" \
   "$OUT/AP02_INTERNAL"
 
-if [[ -d "$COMPARE_RESULT" ]]; then
-    cp -a \
-      "$COMPARE_RESULT" \
-      "$OUT/AP02_COMPARISON"
-fi
 
 if [[ -d "$FINAL_RESULT/AP02" ]]; then
     cp -a \

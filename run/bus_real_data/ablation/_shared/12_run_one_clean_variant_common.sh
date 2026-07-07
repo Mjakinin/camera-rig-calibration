@@ -74,7 +74,6 @@ echo "=== Clean method outputs ==="
 rm -rf results/bus_real_data/01_marker_direct_relay_multimarker_multichain
 rm -rf results/bus_real_data/02_ref_marker_graph_ba
 rm -rf results/bus_real_data/03_targetless_colmap_aruco_scale
-rm -rf results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT
 
 echo
 echo "=== AP01 ==="
@@ -105,6 +104,22 @@ echo
 echo "=== AP02 ==="
 AP02_STATUS="OK"
 bash run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_full_pipeline.sh --skip-shared-baseline --skip-report || AP02_STATUS="FAILED"
+
+AP02_GT_FULL_MAP_STATUS="NOT_AVAILABLE"
+AP02_GT_STATUS_FILE="results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_GT_ALIGNED_FULL_MAP_STATUS.txt"
+
+if [[ -f "$AP02_GT_STATUS_FILE" ]]; then
+  AP02_GT_FULL_MAP_STATUS="$(
+    awk -F= '$1 == "status" {print $2}' "$AP02_GT_STATUS_FILE" |
+      tail -n 1
+  )"
+
+  AP02_GT_FULL_MAP_STATUS="${
+    AP02_GT_FULL_MAP_STATUS:-NOT_AVAILABLE
+  }"
+fi
+
+echo "[AP02 GT full-map status] $AP02_GT_FULL_MAP_STATUS"
 
 echo
 echo "=== AP03 targetless COLMAP + marker-size-only scale ==="
@@ -139,16 +154,13 @@ echo
 echo "=== Secondary Ref14/world camera-map evaluator ==="
 SECONDARY_STATUS="OK"
 echo "[INFO] legacy full-only secondary evaluator skipped; partial-aware evaluator runs below."
-python3 run/bus_real_data/evaluation/12_eval_partial_static_camera_results.py
-
-echo
-echo "=== Collect FINAL_RESULTS ==="
 rm -rf "$VAR_FINAL"
 mkdir -p "$VAR_FINAL"
 
-if [ -d results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT ]; then
-  cp -a results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/. "$VAR_FINAL/"
-fi
+python3   run/bus_real_data/evaluation/12_eval_partial_static_camera_results.py   --final-root "$VAR_FINAL"
+
+echo
+echo "=== Collect FINAL_RESULTS ==="
 
 cp "$VAR_ROOT/VARIANT_METADATA.json" "$VAR_FINAL/VARIANT_METADATA.json" 2>/dev/null || true
 cp "$VAR_ROOT/aruco_observations/SHARED_ARUCO_DETECTION_SUMMARY.txt" "$VAR_FINAL/DIAGNOSTIC_SHARED_ARUCO_DETECTION_SUMMARY.txt" 2>/dev/null || true
@@ -168,10 +180,17 @@ cp results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_A
 cp results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv \
    "$VAR_FINAL/DIAGNOSTIC_AP02_GT_ALIGNED_FULL_MARKER_MAP.csv" 2>/dev/null || true
 
+cp results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION_metadata.json \
+   "$VAR_FINAL/DIAGNOSTIC_AP02_GT_ALIGNED_FULL_MARKER_MAP_metadata.json" 2>/dev/null || true
+
+cp results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_GT_ALIGNED_FULL_MAP_STATUS.txt \
+   "$VAR_FINAL/DIAGNOSTIC_AP02_GT_ALIGNED_FULL_MARKER_MAP_STATUS.txt" 2>/dev/null || true
+
 cat > "$VAR_FINAL/RUN_STATUS.txt" <<TXT
 variant=$variant
 AP01_STATUS=$AP01_STATUS
 AP02_STATUS=$AP02_STATUS
+AP02_GT_FULL_MAP_STATUS=$AP02_GT_FULL_MAP_STATUS
 AP03_STATUS=$AP03_STATUS
 PAIRWISE_STATUS=$PAIRWISE_STATUS
 SECONDARY_STATUS=$SECONDARY_STATUS
@@ -183,3 +202,12 @@ cat "$VAR_FINAL/RUN_STATUS.txt"
 
 echo
 echo "[OK] variant final results written to $VAR_FINAL"
+
+echo
+echo "=== Refresh canonical final reports from updated variant ==="
+
+if [[ "${REFRESH_CANONICAL_FINAL:-1}" == "1" ]]; then
+  bash     run/bus_real_data/reporting/run_refresh_final_results.sh     --reuse-baseline     --promote
+else
+  echo "[INFO] Canonical final-result refresh disabled."
+fi

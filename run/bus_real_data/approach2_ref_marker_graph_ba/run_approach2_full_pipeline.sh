@@ -7,6 +7,7 @@ RUN_SHARED_BASELINE=1
 RUN_GRAPH_INIT=1
 RUN_BA=1
 RUN_REPORT=1
+RUN_GT_EVAL=1
 
 SHARED_OBS="${SHARED_OBS:-results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations}"
 AP02_OBS="${AP02_OBS:-results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations}"
@@ -27,6 +28,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --skip-report)
       RUN_REPORT=0
+      shift
+      ;;
+    --skip-gt-eval)
+      RUN_GT_EVAL=0
       shift
       ;;
     *)
@@ -99,14 +104,52 @@ echo
 echo "=== Export final AP02 results ==="
 python3 run/bus_real_data/approach2_ref_marker_graph_ba/08_export_ap02_final_results.py
 
+echo
+echo "=== Optional simulation GT full-map evaluation ==="
+
+AP02_GT_EVAL_STATUS="SKIPPED"
+AP02_GT_EVAL_OUT="results/bus_real_data/02_ref_marker_graph_ba/08_final_results"
+
+mkdir -p "$AP02_GT_EVAL_OUT"
+
+rm -f \
+  "$AP02_GT_EVAL_OUT/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv" \
+  "$AP02_GT_EVAL_OUT/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.txt" \
+  "$AP02_GT_EVAL_OUT/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION_metadata.json" \
+  "$AP02_GT_EVAL_OUT/AP02_GT_ALIGNED_FULL_MAP_STATUS.txt"
+
+if [[ "$RUN_GT_EVAL" == "1" ]]; then
+  if python3 \
+    run/bus_real_data/approach2_ref_marker_graph_ba/09_eval_ap02_gt_aligned_full_map.py
+  then
+    AP02_GT_EVAL_STATUS="OK"
+    echo "[OK] AP02 GT-aligned full-map evaluation generated."
+  else
+    AP02_GT_EVAL_STATUS="NOT_AVAILABLE"
+    echo "[WARN] AP02 GT-aligned full-map evaluation unavailable."
+    echo "[WARN] This is expected for incomplete or non-simulation data."
+  fi
+else
+  echo "[INFO] AP02 GT-aligned full-map evaluation skipped."
+fi
+
+printf 'status=%s\n' "$AP02_GT_EVAL_STATUS" \
+  > "$AP02_GT_EVAL_OUT/AP02_GT_ALIGNED_FULL_MAP_STATUS.txt"
+
 if [[ "$RUN_REPORT" == "1" ]]; then
   echo
-  echo "=== 5/5 Ref-ArUco comparison/report ==="
-  python3 run/bus_real_data/approach_comparison_ref_aruco/01_eval_ap02_ref_aruco_vs_gt.py
-  python3 run/bus_real_data/approach_comparison_ref_aruco/02_make_ap02_readable_ref_aruco_report.py
+  echo "=== 5/5 AP02 exported report ==="
+
+  AP02_REPORT="$AP02_GT_EVAL_OUT/ap02_final_results_report.txt"
+
+  if [[ -f "$AP02_REPORT" ]]; then
+    echo "[OK] AP02 readable report: $AP02_REPORT"
+  else
+    echo "[WARN] AP02 readable report not found after export."
+  fi
 else
   echo
-  echo "=== 5/5 Skip report ==="
+  echo "=== 5/5 Skip report announcement ==="
 fi
 
 echo

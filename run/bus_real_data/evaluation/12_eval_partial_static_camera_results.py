@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import math
@@ -425,6 +426,18 @@ def apply_alignment(A, T):
 
 
 def main():
+    global FINAL
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--final-root",
+        type=Path,
+        default=FINAL,
+        help="Output directory for primary and secondary evaluation files.",
+    )
+    args = parser.parse_args()
+
+    FINAL = args.final_root
     FINAL.mkdir(parents=True, exist_ok=True)
 
     gt = gt_static_camera_poses_ref_aruco(

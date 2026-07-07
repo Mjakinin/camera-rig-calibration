@@ -41,9 +41,8 @@ IMAGE_DIR = AP3_ROOT / "01_colmap_dataset" / "images"
 INSPECT_SUMMARY = AP3_ROOT / "03_reconstruction_inspection" / "colmap_model_summary.csv"
 
 OUT_ROOT = AP3_ROOT / "06_triangulated_ref_aruco_registration"
-CMP_ROOT = Path("results/bus_real_data/90_approach_comparison_ref_aruco")
-AP3_CMP = CMP_ROOT / "03_targetless_colmap_aruco_scale"
-COMBINED = CMP_ROOT / "combined"
+AP3_CMP = AP3_ROOT / "07_final_results"
+COMBINED = AP3_ROOT / "07_final_results"
 
 
 def pose_fields():

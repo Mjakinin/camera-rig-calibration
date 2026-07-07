@@ -1,1 +1,0 @@
-[ERROR] ceiling_dark_extreme merge failed with rc=1

@@ -29,7 +29,6 @@ SHARED="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1"
 AP01_ROOT="results/bus_real_data/01_marker_direct_relay_multimarker_multichain"
 AP02_ROOT="results/bus_real_data/02_ref_marker_graph_ba"
 AP03_ROOT="results/bus_real_data/03_targetless_colmap_aruco_scale"
-COMPARE_ROOT="results/bus_real_data/90_approach_comparison_ref_aruco"
 FINAL_ROOT="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
 
 SHARED_TAR="$STATE_ROOT/clean_shared_baseline.tar"
@@ -192,7 +191,6 @@ rm -rf \
   "$AP01_ROOT" \
   "$AP02_ROOT" \
   "$AP03_ROOT" \
-  "$COMPARE_ROOT" \
   "$FINAL_ROOT"
 
 run_required \

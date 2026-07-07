@@ -1,0 +1,134 @@
+MOVING-CAMERA MOTION BLUR — DETAILED CAMERA-TO-CAMERA RESULTS
+================================================================================================================
+
+Primary metric: static camera-to-camera extrinsics against simulation GT.
+No global map alignment is used.
+
+################################################################################################################
+PARAMETER: kernel 0 baseline
+VARIANT:   moving_blur_k00_baseline
+################################################################################################################
+
+AP01
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1       12.22 cm    1.31 deg     5.069 m     5.189 m    11.96 cm    0.28 deg
+cam0-cam3       10.35 cm    2.46 deg     3.819 m     3.870 m     5.13 cm    1.34 deg
+cam0-cam5       12.80 cm    2.37 deg     5.668 m     5.679 m     1.15 cm    1.29 deg
+cam1-cam3        6.69 cm    1.86 deg     2.172 m     2.172 m     0.07 cm    1.77 deg
+cam1-cam5       27.18 cm    2.71 deg     9.834 m    10.008 m    17.43 cm    1.20 deg
+cam3-cam5        7.30 cm    2.36 deg     9.286 m     9.353 m     6.73 cm    0.17 deg
+
+AP02
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1       15.34 cm    1.73 deg     5.069 m     5.207 m    13.83 cm    0.74 deg
+cam0-cam3        9.30 cm    1.95 deg     3.819 m     3.879 m     5.98 cm    1.06 deg
+cam0-cam5       14.62 cm    1.32 deg     5.668 m     5.793 m    12.47 cm    0.76 deg
+cam1-cam3       11.28 cm    0.51 deg     2.172 m     2.231 m     5.89 cm    2.50 deg
+cam1-cam5       28.55 cm    1.07 deg     9.834 m    10.074 m    24.06 cm    0.88 deg
+cam3-cam5       25.29 cm    1.17 deg     9.286 m     9.461 m    17.55 cm    1.11 deg
+
+AP03
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1        9.39 cm    0.15 deg     5.069 m     5.163 m     9.38 cm    0.05 deg
+cam0-cam3        5.98 cm    0.17 deg     3.819 m     3.879 m     5.94 cm    0.10 deg
+cam0-cam5       11.02 cm    0.16 deg     5.668 m     5.777 m    10.91 cm    0.15 deg
+cam1-cam3        4.47 cm    0.04 deg     2.172 m     2.216 m     4.36 cm    0.25 deg
+cam1-cam5       18.31 cm    0.08 deg     9.834 m    10.017 m    18.29 cm    0.05 deg
+cam3-cam5       16.34 cm    0.09 deg     9.286 m     9.449 m    16.34 cm    0.03 deg
+
+################################################################################################################
+PARAMETER: kernel 9
+VARIANT:   moving_blur_k09_mild
+################################################################################################################
+
+AP01
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1       24.69 cm    2.77 deg     5.069 m     5.273 m    20.41 cm    1.54 deg
+cam0-cam3       24.40 cm    3.97 deg     3.819 m     3.921 m    10.15 cm    3.29 deg
+cam0-cam5       10.99 cm    2.17 deg     5.668 m     5.680 m     1.18 cm    1.10 deg
+cam1-cam3        6.69 cm    1.86 deg     2.172 m     2.172 m     0.07 cm    1.77 deg
+cam1-cam5       20.70 cm    2.14 deg     9.834 m     9.976 m    14.24 cm    0.87 deg
+cam3-cam5       12.06 cm    2.94 deg     9.286 m     9.338 m     5.26 cm    0.67 deg
+
+AP02
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1       47.95 cm    6.33 deg     5.069 m     5.345 m    27.54 cm    4.32 deg
+cam0-cam3       43.44 cm    6.45 deg     3.819 m     4.006 m    18.72 cm    5.74 deg
+cam0-cam5       52.56 cm    6.24 deg     5.668 m     5.677 m     0.89 cm    5.31 deg
+cam1-cam3        9.06 cm    0.52 deg     2.172 m     2.205 m     3.32 cm    2.21 deg
+cam1-cam5       34.01 cm    2.78 deg     9.834 m    10.129 m    29.49 cm    0.97 deg
+cam3-cam5       23.80 cm    2.49 deg     9.286 m     9.466 m    18.07 cm    0.95 deg
+
+AP03
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1        4.21 cm    0.11 deg     5.069 m     5.030 m     3.95 cm    0.17 deg
+cam0-cam3        3.32 cm    0.13 deg     3.819 m     3.787 m     3.23 cm    0.11 deg
+cam0-cam5        1.62 cm    0.31 deg     5.668 m     5.653 m     1.52 cm    0.06 deg
+cam1-cam3        1.18 cm    0.18 deg     2.172 m     2.161 m     1.11 cm    0.10 deg
+cam1-cam5        5.63 cm    0.25 deg     9.834 m     9.779 m     5.53 cm    0.06 deg
+cam3-cam5        5.12 cm    0.25 deg     9.286 m     9.238 m     4.75 cm    0.12 deg
+
+################################################################################################################
+PARAMETER: kernel 21
+VARIANT:   moving_blur_k21_strong
+################################################################################################################
+
+AP01
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam1-cam3        6.69 cm    1.86 deg     2.172 m     2.172 m     0.07 cm    1.77 deg
+cam1-cam5       77.46 cm    4.02 deg     9.834 m     9.245 m    58.86 cm    3.03 deg
+cam3-cam5       75.92 cm    4.40 deg     9.286 m     8.560 m    72.54 cm    1.44 deg
+
+AP02
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1       12.50 cm    0.96 deg     5.069 m     5.191 m    12.22 cm    0.29 deg
+cam0-cam3        5.31 cm    1.33 deg     3.819 m     3.866 m     4.66 cm    0.38 deg
+cam1-cam3       11.49 cm    0.49 deg     2.172 m     2.246 m     7.43 cm    2.27 deg
+
+AP03
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1       65.41 cm    2.90 deg     5.069 m     4.429 m    64.00 cm    1.63 deg
+cam0-cam3       51.01 cm    2.38 deg     3.819 m     3.322 m    49.72 cm    1.84 deg
+cam1-cam3       26.66 cm    0.59 deg     2.172 m     1.907 m    26.56 cm    0.65 deg
+
+################################################################################################################
+PARAMETER: kernel 41
+VARIANT:   moving_blur_k41_extreme
+################################################################################################################
+
+AP01
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam1-cam3        6.69 cm    1.86 deg     2.172 m     2.172 m     0.07 cm    1.77 deg
+
+AP02
+----
+Pair             t error     r error     GT base    Est base    Base err     Dir err
+------------------------------------------------------------------------------------
+cam0-cam1       12.50 cm    0.96 deg     5.069 m     5.191 m    12.22 cm    0.29 deg
+cam0-cam3        5.31 cm    1.33 deg     3.819 m     3.866 m     4.66 cm    0.38 deg
+cam1-cam3       11.49 cm    0.49 deg     2.172 m     2.246 m     7.43 cm    2.27 deg
+
+AP03
+----
+- no evaluable pair
+
