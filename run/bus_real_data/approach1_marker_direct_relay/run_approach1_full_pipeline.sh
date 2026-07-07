@@ -26,7 +26,10 @@ if ! command -v colmap >/dev/null 2>&1; then
 fi
 
 # A fresh AP01 run must never reuse stale moving-camera or relay outputs.
-rm -rf   "$RESULT_ROOT/04_moving_camera_colmap_trajectory"   "$RESULT_ROOT/06_moving_relay_chain_eval"   "$RESULT_ROOT/07_final_extrinsics_cam3_reference"
+rm -rf \
+  "$RESULT_ROOT/04_moving_camera_colmap_trajectory" \
+  "$RESULT_ROOT/06_moving_relay_chain_eval" \
+  "$RESULT_ROOT/07_final_extrinsics_cam3_reference"
 
 run_step () {
   STEP="$1"
@@ -74,7 +77,7 @@ run_step 11_make_direct_static_report_cam3_cam1 \
   python3 run/bus_real_data/approach1_marker_direct_relay/11_make_direct_static_report_cam3_cam1.py
 
 run_step 13_eval_direct_static_cam3_cam1_multimarker \
-  python3 run/bus_real_data/approach1_marker_direct_relay/13_eval_direct_static_cam3_cam1_multimarker.py
+  python3 run/bus_real_data/approach1_marker_direct_relay/13_eval_direct_static_cam3_cam1_multimarker_resolution_aware.py
 
 # -----------------------------------------------------------------------------
 # Moving branch is best-effort.
@@ -106,7 +109,7 @@ if [ "$COLMAP_OK" = "1" ]; then
     || echo "[WARN] AP01 COLMAP rotation diagnostic failed."
 
   if run_step 12_estimate_colmap_scale_from_aruco \
-    python3 run/bus_real_data/approach1_marker_direct_relay/12_estimate_colmap_scale_from_aruco.py
+    python3 run/bus_real_data/approach1_marker_direct_relay/12_estimate_colmap_scale_from_aruco_resolution_aware.py
   then
     SCALE_OK=1
   else
@@ -116,7 +119,7 @@ fi
 
 if [ "$SCALE_OK" = "1" ]; then
   run_step 14_eval_moving_relay_chains \
-    python3 run/bus_real_data/approach1_marker_direct_relay/14_eval_moving_relay_chains.py \
+    python3 run/bus_real_data/approach1_marker_direct_relay/14_eval_moving_relay_chains_resolution_aware.py \
     || echo "[WARN] AP01 moving relay evaluation incomplete."
 else
   echo "[WARN] AP01 moving relay skipped because metric moving scale is unavailable."
