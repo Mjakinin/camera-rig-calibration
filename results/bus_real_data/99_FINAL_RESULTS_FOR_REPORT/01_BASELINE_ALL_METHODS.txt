@@ -5,17 +5,17 @@ PRIMARY
 ----------------------------------------------------------------------------------------------------------------
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
-AP01    OK_FULL                        4/4      6/6     12.99 cm     11.66 cm     2.11 deg
+AP01    OK_FULL                        4/4      6/6     41.55 cm     37.16 cm     7.44 deg
 AP02    OK_FULL                        4/4      6/6     14.28 cm     13.67 cm     0.61 deg
-AP03    OK_FULL                        4/4      6/6      9.39 cm      8.50 cm     0.09 deg
+AP03    OK_FULL                        4/4      6/6      9.33 cm      8.42 cm     0.08 deg
 
 OPTIONAL SECONDARY
 ----------------------------------------------------------------------------------------------------------------
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
-AP01    OK_FULL                        4/4      7.93 cm      7.50 cm     1.31 deg
+AP01    OK_FULL                        4/4     28.52 cm     23.59 cm     4.93 deg
 AP02    OK_FULL                        4/4      8.51 cm      8.22 cm     0.38 deg
-AP03    OK_FULL                        4/4      5.70 cm      5.55 cm     0.06 deg
+AP03    OK_FULL                        4/4      5.69 cm      5.56 cm     0.05 deg
 
 Exact values:
 - details/primary/00_BASELINE_CAM_TO_CAM.txt

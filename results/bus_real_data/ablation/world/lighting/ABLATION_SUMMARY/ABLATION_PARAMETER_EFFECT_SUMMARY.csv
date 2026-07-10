@@ -1,0 +1,5 @@
+variant,parameter,final_results_exists,AP01_STATUS,AP02_STATUS,AP03_STATUS,PAIRWISE_STATUS,SECONDARY_STATUS,AP01_mean_t_cm,AP01_mean_r_deg,AP01_worst_pair,AP01_worst_t_cm,AP01_worst_r_deg,AP02_mean_t_cm,AP02_mean_r_deg,AP02_worst_pair,AP02_worst_t_cm,AP02_worst_r_deg,AP03_mean_t_cm,AP03_mean_r_deg,AP03_worst_pair,AP03_worst_t_cm,AP03_worst_r_deg
+ceiling_bright,physical_ceiling_lighting,True,OK_FULL,OK_FULL,OK_FULL,OK,OK,,,,,,,,,,,,,,,
+ceiling_dark_extreme,physical_ceiling_lighting,True,OK_FULL,FAILED_NO_PAIR,OK_FULL,OK,OK,,,,,,,,,,,,,,,
+ceiling_low,physical_ceiling_lighting,True,OK_FULL,OK_FULL,OK_FULL,OK,OK,,,,,,,,,,,,,,,
+ceiling_normal,physical_ceiling_lighting,True,OK_FULL,OK_FULL,OK_FULL,OK,OK,,,,,,,,,,,,,,,

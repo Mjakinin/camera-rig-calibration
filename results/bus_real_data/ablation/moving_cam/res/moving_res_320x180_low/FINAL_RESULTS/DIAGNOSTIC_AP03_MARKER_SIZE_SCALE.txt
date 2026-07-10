@@ -1,14 +1,18 @@
-AP03 MARKER-SIZE-ONLY SCALE
-===========================
+AP03 MARKER-SIZE-ONLY SCALE / PARTIAL COVERAGE
+================================================
 
-status: OK
+status: OK_FULL
+failure_reason: -
 best_model: 0
 registered_static_cameras: 4 / 4
-registered_images: 240
-detected_corner_observations: 1208
+available_static_cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing_static_cameras: []
+registered_images: 262
+detected_corner_observations: 1324
 triangulated_marker_corners: 60
-scale_m_per_colmap_unit: 0.866494957261
-scale_observations_used/total: 87 / 90
-used_rel_std_scale: 0.042504
+scale_m_per_colmap_unit: 0.816126384824
+scale_observations_used/total: 90 / 90
+used_rel_std_scale: 0.016453
 
-Rule: AP03 scale is estimated only from known physical marker size, not from known marker-map positions.
+Partial static-camera poses are exported when metric scale is available. Missing cameras remain explicitly missing.
+Rule: scale is estimated only from known physical marker size, not from known marker-map positions.

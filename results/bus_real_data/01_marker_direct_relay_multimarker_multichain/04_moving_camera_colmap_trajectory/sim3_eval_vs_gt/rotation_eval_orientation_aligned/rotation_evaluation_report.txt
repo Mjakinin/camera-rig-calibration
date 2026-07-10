@@ -11,16 +11,16 @@ Because the trajectory is almost 1D, that rotation is underconstrained for orien
 Model:
 R_gt ~= A * R_colmap_camera_to_world * C
 
-Evaluated registered frames: 137
-Best C index: 1
+Evaluated registered frames: 264
+Best C index: 18
 
 Rotation error is SO(3) geodesic angle in degrees.
 
-RMSE_deg:   20.957919
-Mean_deg:   16.529063
-Median_deg: 8.791298
-Min_deg:    1.726970
-Max_deg:    52.200527
+RMSE_deg:   23.090738
+Mean_deg:   18.369117
+Median_deg: 13.500846
+Min_deg:    1.927844
+Max_deg:    59.499398
 
 CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/rotation_eval_orientation_aligned/rotation_errors_by_frame.csv
 Worst-first CSV: results/bus_real_data/01_marker_direct_relay_multimarker_multichain/04_moving_camera_colmap_trajectory/sim3_eval_vs_gt/rotation_eval_orientation_aligned/rotation_errors_sorted_worst_first.csv

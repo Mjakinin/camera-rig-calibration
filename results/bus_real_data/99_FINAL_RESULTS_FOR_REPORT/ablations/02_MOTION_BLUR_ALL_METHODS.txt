@@ -10,16 +10,16 @@ kernel 0 baseline — moving_blur_k00_baseline
 PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
-AP01    OK                             4/4      6/6     12.76 cm     11.29 cm     2.18 deg
+AP01    OK_FULL                        4/4      6/6     12.30 cm     11.04 cm     2.11 deg
 AP02    OK_FULL                        4/4      6/6     17.40 cm     14.98 cm     1.29 deg
-AP03    OK                             4/4      6/6     10.92 cm     10.21 cm     0.11 deg
+AP03    OK_FULL                        4/4      6/6     12.53 cm      8.94 cm     0.76 deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
-AP01    OK                             4/4      7.70 cm      7.19 cm     1.35 deg
+AP01    OK_FULL                        4/4      7.39 cm      6.86 cm     1.31 deg
 AP02    OK_FULL                        4/4      8.64 cm      8.38 cm     0.81 deg
-AP03    OK                             4/4      6.65 cm      6.35 cm     0.07 deg
+AP03    OK_FULL                        4/4      7.13 cm      7.25 cm     0.48 deg
 
 ################################################################################################################
 kernel 9 — moving_blur_k09_mild
@@ -28,16 +28,16 @@ kernel 9 — moving_blur_k09_mild
 PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
-AP01    OK                             4/4      6/6     16.59 cm     16.38 cm     2.64 deg
+AP01    OK_FULL                        4/4      6/6     16.97 cm     16.74 cm     2.70 deg
 AP02    OK_FULL                        4/4      6/6     35.14 cm     38.72 cm     4.14 deg
-AP03    OK                             4/4      6/6      3.51 cm      3.76 cm     0.21 deg
+AP03    OK_FULL                        4/4      6/6      8.78 cm      6.34 cm     0.76 deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
-AP01    OK                             4/4      9.13 cm      9.21 cm     1.61 deg
+AP01    OK_FULL                        4/4      9.49 cm      9.54 cm     1.65 deg
 AP02    OK_FULL                        4/4     16.91 cm     16.02 cm     2.66 deg
-AP03    OK                             4/4      2.30 cm      2.29 cm     0.13 deg
+AP03    OK_FULL                        4/4      5.06 cm      5.40 cm     0.47 deg
 
 ################################################################################################################
 kernel 21 — moving_blur_k21_strong
@@ -46,16 +46,16 @@ kernel 21 — moving_blur_k21_strong
 PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
-AP01    PARTIAL_3_OF_4                 3/4      3/6     53.36 cm     75.92 cm     3.43 deg
-AP02    PARTIAL_3_OF_4                 3/4      3/6      9.77 cm     11.49 cm     0.93 deg
-AP03    PARTIAL_3_OF_4                 3/4      3/6     47.69 cm     51.01 cm     1.96 deg
+AP01    PARTIAL_3_OF_4                 3/4      3/6     57.66 cm     82.88 cm     3.27 deg
+AP02    FAILED_NO_PAIR                 0/4      0/6         - cm         - cm        - deg
+AP03    PARTIAL_2_OF_4                 2/4      1/6     22.44 cm     22.44 cm     1.93 deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
-AP01    PARTIAL_3_OF_4                 3/4     32.93 cm     30.57 cm     2.01 deg
-AP02    PARTIAL_3_OF_4                 3/4      5.98 cm      6.22 cm     0.53 deg
-AP03    PARTIAL_3_OF_4                 3/4     27.19 cm     28.17 cm     1.18 deg
+AP01    PARTIAL_3_OF_4                 3/4     36.07 cm     32.79 cm     1.91 deg
+AP02    FAILED_NO_STATIC_CAMERAS       0/4         - cm         - cm        - deg
+AP03    PARTIAL_2_OF_4_NO_SE3_AL       2/4         - cm         - cm        - deg
 
 ################################################################################################################
 kernel 41 — moving_blur_k41_extreme
@@ -65,14 +65,14 @@ PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
 AP01    PARTIAL_2_OF_4                 2/4      1/6      6.69 cm      6.69 cm     1.86 deg
-AP02    PARTIAL_3_OF_4                 3/4      3/6      9.77 cm     11.49 cm     0.93 deg
+AP02    FAILED_NO_PAIR                 0/4      0/6         - cm         - cm        - deg
 AP03    FAILED_NO_PAIR                 0/4      0/6         - cm         - cm        - deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
 AP01    PARTIAL_2_OF_4_NO_SE3_AL       2/4         - cm         - cm        - deg
-AP02    PARTIAL_3_OF_4                 3/4      5.98 cm      6.22 cm     0.53 deg
+AP02    FAILED_NO_STATIC_CAMERAS       0/4         - cm         - cm        - deg
 AP03    FAILED_NO_STATIC_CAMERAS       0/4         - cm         - cm        - deg
 
 Exact values:

@@ -1,0 +1,70 @@
+{
+  "approach": "AP02_ref_marker_graph_ba",
+  "evaluation": "gt_aligned_full_map",
+  "world_sdf": "src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf",
+  "ap02_camera_input": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv",
+  "ap02_marker_input": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_marker_poses_ref_marker.csv",
+  "output_csv": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv",
+  "output_txt": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.txt",
+  "alignment": {
+    "type": "best_fit_SE3_from_entity_centers_without_scale",
+    "gt_used_only_after_optimization": true,
+    "used_entities_count": 18,
+    "used_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "used_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "held_out_marker_id": 14,
+    "held_out_marker_entity": "aruco_ref_floor_14",
+    "singular_values": [
+      138.89544595455695,
+      13.251501290190209,
+      4.917694570264953
+    ],
+    "T_gt_from_est_local": [
+      [
+        0.9999997443682213,
+        0.0002787284862591706,
+        -0.0006584633038496645,
+        -0.026005963521972042
+      ],
+      [
+        -0.000279139409871865,
+        0.9999997663181777,
+        -0.0006240551100659055,
+        0.5088104636102284
+      ],
+      [
+        0.0006582892080425998,
+        0.0006242387535956399,
+        0.9999995884905637,
+        0.38858026940534196
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "important_note": "GT is used only after AP02 optimization for evaluation alignment. Marker 14 is held out from the alignment, so its error is a real residual and not a coordinate-frame zero."
+}

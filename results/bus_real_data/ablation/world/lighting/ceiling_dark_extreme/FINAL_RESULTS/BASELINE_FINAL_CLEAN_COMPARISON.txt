@@ -4,32 +4,32 @@ PARTIAL-AWARE PAIRWISE STATIC-CAMERA EVALUATION
 OK_FULL requires all four cameras and all six camera pairs. PARTIAL results retain every evaluable camera pair.
 
 Summary:
-- AP01: OK_FULL | cameras=4/4 | pairs=6/6 | mean=18.01 cm / 2.31 deg | missing=-
-- AP02: OK_FULL | cameras=4/4 | pairs=6/6 | mean=16.44 cm / 0.95 deg | missing=-
-- AP03: OK_FULL | cameras=4/4 | pairs=6/6 | mean=10.97 cm / 0.36 deg | missing=-
+- AP01: OK_FULL | cameras=4/4 | pairs=6/6 | mean=18.61 cm / 2.48 deg | missing=-
+- AP02: FAILED_NO_PAIR | cameras=0/4 | pairs=0/6 | mean=- cm / - deg | missing=cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+- AP03: OK_FULL | cameras=4/4 | pairs=6/6 | mean=10.06 cm / 0.13 deg | missing=-
 
 Pairwise detail:
 
 AP01
-  cam0-cam1: 24.41 cm / 1.55 deg
-  cam0-cam3: 24.21 cm / 3.21 deg
-  cam0-cam5: 13.98 cm / 3.10 deg
+  cam0-cam1: 26.19 cm / 1.81 deg
+  cam0-cam3: 26.55 cm / 3.45 deg
+  cam0-cam5: 14.93 cm / 3.43 deg
   cam1-cam3: 6.15 cm / 1.74 deg
-  cam1-cam5: 24.12 cm / 2.35 deg
-  cam3-cam5: 15.20 cm / 1.93 deg
+  cam1-cam5: 24.12 cm / 2.50 deg
+  cam3-cam5: 13.74 cm / 1.96 deg
 
 AP02
-  cam0-cam1: 21.14 cm / 1.45 deg
-  cam0-cam3: 19.78 cm / 1.61 deg
-  cam0-cam5: 14.13 cm / 1.69 deg
-  cam1-cam3: 3.15 cm / 0.16 deg
-  cam1-cam5: 21.39 cm / 0.40 deg
-  cam3-cam5: 19.08 cm / 0.41 deg
+  cam0-cam1: MISSING_CAMERA (missing cam_edge_0,cam_edge_1)
+  cam0-cam3: MISSING_CAMERA (missing cam_edge_0,cam_edge_3)
+  cam0-cam5: MISSING_CAMERA (missing cam_edge_0,cam_edge_5)
+  cam1-cam3: MISSING_CAMERA (missing cam_edge_1,cam_edge_3)
+  cam1-cam5: MISSING_CAMERA (missing cam_edge_1,cam_edge_5)
+  cam3-cam5: MISSING_CAMERA (missing cam_edge_3,cam_edge_5)
 
 AP03
-  cam0-cam1: 9.93 cm / 0.61 deg
-  cam0-cam3: 7.63 cm / 0.17 deg
-  cam0-cam5: 11.11 cm / 0.21 deg
-  cam1-cam3: 4.26 cm / 0.59 deg
-  cam1-cam5: 16.30 cm / 0.49 deg
-  cam3-cam5: 16.59 cm / 0.11 deg
+  cam0-cam1: 10.11 cm / 0.20 deg
+  cam0-cam3: 7.30 cm / 0.12 deg
+  cam0-cam5: 7.90 cm / 0.17 deg
+  cam1-cam3: 4.53 cm / 0.10 deg
+  cam1-cam5: 15.92 cm / 0.07 deg
+  cam3-cam5: 14.63 cm / 0.11 deg

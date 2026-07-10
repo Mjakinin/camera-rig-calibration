@@ -1,0 +1,232 @@
+cd "$(git rev-parse --show-toplevel)"
+
+cat > /tmp/run_all_camera_calibration_fresh.sh <<'BASH'
+#!/usr/bin/env bash
+
+set -u -o pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+export PYTHONPATH="run/bus_real_data:${PYTHONPATH:-}"
+
+COMMON_RUNNER="run/bus_real_data/ablation/_shared/12_run_one_clean_variant_common.sh"
+SHARED="results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1"
+
+STAMP="$(date +%Y%m%d_%H%M%S)"
+BACKUP="results/bus_real_data/_runtime_backups/pre_full_fresh_run_${STAMP}"
+
+FAILURES=()
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "[ERROR] python3 fehlt."
+    exit 127
+fi
+
+if ! command -v colmap >/dev/null 2>&1; then
+    echo "[ERROR] COLMAP fehlt."
+    exit 127
+fi
+
+echo "========================================================================"
+echo "BACKUP DER ECHTEN SHARED BASELINE"
+echo "========================================================================"
+
+mkdir -p "$BACKUP"
+
+for name in raw_images aruco_observations metadata; do
+    if [[ ! -e "$SHARED/$name" ]]; then
+        echo "[ERROR] Fehlende Baseline: $SHARED/$name"
+        exit 1
+    fi
+
+    cp -a "$SHARED/$name" "$BACKUP/$name"
+done
+
+restore_shared_baseline() {
+    echo
+    echo "========================================================================"
+    echo "ECHTE SHARED BASELINE WIEDERHERSTELLEN"
+    echo "========================================================================"
+
+    rm -rf \
+        "$SHARED/raw_images" \
+        "$SHARED/aruco_observations" \
+        "$SHARED/metadata"
+
+    mkdir -p "$SHARED"
+
+    cp -a "$BACKUP/raw_images" "$SHARED/raw_images"
+    cp -a "$BACKUP/aruco_observations" "$SHARED/aruco_observations"
+    cp -a "$BACKUP/metadata" "$SHARED/metadata"
+
+    echo "[OK] Shared Baseline wiederhergestellt."
+}
+
+trap restore_shared_baseline EXIT INT TERM
+
+run_variant() {
+    local root="$1"
+    local label="$2"
+    local variant="$3"
+
+    echo
+    echo "################################################################################"
+    echo "# $label: $variant"
+    echo "################################################################################"
+
+    if [[ ! -d "$root/$variant/raw_images" ]]; then
+        echo "[FAILED] raw_images fehlen: $root/$variant/raw_images"
+        FAILURES+=("$label/$variant: missing raw_images")
+        return
+    fi
+
+    if [[ ! -d "$root/$variant/aruco_observations" ]]; then
+        echo "[FAILED] aruco_observations fehlen: $root/$variant/aruco_observations"
+        FAILURES+=("$label/$variant: missing aruco_observations")
+        return
+    fi
+
+    if ! REFRESH_CANONICAL_FINAL=0 \
+        bash "$COMMON_RUNNER" "$root" "$label" "$variant"
+    then
+        echo "[FAILED] $label/$variant"
+        FAILURES+=("$label/$variant: runner failed")
+    else
+        echo "[DONE] $label/$variant"
+    fi
+}
+
+collect_group() {
+    local root="$1"
+    local summary_name="$2"
+
+    echo
+    echo "========================================================================"
+    echo "REPORT ERZEUGEN: $root"
+    echo "========================================================================"
+
+    python3 \
+        run/bus_real_data/ablation/22_reconcile_ablation_status.py \
+        "$root" || true
+
+    python3 \
+        run/bus_real_data/ablation/21_collect_full_ablation_report.py \
+        "$root" \
+        "$summary_name" || true
+
+    python3 \
+        run/bus_real_data/ablation/20_collect_ablation_final_summary.py \
+        "$root" \
+        "$summary_name" || true
+}
+
+FOV_ROOT="results/bus_real_data/ablation/moving_cam/fov"
+
+for variant in \
+    fov_40deg \
+    fov_69deg_baseline \
+    fov_100deg \
+    fov_140deg_extreme
+do
+    run_variant "$FOV_ROOT" "FOV" "$variant"
+done
+
+collect_group "$FOV_ROOT" "fov"
+
+BLUR_ROOT="results/bus_real_data/ablation/moving_cam/motion_blur"
+
+for variant in \
+    moving_blur_k00_baseline \
+    moving_blur_k09_mild \
+    moving_blur_k21_strong \
+    moving_blur_k41_extreme
+do
+    run_variant "$BLUR_ROOT" "MOTION_BLUR" "$variant"
+done
+
+collect_group "$BLUR_ROOT" "motion_blur"
+
+RES_ROOT="results/bus_real_data/ablation/moving_cam/res"
+
+for variant in \
+    moving_res_160x90_extreme_pixel \
+    moving_res_320x180_low \
+    moving_res_1280x720_baseline \
+    moving_res_2560x1440_upscaled
+do
+    run_variant "$RES_ROOT" "RESOLUTION" "$variant"
+done
+
+collect_group "$RES_ROOT" "resolution"
+
+LIGHT_ROOT="results/bus_real_data/ablation/world/lighting"
+
+for variant in \
+    ceiling_dark_extreme \
+    ceiling_low \
+    ceiling_normal \
+    ceiling_bright
+do
+    run_variant "$LIGHT_ROOT" "LIGHTING" "$variant"
+done
+
+collect_group "$LIGHT_ROOT" "physical_ceiling_lighting"
+
+restore_shared_baseline
+trap - EXIT INT TERM
+
+echo
+echo "################################################################################"
+echo "# FINALER CLEAN-BASELINE-RUN"
+echo "################################################################################"
+
+if ! bash run/bus_real_data/run_all_and_refresh.sh --run-methods; then
+    echo "[FAILED] Finaler Clean-Baseline-Run"
+    FAILURES+=("FINAL_BASELINE: runner failed")
+fi
+
+echo
+echo "========================================================================"
+echo "FINALE DATEIPRÜFUNG"
+echo "========================================================================"
+
+REQUIRED_FINAL_FILES=(
+    "results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/01_BASELINE_ALL_METHODS.txt"
+    "results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/02_ALL_ABLATIONS_ALL_METHODS.txt"
+    "results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/data/ALL_ABLATIONS_RUN_STATUS.csv"
+    "results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/MANIFEST.json"
+)
+
+for file in "${REQUIRED_FINAL_FILES[@]}"; do
+    if [[ ! -s "$file" ]]; then
+        echo "[FAILED] Datei fehlt oder ist leer: $file"
+        FAILURES+=("missing final file: $file")
+    else
+        echo "[OK] $file"
+    fi
+done
+
+echo
+echo "========================================================================"
+echo "FULL FRESH RUN BEENDET"
+echo "========================================================================"
+
+if (( ${#FAILURES[@]} > 0 )); then
+    echo
+    echo "[WARN] Probleme oder fehlgeschlagene Varianten:"
+    printf '  - %s\n' "${FAILURES[@]}"
+    exit 1
+fi
+
+echo
+echo "[OK] Alle 16 Ablationsvarianten wurden bearbeitet."
+echo "[OK] AP01, AP02 und AP03 wurden für die Baseline neu ausgeführt."
+echo "[OK] 99_FINAL_RESULTS_FOR_REPORT wurde neu aktualisiert."
+echo
+echo "Ergebnisse:"
+echo "results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/"
+BASH
+
+chmod +x /tmp/run_all_camera_calibration_fresh.sh
+
+bash /tmp/run_all_camera_calibration_fresh.sh \
+    2>&1 | tee results/bus_real_data/FULL_FRESH_RERUN.log

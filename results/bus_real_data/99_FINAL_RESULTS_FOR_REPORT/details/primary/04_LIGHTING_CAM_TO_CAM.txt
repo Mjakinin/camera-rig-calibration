@@ -13,34 +13,27 @@ AP01
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1       24.41 cm    1.55 deg     5.069 m     5.248 m    17.84 cm    1.85 deg
-cam0-cam3       24.21 cm    3.21 deg     3.819 m     3.937 m    11.79 cm    3.13 deg
-cam0-cam5       13.98 cm    3.10 deg     5.668 m     5.692 m     2.41 cm    1.39 deg
+cam0-cam1       26.19 cm    1.81 deg     5.069 m     5.249 m    17.97 cm    2.12 deg
+cam0-cam3       26.55 cm    3.45 deg     3.819 m     3.933 m    11.43 cm    3.54 deg
+cam0-cam5       14.93 cm    3.43 deg     5.668 m     5.689 m     2.10 cm    1.49 deg
 cam1-cam3        6.15 cm    1.74 deg     2.172 m     2.175 m     0.29 cm    1.62 deg
-cam1-cam5       24.12 cm    2.35 deg     9.834 m    10.043 m    20.91 cm    0.69 deg
-cam3-cam5       15.20 cm    1.93 deg     9.286 m     9.412 m    12.68 cm    0.51 deg
+cam1-cam5       24.12 cm    2.50 deg     9.834 m    10.035 m    20.14 cm    0.76 deg
+cam3-cam5       13.74 cm    1.96 deg     9.286 m     9.402 m    11.66 cm    0.45 deg
 
 AP02
 ----
-Pair             t error     r error     GT base    Est base    Base err     Dir err
-------------------------------------------------------------------------------------
-cam0-cam1       21.14 cm    1.45 deg     5.069 m     5.245 m    17.59 cm    1.30 deg
-cam0-cam3       19.78 cm    1.61 deg     3.819 m     3.967 m    14.78 cm    1.93 deg
-cam0-cam5       14.13 cm    1.69 deg     5.668 m     5.719 m     5.09 cm    1.33 deg
-cam1-cam3        3.15 cm    0.16 deg     2.172 m     2.202 m     2.96 cm    0.29 deg
-cam1-cam5       21.39 cm    0.40 deg     9.834 m    10.040 m    20.62 cm    0.33 deg
-cam3-cam5       19.08 cm    0.41 deg     9.286 m     9.468 m    18.21 cm    0.35 deg
+- no evaluable pair
 
 AP03
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1        9.93 cm    0.61 deg     5.069 m     5.152 m     8.33 cm    0.60 deg
-cam0-cam3        7.63 cm    0.17 deg     3.819 m     3.888 m     6.85 cm    0.50 deg
-cam0-cam5       11.11 cm    0.21 deg     5.668 m     5.778 m    10.99 cm    0.17 deg
-cam1-cam3        4.26 cm    0.59 deg     2.172 m     2.213 m     4.05 cm    0.34 deg
-cam1-cam5       16.30 cm    0.49 deg     9.834 m     9.986 m    15.21 cm    0.34 deg
-cam3-cam5       16.59 cm    0.11 deg     9.286 m     9.451 m    16.53 cm    0.09 deg
+cam0-cam1       10.11 cm    0.20 deg     5.069 m     5.170 m    10.04 cm    0.13 deg
+cam0-cam3        7.30 cm    0.12 deg     3.819 m     3.892 m     7.26 cm    0.11 deg
+cam0-cam5        7.90 cm    0.17 deg     5.668 m     5.747 m     7.89 cm    0.04 deg
+cam1-cam3        4.53 cm    0.10 deg     2.172 m     2.217 m     4.50 cm    0.13 deg
+cam1-cam5       15.92 cm    0.07 deg     9.834 m     9.993 m    15.91 cm    0.02 deg
+cam3-cam5       14.63 cm    0.11 deg     9.286 m     9.432 m    14.62 cm    0.04 deg
 
 ################################################################################################################
 PARAMETER: low
@@ -51,12 +44,12 @@ AP01
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1       13.08 cm    1.29 deg     5.069 m     5.196 m    12.70 cm    0.35 deg
-cam0-cam3       11.14 cm    2.48 deg     3.819 m     3.880 m     6.09 cm    1.39 deg
-cam0-cam5       12.42 cm    2.23 deg     5.668 m     5.687 m     1.95 cm    1.24 deg
+cam0-cam1       13.10 cm    1.26 deg     5.069 m     5.196 m    12.68 cm    0.37 deg
+cam0-cam3       11.00 cm    2.44 deg     3.819 m     3.880 m     6.06 cm    1.37 deg
+cam0-cam5       12.32 cm    2.23 deg     5.668 m     5.687 m     1.88 cm    1.23 deg
 cam1-cam3        6.69 cm    1.86 deg     2.172 m     2.172 m     0.07 cm    1.77 deg
-cam1-cam5       27.81 cm    2.53 deg     9.834 m    10.022 m    18.86 cm    1.18 deg
-cam3-cam5        9.42 cm    2.16 deg     9.286 m     9.370 m     8.42 cm    0.26 deg
+cam1-cam5       27.76 cm    2.54 deg     9.834 m    10.022 m    18.80 cm    1.18 deg
+cam3-cam5        9.26 cm    2.14 deg     9.286 m     9.369 m     8.34 cm    0.25 deg
 
 AP02
 ----
@@ -73,12 +66,12 @@ AP03
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1       37.90 cm   16.48 deg     5.069 m     4.822 m    24.72 cm    3.33 deg
-cam0-cam3       63.70 cm   15.86 deg     3.819 m     3.375 m    44.40 cm    7.29 deg
-cam0-cam5      183.02 cm   15.86 deg     5.668 m     6.525 m    85.76 cm   15.28 deg
-cam1-cam3        1.86 cm    0.74 deg     2.172 m     2.187 m     1.52 cm    0.28 deg
-cam1-cam5       13.99 cm    0.71 deg     9.834 m     9.967 m    13.29 cm    0.25 deg
-cam3-cam5       14.16 cm    0.66 deg     9.286 m     9.410 m    12.41 cm    0.42 deg
+cam0-cam1        7.66 cm    0.06 deg     5.069 m     5.146 m     7.65 cm    0.04 deg
+cam0-cam3        5.84 cm    0.02 deg     3.819 m     3.877 m     5.83 cm    0.05 deg
+cam0-cam5        9.07 cm    0.16 deg     5.668 m     5.759 m     9.06 cm    0.03 deg
+cam1-cam3        3.32 cm    0.05 deg     2.172 m     2.205 m     3.32 cm    0.01 deg
+cam1-cam5       15.35 cm    0.11 deg     9.834 m     9.987 m    15.34 cm    0.04 deg
+cam3-cam5       14.62 cm    0.14 deg     9.286 m     9.432 m    14.60 cm    0.04 deg
 
 ################################################################################################################
 PARAMETER: normal baseline
@@ -89,12 +82,12 @@ AP01
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1       12.74 cm    1.17 deg     5.069 m     5.191 m    12.20 cm    0.41 deg
-cam0-cam3       10.30 cm    2.30 deg     3.819 m     3.874 m     5.52 cm    1.29 deg
-cam0-cam5       12.29 cm    2.29 deg     5.668 m     5.684 m     1.58 cm    1.23 deg
+cam0-cam1       13.05 cm    1.30 deg     5.069 m     5.198 m    12.90 cm    0.23 deg
+cam0-cam3       12.11 cm    2.58 deg     3.819 m     3.880 m     6.05 cm    1.56 deg
+cam0-cam5        5.77 cm    1.62 deg     5.668 m     5.635 m     3.32 cm    0.48 deg
 cam1-cam3        6.69 cm    1.86 deg     2.172 m     2.172 m     0.07 cm    1.77 deg
-cam1-cam5       26.92 cm    2.59 deg     9.834 m    10.015 m    18.13 cm    1.15 deg
-cam3-cam5        8.23 cm    2.16 deg     9.286 m     9.361 m     7.57 cm    0.20 deg
+cam1-cam5       16.38 cm    1.61 deg     9.834 m     9.928 m     9.41 cm    0.78 deg
+cam3-cam5       13.81 cm    2.34 deg     9.286 m     9.295 m     0.98 cm    0.85 deg
 
 AP02
 ----
@@ -111,12 +104,12 @@ AP03
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1       10.05 cm    0.19 deg     5.069 m     5.168 m     9.84 cm    0.23 deg
-cam0-cam3        6.32 cm    0.22 deg     3.819 m     3.879 m     5.97 cm    0.31 deg
-cam0-cam5       13.53 cm    0.38 deg     5.668 m     5.802 m    13.42 cm    0.17 deg
-cam1-cam3        5.48 cm    0.26 deg     2.172 m     2.225 m     5.26 cm    0.40 deg
-cam1-cam5       21.13 cm    0.47 deg     9.834 m    10.044 m    21.03 cm    0.12 deg
-cam3-cam5       19.16 cm    0.39 deg     9.286 m     9.475 m    18.99 cm    0.15 deg
+cam0-cam1        8.95 cm    0.09 deg     5.069 m     5.158 m     8.93 cm    0.06 deg
+cam0-cam3        6.96 cm    0.13 deg     3.819 m     3.889 m     6.94 cm    0.09 deg
+cam0-cam5        9.48 cm    0.09 deg     5.668 m     5.763 m     9.46 cm    0.07 deg
+cam1-cam3        3.57 cm    0.05 deg     2.172 m     2.208 m     3.57 cm    0.02 deg
+cam1-cam5       17.24 cm    0.04 deg     9.834 m    10.006 m    17.24 cm    0.02 deg
+cam3-cam5       16.17 cm    0.05 deg     9.286 m     9.447 m    16.17 cm    0.01 deg
 
 ################################################################################################################
 PARAMETER: bright
@@ -127,12 +120,12 @@ AP01
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1       13.06 cm    1.30 deg     5.069 m     5.196 m    12.67 cm    0.35 deg
-cam0-cam3       10.95 cm    2.50 deg     3.819 m     3.881 m     6.21 cm    1.34 deg
-cam0-cam5       11.13 cm    2.16 deg     5.668 m     5.683 m     1.53 cm    1.11 deg
+cam0-cam1       12.80 cm    1.33 deg     5.069 m     5.195 m    12.54 cm    0.29 deg
+cam0-cam3       10.98 cm    2.54 deg     3.819 m     3.879 m     6.00 cm    1.37 deg
+cam0-cam5       11.11 cm    2.17 deg     5.668 m     5.680 m     1.24 cm    1.12 deg
 cam1-cam3        6.69 cm    1.86 deg     2.172 m     2.172 m     0.07 cm    1.77 deg
-cam1-cam5       25.48 cm    2.46 deg     9.834 m    10.013 m    17.94 cm    1.05 deg
-cam3-cam5        9.73 cm    2.25 deg     9.286 m     9.365 m     7.91 cm    0.35 deg
+cam1-cam5       24.88 cm    2.42 deg     9.834 m    10.007 m    17.29 cm    1.03 deg
+cam3-cam5        9.40 cm    2.25 deg     9.286 m     9.359 m     7.31 cm    0.36 deg
 
 AP02
 ----
@@ -149,10 +142,10 @@ AP03
 ----
 Pair             t error     r error     GT base    Est base    Base err     Dir err
 ------------------------------------------------------------------------------------
-cam0-cam1       10.51 cm    0.12 deg     5.069 m     5.174 m    10.50 cm    0.05 deg
-cam0-cam3        6.08 cm    0.17 deg     3.819 m     3.878 m     5.93 cm    0.20 deg
-cam0-cam5       10.81 cm    0.17 deg     5.668 m     5.776 m    10.78 cm    0.08 deg
-cam1-cam3        5.10 cm    0.07 deg     2.172 m     2.218 m     4.56 cm    0.60 deg
-cam1-cam5       19.44 cm    0.08 deg     9.834 m    10.028 m    19.40 cm    0.07 deg
-cam3-cam5       16.13 cm    0.10 deg     9.286 m     9.447 m    16.12 cm    0.02 deg
+cam0-cam1        8.79 cm    0.11 deg     5.069 m     5.157 m     8.77 cm    0.07 deg
+cam0-cam3        6.28 cm    0.17 deg     3.819 m     3.881 m     6.23 cm    0.12 deg
+cam0-cam5        9.47 cm    0.08 deg     5.668 m     5.762 m     9.45 cm    0.07 deg
+cam1-cam3        4.03 cm    0.07 deg     2.172 m     2.212 m     3.96 cm    0.19 deg
+cam1-cam5       16.70 cm    0.06 deg     9.834 m    10.001 m    16.68 cm    0.04 deg
+cam3-cam5       15.37 cm    0.12 deg     9.286 m     9.439 m    15.35 cm    0.05 deg
 

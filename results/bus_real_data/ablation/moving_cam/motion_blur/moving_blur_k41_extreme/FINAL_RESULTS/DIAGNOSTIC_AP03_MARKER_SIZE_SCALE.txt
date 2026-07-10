@@ -7,7 +7,7 @@ best_model: 0
 registered_static_cameras: 0 / 4
 available_static_cameras: []
 missing_static_cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
-registered_images: 25
+registered_images: 91
 detected_corner_observations: 0
 triangulated_marker_corners: 0
 scale_m_per_colmap_unit: UNAVAILABLE

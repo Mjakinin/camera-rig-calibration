@@ -12,12 +12,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 10.499270287303041,
-      "median_translation_error_cm": 10.750260717392958,
-      "max_translation_error_cm": 13.833240964405869,
-      "mean_rotation_error_deg": 1.4138050977340177,
-      "median_rotation_error_deg": 1.52305152457085,
-      "max_rotation_error_deg": 1.8497894210143233
+      "mean_translation_error_cm": 10.728474094686884,
+      "median_translation_error_cm": 10.88691431192818,
+      "max_translation_error_cm": 13.946469191789157,
+      "mean_rotation_error_deg": 1.5122640414209254,
+      "median_rotation_error_deg": 1.5998762401251048,
+      "max_rotation_error_deg": 2.057303430350675
     },
     {
       "method": "AP02",
@@ -44,12 +44,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 6.645225257892344,
-      "median_translation_error_cm": 6.046096394820516,
-      "max_translation_error_cm": 10.496313712630519,
-      "mean_rotation_error_deg": 0.2249729732873494,
-      "median_rotation_error_deg": 0.19762978988368654,
-      "max_rotation_error_deg": 0.4189082201084474
+      "mean_translation_error_cm": 6.228238412320279,
+      "median_translation_error_cm": 6.155710956554404,
+      "max_translation_error_cm": 9.41175872561512,
+      "mean_rotation_error_deg": 0.07842824168235016,
+      "median_rotation_error_deg": 0.07490977913015817,
+      "max_rotation_error_deg": 0.11544294838002206
     }
   ]
 }

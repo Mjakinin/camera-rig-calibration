@@ -4,19 +4,19 @@ PARTIAL-AWARE PAIRWISE STATIC-CAMERA EVALUATION
 OK_FULL requires all four cameras and all six camera pairs. PARTIAL results retain every evaluable camera pair.
 
 Summary:
-- AP01: OK | cameras=/4 | pairs=/6 | mean=12.24 cm / 2.13 deg | missing=-
+- AP01: OK_FULL | cameras=4/4 | pairs=6/6 | mean=46.99 cm / 7.28 deg | missing=-
 - AP02: OK_FULL | cameras=4/4 | pairs=6/6 | mean=17.40 cm / 1.29 deg | missing=-
-- AP03: OK | cameras=/4 | pairs=/6 | mean=11.87 cm / 0.13 deg | missing=-
+- AP03: OK_FULL | cameras=4/4 | pairs=6/6 | mean=13.06 cm / 0.78 deg | missing=-
 
 Pairwise detail:
 
 AP01
-  cam0-cam1: 11.89 cm / 1.27 deg
-  cam0-cam3: 10.27 cm / 2.46 deg
-  cam0-cam5: 12.13 cm / 2.35 deg
+  cam0-cam1: 14.15 cm / 1.53 deg
+  cam0-cam3: 12.05 cm / 2.75 deg
+  cam0-cam5: 88.50 cm / 12.80 deg
   cam1-cam3: 6.69 cm / 1.86 deg
-  cam1-cam5: 25.63 cm / 2.62 deg
-  cam3-cam5: 6.83 cm / 2.24 deg
+  cam1-cam5: 70.73 cm / 11.87 deg
+  cam3-cam5: 89.83 cm / 12.87 deg
 
 AP02
   cam0-cam1: 15.34 cm / 1.73 deg
@@ -27,9 +27,9 @@ AP02
   cam3-cam5: 25.29 cm / 1.17 deg
 
 AP03
-  cam0-cam1: 10.76 cm / 0.08 deg
-  cam0-cam3: 6.71 cm / 0.13 deg
-  cam0-cam5: 11.10 cm / 0.18 deg
-  cam1-cam3: 5.39 cm / 0.10 deg
-  cam1-cam5: 19.92 cm / 0.17 deg
-  cam3-cam5: 17.35 cm / 0.11 deg
+  cam0-cam1: 9.20 cm / 0.92 deg
+  cam0-cam3: 4.77 cm / 1.09 deg
+  cam0-cam5: 9.86 cm / 0.85 deg
+  cam1-cam3: 7.75 cm / 0.30 deg
+  cam1-cam5: 23.07 cm / 0.80 deg
+  cam3-cam5: 23.73 cm / 0.70 deg

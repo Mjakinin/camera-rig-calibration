@@ -12,12 +12,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 8.156193672776324,
-      "median_translation_error_cm": 7.722707953094065,
-      "max_translation_error_cm": 11.693505256698456,
-      "mean_rotation_error_deg": 1.2967540737016996,
-      "median_rotation_error_deg": 1.2905814403635727,
-      "max_rotation_error_deg": 1.5195747994890783
+      "mean_translation_error_cm": 8.112130252026205,
+      "median_translation_error_cm": 7.6801460440677385,
+      "max_translation_error_cm": 11.696272012751844,
+      "mean_rotation_error_deg": 1.2892423213839792,
+      "median_rotation_error_deg": 1.2730054434322136,
+      "max_rotation_error_deg": 1.5218847333432834
     },
     {
       "method": "AP02",
@@ -28,12 +28,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 37.66981594686099,
-      "median_translation_error_cm": 31.69932888041398,
-      "max_translation_error_cm": 68.20088380133896,
-      "mean_rotation_error_deg": 3.306967488974005,
-      "median_rotation_error_deg": 2.797341440958445,
-      "max_rotation_error_deg": 6.194319390595499
+      "mean_translation_error_cm": 8.746654259862282,
+      "median_translation_error_cm": 8.476830507314691,
+      "max_translation_error_cm": 13.233045870980003,
+      "mean_rotation_error_deg": 0.43325847460264955,
+      "median_rotation_error_deg": 0.3689518507304447,
+      "max_rotation_error_deg": 0.781600381196754
     },
     {
       "method": "AP03",
@@ -44,12 +44,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 40.12261849823892,
-      "median_translation_error_cm": 39.27535046186085,
-      "max_translation_error_cm": 71.65548389178504,
-      "mean_rotation_error_deg": 6.020827595329525,
-      "median_rotation_error_deg": 4.108802227957778,
-      "max_rotation_error_deg": 12.065841675406677
+      "mean_translation_error_cm": 5.675837821186729,
+      "median_translation_error_cm": 5.52489406173712,
+      "max_translation_error_cm": 9.651359582038555,
+      "mean_rotation_error_deg": 0.05505597689409749,
+      "median_rotation_error_deg": 0.0500861572364768,
+      "max_rotation_error_deg": 0.10110751618961575
     }
   ]
 }

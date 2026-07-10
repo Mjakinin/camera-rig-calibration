@@ -15,15 +15,15 @@ Final estimate:
   weighted mean of MAD inlier transforms, weighted by observable marker quality.
   GT is used only after aggregation for evaluation.
 
-cam3_to_cam0 / COLMAP_motion: candidates=49, inliers=42, outliers=7, error=10.796 cm, 2.136 deg
-  oracle best individual candidate, eval-only: m3@f211 -> m3@f215, 6.094 cm, 1.342 deg
-cam3_to_cam0 / GT_motion: candidates=49, inliers=42, outliers=7, error=12.971 cm, 2.136 deg
-  oracle best individual candidate, eval-only: m3@f211 -> m3@f212, 9.107 cm, 1.883 deg
-cam3_to_cam1 / COLMAP_motion: candidates=7, inliers=7, outliers=0, error=847.540 cm, 141.459 deg
-  oracle best individual candidate, eval-only: m3@f212 -> m14@f163, 845.742 cm, 141.045 deg
-cam3_to_cam1 / GT_motion: candidates=7, inliers=5, outliers=2, error=870.708 cm, 145.179 deg
-  oracle best individual candidate, eval-only: m3@f214 -> m14@f163, 867.679 cm, 140.349 deg
-cam3_to_cam5 / COLMAP_motion: candidates=528, inliers=303, outliers=225, error=19.606 cm, 1.969 deg
-  oracle best individual candidate, eval-only: m3@f211 -> m10@f174, 11.999 cm, 2.099 deg
-cam3_to_cam5 / GT_motion: candidates=528, inliers=423, outliers=105, error=34.674 cm, 3.636 deg
-  oracle best individual candidate, eval-only: m3@f214 -> m10@f179, 21.288 cm, 0.835 deg
+cam3_to_cam0 / COLMAP_motion: candidates=17227, inliers=12938, outliers=4289, error=11.165 cm, 2.669 deg
+  oracle best individual candidate, eval-only: m1@f22 -> m7@f92, 1.881 cm, 1.060 deg
+cam3_to_cam0 / GT_motion: candidates=17227, inliers=16635, outliers=592, error=73.194 cm, 7.374 deg
+  oracle best individual candidate, eval-only: m14@f209 -> m3@f212, 3.601 cm, 1.876 deg
+cam3_to_cam1 / COLMAP_motion: candidates=41065, inliers=40081, outliers=984, error=40.850 cm, 4.230 deg
+  oracle best individual candidate, eval-only: m3@f214 -> m14@f17, 6.262 cm, 0.440 deg
+cam3_to_cam1 / GT_motion: candidates=41065, inliers=40074, outliers=991, error=45.655 cm, 4.601 deg
+  oracle best individual candidate, eval-only: m1@f239 -> m1@f247, 8.118 cm, 1.240 deg
+cam3_to_cam5 / COLMAP_motion: candidates=47304, inliers=44128, outliers=3176, error=79.123 cm, 13.278 deg
+  oracle best individual candidate, eval-only: m7@f100 -> m9@f173, 1.618 cm, 2.289 deg
+cam3_to_cam5 / GT_motion: candidates=47304, inliers=44897, outliers=2407, error=209.289 cm, 12.066 deg
+  oracle best individual candidate, eval-only: m2@f17 -> m0@f58, 2.755 cm, 4.880 deg

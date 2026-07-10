@@ -2,25 +2,34 @@ PARTIAL-AWARE SECONDARY REF14/WORLD CAMERA-MAP EVALUATION
 ==========================================================
 
 SE(3) alignment is evaluated only when at least three static cameras are available.
+Two-camera results remain available in the primary pairwise evaluation but are not independently aligned here.
 
 AP01
 ----
-available cameras: []
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
 missing cameras: []
-summary: OK | mean 7.36 cm / 1.32 deg
+- cam_edge_0: 30.643 cm / 3.627 deg
+- cam_edge_1: 18.567 cm / 2.531 deg
+- cam_edge_3: 20.530 cm / 3.723 deg
+- cam_edge_5: 54.218 cm / 9.357 deg
+summary: OK_FULL | mean 30.990 cm / 4.810 deg
 
 AP02
 ----
 available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
 missing cameras: []
-- cam_edge_0: 3.65 cm / 1.19 deg
-- cam_edge_1: 12.07 cm / 0.63 deg
-- cam_edge_3: 4.69 cm / 0.81 deg
-- cam_edge_5: 14.14 cm / 0.60 deg
-summary: OK_FULL | mean 8.64 cm / 0.81 deg
+- cam_edge_0: 3.653 cm / 1.194 deg
+- cam_edge_1: 12.073 cm / 0.627 deg
+- cam_edge_3: 4.686 cm / 0.807 deg
+- cam_edge_5: 14.141 cm / 0.601 deg
+summary: OK_FULL | mean 8.638 cm / 0.807 deg
 
 AP03
 ----
-available cameras: []
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
 missing cameras: []
-summary: OK | mean 7.19 cm / 0.08 deg
+- cam_edge_0: 2.431 cm / 0.665 deg
+- cam_edge_1: 8.522 cm / 0.380 deg
+- cam_edge_3: 6.523 cm / 0.442 deg
+- cam_edge_5: 12.301 cm / 0.459 deg
+summary: OK_FULL | mean 7.444 cm / 0.486 deg

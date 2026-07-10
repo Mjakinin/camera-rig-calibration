@@ -5,9 +5,9 @@
   "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
   "best_model": "0",
   "model_dir": "results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0",
-  "registered_images": 25,
+  "registered_images": 91,
   "registered_static_cameras": 0,
-  "registered_moving_frames": 25,
+  "registered_moving_frames": 91,
   "available_static_cameras": [],
   "missing_static_cameras": [
     "cam_edge_0",
@@ -15,7 +15,7 @@
     "cam_edge_3",
     "cam_edge_5"
   ],
-  "num_sparse_points3d": 492,
+  "num_sparse_points3d": 1270,
   "marker_ids_requested": [
     0,
     1,

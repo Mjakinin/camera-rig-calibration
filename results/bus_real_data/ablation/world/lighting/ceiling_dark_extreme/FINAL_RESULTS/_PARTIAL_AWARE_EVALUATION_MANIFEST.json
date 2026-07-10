@@ -12,17 +12,17 @@
       "failure_reason": "",
       "source": "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv",
       "note": "",
-      "mean_pair_t_cm": 18.011478390996018,
-      "median_pair_t_cm": 19.65801091798641,
-      "max_pair_t_cm": 24.412893315620284,
-      "mean_pair_r_deg": 2.3129514362216046,
-      "median_pair_r_deg": 2.1394879149654495,
-      "max_pair_r_deg": 3.2126420704399052,
-      "mean_baseline_error_cm": 10.987498676281845,
-      "mean_direction_error_deg": 1.531659264529031,
-      "worst_pair": "cam0-cam1",
-      "worst_pair_t_cm": 24.412893315620284,
-      "worst_pair_r_deg": 1.550004524482351
+      "mean_pair_t_cm": 18.61121695174212,
+      "median_pair_t_cm": 19.521494013002776,
+      "max_pair_t_cm": 26.548745435481674,
+      "mean_pair_r_deg": 2.4799796474878666,
+      "median_pair_r_deg": 2.228669392174397,
+      "max_pair_r_deg": 3.4531732579192855,
+      "mean_baseline_error_cm": 10.598513151822933,
+      "mean_direction_error_deg": 1.6632031301461294,
+      "worst_pair": "cam0-cam3",
+      "worst_pair_t_cm": 26.548745435481674,
+      "worst_pair_r_deg": 3.4531732579192855
     },
     {
       "method": "AP02",
@@ -60,17 +60,17 @@
       "failure_reason": "",
       "source": "results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
       "note": "",
-      "mean_pair_t_cm": 10.970237994900188,
-      "median_pair_t_cm": 10.519822471692489,
-      "max_pair_t_cm": 16.593390305872312,
-      "mean_pair_r_deg": 0.36267359938402094,
-      "median_pair_r_deg": 0.34661631837469176,
-      "max_pair_r_deg": 0.6147070724688204,
-      "mean_baseline_error_cm": 10.326887585530146,
-      "mean_direction_error_deg": 0.3402823067499044,
-      "worst_pair": "cam3-cam5",
-      "worst_pair_t_cm": 16.593390305872312,
-      "worst_pair_r_deg": 0.10829807036977723
+      "mean_pair_t_cm": 10.063499565262449,
+      "median_pair_t_cm": 9.003507432254882,
+      "max_pair_t_cm": 15.915226196321122,
+      "mean_pair_r_deg": 0.1274589177621324,
+      "median_pair_r_deg": 0.11331301234045363,
+      "max_pair_r_deg": 0.1979656352402264,
+      "mean_baseline_error_cm": 10.036726766395887,
+      "mean_direction_error_deg": 0.07873918063867162,
+      "worst_pair": "cam1-cam5",
+      "worst_pair_t_cm": 15.915226196321122,
+      "worst_pair_r_deg": 0.07049473284368127
     }
   ],
   "secondary_summary": [
@@ -83,12 +83,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 10.499270287303041,
-      "median_translation_error_cm": 10.750260717392958,
-      "max_translation_error_cm": 13.833240964405869,
-      "mean_rotation_error_deg": 1.4138050977340177,
-      "median_rotation_error_deg": 1.52305152457085,
-      "max_rotation_error_deg": 1.8497894210143233
+      "mean_translation_error_cm": 10.728474094686884,
+      "median_translation_error_cm": 10.88691431192818,
+      "max_translation_error_cm": 13.946469191789157,
+      "mean_rotation_error_deg": 1.5122640414209254,
+      "median_rotation_error_deg": 1.5998762401251048,
+      "max_rotation_error_deg": 2.057303430350675
     },
     {
       "method": "AP02",
@@ -115,12 +115,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 6.645225257892344,
-      "median_translation_error_cm": 6.046096394820516,
-      "max_translation_error_cm": 10.496313712630519,
-      "mean_rotation_error_deg": 0.2249729732873494,
-      "median_rotation_error_deg": 0.19762978988368654,
-      "max_rotation_error_deg": 0.4189082201084474
+      "mean_translation_error_cm": 6.228238412320279,
+      "median_translation_error_cm": 6.155710956554404,
+      "max_translation_error_cm": 9.41175872561512,
+      "mean_rotation_error_deg": 0.07842824168235016,
+      "median_rotation_error_deg": 0.07490977913015817,
+      "max_rotation_error_deg": 0.11544294838002206
     }
   ]
 }

@@ -12,12 +12,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3",
       "missing_cameras": "cam_edge_5",
       "failure_reason": "cam_edge_5: RuntimeError: No relay multichain aggregate row found for cam3_to_cam5 / COLMAP_motion",
-      "mean_translation_error_cm": 6.819785995214407,
-      "median_translation_error_cm": 8.000799640825004,
-      "max_translation_error_cm": 8.353428748522653,
-      "mean_rotation_error_deg": 1.1303175855548473,
-      "median_rotation_error_deg": 1.1798299458621564,
-      "max_rotation_error_deg": 1.1880829067951446
+      "mean_translation_error_cm": 6.822442393411591,
+      "median_translation_error_cm": 7.998759534981438,
+      "max_translation_error_cm": 8.356422218235856,
+      "mean_rotation_error_deg": 1.1303175855559375,
+      "median_rotation_error_deg": 1.1798299458627741,
+      "max_rotation_error_deg": 1.1880829067963719
     },
     {
       "method": "AP02",
@@ -28,12 +28,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
       "missing_cameras": "",
       "failure_reason": "",
-      "mean_translation_error_cm": 441.0439295084185,
-      "median_translation_error_cm": 298.0487675325755,
-      "max_translation_error_cm": 873.8438773498723,
-      "mean_rotation_error_deg": 43.25958679926539,
-      "median_rotation_error_deg": 15.886445941872513,
-      "max_rotation_error_deg": 126.03024128135152
+      "mean_translation_error_cm": 441.1570796384995,
+      "median_translation_error_cm": 298.57515203105106,
+      "max_translation_error_cm": 873.998764936508,
+      "mean_rotation_error_deg": 43.2811672526598,
+      "median_rotation_error_deg": 15.89933179620181,
+      "max_rotation_error_deg": 126.17604162480993
     },
     {
       "method": "AP03",
@@ -44,12 +44,12 @@
       "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3",
       "missing_cameras": "cam_edge_5",
       "failure_reason": "",
-      "mean_translation_error_cm": 8.093172282624357,
-      "median_translation_error_cm": 10.011624527992142,
-      "max_translation_error_cm": 10.987917117569639,
-      "mean_rotation_error_deg": 0.47301171967167405,
-      "median_rotation_error_deg": 0.4020723164307042,
-      "max_rotation_error_deg": 0.6766882286952471
+      "mean_translation_error_cm": 8.40344539874976,
+      "median_translation_error_cm": 9.969348199110378,
+      "max_translation_error_cm": 10.972669153746654,
+      "mean_rotation_error_deg": 0.8919340743086225,
+      "median_rotation_error_deg": 0.9404146218254172,
+      "max_rotation_error_deg": 1.0627600715789227
     }
   ]
 }

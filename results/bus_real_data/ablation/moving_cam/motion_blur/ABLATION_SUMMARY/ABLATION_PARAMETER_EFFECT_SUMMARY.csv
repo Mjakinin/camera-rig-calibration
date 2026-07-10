@@ -1,5 +1,5 @@
 variant,parameter,final_results_exists,AP01_STATUS,AP02_STATUS,AP03_STATUS,PAIRWISE_STATUS,SECONDARY_STATUS,AP01_mean_t_cm,AP01_mean_r_deg,AP01_worst_pair,AP01_worst_t_cm,AP01_worst_r_deg,AP02_mean_t_cm,AP02_mean_r_deg,AP02_worst_pair,AP02_worst_t_cm,AP02_worst_r_deg,AP03_mean_t_cm,AP03_mean_r_deg,AP03_worst_pair,AP03_worst_t_cm,AP03_worst_r_deg,AP01_delta_t_cm_vs_baseline,AP01_delta_r_deg_vs_baseline,AP02_delta_t_cm_vs_baseline,AP02_delta_r_deg_vs_baseline,AP03_delta_t_cm_vs_baseline,AP03_delta_r_deg_vs_baseline
-moving_blur_k00_baseline,motion_blur,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
-moving_blur_k09_mild,motion_blur,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
-moving_blur_k21_strong,motion_blur,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
-moving_blur_k41_extreme,motion_blur,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
+moving_blur_k00_baseline,motion_blur,True,OK_FULL,OK_FULL,OK_FULL,OK,OK,,,,,,,,,,,,,,,,,,,,,
+moving_blur_k09_mild,motion_blur,True,OK_FULL,OK_FULL,OK_FULL,OK,OK,,,,,,,,,,,,,,,,,,,,,
+moving_blur_k21_strong,motion_blur,True,PARTIAL_3_OF_4,FAILED_NO_PAIR,PARTIAL_2_OF_4,OK,OK,,,,,,,,,,,,,,,,,,,,,
+moving_blur_k41_extreme,motion_blur,True,PARTIAL_2_OF_4,FAILED_NO_PAIR,FAILED_NO_PAIR,OK,OK,,,,,,,,,,,,,,,,,,,,,

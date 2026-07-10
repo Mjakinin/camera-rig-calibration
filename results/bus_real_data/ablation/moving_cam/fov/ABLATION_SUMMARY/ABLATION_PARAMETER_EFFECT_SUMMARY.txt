@@ -2,27 +2,6 @@ ABLATION PARAMETER EFFECT SUMMARY — fov
 ================================================================================
 root: results/bus_real_data/ablation/moving_cam/fov
 
-VARIANT: 00_captures
---------------------------------------------------------------------------------
-status: AP01= AP02= AP03= PAIRWISE= SECONDARY=
-AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-
-VARIANT: 00_prepared_datasets
---------------------------------------------------------------------------------
-status: AP01= AP02= AP03= PAIRWISE= SECONDARY=
-AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-
-VARIANT: 00_world_variants
---------------------------------------------------------------------------------
-status: AP01= AP02= AP03= PAIRWISE= SECONDARY=
-AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
-
 VARIANT: 01_shared_observations
 --------------------------------------------------------------------------------
 status: AP01= AP02= AP03= PAIRWISE= SECONDARY=
@@ -39,28 +18,28 @@ AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 
 VARIANT: fov_100deg
 --------------------------------------------------------------------------------
-status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+status: AP01=OK_FULL AP02=OK_FULL AP03=OK_FULL PAIRWISE=OK SECONDARY=OK
 AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 
 VARIANT: fov_140deg_extreme
 --------------------------------------------------------------------------------
-status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+status: AP01=OK_FULL AP02=OK_FULL AP03=OK_FULL PAIRWISE=OK SECONDARY=OK
 AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 
 VARIANT: fov_40deg
 --------------------------------------------------------------------------------
-status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+status: AP01=PARTIAL_3_OF_4 AP02=OK_FULL AP03=PARTIAL_3_OF_4 PAIRWISE=OK SECONDARY=OK
 AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 
 VARIANT: fov_69deg_baseline
 --------------------------------------------------------------------------------
-status: AP01=OK AP02=OK AP03=OK PAIRWISE=OK SECONDARY=OK
+status: AP01=OK_FULL AP02=OK_FULL AP03=OK_FULL PAIRWISE=OK SECONDARY=OK
 AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
 AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg

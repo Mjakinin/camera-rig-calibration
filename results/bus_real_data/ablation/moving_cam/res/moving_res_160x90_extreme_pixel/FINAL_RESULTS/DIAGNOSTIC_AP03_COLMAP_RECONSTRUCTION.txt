@@ -11,29 +11,24 @@ Input dataset:
 - static images: 4
 - moving images: 270
 
-Number of COLMAP models: 3
+Number of COLMAP models: 1
 
 Models:
-- model 0: 13 images, 0/4 static cameras, 13 moving frames, 65 3D points
-  static registered: none
-  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
-- model 1: 21 images, 0/4 static cameras, 21 moving frames, 67 3D points
-  static registered: none
-  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
-- model 2: 13 images, 0/4 static cameras, 13 moving frames, 80 3D points
-  static registered: none
-  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
+- model 0: 72 images, 1/4 static cameras, 71 moving frames, 541 3D points
+  static registered: static_cam_edge_5.png
+  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png
 
 Best model by static-camera coverage:
-- model: 1
-- registered images: 21
-- registered static cameras: 0/4
-- registered moving frames: 21
-- 3D points: 67
+- model: 0
+- registered images: 72
+- registered static cameras: 1/4
+- registered moving frames: 71
+- 3D points: 541
 
 Interpretation:
-- COLMAP did not register any static bus cameras.
-- Moving trajectory may reconstruct, but rig extrinsics are not available yet.
+- COLMAP registered some but not all static cameras.
+- This is a partial targetless baseline.
+- We can still inspect whether the missing static cameras lack visual overlap/features.
 
 Important:
 - COLMAP poses are currently in arbitrary scale and arbitrary coordinate frame.

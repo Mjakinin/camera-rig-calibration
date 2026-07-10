@@ -1,0 +1,32 @@
+ABLATION PARAMETER EFFECT SUMMARY — physical_ceiling_lighting
+================================================================================
+root: results/bus_real_data/ablation/world/lighting
+
+VARIANT: ceiling_bright
+--------------------------------------------------------------------------------
+status: AP01=OK_FULL AP02=OK_FULL AP03=OK_FULL PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+
+VARIANT: ceiling_dark_extreme
+--------------------------------------------------------------------------------
+status: AP01=OK_FULL AP02=FAILED_NO_PAIR AP03=OK_FULL PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+
+VARIANT: ceiling_low
+--------------------------------------------------------------------------------
+status: AP01=OK_FULL AP02=OK_FULL AP03=OK_FULL PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+
+VARIANT: ceiling_normal
+--------------------------------------------------------------------------------
+status: AP01=OK_FULL AP02=OK_FULL AP03=OK_FULL PAIRWISE=OK SECONDARY=OK
+AP01: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP02: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+AP03: mean  cm /  deg | worst   cm /  deg | delta_vs_baseline  cm /  deg
+

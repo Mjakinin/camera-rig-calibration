@@ -11,15 +11,15 @@ PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
 AP01    PARTIAL_2_OF_4                 2/4      1/6      6.69 cm      6.69 cm     1.86 deg
-AP02    PARTIAL_3_OF_4                 3/4      3/6     12.87 cm     12.38 cm     0.64 deg
-AP03    FAILED_NO_PAIR                 0/4      0/6         - cm         - cm        - deg
+AP02    FAILED_NO_PAIR                 0/4      0/6         - cm         - cm        - deg
+AP03    FAILED_NO_PAIR                 1/4      0/6         - cm         - cm        - deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
 AP01    PARTIAL_2_OF_4_NO_SE3_AL       2/4         - cm         - cm        - deg
-AP02    PARTIAL_3_OF_4                 3/4      7.32 cm      7.32 cm     0.37 deg
-AP03    FAILED_NO_STATIC_CAMERAS       0/4         - cm         - cm        - deg
+AP02    FAILED_NO_STATIC_CAMERAS       0/4         - cm         - cm        - deg
+AP03    PARTIAL_1_OF_4_NO_SE3_AL       1/4         - cm         - cm        - deg
 
 ################################################################################################################
 320x180 — moving_res_320x180_low
@@ -28,16 +28,16 @@ AP03    FAILED_NO_STATIC_CAMERAS       0/4         - cm         - cm        - de
 PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
-AP01    OK                             4/4      6/6    151.61 cm    147.77 cm    13.54 deg
+AP01    OK_FULL                        4/4      6/6     43.76 cm     42.83 cm     2.08 deg
 AP02    OK_FULL                        4/4      6/6     23.78 cm     21.22 cm     1.44 deg
-AP03    OK                             4/4      6/6     38.10 cm     41.72 cm     1.73 deg
+AP03    OK_FULL                        4/4      6/6     29.42 cm     25.44 cm     0.85 deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
-AP01    OK                             4/4     83.23 cm     64.68 cm     9.07 deg
+AP01    OK_FULL                        4/4     27.68 cm     22.27 cm     1.27 deg
 AP02    OK_FULL                        4/4     13.60 cm     13.49 cm     0.84 deg
-AP03    OK                             4/4     24.26 cm     23.42 cm     1.12 deg
+AP03    OK_FULL                        4/4     17.51 cm     17.59 cm     0.49 deg
 
 ################################################################################################################
 1280x720 baseline — moving_res_1280x720_baseline
@@ -46,16 +46,16 @@ AP03    OK                             4/4     24.26 cm     23.42 cm     1.12 de
 PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
-AP01    OK                             4/4      6/6     12.24 cm     11.08 cm     2.13 deg
+AP01    OK_FULL                        4/4      6/6     46.99 cm     42.44 cm     7.28 deg
 AP02    OK_FULL                        4/4      6/6     17.40 cm     14.98 cm     1.29 deg
-AP03    OK                             4/4      6/6     11.87 cm     10.93 cm     0.13 deg
+AP03    OK_FULL                        4/4      6/6     13.06 cm      9.53 cm     0.78 deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
-AP01    OK                             4/4      7.36 cm      6.80 cm     1.32 deg
+AP01    OK_FULL                        4/4     30.99 cm     25.59 cm     4.81 deg
 AP02    OK_FULL                        4/4      8.64 cm      8.38 cm     0.81 deg
-AP03    OK                             4/4      7.19 cm      7.00 cm     0.08 deg
+AP03    OK_FULL                        4/4      7.44 cm      7.52 cm     0.49 deg
 
 ################################################################################################################
 2560x1440 — moving_res_2560x1440_upscaled
@@ -64,16 +64,16 @@ AP03    OK                             4/4      7.19 cm      7.00 cm     0.08 de
 PRIMARY
 Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
 ------------------------------------------------------------------------------------------
-AP01    OK                             4/4      6/6     12.40 cm     10.48 cm     2.10 deg
+AP01    OK_FULL                        4/4      6/6     11.68 cm      9.58 cm     1.94 deg
 AP02    OK_FULL                        4/4      6/6     14.10 cm     12.25 cm     1.37 deg
-AP03    OK                             4/4      6/6      6.41 cm      5.44 cm     0.27 deg
+AP03    FAILED_NO_PAIR                 0/4      0/6         - cm         - cm        - deg
 
 OPTIONAL SECONDARY
 Method  Status                     Cameras       Mean t     Median t       Mean r
 ---------------------------------------------------------------------------------
-AP01    OK                             4/4      7.57 cm      7.04 cm     1.31 deg
+AP01    OK_FULL                        4/4      6.96 cm      6.32 cm     1.21 deg
 AP02    OK_FULL                        4/4      6.12 cm      6.63 cm     0.85 deg
-AP03    OK                             4/4      4.03 cm      3.97 cm     0.16 deg
+AP03    FAILED_NO_STATIC_CAMERAS       0/4         - cm         - cm        - deg
 
 Exact values:
 - ../details/primary/03_RESOLUTION_CAM_TO_CAM.txt
