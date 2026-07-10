@@ -1,0 +1,61 @@
+AP02 GT-Aligned Full-Map Evaluation
+====================================
+
+What this evaluates:
+- AP02 estimated map is aligned to the Gazebo GT map with a best-fit SE(3) transform.
+- The alignment uses static cameras and markers 0..13.
+- Marker 14 / aruco_ref_floor_14 is held out from the alignment.
+- Therefore marker 14 receives a real residual/error instead of a forced coordinate-frame zero.
+- GT is used only after optimization for evaluation, not during AP02 estimation.
+
+Alignment:
+- used entities: 18
+- used static cameras: cam_edge_0, cam_edge_1, cam_edge_3, cam_edge_5
+- used marker ids: 0..13
+- held-out marker: 14 / aruco_ref_floor_14
+
+Camera pose errors:
+- count: 4
+- mean translation error [cm]: 8.900993
+- median translation error [cm]: 8.166185
+- mean rotation error [deg]: 1.320163
+- median rotation error [deg]: 1.627535
+
+Marker-map pose errors:
+- count: 15
+- mean translation error [cm]: 10.887914
+- median translation error [cm]: 11.781133
+- mean rotation error [deg]: 1.238624
+- median rotation error [deg]: 1.511417
+
+Held-out reference marker result:
+- aruco_ref_floor_14: 9.601 cm, 1.688 deg
+
+Per-camera:
+- cam_edge_0: 5.481 cm, 1.742 deg | aligned_est=(+0.541, -1.245, +2.462) m | gt=(+0.588, -1.235, +2.487) m
+- cam_edge_1: 9.311 cm, 1.644 deg | aligned_est=(-4.024, +0.981, +2.610) m | gt=(-3.974, +0.975, +2.532) m
+- cam_edge_3: 7.022 cm, 1.611 deg | aligned_est=(-3.283, -1.061, +2.498) m | gt=(-3.227, -1.063, +2.454) m
+- cam_edge_5: 13.791 cm, 0.284 deg | aligned_est=(+5.980, +0.854, +2.605) m | gt=(+5.859, +0.848, +2.539) m
+
+Per-marker:
+- marker_000 [alignment]: 11.781 cm, 0.733 deg | aligned_est=(-2.663, +0.511, +1.195) m | gt=(-2.550, +0.480, +1.180) m
+- marker_001 [alignment]: 7.753 cm, 1.168 deg | aligned_est=(-2.324, -0.525, +1.654) m | gt=(-2.250, -0.525, +1.630) m
+- marker_002 [alignment]: 8.898 cm, 1.638 deg | aligned_est=(-1.188, -0.529, +1.088) m | gt=(-1.100, -0.525, +1.100) m
+- marker_003 [alignment]: 8.206 cm, 1.511 deg | aligned_est=(+0.030, +1.205, +0.757) m | gt=(+0.100, +1.210, +0.800) m
+- marker_004 [alignment]: 6.294 cm, 1.661 deg | aligned_est=(+0.667, +1.189, +1.951) m | gt=(+0.700, +1.210, +2.000) m
+- marker_005 [alignment]: 11.854 cm, 1.707 deg | aligned_est=(+1.848, -1.005, +0.997) m | gt=(+1.900, -0.980, +1.100) m
+- marker_006 [alignment]: 10.356 cm, 2.162 deg | aligned_est=(+1.931, +0.485, +1.275) m | gt=(+1.970, +0.500, +1.370) m
+- marker_007 [alignment]: 10.076 cm, 1.691 deg | aligned_est=(+1.927, +0.922, +1.280) m | gt=(+1.970, +0.935, +1.370) m
+- marker_008 [alignment]: 12.541 cm, 1.871 deg | aligned_est=(+2.614, -0.550, +1.292) m | gt=(+2.650, -0.525, +1.410) m
+- marker_009 [alignment]: 13.084 cm, 1.089 deg | aligned_est=(+3.136, +0.497, +1.478) m | gt=(+3.020, +0.480, +1.420) m
+- marker_010 [alignment]: 12.589 cm, 0.262 deg | aligned_est=(+3.132, -0.968, +1.477) m | gt=(+3.020, -0.980, +1.420) m
+- marker_011 [alignment]: 13.492 cm, 0.413 deg | aligned_est=(+4.117, +0.014, +1.595) m | gt=(+4.000, +0.000, +1.530) m
+- marker_012 [alignment]: 13.178 cm, 0.417 deg | aligned_est=(+4.155, -0.963, +1.482) m | gt=(+4.040, -0.980, +1.420) m
+- marker_013 [alignment]: 13.615 cm, 0.569 deg | aligned_est=(+4.169, +0.744, +1.335) m | gt=(+4.050, +0.730, +1.270) m
+- aruco_ref_floor_14 [held-out]: 9.601 cm, 1.688 deg | aligned_est=(-0.088, +0.499, +0.361) m | gt=(+0.000, +0.500, +0.400) m
+
+Output files:
+- results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv
+- results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.txt
+- results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION_metadata.json
+

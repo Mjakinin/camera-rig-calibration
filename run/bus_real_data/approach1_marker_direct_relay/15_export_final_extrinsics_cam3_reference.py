@@ -123,10 +123,26 @@ def pose_payload(T):
 
 
 def load_direct_multimarker(m):
-    rows = read_csv(DIRECT_MULTI_CSV)
-    rows = [r for r in rows if r["aggregate_type"] == "weighted_mean_of_mad_inliers_no_gt_selection"]
+    all_rows = read_csv(DIRECT_MULTI_CSV)
+
+    preferred_aggregate_types = [
+        "quality_filtered_preferred_marker_no_gt_selection",
+        "quality_filtered_weighted_mean_no_gt_selection",
+        "weighted_mean_of_mad_inliers_no_gt_selection",
+        "se3_medoid_no_gt_selection",
+    ]
+
+    rows = []
+    selected_aggregate_type = None
+
+    for aggregate_type in preferred_aggregate_types:
+        rows = [r for r in all_rows if r.get("aggregate_type") == aggregate_type]
+        if rows:
+            selected_aggregate_type = aggregate_type
+            break
+
     if not rows:
-        raise RuntimeError("No weighted direct multimarker row found")
+        raise RuntimeError("No usable direct multimarker aggregate row found")
 
     r = rows[0]
     T_est = T_from_row(r)
@@ -135,7 +151,7 @@ def load_direct_multimarker(m):
     return {
         "name": "cam_edge_3_to_cam_edge_1_direct_static_multimarker",
         "target_camera": "cam_edge_1",
-        "method": "direct_static_aruco_multimarker_weighted_mad_inliers",
+        "method": f"direct_static_aruco_multimarker_{selected_aggregate_type}",
         "category": "main_no_gt",
         "pair": "cam3_to_cam1",
         "root_marker": "COMMON_MARKERS",

@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = ROOT / "models"
 
 DICT_NAME = "DICT_4X4_50"
-MARKER_IDS = list(range(14))
+MARKER_IDS = list(range(15))
 
 A4_WIDTH_M = 0.210
 A4_HEIGHT_M = 0.297
@@ -53,10 +53,11 @@ def black_cell_visual(name, row, col):
     z =  MARKER_SIZE_M / 2 - (row + 0.5) * CELL_M
     y = -0.004
 
-    size = CELL_M * 0.98
+    size = CELL_M * 1.04
 
     return f"""
         <visual name="{name}">
+          <cast_shadows>false</cast_shadows>
           <pose>{x:.6f} {y:.6f} {z:.6f} 0 0 0</pose>
           <geometry>
             <box>
@@ -66,6 +67,7 @@ def black_cell_visual(name, row, col):
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 """
@@ -91,6 +93,7 @@ def write_model(marker_id: int):
     <link name="board_link">
 
       <visual name="a4_white_sheet">
+          <cast_shadows>false</cast_shadows>
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <box>
@@ -100,6 +103,7 @@ def write_model(marker_id: int):
         <material>
           <ambient>1 1 1 1</ambient>
           <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
         </material>
       </visual>
 

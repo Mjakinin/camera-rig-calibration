@@ -1,8 +1,8 @@
 AP02 debug artifact report
 ==========================
 
-Input observations: 184
-Observers: 119
+Input observations: 374
+Observers: 169
 Markers: 15
 
 Generated:

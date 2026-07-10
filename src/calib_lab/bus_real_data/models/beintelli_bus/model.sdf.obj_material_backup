@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <model name="beintelli_bus">
+    <static>true</static>
+
+    <link name="interior_overlay_link">
+
+      <!--
+        Initial local alignment:
+        - align X center
+        - align Y center
+        - align minimum Z / floor
+        - no scaling
+        - no rotation
+      -->
+      <pose>-1.213095000 -3.540882500 7.273781000 0.000000000 0.000000000 0.000000000</pose>
+
+      <visual name="interior_overlay_visual">
+        <cast_shadows>true</cast_shadows>
+        <transparency>0.0</transparency>
+
+        <geometry>
+          <mesh>
+            <uri>model://beintelli_bus/meshes/obj/beintelli_erklarbus.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+    </link>
+  </model>
+</sdf>

@@ -552,6 +552,11 @@ def main():
         c["rotation_error_deg"] = re
         c.update(pose_fields("gt_target_in_root", T_gt_best))
 
+    # -------------------------------------------------------------------------
+    # Legacy robust aggregation over all candidates.
+    # Kept for diagnostics, but not ideal when several low-quality marker PnP
+    # estimates form a wrong but internally consistent cluster.
+    # -------------------------------------------------------------------------
     medoid_idx, medoid_score = se3_medoid(candidates)
     inliers, outliers, inlier_stats = robust_inliers_by_medoid(candidates, medoid_idx)
 
@@ -560,6 +565,76 @@ def main():
 
     T_medoid = candidates[medoid_idx]["T_est"]
     med_te, med_re = transform_error(T_medoid, T_gt_best)
+
+    # -------------------------------------------------------------------------
+    # New no-GT quality-filtered direct static estimate.
+    #
+    # All candidates are still written to 02_all_common_marker_candidates.csv,
+    # but the deployable AP01 direct-static estimate should not average
+    # extremely weak/far/ambiguous marker PnP candidates.
+    #
+    # Selection uses only image/detection quality:
+    # - marker area
+    # - PnP distance
+    # - combined detection quality
+    # - optional priority for marker 14 when it is visible and passes quality
+    #
+    # No GT camera pose, marker pose, or GT error is used for selection.
+    # -------------------------------------------------------------------------
+    quality_candidates = [
+        c for c in candidates
+        if c["root_area_px"] >= 500.0
+        and c["target_area_px"] >= 500.0
+        and c["root_distance_m"] <= 5.5
+        and c["target_distance_m"] <= 5.5
+        and c["combined_quality"] >= 20.0
+    ]
+
+    if len(quality_candidates) < 1:
+        quality_candidates = sorted(
+            candidates,
+            key=lambda c: c["combined_quality"],
+            reverse=True,
+        )[:max(1, min(2, len(candidates)))]
+
+    q_medoid_idx, q_medoid_score = se3_medoid(quality_candidates)
+    q_inliers, q_outliers, q_inlier_stats = robust_inliers_by_medoid(
+        quality_candidates,
+        q_medoid_idx,
+        min_t_thresh=0.08,
+        min_r_thresh_deg=2.0,
+    )
+
+    if not q_inliers:
+        q_inliers = quality_candidates
+
+    q_weights = np.array(
+        [max(1e-12, c["combined_quality"]) for c in q_inliers],
+        dtype=np.float64,
+    )
+
+    T_quality_weighted = weighted_transform_mean(
+        [c["T_est"] for c in q_inliers],
+        q_weights,
+    )
+    q_wt_te, q_wt_re = transform_error(T_quality_weighted, T_gt_best)
+
+    q_ref14 = None
+    for c in quality_candidates:
+        if int(c["marker_id"]) == 14:
+            q_ref14 = c
+            break
+
+    if q_ref14 is not None:
+        T_quality_preferred = q_ref14["T_est"]
+        q_selected_marker_id = q_ref14["marker_id"]
+        q_selection_note = "marker14_visible_and_passed_no_gt_quality_filter"
+    else:
+        T_quality_preferred = quality_candidates[q_medoid_idx]["T_est"]
+        q_selected_marker_id = quality_candidates[q_medoid_idx]["marker_id"]
+        q_selection_note = "quality_filtered_se3_medoid_fallback"
+
+    q_pref_te, q_pref_re = transform_error(T_quality_preferred, T_gt_best)
 
     weights = np.array([max(1e-12, c["combined_quality"]) for c in inliers], dtype=np.float64)
     T_weighted = weighted_transform_mean([c["T_est"] for c in inliers], weights)
@@ -572,6 +647,36 @@ def main():
     uw_te, uw_re = transform_error(T_unweighted, T_gt_best)
 
     aggregate_rows = []
+
+    aggregate_rows.append({
+        "aggregate_type": "quality_filtered_preferred_marker_no_gt_selection",
+        "selected_marker_id": q_selected_marker_id,
+        "num_candidates": len(candidates),
+        "num_inliers": len(q_inliers),
+        "num_outliers": len(candidates) - len(q_inliers),
+        "medoid_pairwise_score": q_medoid_score,
+        "quality_selection_note": q_selection_note,
+        "translation_error_m": q_pref_te,
+        "translation_error_cm": 100.0 * q_pref_te,
+        "rotation_error_deg": q_pref_re,
+        **pose_fields("estimated_target_in_root", T_quality_preferred),
+        **pose_fields("gt_target_in_root", T_gt_best),
+    })
+
+    aggregate_rows.append({
+        "aggregate_type": "quality_filtered_weighted_mean_no_gt_selection",
+        "selected_marker_id": "",
+        "num_candidates": len(candidates),
+        "num_inliers": len(q_inliers),
+        "num_outliers": len(candidates) - len(q_inliers),
+        "medoid_pairwise_score": q_medoid_score,
+        "quality_selection_note": "weighted_mean_of_no_gt_quality_filtered_candidates",
+        "translation_error_m": q_wt_te,
+        "translation_error_cm": 100.0 * q_wt_te,
+        "rotation_error_deg": q_wt_re,
+        **pose_fields("estimated_target_in_root", T_quality_weighted),
+        **pose_fields("gt_target_in_root", T_gt_best),
+    })
 
     aggregate_rows.append({
         "aggregate_type": "se3_medoid_no_gt_selection",

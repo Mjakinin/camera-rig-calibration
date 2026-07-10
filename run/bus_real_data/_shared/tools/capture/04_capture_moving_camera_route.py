@@ -111,7 +111,8 @@ def main():
     ap.add_argument("--out", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence")
     ap.add_argument("--world", default="bus_real_data_camera_layout")
     ap.add_argument("--name", default="moving_calib_camera")
-    ap.add_argument("--settle", type=float, default=0.20)
+    ap.add_argument("--settle", type=float, default=0.80)
+    ap.add_argument("--post-pose-skip", type=int, default=5)
     ap.add_argument("--timeout", type=float, default=2.0)
     ap.add_argument("--clean", action="store_true")
     args = ap.parse_args()
@@ -137,6 +138,31 @@ def main():
         rclpy.shutdown()
         raise RuntimeError("No image received. Is the bridge running?")
 
+    # Important: move once to the first commanded route pose before recording frame_0000.
+    # This flushes stale images from the default / previous moving-camera pose.
+    if frames:
+        first = frames[0]
+        first_pose = [
+            first["x"],
+            first["y"],
+            first["z"],
+            first["roll"],
+            first["pitch"],
+            first["yaw"],
+        ]
+        print("[INFO] pre-positioning at first route frame and flushing stale images...")
+        ok_first = set_pose(args.world, args.name, first_pose)
+        print(f"[INFO] first route pose set_pose_ok={ok_first}")
+        time.sleep(max(args.settle, 1.0))
+
+        cnt = node.counter
+        flush_n = max(args.post_pose_skip * 2, 10)
+        for _ in range(flush_n):
+            msg, cnt = wait_for_image(node, cnt, args.timeout)
+            if msg is None:
+                break
+        print(f"[INFO] flushed up to counter={cnt}")
+
     rows = []
 
     for r in frames:
@@ -147,7 +173,16 @@ def main():
         before = node.counter
         time.sleep(args.settle)
 
-        msg, cnt = wait_for_image(node, before, args.timeout)
+        msg = None
+        cnt = before
+
+        for _skip in range(args.post_pose_skip):
+            msg, cnt = wait_for_image(node, cnt, args.timeout)
+            if msg is None:
+                break
+
+        msg, cnt = wait_for_image(node, cnt, args.timeout)
+
         if msg is None:
             print(f"[WARN] frame {frame_idx:04d}: no image")
             continue

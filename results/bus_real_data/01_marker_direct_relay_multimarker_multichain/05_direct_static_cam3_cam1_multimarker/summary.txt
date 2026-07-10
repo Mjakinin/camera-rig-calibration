@@ -1,10 +1,10 @@
 Direct static-to-static multi-marker evaluation: cam_edge_3 -> cam_edge_1
 ==============================================================================
 
-Common markers: [1, 2, 5, 6, 7, 8, 14]
-Number of candidates: 7
-Number of inliers: 5
-Number of outliers: 2
+Common markers: [2, 5, 6, 7, 8, 14]
+Number of candidates: 6
+Number of inliers: 6
+Number of outliers: 0
 
 No-GT selection policy:
 - Candidates are generated from shared marker PnP observations.
@@ -14,23 +14,22 @@ No-GT selection policy:
 Selected GT convention for evaluation only: sdf_link_times_inverse_optical_to_link
 
 Best individual marker by GT evaluation only:
-- marker_id: 1
-- translation_error: 0.101915 m = 10.192 cm
-- rotation_error: 1.678836 deg
+- marker_id: 14
+- translation_error: 0.101527 m = 10.153 cm
+- rotation_error: 0.308343 deg
 
 SE(3) medoid aggregate, no GT selection:
-- medoid marker_id: 8
-- translation_error: 0.661123 m = 66.112 cm
-- rotation_error: 4.857386 deg
+- medoid marker_id: 7
+- translation_error: 0.450972 m = 45.097 cm
+- rotation_error: 4.154514 deg
 
 Weighted mean of MAD inliers, no GT selection:
-- translation_error: 0.125971 m = 12.597 cm
-- rotation_error: 1.861631 deg
+- translation_error: 0.494777 m = 49.478 cm
+- rotation_error: 5.397191 deg
 
 Inlier filter:
-- t threshold: 1.186572 m
-- r threshold: 15.641637 deg
+- t threshold: 8.246459 m
+- r threshold: 79.219812 deg
 
 Outliers:
-- marker 6: dev_t=573.46 cm, dev_r=53.34 deg
-- marker 7: dev_t=238.69 cm, dev_r=21.60 deg
+- none

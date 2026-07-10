@@ -5,6 +5,7 @@
     <link name="board_link">
 
       <visual name="a4_white_sheet">
+          <cast_shadows>false</cast_shadows>
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <box>
@@ -14,319 +15,368 @@
         <material>
           <ambient>1 1 1 1</ambient>
           <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
         </material>
       </visual>
 
 
         <visual name="black_cell_0_0">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.070833 -0.004000 0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_0_1">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.042500 -0.004000 0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_0_2">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.014167 -0.004000 0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_0_3">
+          <cast_shadows>false</cast_shadows>
           <pose>0.014167 -0.004000 0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_0_4">
+          <cast_shadows>false</cast_shadows>
           <pose>0.042500 -0.004000 0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_0_5">
+          <cast_shadows>false</cast_shadows>
           <pose>0.070833 -0.004000 0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_1_0">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.070833 -0.004000 0.042500 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_1_5">
+          <cast_shadows>false</cast_shadows>
           <pose>0.070833 -0.004000 0.042500 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_2_0">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.070833 -0.004000 0.014167 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_2_4">
+          <cast_shadows>false</cast_shadows>
           <pose>0.042500 -0.004000 0.014167 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_2_5">
+          <cast_shadows>false</cast_shadows>
           <pose>0.070833 -0.004000 0.014167 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_3_0">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.070833 -0.004000 -0.014167 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_3_3">
+          <cast_shadows>false</cast_shadows>
           <pose>0.014167 -0.004000 -0.014167 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_3_5">
+          <cast_shadows>false</cast_shadows>
           <pose>0.070833 -0.004000 -0.014167 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_4_0">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.070833 -0.004000 -0.042500 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_4_2">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.014167 -0.004000 -0.042500 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_4_4">
+          <cast_shadows>false</cast_shadows>
           <pose>0.042500 -0.004000 -0.042500 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_4_5">
+          <cast_shadows>false</cast_shadows>
           <pose>0.070833 -0.004000 -0.042500 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_5_0">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.070833 -0.004000 -0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_5_1">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.042500 -0.004000 -0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_5_2">
+          <cast_shadows>false</cast_shadows>
           <pose>-0.014167 -0.004000 -0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_5_3">
+          <cast_shadows>false</cast_shadows>
           <pose>0.014167 -0.004000 -0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_5_4">
+          <cast_shadows>false</cast_shadows>
           <pose>0.042500 -0.004000 -0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 
         <visual name="black_cell_5_5">
+          <cast_shadows>false</cast_shadows>
           <pose>0.070833 -0.004000 -0.070833 0 0 0</pose>
           <geometry>
             <box>
-              <size>0.027767 0.003 0.027767</size>
+              <size>0.029467 0.003 0.029467</size>
             </box>
           </geometry>
           <material>
             <ambient>0 0 0 1</ambient>
             <diffuse>0 0 0 1</diffuse>
+            <specular>0 0 0 1</specular>
           </material>
         </visual>
 

@@ -8,123 +8,107 @@ Meaning:
 - GT cam1 in cam3 = ground-truth relative pose from simulation, converted into optical-frame convention.
 - Errors are only for simulation evaluation.
 
-Marker 1 [GOOD_INLIER]
-------------------------------------------------------------
-Estimated pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.1467, y=-0.1357, z=0.2521
-  rotation [deg]: roll=16.365, pitch=48.875, yaw=25.167
-
-Ground Truth pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.1394, y=-0.1285, z=0.3535
-  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
-
-Errors
-  position error: 10.19 cm
-  rotation error: 1.679 deg
-  coordinate errors: dx=-0.74 cm, dy=-0.72 cm, dz=-10.14 cm
-  marker distances: root=1.394 m, target=2.483 m
-
 Marker 14 [GOOD_INLIER]
 ------------------------------------------------------------
 Estimated pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.1602, y=-0.0142, z=0.2044
-  rotation [deg]: roll=16.941, pitch=48.936, yaw=24.235
+  position [m]: x=-2.2094, y=-0.1137, z=0.2815
+  rotation [deg]: roll=16.473, pitch=50.284, yaw=24.942
 
 Ground Truth pose: cam_edge_1 in cam_edge_3
   position [m]: x=-2.1394, y=-0.1285, z=0.3535
   rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
 
 Errors
-  position error: 18.91 cm
-  rotation error: 1.884 deg
-  coordinate errors: dx=-2.09 cm, dy=11.44 cm, dz=-14.92 cm
-  marker distances: root=4.174 m, target=4.639 m
+  position error: 10.15 cm
+  rotation error: 0.308 deg
+  coordinate errors: dx=-7.00 cm, dy=1.49 cm, dz=-7.20 cm
+  marker distances: root=4.174 m, target=4.619 m
 
-Marker 2 [WEAK_INLIER]
+Marker 2 [GOOD_INLIER]
 ------------------------------------------------------------
 Estimated pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.1155, y=-0.0200, z=0.0974
-  rotation [deg]: roll=16.208, pitch=46.854, yaw=23.379
+  position [m]: x=-2.1332, y=-0.0973, z=0.1802
+  rotation [deg]: roll=15.256, pitch=48.527, yaw=23.309
 
 Ground Truth pose: cam_edge_1 in cam_edge_3
   position [m]: x=-2.1394, y=-0.1285, z=0.3535
   rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
 
 Errors
-  position error: 27.92 cm
-  rotation error: 3.842 deg
-  coordinate errors: dx=2.38 cm, dy=10.85 cm, dz=-25.61 cm
-  marker distances: root=2.602 m, target=3.651 m
+  position error: 17.62 cm
+  rotation error: 2.134 deg
+  coordinate errors: dx=0.62 cm, dy=3.12 cm, dz=-17.33 cm
+  marker distances: root=2.580 m, target=3.606 m
+
+Marker 7 [WEAK_INLIER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-1.9205, y=0.1433, z=0.0679
+  rotation [deg]: roll=16.402, pitch=46.900, yaw=22.678
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 45.10 cm
+  rotation error: 4.155 deg
+  coordinate errors: dx=21.89 cm, dy=27.18 cm, dz=-28.56 cm
+  marker distances: root=5.665 m, target=6.188 m
 
 Marker 8 [REJECT_FAR_MARKER]
 ------------------------------------------------------------
 Estimated pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.7382, y=-0.3880, z=0.4591
-  rotation [deg]: roll=15.302, pitch=55.273, yaw=24.573
+  position [m]: x=-0.9465, y=3.2022, z=0.3984
+  rotation [deg]: roll=40.382, pitch=30.470, yaw=27.163
 
 Ground Truth pose: cam_edge_1 in cam_edge_3
   position [m]: x=-2.1394, y=-0.1285, z=0.3535
   rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
 
 Errors
-  position error: 66.11 cm
-  rotation error: 4.857 deg
-  coordinate errors: dx=-59.88 cm, dy=-25.94 cm, dz=10.56 cm
-  marker distances: root=6.057 m, target=7.223 m
-
-Marker 5 [REJECT_FAR_MARKER]
-------------------------------------------------------------
-Estimated pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.8086, y=0.1172, z=0.8327
-  rotation [deg]: roll=24.169, pitch=55.921, yaw=29.729
-
-Ground Truth pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.1394, y=-0.1285, z=0.3535
-  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
-
-Errors
-  position error: 85.90 cm
-  rotation error: 7.341 deg
-  coordinate errors: dx=-66.92 cm, dy=24.57 cm, dz=47.92 cm
-  marker distances: root=5.376 m, target=6.607 m
-
-Marker 7 [REJECT_FAR_MARKER]
-------------------------------------------------------------
-Estimated pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.2517, y=-2.7175, z=0.2741
-  rotation [deg]: roll=-17.841, pitch=56.671, yaw=8.200
-
-Ground Truth pose: cam_edge_1 in cam_edge_3
-  position [m]: x=-2.1394, y=-0.1285, z=0.3535
-  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
-
-Errors
-  position error: 259.26 cm
-  rotation error: 23.708 deg
-  coordinate errors: dx=-11.23 cm, dy=-258.89 cm, dz=-7.94 cm
-  marker distances: root=5.714 m, target=6.418 m
+  position error: 353.82 cm
+  rotation error: 30.101 deg
+  coordinate errors: dx=119.29 cm, dy=333.08 cm, dz=4.49 cm
+  marker distances: root=5.929 m, target=7.223 m
 
 Marker 6 [REJECT_FAR_MARKER]
 ------------------------------------------------------------
 Estimated pose: cam_edge_1 in cam_edge_3
-  position [m]: x=2.8638, y=0.3270, z=-0.5369
-  rotation [deg]: roll=4.033, pitch=3.531, yaw=8.837
+  position [m]: x=0.4257, y=2.3339, z=0.0131
+  rotation [deg]: roll=28.246, pitch=17.887, yaw=23.670
 
 Ground Truth pose: cam_edge_1 in cam_edge_3
   position [m]: x=-2.1394, y=-0.1285, z=0.3535
   rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
 
 Errors
-  position error: 510.21 cm
-  rotation error: 48.981 deg
-  coordinate errors: dx=500.31 cm, dy=45.55 cm, dz=-89.04 cm
-  marker distances: root=5.616 m, target=6.298 m
+  position error: 357.20 cm
+  rotation error: 34.904 deg
+  coordinate errors: dx=256.51 cm, dy=246.25 cm, dz=-34.04 cm
+  marker distances: root=5.616 m, target=6.294 m
+
+Marker 5 [REJECT_FAR_MARKER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=1.3013, y=-1.7290, z=-1.6300
+  rotation [deg]: roll=-11.602, pitch=20.771, yaw=19.383
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 428.19 cm
+  rotation error: 38.642 deg
+  coordinate errors: dx=344.07 cm, dy=-160.05 cm, dz=-198.35 cm
+  marker distances: root=5.260 m, target=6.547 m
 
 Summary
 -------
-Total shared markers: 7
+Total shared markers: 6
 Kept as inlier candidates: 3
-Rejected: 4
+Rejected: 3
 
 Recommended direct-static decision for now:
 - Use marker 1 as best single-marker sanity baseline.

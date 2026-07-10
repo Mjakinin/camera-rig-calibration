@@ -6,25 +6,25 @@ Reference marker id: 14
 
 Optimized variable poses: 11
 Parameter count: 66
-Marker observations used: 18
-Scalar residual count: 144
+Marker observations used: 16
+Scalar residual count: 128
 
 Initial reprojection error [px]:
-- mean: 4.893484
-- median: 0.293337
-- max: 19.709407
+- mean: 2.422928
+- median: 0.275501
+- max: 10.916053
 
 Final reprojection error [px]:
-- mean: 0.457989
-- median: 0.393160
-- max: 1.585567
+- mean: 0.292074
+- median: 0.265044
+- max: 0.660310
 
 Optimizer:
 - success: True
 - status: 2
 - message: `ftol` termination condition is satisfied.
-- nfev: 19
-- cost: 10.887310
+- nfev: 20
+- cost: 3.390777
 
 Outputs:
 - optimized_static_camera_poses_ref_marker.csv

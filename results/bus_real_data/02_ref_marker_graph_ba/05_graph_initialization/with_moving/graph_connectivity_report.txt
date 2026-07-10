@@ -4,18 +4,18 @@ AP02 maximum-bottleneck pose graph initialization
 Mode: with_moving
 Reference marker id: 14
 
-Raw observations in mode: 184
-Quality-valid observer-marker edges: 184
-Used initialization edges: 133
+Raw observations in mode: 374
+Quality-valid observer-marker edges: 374
+Used initialization edges: 183
 
 Initialized static cameras: 4 / 4
-Initialized moving frames: 115 / 115
+Initialized moving frames: 165 / 165
 Initialized markers: 15 / 15
 
 Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
 Missing static cameras: []
 
-Camera path bottlenecks: {'cam_edge_0': 13.448840466158916, 'cam_edge_1': 17.32574012095247, 'cam_edge_3': 18.46222602155637, 'cam_edge_5': 7.098287616660087}
+Camera path bottlenecks: {'cam_edge_0': 28.423049558095084, 'cam_edge_1': 15.6329583956338, 'cam_edge_3': 17.152015309609308, 'cam_edge_5': 8.24777897219378}
 
 Initialized markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 Missing markers: []

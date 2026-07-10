@@ -15,5 +15,5 @@ because it assigned zero error to the anchor camera by construction.
 
 Available AP01 target estimates:
 - cam_edge_0 via moving_relay_multichain_colmap_motion_aruco_metric_scale
-- cam_edge_1 via direct_static_aruco_multimarker_weighted_mad_inliers
+- cam_edge_1 via direct_static_aruco_multimarker_quality_filtered_preferred_marker_no_gt_selection
 - cam_edge_5 via moving_relay_multichain_colmap_motion_aruco_metric_scale
