@@ -175,10 +175,27 @@ if [[ "$PROMOTE" != "1" ]]; then
 fi
 
 echo
-echo "=== Promote generated result tree ==="
+echo "=== Promote generated result tree without interrupting live logs ==="
 
-rm -rf "$FINAL"
-mv "$GENERATED" "$FINAL"
+mkdir -p "$FINAL"
+
+# Runtime files can be open and actively followed while the overnight run is
+# still executing. Keep their inodes and paths intact while replacing only the
+# generated report artifacts.
+find "$FINAL" -mindepth 1 -maxdepth 1 \
+  ! -name 'OVERNIGHT_LIVE.log' \
+  ! -name 'FULL_SIMULATION_RERUN.log' \
+  ! -name 'PREFLIGHT.log' \
+  ! -name 'LIVE_STATUS.txt' \
+  -exec rm -rf -- {} +
+
+shopt -s dotglob nullglob
+generated_entries=("$GENERATED"/*)
+if [[ "${#generated_entries[@]}" -gt 0 ]]; then
+  mv "${generated_entries[@]}" "$FINAL/"
+fi
+shopt -u dotglob nullglob
+rmdir "$GENERATED"
 
 mkdir -p \
   "$BUS/00_shared_baseline" \
@@ -207,6 +224,7 @@ rm -rf "$BUILD"
 
 echo
 echo "[OK] Canonical final results refreshed."
-echo "[OK] Existing report files were replaced."
+echo "[OK] Existing generated report files were replaced."
+echo "[OK] Live status and runtime logs remained readable."
 echo "[OK] No result rows were appended."
 echo "[OK] Output: $FINAL"
