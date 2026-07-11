@@ -7,6 +7,9 @@ REAL_FINAL_DIR="results/real_vehicle_data/real_05x_4k_3hz_v1/99_FINAL_RESULTS"
 SIM_FINAL_DIR="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
 INNER_RUNNER="run/run_full_final_rerun.sh"
 SECTION="all"
+STARTED_AT="$(date --iso-8601=seconds)"
+STATUS_PID=""
+RUN_CODE=""
 
 args=("$@")
 for ((index = 0; index < ${#args[@]}; index++)); do
@@ -17,12 +20,6 @@ done
 
 mkdir -p "$REAL_FINAL_DIR" "$SIM_FINAL_DIR"
 rm -rf results/_full_final_rerun_logs
-
-TMP_DIR="$(mktemp -d -t camera-rig-live-XXXXXX)"
-TMP_LOG="$TMP_DIR/OVERNIGHT_LIVE.log"
-STARTED_AT="$(date --iso-8601=seconds)"
-RUN_PID=""
-SYNC_PID=""
 
 status_targets=()
 log_targets=()
@@ -51,16 +48,25 @@ case "$SECTION" in
     ;;
 esac
 
+for target in "${log_targets[@]}"; do
+  mkdir -p "$(dirname "$target")"
+  : > "$target"
+done
+
+latest_log_line() {
+  local source="${log_targets[0]}"
+  if [[ -s "$source" ]]; then
+    tail -n 1 "$source" | tr '\t\r\n' '   '
+  fi
+}
+
 write_status() {
   local state="$1"
   local exit_code="${2:-}"
   local last_line=""
   local temporary
 
-  if [[ -s "$TMP_LOG" ]]; then
-    last_line="$(tail -n 1 "$TMP_LOG" | tr '\t\r\n' '   ')"
-  fi
-
+  last_line="$(latest_log_line)"
   for target in "${status_targets[@]}"; do
     mkdir -p "$(dirname "$target")"
     temporary="${target}.tmp.$$"
@@ -68,7 +74,6 @@ write_status() {
       echo "state=$state"
       echo "section=$SECTION"
       echo "wrapper_pid=$$"
-      echo "pipeline_pid=${RUN_PID:-NOT_STARTED}"
       echo "started_at=$STARTED_AT"
       echo "updated_at=$(date --iso-8601=seconds)"
       if [[ -n "$exit_code" ]]; then
@@ -80,59 +85,46 @@ write_status() {
   done
 }
 
-mirror_log() {
-  local target
-  for target in "${log_targets[@]}"; do
-    mkdir -p "$(dirname "$target")"
-    cp -f "$TMP_LOG" "$target"
-  done
-}
-
 cleanup() {
   local code=$?
+  trap - EXIT INT TERM
   set +e
-  if [[ -n "$SYNC_PID" ]]; then
-    kill "$SYNC_PID" 2>/dev/null || true
-    wait "$SYNC_PID" 2>/dev/null || true
+  if [[ -n "$STATUS_PID" ]]; then
+    kill "$STATUS_PID" 2>/dev/null || true
+    wait "$STATUS_PID" 2>/dev/null || true
   fi
-  if [[ -f "$TMP_LOG" ]]; then
-    mirror_log
-  fi
-  if [[ "$code" -eq 0 ]]; then
+  if [[ -n "$RUN_CODE" ]]; then
+    if [[ "$RUN_CODE" -eq 0 ]]; then
+      write_status "COMPLETED" "$RUN_CODE"
+    else
+      write_status "FAILED" "$RUN_CODE"
+    fi
+  elif [[ "$code" -eq 0 ]]; then
     write_status "COMPLETED" "$code"
   else
-    write_status "FAILED" "$code"
+    write_status "INTERRUPTED" "$code"
   fi
-  rm -rf "$TMP_DIR"
   exit "$code"
 }
 trap cleanup EXIT INT TERM
 
-: > "$TMP_LOG"
 write_status "STARTING"
-
-bash "$INNER_RUNNER" "$@" > "$TMP_LOG" 2>&1 &
-RUN_PID=$!
-write_status "RUNNING"
-
 (
-  while kill -0 "$RUN_PID" 2>/dev/null; do
-    mirror_log
+  while true; do
     write_status "RUNNING"
-    sleep 2
+    sleep 5
   done
 ) &
-SYNC_PID=$!
+STATUS_PID=$!
 
 set +e
-wait "$RUN_PID"
-RUN_CODE=$?
+bash "$INNER_RUNNER" "$@" 2>&1 | tee "${log_targets[@]}"
+RUN_CODE=${PIPESTATUS[0]}
 set -e
 
-kill "$SYNC_PID" 2>/dev/null || true
-wait "$SYNC_PID" 2>/dev/null || true
-SYNC_PID=""
-mirror_log
+kill "$STATUS_PID" 2>/dev/null || true
+wait "$STATUS_PID" 2>/dev/null || true
+STATUS_PID=""
 
 if [[ "$RUN_CODE" -ne 0 ]]; then
   write_status "FAILED" "$RUN_CODE"
