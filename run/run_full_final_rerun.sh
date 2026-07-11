@@ -131,7 +131,20 @@ run_real() {
   echo "================================================================================"
   echo "REAL 0.5x FULL END-TO-END CALIBRATION"
   echo "================================================================================"
-  bash run/real_vehicle_data/run_full_real_pipeline.sh --gpu "$GPU"
+  local pipeline_code=0
+  bash run/real_vehicle_data/run_full_real_pipeline.sh --gpu "$GPU" || pipeline_code=$?
+
+  local legacy_logs="results/real_vehicle_data/real_05x_4k_3hz_v1/_pipeline_logs"
+  if [[ -d "$legacy_logs" ]]; then
+    mkdir -p "$REAL_FINAL_DIR/logs"
+    find "$legacy_logs" -maxdepth 1 -type f -exec mv -f {} "$REAL_FINAL_DIR/logs/" \;
+    rm -rf "$legacy_logs"
+  fi
+
+  if [[ "$pipeline_code" -ne 0 ]]; then
+    echo "[ERROR] real pipeline exited with code $pipeline_code"
+    return "$pipeline_code"
+  fi
 
   local final="$REAL_FINAL_DIR/REAL_DATA_ALL_METHODS.txt"
   if [[ ! -s "$final" ]]; then
