@@ -18,6 +18,7 @@ COMMON="run/bus_real_data/ablation/_shared/12_run_one_clean_variant_common.sh"
 STAMP="$(date +%Y%m%d_%H%M%S)"
 SAFE_LABEL="$(printf '%s' "$LABEL" | tr ' /' '__' | tr -cd '[:alnum:]_.-')"
 BACKUP="results/bus_real_data/_runtime_backups/${SAFE_LABEL}_${STAMP}"
+REUSE_EXISTING_OBSERVATIONS="${REUSE_EXISTING_OBSERVATIONS:-0}"
 
 CANONICAL_PATHS=(
   results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1
@@ -50,12 +51,17 @@ for variant in "${VARIANTS[@]}"; do
     echo "[ERROR] missing raw_images for $variant: $raw"
     exit 1
   fi
+
   obs="$ROOT/$variant/aruco_observations"
-  rm -rf "$obs"
-  python3 "$DETECTOR" \
-    --dataset "$raw" \
-    --out "$obs" \
-    --dictionary DICT_4X4_50
+  if [[ "$REUSE_EXISTING_OBSERVATIONS" == "1" && -s "$obs/shared_all_aruco_observations.csv" ]]; then
+    echo "[REUSE] existing ArUco observations: $obs"
+  else
+    rm -rf "$obs"
+    python3 "$DETECTOR" \
+      --dataset "$raw" \
+      --out "$obs" \
+      --dictionary DICT_4X4_50
+  fi
 done
 
 for path in "${CANONICAL_PATHS[@]}"; do
