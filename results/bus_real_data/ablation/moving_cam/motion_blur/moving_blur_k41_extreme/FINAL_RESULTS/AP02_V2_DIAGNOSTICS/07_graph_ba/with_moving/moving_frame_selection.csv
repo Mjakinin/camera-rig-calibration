@@ -1,6 +1,0 @@
-observer_id,frame_number,marker_ids,marker_count,frame_score,reference_marker_seen,selection_reasons
-moving_frame_000038,38,1,1,2.4800631960328072,False,top_marker_1
-moving_frame_000039,39,1,1,7.610690415790096,False,top_marker_1
-moving_frame_000040,40,1,1,13.376445559301368,False,top_marker_1
-moving_frame_000041,41,1,1,11.45825357383962,False,top_marker_1
-moving_frame_000042,42,1,1,9.89768795506411,False,top_marker_1

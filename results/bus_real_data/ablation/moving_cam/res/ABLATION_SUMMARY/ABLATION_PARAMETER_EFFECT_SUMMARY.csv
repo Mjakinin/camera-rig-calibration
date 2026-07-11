@@ -1,5 +1,0 @@
-variant,parameter,final_results_exists,AP01_STATUS,AP02_STATUS,AP03_STATUS,PAIRWISE_STATUS,SECONDARY_STATUS,AP01_mean_t_cm,AP01_mean_r_deg,AP01_worst_pair,AP01_worst_t_cm,AP01_worst_r_deg,AP02_mean_t_cm,AP02_mean_r_deg,AP02_worst_pair,AP02_worst_t_cm,AP02_worst_r_deg,AP03_mean_t_cm,AP03_mean_r_deg,AP03_worst_pair,AP03_worst_t_cm,AP03_worst_r_deg,AP01_delta_t_cm_vs_baseline,AP01_delta_r_deg_vs_baseline,AP02_delta_t_cm_vs_baseline,AP02_delta_r_deg_vs_baseline,AP03_delta_t_cm_vs_baseline,AP03_delta_r_deg_vs_baseline
-moving_res_1280x720_baseline,resolution,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
-moving_res_160x90_extreme_pixel,resolution,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
-moving_res_2560x1440_upscaled,resolution,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,
-moving_res_320x180_low,resolution,True,OK,OK,OK,OK,OK,,,,,,,,,,,,,,,,,,,,,

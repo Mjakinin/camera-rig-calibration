@@ -1,0 +1,33 @@
+0.5x MOVING-CAMERA INTRINSIC CALIBRATION
+============================================================================
+
+Source: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/0.5/0.5_Intrinsics.mov
+Resolution: 2160x3840
+Source FPS: 30.000000
+Original frames scanned: 1350
+Checkerboard: 8x6 inner corners
+Successful detections: 931
+Initially selected views: 80
+Final calibration views: 68
+Removed outliers: 12
+
+Model comparison:
+Standard holdout median RMSE: 1.205406 px
+Rational holdout median RMSE: 1.204451 px
+Selected model: plumb_bob
+
+OpenCV calibration RMS: 1.154215 px
+Median per-view RMSE: 1.040044 px
+Maximum per-view RMSE: 2.032581 px
+
+Camera matrix K:
+[[1.7142984129e+03 0.0000000000e+00 1.0706406115e+03]
+ [0.0000000000e+00 1.7134888328e+03 1.9204824162e+03]
+ [0.0000000000e+00 0.0000000000e+00 1.0000000000e+00]]
+
+Distortion D:
+[ 0.007573297947 -0.038005141791  0.000488784571 -0.000102243849
+  0.028397472375]
+
+CameraInfo JSON: /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/calibration/intrinsics_05x/moving_calib_camera.json
+Contact sheet: /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/calibration/intrinsics_05x/SELECTED_VIEWS_CONTACT_SHEET.jpg

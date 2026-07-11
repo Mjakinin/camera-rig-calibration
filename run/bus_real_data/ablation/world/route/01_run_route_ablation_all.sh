@@ -717,3 +717,8 @@ echo "  results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/details/primary/05_ROU
 echo "  results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/details/secondary/05_ROUTE_PATH_MAP_TO_GT.txt"
 echo "  results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/data/primary/ROUTE_PATH_ABLATION_SUMMARY.csv"
 echo "  results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/data/secondary/ROUTE_PATH_ABLATION_SUMMARY.csv"
+
+echo
+echo "=== Rewrite route reports in readable tabular form ==="
+python3 \
+  run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py

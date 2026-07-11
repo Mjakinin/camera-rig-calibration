@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = ROOT / "models"
 
 DICT_NAME = "DICT_4X4_50"
-MARKER_IDS = list(range(15))
+MARKER_IDS = list(range(15)) + [16, 17, 18, 19, 20]
 
 A4_WIDTH_M = 0.210
 A4_HEIGHT_M = 0.297

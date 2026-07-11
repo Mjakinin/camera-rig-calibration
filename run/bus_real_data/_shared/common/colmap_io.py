@@ -41,6 +41,25 @@ def parse_cameras_txt(path):
             fx, fy, cx, cy, k1, k2, p1, p2 = params[:8]
             K = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]], dtype=np.float64)
             D = np.array([k1, k2, p1, p2, 0], dtype=np.float64)
+        elif model == "FULL_OPENCV":
+            # COLMAP FULL_OPENCV parameter order:
+            # fx, fy, cx, cy, k1, k2, p1, p2, k3, k4, k5, k6
+            if len(params) < 12:
+                raise RuntimeError(
+                    f"FULL_OPENCV camera {camera_id} has only {len(params)} parameters"
+                )
+            fx, fy, cx, cy = params[:4]
+            k1, k2, p1, p2, k3, k4, k5, k6 = params[4:12]
+            K = np.array(
+                [[fx, 0, cx], [0, fy, cy], [0, 0, 1]],
+                dtype=np.float64,
+            )
+            # OpenCV projectPoints ordering is identical here:
+            # k1, k2, p1, p2, k3, k4, k5, k6
+            D = np.array(
+                [k1, k2, p1, p2, k3, k4, k5, k6],
+                dtype=np.float64,
+            )
         else:
             raise RuntimeError(f"Unsupported COLMAP camera model: {model}")
 

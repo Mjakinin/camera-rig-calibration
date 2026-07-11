@@ -1,0 +1,23 @@
+{
+  "created_utc": "2026-07-11T21:01:09.471516+00:00",
+  "contract": "AP01, AP02 and AP03 consume the same immutable raw images and ArUco observations for each dataset.",
+  "real_dataset": {
+    "shared_root": "results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input",
+    "raw_images": "results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input/raw_images",
+    "aruco_observations": "results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input/aruco_observations",
+    "raw_file_count": 563,
+    "observation_file_count": 16,
+    "image_count": 541,
+    "image_bytes": 3081459196
+  },
+  "simulation_baseline": {
+    "shared_root": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1",
+    "raw_images": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images",
+    "aruco_observations": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations",
+    "raw_file_count": 199,
+    "observation_file_count": 197,
+    "image_count": 193,
+    "image_bytes": 24075530,
+    "route": "route2_extended_aruco"
+  }
+}

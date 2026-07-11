@@ -5,10 +5,10 @@ Dataset: results/bus_real_data/ablation/world/route/route1/raw_images
 Dictionary: DICT_4X4_50
 Marker length [m]: 0.17
 
-Static observations: 22
-Moving observations: 377
-Total observations: 399
-PnP success: 399 / 399
+Static observations: 25
+Moving observations: 820
+Total observations: 845
+PnP success: 845 / 845
 
 Output files:
 - results/bus_real_data/ablation/world/route/route1/aruco_observations/shared_static_aruco_observations.csv

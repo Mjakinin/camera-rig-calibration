@@ -1,0 +1,29 @@
+{
+  "scale_m_per_colmap_unit": 0.6550107224929438,
+  "raw_pairs": 2832,
+  "used_pairs": 2327,
+  "raw_median": 0.6579866142084065,
+  "raw_mad": 0.01711356326445934,
+  "used_mean": 0.6569637777456505,
+  "used_std": 0.02652186903759223,
+  "used_relative_std": 0.04049074026857315,
+  "markers_with_registered_observations": [
+    0,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ]
+}

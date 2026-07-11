@@ -1,0 +1,19 @@
+FINAL CAMERA-RIG CALIBRATION METHODS — FROZEN
+==============================================================================
+
+Baseline experiment route: Route 2 with the extended ArUco layout.
+
+AP01 FINAL: BASELINE
+  Direct multimarker where possible; moving-COLMAP relay only where required.
+
+AP02 FINAL: BASELINE
+  Distortion-aware reference-marker graph bundle adjustment with soft-L1; no hard residual rejection.
+
+AP03 FINAL: CURRENT_MARKER_SIZE_SCALE_ONLY
+  Grouped calibrated targetless COLMAP with ArUco marker-size metric scaling.
+
+Rejected development candidates:
+  AP01 robust: substantially worse simulation-GT geometry.
+  AP02 refined: no-op on nominal Route 2; 0 observations rejected.
+
+No further method tuning is allowed before or during the ablation study.

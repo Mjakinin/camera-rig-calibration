@@ -1,0 +1,2 @@
+model,registered_images,registered_static_cameras,registered_moving_frames,num_3d_points,static_registered_list,static_missing_list,model_path
+0,236,4,232,39351,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,,/home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/02_colmap_sparse/sparse_txt/0

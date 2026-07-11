@@ -1,0 +1,16 @@
+{
+  "policy": "Preserve canonical camera IDs by physical position so real-data results remain comparable to simulation and measured pairwise references.",
+  "current_topic_to_canonical_camera": {
+    "/edge_0/": "cam_edge_5",
+    "/edge_1/": "cam_edge_1",
+    "/edge_3/": "cam_edge_3",
+    "/edge_5/": "cam_edge_0"
+  },
+  "canonical_camera_to_physical_intrinsics": {
+    "cam_edge_0": "center_left",
+    "cam_edge_1": "front_right",
+    "cam_edge_3": "front_left",
+    "cam_edge_5": "back_right"
+  },
+  "important": "These four files are only for static cameras. moving_calib_camera.json remains the independently estimated 0.5x iPhone model."
+}

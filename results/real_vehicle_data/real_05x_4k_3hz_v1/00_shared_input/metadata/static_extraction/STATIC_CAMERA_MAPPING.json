@@ -1,0 +1,17 @@
+{
+  "policy": "Preserve canonical physical camera IDs for comparability with simulation and measured reference distances.",
+  "current_topic_to_canonical_camera": {
+    "/edge_0/camera/color/image_raw/compressed": "cam_edge_5",
+    "/edge_1/camera/color/image_raw/compressed": "cam_edge_1",
+    "/edge_3/camera/color/image_raw/compressed": "cam_edge_3",
+    "/edge_5/camera/color/image_raw/compressed": "cam_edge_0"
+  },
+  "current_topic_to_physical_camera": {
+    "/edge_0/camera/color/image_raw/compressed": "back_right",
+    "/edge_1/camera/color/image_raw/compressed": "front_right",
+    "/edge_3/camera/color/image_raw/compressed": "front_left",
+    "/edge_5/camera/color/image_raw/compressed": "center_left"
+  },
+  "static_intrinsics_source": "camera_info.zip, not rosbag CameraInfo",
+  "moving_intrinsics_source": "0.5x iPhone checkerboard calibration; applies only to moving frames"
+}

@@ -1,0 +1,11 @@
+AP01 MOVING-CAMERA COLMAP
+========================================================================
+
+Image directory: /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/raw_images/moving
+Matcher: exhaustive
+Camera model: FULL_OPENCV
+Camera parameters: 1713.9955955774601,1715.413329053988,1916.8763303257203,1087.5219440582887,0.0043144272039170369,-0.023151932458517994,-6.7987766234822768e-05,-4.7173090785107653e-05,0.014071281082948448,0,0,0
+Feature max image size: 2400
+Registered images in best model: 232
+Best model: /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/02_ap01_real/01_moving_colmap/sparse_txt/0
+

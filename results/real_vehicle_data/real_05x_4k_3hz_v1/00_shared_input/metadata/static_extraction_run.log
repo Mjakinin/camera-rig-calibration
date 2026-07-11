@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/maxim/camera-rig-calibration/run/real_vehicle_data/03_extract_static_cameras_from_mcap.py", line 770, in <module>
+    main()
+  File "/home/maxim/camera-rig-calibration/run/real_vehicle_data/03_extract_static_cameras_from_mcap.py", line 338, in main
+    image_topics = {
+  File "/home/maxim/camera-rig-calibration/run/real_vehicle_data/03_extract_static_cameras_from_mcap.py", line 339, in <dictcomp>
+    camera: choose_topic(
+  File "/home/maxim/camera-rig-calibration/run/real_vehicle_data/03_extract_static_cameras_from_mcap.py", line 47, in choose_topic
+    raise RuntimeError(
+RuntimeError: No sensor_msgs/msg/CompressedImage topic found for cam_edge_0

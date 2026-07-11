@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import json
+import os
 import sys
 
 import numpy as np
@@ -29,7 +30,12 @@ from _shared.common.geometry import (
 )
 
 
-AP02_ROOT = Path("results/bus_real_data/02_ref_marker_graph_ba")
+AP02_ROOT = Path(
+    os.environ.get(
+        "AP02_ROOT",
+        "results/bus_real_data/02_ref_marker_graph_ba",
+    )
+)
 
 MOVING_CAMERA = "moving_calib_camera"
 

@@ -1,6 +1,0 @@
-{
-  "variant": "fov_69deg_baseline",
-  "ablation_scope": "moving_cam",
-  "ablation_study": "fov",
-  "note": "Baseline FOV cloned from validated 1280x720 baseline dataset for sanity reference."
-}

@@ -1,0 +1,73 @@
+[INFO] scanning every static-camera frame
+
+MULTI-FRAME STATIC ARUCO SELECTION
+==============================================================================
+
+Source MCAP: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/rosbag2_2026_07_10-11_06_18/rosbag2_2026_07_10-11_06_18_0.mcap
+Dataset: /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1
+Dictionary: DICT_4X4_50
+Marker length [m]: 0.17
+Allowed marker IDs: 0..20
+Target observations per static marker: 2
+Maximum selected frames per camera: 8
+
+Moving-camera marker union: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 18, 19, 20]
+
+cam_edge_0
+  physical camera: center_left
+  available frames: 134
+  marker union across all frames: [15, 16, 19]
+  shared with moving camera: [15, 16, 19]
+  selected frames: 2
+    frame  105: markers=[15, 16, 19], sharpness=138.29
+    frame  109: markers=[15, 16, 19], sharpness=138.53
+  retained observations per marker: {15: 2, 16: 2, 19: 2}
+  unexpected IDs rejected: []
+
+cam_edge_1
+  physical camera: front_right
+  available frames: 125
+  marker union across all frames: [0, 2, 3, 4, 6, 10, 20]
+  shared with moving camera: [0, 2, 3, 4, 6, 10, 20]
+  selected frames: 3
+    frame    2: markers=[0, 2, 3, 4, 6, 20], sharpness=429.13
+    frame   31: markers=[2, 3, 4, 6, 10, 20], sharpness=430.08
+    frame  107: markers=[2, 3, 4, 6, 10, 20], sharpness=429.58
+  retained observations per marker: {0: 1, 2: 3, 3: 3, 4: 3, 6: 3, 10: 2, 20: 3}
+  unexpected IDs rejected: []
+
+cam_edge_3
+  physical camera: front_left
+  available frames: 109
+  marker union across all frames: [2, 3, 15, 16, 19]
+  shared with moving camera: [2, 3, 15, 16, 19]
+  selected frames: 2
+    frame   70: markers=[2, 3, 15, 16, 19], sharpness=409.38
+    frame   64: markers=[2, 3, 15, 16, 19], sharpness=408.55
+  retained observations per marker: {2: 2, 3: 2, 15: 2, 16: 2, 19: 2}
+  unexpected IDs rejected: []
+
+cam_edge_5
+  physical camera: back_right
+  available frames: 131
+  marker union across all frames: [5, 7, 8, 9, 10, 12, 17]
+  shared with moving camera: [5, 7, 8, 9, 10, 12, 17]
+  selected frames: 2
+    frame   40: markers=[5, 7, 8, 9, 10, 12, 17], sharpness=331.65
+    frame   14: markers=[5, 7, 8, 9, 10, 12, 17], sharpness=331.51
+  retained observations per marker: {5: 2, 7: 2, 8: 2, 9: 2, 10: 2, 12: 2, 17: 2}
+  unexpected IDs rejected: []
+
+Combined observation summary
+------------------------------------------------------------------------------
+Selected static observations: 48
+Moving observations retained: 519
+Combined observations: 567
+Selected static marker union: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 19, 20]
+Moving marker union: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 18, 19, 20]
+Static/moving shared marker union: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 19, 20]
+
+Note: all selected frames from one static camera use the same observer_id. They add repeated observations of one fixed pose; they do not create additional cameras.
+
+[OK] multi-frame static observation set prepared
+

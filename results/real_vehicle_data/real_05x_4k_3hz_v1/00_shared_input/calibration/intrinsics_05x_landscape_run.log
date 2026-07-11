@@ -1,0 +1,62 @@
+[INFO] source: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/0.5/0.5_Intrinsics.mov
+[INFO] resolution: 3840 x 2160
+[INFO] source FPS: 30.0
+[INFO] reported frames: 1350
+[INFO] checkerboard: (8, 6)
+[INFO] scanning every original frame
+[SCAN] frame=0 detections=1
+[SCAN] frame=100 detections=57
+[SCAN] frame=200 detections=155
+[SCAN] frame=300 detections=255
+[SCAN] frame=400 detections=355
+[SCAN] frame=500 detections=447
+[SCAN] frame=600 detections=480
+[SCAN] frame=700 detections=527
+[SCAN] frame=800 detections=609
+[SCAN] frame=900 detections=650
+[SCAN] frame=1000 detections=711
+[SCAN] frame=1100 detections=785
+[SCAN] frame=1200 detections=846
+[SCAN] frame=1300 detections=908
+[FILTER] frame=128 rmse=23.4188px
+[FILTER] frame=860 rmse=16.2752px
+[FILTER] frame=847 rmse=11.3663px
+[FILTER] frame=899 rmse=4.0691px
+[FILTER] frame=947 rmse=3.2617px
+[FILTER] frame=920 rmse=2.5532px
+
+0.5x MOVING-CAMERA INTRINSIC CALIBRATION
+============================================================================
+
+Source: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/0.5/0.5_Intrinsics.mov
+Resolution: 3840x2160
+Source FPS: 30.000000
+Original frames scanned: 1350
+Checkerboard: 8x6 inner corners
+Successful detections: 927
+Initially selected views: 80
+Final calibration views: 74
+Removed outliers: 6
+
+Model comparison:
+Standard holdout median RMSE: 1.230660 px
+Rational holdout median RMSE: 1.249373 px
+Selected model: plumb_bob
+
+OpenCV calibration RMS: 1.174328 px
+Median per-view RMSE: 1.091900 px
+Maximum per-view RMSE: 2.192113 px
+
+Camera matrix K:
+[[1.7139955956e+03 0.0000000000e+00 1.9168763303e+03]
+ [0.0000000000e+00 1.7154133291e+03 1.0875219441e+03]
+ [0.0000000000e+00 0.0000000000e+00 1.0000000000e+00]]
+
+Distortion D:
+[ 4.314427203917e-03 -2.315193245852e-02 -6.798776623482e-05
+ -4.717309078511e-05  1.407128108295e-02]
+
+CameraInfo JSON: /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/calibration/intrinsics_05x/moving_calib_camera.json
+Contact sheet: /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/calibration/intrinsics_05x/SELECTED_VIEWS_CONTACT_SHEET.jpg
+
+[OK] intrinsic calibration completed

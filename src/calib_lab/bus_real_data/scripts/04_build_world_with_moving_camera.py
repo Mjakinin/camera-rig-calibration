@@ -17,7 +17,7 @@ HFOV_RAD = math.radians(69.1)
 # Initial pose:
 # x y z roll pitch yaw
 # Gazebo convention here: camera renders along local +X.
-INITIAL_POSE = "0.000000 0.000000 1.600000 0.000000 0.000000 0.000000"
+INITIAL_POSE = "-6.000000 0.000000 2.200000 0.000000 0.000000 0.000000"
 
 MOVING_CAMERA_BLOCK = f"""
     <model name="moving_calib_camera">

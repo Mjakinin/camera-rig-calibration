@@ -20,7 +20,12 @@ import cv2
 import numpy as np
 
 
-ROOT = Path("results/bus_real_data/02_ref_marker_graph_ba")
+ROOT = Path(
+    os.environ.get(
+        "AP02_ROOT",
+        "results/bus_real_data/02_ref_marker_graph_ba",
+    )
+)
 BA_ROOT = ROOT / "07_graph_ba" / "with_moving"
 OBS_CSV = ROOT / "02_aruco_observations" / "ap02_all_aruco_observations.csv"
 OUT_ROOT = ROOT / "08_final_results"

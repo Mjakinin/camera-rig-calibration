@@ -24,7 +24,7 @@ def rpy_to_quat(roll, pitch, yaw):
     return qx, qy, qz, qw
 
 
-def set_pose(world, name, pose):
+def set_pose(world, name, pose, retries=8):
     x, y, z, roll, pitch, yaw = pose
     qx, qy, qz, qw = rpy_to_quat(roll, pitch, yaw)
 
@@ -35,24 +35,73 @@ def set_pose(world, name, pose):
     )
 
     cmd = [
-        "ign", "service",
-        "-s", f"/world/{world}/set_pose",
-        "--reqtype", "ignition.msgs.Pose",
-        "--reptype", "ignition.msgs.Boolean",
-        "--timeout", "1000",
-        "--req", req,
+        "ign",
+        "service",
+        "-s",
+        f"/world/{world}/set_pose",
+        "--reqtype",
+        "ignition.msgs.Pose",
+        "--reptype",
+        "ignition.msgs.Boolean",
+        "--timeout",
+        "5000",
+        "--req",
+        req,
     ]
 
-    proc = subprocess.run(cmd, check=False, capture_output=True, text=True, timeout=3)
-    out = (proc.stdout or "") + (proc.stderr or "")
-    ok = proc.returncode == 0 and "data: true" in out
-    if not ok:
-        raise RuntimeError(
-            f"set_pose failed for world={world!r}, name={name!r}, pose={pose}\n"
-            f"returncode={proc.returncode}\nstdout={proc.stdout}\nstderr={proc.stderr}"
-        )
-    return ok
+    last_output = ""
+    last_returncode = None
 
+    for attempt in range(1, retries + 1):
+        try:
+            proc = subprocess.run(
+                cmd,
+                check=False,
+                capture_output=True,
+                text=True,
+                timeout=8,
+            )
+
+            last_returncode = proc.returncode
+            last_output = (
+                (proc.stdout or "")
+                + (proc.stderr or "")
+            )
+
+            if (
+                proc.returncode == 0
+                and "data: true" in last_output
+            ):
+                return True
+
+        except subprocess.TimeoutExpired as exc:
+            last_returncode = "subprocess-timeout"
+            last_output = str(exc)
+
+        if attempt < retries:
+            delay = min(0.25 * attempt, 1.5)
+
+            print(
+                f"[WARN] set_pose attempt "
+                f"{attempt}/{retries} failed; "
+                f"retrying in {delay:.2f}s",
+                flush=True,
+            )
+
+            time.sleep(delay)
+
+    raise RuntimeError(
+        "\n".join(
+            [
+                f"set_pose failed after {retries} attempts",
+                f"world={world!r}",
+                f"name={name!r}",
+                f"pose={pose}",
+                f"returncode={last_returncode}",
+                f"output={last_output}",
+            ]
+        )
+    )
 
 def main():
     ap = argparse.ArgumentParser()
@@ -60,10 +109,15 @@ def main():
     ap.add_argument("--world", default="bus_real_data_camera_layout")
     ap.add_argument("--name", default="moving_calib_camera")
     ap.add_argument("--sleep", type=float, default=0.08)
+    ap.add_argument("--start-frame", type=int, default=0)
     args = ap.parse_args()
 
     data = json.loads(Path(args.route).read_text())
-    frames = data["frames"]
+    frames = [
+        frame
+        for frame in data["frames"]
+        if int(frame["frame"]) >= args.start_frame
+    ]
 
     print(f"[INFO] replaying {len(frames)} frames")
     print("[INFO] watch /bus_real_data/moving_calib_camera/image in rqt_image_view")

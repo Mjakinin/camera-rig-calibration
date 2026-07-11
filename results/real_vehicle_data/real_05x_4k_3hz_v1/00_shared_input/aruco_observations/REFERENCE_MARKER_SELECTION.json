@@ -1,0 +1,9 @@
+{
+  "selected_reference_marker_id": 3,
+  "selection_policy": [
+    "maximum number of connected static cameras",
+    "maximum number of moving frames",
+    "maximum observation count",
+    "maximum median image area"
+  ]
+}

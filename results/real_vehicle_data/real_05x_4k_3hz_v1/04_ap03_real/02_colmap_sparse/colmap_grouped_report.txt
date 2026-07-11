@@ -1,0 +1,18 @@
+AP03 grouped calibrated COLMAP run
+===================================
+
+Physical camera contract:
+- one COLMAP camera id per static physical camera
+- one shared COLMAP camera id for all moving-camera frames
+- camera intrinsics and distortion loaded from camera_info JSON
+- intrinsic refinement disabled during mapping
+
+Groups:
+- cam_edge_0: 1 images, PINHOLE, /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/raw_images/camera_info/cam_edge_0.json
+- cam_edge_1: 1 images, PINHOLE, /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/raw_images/camera_info/cam_edge_1.json
+- cam_edge_3: 1 images, PINHOLE, /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/raw_images/camera_info/cam_edge_3.json
+- cam_edge_5: 1 images, PINHOLE, /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/raw_images/camera_info/cam_edge_5.json
+- moving_calib_camera: 232 images, FULL_OPENCV, /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/raw_images/camera_info/moving_calib_camera.json
+
+Sparse models:
+- 0: 236 registered images

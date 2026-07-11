@@ -1,2 +1,0 @@
-method,status,alignment,source_file,camera_count,mean_translation_error_cm,median_translation_error_cm,max_translation_error_cm,mean_rotation_error_deg,median_rotation_error_deg,max_rotation_error_deg
-AP02,OK,SE3_all_static_cameras_no_scale,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv,4,71.032882,52.655155,141.036394,6.125478,4.158307,12.248963

@@ -1,0 +1,18 @@
+Shared ArUco detection summary
+==============================
+
+Dataset: /home/maxim/camera-rig-calibration/data_local/real_vehicle_2026_07_10/datasets/real_05x_4k_3hz_v1/raw_images
+Dictionary: DICT_4X4_50
+Marker length [m]: 0.17
+
+Static observations: 21
+Moving observations: 523
+Total observations: 544
+PnP success: 544 / 544
+
+Output files:
+- /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/00_aruco_single_static/shared_static_aruco_observations.csv
+- /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/00_aruco_single_static/shared_moving_aruco_observations.csv
+- /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/00_aruco_single_static/shared_all_aruco_observations.csv
+- /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/00_aruco_single_static/debug_images
+

@@ -1,0 +1,14 @@
+{
+  "method": "AP02",
+  "status": "OK_FULL",
+  "success": true,
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "runtime_seconds": 5349.503669023514,
+  "pose_file": "/home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/03_ap02_real/07_graph_ba/with_moving/optimized_static_camera_poses_ref_marker.csv",
+  "diagnostics_file": "/home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/03_ap02_real/08_final_results/AP02_DIAGNOSTICS.json"
+}

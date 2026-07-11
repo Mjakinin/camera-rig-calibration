@@ -1,11 +1,6 @@
 {
-  "description": "Route 2 moving camera route from manually previewed move commands.",
+  "description": "Updated sparse route2: faster and less comprehensive than the high-coverage route1.",
   "pose_format": "x y z roll pitch yaw",
-  "notes": [
-    "Generated from user-provided move x y z roll pitch yaw sleep commands.",
-    "The final sleep value from each move command is not stored in the route file.",
-    "Route 2 starts from the rear/cam5-side area and returns through the aisle with different viewing directions."
-  ],
   "keyframes": [
     {
       "name": "route2_kf_000",
@@ -19,7 +14,7 @@
       ]
     },
     {
-      "name": "route2_kf_001_pitch_yaw_fix",
+      "name": "route2_kf_001",
       "pose": [
         5.3,
         0.5,
@@ -109,6 +104,17 @@
     {
       "name": "route2_kf_009",
       "pose": [
+        0.0,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -3.7
+      ]
+    },
+    {
+      "name": "route2_kf_010",
+      "pose": [
         -0.7,
         0.6,
         2.2,
@@ -118,7 +124,7 @@
       ]
     },
     {
-      "name": "route2_kf_010",
+      "name": "route2_kf_011",
       "pose": [
         -1.5,
         0.6,
@@ -129,35 +135,24 @@
       ]
     },
     {
-      "name": "route2_kf_011",
+      "name": "route2_kf_012",
       "pose": [
         -3.0,
         0.0,
         2.2,
         0.0,
-        0.5,
+        0.3,
         -0.3
       ]
     },
     {
-      "name": "route2_kf_012",
+      "name": "route2_kf_013",
       "pose": [
         -2.0,
         0.0,
         2.2,
         0.0,
         0.6,
-        0.3
-      ]
-    },
-    {
-      "name": "route2_kf_013",
-      "pose": [
-        -0.8,
-        0.0,
-        2.2,
-        0.0,
-        0.7,
         0.7
       ]
     },
@@ -212,8 +207,8 @@
         -0.4,
         2.2,
         0.0,
-        0.6,
-        -0.5
+        0.4,
+        -0.4
       ]
     },
     {
