@@ -74,7 +74,7 @@ AP03
 
 Installation
 ------------
-Copy these five files into run/real_vehicle_data:
+The productive real-data files are:
 
   07_run_ap01_real.py
   08_run_ap02_real.py
@@ -82,7 +82,7 @@ Copy these five files into run/real_vehicle_data:
   10_write_real_final_report.py
   run_full_real_pipeline.sh
 
-Then:
+Validation:
 
   chmod +x run/real_vehicle_data/run_full_real_pipeline.sh
   python3 -m py_compile run/real_vehicle_data/0{7,8,9}_run_*.py
@@ -113,20 +113,4 @@ Run one method:
 
 Regenerate only the final report:
 
-  bash run/real_vehicle_data/run_full_real_pipeline.sh --only report
-
-Important interpretation
-------------------------
-There is no complete real 6-DoF ground truth.
-
-The final report therefore provides:
-  - method execution status
-  - static-camera coverage
-  - six pairwise metric distances
-  - optional measured-reference errors
-  - cross-method disagreement
-  - method-specific diagnostics
-
-The file measured_reference_distances.json is created with null values.
-Only independent physical measurements or trusted mounting transforms should
-be entered there.
+  bash run/reaq}Ù•¡¥±•}‘…Ñ„½ÉÕ¹}™Õ±±}É•…±}Á¥Á•±¥¹”¹Í €´µ½¹±äÉ•Á½ÉĞ()%µÁ½ÉÑ…¹Ğ¥¹Ñ•ÉÁÉ•Ñ…Ñ¥½¸(´´´´´´´´´´´´´´´´´´´´´´´´)Q¡•É”¥Ì¹¼½µÁ±•Ñ”É•…°€Øµ½É½Õ¹ÑÉÕÑ ¸()Q¡”™¥¹…°É•Á½ÉĞÑ¡•É•™½É”ÁÉ½Ù¥‘•Ìè(€€´µ•Ñ¡½•á•ÕÑ¥½¸ÍÑ…ÑÕÌ(€€´ÍÑ…Ñ¥Œµ…µ•É„½Ù•É…”(€€´Í¥àÁ…¥Éİ¥Í”µ•ÑÉ¥Œ‘¥ÍÑ…¹•Ì(€€´½µÁ…É¥Í½¸İ¥Ñ Ñ¡”¹½µ¥¹…°…é•‰¼±…å½ÕĞ…Ì½¹Ñ•áĞ½¹±ä(€€´½ÁÑ¥½¹…°¥¹‘•Á•¹‘•¹Ğµ•…ÍÕÉ•µÉ•™•É•¹”•ÉÉ½ÉÌ(€€´µ•Ñ¡½µÍÁ•¥™¥Œ‘¥…¹½ÍÑ¥Ì()%Ğ¥¹Ñ•¹Ñ¥½¹…±±ä‘½•Ì¹½Ğ…±Õ±…Ñ”@ÀÄµÙÌµ@ÀÈµÙÌµ@ÀÌ‘¥Í…É••µ•¹Ğµ•ÑÉ¥Ì¸()Q¡”™¥±”µ•…ÍÕÉ•‘}É•™•É•¹•}‘¥ÍÑ…¹•Ì¹©Í½¸¥ÌÉ•…Ñ•İ¥Ñ ¹Õ±°Ù…±Õ•Ì¸)=¹±ä¥¹‘•Á•¹‘•¹ĞÁ¡åÍ¥…°µ•…ÍÕÉ•µ•¹ÑÌ½ÈÑÉÕÍÑ•µ½Õ¹Ñ¥¹œÑÉ…¹Í™½ÉµÌÍ¡½Õ±)‰”•¹Ñ•É•Ñ¡•É”¸(

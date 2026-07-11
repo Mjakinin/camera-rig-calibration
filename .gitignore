@@ -11,6 +11,7 @@ run/bus_real_data/**/__pycache__/
 
 results/bus_real_data/_visible_full_pipeline_logs/
 results/bus_real_data/_overnight_pipeline_logs/
+
 # ROS build artifacts
 build/
 install/
@@ -36,22 +37,31 @@ results/bus_real_data/ablation/**/aruco_annotated*/
 results/bus_real_data/ablation/**/exposure_preview/
 results/bus_real_data/ablation/plots/
 results/**/backup_before_rerun/
+results/**/_backups/
+
+# Legacy FOV intermediate/summary outputs
+results/bus_real_data/ablation/moving_cam/fov/01_shared_observations/
+results/bus_real_data/ablation/moving_cam/fov/99_summary/
 
 # Local real-vehicle raw data
 data_local/
+
 # Real-data generated caches/logs
 results/real_vehicle_data/**/_pipeline_logs/
 run/real_vehicle_data/**/__pycache__/
+
 # Transient simulation backups and selection scratch
 results/bus_real_data/.backup_shared_before_route_ablation_*/
 results/bus_real_data/_runtime_backups/
 results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT.before_*/
 results/bus_real_data/00_shared_baseline/**/*.before_route2_*/
 results/bus_real_data/method_selection/
+
 # Preview-only artifacts
 **/preview/
 **/previews/
 **/*_preview/
+
 # Canonical shared input datasets are intentionally tracked
 !results/bus_real_data/00_shared_baseline/
 !results/bus_real_data/00_shared_baseline/**
