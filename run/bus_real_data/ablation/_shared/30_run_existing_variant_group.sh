@@ -20,12 +20,15 @@ SAFE_LABEL="$(printf '%s' "$LABEL" | tr ' /' '__' | tr -cd '[:alnum:]_.-')"
 BACKUP="results/bus_real_data/_runtime_backups/${SAFE_LABEL}_${STAMP}"
 REUSE_EXISTING_OBSERVATIONS="${REUSE_EXISTING_OBSERVATIONS:-0}"
 
+# The canonical final-report directory is intentionally not moved here.
+# The common variant runner is called with REFRESH_CANONICAL_FINAL=0, so it
+# cannot overwrite those reports. Keeping the directory in place allows the
+# overnight live log and LIVE_STATUS.txt to remain readable throughout runs.
 CANONICAL_PATHS=(
   results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1
   results/bus_real_data/01_marker_direct_relay_multimarker_multichain
   results/bus_real_data/02_ref_marker_graph_ba
   results/bus_real_data/03_targetless_colmap_aruco_scale
-  results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT
 )
 BACKED_UP=()
 
