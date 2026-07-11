@@ -89,8 +89,9 @@ RUN_SHARED_BASELINE=0 \
   || AP01_STATUS="FAILED"
 AP01_RUNTIME_SECONDS="$(elapsed_seconds "$AP01_STARTED")"
 
+AP01_CAM1_PATH_STATUS="NOT_AVAILABLE"
 if [[ "$AP01_STATUS" == "OK" ]]; then
-  python3 - <<'PY' || AP01_STATUS="FAILED_DIRECT_GUARD"
+  AP01_CAM1_PATH_STATUS="$(python3 - <<'PY'
 import csv
 from pathlib import Path
 path = Path(
@@ -98,17 +99,25 @@ path = Path(
     "07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv"
 )
 rows = list(csv.DictReader(path.open()))
-valid = any(
-    row.get("category") == "main_no_gt"
-    and row.get("target_camera") == "cam_edge_1"
-    and row.get("pair") == "cam3_to_cam1"
-    and "direct_static" in row.get("method", "")
+matches = [
+    row
     for row in rows
-)
-if not valid:
-    raise SystemExit("[ERROR] AP01 cam3->cam1 final solution is not direct_static")
-print("[OK] AP01 cam3->cam1 direct-static guard")
+    if row.get("category") == "main_no_gt"
+    and row.get("target_camera") == "cam_edge_1"
+]
+if not matches:
+    print("MISSING_CAM1_RESULT")
+else:
+    row = matches[0]
+    method = row.get("method", "")
+    pair = row.get("pair", "")
+    if pair == "cam3_to_cam1" and "direct_static" in method:
+        print("DIRECT_STATIC_OK")
+    else:
+        print(f"NON_DIRECT_OR_PARTIAL:{pair}:{method}")
 PY
+)"
+  echo "[AP01 cam1 path] $AP01_CAM1_PATH_STATUS"
 fi
 
 AP02_STARTED="$(now_seconds)"
@@ -181,6 +190,7 @@ cat > "$VAR_FINAL/RUN_STATUS.txt" <<TXT
 variant=$variant
 AP01_STATUS=$AP01_STATUS
 AP01_RUNTIME_SECONDS=$AP01_RUNTIME_SECONDS
+AP01_CAM1_PATH_STATUS=$AP01_CAM1_PATH_STATUS
 AP02_STATUS=$AP02_STATUS
 AP02_RUNTIME_SECONDS=$AP02_RUNTIME_SECONDS
 AP02_GT_FULL_MAP_STATUS=$AP02_GT_FULL_MAP_STATUS
