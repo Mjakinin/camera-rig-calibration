@@ -39,17 +39,12 @@ if [[ "$SECTION" != "all" && "$SECTION" != "preflight" && "$SECTION" != "real" &
   exit 2
 fi
 
-STAMP="$(date +%Y%m%d_%H%M%S)"
-LOG_ROOT="results/_full_final_rerun_logs/$STAMP"
-mkdir -p "$LOG_ROOT"
-exec > >(tee "$LOG_ROOT/full_final_rerun.log") 2>&1
+REAL_FINAL_DIR="results/real_vehicle_data/real_05x_4k_3hz_v1/99_FINAL_RESULTS"
+SIM_FINAL_DIR="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
+mkdir -p "$REAL_FINAL_DIR" "$SIM_FINAL_DIR"
 
-echo "================================================================================"
-echo "FINAL FULL RERUN"
-echo "section=$SECTION gpu=$GPU recapture_fov=$RECAPTURE_FOV"
-echo "commit=$(git rev-parse HEAD)"
-echo "log=$LOG_ROOT/full_final_rerun.log"
-echo "================================================================================"
+# This legacy global log directory is no longer part of the output contract.
+rm -rf results/_full_final_rerun_logs
 
 if [[ -n "$(git status --porcelain --untracked-files=no)" && "${ALLOW_DIRTY:-0}" != "1" ]]; then
   echo "[ERROR] tracked working tree changes exist."
@@ -58,6 +53,15 @@ if [[ -n "$(git status --porcelain --untracked-files=no)" && "${ALLOW_DIRTY:-0}"
   exit 1
 fi
 
+print_header() {
+  local label="$1"
+  echo "================================================================================"
+  echo "$label"
+  echo "section=$SECTION gpu=$GPU recapture_fov=$RECAPTURE_FOV"
+  echo "commit=$(git rev-parse HEAD)"
+  echo "================================================================================"
+}
+
 run_preflight() {
   echo
   echo "=== Python syntax ==="
@@ -65,8 +69,8 @@ run_preflight() {
 
   echo
   echo "=== Shell syntax ==="
-  while IFS= read -r -d '' script; do
-    bash -n "$script"
+  while IFS= read -r -d '' script_path; do
+    bash -n "$script_path"
   done < <(find run -name '*.sh' -print0)
 
   echo
@@ -129,7 +133,7 @@ run_real() {
   echo "================================================================================"
   bash run/real_vehicle_data/run_full_real_pipeline.sh --gpu "$GPU"
 
-  final="results/real_vehicle_data/real_05x_4k_3hz_v1/99_FINAL_RESULTS/REAL_DATA_ALL_METHODS.txt"
+  local final="$REAL_FINAL_DIR/REAL_DATA_ALL_METHODS.txt"
   if [[ ! -s "$final" ]]; then
     echo "[ERROR] missing final real report: $final"
     exit 1
@@ -214,7 +218,7 @@ run_simulation() {
   bash run/bus_real_data/reporting/run_refresh_final_results.sh \
     --reuse-baseline --promote
 
-  route_report="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/ablations/05_ROUTE_PATH_ALL_METHODS.txt"
+  local route_report="$SIM_FINAL_DIR/ablations/05_ROUTE_PATH_ALL_METHODS.txt"
   if [[ ! -s "$route_report" ]]; then
     echo "[ERROR] route report was not generated: $route_report"
     exit 1
@@ -222,19 +226,63 @@ run_simulation() {
   echo "[OK] route report: $route_report"
 }
 
-run_preflight
+run_preflight_logged() {
+  local logs=()
+  case "$SECTION" in
+    real)
+      logs+=("$REAL_FINAL_DIR/PREFLIGHT.log")
+      ;;
+    simulation)
+      logs+=("$SIM_FINAL_DIR/PREFLIGHT.log")
+      ;;
+    all|preflight)
+      logs+=(
+        "$REAL_FINAL_DIR/PREFLIGHT.log"
+        "$SIM_FINAL_DIR/PREFLIGHT.log"
+      )
+      ;;
+  esac
+
+  {
+    print_header "FINAL FULL RERUN — PREFLIGHT"
+    run_preflight
+    echo
+    echo "[OK] PREFLIGHT COMPLETE"
+  } 2>&1 | tee "${logs[@]}"
+}
+
+run_real_logged() {
+  {
+    print_header "FINAL FULL RERUN — REAL VEHICLE"
+    run_real
+    echo
+    echo "[OK] REAL VEHICLE RERUN COMPLETE"
+  } 2>&1 | tee "$REAL_FINAL_DIR/FULL_REAL_RERUN.log"
+}
+
+run_simulation_logged() {
+  {
+    print_header "FINAL FULL RERUN — SIMULATION"
+    run_simulation
+    echo
+    echo "[OK] SIMULATION RERUN COMPLETE"
+  } 2>&1 | tee "$SIM_FINAL_DIR/FULL_SIMULATION_RERUN.log"
+}
+
+run_preflight_logged
+
 case "$SECTION" in
   preflight)
     ;;
   real)
-    run_real
+    run_real_logged
     ;;
   simulation)
-    run_simulation
+    run_simulation_logged
     ;;
   all)
-    run_real
-    run_simulation
+    run_real_logged
+    run_simulation_logged
     ;;
 esac
 
@@ -242,5 +290,6 @@ echo
 echo "================================================================================"
 echo "[OK] FINAL RERUN SECTION COMPLETE"
 echo "section=$SECTION"
-echo "log=$LOG_ROOT/full_final_rerun.log"
+echo "real results: $REAL_FINAL_DIR"
+echo "simulation results: $SIM_FINAL_DIR"
 echo "================================================================================"
