@@ -4,14 +4,14 @@
   "registered_moving_frames": 232,
   "input_moving_frames": 232,
   "metric_scale": {
-    "scale_m_per_colmap_unit": 0.6550107224929438,
+    "scale_m_per_colmap_unit": 0.6550993020722411,
     "raw_pairs": 2832,
-    "used_pairs": 2327,
-    "raw_median": 0.6579866142084065,
-    "raw_mad": 0.01711356326445934,
-    "used_mean": 0.6569637777456505,
-    "used_std": 0.02652186903759223,
-    "used_relative_std": 0.04049074026857315,
+    "used_pairs": 2330,
+    "raw_median": 0.658015409117778,
+    "raw_mad": 0.01719312762868297,
+    "used_mean": 0.6571148956792706,
+    "used_std": 0.026587583863518366,
+    "used_relative_std": 0.04058557806337949,
     "markers_with_registered_observations": [
       0,
       2,
@@ -57,10 +57,10 @@
       "relay": {
         "candidates": 936,
         "inliers": 744,
-        "translation_deviation_median_m": 0.18775425781067073,
-        "rotation_deviation_median_deg": 7.296586871983896,
-        "translation_threshold_m": 0.5381882559260482,
-        "rotation_threshold_deg": 19.457162486070583
+        "translation_deviation_median_m": 0.1879391705791057,
+        "rotation_deviation_median_deg": 7.297463082994805,
+        "translation_threshold_m": 0.5372476383326674,
+        "rotation_threshold_deg": 19.471217622805174
       },
       "relay_candidates": 936
     },
@@ -81,10 +81,10 @@
       "relay": {
         "candidates": 2224,
         "inliers": 1272,
-        "translation_deviation_median_m": 0.7287191754141973,
-        "rotation_deviation_median_deg": 17.577926499736108,
-        "translation_threshold_m": 2.7320697998256933,
-        "rotation_threshold_deg": 41.06173336483299
+        "translation_deviation_median_m": 0.7282756815141629,
+        "rotation_deviation_median_deg": 17.57320066995895,
+        "translation_threshold_m": 2.728772072428051,
+        "rotation_threshold_deg": 41.02102027127987
       },
       "relay_candidates": 2224
     },
@@ -94,11 +94,11 @@
       "direct": null,
       "relay": {
         "candidates": 2200,
-        "inliers": 1876,
-        "translation_deviation_median_m": 0.5565346000100418,
-        "rotation_deviation_median_deg": 17.004705932364573,
-        "translation_threshold_m": 2.448124820329148,
-        "rotation_threshold_deg": 38.7760767576886
+        "inliers": 1875,
+        "translation_deviation_median_m": 0.555583716382283,
+        "rotation_deviation_median_deg": 17.007135382138642,
+        "translation_threshold_m": 2.4456379766903207,
+        "rotation_threshold_deg": 38.78345423520856
       },
       "relay_candidates": 2200
     }
@@ -110,6 +110,6 @@
     "cam_edge_5"
   ],
   "missing_static_cameras": [],
-  "runtime_seconds": 2101.301460504532,
+  "runtime_seconds": 2878.0083866119385,
   "ground_truth_used": false
 }

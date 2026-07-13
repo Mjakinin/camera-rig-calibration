@@ -14,7 +14,7 @@ Input dataset:
 Number of COLMAP models: 1
 
 Models:
-- model 0: 236 images, 4/4 static cameras, 232 moving frames, 39351 3D points
+- model 0: 236 images, 4/4 static cameras, 232 moving frames, 39268 3D points
   static registered: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
   static missing: none
 
@@ -23,7 +23,7 @@ Best model by static-camera coverage:
 - registered images: 236
 - registered static cameras: 4/4
 - registered moving frames: 232
-- 3D points: 39351
+- 3D points: 39268
 
 Interpretation:
 - COLMAP registered all static cameras.
@@ -34,7 +34,7 @@ Important:
 - Metric scale and Ref-ArUco alignment are planned for AP03 Phase 2.
 
 Output files:
-- /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/03_reconstruction_inspection/colmap_model_summary.csv
-- /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/03_reconstruction_inspection/registered_images_by_model.csv
-- /home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/03_reconstruction_inspection/ap03_colmap_inspection_report.txt
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/03_reconstruction_inspection/colmap_model_summary.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/03_reconstruction_inspection/registered_images_by_model.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/03_reconstruction_inspection/ap03_colmap_inspection_report.txt
 

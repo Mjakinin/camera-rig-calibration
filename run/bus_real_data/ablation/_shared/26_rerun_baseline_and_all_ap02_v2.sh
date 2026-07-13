@@ -165,11 +165,11 @@ INFO_COUNT="$(
 
 echo "Shared-baseline preflight:"
 echo "- static:     $STATIC_COUNT / 4"
-echo "- moving:     $MOVING_COUNT / 270"
+echo "- moving:     $MOVING_COUNT / 189"
 echo "- cameraInfo: $INFO_COUNT / 5"
 
 if [[ "$STATIC_COUNT" -ne 4 ]] \
-  || [[ "$MOVING_COUNT" -ne 270 ]] \
+  || [[ "$MOVING_COUNT" -ne 189 ]] \
   || [[ "$INFO_COUNT" -ne 5 ]]
 then
     record_failure \
@@ -234,7 +234,7 @@ run_required \
   baseline_07_ap03_marker_scale \
   python3 \
   run/bus_real_data/approach3_targetless_colmap_aruco_scale/10_estimate_scale_from_marker_size_only.py \
-  --marker-ids 0-14 \
+  --marker-ids 0-14,16-20 \
   --min-area-px2 100 \
   --reproj-thresh-px 5 \
   --ransac-iters 1000 \

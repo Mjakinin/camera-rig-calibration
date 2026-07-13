@@ -5,9 +5,9 @@
   "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
   "best_model": "0",
   "model_dir": "results/bus_real_data/03_targetless_colmap_aruco_scale/02_colmap_sparse/sparse_txt/0",
-  "registered_images": 237,
+  "registered_images": 193,
   "registered_static_cameras": 4,
-  "registered_moving_frames": 233,
+  "registered_moving_frames": 189,
   "available_static_cameras": [
     "cam_edge_0",
     "cam_edge_1",
@@ -15,7 +15,7 @@
     "cam_edge_5"
   ],
   "missing_static_cameras": [],
-  "num_sparse_points3d": 11479,
+  "num_sparse_points3d": 11590,
   "marker_ids_requested": [
     0,
     1,
@@ -31,18 +31,23 @@
     11,
     12,
     13,
-    14
+    14,
+    16,
+    17,
+    18,
+    19,
+    20
   ],
   "marker_length_m": 0.17,
-  "detected_corner_observations": 1596,
-  "triangulated_marker_corners": 60,
-  "scale_m_per_colmap_unit": 0.8274095163290757,
-  "num_scale_observations_total": 90,
-  "num_scale_observations_used": 90,
-  "raw_median_scale": 0.8274095163290757,
-  "raw_mad_scale": 0.006967067534255633,
-  "raw_rel_mad_scale": 0.008420337688604375,
-  "used_mean_scale": 0.828590232859312,
-  "used_std_scale": 0.008769108801723019,
-  "used_rel_std_scale": 0.010598269210908359
+  "detected_corner_observations": 2052,
+  "triangulated_marker_corners": 80,
+  "scale_m_per_colmap_unit": 0.7277048092204139,
+  "num_scale_observations_total": 120,
+  "num_scale_observations_used": 120,
+  "raw_median_scale": 0.7277048092204139,
+  "raw_mad_scale": 0.005081144097518975,
+  "raw_rel_mad_scale": 0.00698242478699897,
+  "used_mean_scale": 0.7286749301678153,
+  "used_std_scale": 0.008110441146340455,
+  "used_rel_std_scale": 0.0111452350507744
 }

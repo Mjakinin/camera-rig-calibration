@@ -1,0 +1,8 @@
+Extended Route-2 frame-density variant
+=======================================
+
+Variant: density_stride_8_offset4
+Stride: 8
+Offset: 4
+Frames: 25 / 189
+Moving ArUco observations: 73

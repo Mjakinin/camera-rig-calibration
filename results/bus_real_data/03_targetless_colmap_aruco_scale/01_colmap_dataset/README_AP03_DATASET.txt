@@ -14,6 +14,6 @@ No ArUco detections are used in this phase.
 COLMAP reconstruction scale is arbitrary until later scale/registration.
 
 Static images: 4
-Moving images: 190
-Total images: 194
+Moving images: 189
+Total images: 193
 

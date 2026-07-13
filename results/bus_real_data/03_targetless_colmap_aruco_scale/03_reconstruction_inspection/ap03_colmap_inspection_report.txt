@@ -7,23 +7,23 @@ AP03 Phase:
 - reconstruction scale is arbitrary
 
 Input dataset:
-- total images: 246
+- total images: 193
 - static images: 4
-- moving images: 242
+- moving images: 189
 
 Number of COLMAP models: 1
 
 Models:
-- model 0: 237 images, 4/4 static cameras, 233 moving frames, 11479 3D points
+- model 0: 193 images, 4/4 static cameras, 189 moving frames, 11590 3D points
   static registered: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
   static missing: none
 
 Best model by static-camera coverage:
 - model: 0
-- registered images: 237
+- registered images: 193
 - registered static cameras: 4/4
-- registered moving frames: 233
-- 3D points: 11479
+- registered moving frames: 189
+- 3D points: 11590
 
 Interpretation:
 - COLMAP registered all static cameras.

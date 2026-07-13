@@ -68,3 +68,9 @@ results/bus_real_data/method_selection/
 !results/real_vehicle_data/
 !results/real_vehicle_data/**/00_shared_input/
 !results/real_vehicle_data/**/00_shared_input/**
+# Calibration runtime backups and long logs
+results/bus_real_data/_final_corrected_overnight/
+results/bus_real_data/_master_logs/
+results/bus_real_data/POST_OVERNIGHT_DIAGNOSTICS.txt
+results/**/_pipeline_logs/
+results/**/*.log

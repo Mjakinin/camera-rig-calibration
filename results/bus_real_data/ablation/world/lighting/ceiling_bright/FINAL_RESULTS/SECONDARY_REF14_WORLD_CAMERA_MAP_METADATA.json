@@ -1,0 +1,55 @@
+{
+  "evaluation": "partial_aware_secondary_ref14_world_map",
+  "minimum_cameras_for_se3_alignment": 3,
+  "primary_metric": "pairwise_static_camera_extrinsics",
+  "summary_rows": [
+    {
+      "method": "AP01",
+      "status": "OK_FULL",
+      "alignment": "SE3_available_static_cameras_no_scale",
+      "source_file": "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv",
+      "camera_count": 4,
+      "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
+      "missing_cameras": "",
+      "failure_reason": "",
+      "mean_translation_error_cm": 7.6467103199493245,
+      "median_translation_error_cm": 6.498381746653618,
+      "max_translation_error_cm": 13.184928053341874,
+      "mean_rotation_error_deg": 1.8168618001970036,
+      "median_rotation_error_deg": 1.503811137897112,
+      "max_rotation_error_deg": 3.3738617661810366
+    },
+    {
+      "method": "AP02",
+      "status": "OK_FULL",
+      "alignment": "SE3_available_static_cameras_no_scale",
+      "source_file": "results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv",
+      "camera_count": 4,
+      "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
+      "missing_cameras": "",
+      "failure_reason": "",
+      "mean_translation_error_cm": 9.725266012670293,
+      "median_translation_error_cm": 6.980757350652532,
+      "max_translation_error_cm": 19.25246825676962,
+      "mean_rotation_error_deg": 0.7023417992827207,
+      "median_rotation_error_deg": 0.5948724895475941,
+      "max_rotation_error_deg": 1.1890325319728086
+    },
+    {
+      "method": "AP03",
+      "status": "OK_FULL",
+      "alignment": "SE3_available_static_cameras_no_scale",
+      "source_file": "results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+      "camera_count": 4,
+      "available_cameras": "cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5",
+      "missing_cameras": "",
+      "failure_reason": "",
+      "mean_translation_error_cm": 1.7184744561142566,
+      "median_translation_error_cm": 1.6525680463316965,
+      "max_translation_error_cm": 2.9285310824793247,
+      "mean_rotation_error_deg": 0.024515350602378836,
+      "median_rotation_error_deg": 0.024334618909271154,
+      "max_rotation_error_deg": 0.03150206359546313
+    }
+  ]
+}

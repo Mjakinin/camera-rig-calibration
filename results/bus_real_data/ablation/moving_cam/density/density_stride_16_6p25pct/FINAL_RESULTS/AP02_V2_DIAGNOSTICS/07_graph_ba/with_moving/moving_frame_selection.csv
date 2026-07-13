@@ -1,0 +1,12 @@
+observer_id,frame_number,marker_ids,marker_count,frame_score,reference_marker_seen,selection_reasons
+moving_frame_000000,0,0;9;10;11;12;13;16,7,140.85585676570926,False,top_marker_0;top_marker_10;top_marker_11;top_marker_12;top_marker_13;top_marker_16;top_marker_9;top_pair_0_10;top_pair_0_11;top_pair_0_12;top_pair_0_13;top_pair_0_16;top_pair_0_9;top_pair_10_11;top_pair_10_12;top_pair_10_13;top_pair_10_16;top_pair_11_12;top_pair_11_13;top_pair_11_16;top_pair_12_13;top_pair_12_16;top_pair_13_16;top_pair_9_10;top_pair_9_11;top_pair_9_12;top_pair_9_13;top_pair_9_16
+moving_frame_000016,16,10;16,2,41.91205767603331,False,top_marker_10;top_marker_16;top_pair_10_16
+moving_frame_000032,32,0;4,2,32.95185435392737,False,top_marker_0;top_marker_4;top_pair_0_4
+moving_frame_000048,48,3;14,2,47.266577215420085,True,reference_marker_14;top_marker_14;top_marker_3;top_pair_3_14
+moving_frame_000064,64,0;16,2,61.289213623467376,False,top_marker_0;top_marker_16;top_pair_0_16
+moving_frame_000080,80,0,1,32.1337195923529,False,top_marker_0
+moving_frame_000096,96,1,1,89.09527237881078,False,top_marker_1
+moving_frame_000112,112,2;4;5;6;7;8;14;20,8,104.87083310481631,True,reference_marker_14;top_marker_14;top_marker_2;top_marker_20;top_marker_4;top_marker_5;top_marker_6;top_marker_7;top_marker_8;top_pair_14_20;top_pair_2_14;top_pair_2_20;top_pair_2_4;top_pair_2_5;top_pair_2_6;top_pair_2_7;top_pair_2_8;top_pair_4_14;top_pair_4_20;top_pair_4_5;top_pair_4_6;top_pair_4_7;top_pair_4_8;top_pair_5_14;top_pair_5_20;top_pair_5_6;top_pair_5_7;top_pair_5_8;top_pair_6_14;top_pair_6_20;top_pair_6_7;top_pair_6_8;top_pair_7_14;top_pair_7_20;top_pair_7_8;top_pair_8_14;top_pair_8_20
+moving_frame_000128,128,4;7,2,62.742010851157374,False,top_marker_4;top_marker_7;top_pair_4_7
+moving_frame_000144,144,5;8;17;20,4,119.63035624144109,False,top_marker_17;top_marker_20;top_marker_5;top_marker_8;top_pair_17_20;top_pair_5_17;top_pair_5_20;top_pair_5_8;top_pair_8_17;top_pair_8_20
+moving_frame_000160,160,12;20,2,39.863830332246806,False,top_marker_12;top_marker_20;top_pair_12_20

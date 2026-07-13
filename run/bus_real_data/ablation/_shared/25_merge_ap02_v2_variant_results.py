@@ -496,6 +496,12 @@ def copy_outputs(
         ),
     }
 
+    # Remove outputs from an older AP02 evaluator before copying the
+    # current run. Otherwise an evaluator failure can leave a stale CSV
+    # that looks like a current partial-map result.
+    for destination in diagnostic_files.values():
+        destination.unlink(missing_ok=True)
+
     for source, destination in diagnostic_files.items():
         if source.exists():
             shutil.copy2(

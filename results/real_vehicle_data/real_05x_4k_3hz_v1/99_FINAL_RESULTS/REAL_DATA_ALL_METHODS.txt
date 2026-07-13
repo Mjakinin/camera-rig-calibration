@@ -1,0 +1,265 @@
+REAL-DATA CAMERA-RIG CALIBRATION: AP01 / AP02 / AP03
+======================================================================================================================================================
+
+Dataset: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input
+Primary evaluation mode: GT-free.
+Nominal Gazebo distances are context only, not real-world errors.
+Moving frames: 232
+
+METHOD STATUS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Method  Status                         Cameras       Runtime [s]  Error
+AP01    OK_FULL                        4/4              2878.02  
+AP02    OK_FULL                        4/4              6191.54  
+AP03    OK_FULL                        4/4              3650.41  
+
+PAIRWISE CAMERA DISTANCES WITH NOMINAL-LAYOUT COMPARISON
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Camera pair                      AP01 [m]    AP02 [m]    AP03 [m]  Nominal [m]   |AP01-Nom| [cm]   |AP02-Nom| [cm]   |AP03-Nom| [cm]
+cam_edge_0 - cam_edge_1          4.469362    4.949296    4.949933     5.069131            59.977            11.983            11.920
+cam_edge_0 - cam_edge_3          3.818549    3.782229    3.742826     3.819153             0.060             3.692             7.633
+cam_edge_0 - cam_edge_5          5.539957    5.661876    5.559710     5.667928            12.797             0.605            10.822
+cam_edge_1 - cam_edge_3          1.421068    2.052267    2.119393     2.172183            75.112            11.992             5.279
+cam_edge_1 - cam_edge_5          9.359244    9.806651    9.648697     9.833845            47.460             2.719            18.515
+cam_edge_3 - cam_edge_5          9.146554    9.268577    9.114758     9.285515            13.896             1.694            17.076
+
+INDEPENDENT REAL-WORLD REFERENCES
+------------------------------------------------------------------------------------------------------------------------------------------------------
+No independent measurements entered; real accuracy remains unknown.
+
+METHOD DIAGNOSTICS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+AP01
+{
+  "approach": "AP01_marker_direct_and_moving_colmap_relay",
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "ground_truth_used": false,
+  "input_moving_frames": 232,
+  "metric_scale": {
+    "markers_with_registered_observations": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "raw_mad": 0.01719312762868297,
+    "raw_median": 0.658015409117778,
+    "raw_pairs": 2832,
+    "scale_m_per_colmap_unit": 0.6550993020722411,
+    "used_mean": 0.6571148956792706,
+    "used_pairs": 2330,
+    "used_relative_std": 0.04058557806337949,
+    "used_std": 0.026587583863518366
+  },
+  "missing_static_cameras": [],
+  "per_target_diagnostics": {
+    "cam_edge_0": {
+      "direct": {
+        "candidates": 3,
+        "inliers": 3,
+        "rotation_deviation_median_deg": 0.6996224377179582,
+        "rotation_threshold_deg": 4.0,
+        "translation_deviation_median_m": 0.02067691069303668,
+        "translation_threshold_m": 0.12
+      },
+      "direct_common_markers": [
+        15,
+        16,
+        19
+      ],
+      "relay": {
+        "candidates": 936,
+        "inliers": 744,
+        "rotation_deviation_median_deg": 7.297463082994805,
+        "rotation_threshold_deg": 19.471217622805174,
+        "translation_deviation_median_m": 0.1879391705791057,
+        "translation_threshold_m": 0.5372476383326674
+      },
+      "relay_candidates": 936,
+      "selected_method": "direct_multimarker"
+    },
+    "cam_edge_1": {
+      "direct": {
+        "candidates": 2,
+        "inliers": 2,
+        "rotation_deviation_median_deg": 21.313674877821487,
+        "rotation_threshold_deg": 72.7809559688645,
+        "translation_deviation_median_m": 1.8901431143158585,
+        "translation_threshold_m": 1.8901431143158585
+      },
+      "direct_common_markers": [
+        2,
+        3
+      ],
+      "relay": {
+        "candidates": 2224,
+        "inliers": 1272,
+        "rotation_deviation_median_deg": 17.57320066995895,
+        "rotation_threshold_deg": 41.02102027127987,
+        "translation_deviation_median_m": 0.7282756815141629,
+        "translation_threshold_m": 2.728772072428051
+      },
+      "relay_candidates": 2224,
+      "selected_method": "direct_multimarker"
+    },
+    "cam_edge_5": {
+      "direct": null,
+      "direct_common_markers": [],
+      "relay": {
+        "candidates": 2200,
+        "inliers": 1875,
+        "rotation_deviation_median_deg": 17.007135382138642,
+        "rotation_threshold_deg": 38.78345423520856,
+        "translation_deviation_median_m": 0.555583716382283,
+        "translation_threshold_m": 2.4456379766903207
+      },
+      "relay_candidates": 2200,
+      "selected_method": "moving_colmap_relay"
+    }
+  },
+  "registered_moving_frames": 232,
+  "root_camera": "cam_edge_3",
+  "runtime_seconds": 2878.0083866119385,
+  "static_camera_methods": {
+    "cam_edge_0": "direct_multimarker",
+    "cam_edge_1": "direct_multimarker",
+    "cam_edge_3": "gauge_identity",
+    "cam_edge_5": "moving_colmap_relay"
+  }
+}
+
+AP02
+{
+  "approach": "AP02_reference_marker_graph_distortion_aware_BA",
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "estimated_rig_diameter_m": 9.806650993878941,
+  "evaluated_depth_corners": 1808,
+  "ground_truth_used": false,
+  "missing_static_cameras": [],
+  "optimized_markers": 17,
+  "optimized_moving_frames": 146,
+  "positive_depth_corners": 1808,
+  "positive_depth_fraction": 1.0,
+  "reference_marker_id": 3,
+  "reprojection": {
+    "maximum_reprojection_px": 98.45593356565384,
+    "mean_reprojection_px": 2.1444581370267426,
+    "median_reprojection_px": 1.1328159925971328,
+    "observation_count": 452
+  },
+  "runtime_seconds": 6191.532036066055,
+  "selected_moving_frames": 146
+}
+
+AP03
+{
+  "approach": "AP03_targetless_grouped_COLMAP_marker_size_scale",
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "ground_truth_used": false,
+  "marker_scale": {
+    "approach": "AP03_targetless_colmap_marker_size_scale_only",
+    "available_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "best_model": "0",
+    "detected_corner_observations": 2160,
+    "failure_reason": "",
+    "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
+    "marker_ids_requested": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "marker_length_m": 0.17,
+    "missing_static_cameras": [],
+    "model_dir": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/02_colmap_sparse/sparse_txt/0",
+    "num_scale_observations_total": 102,
+    "num_scale_observations_used": 102,
+    "num_sparse_points3d": 39268,
+    "raw_mad_scale": 0.0049769554007652594,
+    "raw_median_scale": 0.6625734016741829,
+    "raw_rel_mad_scale": 0.007511553268195713,
+    "registered_images": 236,
+    "registered_moving_frames": 232,
+    "registered_static_cameras": 4,
+    "scale_m_per_colmap_unit": 0.6625734016741829,
+    "status": "OK_FULL",
+    "triangulated_marker_corners": 68,
+    "used_mean_scale": 0.6641763526629486,
+    "used_rel_std_scale": 0.012546695457487178,
+    "used_std_scale": 0.008313106689037298
+  },
+  "missing_static_cameras": [],
+  "reconstruction": {
+    "best_model": "0",
+    "num_3d_points": 39268,
+    "registered_images": 236,
+    "registered_moving_frames": 232,
+    "registered_static_cameras": 4,
+    "static_missing_list": "",
+    "static_registered_list": "static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png"
+  },
+  "runtime_seconds": 3650.3886563777924
+}
+
+INTERPRETATION
+------------------------------------------------------------------------------------------------------------------------------------------------------
+- Pairwise distances evaluate translation and metric scale, not orientation.
+- Nominal-layout differences are plausibility context, not real accuracy.
+- Real accuracy needs independent measurements or trusted transforms.
+- Reprojection error alone does not prove correct global geometry.
+
+Pairwise CSV: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/99_FINAL_RESULTS/REAL_DATA_PAIRWISE_DISTANCES.csv
+Method-status CSV: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/99_FINAL_RESULTS/REAL_DATA_METHOD_STATUS.csv
+Nominal-reference JSON: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/99_FINAL_RESULTS/simulation_gt_reference_distances.json
+Measured-reference template: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/99_FINAL_RESULTS/measured_reference_distances.json
+

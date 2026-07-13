@@ -1,17 +1,17 @@
 Shared ArUco detection summary
 ==============================
 
-Dataset: results/bus_real_data/ablation/world/route/route2/raw_images
+Dataset: results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images
 Dictionary: DICT_4X4_50
 Marker length [m]: 0.17
 
-Static observations: 22
-Moving observations: 352
-Total observations: 374
-PnP success: 374 / 374
+Static observations: 25
+Moving observations: 488
+Total observations: 513
+PnP success: 513 / 513
 
 Output files:
-- results/bus_real_data/ablation/world/route/route2/aruco_observations/shared_static_aruco_observations.csv
-- results/bus_real_data/ablation/world/route/route2/aruco_observations/shared_moving_aruco_observations.csv
-- results/bus_real_data/ablation/world/route/route2/aruco_observations/shared_all_aruco_observations.csv
-- results/bus_real_data/ablation/world/route/route2/aruco_observations/debug_images
+- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_static_aruco_observations.csv
+- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_moving_aruco_observations.csv
+- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/shared_all_aruco_observations.csv
+- results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations/debug_images

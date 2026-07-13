@@ -298,6 +298,13 @@ run_logged FINAL_REPORT \
     --dataset "$DATASET" \
     --results-root "$RESULTS_ROOT"
 
+
+run_logged PRIMARY_SECONDARY_REPORTS \
+  python3 run/real_vehicle_data/11_write_real_primary_secondary_reports.py \
+    --results-root "$RESULTS_ROOT" \
+    --observations-root "$OBS_ROOT" \
+    --ref-marker-id "$REF_MARKER"
+
 REPORT="$RESULTS_ROOT/99_FINAL_RESULTS/REAL_DATA_ALL_METHODS.txt"
 
 echo

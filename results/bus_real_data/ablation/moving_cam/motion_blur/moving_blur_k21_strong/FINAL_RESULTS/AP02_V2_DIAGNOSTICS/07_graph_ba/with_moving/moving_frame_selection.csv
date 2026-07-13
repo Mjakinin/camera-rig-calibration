@@ -1,0 +1,12 @@
+observer_id,frame_number,marker_ids,marker_count,frame_score,reference_marker_seen,selection_reasons
+moving_frame_000086,86,1,1,37.17303833426652,False,top_marker_1
+moving_frame_000088,88,1,1,64.48343803083021,False,top_marker_1
+moving_frame_000089,89,1,1,35.22179946141315,False,top_marker_1
+moving_frame_000093,93,1,1,23.546602751780448,False,top_marker_1
+moving_frame_000094,94,1,1,40.05645835092311,False,top_marker_1
+moving_frame_000097,97,1,1,28.21777549183778,False,top_marker_1
+moving_frame_000098,98,1,1,30.382870165449944,False,top_marker_1
+moving_frame_000108,108,1,1,29.434575287084275,False,top_marker_1
+moving_frame_000122,122,19,1,45.05802879110939,False,top_marker_19
+moving_frame_000154,154,8,1,21.859595442292783,False,top_marker_8
+moving_frame_000173,173,20,1,13.316096923371925,False,top_marker_20

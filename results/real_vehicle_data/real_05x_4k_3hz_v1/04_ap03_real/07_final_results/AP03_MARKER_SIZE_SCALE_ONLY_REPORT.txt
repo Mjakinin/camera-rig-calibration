@@ -10,9 +10,9 @@ missing_static_cameras: []
 registered_images: 236
 detected_corner_observations: 2160
 triangulated_marker_corners: 68
-scale_m_per_colmap_unit: 0.662745889810
+scale_m_per_colmap_unit: 0.662573401674
 scale_observations_used/total: 102 / 102
-used_rel_std_scale: 0.012704
+used_rel_std_scale: 0.012547
 
 Partial static-camera poses are exported when metric scale is available. Missing cameras remain explicitly missing.
 Rule: scale is estimated only from known physical marker size, not from known marker-map positions.

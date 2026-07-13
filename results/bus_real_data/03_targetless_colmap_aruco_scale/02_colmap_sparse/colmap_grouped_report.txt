@@ -12,7 +12,7 @@ Groups:
 - cam_edge_1: 1 images, PINHOLE, results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/camera_info/cam_edge_1.json
 - cam_edge_3: 1 images, PINHOLE, results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/camera_info/cam_edge_3.json
 - cam_edge_5: 1 images, PINHOLE, results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/camera_info/cam_edge_5.json
-- moving_calib_camera: 242 images, PINHOLE, results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/camera_info/moving_calib_camera.json
+- moving_calib_camera: 189 images, PINHOLE, results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/camera_info/moving_calib_camera.json
 
 Sparse models:
-- 0: 242 registered images
+- 0: 194 registered images

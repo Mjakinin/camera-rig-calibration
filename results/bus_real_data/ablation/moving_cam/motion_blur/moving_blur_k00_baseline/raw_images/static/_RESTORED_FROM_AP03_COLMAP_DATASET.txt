@@ -1,3 +1,0 @@
-Baseline static images restored from AP03 COLMAP dataset static images.
-Source: results/bus_real_data/03_targetless_colmap_aruco_scale/01_colmap_dataset/images/static_cam_edge_*.png
-Reason: reference-image recovery produced zero static ArUco observations.

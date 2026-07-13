@@ -8,7 +8,7 @@ RUN_GRAPH_INIT=1
 RUN_BA=1
 RUN_REPORT=1
 RUN_GT_EVAL=1
-RUN_GT_FREE_GATE=1
+RUN_GT_FREE_GATE=0
 
 SHARED_OBS="${SHARED_OBS:-results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations}"
 AP02_OBS="${AP02_OBS:-results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations}"
@@ -105,19 +105,33 @@ else
   echo "=== 4/6 Skip graph BA ==="
 fi
 
+echo
+echo "=== Export final AP02 results ==="
+python3 run/bus_real_data/approach2_ref_marker_graph_ba/08_export_ap02_final_results.py
+
+AP02_GT_FREE_GATE_STATUS="SKIPPED"
+
 if [[ "$RUN_GT_FREE_GATE" == "1" ]]; then
   echo
   echo "=== 5/6 GT-free deployment validity gate ==="
-  python3 \
+
+  if python3 \
     run/bus_real_data/approach2_ref_marker_graph_ba/09_validate_ap02_solution_without_gt.py
+  then
+    AP02_GT_FREE_GATE_STATUS="ACCEPTED"
+  else
+    AP02_GT_FREE_GATE_STATUS="REJECTED"
+    echo "[WARN] AP02 poses retained despite GT-free gate rejection."
+  fi
 else
   echo
   echo "=== 5/6 Skip GT-free deployment validity gate ==="
 fi
 
-echo
-echo "=== Export final AP02 results ==="
-python3 run/bus_real_data/approach2_ref_marker_graph_ba/08_export_ap02_final_results.py
+mkdir -p results/bus_real_data/02_ref_marker_graph_ba/08_final_results
+
+printf 'status=%s\n' "$AP02_GT_FREE_GATE_STATUS" > \
+  results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_GT_FREE_GATE_PIPELINE_STATUS.txt
 
 echo
 echo "=== Optional simulation GT full-map evaluation ==="

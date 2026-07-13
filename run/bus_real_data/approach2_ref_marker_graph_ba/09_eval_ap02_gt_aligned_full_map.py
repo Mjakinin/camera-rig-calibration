@@ -23,6 +23,13 @@ STATIC_CAMERAS = ["cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"]
 REF_MARKER_ID = 14
 REF_MARKER_ENTITY = "aruco_ref_floor_14"
 
+SIM_MARKER_IDS = list(range(0, 15)) + list(range(16, 21))
+ALIGNMENT_MARKER_IDS = [
+    marker_id
+    for marker_id in SIM_MARKER_IDS
+    if marker_id != REF_MARKER_ID
+]
+
 # Gazebo marker model frame:
 # - board plane is X/Z
 # - board normal is Y
@@ -209,7 +216,7 @@ def load_gt_world_entities():
             raise RuntimeError(f"Could not find camera {cam} in {WORLD_SDF}")
         gt[("static_camera", cam)] = sdf_model_pose_to_optical(poses[cam]["T_W_model"])
 
-    for mid in range(0, 15):
+    for mid in SIM_MARKER_IDS:
         name = marker_name(mid)
         if name not in poses:
             raise RuntimeError(f"Could not find marker {name} in {WORLD_SDF}")
@@ -375,9 +382,7 @@ def main():
     alignment_keys = []
     for cam in STATIC_CAMERAS:
         alignment_keys.append(("static_camera", cam))
-    for mid in range(0, 15):
-        if mid == REF_MARKER_ID:
-            continue
+    for mid in ALIGNMENT_MARKER_IDS:
         alignment_keys.append(("aruco_marker", mid))
 
     src_pts = []
@@ -400,7 +405,7 @@ def main():
     ordered_eval_keys = []
     for cam in STATIC_CAMERAS:
         ordered_eval_keys.append(("static_camera", cam))
-    for mid in range(0, 15):
+    for mid in SIM_MARKER_IDS:
         ordered_eval_keys.append(("aruco_marker", mid))
 
     for key in ordered_eval_keys:
@@ -430,7 +435,7 @@ def main():
             "entity_id": entity_id,
             "marker_id": marker_id,
             "used_for_alignment": "yes" if key in used_keys else "no",
-            "alignment_frame": "GT_world_best_fit_SE3_using_static_cameras_and_markers_0_to_13",
+            "alignment_frame": "GT_world_best_fit_SE3_using_static_cameras_and_all_nonreference_markers",
             "translation_error_cm": trans_error_cm(T_est_aligned, T_gt),
             "rotation_error_deg": rot_error_deg(T_est_aligned, T_gt),
         }
@@ -462,7 +467,7 @@ def main():
             "gt_used_only_after_optimization": True,
             "used_entities_count": len(used_keys),
             "used_static_cameras": STATIC_CAMERAS,
-            "used_marker_ids": [mid for mid in range(0, 15) if mid != REF_MARKER_ID],
+            "used_marker_ids": ALIGNMENT_MARKER_IDS,
             "held_out_marker_id": REF_MARKER_ID,
             "held_out_marker_entity": REF_MARKER_ENTITY,
             "singular_values": [float(x) for x in singular_values],
@@ -487,7 +492,7 @@ def main():
         "",
         "What this evaluates:",
         "- AP02 estimated map is aligned to the Gazebo GT map with a best-fit SE(3) transform.",
-        "- The alignment uses static cameras and markers 0..13.",
+        "- The alignment uses static cameras and every estimated non-reference simulation marker.",
         "- Marker 14 / aruco_ref_floor_14 is held out from the alignment.",
         "- Therefore marker 14 receives a real residual/error instead of a forced coordinate-frame zero.",
         "- GT is used only after optimization for evaluation, not during AP02 estimation.",
@@ -495,7 +500,7 @@ def main():
         "Alignment:",
         f"- used entities: {len(used_keys)}",
         "- used static cameras: " + ", ".join(STATIC_CAMERAS),
-        "- used marker ids: 0..13",
+        f"- used marker ids: {ALIGNMENT_MARKER_IDS}",
         f"- held-out marker: {REF_MARKER_ID} / {REF_MARKER_ENTITY}",
         "",
         "Camera pose errors:",

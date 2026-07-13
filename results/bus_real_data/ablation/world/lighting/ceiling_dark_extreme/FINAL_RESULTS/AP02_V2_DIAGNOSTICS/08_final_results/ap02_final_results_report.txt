@@ -1,0 +1,148 @@
+AP02 Final Results Report
+=========================
+
+Selected AP02 result:
+- graph_ba_with_moving_sparse
+
+Why this result is selected:
+- Single-reference-marker PnP only estimates cameras that directly see marker 14.
+- Static-only graph improves connectivity but still misses cam_edge_5.
+- With-moving graph connects all 4 static cameras, all 15 markers, and all selected moving frames.
+- Bundle adjustment reduces the reprojection error to subpixel-level mean/median values.
+
+Connectivity summary:
+
+Single Reference Marker PnP:
+AP02 single reference-marker PnP baseline
+=========================================
+
+Reference marker id: 14
+
+Goal:
+Estimate T_ref_marker_cam directly for every static camera that sees the reference marker.
+
+Static cameras in AP02 observations: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+Static cameras seeing reference marker: []
+Static cameras NOT seeing reference marker: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+
+Estimated static camera poses: 0
+
+Interpretation:
+- If a static camera is not listed, it cannot be calibrated by the naive single-reference-marker method.
+- Missing cameras motivate the marker-map graph method.
+- This AP02 script reads only AP02 observations, not AP01 result internals.
+
+
+
+Static-only graph initialization:
+AP02 maximum-bottleneck pose graph initialization
+=================================================
+
+Mode: static_only
+Reference marker id: 14
+
+Raw observations in mode: 18
+Quality-valid observer-marker edges: 18
+Used initialization edges: 0
+
+Initialized static cameras: 0 / 4
+Initialized moving frames: 0 / 0
+Initialized markers: 1 / 13
+
+Initialized static cameras: []
+Missing static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+
+Camera path bottlenecks: {}
+
+Initialized markers: [14]
+Missing markers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
+Missing moving frames count: 0
+
+Interpretation:
+- Every entity is initialized through the path whose weakest observation has the highest possible quality.
+- This replaces first-hit BFS and avoids committing cam5 to the first weak bridge encountered.
+
+
+
+With-moving graph initialization:
+AP02 maximum-bottleneck pose graph initialization
+=================================================
+
+Mode: with_moving
+Reference marker id: 14
+
+Raw observations in mode: 290
+Quality-valid observer-marker edges: 290
+Used initialization edges: 172
+
+Initialized static cameras: 4 / 4
+Initialized moving frames: 154 / 154
+Initialized markers: 15 / 15
+
+Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+Missing static cameras: []
+
+Camera path bottlenecks: {'cam_edge_0': 14.761657976995126, 'cam_edge_1': 14.613070877641416, 'cam_edge_3': 14.613070877641416, 'cam_edge_5': 6.150676106224777}
+
+Initialized markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+Missing markers: []
+
+Missing moving frames count: 0
+
+Interpretation:
+- Every entity is initialized through the path whose weakest observation has the highest possible quality.
+- This replaces first-hit BFS and avoids committing cam5 to the first weak bridge encountered.
+
+
+
+Static-only BA summary:
+
+
+With-moving BA summary:
+AP02 Reference-marker Graph Bundle Adjustment
+============================================
+
+Mode: with_moving
+Reference marker id: 14
+
+Optimized variable poses: 109
+Parameter count: 654
+Marker observations used: 214
+Scalar residual count: 1712
+
+Initial reprojection error [px]:
+- mean: 5.989995
+- median: 0.378660
+- max: 74.982074
+
+Final reprojection error [px]:
+- mean: 0.333079
+- median: 0.300936
+- max: 1.372703
+
+Optimizer:
+- success: True
+- status: 2
+- message: `ftol` termination condition is satisfied.
+- nfev: 35
+- cost: 63.760542
+
+Outputs:
+- optimized_static_camera_poses_ref_marker.csv
+- optimized_moving_frame_poses_ref_marker.csv
+- optimized_marker_poses_ref_marker.csv
+- reprojection_errors_by_observation.csv
+
+
+
+Final exported files:
+- ap02_with_moving_static_camera_poses_ref_marker.csv
+- ap02_with_moving_marker_poses_ref_marker.csv
+- ap02_with_moving_moving_frame_poses_ref_marker.csv
+- ap02_method_stage_summary.csv
+- ap02_final_metadata.json
+
+Important interpretation:
+AP02 is not just another local ArUco chain method. It shows that a global reference-marker pose graph becomes fully connected only when moving-camera observations are included. The final BA result is therefore the AP02 with_moving variant.
+

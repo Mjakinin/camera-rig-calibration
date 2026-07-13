@@ -1,0 +1,11 @@
+{
+  "frame_density_ablation": {
+    "baseline": "density_stride_1_100pct",
+    "dense_gazebo_recapture": "density_route2_125pct_recaptured",
+    "additional_variants": [
+      "density_stride_8_offset4",
+      "density_stride_16_6p25pct"
+    ],
+    "report": "ablations/06_FRAME_DENSITY_ALL_METHODS.txt"
+  }
+}

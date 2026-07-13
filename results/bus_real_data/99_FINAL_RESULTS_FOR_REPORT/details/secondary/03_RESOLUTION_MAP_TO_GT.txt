@@ -22,18 +22,40 @@ AP02
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    OK                            7.32 cm     0.41 deg        (0.638, -1.685, 2.067)        (0.588, -1.735, 2.087)
-cam_edge_1    OK                            8.89 cm     0.31 deg        (-4.052, 0.470, 2.174)        (-3.974, 0.475, 2.132)
-cam_edge_3    OK                            5.76 cm     0.38 deg       (-3.199, -1.608, 2.032)       (-3.227, -1.563, 2.054)
+cam_edge_0    OK                          146.21 cm     9.42 deg        (0.921, -0.386, 1.630)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           77.04 cm     8.58 deg        (-3.957, 1.146, 1.753)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           90.09 cm     8.35 deg       (-2.945, -0.787, 1.694)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                          310.52 cm    26.83 deg        (5.226, -2.447, 3.334)         (5.859, 0.348, 2.139)
 
 AP03
 ----
-- no map-to-GT result
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_5    AVAILABLE_NOT_ALIGNED            - cm        - deg                     (-, -, -)                     (-, -, -)
 
 AP02 OPTIONAL GT-ALIGNED FULL MAP
 ------------------------------------
-- status: NOT_AVAILABLE
-- no complete held-out full-map evaluation exists for this run
+Entity                      Type                Used align      t error      r error
+------------------------------------------------------------------------------------
+cam_edge_0                  static_camera              yes    143.91 cm    31.99 deg
+cam_edge_1                  static_camera              yes    101.55 cm    31.15 deg
+cam_edge_3                  static_camera              yes    111.45 cm    30.94 deg
+cam_edge_5                  static_camera              yes    137.51 cm     4.62 deg
+marker_000                  aruco_marker               yes     68.86 cm    10.10 deg
+marker_001                  aruco_marker               yes     53.25 cm    31.00 deg
+marker_002                  aruco_marker               yes     17.13 cm    30.78 deg
+marker_003                  aruco_marker               yes    100.16 cm    31.00 deg
+marker_004                  aruco_marker               yes    135.18 cm    35.38 deg
+marker_005                  aruco_marker               yes    156.95 cm    31.16 deg
+marker_006                  aruco_marker               yes    175.66 cm    31.38 deg
+marker_007                  aruco_marker               yes    183.31 cm    31.09 deg
+marker_008                  aruco_marker               yes    201.08 cm    31.81 deg
+marker_009                  aruco_marker               yes    115.81 cm    12.96 deg
+marker_010                  aruco_marker               yes    115.78 cm     3.35 deg
+marker_011                  aruco_marker               yes    123.57 cm     4.25 deg
+marker_012                  aruco_marker               yes    122.85 cm     4.95 deg
+marker_013                  aruco_marker               yes    123.97 cm     3.51 deg
+aruco_ref_floor_14          aruco_marker                no     75.29 cm    31.36 deg
 
 ################################################################################################################
 PARAMETER: 320x180
@@ -44,28 +66,26 @@ AP01
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    -                            81.47 cm     4.55 deg        (0.921, -2.195, 1.504)        (0.588, -1.735, 2.087)
-cam_edge_1    -                            47.90 cm     6.08 deg        (-3.532, 0.352, 1.996)        (-3.974, 0.475, 2.132)
-cam_edge_3    -                            42.07 cm     7.65 deg       (-2.874, -1.714, 1.883)       (-3.227, -1.563, 2.054)
-cam_edge_5    -                           161.48 cm    18.00 deg         (4.729, 1.083, 3.029)         (5.859, 0.348, 2.139)
+cam_edge_1    AVAILABLE_NOT_ALIGNED            - cm        - deg                     (-, -, -)                     (-, -, -)
+cam_edge_3    AVAILABLE_NOT_ALIGNED            - cm        - deg                     (-, -, -)                     (-, -, -)
 
 AP02
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    OK                            2.27 cm     1.11 deg        (0.576, -1.720, 2.100)        (0.588, -1.735, 2.087)
-cam_edge_1    OK                           17.12 cm     0.31 deg        (-4.143, 0.456, 2.156)        (-3.974, 0.475, 2.132)
-cam_edge_3    OK                            9.87 cm     0.46 deg       (-3.286, -1.636, 2.023)       (-3.227, -1.563, 2.054)
-cam_edge_5    OK                           25.13 cm     1.50 deg         (6.097, 0.427, 2.133)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                           58.09 cm    18.83 deg        (0.539, -1.449, 2.591)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           85.94 cm     4.48 deg        (-4.136, 0.887, 2.868)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           94.14 cm     4.14 deg       (-3.296, -1.139, 2.892)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                          237.77 cm    27.24 deg        (6.138, -0.773, 0.061)         (5.859, 0.348, 2.139)
 
 AP03
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    -                            25.85 cm     1.84 deg        (0.832, -1.707, 2.008)        (0.588, -1.735, 2.087)
-cam_edge_1    -                            29.52 cm     0.93 deg        (-4.242, 0.589, 2.183)        (-3.974, 0.475, 2.132)
-cam_edge_3    -                            20.70 cm     0.79 deg       (-3.409, -1.659, 2.080)       (-3.227, -1.563, 2.054)
-cam_edge_5    -                            20.99 cm     0.91 deg         (6.064, 0.303, 2.140)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                            4.66 cm     0.08 deg        (0.617, -1.771, 2.087)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           12.63 cm     0.14 deg        (-4.094, 0.515, 2.132)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           10.25 cm     0.11 deg       (-3.324, -1.598, 2.049)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           18.99 cm     0.21 deg         (6.046, 0.380, 2.144)         (5.859, 0.348, 2.139)
 
 AP02 OPTIONAL GT-ALIGNED FULL MAP
 ------------------------------------
@@ -81,33 +101,57 @@ AP01
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    -                             6.82 cm     1.23 deg        (0.632, -1.717, 2.038)        (0.588, -1.735, 2.087)
-cam_edge_1    -                            10.78 cm     1.10 deg        (-4.076, 0.453, 2.160)        (-3.974, 0.475, 2.132)
-cam_edge_3    -                             5.04 cm     1.36 deg       (-3.231, -1.547, 2.102)       (-3.227, -1.563, 2.054)
-cam_edge_5    -                             6.78 cm     1.60 deg         (5.920, 0.337, 2.112)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                            7.08 cm     1.14 deg        (0.634, -1.682, 2.083)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           12.99 cm     0.76 deg        (-4.001, 0.571, 2.215)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           13.60 cm     1.02 deg       (-3.170, -1.498, 2.159)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           29.25 cm     1.95 deg         (5.782, 0.135, 1.955)         (5.859, 0.348, 2.139)
 
 AP02
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    OK                            3.65 cm     1.19 deg        (0.613, -1.761, 2.085)        (0.588, -1.735, 2.087)
-cam_edge_1    OK                           12.07 cm     0.63 deg        (-4.089, 0.475, 2.167)        (-3.974, 0.475, 2.132)
-cam_edge_3    OK                            4.69 cm     0.81 deg       (-3.263, -1.594, 2.050)       (-3.227, -1.563, 2.054)
-cam_edge_5    OK                           14.14 cm     0.60 deg         (5.985, 0.406, 2.109)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                            1.67 cm     0.40 deg        (0.584, -1.738, 2.103)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            3.51 cm     0.23 deg        (-4.008, 0.467, 2.132)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            2.59 cm     0.12 deg       (-3.248, -1.571, 2.040)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            6.16 cm     0.07 deg         (5.917, 0.367, 2.136)         (5.859, 0.348, 2.139)
 
 AP03
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    -                             2.88 cm     0.09 deg        (0.602, -1.759, 2.093)        (0.588, -1.735, 2.087)
-cam_edge_1    -                             8.47 cm     0.07 deg        (-4.054, 0.503, 2.134)        (-3.974, 0.475, 2.132)
-cam_edge_3    -                             5.53 cm     0.06 deg       (-3.279, -1.581, 2.052)       (-3.227, -1.563, 2.054)
-cam_edge_5    -                            11.89 cm     0.11 deg         (5.977, 0.363, 2.134)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                            0.59 cm     0.05 deg        (0.588, -1.740, 2.086)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            1.86 cm     0.03 deg        (-3.991, 0.482, 2.130)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            1.48 cm     0.04 deg       (-3.240, -1.571, 2.055)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            3.08 cm     0.05 deg         (5.889, 0.355, 2.141)         (5.859, 0.348, 2.139)
 
 AP02 OPTIONAL GT-ALIGNED FULL MAP
 ------------------------------------
-- status: NOT_AVAILABLE
-- no complete held-out full-map evaluation exists for this run
+Entity                      Type                Used align      t error      r error
+------------------------------------------------------------------------------------
+cam_edge_0                  static_camera              yes      3.17 cm     0.54 deg
+cam_edge_1                  static_camera              yes      4.51 cm     0.14 deg
+cam_edge_3                  static_camera              yes      3.59 cm     0.15 deg
+cam_edge_5                  static_camera              yes      4.85 cm     0.14 deg
+marker_000                  aruco_marker               yes      5.66 cm     1.77 deg
+marker_001                  aruco_marker               yes      3.64 cm     0.74 deg
+marker_002                  aruco_marker               yes      3.52 cm     0.86 deg
+marker_003                  aruco_marker               yes      1.76 cm     0.16 deg
+marker_004                  aruco_marker               yes      0.95 cm     0.18 deg
+marker_005                  aruco_marker               yes      1.47 cm     0.79 deg
+marker_006                  aruco_marker               yes      0.35 cm     1.24 deg
+marker_007                  aruco_marker               yes      0.44 cm     0.76 deg
+marker_008                  aruco_marker               yes      1.14 cm     1.85 deg
+marker_009                  aruco_marker               yes      4.42 cm     1.26 deg
+marker_010                  aruco_marker               yes      4.08 cm     0.32 deg
+marker_011                  aruco_marker               yes      4.64 cm     0.54 deg
+marker_012                  aruco_marker               yes      4.47 cm     0.34 deg
+marker_013                  aruco_marker               yes      4.51 cm     0.69 deg
+aruco_ref_floor_14          aruco_marker                no      1.98 cm     0.20 deg
+marker_016                  aruco_marker               yes      3.96 cm     0.33 deg
+marker_017                  aruco_marker               yes      0.94 cm     0.63 deg
+marker_018                  aruco_marker               yes      3.50 cm     0.51 deg
+marker_019                  aruco_marker               yes      2.81 cm     0.23 deg
+marker_020                  aruco_marker               yes      7.85 cm     1.45 deg
 
 ################################################################################################################
 PARAMETER: 2560x1440
@@ -118,31 +162,55 @@ AP01
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    -                             6.73 cm     1.08 deg        (0.630, -1.708, 2.042)        (0.588, -1.735, 2.087)
-cam_edge_1    -                            11.40 cm     1.24 deg        (-4.079, 0.446, 2.165)        (-3.974, 0.475, 2.132)
-cam_edge_3    -                             4.81 cm     1.12 deg       (-3.228, -1.551, 2.101)       (-3.227, -1.563, 2.054)
-cam_edge_5    -                             7.36 cm     1.78 deg         (5.923, 0.338, 2.104)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                            6.82 cm     1.46 deg        (0.634, -1.685, 2.081)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           13.92 cm     0.78 deg        (-3.993, 0.579, 2.222)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           14.65 cm     1.03 deg       (-3.164, -1.491, 2.165)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           31.22 cm     1.98 deg         (5.767, 0.123, 1.943)         (5.859, 0.348, 2.139)
 
 AP02
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    OK                            4.34 cm     1.34 deg        (0.612, -1.767, 2.071)        (0.588, -1.735, 2.087)
-cam_edge_1    OK                            8.96 cm     0.73 deg        (-4.054, 0.470, 2.173)        (-3.974, 0.475, 2.132)
-cam_edge_3    OK                            2.28 cm     0.84 deg       (-3.233, -1.585, 2.059)       (-3.227, -1.563, 2.054)
-cam_edge_5    OK                            8.91 cm     0.51 deg         (5.920, 0.407, 2.110)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                            1.06 cm     0.12 deg        (0.586, -1.742, 2.095)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            1.67 cm     0.10 deg        (-3.984, 0.478, 2.145)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            0.99 cm     0.11 deg       (-3.222, -1.557, 2.049)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            1.65 cm     0.17 deg         (5.865, 0.347, 2.124)         (5.859, 0.348, 2.139)
 
 AP03
 ----
 Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
 ----------------------------------------------------------------------------------------------------------------------------
-cam_edge_0    -                             1.55 cm     0.11 deg        (0.602, -1.741, 2.086)        (0.588, -1.735, 2.087)
-cam_edge_1    -                             3.98 cm     0.10 deg        (-4.014, 0.473, 2.136)        (-3.974, 0.475, 2.132)
-cam_edge_3    -                             3.95 cm     0.24 deg       (-3.266, -1.569, 2.057)       (-3.227, -1.563, 2.054)
-cam_edge_5    -                             6.65 cm     0.20 deg         (5.923, 0.364, 2.133)         (5.859, 0.348, 2.139)
+cam_edge_0    OK                            0.28 cm     0.04 deg        (0.587, -1.732, 2.087)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            0.76 cm     0.03 deg        (-3.967, 0.474, 2.130)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            0.32 cm     0.01 deg       (-3.224, -1.563, 2.054)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            1.03 cm     0.02 deg         (5.849, 0.347, 2.141)         (5.859, 0.348, 2.139)
 
 AP02 OPTIONAL GT-ALIGNED FULL MAP
 ------------------------------------
-- status: NOT_AVAILABLE
-- no complete held-out full-map evaluation exists for this run
+Entity                      Type                Used align      t error      r error
+------------------------------------------------------------------------------------
+cam_edge_0                  static_camera              yes      0.88 cm     0.13 deg
+cam_edge_1                  static_camera              yes      1.17 cm     0.12 deg
+cam_edge_3                  static_camera              yes      1.66 cm     0.15 deg
+cam_edge_5                  static_camera              yes      1.95 cm     0.15 deg
+marker_000                  aruco_marker               yes      0.28 cm     1.71 deg
+marker_001                  aruco_marker               yes      0.52 cm     0.66 deg
+marker_002                  aruco_marker               yes      1.05 cm     1.05 deg
+marker_003                  aruco_marker               yes      0.96 cm     0.74 deg
+marker_004                  aruco_marker               yes      0.89 cm     0.19 deg
+marker_005                  aruco_marker               yes      0.52 cm     0.58 deg
+marker_006                  aruco_marker               yes      0.84 cm     0.58 deg
+marker_007                  aruco_marker               yes      0.74 cm     0.85 deg
+marker_008                  aruco_marker               yes      1.15 cm     0.56 deg
+marker_009                  aruco_marker               yes      1.94 cm     2.13 deg
+marker_010                  aruco_marker               yes      2.02 cm     0.49 deg
+marker_011                  aruco_marker               yes      1.60 cm     0.59 deg
+marker_012                  aruco_marker               yes      2.01 cm     0.32 deg
+marker_013                  aruco_marker               yes      1.39 cm     0.83 deg
+aruco_ref_floor_14          aruco_marker                no      0.72 cm    10.67 deg
+marker_016                  aruco_marker               yes      0.53 cm     0.21 deg
+marker_017                  aruco_marker               yes      0.70 cm     0.68 deg
+marker_018                  aruco_marker               yes      0.72 cm     0.55 deg
+marker_019                  aruco_marker               yes      1.31 cm     0.21 deg
+marker_020                  aruco_marker               yes      3.60 cm    13.46 deg
 

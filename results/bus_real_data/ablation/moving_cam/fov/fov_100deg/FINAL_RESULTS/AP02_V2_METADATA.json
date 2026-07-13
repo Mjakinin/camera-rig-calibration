@@ -1,0 +1,13 @@
+{
+  "variant": "fov_100deg",
+  "method": "AP02",
+  "version": "v2",
+  "pipeline_return_code": 0,
+  "primary_status": "OK_FULL",
+  "graph_initialization": "rooted_maximum_spanning_tree",
+  "moving_frame_selection": "marker_aware_smart_selection",
+  "top_per_marker": 8,
+  "top_per_marker_pair": 4,
+  "uniform_stride_used": false,
+  "updated_utc": "2026-07-13T11:24:29.993286+00:00"
+}

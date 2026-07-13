@@ -1,0 +1,35 @@
+PARTIAL-AWARE PAIRWISE STATIC-CAMERA EVALUATION
+================================================
+
+OK_FULL requires all four cameras and all six camera pairs. PARTIAL results retain every evaluable camera pair.
+
+Summary:
+- AP01: OK_FULL | cameras=4/4 | pairs=6/6 | mean=38.40 cm / 3.14 deg | missing=-
+- AP02: OK_FULL | cameras=4/4 | pairs=6/6 | mean=4.95 cm / 0.39 deg | missing=-
+- AP03: OK_FULL | cameras=4/4 | pairs=6/6 | mean=2.71 cm / 0.06 deg | missing=-
+
+Pairwise detail:
+
+AP01
+  cam0-cam1: 54.16 cm / 4.62 deg
+  cam0-cam3: 49.73 cm / 4.83 deg
+  cam0-cam5: 53.75 cm / 4.38 deg
+  cam1-cam3: 9.91 cm / 0.31 deg
+  cam1-cam5: 32.03 cm / 2.23 deg
+  cam3-cam5: 30.81 cm / 2.49 deg
+
+AP02
+  cam0-cam1: 3.97 cm / 0.69 deg
+  cam0-cam3: 3.30 cm / 0.54 deg
+  cam0-cam5: 6.27 cm / 0.31 deg
+  cam1-cam3: 1.09 cm / 0.16 deg
+  cam1-cam5: 8.08 cm / 0.39 deg
+  cam3-cam5: 7.00 cm / 0.26 deg
+
+AP03
+  cam0-cam1: 1.94 cm / 0.07 deg
+  cam0-cam3: 1.49 cm / 0.09 deg
+  cam0-cam5: 2.91 cm / 0.05 deg
+  cam1-cam3: 1.46 cm / 0.05 deg
+  cam1-cam5: 4.26 cm / 0.07 deg
+  cam3-cam5: 4.20 cm / 0.06 deg

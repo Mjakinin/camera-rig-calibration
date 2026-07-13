@@ -1,0 +1,29 @@
+{
+  "group": "moving_cam/density",
+  "variant": "density_stride_1_100pct",
+  "parameter": "moving camera temporal frame density",
+  "source_dataset": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1",
+  "source_frame_count": 189,
+  "selected_frame_count": 189,
+  "stride": 1,
+  "retained_fraction": 1.0,
+  "first_frame": 0,
+  "last_frame": 188,
+  "endpoint_forced": true,
+  "static_images_unchanged": true,
+  "camera_info_unchanged": true,
+  "route_geometry_unchanged": true,
+  "moving_images_resized": false,
+  "selection_rule": "retain every 1th source frame and retain the final endpoint frame when necessary",
+  "changed_factor_only": "temporal sampling density",
+  "baseline_reused": true,
+  "baseline_source_variant": "route2",
+  "baseline_source": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/bus_real_data/ablation/world/route/route2",
+  "route_frame_count": 189,
+  "equivalence_contract": "Exact nominal Route-2 raw images, CameraInfo, ArUco observations and method outputs are reused; AP01/AP02/AP03 are not rerun for this mathematically identical baseline variant.",
+  "methods_reused_without_rerun": [
+    "AP01",
+    "AP02",
+    "AP03"
+  ]
+}

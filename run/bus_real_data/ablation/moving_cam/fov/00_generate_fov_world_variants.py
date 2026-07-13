@@ -114,8 +114,13 @@ def patch_camera_info(base_info, hfov_deg):
 
     if isinstance(info.get("K"), list) and len(info["K"]) == 9:
         info["K"] = K
+    if isinstance(info.get("k"), list) and len(info["k"]) == 9:
+        info["k"] = K
+
     if isinstance(info.get("P"), list) and len(info["P"]) == 12:
         info["P"] = P
+    if isinstance(info.get("p"), list) and len(info["p"]) == 12:
+        info["p"] = P
 
     if isinstance(info.get("camera_matrix"), dict):
         info["camera_matrix"]["data"] = K

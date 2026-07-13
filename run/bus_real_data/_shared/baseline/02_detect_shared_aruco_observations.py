@@ -6,7 +6,7 @@ import sys
 import cv2
 import numpy as np
 
-BUS_RUN = Path(__file__).resolve().parents[1]
+BUS_RUN = Path(__file__).resolve().parents[2]
 if str(BUS_RUN) not in sys.path:
     sys.path.insert(0, str(BUS_RUN))
 

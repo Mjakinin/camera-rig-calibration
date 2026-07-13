@@ -6,7 +6,7 @@
     "failure_reason": "",
     "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
     "best_model": "0",
-    "model_dir": "/home/maxim/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/02_colmap_sparse/sparse_txt/0",
+    "model_dir": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/04_ap03_real/02_colmap_sparse/sparse_txt/0",
     "registered_images": 236,
     "registered_static_cameras": 4,
     "registered_moving_frames": 232,
@@ -17,7 +17,7 @@
       "cam_edge_5"
     ],
     "missing_static_cameras": [],
-    "num_sparse_points3d": 39351,
+    "num_sparse_points3d": 39268,
     "marker_ids_requested": [
       0,
       1,
@@ -44,22 +44,22 @@
     "marker_length_m": 0.17,
     "detected_corner_observations": 2160,
     "triangulated_marker_corners": 68,
-    "scale_m_per_colmap_unit": 0.66274588981021,
+    "scale_m_per_colmap_unit": 0.6625734016741829,
     "num_scale_observations_total": 102,
     "num_scale_observations_used": 102,
-    "raw_median_scale": 0.66274588981021,
-    "raw_mad_scale": 0.005504787634421415,
-    "raw_rel_mad_scale": 0.008306030590393879,
-    "used_mean_scale": 0.6639328247016515,
-    "used_std_scale": 0.008419661076220598,
-    "used_rel_std_scale": 0.012704207156428731
+    "raw_median_scale": 0.6625734016741829,
+    "raw_mad_scale": 0.0049769554007652594,
+    "raw_rel_mad_scale": 0.007511553268195713,
+    "used_mean_scale": 0.6641763526629486,
+    "used_std_scale": 0.008313106689037298,
+    "used_rel_std_scale": 0.012546695457487178
   },
   "reconstruction": {
     "best_model": "0",
     "registered_images": 236,
     "registered_static_cameras": 4,
     "registered_moving_frames": 232,
-    "num_3d_points": 39351,
+    "num_3d_points": 39268,
     "static_registered_list": "static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png",
     "static_missing_list": ""
   },
@@ -70,6 +70,6 @@
     "cam_edge_5"
   ],
   "missing_static_cameras": [],
-  "runtime_seconds": 59.617523193359375,
+  "runtime_seconds": 3650.3886563777924,
   "ground_truth_used": false
 }

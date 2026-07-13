@@ -21,6 +21,6 @@
   "positive_depth_corners": 1808,
   "evaluated_depth_corners": 1808,
   "estimated_rig_diameter_m": 9.806650993878941,
-  "runtime_seconds": 5349.503539562225,
+  "runtime_seconds": 6191.532036066055,
   "ground_truth_used": false
 }

@@ -9,69 +9,69 @@ Validity note:
 
 Group                   Parameter             Method  Status                     Cams   Pairs      Mean t      Mean r
 -------------------------------------------------------------------------------------------------------------
-moving_cam/fov          40 deg                AP01    PARTIAL_3_OF_4              3/4     3/6     9.61 cm    1.96 deg
-moving_cam/fov          40 deg                AP02    INVALID_FULL_COVERAGE       4/4     6/6   594.40 cm   71.85 deg
-moving_cam/fov          40 deg                AP03    PARTIAL_3_OF_4              3/4     3/6    15.13 cm    0.79 deg
+moving_cam/fov          40 deg                AP01    OK_FULL                     4/4     6/6   155.64 cm   18.94 deg
+moving_cam/fov          40 deg                AP02    OK_FULL                     4/4     6/6   202.93 cm   14.00 deg
+moving_cam/fov          40 deg                AP03    SCALE_WEAK_CHECK_REQUIRE    4/4     6/6   931.15 cm   75.23 deg
 
-moving_cam/fov          69 deg baseline       AP01    OK                          4/4     6/6    12.39 cm    2.11 deg
-moving_cam/fov          69 deg baseline       AP02    OK_FULL                     4/4     6/6    17.40 cm    1.29 deg
-moving_cam/fov          69 deg baseline       AP03    OK                          4/4     6/6    10.45 cm    0.13 deg
+moving_cam/fov          69 deg baseline       AP01    OK_FULL                     4/4     6/6    27.50 cm    1.92 deg
+moving_cam/fov          69 deg baseline       AP02    OK_FULL                     4/4     6/6     5.47 cm    0.33 deg
+moving_cam/fov          69 deg baseline       AP03    OK_FULL                     4/4     6/6     2.92 cm    0.07 deg
 
-moving_cam/fov          100 deg               AP01    OK                          4/4     6/6    13.44 cm    2.22 deg
-moving_cam/fov          100 deg               AP02    OK_FULL                     4/4     6/6    16.11 cm    0.96 deg
-moving_cam/fov          100 deg               AP03    OK                          4/4     6/6   310.90 cm   22.84 deg
+moving_cam/fov          100 deg               AP01    OK_FULL                     4/4     6/6    40.72 cm    3.80 deg
+moving_cam/fov          100 deg               AP02    OK_FULL                     4/4     6/6     5.72 cm    0.33 deg
+moving_cam/fov          100 deg               AP03    OK_FULL                     4/4     6/6     7.49 cm    0.05 deg
 
-moving_cam/fov          140 deg               AP01    OK                          4/4     6/6    15.43 cm    2.63 deg
-moving_cam/fov          140 deg               AP02    OK_FULL                     4/4     6/6    22.09 cm    1.18 deg
-moving_cam/fov          140 deg               AP03    OK                          4/4     6/6    18.95 cm    0.13 deg
+moving_cam/fov          140 deg               AP01    OK_FULL                     4/4     6/6    38.06 cm    3.81 deg
+moving_cam/fov          140 deg               AP02    OK_FULL                     4/4     6/6     8.16 cm    0.37 deg
+moving_cam/fov          140 deg               AP03    OK_FULL                     4/4     6/6    14.03 cm    0.02 deg
 
-moving_cam/motion_blur  kernel 0 baseline     AP01    OK                          4/4     6/6    12.76 cm    2.18 deg
-moving_cam/motion_blur  kernel 0 baseline     AP02    OK_FULL                     4/4     6/6    17.40 cm    1.29 deg
-moving_cam/motion_blur  kernel 0 baseline     AP03    OK                          4/4     6/6    10.92 cm    0.11 deg
+moving_cam/motion_blur  kernel 0 baseline     AP01    OK_FULL                     4/4     6/6    27.50 cm    1.92 deg
+moving_cam/motion_blur  kernel 0 baseline     AP02    OK_FULL                     4/4     6/6     5.47 cm    0.33 deg
+moving_cam/motion_blur  kernel 0 baseline     AP03    OK_FULL                     4/4     6/6     2.92 cm    0.07 deg
 
-moving_cam/motion_blur  kernel 9              AP01    OK                          4/4     6/6    16.59 cm    2.64 deg
-moving_cam/motion_blur  kernel 9              AP02    OK_FULL                     4/4     6/6    35.14 cm    4.14 deg
-moving_cam/motion_blur  kernel 9              AP03    OK                          4/4     6/6     3.51 cm    0.21 deg
+moving_cam/motion_blur  kernel 9              AP01    OK_FULL                     4/4     6/6    37.91 cm    3.77 deg
+moving_cam/motion_blur  kernel 9              AP02    OK_FULL                     4/4     6/6    13.46 cm    1.49 deg
+moving_cam/motion_blur  kernel 9              AP03    OK_FULL                     4/4     6/6    10.27 cm    0.16 deg
 
-moving_cam/motion_blur  kernel 21             AP01    PARTIAL_3_OF_4              3/4     3/6    53.36 cm    3.43 deg
-moving_cam/motion_blur  kernel 21             AP02    PARTIAL_3_OF_4              3/4     3/6     9.77 cm    0.93 deg
-moving_cam/motion_blur  kernel 21             AP03    PARTIAL_3_OF_4              3/4     3/6    47.69 cm    1.96 deg
+moving_cam/motion_blur  kernel 21             AP01    PARTIAL_3_OF_4              3/4     3/6   515.90 cm   40.11 deg
+moving_cam/motion_blur  kernel 21             AP02    PARTIAL_3_OF_4              3/4     3/6    17.20 cm    2.08 deg
+moving_cam/motion_blur  kernel 21             AP03    FAILED_NO_PAIR              1/4     0/6        - cm       - deg
 
-moving_cam/motion_blur  kernel 41             AP01    PARTIAL_2_OF_4              2/4     1/6     6.69 cm    1.86 deg
-moving_cam/motion_blur  kernel 41             AP02    PARTIAL_3_OF_4              3/4     3/6     9.77 cm    0.93 deg
+moving_cam/motion_blur  kernel 41             AP01    FAILED_NO_PAIR              0/4     0/6        - cm       - deg
+moving_cam/motion_blur  kernel 41             AP02    PARTIAL_3_OF_4              3/4     3/6    17.20 cm    2.08 deg
 moving_cam/motion_blur  kernel 41             AP03    FAILED_NO_PAIR              0/4     0/6        - cm       - deg
 
-moving_cam/res          160x90                AP01    PARTIAL_2_OF_4              2/4     1/6     6.69 cm    1.86 deg
-moving_cam/res          160x90                AP02    PARTIAL_3_OF_4              3/4     3/6    12.87 cm    0.64 deg
-moving_cam/res          160x90                AP03    FAILED_NO_PAIR              0/4     0/6        - cm       - deg
+moving_cam/res          160x90                AP01    PARTIAL_2_OF_4              2/4     1/6     9.91 cm    0.31 deg
+moving_cam/res          160x90                AP02    OK_FULL                     4/4     6/6   271.99 cm   18.92 deg
+moving_cam/res          160x90                AP03    FAILED_NO_PAIR              1/4     0/6        - cm       - deg
 
-moving_cam/res          320x180               AP01    OK                          4/4     6/6   151.61 cm   13.54 deg
-moving_cam/res          320x180               AP02    OK_FULL                     4/4     6/6    23.78 cm    1.44 deg
-moving_cam/res          320x180               AP03    OK                          4/4     6/6    38.10 cm    1.73 deg
+moving_cam/res          320x180               AP01    PARTIAL_2_OF_4              2/4     1/6     9.91 cm    0.31 deg
+moving_cam/res          320x180               AP02    OK_FULL                     4/4     6/6   261.75 cm   23.27 deg
+moving_cam/res          320x180               AP03    OK_FULL                     4/4     6/6    19.03 cm    0.22 deg
 
-moving_cam/res          1280x720 baseline     AP01    OK                          4/4     6/6    12.24 cm    2.13 deg
-moving_cam/res          1280x720 baseline     AP02    OK_FULL                     4/4     6/6    17.40 cm    1.29 deg
-moving_cam/res          1280x720 baseline     AP03    OK                          4/4     6/6    11.87 cm    0.13 deg
+moving_cam/res          1280x720 baseline     AP01    OK_FULL                     4/4     6/6    27.50 cm    1.92 deg
+moving_cam/res          1280x720 baseline     AP02    OK_FULL                     4/4     6/6     5.47 cm    0.33 deg
+moving_cam/res          1280x720 baseline     AP03    OK_FULL                     4/4     6/6     2.92 cm    0.07 deg
 
-moving_cam/res          2560x1440             AP01    OK                          4/4     6/6    12.40 cm    2.10 deg
-moving_cam/res          2560x1440             AP02    OK_FULL                     4/4     6/6    14.10 cm    1.37 deg
-moving_cam/res          2560x1440             AP03    OK                          4/4     6/6     6.41 cm    0.27 deg
+moving_cam/res          2560x1440             AP01    OK_FULL                     4/4     6/6    29.92 cm    2.09 deg
+moving_cam/res          2560x1440             AP02    OK_FULL                     4/4     6/6     2.46 cm    0.20 deg
+moving_cam/res          2560x1440             AP03    OK_FULL                     4/4     6/6     1.02 cm    0.04 deg
 
-world/lighting          dark extreme          AP01    OK_FULL                     4/4     6/6    18.01 cm    2.31 deg
-world/lighting          dark extreme          AP02    OK_FULL                     4/4     6/6    16.44 cm    0.95 deg
-world/lighting          dark extreme          AP03    OK_FULL                     4/4     6/6    10.97 cm    0.36 deg
+world/lighting          dark extreme          AP01    OK_FULL                     4/4     6/6    38.84 cm    3.06 deg
+world/lighting          dark extreme          AP02    OK_FULL                     4/4     6/6   182.62 cm   12.46 deg
+world/lighting          dark extreme          AP03    OK_FULL                     4/4     6/6     2.62 cm    0.09 deg
 
-world/lighting          low                   AP01    OK_FULL                     4/4     6/6    13.43 cm    2.09 deg
-world/lighting          low                   AP02    OK_FULL                     4/4     6/6    14.64 cm    0.69 deg
-world/lighting          low                   AP03    OK_FULL                     4/4     6/6    52.44 cm    8.38 deg
+world/lighting          low                   AP01    OK_FULL                     4/4     6/6    20.33 cm    3.03 deg
+world/lighting          low                   AP02    OK_FULL                     4/4     6/6    16.88 cm    1.13 deg
+world/lighting          low                   AP03    OK_FULL                     4/4     6/6     2.98 cm    0.07 deg
 
-world/lighting          normal baseline       AP01    OK_FULL                     4/4     6/6    12.86 cm    2.06 deg
-world/lighting          normal baseline       AP02    OK_FULL                     4/4     6/6    14.31 cm    0.66 deg
-world/lighting          normal baseline       AP03    OK_FULL                     4/4     6/6    12.61 cm    0.32 deg
+world/lighting          normal baseline       AP01    OK_FULL                     4/4     6/6    20.07 cm    2.98 deg
+world/lighting          normal baseline       AP02    OK_FULL                     4/4     6/6    16.93 cm    1.14 deg
+world/lighting          normal baseline       AP03    OK_FULL                     4/4     6/6     2.98 cm    0.04 deg
 
-world/lighting          bright                AP01    OK_FULL                     4/4     6/6    12.84 cm    2.09 deg
-world/lighting          bright                AP02    OK_FULL                     4/4     6/6    14.82 cm    0.68 deg
-world/lighting          bright                AP03    OK_FULL                     4/4     6/6    11.34 cm    0.12 deg
+world/lighting          bright                AP01    OK_FULL                     4/4     6/6    19.06 cm    2.86 deg
+world/lighting          bright                AP02    OK_FULL                     4/4     6/6    16.74 cm    1.11 deg
+world/lighting          bright                AP03    OK_FULL                     4/4     6/6     2.84 cm    0.04 deg
 
 Detailed reports:
 - ablations/

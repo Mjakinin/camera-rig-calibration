@@ -14,6 +14,7 @@ import numpy as np
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
 
 
@@ -144,7 +145,12 @@ class ImageGrabber(Node):
         super().__init__("moving_camera_route_capture")
         self.last_msg = None
         self.counter = 0
-        self.sub = self.create_subscription(Image, TOPIC, self.cb, 10)
+        self.sub = self.create_subscription(
+            Image,
+            TOPIC,
+            self.cb,
+            qos_profile_sensor_data,
+        )
         self.get_logger().info(f"subscribed: {TOPIC}")
 
     def cb(self, msg):
@@ -187,8 +193,12 @@ def main():
     rclpy.init()
     node = ImageGrabber()
 
-    print("[INFO] waiting for first image...")
-    msg, cnt = wait_for_image(node, -1, args.timeout)
+    startup_timeout = max(args.timeout, 30.0)
+    print(
+        f"[INFO] waiting for first image "
+        f"(startup timeout={startup_timeout:.1f}s)..."
+    )
+    msg, cnt = wait_for_image(node, -1, startup_timeout)
     if msg is None:
         node.destroy_node()
         rclpy.shutdown()

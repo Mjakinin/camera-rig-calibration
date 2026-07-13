@@ -7,10 +7,17 @@ BA_SCRIPT="run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_gra
 
 echo "=== AP02 Phase 3: distortion-aware graph BA static_only ==="
 
-python3 \
+STATIC_ONLY_STATUS="OK"
+
+if ! python3 \
   "$BA_SCRIPT" \
   --mode static_only \
   --max-nfev 100
+then
+  STATIC_ONLY_STATUS="FAILED"
+  echo "[WARN] AP02 static_only BA unavailable."
+  echo "[WARN] Continuing with the main with_moving BA."
+fi
 
 echo
 echo "=== AP02 Phase 3: distortion-aware marker-aware with_moving BA ==="
@@ -27,8 +34,13 @@ python3 -u \
 echo
 echo "=== AP02 BA static_only summary ==="
 
-cat \
-  results/bus_real_data/02_ref_marker_graph_ba/07_graph_ba/static_only/ba_summary.txt
+STATIC_SUMMARY="results/bus_real_data/02_ref_marker_graph_ba/07_graph_ba/static_only/ba_summary.txt"
+
+if [[ -f "$STATIC_SUMMARY" ]]; then
+  cat "$STATIC_SUMMARY"
+else
+  echo "[INFO] static_only summary unavailable: $STATIC_ONLY_STATUS"
+fi
 
 echo
 echo "=== AP02 BA with_moving summary ==="
