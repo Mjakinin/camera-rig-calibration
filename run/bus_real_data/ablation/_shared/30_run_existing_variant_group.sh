@@ -15,15 +15,15 @@ VARIANTS=("$@")
 
 DETECTOR="run/bus_real_data/_shared/baseline/02_detect_shared_aruco_observations.py"
 COMMON="run/bus_real_data/ablation/_shared/12_run_one_clean_variant_common.sh"
+FINALIZER="run/bus_real_data/reporting/run_refresh_final_results.sh"
+FINAL99="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
 STAMP="$(date +%Y%m%d_%H%M%S)"
 SAFE_LABEL="$(printf '%s' "$LABEL" | tr ' /' '__' | tr -cd '[:alnum:]_.-')"
 BACKUP="results/bus_real_data/_runtime_backups/${SAFE_LABEL}_${STAMP}"
 REUSE_EXISTING_OBSERVATIONS="${REUSE_EXISTING_OBSERVATIONS:-0}"
 
 # The canonical final-report directory is intentionally not moved here.
-# The common variant runner is called with REFRESH_CANONICAL_FINAL=0, so it
-# cannot overwrite those reports. Keeping the directory in place allows the
-# overnight live log and LIVE_STATUS.txt to remain readable throughout runs.
+# Variant runs cannot overwrite it because REFRESH_CANONICAL_FINAL=0 is used.
 CANONICAL_PATHS=(
   results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1
   results/bus_real_data/01_marker_direct_relay_multimarker_multichain
@@ -31,8 +31,13 @@ CANONICAL_PATHS=(
   results/bus_real_data/03_targetless_colmap_aruco_scale
 )
 BACKED_UP=()
+RESTORED=0
 
 restore() {
+  if [[ "$RESTORED" == "1" ]]; then
+    return 0
+  fi
+
   set +e
   for path in "${CANONICAL_PATHS[@]}"; do
     rm -rf "$path"
@@ -45,6 +50,8 @@ restore() {
     fi
   done
   rm -rf "$BACKUP"
+  RESTORED=1
+  set -e
 }
 trap restore EXIT INT TERM
 
@@ -88,4 +95,30 @@ done
 python3 run/bus_real_data/ablation/21_collect_full_ablation_report.py \
   "$ROOT" "$SAFE_LABEL"
 
+# Restore the nominal method workspaces before rebuilding canonical reports.
+# This is done explicitly rather than waiting for EXIT so reporting always sees
+# the original baseline outputs, never the last ablation variant workspace.
+restore
+trap - EXIT INT TERM
+
+# A failed older backup attempt may have left the tracked final-report tree
+# absent. Recover only that tree before the report-only baseline reuse step.
+if [[ ! -d "$FINAL99" ]]; then
+  echo "[WARN] Missing $FINAL99; restoring tracked reports from HEAD."
+  git restore --source=HEAD --worktree -- "$FINAL99"
+fi
+
+if [[ ! -d "$FINAL99" ]]; then
+  echo "[ERROR] Could not restore canonical final-report tree: $FINAL99"
+  exit 1
+fi
+
+# Permanent finalization for every group rerun:
+# - rebuild canonical result TXT files,
+# - rewrite Route and Density as readable tables,
+# - remove old/duplicated marker-map sections,
+# - install one complete or partial REF14 map inside every variant block.
+bash "$FINALIZER" --reuse-baseline --promote
+
 echo "[OK] completed group: $LABEL"
+echo "[OK] canonical readable reports and partial REF14 maps refreshed"
