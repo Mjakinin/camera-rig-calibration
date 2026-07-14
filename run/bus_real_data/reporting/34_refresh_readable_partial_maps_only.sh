@@ -11,6 +11,7 @@ required=(
   "run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py"
   "run/bus_real_data/ablation/moving_cam/density/05_write_readable_density_reports.py"
   "run/bus_real_data/reporting/33_write_ref14_available_maps.py"
+  "run/bus_real_data/reporting/35_remove_legacy_bestfit_full_maps.py"
   "$FINAL/details/secondary/00_BASELINE_MAP_TO_GT.txt"
   "$FINAL/details/secondary/01_FOV_MAP_TO_GT.txt"
   "$FINAL/details/secondary/02_MOTION_BLUR_MAP_TO_GT.txt"
@@ -39,6 +40,7 @@ echo "==========================================================================
 
 python3 run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py
 python3 run/bus_real_data/ablation/moving_cam/density/05_write_readable_density_reports.py
+python3 run/bus_real_data/reporting/35_remove_legacy_bestfit_full_maps.py
 python3 run/bus_real_data/reporting/33_write_ref14_available_maps.py --skip-lighting
 
 declare -A expected_counts=(
