@@ -39,32 +39,6 @@ phase() {
   echo "================================================================================"
 }
 
-restore_extra_group() {
-  local source="$1"
-  local number="$2"
-  local name="$3"
-  local final="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
-
-  mkdir -p \
-    "$final/ablations" \
-    "$final/data" \
-    "$final/data/primary" \
-    "$final/data/secondary"
-
-  cp -f "$source/FULL_ABLATION_REPORT.txt" \
-    "$final/ablations/${number}_${name}_ALL_METHODS.txt"
-  cp -f "$source/RUN_STATUS_ALL_VARIANTS.csv" \
-    "$final/data/${name}_RUN_STATUS.csv"
-  cp -f "$source/PRIMARY_PAIRWISE_SUMMARY_ALL_VARIANTS.csv" \
-    "$final/data/primary/${name}_ABLATION_SUMMARY.csv"
-  cp -f "$source/PRIMARY_PAIRWISE_DETAIL_ALL_VARIANTS.csv" \
-    "$final/data/primary/${name}_ABLATION_DETAIL.csv"
-  cp -f "$source/SECONDARY_REF14_WORLD_SUMMARY_ALL_VARIANTS.csv" \
-    "$final/data/secondary/${name}_ABLATION_SUMMARY.csv"
-  cp -f "$source/SECONDARY_REF14_WORLD_DETAIL_ALL_VARIANTS.csv" \
-    "$final/data/secondary/${name}_ABLATION_DETAIL.csv"
-}
-
 phase "1. REGENERATE LIGHTING WORLDS FROM CURRENT 20-MARKER BASE WORLD"
 python3 run/bus_real_data/ablation/world/lighting/create_physical_lighting_worlds.py
 
@@ -134,27 +108,16 @@ PY
 phase "6. RERUN AP01, AP02 AND AP03 FOR ALL LIGHTING VARIANTS"
 bash run/bus_real_data/ablation/world/lighting/21_run_all_lighting_methods.sh
 
-phase "7. REFRESH CANONICAL FINAL RESULTS"
+phase "7. REFRESH ALL CANONICAL REPORTS"
 bash run/bus_real_data/reporting/run_refresh_final_results.sh --reuse-baseline --promote
 
-phase "8. RESTORE ROUTE/DENSITY PACKAGES AND WRITE READABLE REPORTS"
-restore_extra_group \
-  results/bus_real_data/ablation/world/route/ABLATION_SUMMARY \
-  05 ROUTE_PATH
-restore_extra_group \
-  results/bus_real_data/ablation/moving_cam/density/ABLATION_SUMMARY \
-  06 FRAME_DENSITY
-
-python3 run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py
-python3 run/bus_real_data/ablation/moving_cam/density/05_write_readable_density_reports.py
-python3 run/bus_real_data/reporting/33_write_ref14_available_maps.py
-
-phase "9. FINAL LIGHTING VERIFICATION"
+phase "8. FINAL LIGHTING AND REPORT VERIFICATION"
 python3 - <<'PY'
 from pathlib import Path
 import csv
 
 root = Path("results/bus_real_data/ablation/world/lighting")
+final99 = Path("results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT")
 expected_world = set(range(0, 15)) | set(range(16, 21))
 
 for variant in (
@@ -182,6 +145,18 @@ for variant in (
         ids = sorted({int(float(row["entity_id"])) for row in rows})
         print(f"AP02 estimated marker IDs: {ids}")
         print(f"AP02 missing marker IDs: {sorted(expected_world - set(ids))}")
+
+report = final99 / "details/secondary/04_LIGHTING_MAP_TO_GT.txt"
+count = sum(
+    1
+    for line in report.read_text(errors="replace").splitlines()
+    if line.startswith("=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN:")
+)
+if count != 4:
+    raise SystemExit(
+        f"[ERROR] lighting report contains {count} inline maps instead of 4"
+    )
+print(f"[OK] lighting report contains {count} inline marker maps")
 PY
 
 echo
