@@ -32,6 +32,7 @@ STATIC_CAMERAS = list(EV.STATIC_CAMERAS)
 LEGACY_BEGIN = "=== AP02 REF14-ANCHORED AVAILABLE MAPS BEGIN ==="
 INLINE_BEGIN_PREFIX = "=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN:"
 INLINE_END_PREFIX = "=== AP02 REF14-ANCHORED AVAILABLE MAP END:"
+OLD_FULL_MAP_HEADING = "AP02 OPTIONAL GT-ALIGNED FULL MAP"
 
 GROUPS = [
     {
@@ -194,7 +195,7 @@ def evaluate(diag: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if REF_KEY not in estimates:
         return [], meta
 
-    T_world_from_local = gt[REF_KEY] @ EV.invT(estimates[REF_KEY])
+    transform = gt[REF_KEY] @ EV.invT(estimates[REF_KEY])
     keys = [
         ("static_camera", camera) for camera in available_cameras
     ] + [
@@ -204,9 +205,9 @@ def evaluate(diag: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for key in keys:
         entity_type, entity_raw = key
-        T_local = estimates[key]
-        T_aligned = T_world_from_local @ T_local
-        T_gt = gt[key]
+        local_pose = estimates[key]
+        aligned_pose = transform @ local_pose
+        gt_pose = gt[key]
 
         marker_id: Any = ""
         entity_id = str(entity_raw)
@@ -222,13 +223,13 @@ def evaluate(diag: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
             "marker_id": marker_id,
             "used_for_alignment": "yes" if key == REF_KEY else "no",
             "alignment_frame": "GT_world_from_est_local_using_ref14_pose_only",
-            "translation_error_cm": EV.trans_error_cm(T_aligned, T_gt),
-            "rotation_error_deg": EV.rot_error_deg(T_aligned, T_gt),
+            "translation_error_cm": EV.trans_error_cm(aligned_pose, gt_pose),
+            "rotation_error_deg": EV.rot_error_deg(aligned_pose, gt_pose),
         }
-        row.update(EV.delta_columns(T_aligned, T_gt))
-        row.update(EV.pose_columns("est_local", T_local))
-        row.update(EV.pose_columns("est_gt_aligned", T_aligned))
-        row.update(EV.pose_columns("gt_world", T_gt))
+        row.update(EV.delta_columns(aligned_pose, gt_pose))
+        row.update(EV.pose_columns("est_local", local_pose))
+        row.update(EV.pose_columns("est_gt_aligned", aligned_pose))
+        row.update(EV.pose_columns("gt_world", gt_pose))
         rows.append(row)
 
     return rows, meta
@@ -305,21 +306,20 @@ def records_for_group(
     return records
 
 
-def clean_report(text: str) -> str:
+def strip_global_legacy(text: str) -> str:
     if LEGACY_BEGIN in text:
         text = text.split(LEGACY_BEGIN, 1)[0]
 
     inline_pattern = re.compile(
-        r"\n?=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: [^\n]+ ==="
-        r".*?"
-        r"=== AP02 REF14-ANCHORED AVAILABLE MAP END: [^\n]+ ===\n?",
+        rf"\n?{re.escape(INLINE_BEGIN_PREFIX)}[^\n]*\n"
+        rf".*?"
+        rf"{re.escape(INLINE_END_PREFIX)}[^\n]*\n?",
         flags=re.DOTALL,
     )
-    text = inline_pattern.sub("\n", text)
-    return text.rstrip() + "\n"
+    return inline_pattern.sub("\n", text).rstrip() + "\n"
 
 
-def record_marker_position(text: str, variant: str) -> int:
+def variant_position(text: str, variant: str) -> int:
     candidates = [
         f"VARIANT:   {variant}",
         f"— {variant} —",
@@ -341,6 +341,15 @@ def block_start(text: str, marker_position: int) -> int:
     return divider_start + 1
 
 
+def remove_old_full_map(block: str) -> str:
+    lines = block.splitlines()
+    for index, line in enumerate(lines):
+        if line.strip() == OLD_FULL_MAP_HEADING:
+            lines = lines[:index]
+            break
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def inline_section(
     variant: str,
     rows: list[dict[str, Any]],
@@ -356,7 +365,7 @@ def inline_section(
         "- marker 14 alone defines the estimated-local to GT-world transform",
         "- marker 14 is therefore marked 'yes' and has zero residual by construction",
         "- every camera and every other available marker is marked 'no'",
-        "- this section is separate from the preceding best-fit SE(3) diagnostic",
+        "- this is the only marker-map table in this readable variant block",
         "",
         *table(rows, meta),
         f"{INLINE_END_PREFIX} {variant} ===",
@@ -379,14 +388,16 @@ def install_inline_sections(
     if not report.is_file():
         raise RuntimeError(f"Missing readable secondary report: {report}")
 
-    text = clean_report(report.read_text(encoding="utf-8", errors="replace"))
+    text = strip_global_legacy(
+        report.read_text(encoding="utf-8", errors="replace")
+    )
 
     located = []
     for variant, parameter, final, rows, meta in evaluated:
-        marker_position = record_marker_position(text, variant)
+        position = variant_position(text, variant)
         located.append(
             (
-                block_start(text, marker_position),
+                block_start(text, position),
                 variant,
                 parameter,
                 final,
@@ -396,23 +407,35 @@ def install_inline_sections(
         )
 
     located.sort(key=lambda item: item[0])
+    prefix = text[: located[0][0]].rstrip()
+    rendered_blocks: list[str] = []
 
-    for index in range(len(located) - 1, -1, -1):
-        current = located[index]
-        insertion = (
-            located[index + 1][0]
-            if index + 1 < len(located)
-            else len(text)
+    for index, item in enumerate(located):
+        start, variant, _parameter, _final, rows, meta = item
+        end = located[index + 1][0] if index + 1 < len(located) else len(text)
+        block = remove_old_full_map(text[start:end])
+        rendered_blocks.append(
+            block.rstrip() + "\n\n" + inline_section(variant, rows, meta)
         )
-        _start, variant, _parameter, _final, rows, meta = current
-        section = inline_section(variant, rows, meta)
 
-        before = text[:insertion].rstrip()
-        after = text[insertion:].lstrip("\n")
-        text = before + "\n\n" + section.rstrip() + "\n\n" + after
+    output = prefix + "\n\n" + "\n\n".join(rendered_blocks) + "\n"
+    report.write_text(output, encoding="utf-8")
 
-    report.write_text(text.rstrip() + "\n", encoding="utf-8")
-    print(f"[OK] inline REF14 maps: {report}")
+    written = report.read_text(encoding="utf-8", errors="replace")
+    inline_count = written.count(INLINE_BEGIN_PREFIX)
+    if inline_count != len(evaluated):
+        raise RuntimeError(
+            f"{report}: found {inline_count} inline maps; expected {len(evaluated)}"
+        )
+    if LEGACY_BEGIN in written:
+        raise RuntimeError(f"{report}: legacy bottom marker-map block remains")
+    if OLD_FULL_MAP_HEADING in written:
+        raise RuntimeError(f"{report}: old GT-aligned full-map table remains")
+
+    print(
+        f"[OK] {report}: {inline_count} inline REF14 map(s), "
+        "old marker-map table removed"
+    )
 
 
 def main() -> None:
@@ -420,7 +443,7 @@ def main() -> None:
     parser.add_argument(
         "--skip-lighting",
         action="store_true",
-        help="Do not touch the lighting report before its corrected recapture.",
+        help="Do not touch the lighting report before corrected recapture.",
     )
     args = parser.parse_args()
 
@@ -437,8 +460,12 @@ def main() -> None:
         for variant, parameter, final, diag in records_for_group(group):
             rows, meta = evaluate(diag)
 
-            output_csv = final / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP.csv"
-            output_txt = final / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP.txt"
+            output_csv = (
+                final / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP.csv"
+            )
+            output_txt = (
+                final / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP.txt"
+            )
             output_meta = (
                 final
                 / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP_metadata.json"
@@ -475,7 +502,9 @@ def main() -> None:
                     "missing_marker_ids": ";".join(
                         map(str, meta["missing_marker_ids"])
                     ),
-                    "ref14_available": "yes" if meta["ref14_available"] else "no",
+                    "ref14_available": (
+                        "yes" if meta["ref14_available"] else "no"
+                    ),
                     "row_count": len(rows),
                 }
             )
@@ -504,7 +533,7 @@ def main() -> None:
         "\n".join(audit_lines) + "\n",
         encoding="utf-8",
     )
-    print("[OK] one inline complete/partial REF14 map per variant")
+    print("[OK] exactly one readable REF14 map per processed variant")
 
 
 if __name__ == "__main__":
