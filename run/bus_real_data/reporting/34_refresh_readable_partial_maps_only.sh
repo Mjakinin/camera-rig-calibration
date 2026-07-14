@@ -7,6 +7,16 @@ export PYTHONPATH="$PWD/run/bus_real_data:${PYTHONPATH:-}"
 
 FINAL="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
 
+if [[ ! -d "$FINAL" ]]; then
+  echo "[WARN] Missing $FINAL; restoring tracked canonical reports from HEAD."
+  git restore --source=HEAD --worktree -- "$FINAL"
+fi
+
+if [[ ! -d "$FINAL" ]]; then
+  echo "[ERROR] Could not restore canonical final-report tree: $FINAL"
+  exit 1
+fi
+
 required=(
   "run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py"
   "run/bus_real_data/ablation/moving_cam/density/05_write_readable_density_reports.py"
