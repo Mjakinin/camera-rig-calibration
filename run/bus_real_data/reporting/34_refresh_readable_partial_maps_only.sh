@@ -32,50 +32,49 @@ echo "- no image capture"
 echo "- no ArUco redetection"
 echo "- no AP01/AP02/AP03 rerun"
 echo "- rewrites readable route and density detail reports"
-echo "- appends REF14-anchored complete/partial AP02 maps"
+echo "- removes the old duplicated bottom-of-file marker-map blocks"
+echo "- installs exactly one REF14 map inside each non-lighting variant block"
 echo "- intentionally skips lighting until corrected recapture is finished"
 echo "================================================================================"
 
 python3 run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py
 python3 run/bus_real_data/ablation/moving_cam/density/05_write_readable_density_reports.py
+python3 run/bus_real_data/reporting/33_write_ref14_available_maps.py --skip-lighting
 
-python3 - <<'PY'
-from pathlib import Path
-import runpy
-
-namespace = runpy.run_path(
-    "run/bus_real_data/reporting/33_write_ref14_available_maps.py"
+declare -A expected_counts=(
+  ["00_BASELINE_MAP_TO_GT.txt"]=1
+  ["01_FOV_MAP_TO_GT.txt"]=4
+  ["02_MOTION_BLUR_MAP_TO_GT.txt"]=4
+  ["03_RESOLUTION_MAP_TO_GT.txt"]=4
+  ["05_ROUTE_PATH_MAP_TO_GT.txt"]=2
+  ["06_FRAME_DENSITY_MAP_TO_GT.txt"]=7
 )
 
-namespace["GROUPS"][:] = [
-    group
-    for group in namespace["GROUPS"]
-    if Path(group["report"]).name != "04_LIGHTING_MAP_TO_GT.txt"
-]
+for filename in "${!expected_counts[@]}"; do
+  report="$FINAL/details/secondary/$filename"
+  count="$(
+    grep -c '^=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN:' "$report" \
+      || true
+  )"
 
-namespace["main"]()
-PY
-
-for report in \
-  "$FINAL/details/secondary/00_BASELINE_MAP_TO_GT.txt" \
-  "$FINAL/details/secondary/01_FOV_MAP_TO_GT.txt" \
-  "$FINAL/details/secondary/02_MOTION_BLUR_MAP_TO_GT.txt" \
-  "$FINAL/details/secondary/03_RESOLUTION_MAP_TO_GT.txt" \
-  "$FINAL/details/secondary/05_ROUTE_PATH_MAP_TO_GT.txt" \
-  "$FINAL/details/secondary/06_FRAME_DENSITY_MAP_TO_GT.txt"
-do
-  if ! grep -q "AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAPS" "$report"; then
-    echo "[ERROR] Partial-map section missing from $report"
+  if [[ "$count" -ne "${expected_counts[$filename]}" ]]; then
+    echo "[ERROR] $filename contains $count inline maps; expected ${expected_counts[$filename]}"
     exit 1
   fi
-  echo "[OK] partial-map section: $report"
+
+  if grep -q '^=== AP02 REF14-ANCHORED AVAILABLE MAPS BEGIN ===' "$report"; then
+    echo "[ERROR] Legacy duplicated bottom block remains in $filename"
+    exit 1
+  fi
+
+  echo "[OK] $filename: $count inline map section(s), no legacy duplicate"
 done
 
 echo
 echo "[INFO] Lighting was not modified because its current captures are invalid."
-echo "[INFO] The corrected lighting rerun writes the lighting partial maps after recapture."
+echo "[INFO] The corrected lighting rerun writes one inline map per lighting variant."
 echo
 cat "$FINAL/AP02_REF14_AVAILABLE_MAP_AUDIT.txt"
 
 echo
-echo "[OK] Report-only readable partial-map refresh complete."
+echo "[OK] Report-only readable inline-map refresh complete."
