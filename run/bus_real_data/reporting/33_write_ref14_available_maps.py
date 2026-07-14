@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import csv
 import importlib.util
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any
 
@@ -26,8 +28,10 @@ SPEC.loader.exec_module(EV)
 REF_KEY = ("aruco_marker", int(EV.REF_MARKER_ID))
 EXPECTED_MARKERS = list(EV.SIM_MARKER_IDS)
 STATIC_CAMERAS = list(EV.STATIC_CAMERAS)
-BEGIN = "=== AP02 REF14-ANCHORED AVAILABLE MAPS BEGIN ==="
-END = "=== AP02 REF14-ANCHORED AVAILABLE MAPS END ==="
+
+LEGACY_BEGIN = "=== AP02 REF14-ANCHORED AVAILABLE MAPS BEGIN ==="
+INLINE_BEGIN_PREFIX = "=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN:"
+INLINE_END_PREFIX = "=== AP02 REF14-ANCHORED AVAILABLE MAP END:"
 
 GROUPS = [
     {
@@ -143,64 +147,73 @@ def load_estimates(diag: Path) -> dict[tuple[str, Any], Any]:
     markers = diag / "ap02_with_moving_marker_poses_ref_marker.csv"
     if not cameras.is_file() or not markers.is_file():
         return {}
-    est: dict[tuple[str, Any], Any] = {}
+
+    estimates: dict[tuple[str, Any], Any] = {}
     for row in read_csv(cameras):
         camera = row.get("entity_id", "")
         if camera:
-            est[("static_camera", camera)] = EV.T_from_ap02_row(row)
+            estimates[("static_camera", camera)] = EV.T_from_ap02_row(row)
+
     for row in read_csv(markers):
         try:
             marker_id = int(float(row.get("entity_id", "")))
         except (TypeError, ValueError):
             continue
-        est[("aruco_marker", marker_id)] = EV.T_from_ap02_row(row)
-    return est
+        estimates[("aruco_marker", marker_id)] = EV.T_from_ap02_row(row)
+
+    return estimates
 
 
 def evaluate(diag: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     gt = EV.load_gt_world_entities()
-    est = load_estimates(diag)
+    estimates = load_estimates(diag)
+
     available_cameras = [
-        camera for camera in STATIC_CAMERAS
-        if ("static_camera", camera) in est
+        camera
+        for camera in STATIC_CAMERAS
+        if ("static_camera", camera) in estimates
     ]
     available_markers = [
-        marker for marker in EXPECTED_MARKERS
-        if ("aruco_marker", marker) in est
+        marker
+        for marker in EXPECTED_MARKERS
+        if ("aruco_marker", marker) in estimates
     ]
+
     meta = {
         "available_cameras": available_cameras,
         "missing_cameras": [
-            camera for camera in STATIC_CAMERAS
-            if camera not in available_cameras
+            camera for camera in STATIC_CAMERAS if camera not in available_cameras
         ],
         "available_marker_ids": available_markers,
         "missing_marker_ids": [
-            marker for marker in EXPECTED_MARKERS
-            if marker not in available_markers
+            marker for marker in EXPECTED_MARKERS if marker not in available_markers
         ],
-        "ref14_available": REF_KEY in est,
+        "ref14_available": REF_KEY in estimates,
     }
-    if REF_KEY not in est:
+
+    if REF_KEY not in estimates:
         return [], meta
 
-    T_world_from_local = gt[REF_KEY] @ EV.invT(est[REF_KEY])
+    T_world_from_local = gt[REF_KEY] @ EV.invT(estimates[REF_KEY])
     keys = [
         ("static_camera", camera) for camera in available_cameras
     ] + [
         ("aruco_marker", marker) for marker in available_markers
     ]
+
     rows: list[dict[str, Any]] = []
     for key in keys:
         entity_type, entity_raw = key
-        T_local = est[key]
+        T_local = estimates[key]
         T_aligned = T_world_from_local @ T_local
         T_gt = gt[key]
+
         marker_id: Any = ""
         entity_id = str(entity_raw)
         if entity_type == "aruco_marker":
             marker_id = int(entity_raw)
             entity_id = EV.marker_name(marker_id)
+
         row: dict[str, Any] = {
             "approach": "AP02_ref_marker_graph_ba",
             "evaluation": "ref14_anchored_available_map",
@@ -217,6 +230,7 @@ def evaluate(diag: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         row.update(EV.pose_columns("est_gt_aligned", T_aligned))
         row.update(EV.pose_columns("gt_world", T_gt))
         rows.append(row)
+
     return rows, meta
 
 
@@ -228,6 +242,7 @@ def table(rows: list[dict[str, Any]], meta: dict[str, Any]) -> list[str]:
         f"missing marker IDs: {meta['missing_marker_ids']}",
         "",
     ]
+
     if not rows:
         lines += [
             "NOT AVAILABLE: reference marker 14 is not present in the AP02 estimate.",
@@ -235,6 +250,7 @@ def table(rows: list[dict[str, Any]], meta: dict[str, Any]) -> list[str]:
             "",
         ]
         return lines
+
     lines += [
         (
             f"{'Entity':24s}{'Type':16s}{'Used align':>12s}"
@@ -244,6 +260,7 @@ def table(rows: list[dict[str, Any]], meta: dict[str, Any]) -> list[str]:
         ),
         "-" * 169,
     ]
+
     for row in rows:
         aligned = (
             f"({fmt(row.get('est_gt_aligned_x_m'), 3)}, "
@@ -268,19 +285,17 @@ def table(rows: list[dict[str, Any]], meta: dict[str, Any]) -> list[str]:
             f"{fmt(row.get('rotation_error_deg'), 2, ' deg'):>12s}"
             f"{aligned:>31s}{gt:>31s}{delta:>31s}"
         )
+
     lines.append("")
     return lines
 
 
-def strip_old_section(text: str) -> str:
-    if BEGIN not in text:
-        return text.rstrip() + "\n"
-    return text.split(BEGIN, 1)[0].rstrip() + "\n"
-
-
-def records_for_group(group: dict[str, Any]) -> list[tuple[str, str, Path, Path]]:
+def records_for_group(
+    group: dict[str, Any],
+) -> list[tuple[str, str, Path, Path]]:
     if "records" in group:
         return list(group["records"])
+
     records = []
     root = group["root"]
     for variant, parameter in group["variants"]:
@@ -290,67 +305,185 @@ def records_for_group(group: dict[str, Any]) -> list[tuple[str, str, Path, Path]
     return records
 
 
+def clean_report(text: str) -> str:
+    if LEGACY_BEGIN in text:
+        text = text.split(LEGACY_BEGIN, 1)[0]
+
+    inline_pattern = re.compile(
+        r"\n?=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: [^\n]+ ==="
+        r".*?"
+        r"=== AP02 REF14-ANCHORED AVAILABLE MAP END: [^\n]+ ===\n?",
+        flags=re.DOTALL,
+    )
+    text = inline_pattern.sub("\n", text)
+    return text.rstrip() + "\n"
+
+
+def record_marker_position(text: str, variant: str) -> int:
+    candidates = [
+        f"VARIANT:   {variant}",
+        f"— {variant} —",
+    ]
+    positions = [text.find(candidate) for candidate in candidates]
+    positions = [position for position in positions if position >= 0]
+    if not positions:
+        raise RuntimeError(
+            f"Cannot find variant block for {variant} in readable report"
+        )
+    return min(positions)
+
+
+def block_start(text: str, marker_position: int) -> int:
+    marker_line_start = text.rfind("\n", 0, marker_position) + 1
+    divider_start = text.rfind("\n#", 0, marker_line_start)
+    if divider_start < 0:
+        return marker_line_start
+    return divider_start + 1
+
+
+def inline_section(
+    variant: str,
+    rows: list[dict[str, Any]],
+    meta: dict[str, Any],
+) -> str:
+    lines = [
+        f"{INLINE_BEGIN_PREFIX} {variant} ===",
+        "",
+        "AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP",
+        "=" * 169,
+        "",
+        "Alignment definition:",
+        "- marker 14 alone defines the estimated-local to GT-world transform",
+        "- marker 14 is therefore marked 'yes' and has zero residual by construction",
+        "- every camera and every other available marker is marked 'no'",
+        "- this section is separate from the preceding best-fit SE(3) diagnostic",
+        "",
+        *table(rows, meta),
+        f"{INLINE_END_PREFIX} {variant} ===",
+    ]
+    return "\n".join(lines)
+
+
+def install_inline_sections(
+    report: Path,
+    evaluated: list[
+        tuple[
+            str,
+            str,
+            Path,
+            list[dict[str, Any]],
+            dict[str, Any],
+        ]
+    ],
+) -> None:
+    if not report.is_file():
+        raise RuntimeError(f"Missing readable secondary report: {report}")
+
+    text = clean_report(report.read_text(encoding="utf-8", errors="replace"))
+
+    located = []
+    for variant, parameter, final, rows, meta in evaluated:
+        marker_position = record_marker_position(text, variant)
+        located.append(
+            (
+                block_start(text, marker_position),
+                variant,
+                parameter,
+                final,
+                rows,
+                meta,
+            )
+        )
+
+    located.sort(key=lambda item: item[0])
+
+    for index in range(len(located) - 1, -1, -1):
+        current = located[index]
+        insertion = (
+            located[index + 1][0]
+            if index + 1 < len(located)
+            else len(text)
+        )
+        _start, variant, _parameter, _final, rows, meta = current
+        section = inline_section(variant, rows, meta)
+
+        before = text[:insertion].rstrip()
+        after = text[insertion:].lstrip("\n")
+        text = before + "\n\n" + section.rstrip() + "\n\n" + after
+
+    report.write_text(text.rstrip() + "\n", encoding="utf-8")
+    print(f"[OK] inline REF14 maps: {report}")
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--skip-lighting",
+        action="store_true",
+        help="Do not touch the lighting report before its corrected recapture.",
+    )
+    args = parser.parse_args()
+
     FINAL99.mkdir(parents=True, exist_ok=True)
     audit: list[dict[str, Any]] = []
 
     for group in GROUPS:
-        report = group["report"]
-        if not report.is_file():
-            raise RuntimeError(f"Missing readable secondary report: {report}")
-        section = [
-            BEGIN,
-            "",
-            "AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAPS",
-            "=" * 169,
-            "",
-            "Marker 14 alone defines the world transform in this section.",
-            "Therefore marker 14 has zero residual by construction and is marked 'yes'.",
-            "Every camera and every other available marker is marked 'no' and evaluated relative to marker 14.",
-            "This is separate from the preceding best-fit SE(3) camera-map/full-map diagnostic.",
-            "",
-        ]
+        report = Path(group["report"])
+        if args.skip_lighting and report.name == "04_LIGHTING_MAP_TO_GT.txt":
+            print(f"[SKIP] invalid pre-recapture lighting report: {report}")
+            continue
 
+        evaluated = []
         for variant, parameter, final, diag in records_for_group(group):
             rows, meta = evaluate(diag)
+
             output_csv = final / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP.csv"
             output_txt = final / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP.txt"
-            output_meta = final / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP_metadata.json"
+            output_meta = (
+                final
+                / "DIAGNOSTIC_AP02_REF14_ANCHORED_AVAILABLE_MAP_metadata.json"
+            )
+
             write_csv(output_csv, rows)
-            body = [
-                "AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP",
-                "=" * 169,
-                "",
-                f"variant: {variant}",
-                *table(rows, meta),
-            ]
-            output_txt.write_text("\n".join(body) + "\n", encoding="utf-8")
-            output_meta.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
+            output_txt.write_text(
+                "\n".join(
+                    [
+                        "AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP",
+                        "=" * 169,
+                        "",
+                        f"variant: {variant}",
+                        *table(rows, meta),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            output_meta.write_text(
+                json.dumps(meta, indent=2) + "\n",
+                encoding="utf-8",
+            )
 
-            section += [
-                "#" * 169,
-                f"PARAMETER: {parameter}",
-                f"VARIANT:   {variant}",
-                "#" * 169,
-                "",
-                *table(rows, meta),
-            ]
-            audit.append({
-                "variant": variant,
-                "available_cameras": ";".join(meta["available_cameras"]),
-                "missing_cameras": ";".join(meta["missing_cameras"]),
-                "available_marker_ids": ";".join(map(str, meta["available_marker_ids"])),
-                "missing_marker_ids": ";".join(map(str, meta["missing_marker_ids"])),
-                "ref14_available": "yes" if meta["ref14_available"] else "no",
-                "row_count": len(rows),
-            })
+            evaluated.append((variant, parameter, final, rows, meta))
+            audit.append(
+                {
+                    "variant": variant,
+                    "available_cameras": ";".join(meta["available_cameras"]),
+                    "missing_cameras": ";".join(meta["missing_cameras"]),
+                    "available_marker_ids": ";".join(
+                        map(str, meta["available_marker_ids"])
+                    ),
+                    "missing_marker_ids": ";".join(
+                        map(str, meta["missing_marker_ids"])
+                    ),
+                    "ref14_available": "yes" if meta["ref14_available"] else "no",
+                    "row_count": len(rows),
+                }
+            )
 
-        section += [END, ""]
-        base = strip_old_section(report.read_text(encoding="utf-8", errors="replace"))
-        report.write_text(base + "\n".join(section), encoding="utf-8")
-        print(f"[OK] updated {report}")
+        install_inline_sections(report, evaluated)
 
     write_csv(FINAL99 / "AP02_REF14_AVAILABLE_MAP_AUDIT.csv", audit)
+
     audit_lines = [
         "AP02 REF14-ANCHORED AVAILABLE MAP AUDIT",
         "=" * 120,
@@ -366,11 +499,12 @@ def main() -> None:
             f"  evaluated rows: {row['row_count']}",
             "",
         ]
+
     (FINAL99 / "AP02_REF14_AVAILABLE_MAP_AUDIT.txt").write_text(
         "\n".join(audit_lines) + "\n",
         encoding="utf-8",
     )
-    print("[OK] REF14-anchored partial maps written for all available variants")
+    print("[OK] one inline complete/partial REF14 map per variant")
 
 
 if __name__ == "__main__":
