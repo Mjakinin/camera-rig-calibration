@@ -197,6 +197,35 @@ fi
 shopt -u dotglob nullglob
 rmdir "$GENERATED"
 
+echo
+echo "=== Finalize readable route/density and inline AP02 maps ==="
+
+ROUTE_WRITER="run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py"
+DENSITY_WRITER="run/bus_real_data/ablation/moving_cam/density/05_write_readable_density_reports.py"
+MAP_WRITER="run/bus_real_data/reporting/33_write_ref14_available_maps.py"
+
+if [[ -f "$ROUTE_WRITER" ]] \
+  && [[ -d "$BUS/ablation/world/route/route1/FINAL_RESULTS" ]] \
+  && [[ -d "$BUS/ablation/world/route/route2/FINAL_RESULTS" ]]
+then
+  python3 "$ROUTE_WRITER"
+fi
+
+if [[ -f "$DENSITY_WRITER" ]] \
+  && [[ -d "$BUS/ablation/moving_cam/density/density_stride_1_100pct/FINAL_RESULTS" ]]
+then
+  python3 "$DENSITY_WRITER"
+fi
+
+python3 "$MAP_WRITER"
+
+for report in "$FINAL"/details/secondary/*_MAP_TO_GT.txt; do
+  if ! grep -q "AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP" "$report"; then
+    echo "[ERROR] Missing inline AP02 marker map in $report"
+    exit 1
+  fi
+done
+
 mkdir -p \
   "$BUS/00_shared_baseline" \
   "$BUS/01_marker_direct_relay_multimarker_multichain" \
@@ -225,6 +254,8 @@ rm -rf "$BUILD"
 echo
 echo "[OK] Canonical final results refreshed."
 echo "[OK] Existing generated report files were replaced."
+echo "[OK] Route and density detail files are readable tables."
+echo "[OK] Every secondary variant contains one inline AP02 map."
 echo "[OK] Live status and runtime logs remained readable."
 echo "[OK] No result rows were appended."
 echo "[OK] Output: $FINAL"
