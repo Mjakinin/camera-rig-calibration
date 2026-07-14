@@ -15,7 +15,7 @@
     "cam_edge_5"
   ],
   "missing_static_cameras": [],
-  "num_sparse_points3d": 12127,
+  "num_sparse_points3d": 13072,
   "marker_ids_requested": [
     0,
     1,
@@ -39,15 +39,15 @@
     20
   ],
   "marker_length_m": 0.17,
-  "detected_corner_observations": 1512,
-  "triangulated_marker_corners": 60,
-  "scale_m_per_colmap_unit": 0.7296868407894073,
-  "num_scale_observations_total": 90,
-  "num_scale_observations_used": 90,
-  "raw_median_scale": 0.7296868407894073,
-  "raw_mad_scale": 0.0048974014210047545,
-  "raw_rel_mad_scale": 0.006711648267778175,
-  "used_mean_scale": 0.7299989393859596,
-  "used_std_scale": 0.006826262544523008,
-  "used_rel_std_scale": 0.009355057763050869
+  "detected_corner_observations": 2188,
+  "triangulated_marker_corners": 80,
+  "scale_m_per_colmap_unit": 0.7284398611917482,
+  "num_scale_observations_total": 120,
+  "num_scale_observations_used": 120,
+  "raw_median_scale": 0.7284398611917482,
+  "raw_mad_scale": 0.005200640538916612,
+  "raw_rel_mad_scale": 0.007139423329206912,
+  "used_mean_scale": 0.7292641058811654,
+  "used_std_scale": 0.00782577675612047,
+  "used_rel_std_scale": 0.010743202250515612
 }

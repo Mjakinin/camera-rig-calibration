@@ -1,171 +1,536 @@
-MOVING-CAMERA FRAME DENSITY — SECONDARY MAP DETAIL
-========================================================================================================================
+MOVING-CAMERA FRAME DENSITY — DETAILED OPTIONAL MAP-TO-GT RESULTS
+============================================================================================================================
 
-Source: results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT/data/secondary/FRAME_DENSITY_ABLATION_DETAIL.csv
-Rows: 77
+Method-independent section: best-fit SE(3)-aligned static-camera map against GT.
+AP02 REF14-anchored available marker maps are appended by 33_write_ref14_available_maps.py.
 
+############################################################################################################################
+PARAMETER: 125% recaptured
+VARIANT:   density_route2_125pct_recaptured
+############################################################################################################################
 
-########################################################################################################################
-VARIANT: density_route2_125pct_recaptured
-########################################################################################################################
+AP01 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                           14.31 cm     3.36 deg        (0.687, -1.761, 1.988)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           20.27 cm     1.38 deg        (-4.004, 0.624, 2.266)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           18.85 cm     1.64 deg       (-3.198, -1.455, 2.206)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           31.27 cm     1.70 deg         (5.760, 0.118, 1.952)         (5.859, 0.348, 2.139)
 
-AP01
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=14.312541390439154 | rotation_error_deg=3.358070902963741 | aligned_est_x_m=0.6872068143278653 | aligned_est_y_m=-1.7609942665445024 | aligned_est_z_m=1.987800784744115 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=20.271024255498464 | rotation_error_deg=1.3833617488318086 | aligned_est_x_m=-4.003772311044733 | aligned_est_y_m=0.6235628876859289 | aligned_est_z_m=2.2663378862332295 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=18.851892383452068 | rotation_error_deg=1.6421510960734642 | aligned_est_x_m=-3.1978093970517847 | aligned_est_y_m=-1.454949830789083 | aligned_est_z_m=2.205687642003196 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=31.26994086280507 | rotation_error_deg=1.7027332075003931 | aligned_est_x_m=5.75951854376865 | aligned_est_y_m=0.1181177026868272 | aligned_est_z_m=1.952017129089188 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP02 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            1.84 cm     0.38 deg        (0.582, -1.733, 2.105)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            3.17 cm     0.31 deg        (-4.004, 0.465, 2.136)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            2.00 cm     0.16 deg       (-3.242, -1.572, 2.044)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            5.45 cm     0.10 deg         (5.910, 0.365, 2.128)         (5.859, 0.348, 2.139)
 
-AP02
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=1.8351253271357684 | rotation_error_deg=0.3834740395470674 | aligned_est_x_m=0.581628813895869 | aligned_est_y_m=-1.7329803592623727 | aligned_est_z_m=2.10453604523477 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=3.1731278282848274 | rotation_error_deg=0.3092212640720526 | aligned_est_x_m=-4.004098412791029 | aligned_est_y_m=0.46543909680096907 | aligned_est_z_m=2.1357772357061062 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=1.9973420372812152 | rotation_error_deg=0.16377984419077224 | aligned_est_x_m=-3.241993746755108 | aligned_est_y_m=-1.5717905707533575 | aligned_est_z_m=2.0436697412932214 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=5.45104546692741 | rotation_error_deg=0.09553871116361193 | aligned_est_x_m=5.909606995650267 | aligned_est_y_m=0.3650683262539325 | aligned_est_z_m=2.1278604198356312 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP03 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            0.54 cm     0.04 deg        (0.588, -1.740, 2.085)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            1.67 cm     0.04 deg        (-3.989, 0.482, 2.130)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            1.49 cm     0.04 deg       (-3.240, -1.571, 2.056)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            2.79 cm     0.03 deg         (5.886, 0.354, 2.140)         (5.859, 0.348, 2.139)
 
-AP03
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=0.5440016918453972 | rotation_error_deg=0.04467424747301828 | aligned_est_x_m=0.5884416381468979 | aligned_est_y_m=-1.7396010059844986 | aligned_est_z_m=2.085396271399659 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.671283987711785 | rotation_error_deg=0.03533478451716219 | aligned_est_x_m=-3.989400984096723 | aligned_est_y_m=0.4818394765047076 | aligned_est_z_m=2.1302574924303737 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.4857151191158782 | rotation_error_deg=0.04350830227196788 | aligned_est_x_m=-3.2400291676996984 | aligned_est_y_m=-1.5707949159937689 | aligned_est_z_m=2.0558403757634487 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=2.794369925361242 | rotation_error_deg=0.03132035366761182 | aligned_est_x_m=5.886132163649524 | aligned_est_y_m=0.354292938512731 | aligned_est_z_m=2.140349302476247 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: density_route2_125pct_recaptured ===
 
-########################################################################################################################
-VARIANT: density_stride_16_6p25pct
-########################################################################################################################
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
 
-AP01
---------------------------------------------------------------------------------
-camera=cam_edge_1 | status=AVAILABLE_NOT_ALIGNED | alignment=NOT_RUN_INSUFFICIENT_CAMERAS | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm= | rotation_error_deg= | aligned_est_x_m= | aligned_est_y_m= | aligned_est_z_m= | gt_x_m= | gt_y_m= | gt_z_m=
-camera=cam_edge_3 | status=AVAILABLE_NOT_ALIGNED | alignment=NOT_RUN_INSUFFICIENT_CAMERAS | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm= | rotation_error_deg= | aligned_est_x_m= | aligned_est_y_m= | aligned_est_z_m= | gt_x_m= | gt_y_m= | gt_z_m=
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
 
-AP02
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=3.5271866995659082 | rotation_error_deg=1.1611826144617023 | aligned_est_x_m=0.5697052102432648 | aligned_est_y_m=-1.7299493906860772 | aligned_est_z_m=2.117247887435866 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=5.976246245274546 | rotation_error_deg=0.46084783129244405 | aligned_est_x_m=-4.028066187231318 | aligned_est_y_m=0.45244357296979243 | aligned_est_z_m=2.119142593035689 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=5.863612367425259 | rotation_error_deg=0.34010332923496117 | aligned_est_x_m=-3.2710486331942445 | aligned_est_y_m=-1.5924516645321283 | aligned_est_z_m=2.0282434440214256 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=12.526544854401484 | rotation_error_deg=0.3946024787841149 | aligned_est_x_m=5.974553260182297 | aligned_est_y_m=0.3956939752875842 | aligned_est_z_m=2.1472095175767487 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
+missing marker IDs: []
 
-########################################################################################################################
-VARIANT: density_stride_1_100pct
-########################################################################################################################
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     2.62 cm    0.43 deg         (0.583, -1.241, 2.512)         (0.588, -1.235, 2.487)           (-0.51, -0.65, 2.48)
+cam_edge_1              static_camera             no     3.40 cm    0.29 deg         (-4.003, 0.958, 2.535)         (-3.974, 0.975, 2.532)           (-2.89, -1.76, 0.37)
+cam_edge_3              static_camera             no     2.31 cm    0.17 deg        (-3.241, -1.080, 2.445)        (-3.227, -1.063, 2.454)          (-1.35, -1.66, -0.88)
+cam_edge_5              static_camera             no     5.26 cm    0.12 deg          (5.911, 0.857, 2.542)          (5.859, 0.848, 2.539)             (5.18, 0.85, 0.37)
+marker_000              aruco_marker              no     4.19 cm    2.20 deg         (-2.590, 0.485, 1.167)         (-2.550, 0.480, 1.180)           (-3.96, 0.53, -1.27)
+marker_001              aruco_marker              no     1.97 cm    0.76 deg        (-2.264, -0.539, 1.631)        (-2.250, -0.525, 1.630)           (-1.43, -1.35, 0.09)
+marker_002              aruco_marker              no     1.58 cm    0.65 deg        (-1.112, -0.535, 1.097)        (-1.100, -0.525, 1.100)          (-1.21, -0.99, -0.29)
+marker_003              aruco_marker              no     0.23 cm    0.32 deg          (0.100, 1.208, 0.799)          (0.100, 1.210, 0.800)           (0.05, -0.20, -0.10)
+marker_004              aruco_marker              no     1.09 cm    0.32 deg          (0.703, 1.203, 2.008)          (0.700, 1.210, 2.000)            (0.28, -0.72, 0.77)
+marker_005              aruco_marker              no     2.78 cm    0.71 deg         (1.926, -0.988, 1.094)         (1.900, -0.980, 1.100)           (2.62, -0.75, -0.56)
+marker_006              aruco_marker              no     1.89 cm    1.49 deg          (1.988, 0.504, 1.373)          (1.970, 0.500, 1.370)             (1.83, 0.39, 0.30)
+marker_007              aruco_marker              no     1.68 cm    0.43 deg          (1.985, 0.941, 1.375)          (1.970, 0.935, 1.370)             (1.46, 0.63, 0.53)
+marker_008              aruco_marker              no     2.76 cm    0.76 deg         (2.677, -0.527, 1.411)         (2.650, -0.525, 1.410)            (2.75, -0.17, 0.11)
+marker_009              aruco_marker              no     5.23 cm    3.55 deg          (3.072, 0.487, 1.423)          (3.020, 0.480, 1.420)             (5.18, 0.66, 0.31)
+marker_010              aruco_marker              no     4.86 cm    0.68 deg         (3.068, -0.978, 1.425)         (3.020, -0.980, 1.420)             (4.83, 0.17, 0.51)
+marker_011              aruco_marker              no     5.38 cm    0.36 deg          (4.052, 0.008, 1.539)          (4.000, 0.000, 1.530)             (5.25, 0.76, 0.90)
+marker_012              aruco_marker              no     5.62 cm    0.37 deg         (4.094, -0.967, 1.430)         (4.040, -0.980, 1.420)             (5.38, 1.28, 1.01)
+marker_013              aruco_marker              no     5.39 cm    0.48 deg          (4.103, 0.737, 1.278)          (4.050, 0.730, 1.270)             (5.29, 0.67, 0.77)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     2.27 cm    0.46 deg        (-0.969, -0.507, 1.270)        (-0.950, -0.500, 1.280)          (-1.88, -0.74, -1.03)
+marker_017              aruco_marker              no     2.14 cm    0.99 deg         (1.521, -1.206, 1.900)         (1.500, -1.200, 1.900)           (2.06, -0.55, -0.04)
+marker_018              aruco_marker              no     2.43 cm    0.68 deg        (-0.222, -1.205, 1.440)        (-0.200, -1.200, 1.450)          (-2.17, -0.46, -0.99)
+marker_019              aruco_marker              no     1.71 cm    0.23 deg         (-1.301, 1.077, 1.500)         (-1.290, 1.090, 1.500)           (-1.08, -1.32, 0.02)
+marker_020              aruco_marker              no     7.78 cm    2.10 deg         (5.748, -0.849, 1.754)         (5.670, -0.850, 1.750)             (7.77, 0.06, 0.44)
 
-AP01
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=7.077698876289667 | rotation_error_deg=1.136593010778913 | aligned_est_x_m=0.6344513931406803 | aligned_est_y_m=-1.6815015506331226 | aligned_est_z_m=2.0829610645253416 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=12.994109425884101 | rotation_error_deg=0.764877320315312 | aligned_est_x_m=-4.001190798015798 | aligned_est_y_m=0.5707834109711414 | aligned_est_z_m=2.215187881840047 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=13.600964490775262 | rotation_error_deg=1.017477188924627 | aligned_est_x_m=-3.170420386107444 | aligned_est_y_m=-1.498069056430514 | aligned_est_z_m=2.1591541193100996 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=29.24886568453877 | rotation_error_deg=1.9471673901771371 | aligned_est_x_m=5.782303440982559 | aligned_est_y_m=0.1345236891316659 | aligned_est_z_m=1.9545403763942417 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: density_route2_125pct_recaptured ===
 
-AP02
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=1.6681371705600454 | rotation_error_deg=0.3980671661657537 | aligned_est_x_m=0.5841088579109166 | aligned_est_y_m=-1.7381546830073695 | aligned_est_z_m=2.103191119845749 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=3.51161033391948 | rotation_error_deg=0.2334289759714846 | aligned_est_x_m=-4.008451390755202 | aligned_est_y_m=0.4674900333461197 | aligned_est_z_m=2.1317350466781155 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=2.591537913831084 | rotation_error_deg=0.11500127454789555 | aligned_est_x_m=-3.2479411560741647 | aligned_est_y_m=-1.5709195841316075 | aligned_est_z_m=2.040482118358419 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=6.158679140866687 | rotation_error_deg=0.0722724391840362 | aligned_est_x_m=5.917427338918451 | aligned_est_y_m=0.36732072683202865 | aligned_est_z_m=2.136435157187445 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+############################################################################################################################
+PARAMETER: 100%
+VARIANT:   density_stride_1_100pct
+############################################################################################################################
 
-AP03
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=0.5855125317383463 | rotation_error_deg=0.047096088661595474 | aligned_est_x_m=0.587790797268055 | aligned_est_y_m=-1.7402946848193077 | aligned_est_z_m=2.086170158658411 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.8641951067584615 | rotation_error_deg=0.026531892733786932 | aligned_est_x_m=-3.9913968477605613 | aligned_est_y_m=0.48195337235457314 | aligned_est_z_m=2.129668733019189 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.4811231188762521 | rotation_error_deg=0.04461874771587115 | aligned_est_x_m=-3.2402176137248695 | aligned_est_y_m=-1.5705451665301047 | aligned_est_z_m=2.0546636584172013 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=3.084888917496815 | rotation_error_deg=0.0547147211932525 | aligned_est_x_m=5.888967314217375 | aligned_est_y_m=0.3546229720340104 | aligned_est_z_m=2.141340891974928 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP01 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            7.08 cm     1.14 deg        (0.634, -1.682, 2.083)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           12.99 cm     0.76 deg        (-4.001, 0.571, 2.215)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           13.60 cm     1.02 deg       (-3.170, -1.498, 2.159)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           29.25 cm     1.95 deg         (5.782, 0.135, 1.955)         (5.859, 0.348, 2.139)
 
-########################################################################################################################
-VARIANT: density_stride_2_50pct
-########################################################################################################################
+AP02 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            1.67 cm     0.40 deg        (0.584, -1.738, 2.103)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            3.51 cm     0.23 deg        (-4.008, 0.467, 2.132)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            2.59 cm     0.12 deg       (-3.248, -1.571, 2.040)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            6.16 cm     0.07 deg         (5.917, 0.367, 2.136)         (5.859, 0.348, 2.139)
 
-AP01
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=13.49988803821268 | rotation_error_deg=2.9833365225607618 | aligned_est_x_m=0.6720685023062707 | aligned_est_y_m=-1.7512300355278676 | aligned_est_z_m=1.983180295212287 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=20.57823351496256 | rotation_error_deg=1.472339774224327 | aligned_est_x_m=-3.9874538110993996 | aligned_est_y_m=0.6251089496273625 | aligned_est_z_m=2.2717678617573958 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=19.472302052502886 | rotation_error_deg=1.731199912079713 | aligned_est_x_m=-3.1833191985197704 | aligned_est_y_m=-1.4540589700586293 | aligned_est_z_m=2.2093332694259624 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=32.95336573922793 | rotation_error_deg=1.7430056696845724 | aligned_est_x_m=5.743848157312897 | aligned_est_y_m=0.1059165489983056 | aligned_est_z_m=1.9475620156740847 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP03 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            0.59 cm     0.05 deg        (0.588, -1.740, 2.086)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            1.86 cm     0.03 deg        (-3.991, 0.482, 2.130)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            1.48 cm     0.04 deg       (-3.240, -1.571, 2.055)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            3.08 cm     0.05 deg         (5.889, 0.355, 2.141)         (5.859, 0.348, 2.139)
 
-AP02
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=2.0151535658275757 | rotation_error_deg=0.6073725296428982 | aligned_est_x_m=0.5822603238452628 | aligned_est_y_m=-1.7300670550838873 | aligned_est_z_m=2.106174100656186 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=3.465626766488459 | rotation_error_deg=0.24590772989157367 | aligned_est_x_m=-4.007951658262199 | aligned_est_y_m=0.46747781685231704 | aligned_est_z_m=2.130207233520796 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=2.761611275725407 | rotation_error_deg=0.1329029401898095 | aligned_est_x_m=-3.2458514717607803 | aligned_est_y_m=-1.5749720988695952 | aligned_est_z_m=2.0374086838370014 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=5.971511464345635 | rotation_error_deg=0.2462624174136172 | aligned_est_x_m=5.9166864561777155 | aligned_est_y_m=0.3632978301403368 | aligned_est_z_m=2.1380534240557463 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: density_stride_1_100pct ===
 
-AP03
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=0.5036451456487264 | rotation_error_deg=0.10765266574202335 | aligned_est_x_m=0.5866776066537789 | aligned_est_y_m=-1.7392205006560988 | aligned_est_z_m=2.088852697421761 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.7741622851623224 | rotation_error_deg=0.020718758603431215 | aligned_est_x_m=-3.9909272445819717 | aligned_est_y_m=0.48026256774924647 | aligned_est_z_m=2.128882162523117 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.5169100644371647 | rotation_error_deg=0.05281962235615271 | aligned_est_x_m=-3.240462867635407 | aligned_est_y_m=-1.5708491861789227 | aligned_est_z_m=2.0543341084692517 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=3.182153649930327 | rotation_error_deg=0.08978210628043944 | aligned_est_x_m=5.8898561555636 | aligned_est_y_m=0.35554361212494623 | aligned_est_z_m=2.1397744736555984 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
 
-########################################################################################################################
-VARIANT: density_stride_4_25pct
-########################################################################################################################
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
 
-AP01
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=13.963786358967129 | rotation_error_deg=3.4652880216543234 | aligned_est_x_m=0.6952619794032069 | aligned_est_y_m=-1.7436489255278562 | aligned_est_z_m=1.998617158816663 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=22.30329443904211 | rotation_error_deg=1.461839466945269 | aligned_est_x_m=-3.981665228477784 | aligned_est_y_m=0.6438518420548509 | aligned_est_z_m=2.277164564037251 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=21.16910079107752 | rotation_error_deg=1.70504591770022 | aligned_est_x_m=-3.180914567256713 | aligned_est_y_m=-1.4367018746342048 | aligned_est_z_m=2.217461948977883 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=38.962128683703895 | rotation_error_deg=1.771706557068629 | aligned_est_x_m=5.7124614663312885 | aligned_est_y_m=0.062235451146381404 | aligned_est_z_m=1.9185997702379325 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
+missing marker IDs: []
 
-AP02
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=2.9903234347812333 | rotation_error_deg=0.7927909152014977 | aligned_est_x_m=0.5716922331125563 | aligned_est_y_m=-1.7332521284890645 | aligned_est_z_m=2.1124836034055035 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=4.379477000089896 | rotation_error_deg=0.3656375184508995 | aligned_est_x_m=-4.013501624857455 | aligned_est_y_m=0.45658781554185307 | aligned_est_z_m=2.126195414287053 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=4.168963216136613 | rotation_error_deg=0.2787481246011698 | aligned_est_x_m=-3.2552687777895546 | aligned_est_y_m=-1.584103835124703 | aligned_est_z_m=2.031352227013908 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=9.170148921563175 | rotation_error_deg=0.2453220265763625 | aligned_est_x_m=5.942221819534453 | aligned_est_y_m=0.38650464111108584 | aligned_est_z_m=2.141812197363264 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     2.69 cm    0.37 deg         (0.593, -1.244, 2.512)         (0.588, -1.235, 2.487)            (0.49, -0.94, 2.47)
+cam_edge_1              static_camera             no     3.30 cm    0.27 deg         (-4.001, 0.960, 2.544)         (-3.974, 0.975, 2.532)           (-2.66, -1.53, 1.22)
+cam_edge_3              static_camera             no     1.95 cm    0.13 deg        (-3.239, -1.078, 2.451)        (-3.227, -1.063, 2.454)          (-1.21, -1.51, -0.30)
+cam_edge_5              static_camera             no     6.83 cm    0.11 deg          (5.925, 0.864, 2.544)          (5.859, 0.848, 2.539)             (6.63, 1.53, 0.50)
+marker_000              aruco_marker              no     3.54 cm    1.81 deg         (-2.585, 0.484, 1.178)         (-2.550, 0.480, 1.180)           (-3.51, 0.38, -0.24)
+marker_001              aruco_marker              no     1.95 cm    0.80 deg        (-2.264, -0.538, 1.635)        (-2.250, -0.525, 1.630)           (-1.39, -1.26, 0.52)
+marker_002              aruco_marker              no     1.59 cm    0.69 deg        (-1.113, -0.534, 1.100)        (-1.100, -0.525, 1.100)          (-1.28, -0.94, -0.01)
+marker_003              aruco_marker              no     0.26 cm    0.17 deg          (0.101, 1.208, 0.798)          (0.100, 1.210, 0.800)           (0.10, -0.15, -0.18)
+marker_004              aruco_marker              no     1.16 cm    0.20 deg          (0.708, 1.205, 2.007)          (0.700, 1.210, 2.000)            (0.79, -0.50, 0.69)
+marker_005              aruco_marker              no     2.87 cm    0.67 deg         (1.926, -0.989, 1.091)         (1.900, -0.980, 1.100)           (2.59, -0.87, -0.86)
+marker_006              aruco_marker              no     1.98 cm    1.35 deg          (1.990, 0.502, 1.370)          (1.970, 0.500, 1.370)             (1.97, 0.25, 0.03)
+marker_007              aruco_marker              no     1.86 cm    0.86 deg          (1.988, 0.940, 1.372)          (1.970, 0.935, 1.370)             (1.77, 0.53, 0.17)
+marker_008              aruco_marker              no     2.96 cm    1.71 deg         (2.679, -0.528, 1.407)         (2.650, -0.525, 1.410)           (2.92, -0.35, -0.33)
+marker_009              aruco_marker              no     6.43 cm    1.24 deg          (3.083, 0.493, 1.426)          (3.020, 0.480, 1.420)             (6.28, 1.28, 0.61)
+marker_010              aruco_marker              no     6.48 cm    0.44 deg         (3.084, -0.972, 1.424)         (3.020, -0.980, 1.420)             (6.41, 0.84, 0.43)
+marker_011              aruco_marker              no     6.84 cm    0.53 deg          (4.066, 0.015, 1.540)          (4.000, 0.000, 1.530)             (6.61, 1.47, 0.99)
+marker_012              aruco_marker              no     6.95 cm    0.14 deg         (4.107, -0.962, 1.426)         (4.040, -0.980, 1.420)             (6.68, 1.83, 0.59)
+marker_013              aruco_marker              no     6.53 cm    0.70 deg          (4.113, 0.745, 1.279)          (4.050, 0.730, 1.270)             (6.29, 1.51, 0.91)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     1.96 cm    0.21 deg        (-0.967, -0.509, 1.275)        (-0.950, -0.500, 1.280)          (-1.67, -0.85, -0.55)
+marker_017              aruco_marker              no     2.64 cm    0.82 deg         (1.525, -1.209, 1.896)         (1.500, -1.200, 1.900)           (2.46, -0.89, -0.36)
+marker_018              aruco_marker              no     1.13 cm    0.46 deg        (-0.211, -1.203, 1.448)        (-0.200, -1.200, 1.450)          (-1.06, -0.30, -0.25)
+marker_019              aruco_marker              no     1.68 cm    0.09 deg         (-1.300, 1.077, 1.503)         (-1.290, 1.090, 1.500)           (-1.00, -1.31, 0.34)
+marker_020              aruco_marker              no     9.97 cm    1.41 deg         (5.769, -0.855, 1.744)         (5.670, -0.850, 1.750)           (9.94, -0.46, -0.64)
 
-AP03
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.4180573428326042 | rotation_error_deg=0.06469905920904873 | aligned_est_x_m=0.5953639560745349 | aligned_est_y_m=-1.7461690095444657 | aligned_est_z_m=2.0843090048503132 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=2.9296337400448134 | rotation_error_deg=0.04251988221570238 | aligned_est_x_m=-4.00217446917739 | aligned_est_y_m=0.48368042628667207 | aligned_est_z_m=2.131403780150275 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=2.3965413096903467 | rotation_error_deg=0.01885528505846818 | aligned_est_x_m=-3.2497873942319995 | aligned_est_y_m=-1.5716422778591776 | aligned_est_z_m=2.0545777423090614 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=4.447211573892417 | rotation_error_deg=0.032306119915156445 | aligned_est_x_m=5.901741557334854 | aligned_est_y_m=0.35986735415614257 | aligned_est_z_m=2.141552914760079 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: density_stride_1_100pct ===
 
-########################################################################################################################
-VARIANT: density_stride_8_12p5pct
-########################################################################################################################
+############################################################################################################################
+PARAMETER: 50%
+VARIANT:   density_stride_2_50pct
+############################################################################################################################
 
-AP01
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=9.136744199360813 | rotation_error_deg=0.12283576916028947 | aligned_est_x_m=0.5938179126961352 | aligned_est_y_m=-1.645103692967541 | aligned_est_z_m=2.069712803445298 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=8.408235035595116 | rotation_error_deg=1.0196893408738248 | aligned_est_x_m=-4.05751868602427 | aligned_est_y_m=0.4654460086135841 | aligned_est_z_m=2.126115667535109 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=4.445151437395619 | rotation_error_deg=1.0033606044517887 | aligned_est_x_m=-3.19442325490183 | aligned_est_y_m=-1.5900528722653 | aligned_est_z_m=2.067290339650076 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=6.983902079880909 | rotation_error_deg=2.056248772284277 | aligned_est_x_m=5.903267678229966 | aligned_est_y_m=0.2954470496584274 | aligned_est_z_m=2.1487246314392467 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP01 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                           13.50 cm     2.98 deg        (0.672, -1.751, 1.983)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           20.58 cm     1.47 deg        (-3.987, 0.625, 2.272)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           19.47 cm     1.73 deg       (-3.183, -1.454, 2.209)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           32.95 cm     1.74 deg         (5.744, 0.106, 1.948)         (5.859, 0.348, 2.139)
 
-AP02
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=2.9876462310660346 | rotation_error_deg=1.0009548035041131 | aligned_est_x_m=0.5833633751789571 | aligned_est_y_m=-1.7283242973005826 | aligned_est_z_m=2.1162077673081616 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=4.90832325257948 | rotation_error_deg=0.3618992732930632 | aligned_est_x_m=-4.01886998290532 | aligned_est_y_m=0.4593696592393447 | aligned_est_z_m=2.1187435887576735 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=5.01447582269441 | rotation_error_deg=0.277624798262293 | aligned_est_x_m=-3.26297155822942 | aligned_est_y_m=-1.5871803163133815 | aligned_est_z_m=2.028294777597395 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=9.16544014403006 | rotation_error_deg=0.38624774041237414 | aligned_est_x_m=5.943621815955782 | aligned_est_y_m=0.3818714474137907 | aligned_est_z_m=2.1485973084064987 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP02 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            2.02 cm     0.61 deg        (0.582, -1.730, 2.106)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            3.47 cm     0.25 deg        (-4.008, 0.467, 2.130)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            2.76 cm     0.13 deg       (-3.246, -1.575, 2.037)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            5.97 cm     0.25 deg         (5.917, 0.363, 2.138)         (5.859, 0.348, 2.139)
 
-AP03
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=2.1770548891577883 | rotation_error_deg=0.10858029630242477 | aligned_est_x_m=0.5943652403098676 | aligned_est_y_m=-1.7552710930618283 | aligned_est_z_m=2.088674778111926 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=3.1009784959980724 | rotation_error_deg=0.07360867781717925 | aligned_est_x_m=-4.004719084027907 | aligned_est_y_m=0.4796700748970344 | aligned_est_z_m=2.1288617755970325 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=3.167160058685694 | rotation_error_deg=0.10494452908623944 | aligned_est_x_m=-3.256733669277618 | aligned_est_y_m=-1.574174800981849 | aligned_est_z_m=2.0497500061966245 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=6.0134898070109095 | rotation_error_deg=0.19205514978063254 | aligned_est_x_m=5.912231162995656 | aligned_est_y_m=0.37551231218581416 | aligned_est_z_m=2.144556882164146 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP03 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            0.50 cm     0.11 deg        (0.587, -1.739, 2.089)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            1.77 cm     0.02 deg        (-3.991, 0.480, 2.129)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            1.52 cm     0.05 deg       (-3.240, -1.571, 2.054)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            3.18 cm     0.09 deg         (5.890, 0.356, 2.140)         (5.859, 0.348, 2.139)
 
-########################################################################################################################
-VARIANT: density_stride_8_offset4
-########################################################################################################################
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: density_stride_2_50pct ===
 
-AP01
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=5.275459718071774 | rotation_error_deg=0.25516589508067045 | aligned_est_x_m=0.5848947441965455 | aligned_est_y_m=-1.6829168640424061 | aligned_est_z_m=2.0977223429380842 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=7.42153614062133 | rotation_error_deg=0.8369159794985136 | aligned_est_x_m=-4.042129279354599 | aligned_est_y_m=0.44960292860939277 | aligned_est_z_m=2.1470242798483428 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=6.631415657977935 | rotation_error_deg=0.7846963116706093 | aligned_est_x_m=-3.1893556082308425 | aligned_est_y_m=-1.6100084468000924 | aligned_est_z_m=2.081848825561368 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/01_marker_direct_relay_multimarker_multichain/07_final_extrinsics_cam3_reference/final_extrinsics_summary.csv | translation_error_cm=6.610934878561622 | rotation_error_deg=1.5089408439212406 | aligned_est_x_m=5.8917337933888945 | aligned_est_y_m=0.369058875272277 | aligned_est_z_m=2.085247993721935 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
 
-AP02
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=3.7802205577055976 | rotation_error_deg=1.0247823843665678 | aligned_est_x_m=0.5637793096672539 | aligned_est_y_m=-1.731987720710051 | aligned_est_z_m=2.116397863736229 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=4.547029001524318 | rotation_error_deg=0.2909273269984428 | aligned_est_x_m=-4.015248773094842 | aligned_est_y_m=0.45761265359218634 | aligned_est_z_m=2.1229098131605135 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=4.301683950366767 | rotation_error_deg=0.20076289846288448 | aligned_est_x_m=-3.254409368618351 | aligned_est_y_m=-1.5856186690299499 | aligned_est_z_m=2.0293795180615883 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
-camera=cam_edge_5 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv | translation_error_cm=9.95265421964739 | rotation_error_deg=0.5613254913805897 | aligned_est_x_m=5.951022482045939 | aligned_est_y_m=0.38573022918698546 | aligned_est_z_m=2.1431562471113983 | gt_x_m=5.85885887 | gt_y_m=0.3484195331450478 | gt_z_m=2.1387615711167207
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
 
-AP03
---------------------------------------------------------------------------------
-camera=cam_edge_0 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=3.2854168320067956 | rotation_error_deg=0.24906637327574171 | aligned_est_x_m=0.619981683184436 | aligned_est_y_m=-1.7376253944109155 | aligned_est_z_m=2.0932291670716525 | gt_x_m=0.58780793 | gt_y_m=-1.7345552666901032 | gt_z_m=2.087328294440571
-camera=cam_edge_1 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=2.809795576448787 | rotation_error_deg=0.10943252162065886 | aligned_est_x_m=-3.995725799860346 | aligned_est_y_m=0.4930280816201148 | aligned_est_z_m=2.1298614712218327 | gt_x_m=-3.97416732 | gt_y_m=0.4750864931681852 | gt_z_m=2.131542681522701
-camera=cam_edge_3 | status=OK | alignment=SE3_available_static_cameras_no_scale | source_file=results/bus_real_data/03_targetless_colmap_aruco_scale/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv | translation_error_cm=1.875233111384575 | rotation_error_deg=0.14353492143766855 | aligned_est_x_m=-3.2379711033240888 | aligned_est_y_m=-1.578085727315076 | aligned_est_z_m=2.0499912326595218 | gt_x_m=-3.22735583 | gt_y_m=-1.5632142665839586 | gt_z_m=2.0542108949897364
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
+missing marker IDs: []
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     3.13 cm    0.53 deg         (0.587, -1.239, 2.518)         (0.588, -1.235, 2.487)           (-0.08, -0.44, 3.10)
+cam_edge_1              static_camera             no     3.68 cm    0.33 deg         (-4.003, 0.960, 2.549)         (-3.974, 0.975, 2.532)           (-2.84, -1.52, 1.78)
+cam_edge_3              static_camera             no     2.38 cm    0.21 deg        (-3.241, -1.083, 2.453)        (-3.227, -1.063, 2.454)          (-1.37, -1.94, -0.14)
+cam_edge_5              static_camera             no     6.42 cm    0.33 deg          (5.922, 0.853, 2.549)          (5.859, 0.848, 2.539)             (6.32, 0.44, 1.03)
+marker_000              aruco_marker              no     3.57 cm    2.28 deg         (-2.586, 0.482, 1.179)         (-2.550, 0.480, 1.180)           (-3.56, 0.21, -0.12)
+marker_001              aruco_marker              no     2.20 cm    0.85 deg        (-2.265, -0.540, 1.636)        (-2.250, -0.525, 1.630)           (-1.48, -1.51, 0.59)
+marker_002              aruco_marker              no     1.76 cm    0.46 deg        (-1.114, -0.536, 1.100)        (-1.100, -0.525, 1.100)           (-1.35, -1.12, 0.01)
+marker_003              aruco_marker              no     0.25 cm    0.11 deg          (0.100, 1.208, 0.800)          (0.100, 1.210, 0.800)           (-0.02, -0.25, 0.04)
+marker_004              aruco_marker              no     1.35 cm    0.34 deg          (0.706, 1.202, 2.009)          (0.700, 1.210, 2.000)            (0.61, -0.82, 0.88)
+marker_005              aruco_marker              no     2.74 cm    0.66 deg         (1.923, -0.991, 1.090)         (1.900, -0.980, 1.100)           (2.31, -1.09, -0.97)
+marker_006              aruco_marker              no     1.63 cm    1.44 deg          (1.986, 0.500, 1.371)          (1.970, 0.500, 1.370)            (1.62, -0.02, 0.10)
+marker_007              aruco_marker              no     1.43 cm    0.46 deg          (1.984, 0.937, 1.373)          (1.970, 0.935, 1.370)             (1.37, 0.24, 0.34)
+marker_008              aruco_marker              no     2.60 cm    1.72 deg         (2.675, -0.531, 1.406)         (2.650, -0.525, 1.410)           (2.50, -0.59, -0.41)
+marker_009              aruco_marker              no     5.85 cm    1.86 deg          (3.078, 0.487, 1.428)          (3.020, 0.480, 1.420)             (5.75, 0.73, 0.80)
+marker_010              aruco_marker              no     5.57 cm    0.50 deg         (3.076, -0.980, 1.419)         (3.020, -0.980, 1.420)            (5.57, 0.05, -0.09)
+marker_011              aruco_marker              no     6.35 cm    0.55 deg          (4.062, 0.008, 1.540)          (4.000, 0.000, 1.530)             (6.21, 0.83, 1.04)
+marker_012              aruco_marker              no     6.43 cm    0.11 deg         (4.103, -0.968, 1.423)         (4.040, -0.980, 1.420)             (6.31, 1.23, 0.31)
+marker_013              aruco_marker              no     6.02 cm    0.77 deg          (4.108, 0.740, 1.282)          (4.050, 0.730, 1.270)             (5.81, 1.01, 1.20)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     1.90 cm    0.41 deg        (-0.964, -0.510, 1.273)        (-0.950, -0.500, 1.280)          (-1.45, -1.01, -0.70)
+marker_017              aruco_marker              no     2.69 cm    0.73 deg         (1.523, -1.212, 1.895)         (1.500, -1.200, 1.900)           (2.33, -1.24, -0.51)
+marker_018              aruco_marker              no     2.00 cm    0.88 deg        (-0.215, -1.207, 1.439)        (-0.200, -1.200, 1.450)          (-1.51, -0.75, -1.08)
+marker_019              aruco_marker              no     1.96 cm    0.17 deg         (-1.301, 1.075, 1.506)         (-1.290, 1.090, 1.500)           (-1.13, -1.46, 0.65)
+marker_020              aruco_marker              no     8.92 cm    1.93 deg         (5.758, -0.857, 1.741)         (5.670, -0.850, 1.750)           (8.85, -0.73, -0.89)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: density_stride_2_50pct ===
+
+############################################################################################################################
+PARAMETER: 25%
+VARIANT:   density_stride_4_25pct
+############################################################################################################################
+
+AP01 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                           13.96 cm     3.47 deg        (0.695, -1.744, 1.999)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           22.30 cm     1.46 deg        (-3.982, 0.644, 2.277)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           21.17 cm     1.71 deg       (-3.181, -1.437, 2.217)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           38.96 cm     1.77 deg         (5.712, 0.062, 1.919)         (5.859, 0.348, 2.139)
+
+AP02 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            2.99 cm     0.79 deg        (0.572, -1.733, 2.112)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            4.38 cm     0.37 deg        (-4.014, 0.457, 2.126)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            4.17 cm     0.28 deg       (-3.255, -1.584, 2.031)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            9.17 cm     0.25 deg         (5.942, 0.387, 2.142)         (5.859, 0.348, 2.139)
+
+AP03 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            1.42 cm     0.06 deg        (0.595, -1.746, 2.084)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            2.93 cm     0.04 deg        (-4.002, 0.484, 2.131)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            2.40 cm     0.02 deg       (-3.250, -1.572, 2.055)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            4.45 cm     0.03 deg         (5.902, 0.360, 2.142)         (5.859, 0.348, 2.139)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: density_stride_4_25pct ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
+missing marker IDs: []
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     4.40 cm    0.86 deg         (0.587, -1.228, 2.531)         (0.588, -1.235, 2.487)            (-0.13, 0.70, 4.35)
+cam_edge_1              static_camera             no     3.44 cm    0.31 deg         (-4.001, 0.957, 2.542)         (-3.974, 0.975, 2.532)           (-2.72, -1.83, 1.05)
+cam_edge_3              static_camera             no     2.43 cm    0.19 deg        (-3.241, -1.083, 2.450)        (-3.227, -1.063, 2.454)          (-1.33, -2.00, -0.38)
+cam_edge_5              static_camera             no    10.93 cm    0.29 deg          (5.954, 0.899, 2.555)          (5.859, 0.848, 2.539)             (9.56, 5.03, 1.66)
+marker_000              aruco_marker              no     3.68 cm    1.83 deg         (-2.587, 0.477, 1.179)         (-2.550, 0.480, 1.180)          (-3.67, -0.29, -0.14)
+marker_001              aruco_marker              no     2.07 cm    0.81 deg        (-2.264, -0.540, 1.634)        (-2.250, -0.525, 1.630)           (-1.35, -1.52, 0.36)
+marker_002              aruco_marker              no     1.61 cm    0.69 deg        (-1.112, -0.536, 1.098)        (-1.100, -0.525, 1.100)          (-1.16, -1.10, -0.16)
+marker_003              aruco_marker              no     0.21 cm    0.33 deg          (0.101, 1.208, 0.799)          (0.100, 1.210, 0.800)           (0.07, -0.18, -0.09)
+marker_004              aruco_marker              no     1.12 cm    0.34 deg          (0.707, 1.206, 2.008)          (0.700, 1.210, 2.000)            (0.66, -0.38, 0.82)
+marker_005              aruco_marker              no     2.83 cm    0.46 deg         (1.926, -0.988, 1.092)         (1.900, -0.980, 1.100)           (2.58, -0.82, -0.84)
+marker_006              aruco_marker              no     1.72 cm    1.38 deg          (1.987, 0.502, 1.371)          (1.970, 0.500, 1.370)             (1.70, 0.22, 0.12)
+marker_007              aruco_marker              no     1.44 cm    0.22 deg          (1.983, 0.940, 1.374)          (1.970, 0.935, 1.370)             (1.31, 0.48, 0.36)
+marker_008              aruco_marker              no     2.93 cm    1.57 deg         (2.679, -0.528, 1.407)         (2.650, -0.525, 1.410)           (2.91, -0.30, -0.26)
+marker_009              aruco_marker              no    10.02 cm    1.28 deg          (3.113, 0.513, 1.435)          (3.020, 0.480, 1.420)             (9.33, 3.30, 1.54)
+marker_010              aruco_marker              no     9.50 cm    1.09 deg         (3.112, -0.958, 1.432)         (3.020, -0.980, 1.420)             (9.16, 2.23, 1.20)
+marker_011              aruco_marker              no    10.80 cm    0.81 deg          (4.098, 0.039, 1.550)          (4.000, 0.000, 1.530)             (9.85, 3.94, 2.03)
+marker_012              aruco_marker              no    10.26 cm    0.34 deg         (4.136, -0.946, 1.433)         (4.040, -0.980, 1.420)             (9.59, 3.41, 1.34)
+marker_013              aruco_marker              no    10.25 cm    0.79 deg          (4.142, 0.770, 1.289)          (4.050, 0.730, 1.270)             (9.23, 4.03, 1.87)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     1.37 cm    0.32 deg        (-0.958, -0.511, 1.277)        (-0.950, -0.500, 1.280)          (-0.80, -1.08, -0.28)
+marker_017              aruco_marker              no     1.72 cm    0.59 deg         (1.517, -1.203, 1.897)         (1.500, -1.200, 1.900)           (1.67, -0.30, -0.30)
+marker_018              aruco_marker              no     0.10 cm    0.21 deg        (-0.199, -1.200, 1.450)        (-0.200, -1.200, 1.450)            (0.08, -0.04, 0.05)
+marker_019              aruco_marker              no     2.15 cm    0.25 deg         (-1.303, 1.074, 1.506)         (-1.290, 1.090, 1.500)           (-1.32, -1.61, 0.56)
+marker_020              aruco_marker              no    11.40 cm    1.44 deg         (5.784, -0.853, 1.745)         (5.670, -0.850, 1.750)          (11.39, -0.33, -0.47)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: density_stride_4_25pct ===
+
+############################################################################################################################
+PARAMETER: 12.5%
+VARIANT:   density_stride_8_12p5pct
+############################################################################################################################
+
+AP01 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            9.14 cm     0.12 deg        (0.594, -1.645, 2.070)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            8.41 cm     1.02 deg        (-4.058, 0.465, 2.126)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            4.45 cm     1.00 deg       (-3.194, -1.590, 2.067)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            6.98 cm     2.06 deg         (5.903, 0.295, 2.149)         (5.859, 0.348, 2.139)
+
+AP02 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            2.99 cm     1.00 deg        (0.583, -1.728, 2.116)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            4.91 cm     0.36 deg        (-4.019, 0.459, 2.119)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            5.01 cm     0.28 deg       (-3.263, -1.587, 2.028)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            9.17 cm     0.39 deg         (5.944, 0.382, 2.149)         (5.859, 0.348, 2.139)
+
+AP03 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            2.18 cm     0.11 deg        (0.594, -1.755, 2.089)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            3.10 cm     0.07 deg        (-4.005, 0.480, 2.129)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            3.17 cm     0.10 deg       (-3.257, -1.574, 2.050)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            6.01 cm     0.19 deg         (5.912, 0.376, 2.145)         (5.859, 0.348, 2.139)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: density_stride_8_12p5pct ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 20]
+missing marker IDs: [18]
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     7.02 cm    1.42 deg         (0.591, -1.214, 2.554)         (0.588, -1.235, 2.487)             (0.31, 2.09, 6.70)
+cam_edge_1              static_camera             no     3.61 cm    0.06 deg         (-4.008, 0.981, 2.542)         (-3.974, 0.975, 2.532)            (-3.40, 0.55, 1.08)
+cam_edge_3              static_camera             no     3.08 cm    0.17 deg        (-3.255, -1.068, 2.467)        (-3.227, -1.063, 2.454)           (-2.79, -0.45, 1.23)
+cam_edge_5              static_camera             no    10.82 cm    0.14 deg          (5.954, 0.889, 2.570)          (5.859, 0.848, 2.539)             (9.53, 4.06, 3.10)
+marker_000              aruco_marker              no     5.56 cm    2.14 deg         (-2.603, 0.497, 1.179)         (-2.550, 0.480, 1.180)           (-5.27, 1.75, -0.14)
+marker_001              aruco_marker              no     3.53 cm    0.34 deg        (-2.279, -0.533, 1.648)        (-2.250, -0.525, 1.630)           (-2.90, -0.83, 1.83)
+marker_002              aruco_marker              no     1.81 cm    0.78 deg        (-1.116, -0.532, 1.105)        (-1.100, -0.525, 1.100)           (-1.60, -0.67, 0.53)
+marker_003              aruco_marker              no     0.68 cm    0.60 deg          (0.103, 1.213, 0.795)          (0.100, 1.210, 0.800)            (0.35, 0.27, -0.52)
+marker_004              aruco_marker              no     1.65 cm    0.23 deg          (0.713, 1.216, 2.008)          (0.700, 1.210, 2.000)             (1.30, 0.65, 0.78)
+marker_005              aruco_marker              no     3.52 cm    0.22 deg         (1.932, -0.994, 1.101)         (1.900, -0.980, 1.100)            (3.22, -1.41, 0.08)
+marker_006              aruco_marker              no     2.30 cm    1.85 deg          (1.993, 0.502, 1.373)          (1.970, 0.500, 1.370)             (2.26, 0.20, 0.34)
+marker_007              aruco_marker              no     1.84 cm    0.25 deg          (1.987, 0.940, 1.374)          (1.970, 0.935, 1.370)             (1.73, 0.48, 0.41)
+marker_008              aruco_marker              no     3.63 cm    1.14 deg         (2.685, -0.533, 1.416)         (2.650, -0.525, 1.410)            (3.48, -0.82, 0.59)
+marker_009              aruco_marker              no    10.04 cm    1.69 deg          (3.112, 0.512, 1.446)          (3.020, 0.480, 1.420)             (9.16, 3.22, 2.56)
+marker_010              aruco_marker              no     8.94 cm    0.65 deg         (3.104, -0.959, 1.444)         (3.020, -0.980, 1.420)             (8.36, 2.09, 2.40)
+marker_011              aruco_marker              no    10.63 cm    0.64 deg          (4.095, 0.035, 1.563)          (4.000, 0.000, 1.530)             (9.49, 3.49, 3.28)
+marker_012              aruco_marker              no     9.57 cm    0.82 deg         (4.128, -0.953, 1.446)         (4.040, -0.980, 1.420)             (8.79, 2.72, 2.65)
+marker_013              aruco_marker              no    10.56 cm    0.58 deg          (4.144, 0.766, 1.301)          (4.050, 0.730, 1.270)             (9.44, 3.57, 3.11)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     3.40 cm    1.11 deg        (-0.984, -0.500, 1.279)        (-0.950, -0.500, 1.280)           (-3.40, 0.01, -0.05)
+marker_017              aruco_marker              no     1.95 cm    0.19 deg         (1.517, -1.197, 1.909)         (1.500, -1.200, 1.900)             (1.69, 0.33, 0.91)
+marker_019              aruco_marker              no     1.62 cm    0.07 deg         (-1.305, 1.087, 1.506)         (-1.290, 1.090, 1.500)           (-1.49, -0.29, 0.56)
+marker_020              aruco_marker              no    11.22 cm    2.20 deg         (5.781, -0.866, 1.757)         (5.670, -0.850, 1.750)           (11.09, -1.57, 0.75)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: density_stride_8_12p5pct ===
+
+############################################################################################################################
+PARAMETER: 12.5% offset 4
+VARIANT:   density_stride_8_offset4
+############################################################################################################################
+
+AP01 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            5.28 cm     0.26 deg        (0.585, -1.683, 2.098)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            7.42 cm     0.84 deg        (-4.042, 0.450, 2.147)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            6.63 cm     0.78 deg       (-3.189, -1.610, 2.082)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            6.61 cm     1.51 deg         (5.892, 0.369, 2.085)         (5.859, 0.348, 2.139)
+
+AP02 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            3.78 cm     1.02 deg        (0.564, -1.732, 2.116)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            4.55 cm     0.29 deg        (-4.015, 0.458, 2.123)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            4.30 cm     0.20 deg       (-3.254, -1.586, 2.029)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            9.95 cm     0.56 deg         (5.951, 0.386, 2.143)         (5.859, 0.348, 2.139)
+
+AP03 — PARTIAL_3_OF_4 — 3/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            3.29 cm     0.25 deg        (0.620, -1.738, 2.093)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            2.81 cm     0.11 deg        (-3.996, 0.493, 2.130)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            1.88 cm     0.14 deg       (-3.238, -1.578, 2.050)       (-3.227, -1.563, 2.054)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: density_stride_8_offset4 ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
+missing marker IDs: []
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     6.07 cm    1.14 deg         (0.568, -1.225, 2.544)         (0.588, -1.235, 2.487)            (-1.98, 1.00, 5.65)
+cam_edge_1              static_camera             no     3.83 cm    0.23 deg         (-4.011, 0.965, 2.532)         (-3.974, 0.975, 2.532)           (-3.69, -1.02, 0.06)
+cam_edge_3              static_camera             no     2.87 cm    0.22 deg        (-3.250, -1.078, 2.445)        (-3.227, -1.063, 2.454)          (-2.25, -1.53, -0.92)
+cam_edge_5              static_camera             no    11.49 cm    0.52 deg          (5.955, 0.893, 2.582)          (5.859, 0.848, 2.539)             (9.62, 4.51, 4.37)
+marker_000              aruco_marker              no     4.72 cm    1.22 deg         (-2.596, 0.473, 1.170)         (-2.550, 0.480, 1.180)          (-4.56, -0.72, -0.95)
+marker_001              aruco_marker              no     2.31 cm    0.93 deg        (-2.270, -0.537, 1.630)        (-2.250, -0.525, 1.630)          (-1.96, -1.23, -0.02)
+marker_002              aruco_marker              no     1.83 cm    1.47 deg        (-1.115, -0.535, 1.098)        (-1.100, -0.525, 1.100)          (-1.53, -0.97, -0.22)
+marker_003              aruco_marker              no     0.27 cm    0.41 deg          (0.098, 1.208, 0.800)          (0.100, 1.210, 0.800)           (-0.18, -0.20, 0.04)
+marker_004              aruco_marker              no     1.80 cm    0.46 deg          (0.699, 1.200, 2.015)          (0.700, 1.210, 2.000)           (-0.09, -1.03, 1.47)
+marker_005              aruco_marker              no     2.38 cm    0.46 deg         (1.922, -0.989, 1.101)         (1.900, -0.980, 1.100)            (2.20, -0.90, 0.13)
+marker_006              aruco_marker              no     1.82 cm    1.35 deg          (1.986, 0.503, 1.378)          (1.970, 0.500, 1.370)             (1.60, 0.28, 0.80)
+marker_007              aruco_marker              no     1.66 cm    0.26 deg          (1.982, 0.941, 1.380)          (1.970, 0.935, 1.370)             (1.22, 0.58, 0.97)
+marker_008              aruco_marker              no     2.53 cm    1.51 deg         (2.674, -0.529, 1.419)         (2.650, -0.525, 1.410)            (2.36, -0.36, 0.85)
+marker_009              aruco_marker              no    10.36 cm    1.25 deg          (3.114, 0.512, 1.449)          (3.020, 0.480, 1.420)             (9.42, 3.17, 2.91)
+marker_010              aruco_marker              no    10.02 cm    1.10 deg         (3.116, -0.959, 1.438)         (3.020, -0.980, 1.420)             (9.63, 2.08, 1.82)
+marker_011              aruco_marker              no    11.66 cm    0.69 deg          (4.104, 0.039, 1.566)          (4.000, 0.000, 1.530)            (10.39, 3.87, 3.61)
+marker_012              aruco_marker              no    11.02 cm    0.41 deg         (4.142, -0.946, 1.444)         (4.040, -0.980, 1.420)            (10.20, 3.42, 2.38)
+marker_013              aruco_marker              no    11.15 cm    0.83 deg          (4.147, 0.771, 1.308)          (4.050, 0.730, 1.270)             (9.65, 4.09, 3.81)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     2.33 cm    0.32 deg        (-0.963, -0.516, 1.270)        (-0.950, -0.500, 1.280)          (-1.33, -1.63, -1.00)
+marker_017              aruco_marker              no     0.92 cm    0.83 deg         (1.506, -1.201, 1.907)         (1.500, -1.200, 1.900)            (0.64, -0.11, 0.66)
+marker_018              aruco_marker              no     1.06 cm    0.28 deg        (-0.204, -1.206, 1.443)        (-0.200, -1.200, 1.450)          (-0.41, -0.65, -0.74)
+marker_019              aruco_marker              no     3.22 cm    0.42 deg         (-1.314, 1.069, 1.505)         (-1.290, 1.090, 1.500)           (-2.41, -2.07, 0.54)
+marker_020              aruco_marker              no    11.92 cm    2.25 deg         (5.788, -0.855, 1.767)         (5.670, -0.850, 1.750)           (11.79, -0.45, 1.66)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: density_stride_8_offset4 ===
+
+############################################################################################################################
+PARAMETER: 6.25%
+VARIANT:   density_stride_16_6p25pct
+############################################################################################################################
+
+AP01 — PARTIAL_2_OF_4_NO_SE3_ALIGNMENT — 2/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_1    AVAILABLE_NOT_ALIGNED               -            -                     (-, -, -)                     (-, -, -)
+cam_edge_3    AVAILABLE_NOT_ALIGNED               -            -                     (-, -, -)                     (-, -, -)
+
+AP02 — OK_FULL — 4/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            3.53 cm     1.16 deg        (0.570, -1.730, 2.117)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            5.98 cm     0.46 deg        (-4.028, 0.452, 2.119)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            5.86 cm     0.34 deg       (-3.271, -1.592, 2.028)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           12.53 cm     0.39 deg         (5.975, 0.396, 2.147)         (5.859, 0.348, 2.139)
+
+AP03 — FAILED_NO_STATIC_CAMERAS — 0/4 cameras
+----------------------------------------------------------------------------------------------------------------------------
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+- no camera-map rows
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: density_stride_16_6p25pct ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 20]
+missing marker IDs: [18]
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     7.83 cm    1.54 deg         (0.569, -1.221, 2.562)         (0.588, -1.235, 2.487)            (-1.87, 1.38, 7.48)
+cam_edge_1              static_camera             no     4.94 cm    0.25 deg         (-4.024, 0.972, 2.531)         (-3.974, 0.975, 2.532)          (-4.93, -0.28, -0.05)
+cam_edge_3              static_camera             no     4.50 cm    0.26 deg        (-3.271, -1.075, 2.455)        (-3.227, -1.063, 2.454)           (-4.35, -1.17, 0.10)
+cam_edge_5              static_camera             no    14.36 cm    0.32 deg          (5.979, 0.893, 2.604)          (5.859, 0.848, 2.539)            (11.99, 4.42, 6.55)
+marker_000              aruco_marker              no     4.25 cm    1.13 deg         (-2.587, 0.501, 1.177)         (-2.550, 0.480, 1.180)           (-3.70, 2.08, -0.27)
+marker_001              aruco_marker              no     4.52 cm    0.54 deg        (-2.291, -0.539, 1.642)        (-2.250, -0.525, 1.630)           (-4.14, -1.37, 1.20)
+marker_002              aruco_marker              no     2.37 cm    0.95 deg        (-1.122, -0.535, 1.100)        (-1.100, -0.525, 1.100)           (-2.16, -0.99, 0.01)
+marker_003              aruco_marker              no     0.85 cm    0.98 deg          (0.106, 1.204, 0.799)          (0.100, 1.210, 0.800)           (0.58, -0.62, -0.09)
+marker_004              aruco_marker              no     1.57 cm    0.36 deg          (0.705, 1.212, 2.015)          (0.700, 1.210, 2.000)             (0.54, 0.24, 1.46)
+marker_005              aruco_marker              no     4.65 cm    0.33 deg         (1.942, -1.000, 1.103)         (1.900, -0.980, 1.100)            (4.20, -1.95, 0.34)
+marker_006              aruco_marker              no     3.56 cm    2.57 deg          (2.004, 0.501, 1.381)          (1.970, 0.500, 1.370)             (3.38, 0.08, 1.13)
+marker_007              aruco_marker              no     2.63 cm    0.77 deg          (1.992, 0.940, 1.384)          (1.970, 0.935, 1.370)             (2.18, 0.45, 1.40)
+marker_008              aruco_marker              no     4.98 cm    1.99 deg         (2.696, -0.538, 1.424)         (2.650, -0.525, 1.410)            (4.61, -1.31, 1.39)
+marker_009              aruco_marker              no    13.22 cm    1.93 deg          (3.138, 0.517, 1.468)          (3.020, 0.480, 1.420)            (11.75, 3.65, 4.81)
+marker_010              aruco_marker              no    11.08 cm    0.76 deg         (3.121, -0.962, 1.461)         (3.020, -0.980, 1.420)            (10.12, 1.85, 4.10)
+marker_011              aruco_marker              no    14.26 cm    0.38 deg          (4.124, 0.039, 1.589)          (4.000, 0.000, 1.530)            (12.38, 3.93, 5.89)
+marker_012              aruco_marker              no    12.71 cm    1.01 deg         (4.154, -0.952, 1.469)         (4.040, -0.980, 1.420)            (11.36, 2.84, 4.93)
+marker_013              aruco_marker              no    14.21 cm    0.56 deg          (4.173, 0.771, 1.328)          (4.050, 0.730, 1.270)            (12.31, 4.06, 5.81)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     2.19 cm    0.90 deg        (-0.932, -0.493, 1.290)        (-0.950, -0.500, 1.280)             (1.80, 0.74, 1.01)
+marker_017              aruco_marker              no     2.69 cm    0.95 deg         (1.523, -1.207, 1.911)         (1.500, -1.200, 1.900)            (2.35, -0.69, 1.12)
+marker_019              aruco_marker              no     2.11 cm    0.71 deg         (-1.310, 1.088, 1.505)         (-1.290, 1.090, 1.500)           (-2.04, -0.21, 0.47)
+marker_020              aruco_marker              no    15.03 cm    2.15 deg         (5.816, -0.874, 1.777)         (5.670, -0.850, 1.750)           (14.60, -2.35, 2.69)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: density_stride_16_6p25pct ===

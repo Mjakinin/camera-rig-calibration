@@ -14,7 +14,7 @@ Input dataset:
 Number of COLMAP models: 1
 
 Models:
-- model 0: 179 images, 4/4 static cameras, 175 moving frames, 8822 3D points
+- model 0: 179 images, 4/4 static cameras, 175 moving frames, 9575 3D points
   static registered: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
   static missing: none
 
@@ -23,7 +23,7 @@ Best model by static-camera coverage:
 - registered images: 179
 - registered static cameras: 4/4
 - registered moving frames: 175
-- 3D points: 8822
+- 3D points: 9575
 
 Interpretation:
 - COLMAP registered all static cameras.

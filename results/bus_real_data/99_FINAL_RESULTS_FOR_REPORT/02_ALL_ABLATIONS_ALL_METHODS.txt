@@ -57,21 +57,21 @@ moving_cam/res          2560x1440             AP01    OK_FULL                   
 moving_cam/res          2560x1440             AP02    OK_FULL                     4/4     6/6     2.46 cm    0.20 deg
 moving_cam/res          2560x1440             AP03    OK_FULL                     4/4     6/6     1.02 cm    0.04 deg
 
-world/lighting          dark extreme          AP01    OK_FULL                     4/4     6/6    38.84 cm    3.06 deg
-world/lighting          dark extreme          AP02    OK_FULL                     4/4     6/6   182.62 cm   12.46 deg
-world/lighting          dark extreme          AP03    OK_FULL                     4/4     6/6     2.62 cm    0.09 deg
+world/lighting          dark extreme          AP01    OK_FULL                     4/4     6/6    18.46 cm    2.11 deg
+world/lighting          dark extreme          AP02    OK_FULL                     4/4     6/6    13.09 cm    1.15 deg
+world/lighting          dark extreme          AP03    OK_FULL                     4/4     6/6     2.95 cm    0.07 deg
 
-world/lighting          low                   AP01    OK_FULL                     4/4     6/6    20.33 cm    3.03 deg
-world/lighting          low                   AP02    OK_FULL                     4/4     6/6    16.88 cm    1.13 deg
-world/lighting          low                   AP03    OK_FULL                     4/4     6/6     2.98 cm    0.07 deg
+world/lighting          low                   AP01    OK_FULL                     4/4     6/6    27.37 cm    1.98 deg
+world/lighting          low                   AP02    OK_FULL                     4/4     6/6     5.35 cm    0.30 deg
+world/lighting          low                   AP03    OK_FULL                     4/4     6/6     3.21 cm    0.08 deg
 
-world/lighting          normal baseline       AP01    OK_FULL                     4/4     6/6    20.07 cm    2.98 deg
-world/lighting          normal baseline       AP02    OK_FULL                     4/4     6/6    16.93 cm    1.14 deg
-world/lighting          normal baseline       AP03    OK_FULL                     4/4     6/6     2.98 cm    0.04 deg
+world/lighting          normal baseline       AP01    OK_FULL                     4/4     6/6    24.75 cm    1.84 deg
+world/lighting          normal baseline       AP02    OK_FULL                     4/4     6/6     4.31 cm    0.31 deg
+world/lighting          normal baseline       AP03    OK_FULL                     4/4     6/6     3.01 cm    0.06 deg
 
-world/lighting          bright                AP01    OK_FULL                     4/4     6/6    19.06 cm    2.86 deg
-world/lighting          bright                AP02    OK_FULL                     4/4     6/6    16.74 cm    1.11 deg
-world/lighting          bright                AP03    OK_FULL                     4/4     6/6     2.84 cm    0.04 deg
+world/lighting          bright                AP01    OK_FULL                     4/4     6/6    24.63 cm    1.81 deg
+world/lighting          bright                AP02    OK_FULL                     4/4     6/6     4.29 cm    0.31 deg
+world/lighting          bright                AP03    OK_FULL                     4/4     6/6     3.34 cm    0.05 deg
 
 Detailed reports:
 - ablations/

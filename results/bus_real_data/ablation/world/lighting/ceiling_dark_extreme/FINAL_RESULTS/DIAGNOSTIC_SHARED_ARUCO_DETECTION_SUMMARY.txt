@@ -5,10 +5,10 @@ Dataset: results/bus_real_data/ablation/world/lighting/ceiling_dark_extreme/raw_
 Dictionary: DICT_4X4_50
 Marker length [m]: 0.17
 
-Static observations: 18
-Moving observations: 272
-Total observations: 290
-PnP success: 290 / 290
+Static observations: 19
+Moving observations: 331
+Total observations: 350
+PnP success: 350 / 350
 
 Output files:
 - results/bus_real_data/ablation/world/lighting/ceiling_dark_extreme/aruco_observations/shared_static_aruco_observations.csv

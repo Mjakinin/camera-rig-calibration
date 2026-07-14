@@ -8,11 +8,11 @@ registered_static_cameras: 4 / 4
 available_static_cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
 missing_static_cameras: []
 registered_images: 179
-detected_corner_observations: 1512
-triangulated_marker_corners: 60
-scale_m_per_colmap_unit: 0.684647415191
-scale_observations_used/total: 90 / 90
-used_rel_std_scale: 0.009819
+detected_corner_observations: 2048
+triangulated_marker_corners: 80
+scale_m_per_colmap_unit: 0.684547663457
+scale_observations_used/total: 120 / 120
+used_rel_std_scale: 0.011177
 
 Partial static-camera poses are exported when metric scale is available. Missing cameras remain explicitly missing.
 Rule: scale is estimated only from known physical marker size, not from known marker-map positions.

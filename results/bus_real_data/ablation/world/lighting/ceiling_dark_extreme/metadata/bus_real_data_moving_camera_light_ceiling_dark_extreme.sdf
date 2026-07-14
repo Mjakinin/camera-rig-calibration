@@ -227,9 +227,39 @@
       <name>marker_013</name>
       <pose>4.050000 0.730000 1.270000 -1.57079633 0.00000000 1.57079633</pose>
     </include>
+    <include>
+      <uri>model://a4_aruco_marker_014</uri>
+      <name>aruco_ref_floor_14</name>
+      <pose>0.000000 0.500000 0.400000 -1.57079633 0.00000000 0.00000000</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_016</uri>
+      <name>marker_016</name>
+      <pose>-0.950000 -0.500000 1.280000 0.00000000 0.00000000 1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_017</uri>
+      <name>marker_017</name>
+      <pose>1.500000 -1.200000 1.900000 0.00000000 0.00000000 3.14159265</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_018</uri>
+      <name>marker_018</name>
+      <pose>-0.200000 -1.200000 1.450000 0.00000000 0.00000000 3.14159265</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_019</uri>
+      <name>marker_019</name>
+      <pose>-1.290000 1.090000 1.500000 0.00000000 0.00000000 0.00000000</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_020</uri>
+      <name>marker_020</name>
+      <pose>5.670000 -0.850000 1.750000 -0.20000000 0.00000000 -1.57079633</pose>
+    </include>
     <model name="moving_calib_camera">
       <static>true</static>
-      <pose>-4.5 0 2.2 0 0.3 0</pose>
+      <pose>-6.000000 0.000000 2.200000 0.000000 0.000000 0.000000</pose>
       <link name="moving_calib_camera_link">
         <visual name="moving_calib_camera_visual">
           <geometry>
@@ -261,11 +291,6 @@
         </sensor>
       </link>
     </model>
-    <include>
-      <name>aruco_ref_floor_14</name>
-      <uri>model://a4_aruco_marker_014</uri>
-      <pose>0 0.5 0.4 -1.570796327 0 0</pose>
-    </include>
     <model name="bus_ceiling_led_panels">
       <static>true</static>
       <link name="ceiling_led_panel_link">

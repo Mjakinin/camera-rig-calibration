@@ -31,10 +31,10 @@ moving_cam/res          160x90                FAILED_NO_PAIR              1/4   
 moving_cam/res          320x180               OK_FULL                     4/4     6/6    19.03 cm    0.22 deg
 moving_cam/res          1280x720 baseline     OK_FULL                     4/4     6/6     2.92 cm    0.07 deg
 moving_cam/res          2560x1440             OK_FULL                     4/4     6/6     1.02 cm    0.04 deg
-world/lighting          dark extreme          OK_FULL                     4/4     6/6     2.62 cm    0.09 deg
-world/lighting          low                   OK_FULL                     4/4     6/6     2.98 cm    0.07 deg
-world/lighting          normal baseline       OK_FULL                     4/4     6/6     2.98 cm    0.04 deg
-world/lighting          bright                OK_FULL                     4/4     6/6     2.84 cm    0.04 deg
+world/lighting          dark extreme          OK_FULL                     4/4     6/6     2.95 cm    0.07 deg
+world/lighting          low                   OK_FULL                     4/4     6/6     3.21 cm    0.08 deg
+world/lighting          normal baseline       OK_FULL                     4/4     6/6     3.01 cm    0.06 deg
+world/lighting          bright                OK_FULL                     4/4     6/6     3.34 cm    0.05 deg
 
 Detailed primary values:
 - details/primary/

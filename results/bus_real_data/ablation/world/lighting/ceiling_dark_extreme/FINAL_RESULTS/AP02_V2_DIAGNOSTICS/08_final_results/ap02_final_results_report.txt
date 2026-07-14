@@ -41,13 +41,13 @@ AP02 maximum-bottleneck pose graph initialization
 Mode: static_only
 Reference marker id: 14
 
-Raw observations in mode: 18
-Quality-valid observer-marker edges: 18
+Raw observations in mode: 19
+Quality-valid observer-marker edges: 19
 Used initialization edges: 0
 
 Initialized static cameras: 0 / 4
 Initialized moving frames: 0 / 0
-Initialized markers: 1 / 13
+Initialized markers: 1 / 14
 
 Initialized static cameras: []
 Missing static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
@@ -55,7 +55,7 @@ Missing static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
 Camera path bottlenecks: {}
 
 Initialized markers: [14]
-Missing markers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+Missing markers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 19]
 
 Missing moving frames count: 0
 
@@ -72,20 +72,20 @@ AP02 maximum-bottleneck pose graph initialization
 Mode: with_moving
 Reference marker id: 14
 
-Raw observations in mode: 290
-Quality-valid observer-marker edges: 290
-Used initialization edges: 172
+Raw observations in mode: 350
+Quality-valid observer-marker edges: 350
+Used initialization edges: 188
 
 Initialized static cameras: 4 / 4
-Initialized moving frames: 154 / 154
-Initialized markers: 15 / 15
+Initialized moving frames: 165 / 165
+Initialized markers: 20 / 20
 
 Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
 Missing static cameras: []
 
-Camera path bottlenecks: {'cam_edge_0': 14.761657976995126, 'cam_edge_1': 14.613070877641416, 'cam_edge_3': 14.613070877641416, 'cam_edge_5': 6.150676106224777}
+Camera path bottlenecks: {'cam_edge_0': 21.165007552618846, 'cam_edge_1': 15.6329583956338, 'cam_edge_3': 27.239210748608727, 'cam_edge_5': 10.827729123550036}
 
-Initialized markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+Initialized markers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
 Missing markers: []
 
 Missing moving frames count: 0
@@ -106,27 +106,27 @@ AP02 Reference-marker Graph Bundle Adjustment
 Mode: with_moving
 Reference marker id: 14
 
-Optimized variable poses: 109
-Parameter count: 654
-Marker observations used: 214
-Scalar residual count: 1712
+Optimized variable poses: 139
+Parameter count: 834
+Marker observations used: 280
+Scalar residual count: 2240
 
 Initial reprojection error [px]:
-- mean: 5.989995
-- median: 0.378660
-- max: 74.982074
+- mean: 8.046980
+- median: 0.632169
+- max: 182.336687
 
 Final reprojection error [px]:
-- mean: 0.333079
-- median: 0.300936
-- max: 1.372703
+- mean: 0.364919
+- median: 0.320735
+- max: 5.108386
 
 Optimizer:
 - success: True
 - status: 2
 - message: `ftol` termination condition is satisfied.
-- nfev: 35
-- cost: 63.760542
+- nfev: 42
+- cost: 125.295208
 
 Outputs:
 - optimized_static_camera_poses_ref_marker.csv
