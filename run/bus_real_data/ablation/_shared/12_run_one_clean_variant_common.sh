@@ -186,6 +186,16 @@ cp results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_A
 cp results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv \
   "$VAR_FINAL/DIAGNOSTIC_AP02_GT_ALIGNED_FULL_MARKER_MAP.csv" 2>/dev/null || true
 
+# Preserve the complete AP02 pose exports needed by the readable complete/partial
+# REF14 marker-map reporter. This makes every fresh ablation run self-contained.
+rm -rf "$VAR_FINAL/AP02_V2_DIAGNOSTICS"
+if [[ -d results/bus_real_data/02_ref_marker_graph_ba/08_final_results ]]; then
+  mkdir -p "$VAR_FINAL/AP02_V2_DIAGNOSTICS"
+  cp -a \
+    results/bus_real_data/02_ref_marker_graph_ba/08_final_results \
+    "$VAR_FINAL/AP02_V2_DIAGNOSTICS/08_final_results"
+fi
+
 cat > "$VAR_FINAL/RUN_STATUS.txt" <<TXT
 variant=$variant
 AP01_STATUS=$AP01_STATUS
