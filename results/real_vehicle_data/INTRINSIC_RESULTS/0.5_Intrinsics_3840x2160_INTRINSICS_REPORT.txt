@@ -1,0 +1,79 @@
+INTRINSIC CALIBRATION RESULT — 0.5x moving camera
+========================================================================================
+
+SOURCE
+------
+Video: 0.5_Intrinsics.mov
+Recorded path: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/0.5/0.5_Intrinsics.mov
+Resolution: 3840x2160
+Source FPS: 30.0
+
+CHECKERBOARD AND VIEW SELECTION
+-------------------------------
+Inner corners: 8x6
+Original frames scanned: 1350
+Successful checkerboard detections: 927
+Initially selected views: 80
+Final calibration views: 74
+Removed outlier views: 6
+
+MODEL AND QUALITY
+-----------------
+Selected distortion model: plumb_bob
+Standard holdout median RMSE [px]: 1.2306599020957947
+Rational holdout median RMSE [px]: 1.249373197555542
+OpenCV calibration RMS [px]: 1.17432826122808
+Median per-view reprojection RMSE [px]: 1.09190034866333
+Maximum retained per-view RMSE [px]: 2.192113161087036
+
+CAMERA MATRIX K
+---------------
+[ 1713.9955955775     0.0000000000  1916.8763303257]
+[    0.0000000000  1715.4133290540  1087.5219440583]
+[    0.0000000000     0.0000000000     1.0000000000]
+
+SCALAR INTRINSICS
+-----------------
+fx [px]: 1713.99559557746
+fy [px]: 1715.413329053988
+cx [px]: 1916.8763303257203
+cy [px]: 1087.5219440582887
+
+DISTORTION D
+------------
+Model ordering for plumb_bob: [k1, k2, p1, p2, k3]
+[0.00431442720392, -0.0231519324585, -6.79877662348e-05, -4.71730907851e-05, 0.0140712810829]
+
+RECTIFICATION R
+---------------
+[1, 0, 0,
+ 0, 1, 0,
+ 0, 0, 1]
+
+PROJECTION MATRIX P
+-------------------
+[1713.99559557746, 0, 1916.8763303257203, 0,
+ 0, 1715.413329053988, 1087.5219440582887, 0,
+ 0, 0, 1, 0]
+
+REMOVED OUTLIER VIEWS
+---------------------
+- frame 128: RMSE=23.418779373168945 px
+- frame 860: RMSE=16.2751522064209 px
+- frame 847: RMSE=11.366310119628906 px
+- frame 899: RMSE=4.069143295288086 px
+- frame 947: RMSE=3.261725664138794 px
+- frame 920: RMSE=2.5531718730926514 px
+
+CANONICAL CAMERAINFO JSON
+-------------------------
+results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input/calibration/intrinsics_05x/moving_calib_camera.json
+
+INTERPRETATION
+--------------
+- K contains focal lengths and principal point in pixels.
+- D contains the lens-distortion coefficients.
+- R is identity because no stereo rectification is applied.
+- P is the monocular projection matrix derived from K.
+- This calibration is valid for the physical 0.5x camera in the 3840x2160 capture mode.
+- It must not be reused unchanged for the 1x camera module or a different sensor crop.
