@@ -4,6 +4,19 @@ set -Eeuo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 ROOT="results/bus_real_data/ablation/world/lighting"
+FINAL="results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT"
+
+# A failed older lighting backup could leave the tracked final-report tree absent.
+# Recover only that tree from the current commit before touching method workspaces.
+if [[ ! -d "$FINAL" ]]; then
+  echo "[WARN] Missing $FINAL; restoring tracked canonical reports from HEAD."
+  git restore --source=HEAD --worktree -- "$FINAL"
+fi
+
+if [[ ! -d "$FINAL" ]]; then
+  echo "[ERROR] Could not restore canonical final-report tree: $FINAL"
+  exit 1
+fi
 
 VARIANTS=(
   ceiling_dark_extreme
