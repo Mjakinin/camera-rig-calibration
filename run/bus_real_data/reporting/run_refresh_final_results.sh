@@ -198,7 +198,45 @@ shopt -u dotglob nullglob
 rmdir "$GENERATED"
 
 echo
-echo "=== Finalize readable route/density and inline AP02 maps ==="
+echo "=== Restore route/density packages and finalize readable reports ==="
+
+restore_extra_group() {
+  local source="$1"
+  local number="$2"
+  local name="$3"
+
+  if [[ ! -s "$source/FULL_ABLATION_REPORT.txt" ]]; then
+    echo "[WARN] Skip missing extra ablation package: $source"
+    return 0
+  fi
+
+  mkdir -p \
+    "$FINAL/ablations" \
+    "$FINAL/data" \
+    "$FINAL/data/primary" \
+    "$FINAL/data/secondary"
+
+  cp -f "$source/FULL_ABLATION_REPORT.txt" \
+    "$FINAL/ablations/${number}_${name}_ALL_METHODS.txt"
+  cp -f "$source/RUN_STATUS_ALL_VARIANTS.csv" \
+    "$FINAL/data/${name}_RUN_STATUS.csv"
+  cp -f "$source/PRIMARY_PAIRWISE_SUMMARY_ALL_VARIANTS.csv" \
+    "$FINAL/data/primary/${name}_ABLATION_SUMMARY.csv"
+  cp -f "$source/PRIMARY_PAIRWISE_DETAIL_ALL_VARIANTS.csv" \
+    "$FINAL/data/primary/${name}_ABLATION_DETAIL.csv"
+  cp -f "$source/SECONDARY_REF14_WORLD_SUMMARY_ALL_VARIANTS.csv" \
+    "$FINAL/data/secondary/${name}_ABLATION_SUMMARY.csv"
+  cp -f "$source/SECONDARY_REF14_WORLD_DETAIL_ALL_VARIANTS.csv" \
+    "$FINAL/data/secondary/${name}_ABLATION_DETAIL.csv"
+}
+
+restore_extra_group \
+  "$BUS/ablation/world/route/ABLATION_SUMMARY" \
+  05 ROUTE_PATH
+
+restore_extra_group \
+  "$BUS/ablation/moving_cam/density/ABLATION_SUMMARY" \
+  06 FRAME_DENSITY
 
 ROUTE_WRITER="run/bus_real_data/ablation/world/route/02_write_readable_route_reports.py"
 DENSITY_WRITER="run/bus_real_data/ablation/moving_cam/density/05_write_readable_density_reports.py"
