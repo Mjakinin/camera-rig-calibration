@@ -32,7 +32,7 @@ echo "- no image capture"
 echo "- no ArUco redetection"
 echo "- no AP01/AP02/AP03 rerun"
 echo "- rewrites readable route and density detail reports"
-echo "- removes the old duplicated bottom-of-file marker-map blocks"
+echo "- removes legacy bottom blocks and old GT-aligned marker-map tables"
 echo "- installs exactly one REF14 map inside each non-lighting variant block"
 echo "- intentionally skips lighting until corrected recapture is finished"
 echo "================================================================================"
@@ -67,12 +67,17 @@ for filename in "${!expected_counts[@]}"; do
     exit 1
   fi
 
-  echo "[OK] $filename: $count inline map section(s), no legacy duplicate"
+  if grep -q '^AP02 OPTIONAL GT-ALIGNED FULL MAP$' "$report"; then
+    echo "[ERROR] Old GT-aligned marker-map table remains in $filename"
+    exit 1
+  fi
+
+  echo "[OK] $filename: $count inline map section(s), no old/duplicate map"
 done
 
 echo
 echo "[INFO] Lighting was not modified because its current captures are invalid."
-echo "[INFO] The corrected lighting rerun writes one inline map per lighting variant."
+echo "[INFO] The corrected lighting resume writes one inline map per lighting variant."
 echo
 cat "$FINAL/AP02_REF14_AVAILABLE_MAP_AUDIT.txt"
 
