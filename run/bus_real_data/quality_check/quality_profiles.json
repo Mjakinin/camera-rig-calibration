@@ -1,0 +1,80 @@
+{
+  "baseline": {
+    "description": "All successful PnP marker observations.",
+    "min_area_px2": 0.0,
+    "max_distance_m": 1000000.0,
+    "max_reprojection_rmse_px": 1000000.0
+  },
+  "area_500": {
+    "description": "Reject marker detections smaller than 500 px^2.",
+    "min_area_px2": 500.0,
+    "max_distance_m": 1000000.0,
+    "max_reprojection_rmse_px": 1000000.0
+  },
+  "area_1000": {
+    "description": "Reject marker detections smaller than 1000 px^2.",
+    "min_area_px2": 1000.0,
+    "max_distance_m": 1000000.0,
+    "max_reprojection_rmse_px": 1000000.0
+  },
+  "area_2000": {
+    "description": "Reject marker detections smaller than 2000 px^2.",
+    "min_area_px2": 2000.0,
+    "max_distance_m": 1000000.0,
+    "max_reprojection_rmse_px": 1000000.0
+  },
+  "distance_3m": {
+    "description": "Keep observations at most 3 m from the camera.",
+    "min_area_px2": 0.0,
+    "max_distance_m": 3.0,
+    "max_reprojection_rmse_px": 1000000.0
+  },
+  "distance_4m": {
+    "description": "Keep observations at most 4 m from the camera.",
+    "min_area_px2": 0.0,
+    "max_distance_m": 4.0,
+    "max_reprojection_rmse_px": 1000000.0
+  },
+  "distance_5m": {
+    "description": "Keep observations at most 5 m from the camera.",
+    "min_area_px2": 0.0,
+    "max_distance_m": 5.0,
+    "max_reprojection_rmse_px": 1000000.0
+  },
+  "reprojection_0_2px": {
+    "description": "Keep observations with PnP reprojection RMSE at most 0.2 px.",
+    "min_area_px2": 0.0,
+    "max_distance_m": 1000000.0,
+    "max_reprojection_rmse_px": 0.2
+  },
+  "reprojection_0_3px": {
+    "description": "Keep observations with PnP reprojection RMSE at most 0.3 px.",
+    "min_area_px2": 0.0,
+    "max_distance_m": 1000000.0,
+    "max_reprojection_rmse_px": 0.3
+  },
+  "reprojection_0_5px": {
+    "description": "Keep observations with PnP reprojection RMSE at most 0.5 px.",
+    "min_area_px2": 0.0,
+    "max_distance_m": 1000000.0,
+    "max_reprojection_rmse_px": 0.5
+  },
+  "combined_loose": {
+    "description": "Loose combined quality filter.",
+    "min_area_px2": 500.0,
+    "max_distance_m": 6.0,
+    "max_reprojection_rmse_px": 0.5
+  },
+  "combined_medium": {
+    "description": "Medium combined quality filter.",
+    "min_area_px2": 1000.0,
+    "max_distance_m": 4.0,
+    "max_reprojection_rmse_px": 0.3
+  },
+  "combined_strict": {
+    "description": "Strict combined quality filter.",
+    "min_area_px2": 2000.0,
+    "max_distance_m": 3.0,
+    "max_reprojection_rmse_px": 0.2
+  }
+}
