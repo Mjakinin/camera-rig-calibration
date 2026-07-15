@@ -87,3 +87,12 @@ results/bus_real_data/quality_check/full_approach_benchmark/*/
 !results/bus_real_data/quality_check/full_approach_benchmark/full_benchmark_metrics.csv
 !results/bus_real_data/quality_check/full_approach_benchmark/canonical_full_benchmark_metrics.csv
 !results/bus_real_data/quality_check/full_approach_benchmark/verified_full_benchmark_metrics.csv
+
+# Other generated calibration outputs
+results/bus_real_data/01_static_a4_marker_detection_static_motion_blur_15/
+results/bus_real_data/02_ref_marker_graph_ba/10_observation_quality_ablation/
+results/bus_real_data/03_moving_camera_sequence_*/
+results/bus_real_data/04_colmap_moving_sequence_*/
+results/bus_real_data/06_moving_relay_chain_eval*/
+results/bus_real_data/07_final_extrinsics_cam3_reference_*/
+project/
