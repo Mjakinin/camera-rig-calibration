@@ -1,0 +1,26 @@
+{
+  "seed": 42,
+  "reference_marker_candidates": [14, 1, 5, 10, 20],
+  "threshold_sweeps": {
+    "min_area_px2": [64, 256, 500, 750, 1000, 2000, 4000],
+    "max_distance_m": [2, 3, 4, 5, 6, 8, 12],
+    "max_reprojection_rmse_px": [0.2, 0.3, 0.5, 1.0, 2.0, 4.0]
+  },
+  "subsampling": {
+    "fractions": [1.0, 0.75, 0.5, 0.25, 0.1],
+    "repetitions": 5
+  },
+  "corner_noise_px": [0.0, 0.5, 1.0, 2.0, 5.0],
+  "outlier_fractions": [0.0, 0.01, 0.05, 0.1, 0.2],
+  "leave_one_marker_out": true,
+  "graph_metrics": [
+    "components",
+    "reference_component_markers",
+    "reference_component_observers",
+    "bridge_edges",
+    "articulation_nodes",
+    "mean_degree",
+    "max_shortest_path_from_reference"
+  ],
+  "approaches": ["AP01", "AP02", "AP03"]
+}
