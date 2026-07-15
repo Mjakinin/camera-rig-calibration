@@ -74,3 +74,16 @@ results/bus_real_data/_master_logs/
 results/bus_real_data/POST_OVERNIGHT_DIAGNOSTICS.txt
 results/**/_pipeline_logs/
 results/**/*.log
+
+# Generated quality-check benchmark artifacts
+results/bus_real_data/quality_check/benchmark_cases/*/
+results/bus_real_data/quality_check/cross_approach_inputs/
+results/bus_real_data/quality_check/full_approach_benchmark/*/
+
+# Keep compact benchmark summaries
+!results/bus_real_data/quality_check/benchmark_cases/benchmark_case_summary.csv
+!results/bus_real_data/quality_check/benchmark_cases/benchmark_manifest.json
+!results/bus_real_data/quality_check/full_approach_benchmark/pipeline_run_summary.csv
+!results/bus_real_data/quality_check/full_approach_benchmark/full_benchmark_metrics.csv
+!results/bus_real_data/quality_check/full_approach_benchmark/canonical_full_benchmark_metrics.csv
+!results/bus_real_data/quality_check/full_approach_benchmark/verified_full_benchmark_metrics.csv
