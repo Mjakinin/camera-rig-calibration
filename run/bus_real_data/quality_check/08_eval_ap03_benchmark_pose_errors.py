@@ -10,6 +10,7 @@ from statistics import mean, median
 REPO = Path(__file__).resolve().parents[3]
 DEFAULT_ROOT = REPO / "results/bus_real_data/quality_check/full_approach_benchmark"
 EVALUATOR_PATH = REPO / "run/bus_real_data/evaluation/10_eval_pairwise_static_camera_extrinsics.py"
+POSE_REL = Path("AP03/results/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv")
 
 
 def load_evaluator():
@@ -19,13 +20,6 @@ def load_evaluator():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
-
-
-def read_csv(path: Path):
-    if not path.is_file():
-        return []
-    with path.open(newline="", encoding="utf-8") as handle:
-        return list(csv.DictReader(handle))
 
 
 def write_csv(path: Path, rows, fields):
@@ -67,6 +61,15 @@ def summarize(case_id: str, rows: list[dict], source: Path) -> dict:
     }
 
 
+def discover_cases(root: Path, selected: set[str]):
+    for case_dir in sorted(path for path in root.iterdir() if path.is_dir()):
+        if selected and case_dir.name not in selected:
+            continue
+        pose_source = case_dir / POSE_REL
+        if pose_source.is_file():
+            yield case_dir.name, pose_source
+
+
 def main():
     parser = argparse.ArgumentParser(description="Evaluate AP03 benchmark snapshots against GT using pairwise static-camera extrinsics.")
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
@@ -75,27 +78,20 @@ def main():
 
     evaluator = load_evaluator()
     gt, _ = evaluator.load_gt_camera_map()
-    runs = read_csv(args.root / "pipeline_run_summary.csv")
     selected = set(args.cases or [])
     summaries = []
 
-    for run in runs:
-        if run.get("approach") != "AP03" or run.get("status") != "success":
-            continue
-        case_id = run.get("case_id", "")
-        if selected and case_id not in selected:
-            continue
-        result_root = Path(run.get("result_dir", ""))
-        if not result_root.is_absolute():
-            result_root = REPO / result_root
-        pose_source = result_root / "07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv"
-        out_dir = result_root / "07_final_results"
+    for case_id, pose_source in discover_cases(args.root, selected):
+        out_dir = pose_source.parent
         detail_path = out_dir / "AP03_GT_PAIRWISE_POSE_ERRORS.csv"
         summary_path = out_dir / "AP03_GT_PAIRWISE_POSE_SUMMARY.csv"
 
         try:
             poses, meta = evaluator.load_pose_csv_camera_map(pose_source, "AP03")
-            rows = evaluator.eval_method_pairwise("AP03", poses, gt, meta.get("source", ""), "GT used only for post-hoc evaluation.")
+            rows = evaluator.eval_method_pairwise(
+                "AP03", poses, gt, meta.get("source", ""),
+                "GT used only for post-hoc evaluation.",
+            )
             summary = summarize(case_id, rows, pose_source)
         except Exception as exc:
             rows = evaluator.failed_rows("AP03", str(exc))
@@ -116,6 +112,8 @@ def main():
                 if key not in fields:
                     fields.append(key)
         write_csv(aggregate, summaries, fields)
+    else:
+        print(f"No AP03 pose snapshots found under: {args.root}")
     print(f"Wrote: {aggregate}")
 
 
