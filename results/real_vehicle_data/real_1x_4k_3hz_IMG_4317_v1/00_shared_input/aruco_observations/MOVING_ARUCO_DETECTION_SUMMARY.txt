@@ -1,0 +1,53 @@
+REAL MOVING-CAMERA ARUCO DETECTION
+================================================================================
+
+Dataset: results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input
+Raw moving directory: results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving
+CameraInfo: results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/camera_info/moving_calib_camera.json
+Dictionary: DICT_4X4_50
+Marker length [m]: 0.17
+Allowed marker IDs: 0..20
+Image size: 3840x2160
+Distortion model: plumb_bob
+
+Moving frames scanned: 293
+Frames with accepted markers: 179
+Frames without accepted markers: 114
+Moving observations written: 301
+PnP successes: 301
+PnP failures: 0
+Observed marker IDs: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 18, 19, 20]
+Unexpected marker IDs rejected: []
+
+Observations per marker:
+- marker 0: 35 observations
+- marker 2: 38 observations
+- marker 3: 27 observations
+- marker 4: 46 observations
+- marker 5: 22 observations
+- marker 6: 6 observations
+- marker 7: 9 observations
+- marker 8: 11 observations
+- marker 9: 6 observations
+- marker 10: 7 observations
+- marker 12: 8 observations
+- marker 15: 15 observations
+- marker 16: 15 observations
+- marker 17: 6 observations
+- marker 18: 9 observations
+- marker 19: 13 observations
+- marker 20: 28 observations
+
+Outputs:
+- results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/aruco_observations/shared_moving_aruco_observations.csv
+- results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/aruco_observations/shared_all_aruco_observations.csv
+- results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/aruco_observations/MOVING_ARUCO_FRAME_SUMMARY.csv
+- results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/aruco_observations/debug_images/moving
+- results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/aruco_observations/debug_images/MOVING_ARUCO_DEBUG_CONTACT_SHEET.jpg
+
+Debug annotation:
+- green marker outline and coordinate axes: successful PnP
+- label z: estimated marker depth in metres
+- label e: four-corner PnP reprojection RMSE in pixels
+
+[OK] moving-camera ArUco observations and debug images regenerated

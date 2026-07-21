@@ -1,0 +1,81 @@
+[
+  {
+    "method": "AP01",
+    "status": "NOT_AVAILABLE",
+    "original_method_status": "FAILED",
+    "original_method_success": false,
+    "error": "RuntimeError: No static camera pose file",
+    "available_static_cameras": [],
+    "available_static_camera_count": 0,
+    "registered_moving_frames": 0,
+    "evaluated_non_anchor_markers": 0
+  },
+  {
+    "method": "AP02",
+    "status": "OK",
+    "available_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "available_static_camera_count": 4,
+    "registered_moving_frames": 122,
+    "static_pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/03_ap02_real/07_graph_ba/with_moving/optimized_static_camera_poses_ref_marker.csv",
+    "trajectory": {
+      "source": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/03_ap02_real/07_graph_ba/with_moving/optimized_moving_frame_poses_ref_marker.csv"
+    },
+    "anchor_marker_id": 3,
+    "anchor_expected_size_cm": 17.0,
+    "anchor_raw_reconstructed_size_units": 0.17541830432803954,
+    "anchor_scale_m_per_unit": 0.969112092670175,
+    "reconstructed_markers_total": 16,
+    "evaluated_non_anchor_markers": 15,
+    "markers_with_moving_to_static_validation": 14,
+    "median_absolute_size_error_cm": 0.5276203609126118,
+    "p90_absolute_size_error_cm": 0.6179437718997893,
+    "median_relative_size_error_percent": 3.1036491818388927,
+    "p90_relative_size_error_percent": 3.634963364116407,
+    "moving_fit_reprojection_rmse_px": 1.3312948218093632,
+    "moving_fit_reprojection_median_px": 0.7700363665862601,
+    "moving_to_static_reprojection_rmse_px": 2.5586336293519305,
+    "moving_to_static_reprojection_median_px": 1.6656154578043223,
+    "moving_to_static_reprojection_p90_px": 3.791712527636457,
+    "moving_to_static_reprojection_observations": 72,
+    "original_method_status": "OK_FULL",
+    "original_method_success": true
+  },
+  {
+    "method": "AP03",
+    "status": "PARTIAL_1_OF_4",
+    "available_static_cameras": [
+      "cam_edge_3"
+    ],
+    "available_static_camera_count": 1,
+    "registered_moving_frames": 17,
+    "static_pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/04_ap03_real/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+    "trajectory": {
+      "source": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/04_ap03_real/02_colmap_sparse/sparse_txt/0/images.txt",
+      "native_scale": 0.0910597778436909
+    },
+    "anchor_marker_id": 3,
+    "anchor_expected_size_cm": 17.0,
+    "anchor_raw_reconstructed_size_units": 0.1728200987503763,
+    "anchor_scale_m_per_unit": 0.9836818820798751,
+    "reconstructed_markers_total": 5,
+    "evaluated_non_anchor_markers": 4,
+    "markers_with_moving_to_static_validation": 1,
+    "median_absolute_size_error_cm": 0.15709304199066354,
+    "p90_absolute_size_error_cm": 0.5307334204795331,
+    "median_relative_size_error_percent": 0.9240767175921384,
+    "p90_relative_size_error_percent": 3.12196129693843,
+    "moving_fit_reprojection_rmse_px": 1.3514560803991074,
+    "moving_fit_reprojection_median_px": 0.5943545715365207,
+    "moving_to_static_reprojection_rmse_px": 1.202019407774508,
+    "moving_to_static_reprojection_median_px": 0.9803381608804187,
+    "moving_to_static_reprojection_p90_px": 1.623552939596232,
+    "moving_to_static_reprojection_observations": 4,
+    "original_method_status": "PARTIAL_1_OF_4",
+    "original_method_success": false
+  }
+]

@@ -39,6 +39,33 @@ allowed_real_exact = {
     "results/real_vehicle_data/real_05x_4k_5hz/EXPERIMENT_CONFIG.txt",
 }
 
+# Generated compact 1x report policy
+one_x_report_prefixes = (
+    "results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/",
+    "results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/",
+    "results/real_vehicle_data/real_1x_4k_intrinsics_v1/",
+)
+
+one_x_report_exact = {
+    (
+        "results/real_vehicle_data/INTRINSIC_RESULTS/"
+        "iphone_1x_4k_3840x2160_INTRINSICS_REPORT.txt"
+    ),
+    (
+        "results/real_vehicle_data/INTRINSIC_RESULTS/"
+        "iphone_1x_4k_3840x2160_moving_calib_camera.json"
+    ),
+}
+
+one_x_report_suffixes = {
+    ".txt",
+    ".csv",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".md",
+}
+
 debug_prefix = (
     "results/real_vehicle_data/"
     "real_05x_4k_1hz/00_shared_input/"
@@ -132,7 +159,19 @@ def real_path_allowed(relative: str) -> bool:
     if relative in allowed_real_exact:
         return True
 
-    return relative.startswith(allowed_real_prefixes)
+    if relative in one_x_report_exact:
+        return True
+
+    if relative.startswith(allowed_real_prefixes):
+        return True
+
+    if relative.startswith(one_x_report_prefixes):
+        return (
+            Path(relative).suffix.lower()
+            in one_x_report_suffixes
+        )
+
+    return False
 
 
 frame_count = 0

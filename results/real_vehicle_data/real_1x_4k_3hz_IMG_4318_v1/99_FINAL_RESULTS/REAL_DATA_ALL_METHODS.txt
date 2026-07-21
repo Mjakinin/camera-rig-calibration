@@ -1,0 +1,153 @@
+REAL-DATA CAMERA-RIG CALIBRATION: AP01 / AP02 / AP03
+======================================================================================================================================================
+
+Dataset: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/00_shared_input
+Primary evaluation mode: GT-free.
+Nominal Gazebo distances are context only, not real-world errors.
+Moving frames: 263
+
+METHOD STATUS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Method  Status                         Cameras       Runtime [s]  Error
+AP01    FAILED                         0/4              2482.92  CalledProcessError: Command '['colmap', 'mapper', '--database_pat
+AP02    OK_FULL                        4/4              2893.14  
+AP03    PARTIAL_1_OF_4                 1/4              2710.33  RuntimeError: AP03 registered only 1/4 static cameras; method sta
+
+PAIRWISE CAMERA DISTANCES WITH NOMINAL-LAYOUT COMPARISON
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Camera pair                      AP01 [m]    AP02 [m]    AP03 [m]  Nominal [m]   |AP01-Nom| [cm]   |AP02-Nom| [cm]   |AP03-Nom| [cm]
+cam_edge_0 - cam_edge_1                NA    5.033829          NA     5.069131                NA             3.530                NA
+cam_edge_0 - cam_edge_3                NA    3.855446          NA     3.819153                NA             3.629                NA
+cam_edge_0 - cam_edge_5                NA    2.080652          NA     5.667928                NA           358.728                NA
+cam_edge_1 - cam_edge_3                NA    2.071461          NA     2.172183                NA            10.072                NA
+cam_edge_1 - cam_edge_5                NA    4.266606          NA     9.833845                NA           556.724                NA
+cam_edge_3 - cam_edge_5                NA    4.020427          NA     9.285515                NA           526.509                NA
+
+INDEPENDENT REAL-WORLD REFERENCES
+------------------------------------------------------------------------------------------------------------------------------------------------------
+No independent measurements entered; real accuracy remains unknown.
+
+METHOD DIAGNOSTICS
+------------------------------------------------------------------------------------------------------------------------------------------------------
+AP01
+{}
+
+AP02
+{
+  "approach": "AP02_reference_marker_graph_distortion_aware_BA",
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "estimated_rig_diameter_m": 5.033828698329282,
+  "evaluated_depth_corners": 1056,
+  "ground_truth_used": false,
+  "missing_static_cameras": [],
+  "optimized_markers": 17,
+  "optimized_moving_frames": 117,
+  "positive_depth_corners": 1008,
+  "positive_depth_fraction": 0.9545454545454546,
+  "reference_marker_id": 3,
+  "reprojection": {
+    "maximum_reprojection_px": 1414.213562373095,
+    "mean_reprojection_px": 79.76962270626865,
+    "median_reprojection_px": 2.3600102772722407,
+    "observation_count": 264
+  },
+  "runtime_seconds": 2893.1378180980682,
+  "selected_moving_frames": 117
+}
+
+AP03
+{
+  "approach": "AP03_targetless_grouped_COLMAP_marker_size_scale",
+  "available_static_cameras": [
+    "cam_edge_3"
+  ],
+  "ground_truth_used": false,
+  "marker_scale": {
+    "approach": "AP03_targetless_colmap_marker_size_scale_only",
+    "available_static_cameras": [
+      "cam_edge_3"
+    ],
+    "best_model": "0",
+    "detected_corner_observations": 212,
+    "failure_reason": "",
+    "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
+    "marker_ids_requested": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "marker_length_m": 0.17,
+    "missing_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_5"
+    ],
+    "model_dir": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/04_ap03_real/02_colmap_sparse/sparse_txt/0",
+    "num_scale_observations_total": 36,
+    "num_scale_observations_used": 31,
+    "num_sparse_points3d": 55,
+    "raw_mad_scale": 0.004765559527151589,
+    "raw_median_scale": 0.06739632406462129,
+    "raw_rel_mad_scale": 0.07070948739848557,
+    "registered_images": 11,
+    "registered_moving_frames": 10,
+    "registered_static_cameras": 1,
+    "scale_m_per_colmap_unit": 0.06722806136470715,
+    "status": "FAILED_NO_PAIR_1_OF_4",
+    "triangulated_marker_corners": 24,
+    "used_mean_scale": 0.06596951299430318,
+    "used_rel_std_scale": 0.07991405342405812,
+    "used_std_scale": 0.005372466887495065
+  },
+  "missing_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_5"
+  ],
+  "reconstruction": {
+    "best_model": "0",
+    "num_3d_points": 55,
+    "registered_images": 11,
+    "registered_moving_frames": 10,
+    "registered_static_cameras": 1,
+    "static_missing_list": "static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_5.png",
+    "static_registered_list": "static_cam_edge_3.png"
+  },
+  "runtime_seconds": 2710.304926633835
+}
+
+INTERPRETATION
+------------------------------------------------------------------------------------------------------------------------------------------------------
+- Pairwise distances evaluate translation and metric scale, not orientation.
+- Nominal-layout differences are plausibility context, not real accuracy.
+- Real accuracy needs independent measurements or trusted transforms.
+- Reprojection error alone does not prove correct global geometry.
+
+Pairwise CSV: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/99_FINAL_RESULTS/REAL_DATA_PAIRWISE_DISTANCES.csv
+Method-status CSV: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/99_FINAL_RESULTS/REAL_DATA_METHOD_STATUS.csv
+Nominal-reference JSON: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/99_FINAL_RESULTS/simulation_gt_reference_distances.json
+Measured-reference template: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/99_FINAL_RESULTS/measured_reference_distances.json
+

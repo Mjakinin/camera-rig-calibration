@@ -1,0 +1,18 @@
+AP03 grouped calibrated COLMAP run
+===================================
+
+Physical camera contract:
+- one COLMAP camera id per static physical camera
+- one shared COLMAP camera id for all moving-camera frames
+- camera intrinsics and distortion loaded from camera_info JSON
+- intrinsic refinement disabled during mapping
+
+Groups:
+- cam_edge_0: 1 images, PINHOLE, /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/camera_info/cam_edge_0.json
+- cam_edge_1: 1 images, PINHOLE, /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/camera_info/cam_edge_1.json
+- cam_edge_3: 1 images, PINHOLE, /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/camera_info/cam_edge_3.json
+- cam_edge_5: 1 images, PINHOLE, /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/camera_info/cam_edge_5.json
+- moving_calib_camera: 293 images, FULL_OPENCV, /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/camera_info/moving_calib_camera.json
+
+Sparse models:
+- 0: 18 registered images

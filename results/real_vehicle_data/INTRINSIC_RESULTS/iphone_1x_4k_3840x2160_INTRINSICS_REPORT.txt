@@ -1,0 +1,59 @@
+INTRINSIC CALIBRATION RESULT — iphone_1x_4k
+========================================================================================
+
+SOURCE
+------
+Video: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/1x/IMG_4364.mov
+Resolution: 3840x2160
+Source FPS: 30.003505082369436
+
+CHECKERBOARD AND VIEW SELECTION
+-------------------------------
+Inner corners: 8x6
+Original frames scanned: 2140
+Successful checkerboard detections: 1812
+Final calibration views: 75
+Removed outlier views: 5
+
+MODEL AND QUALITY
+-----------------
+Selected distortion model: plumb_bob
+Standard holdout median RMSE [px]: 1.0820427536964417
+Rational holdout median RMSE [px]: 1.076761782169342
+OpenCV calibration RMS [px]: 0.9983540119392841
+Median per-view reprojection RMSE [px]: 0.886581540107727
+Maximum retained per-view RMSE [px]: 1.8286592960357666
+
+CAMERA MATRIX K
+---------------
+[ 3220.8204593810  0.0000000000  1913.5902182661]
+[ 0.0000000000  3225.4555846834  1094.9661351270]
+[ 0.0000000000  0.0000000000  1.0000000000]
+
+SCALAR INTRINSICS
+-----------------
+fx [px]: 3220.8204593809583
+fy [px]: 3225.4555846834423
+cx [px]: 1913.5902182661289
+cy [px]: 1094.9661351270033
+
+DISTORTION D
+------------
+[0.242240744797, -1.68140422803, 0.00193813241696, -0.00106553345404, 3.89166110479]
+
+OUTLIER VIEWS
+-------------
+- frame 1774: RMSE=21.39130973815918 px
+- frame 1736: RMSE=9.973577499389648 px
+- frame 1504: RMSE=6.306621074676514 px
+- frame 1741: RMSE=6.041692733764648 px
+- frame 1118: RMSE=5.448469638824463 px
+
+FILES
+-----
+Archived CameraInfo JSON: results/real_vehicle_data/INTRINSIC_RESULTS/iphone_1x_4k_3840x2160_moving_calib_camera.json
+
+Interpretation:
+- K contains focal lengths and principal point in pixels.
+- D contains lens-distortion coefficients for the selected model.
+- The result is valid for this physical camera, resolution and capture mode.

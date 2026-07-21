@@ -1,0 +1,26 @@
+{
+  "approach": "AP02_reference_marker_graph_distortion_aware_BA",
+  "reference_marker_id": 3,
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "missing_static_cameras": [],
+  "optimized_markers": 17,
+  "optimized_moving_frames": 117,
+  "selected_moving_frames": 117,
+  "reprojection": {
+    "observation_count": 264,
+    "mean_reprojection_px": 79.76962270626865,
+    "median_reprojection_px": 2.3600102772722407,
+    "maximum_reprojection_px": 1414.213562373095
+  },
+  "positive_depth_fraction": 0.9545454545454546,
+  "positive_depth_corners": 1008,
+  "evaluated_depth_corners": 1056,
+  "estimated_rig_diameter_m": 5.033828698329282,
+  "runtime_seconds": 2893.1378180980682,
+  "ground_truth_used": false
+}

@@ -1,0 +1,1777 @@
+{
+  "source_video": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/1x/IMG_4317.mov",
+  "autorotation_disabled": true,
+  "source_width": 3840,
+  "source_height": 2160,
+  "source_fps": 30.003078291206347,
+  "reported_source_frames": 2924,
+  "decoded_source_frames": 2924,
+  "target_sampling_hz": 3.0,
+  "extracted_frames": 293,
+  "first_source_time_s": 0.0,
+  "last_source_time_s": 97.3233470132239,
+  "frame_map": [
+    {
+      "output_frame": 0,
+      "source_frame": 0,
+      "source_time_s": 0.0,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000000.png"
+    },
+    {
+      "output_frame": 1,
+      "source_frame": 10,
+      "source_time_s": 0.33329913360693114,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000001.png"
+    },
+    {
+      "output_frame": 2,
+      "source_frame": 20,
+      "source_time_s": 0.6665982672138623,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000002.png"
+    },
+    {
+      "output_frame": 3,
+      "source_frame": 30,
+      "source_time_s": 0.9998974008207935,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000003.png"
+    },
+    {
+      "output_frame": 4,
+      "source_frame": 40,
+      "source_time_s": 1.3331965344277246,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000004.png"
+    },
+    {
+      "output_frame": 5,
+      "source_frame": 50,
+      "source_time_s": 1.6664956680346559,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000005.png"
+    },
+    {
+      "output_frame": 6,
+      "source_frame": 60,
+      "source_time_s": 1.999794801641587,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000006.png"
+    },
+    {
+      "output_frame": 7,
+      "source_frame": 70,
+      "source_time_s": 2.333093935248518,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000007.png"
+    },
+    {
+      "output_frame": 8,
+      "source_frame": 80,
+      "source_time_s": 2.666393068855449,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000008.png"
+    },
+    {
+      "output_frame": 9,
+      "source_frame": 90,
+      "source_time_s": 2.9996922024623807,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000009.png"
+    },
+    {
+      "output_frame": 10,
+      "source_frame": 100,
+      "source_time_s": 3.3329913360693117,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000010.png"
+    },
+    {
+      "output_frame": 11,
+      "source_frame": 110,
+      "source_time_s": 3.666290469676243,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000011.png"
+    },
+    {
+      "output_frame": 12,
+      "source_frame": 120,
+      "source_time_s": 3.999589603283174,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000012.png"
+    },
+    {
+      "output_frame": 13,
+      "source_frame": 130,
+      "source_time_s": 4.332888736890105,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000013.png"
+    },
+    {
+      "output_frame": 14,
+      "source_frame": 140,
+      "source_time_s": 4.666187870497036,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000014.png"
+    },
+    {
+      "output_frame": 15,
+      "source_frame": 150,
+      "source_time_s": 4.999487004103967,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000015.png"
+    },
+    {
+      "output_frame": 16,
+      "source_frame": 160,
+      "source_time_s": 5.332786137710898,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000016.png"
+    },
+    {
+      "output_frame": 17,
+      "source_frame": 170,
+      "source_time_s": 5.666085271317829,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000017.png"
+    },
+    {
+      "output_frame": 18,
+      "source_frame": 180,
+      "source_time_s": 5.999384404924761,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000018.png"
+    },
+    {
+      "output_frame": 19,
+      "source_frame": 190,
+      "source_time_s": 6.332683538531692,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000019.png"
+    },
+    {
+      "output_frame": 20,
+      "source_frame": 200,
+      "source_time_s": 6.6659826721386235,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000020.png"
+    },
+    {
+      "output_frame": 21,
+      "source_frame": 210,
+      "source_time_s": 6.999281805745555,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000021.png"
+    },
+    {
+      "output_frame": 22,
+      "source_frame": 220,
+      "source_time_s": 7.332580939352486,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000022.png"
+    },
+    {
+      "output_frame": 23,
+      "source_frame": 230,
+      "source_time_s": 7.665880072959417,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000023.png"
+    },
+    {
+      "output_frame": 24,
+      "source_frame": 240,
+      "source_time_s": 7.999179206566348,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000024.png"
+    },
+    {
+      "output_frame": 25,
+      "source_frame": 250,
+      "source_time_s": 8.33247834017328,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000025.png"
+    },
+    {
+      "output_frame": 26,
+      "source_frame": 260,
+      "source_time_s": 8.66577747378021,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000026.png"
+    },
+    {
+      "output_frame": 27,
+      "source_frame": 270,
+      "source_time_s": 8.999076607387142,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000027.png"
+    },
+    {
+      "output_frame": 28,
+      "source_frame": 280,
+      "source_time_s": 9.332375740994072,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000028.png"
+    },
+    {
+      "output_frame": 29,
+      "source_frame": 290,
+      "source_time_s": 9.665674874601004,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000029.png"
+    },
+    {
+      "output_frame": 30,
+      "source_frame": 300,
+      "source_time_s": 9.998974008207934,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000030.png"
+    },
+    {
+      "output_frame": 31,
+      "source_frame": 310,
+      "source_time_s": 10.332273141814866,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000031.png"
+    },
+    {
+      "output_frame": 32,
+      "source_frame": 320,
+      "source_time_s": 10.665572275421797,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000032.png"
+    },
+    {
+      "output_frame": 33,
+      "source_frame": 330,
+      "source_time_s": 10.998871409028729,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000033.png"
+    },
+    {
+      "output_frame": 34,
+      "source_frame": 340,
+      "source_time_s": 11.332170542635659,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000034.png"
+    },
+    {
+      "output_frame": 35,
+      "source_frame": 350,
+      "source_time_s": 11.66546967624259,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000035.png"
+    },
+    {
+      "output_frame": 36,
+      "source_frame": 360,
+      "source_time_s": 11.998768809849523,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000036.png"
+    },
+    {
+      "output_frame": 37,
+      "source_frame": 370,
+      "source_time_s": 12.332067943456453,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000037.png"
+    },
+    {
+      "output_frame": 38,
+      "source_frame": 380,
+      "source_time_s": 12.665367077063385,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000038.png"
+    },
+    {
+      "output_frame": 39,
+      "source_frame": 390,
+      "source_time_s": 12.998666210670315,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000039.png"
+    },
+    {
+      "output_frame": 40,
+      "source_frame": 400,
+      "source_time_s": 13.331965344277247,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000040.png"
+    },
+    {
+      "output_frame": 41,
+      "source_frame": 410,
+      "source_time_s": 13.665264477884177,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000041.png"
+    },
+    {
+      "output_frame": 42,
+      "source_frame": 420,
+      "source_time_s": 13.99856361149111,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000042.png"
+    },
+    {
+      "output_frame": 43,
+      "source_frame": 430,
+      "source_time_s": 14.33186274509804,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000043.png"
+    },
+    {
+      "output_frame": 44,
+      "source_frame": 440,
+      "source_time_s": 14.665161878704971,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000044.png"
+    },
+    {
+      "output_frame": 45,
+      "source_frame": 450,
+      "source_time_s": 14.998461012311902,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000045.png"
+    },
+    {
+      "output_frame": 46,
+      "source_frame": 460,
+      "source_time_s": 15.331760145918834,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000046.png"
+    },
+    {
+      "output_frame": 47,
+      "source_frame": 470,
+      "source_time_s": 15.665059279525765,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000047.png"
+    },
+    {
+      "output_frame": 48,
+      "source_frame": 480,
+      "source_time_s": 15.998358413132696,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000048.png"
+    },
+    {
+      "output_frame": 49,
+      "source_frame": 490,
+      "source_time_s": 16.331657546739628,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000049.png"
+    },
+    {
+      "output_frame": 50,
+      "source_frame": 500,
+      "source_time_s": 16.66495668034656,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000050.png"
+    },
+    {
+      "output_frame": 51,
+      "source_frame": 510,
+      "source_time_s": 16.998255813953488,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000051.png"
+    },
+    {
+      "output_frame": 52,
+      "source_frame": 520,
+      "source_time_s": 17.33155494756042,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000052.png"
+    },
+    {
+      "output_frame": 53,
+      "source_frame": 530,
+      "source_time_s": 17.664854081167352,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000053.png"
+    },
+    {
+      "output_frame": 54,
+      "source_frame": 540,
+      "source_time_s": 17.998153214774284,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000054.png"
+    },
+    {
+      "output_frame": 55,
+      "source_frame": 550,
+      "source_time_s": 18.331452348381212,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000055.png"
+    },
+    {
+      "output_frame": 56,
+      "source_frame": 560,
+      "source_time_s": 18.664751481988144,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000056.png"
+    },
+    {
+      "output_frame": 57,
+      "source_frame": 570,
+      "source_time_s": 18.998050615595076,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000057.png"
+    },
+    {
+      "output_frame": 58,
+      "source_frame": 580,
+      "source_time_s": 19.33134974920201,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000058.png"
+    },
+    {
+      "output_frame": 59,
+      "source_frame": 590,
+      "source_time_s": 19.66464888280894,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000059.png"
+    },
+    {
+      "output_frame": 60,
+      "source_frame": 600,
+      "source_time_s": 19.99794801641587,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000060.png"
+    },
+    {
+      "output_frame": 61,
+      "source_frame": 610,
+      "source_time_s": 20.3312471500228,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000061.png"
+    },
+    {
+      "output_frame": 62,
+      "source_frame": 620,
+      "source_time_s": 20.664546283629733,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000062.png"
+    },
+    {
+      "output_frame": 63,
+      "source_frame": 630,
+      "source_time_s": 20.997845417236665,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000063.png"
+    },
+    {
+      "output_frame": 64,
+      "source_frame": 640,
+      "source_time_s": 21.331144550843593,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000064.png"
+    },
+    {
+      "output_frame": 65,
+      "source_frame": 650,
+      "source_time_s": 21.664443684450525,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000065.png"
+    },
+    {
+      "output_frame": 66,
+      "source_frame": 660,
+      "source_time_s": 21.997742818057457,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000066.png"
+    },
+    {
+      "output_frame": 67,
+      "source_frame": 670,
+      "source_time_s": 22.33104195166439,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000067.png"
+    },
+    {
+      "output_frame": 68,
+      "source_frame": 680,
+      "source_time_s": 22.664341085271317,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000068.png"
+    },
+    {
+      "output_frame": 69,
+      "source_frame": 690,
+      "source_time_s": 22.99764021887825,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000069.png"
+    },
+    {
+      "output_frame": 70,
+      "source_frame": 700,
+      "source_time_s": 23.33093935248518,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000070.png"
+    },
+    {
+      "output_frame": 71,
+      "source_frame": 710,
+      "source_time_s": 23.664238486092113,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000071.png"
+    },
+    {
+      "output_frame": 72,
+      "source_frame": 720,
+      "source_time_s": 23.997537619699045,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000072.png"
+    },
+    {
+      "output_frame": 73,
+      "source_frame": 730,
+      "source_time_s": 24.330836753305974,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000073.png"
+    },
+    {
+      "output_frame": 74,
+      "source_frame": 740,
+      "source_time_s": 24.664135886912906,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000074.png"
+    },
+    {
+      "output_frame": 75,
+      "source_frame": 750,
+      "source_time_s": 24.997435020519838,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000075.png"
+    },
+    {
+      "output_frame": 76,
+      "source_frame": 760,
+      "source_time_s": 25.33073415412677,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000076.png"
+    },
+    {
+      "output_frame": 77,
+      "source_frame": 770,
+      "source_time_s": 25.664033287733698,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000077.png"
+    },
+    {
+      "output_frame": 78,
+      "source_frame": 780,
+      "source_time_s": 25.99733242134063,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000078.png"
+    },
+    {
+      "output_frame": 79,
+      "source_frame": 790,
+      "source_time_s": 26.330631554947562,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000079.png"
+    },
+    {
+      "output_frame": 80,
+      "source_frame": 800,
+      "source_time_s": 26.663930688554494,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000080.png"
+    },
+    {
+      "output_frame": 81,
+      "source_frame": 810,
+      "source_time_s": 26.997229822161422,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000081.png"
+    },
+    {
+      "output_frame": 82,
+      "source_frame": 820,
+      "source_time_s": 27.330528955768354,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000082.png"
+    },
+    {
+      "output_frame": 83,
+      "source_frame": 830,
+      "source_time_s": 27.663828089375286,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000083.png"
+    },
+    {
+      "output_frame": 84,
+      "source_frame": 840,
+      "source_time_s": 27.99712722298222,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000084.png"
+    },
+    {
+      "output_frame": 85,
+      "source_frame": 850,
+      "source_time_s": 28.33042635658915,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000085.png"
+    },
+    {
+      "output_frame": 86,
+      "source_frame": 860,
+      "source_time_s": 28.66372549019608,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000086.png"
+    },
+    {
+      "output_frame": 87,
+      "source_frame": 870,
+      "source_time_s": 28.99702462380301,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000087.png"
+    },
+    {
+      "output_frame": 88,
+      "source_frame": 880,
+      "source_time_s": 29.330323757409943,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000088.png"
+    },
+    {
+      "output_frame": 89,
+      "source_frame": 890,
+      "source_time_s": 29.663622891016875,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000089.png"
+    },
+    {
+      "output_frame": 90,
+      "source_frame": 900,
+      "source_time_s": 29.996922024623803,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000090.png"
+    },
+    {
+      "output_frame": 91,
+      "source_frame": 910,
+      "source_time_s": 30.330221158230735,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000091.png"
+    },
+    {
+      "output_frame": 92,
+      "source_frame": 920,
+      "source_time_s": 30.663520291837667,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000092.png"
+    },
+    {
+      "output_frame": 93,
+      "source_frame": 930,
+      "source_time_s": 30.9968194254446,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000093.png"
+    },
+    {
+      "output_frame": 94,
+      "source_frame": 940,
+      "source_time_s": 31.33011855905153,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000094.png"
+    },
+    {
+      "output_frame": 95,
+      "source_frame": 950,
+      "source_time_s": 31.66341769265846,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000095.png"
+    },
+    {
+      "output_frame": 96,
+      "source_frame": 960,
+      "source_time_s": 31.99671682626539,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000096.png"
+    },
+    {
+      "output_frame": 97,
+      "source_frame": 970,
+      "source_time_s": 32.33001595987232,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000097.png"
+    },
+    {
+      "output_frame": 98,
+      "source_frame": 980,
+      "source_time_s": 32.663315093479255,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000098.png"
+    },
+    {
+      "output_frame": 99,
+      "source_frame": 990,
+      "source_time_s": 32.996614227086184,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000099.png"
+    },
+    {
+      "output_frame": 100,
+      "source_frame": 1000,
+      "source_time_s": 33.32991336069312,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000100.png"
+    },
+    {
+      "output_frame": 101,
+      "source_frame": 1010,
+      "source_time_s": 33.66321249430005,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000101.png"
+    },
+    {
+      "output_frame": 102,
+      "source_frame": 1020,
+      "source_time_s": 33.996511627906976,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000102.png"
+    },
+    {
+      "output_frame": 103,
+      "source_frame": 1030,
+      "source_time_s": 34.32981076151391,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000103.png"
+    },
+    {
+      "output_frame": 104,
+      "source_frame": 1040,
+      "source_time_s": 34.66310989512084,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000104.png"
+    },
+    {
+      "output_frame": 105,
+      "source_frame": 1050,
+      "source_time_s": 34.996409028727776,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000105.png"
+    },
+    {
+      "output_frame": 106,
+      "source_frame": 1060,
+      "source_time_s": 35.329708162334704,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000106.png"
+    },
+    {
+      "output_frame": 107,
+      "source_frame": 1070,
+      "source_time_s": 35.66300729594163,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000107.png"
+    },
+    {
+      "output_frame": 108,
+      "source_frame": 1080,
+      "source_time_s": 35.99630642954857,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000108.png"
+    },
+    {
+      "output_frame": 109,
+      "source_frame": 1090,
+      "source_time_s": 36.329605563155496,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000109.png"
+    },
+    {
+      "output_frame": 110,
+      "source_frame": 1100,
+      "source_time_s": 36.662904696762425,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000110.png"
+    },
+    {
+      "output_frame": 111,
+      "source_frame": 1110,
+      "source_time_s": 36.99620383036936,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000111.png"
+    },
+    {
+      "output_frame": 112,
+      "source_frame": 1120,
+      "source_time_s": 37.32950296397629,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000112.png"
+    },
+    {
+      "output_frame": 113,
+      "source_frame": 1130,
+      "source_time_s": 37.662802097583224,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000113.png"
+    },
+    {
+      "output_frame": 114,
+      "source_frame": 1140,
+      "source_time_s": 37.99610123119015,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000114.png"
+    },
+    {
+      "output_frame": 115,
+      "source_frame": 1150,
+      "source_time_s": 38.32940036479708,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000115.png"
+    },
+    {
+      "output_frame": 116,
+      "source_frame": 1160,
+      "source_time_s": 38.66269949840402,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000116.png"
+    },
+    {
+      "output_frame": 117,
+      "source_frame": 1170,
+      "source_time_s": 38.995998632010945,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000117.png"
+    },
+    {
+      "output_frame": 118,
+      "source_frame": 1180,
+      "source_time_s": 39.32929776561788,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000118.png"
+    },
+    {
+      "output_frame": 119,
+      "source_frame": 1190,
+      "source_time_s": 39.66259689922481,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000119.png"
+    },
+    {
+      "output_frame": 120,
+      "source_frame": 1200,
+      "source_time_s": 39.99589603283174,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000120.png"
+    },
+    {
+      "output_frame": 121,
+      "source_frame": 1210,
+      "source_time_s": 40.32919516643867,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000121.png"
+    },
+    {
+      "output_frame": 122,
+      "source_frame": 1220,
+      "source_time_s": 40.6624943000456,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000122.png"
+    },
+    {
+      "output_frame": 123,
+      "source_frame": 1230,
+      "source_time_s": 40.99579343365253,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000123.png"
+    },
+    {
+      "output_frame": 124,
+      "source_frame": 1240,
+      "source_time_s": 41.329092567259465,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000124.png"
+    },
+    {
+      "output_frame": 125,
+      "source_frame": 1250,
+      "source_time_s": 41.662391700866394,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000125.png"
+    },
+    {
+      "output_frame": 126,
+      "source_frame": 1260,
+      "source_time_s": 41.99569083447333,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000126.png"
+    },
+    {
+      "output_frame": 127,
+      "source_frame": 1270,
+      "source_time_s": 42.32898996808026,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000127.png"
+    },
+    {
+      "output_frame": 128,
+      "source_frame": 1280,
+      "source_time_s": 42.662289101687186,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000128.png"
+    },
+    {
+      "output_frame": 129,
+      "source_frame": 1290,
+      "source_time_s": 42.99558823529412,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000129.png"
+    },
+    {
+      "output_frame": 130,
+      "source_frame": 1300,
+      "source_time_s": 43.32888736890105,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000130.png"
+    },
+    {
+      "output_frame": 131,
+      "source_frame": 1310,
+      "source_time_s": 43.662186502507986,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000131.png"
+    },
+    {
+      "output_frame": 132,
+      "source_frame": 1320,
+      "source_time_s": 43.995485636114914,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000132.png"
+    },
+    {
+      "output_frame": 133,
+      "source_frame": 1330,
+      "source_time_s": 44.32878476972184,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000133.png"
+    },
+    {
+      "output_frame": 134,
+      "source_frame": 1340,
+      "source_time_s": 44.66208390332878,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000134.png"
+    },
+    {
+      "output_frame": 135,
+      "source_frame": 1350,
+      "source_time_s": 44.995383036935706,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000135.png"
+    },
+    {
+      "output_frame": 136,
+      "source_frame": 1360,
+      "source_time_s": 45.328682170542635,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000136.png"
+    },
+    {
+      "output_frame": 137,
+      "source_frame": 1370,
+      "source_time_s": 45.66198130414957,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000137.png"
+    },
+    {
+      "output_frame": 138,
+      "source_frame": 1380,
+      "source_time_s": 45.9952804377565,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000138.png"
+    },
+    {
+      "output_frame": 139,
+      "source_frame": 1390,
+      "source_time_s": 46.328579571363434,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000139.png"
+    },
+    {
+      "output_frame": 140,
+      "source_frame": 1400,
+      "source_time_s": 46.66187870497036,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000140.png"
+    },
+    {
+      "output_frame": 141,
+      "source_frame": 1410,
+      "source_time_s": 46.99517783857729,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000141.png"
+    },
+    {
+      "output_frame": 142,
+      "source_frame": 1420,
+      "source_time_s": 47.32847697218423,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000142.png"
+    },
+    {
+      "output_frame": 143,
+      "source_frame": 1430,
+      "source_time_s": 47.661776105791155,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000143.png"
+    },
+    {
+      "output_frame": 144,
+      "source_frame": 1440,
+      "source_time_s": 47.99507523939809,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000144.png"
+    },
+    {
+      "output_frame": 145,
+      "source_frame": 1450,
+      "source_time_s": 48.32837437300502,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000145.png"
+    },
+    {
+      "output_frame": 146,
+      "source_frame": 1460,
+      "source_time_s": 48.66167350661195,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000146.png"
+    },
+    {
+      "output_frame": 147,
+      "source_frame": 1470,
+      "source_time_s": 48.99497264021888,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000147.png"
+    },
+    {
+      "output_frame": 148,
+      "source_frame": 1480,
+      "source_time_s": 49.32827177382581,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000148.png"
+    },
+    {
+      "output_frame": 149,
+      "source_frame": 1490,
+      "source_time_s": 49.66157090743274,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000149.png"
+    },
+    {
+      "output_frame": 150,
+      "source_frame": 1500,
+      "source_time_s": 49.994870041039675,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000150.png"
+    },
+    {
+      "output_frame": 151,
+      "source_frame": 1510,
+      "source_time_s": 50.328169174646604,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000151.png"
+    },
+    {
+      "output_frame": 152,
+      "source_frame": 1520,
+      "source_time_s": 50.66146830825354,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000152.png"
+    },
+    {
+      "output_frame": 153,
+      "source_frame": 1530,
+      "source_time_s": 50.99476744186047,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000153.png"
+    },
+    {
+      "output_frame": 154,
+      "source_frame": 1540,
+      "source_time_s": 51.328066575467396,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000154.png"
+    },
+    {
+      "output_frame": 155,
+      "source_frame": 1550,
+      "source_time_s": 51.66136570907433,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000155.png"
+    },
+    {
+      "output_frame": 156,
+      "source_frame": 1560,
+      "source_time_s": 51.99466484268126,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000156.png"
+    },
+    {
+      "output_frame": 157,
+      "source_frame": 1570,
+      "source_time_s": 52.327963976288196,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000157.png"
+    },
+    {
+      "output_frame": 158,
+      "source_frame": 1580,
+      "source_time_s": 52.661263109895124,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000158.png"
+    },
+    {
+      "output_frame": 159,
+      "source_frame": 1590,
+      "source_time_s": 52.99456224350205,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000159.png"
+    },
+    {
+      "output_frame": 160,
+      "source_frame": 1600,
+      "source_time_s": 53.32786137710899,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000160.png"
+    },
+    {
+      "output_frame": 161,
+      "source_frame": 1610,
+      "source_time_s": 53.661160510715916,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000161.png"
+    },
+    {
+      "output_frame": 162,
+      "source_frame": 1620,
+      "source_time_s": 53.994459644322845,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000162.png"
+    },
+    {
+      "output_frame": 163,
+      "source_frame": 1630,
+      "source_time_s": 54.32775877792978,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000163.png"
+    },
+    {
+      "output_frame": 164,
+      "source_frame": 1640,
+      "source_time_s": 54.66105791153671,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000164.png"
+    },
+    {
+      "output_frame": 165,
+      "source_frame": 1650,
+      "source_time_s": 54.994357045143644,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000165.png"
+    },
+    {
+      "output_frame": 166,
+      "source_frame": 1660,
+      "source_time_s": 55.32765617875057,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000166.png"
+    },
+    {
+      "output_frame": 167,
+      "source_frame": 1670,
+      "source_time_s": 55.6609553123575,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000167.png"
+    },
+    {
+      "output_frame": 168,
+      "source_frame": 1680,
+      "source_time_s": 55.99425444596444,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000168.png"
+    },
+    {
+      "output_frame": 169,
+      "source_frame": 1690,
+      "source_time_s": 56.327553579571365,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000169.png"
+    },
+    {
+      "output_frame": 170,
+      "source_frame": 1700,
+      "source_time_s": 56.6608527131783,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000170.png"
+    },
+    {
+      "output_frame": 171,
+      "source_frame": 1710,
+      "source_time_s": 56.99415184678523,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000171.png"
+    },
+    {
+      "output_frame": 172,
+      "source_frame": 1720,
+      "source_time_s": 57.32745098039216,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000172.png"
+    },
+    {
+      "output_frame": 173,
+      "source_frame": 1730,
+      "source_time_s": 57.66075011399909,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000173.png"
+    },
+    {
+      "output_frame": 174,
+      "source_frame": 1740,
+      "source_time_s": 57.99404924760602,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000174.png"
+    },
+    {
+      "output_frame": 175,
+      "source_frame": 1750,
+      "source_time_s": 58.32734838121296,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000175.png"
+    },
+    {
+      "output_frame": 176,
+      "source_frame": 1760,
+      "source_time_s": 58.660647514819885,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000176.png"
+    },
+    {
+      "output_frame": 177,
+      "source_frame": 1770,
+      "source_time_s": 58.993946648426814,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000177.png"
+    },
+    {
+      "output_frame": 178,
+      "source_frame": 1780,
+      "source_time_s": 59.32724578203375,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000178.png"
+    },
+    {
+      "output_frame": 179,
+      "source_frame": 1790,
+      "source_time_s": 59.66054491564068,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000179.png"
+    },
+    {
+      "output_frame": 180,
+      "source_frame": 1800,
+      "source_time_s": 59.993844049247606,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000180.png"
+    },
+    {
+      "output_frame": 181,
+      "source_frame": 1810,
+      "source_time_s": 60.32714318285454,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000181.png"
+    },
+    {
+      "output_frame": 182,
+      "source_frame": 1820,
+      "source_time_s": 60.66044231646147,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000182.png"
+    },
+    {
+      "output_frame": 183,
+      "source_frame": 1830,
+      "source_time_s": 60.993741450068406,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000183.png"
+    },
+    {
+      "output_frame": 184,
+      "source_frame": 1840,
+      "source_time_s": 61.327040583675334,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000184.png"
+    },
+    {
+      "output_frame": 185,
+      "source_frame": 1850,
+      "source_time_s": 61.66033971728226,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000185.png"
+    },
+    {
+      "output_frame": 186,
+      "source_frame": 1860,
+      "source_time_s": 61.9936388508892,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000186.png"
+    },
+    {
+      "output_frame": 187,
+      "source_frame": 1870,
+      "source_time_s": 62.326937984496126,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000187.png"
+    },
+    {
+      "output_frame": 188,
+      "source_frame": 1880,
+      "source_time_s": 62.66023711810306,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000188.png"
+    },
+    {
+      "output_frame": 189,
+      "source_frame": 1890,
+      "source_time_s": 62.99353625170999,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000189.png"
+    },
+    {
+      "output_frame": 190,
+      "source_frame": 1900,
+      "source_time_s": 63.32683538531692,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000190.png"
+    },
+    {
+      "output_frame": 191,
+      "source_frame": 1910,
+      "source_time_s": 63.660134518923854,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000191.png"
+    },
+    {
+      "output_frame": 192,
+      "source_frame": 1920,
+      "source_time_s": 63.99343365253078,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000192.png"
+    },
+    {
+      "output_frame": 193,
+      "source_frame": 1930,
+      "source_time_s": 64.32673278613771,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000193.png"
+    },
+    {
+      "output_frame": 194,
+      "source_frame": 1940,
+      "source_time_s": 64.66003191974464,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000194.png"
+    },
+    {
+      "output_frame": 195,
+      "source_frame": 1950,
+      "source_time_s": 64.99333105335158,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000195.png"
+    },
+    {
+      "output_frame": 196,
+      "source_frame": 1960,
+      "source_time_s": 65.32663018695851,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000196.png"
+    },
+    {
+      "output_frame": 197,
+      "source_frame": 1970,
+      "source_time_s": 65.65992932056544,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000197.png"
+    },
+    {
+      "output_frame": 198,
+      "source_frame": 1980,
+      "source_time_s": 65.99322845417237,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000198.png"
+    },
+    {
+      "output_frame": 199,
+      "source_frame": 1990,
+      "source_time_s": 66.3265275877793,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000199.png"
+    },
+    {
+      "output_frame": 200,
+      "source_frame": 2000,
+      "source_time_s": 66.65982672138624,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000200.png"
+    },
+    {
+      "output_frame": 201,
+      "source_frame": 2010,
+      "source_time_s": 66.99312585499317,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000201.png"
+    },
+    {
+      "output_frame": 202,
+      "source_frame": 2020,
+      "source_time_s": 67.3264249886001,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000202.png"
+    },
+    {
+      "output_frame": 203,
+      "source_frame": 2030,
+      "source_time_s": 67.65972412220702,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000203.png"
+    },
+    {
+      "output_frame": 204,
+      "source_frame": 2040,
+      "source_time_s": 67.99302325581395,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000204.png"
+    },
+    {
+      "output_frame": 205,
+      "source_frame": 2050,
+      "source_time_s": 68.3263223894209,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000205.png"
+    },
+    {
+      "output_frame": 206,
+      "source_frame": 2060,
+      "source_time_s": 68.65962152302782,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000206.png"
+    },
+    {
+      "output_frame": 207,
+      "source_frame": 2070,
+      "source_time_s": 68.99292065663475,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000207.png"
+    },
+    {
+      "output_frame": 208,
+      "source_frame": 2080,
+      "source_time_s": 69.32621979024168,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000208.png"
+    },
+    {
+      "output_frame": 209,
+      "source_frame": 2090,
+      "source_time_s": 69.65951892384861,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000209.png"
+    },
+    {
+      "output_frame": 210,
+      "source_frame": 2100,
+      "source_time_s": 69.99281805745555,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000210.png"
+    },
+    {
+      "output_frame": 211,
+      "source_frame": 2110,
+      "source_time_s": 70.32611719106248,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000211.png"
+    },
+    {
+      "output_frame": 212,
+      "source_frame": 2120,
+      "source_time_s": 70.65941632466941,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000212.png"
+    },
+    {
+      "output_frame": 213,
+      "source_frame": 2130,
+      "source_time_s": 70.99271545827634,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000213.png"
+    },
+    {
+      "output_frame": 214,
+      "source_frame": 2140,
+      "source_time_s": 71.32601459188326,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000214.png"
+    },
+    {
+      "output_frame": 215,
+      "source_frame": 2150,
+      "source_time_s": 71.6593137254902,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000215.png"
+    },
+    {
+      "output_frame": 216,
+      "source_frame": 2160,
+      "source_time_s": 71.99261285909714,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000216.png"
+    },
+    {
+      "output_frame": 217,
+      "source_frame": 2170,
+      "source_time_s": 72.32591199270406,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000217.png"
+    },
+    {
+      "output_frame": 218,
+      "source_frame": 2180,
+      "source_time_s": 72.65921112631099,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000218.png"
+    },
+    {
+      "output_frame": 219,
+      "source_frame": 2190,
+      "source_time_s": 72.99251025991792,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000219.png"
+    },
+    {
+      "output_frame": 220,
+      "source_frame": 2200,
+      "source_time_s": 73.32580939352485,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000220.png"
+    },
+    {
+      "output_frame": 221,
+      "source_frame": 2210,
+      "source_time_s": 73.65910852713179,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000221.png"
+    },
+    {
+      "output_frame": 222,
+      "source_frame": 2220,
+      "source_time_s": 73.99240766073872,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000222.png"
+    },
+    {
+      "output_frame": 223,
+      "source_frame": 2230,
+      "source_time_s": 74.32570679434565,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000223.png"
+    },
+    {
+      "output_frame": 224,
+      "source_frame": 2240,
+      "source_time_s": 74.65900592795258,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000224.png"
+    },
+    {
+      "output_frame": 225,
+      "source_frame": 2250,
+      "source_time_s": 74.9923050615595,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000225.png"
+    },
+    {
+      "output_frame": 226,
+      "source_frame": 2260,
+      "source_time_s": 75.32560419516645,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000226.png"
+    },
+    {
+      "output_frame": 227,
+      "source_frame": 2270,
+      "source_time_s": 75.65890332877338,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000227.png"
+    },
+    {
+      "output_frame": 228,
+      "source_frame": 2280,
+      "source_time_s": 75.9922024623803,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000228.png"
+    },
+    {
+      "output_frame": 229,
+      "source_frame": 2290,
+      "source_time_s": 76.32550159598723,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000229.png"
+    },
+    {
+      "output_frame": 230,
+      "source_frame": 2300,
+      "source_time_s": 76.65880072959416,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000230.png"
+    },
+    {
+      "output_frame": 231,
+      "source_frame": 2310,
+      "source_time_s": 76.9920998632011,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000231.png"
+    },
+    {
+      "output_frame": 232,
+      "source_frame": 2320,
+      "source_time_s": 77.32539899680803,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000232.png"
+    },
+    {
+      "output_frame": 233,
+      "source_frame": 2330,
+      "source_time_s": 77.65869813041496,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000233.png"
+    },
+    {
+      "output_frame": 234,
+      "source_frame": 2340,
+      "source_time_s": 77.99199726402189,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000234.png"
+    },
+    {
+      "output_frame": 235,
+      "source_frame": 2350,
+      "source_time_s": 78.32529639762882,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000235.png"
+    },
+    {
+      "output_frame": 236,
+      "source_frame": 2360,
+      "source_time_s": 78.65859553123576,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000236.png"
+    },
+    {
+      "output_frame": 237,
+      "source_frame": 2370,
+      "source_time_s": 78.99189466484269,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000237.png"
+    },
+    {
+      "output_frame": 238,
+      "source_frame": 2380,
+      "source_time_s": 79.32519379844962,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000238.png"
+    },
+    {
+      "output_frame": 239,
+      "source_frame": 2390,
+      "source_time_s": 79.65849293205655,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000239.png"
+    },
+    {
+      "output_frame": 240,
+      "source_frame": 2400,
+      "source_time_s": 79.99179206566347,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000240.png"
+    },
+    {
+      "output_frame": 241,
+      "source_frame": 2410,
+      "source_time_s": 80.3250911992704,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000241.png"
+    },
+    {
+      "output_frame": 242,
+      "source_frame": 2420,
+      "source_time_s": 80.65839033287735,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000242.png"
+    },
+    {
+      "output_frame": 243,
+      "source_frame": 2430,
+      "source_time_s": 80.99168946648427,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000243.png"
+    },
+    {
+      "output_frame": 244,
+      "source_frame": 2440,
+      "source_time_s": 81.3249886000912,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000244.png"
+    },
+    {
+      "output_frame": 245,
+      "source_frame": 2450,
+      "source_time_s": 81.65828773369813,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000245.png"
+    },
+    {
+      "output_frame": 246,
+      "source_frame": 2460,
+      "source_time_s": 81.99158686730506,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000246.png"
+    },
+    {
+      "output_frame": 247,
+      "source_frame": 2470,
+      "source_time_s": 82.324886000912,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000247.png"
+    },
+    {
+      "output_frame": 248,
+      "source_frame": 2480,
+      "source_time_s": 82.65818513451893,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000248.png"
+    },
+    {
+      "output_frame": 249,
+      "source_frame": 2490,
+      "source_time_s": 82.99148426812586,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000249.png"
+    },
+    {
+      "output_frame": 250,
+      "source_frame": 2500,
+      "source_time_s": 83.32478340173279,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000250.png"
+    },
+    {
+      "output_frame": 251,
+      "source_frame": 2510,
+      "source_time_s": 83.65808253533972,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000251.png"
+    },
+    {
+      "output_frame": 252,
+      "source_frame": 2520,
+      "source_time_s": 83.99138166894666,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000252.png"
+    },
+    {
+      "output_frame": 253,
+      "source_frame": 2530,
+      "source_time_s": 84.32468080255359,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000253.png"
+    },
+    {
+      "output_frame": 254,
+      "source_frame": 2540,
+      "source_time_s": 84.65797993616052,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000254.png"
+    },
+    {
+      "output_frame": 255,
+      "source_frame": 2550,
+      "source_time_s": 84.99127906976744,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000255.png"
+    },
+    {
+      "output_frame": 256,
+      "source_frame": 2560,
+      "source_time_s": 85.32457820337437,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000256.png"
+    },
+    {
+      "output_frame": 257,
+      "source_frame": 2570,
+      "source_time_s": 85.65787733698131,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000257.png"
+    },
+    {
+      "output_frame": 258,
+      "source_frame": 2580,
+      "source_time_s": 85.99117647058824,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000258.png"
+    },
+    {
+      "output_frame": 259,
+      "source_frame": 2590,
+      "source_time_s": 86.32447560419517,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000259.png"
+    },
+    {
+      "output_frame": 260,
+      "source_frame": 2600,
+      "source_time_s": 86.6577747378021,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000260.png"
+    },
+    {
+      "output_frame": 261,
+      "source_frame": 2610,
+      "source_time_s": 86.99107387140903,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000261.png"
+    },
+    {
+      "output_frame": 262,
+      "source_frame": 2620,
+      "source_time_s": 87.32437300501597,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000262.png"
+    },
+    {
+      "output_frame": 263,
+      "source_frame": 2630,
+      "source_time_s": 87.6576721386229,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000263.png"
+    },
+    {
+      "output_frame": 264,
+      "source_frame": 2640,
+      "source_time_s": 87.99097127222983,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000264.png"
+    },
+    {
+      "output_frame": 265,
+      "source_frame": 2650,
+      "source_time_s": 88.32427040583676,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000265.png"
+    },
+    {
+      "output_frame": 266,
+      "source_frame": 2660,
+      "source_time_s": 88.65756953944368,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000266.png"
+    },
+    {
+      "output_frame": 267,
+      "source_frame": 2670,
+      "source_time_s": 88.99086867305061,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000267.png"
+    },
+    {
+      "output_frame": 268,
+      "source_frame": 2680,
+      "source_time_s": 89.32416780665756,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000268.png"
+    },
+    {
+      "output_frame": 269,
+      "source_frame": 2690,
+      "source_time_s": 89.65746694026448,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000269.png"
+    },
+    {
+      "output_frame": 270,
+      "source_frame": 2700,
+      "source_time_s": 89.99076607387141,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000270.png"
+    },
+    {
+      "output_frame": 271,
+      "source_frame": 2710,
+      "source_time_s": 90.32406520747834,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000271.png"
+    },
+    {
+      "output_frame": 272,
+      "source_frame": 2720,
+      "source_time_s": 90.65736434108527,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000272.png"
+    },
+    {
+      "output_frame": 273,
+      "source_frame": 2730,
+      "source_time_s": 90.99066347469221,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000273.png"
+    },
+    {
+      "output_frame": 274,
+      "source_frame": 2740,
+      "source_time_s": 91.32396260829914,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000274.png"
+    },
+    {
+      "output_frame": 275,
+      "source_frame": 2750,
+      "source_time_s": 91.65726174190607,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000275.png"
+    },
+    {
+      "output_frame": 276,
+      "source_frame": 2760,
+      "source_time_s": 91.990560875513,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000276.png"
+    },
+    {
+      "output_frame": 277,
+      "source_frame": 2770,
+      "source_time_s": 92.32386000911993,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000277.png"
+    },
+    {
+      "output_frame": 278,
+      "source_frame": 2780,
+      "source_time_s": 92.65715914272687,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000278.png"
+    },
+    {
+      "output_frame": 279,
+      "source_frame": 2790,
+      "source_time_s": 92.9904582763338,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000279.png"
+    },
+    {
+      "output_frame": 280,
+      "source_frame": 2800,
+      "source_time_s": 93.32375740994073,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000280.png"
+    },
+    {
+      "output_frame": 281,
+      "source_frame": 2810,
+      "source_time_s": 93.65705654354765,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000281.png"
+    },
+    {
+      "output_frame": 282,
+      "source_frame": 2820,
+      "source_time_s": 93.99035567715458,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000282.png"
+    },
+    {
+      "output_frame": 283,
+      "source_frame": 2830,
+      "source_time_s": 94.32365481076152,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000283.png"
+    },
+    {
+      "output_frame": 284,
+      "source_frame": 2840,
+      "source_time_s": 94.65695394436845,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000284.png"
+    },
+    {
+      "output_frame": 285,
+      "source_frame": 2850,
+      "source_time_s": 94.99025307797538,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000285.png"
+    },
+    {
+      "output_frame": 286,
+      "source_frame": 2860,
+      "source_time_s": 95.32355221158231,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000286.png"
+    },
+    {
+      "output_frame": 287,
+      "source_frame": 2870,
+      "source_time_s": 95.65685134518924,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000287.png"
+    },
+    {
+      "output_frame": 288,
+      "source_frame": 2880,
+      "source_time_s": 95.99015047879618,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000288.png"
+    },
+    {
+      "output_frame": 289,
+      "source_frame": 2890,
+      "source_time_s": 96.32344961240311,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000289.png"
+    },
+    {
+      "output_frame": 290,
+      "source_frame": 2900,
+      "source_time_s": 96.65674874601004,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000290.png"
+    },
+    {
+      "output_frame": 291,
+      "source_frame": 2910,
+      "source_time_s": 96.99004787961697,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000291.png"
+    },
+    {
+      "output_frame": 292,
+      "source_frame": 2920,
+      "source_time_s": 97.3233470132239,
+      "output_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/moving/frame_000292.png"
+    }
+  ],
+  "dataset_name": "real_1x_4k_3hz_IMG_4317_v1",
+  "template_dataset": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input",
+  "moving_intrinsics_json": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/00_shared_input/raw_images/camera_info/moving_calib_camera.json",
+  "intrinsic_source_json": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_intrinsics_v1/moving_calib_camera.json"
+}

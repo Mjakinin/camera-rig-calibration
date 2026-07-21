@@ -1,0 +1,41 @@
+AP03 COLMAP Reconstruction Inspection
+=====================================
+
+AP03 Phase:
+- targetless COLMAP/SfM feasibility
+- no ArUco scale/registration yet
+- reconstruction scale is arbitrary
+
+Input dataset:
+- total images: 267
+- static images: 4
+- moving images: 263
+
+Number of COLMAP models: 1
+
+Models:
+- model 0: 11 images, 1/4 static cameras, 10 moving frames, 55 3D points
+  static registered: static_cam_edge_3.png
+  static missing: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_5.png
+
+Best model by static-camera coverage:
+- model: 0
+- registered images: 11
+- registered static cameras: 1/4
+- registered moving frames: 10
+- 3D points: 55
+
+Interpretation:
+- COLMAP registered some but not all static cameras.
+- This is a partial targetless baseline.
+- We can still inspect whether the missing static cameras lack visual overlap/features.
+
+Important:
+- COLMAP poses are currently in arbitrary scale and arbitrary coordinate frame.
+- Metric scale and Ref-ArUco alignment are planned for AP03 Phase 2.
+
+Output files:
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/04_ap03_real/03_reconstruction_inspection/colmap_model_summary.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/04_ap03_real/03_reconstruction_inspection/registered_images_by_model.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/04_ap03_real/03_reconstruction_inspection/ap03_colmap_inspection_report.txt
+

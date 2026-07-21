@@ -1,0 +1,7 @@
+camera_a,camera_b,ap01_distance_m,ap02_distance_m,ap03_distance_m,simulation_gt_reference_m,ap01_vs_simulation_gt_cm,ap02_vs_simulation_gt_cm,ap03_vs_simulation_gt_cm,measured_real_reference_m,ap01_vs_measured_real_cm,ap02_vs_measured_real_cm,ap03_vs_measured_real_cm
+cam_edge_0,cam_edge_1,,4.997780233540066,,5.069131069576643,,7.135083603657666,,,,,
+cam_edge_0,cam_edge_3,,3.7752643916826285,,3.819152918656321,,4.388852697369261,,,,,
+cam_edge_0,cam_edge_5,,2.0447708602684758,,5.667927964501032,,362.3157104232556,,,,,
+cam_edge_1,cam_edge_3,,2.119725828102094,,2.1721826797050396,,5.2456851602945775,,,,,
+cam_edge_1,cam_edge_5,,3.712845058582513,,9.833844654272019,,612.0999595689506,,,,,
+cam_edge_3,cam_edge_5,,3.418172495182945,,9.285515073252316,,586.7342578069371,,,,,
