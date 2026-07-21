@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+  <model name="beintelli_bus">
+    <static>true</static>
+
+    <link name="bus_link">
+      <visual name="bus_visual">
+        <geometry>
+          <mesh>
+            <uri>model://beintelli_bus/meshes/obj/beintelli_erklarbus.obj</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

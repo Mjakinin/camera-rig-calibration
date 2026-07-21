@@ -1,0 +1,23 @@
+{
+  "status": "CANONICAL_BASELINE",
+  "baseline_route": "route2",
+  "source": "results/bus_real_data/ablation/world/route/route2",
+  "static_images": 4,
+  "moving_images": 189,
+  "camera_info_files": 5,
+  "final_methods": {
+    "AP01": {
+      "variant": "BASELINE",
+      "definition": "Direct multimarker where possible; moving-COLMAP relay only where required."
+    },
+    "AP02": {
+      "variant": "BASELINE",
+      "definition": "Distortion-aware reference-marker graph bundle adjustment with soft-L1; no hard residual rejection."
+    },
+    "AP03": {
+      "variant": "CURRENT_MARKER_SIZE_SCALE_ONLY",
+      "definition": "Grouped calibrated targetless COLMAP with ArUco marker-size metric scaling."
+    }
+  },
+  "note": "This shared baseline is the Route-2 dataset with the extended ArUco layout. FOV, resolution, motion-blur, frame-density and lighting ablations must derive from this baseline route."
+}

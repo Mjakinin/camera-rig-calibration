@@ -1,0 +1,139 @@
+{
+    "os_lidar": [
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_os_lidar",
+            "xyz": "-1.1687371813703327 4.053025202051485 1.77327089735811",
+            "rpy": "-0.02742775617661708 0.025379202764799658 1.5681136941858562",
+            "type": "fixed"
+        }
+    ],
+    "edge_1_color_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_1_color_optical_frame",
+            "xyz": "0.8750864987010092 4.974167319020168 2.0315426849896094",
+            "rpy": "-1.856403993400297 0.013405616772028547 2.712945788911822",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ],
+    "edge_1_depth_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_1_depth_optical_frame",
+            "xyz": "0.8614975713312159 4.980007307943535 2.031336894450189",
+            "rpy": "-1.8537040815298553 0.0188170308808846 2.705889432879945",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ],
+    "edge_0_depth_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_0_depth_optical_frame",
+            "xyz": "-1.3348612323872582 0.3975806027743546 1.987644028325796",
+            "rpy": "-1.9660609098398036 -0.025827819316640133 -1.5943781214265695",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ],
+    "edge_0_color_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_0_color_optical_frame",
+            "xyz": "-1.3345552645993286 0.4121920661589196 1.9873283030824136",
+            "rpy": "-1.9681181153482887 -0.026123106109412347 -1.585231940023972",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ],
+    "edge_3_depth_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_3_depth_optical_frame",
+            "xyz": "-1.1757472093866357 4.219741198591887 1.9533437653533705",
+            "rpy": "-1.9113197752193392 0.04369957903443744 -2.61945350156405",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ],
+    "edge_3_color_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_3_color_optical_frame",
+            "xyz": "-1.1632142616310732 4.227355830813002 1.9542108962925486",
+            "rpy": "-1.9092235012966188 0.03433812727756141 -2.616247715676958",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ],
+    "edge_5_color_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_5_color_optical_frame",
+            "xyz": "0.7484195414140273 -4.858858874286902 2.038761566706905",
+            "rpy": "-1.9071326538448534 0.0710903834839387 0.4167291115694422",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ],
+    "edge_5_depth_optical_frame": [
+        {
+            "parent": "bus_aruco_center_link",
+            "joint_name": "bus_aruco_center_link_to_edge_5_depth_optical_frame",
+            "xyz": "0.7618422253628437 -4.852640885951774 2.0375741019917717",
+            "rpy": "-1.905616479243113 0.07161476843043468 0.41180894603827034",
+            "type": "fixed"
+        },
+        {
+            "parent": "base_link",
+            "joint_name": "base_link_to_bus_aruco_center_link",
+            "xyz": "0.0 0.0 0.0",
+            "rpy": "0.0 0.0 0.0",
+            "type": "fixed"
+        }
+    ]
+}

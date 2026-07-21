@@ -1,0 +1,122 @@
+Pretty direct static-to-static report
+====================================
+
+Pair: cam_edge_3 -> cam_edge_1
+
+Meaning:
+- estimated cam1 in cam3 = estimated relative pose of cam_edge_1 expressed in cam_edge_3 frame.
+- GT cam1 in cam3 = ground-truth relative pose from simulation, converted into optical-frame convention.
+- Errors are only for simulation evaluation.
+
+Marker 14 [GOOD_INLIER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.2094, y=-0.1137, z=0.2815
+  rotation [deg]: roll=16.473, pitch=50.284, yaw=24.942
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 10.15 cm
+  rotation error: 0.308 deg
+  coordinate errors: dx=-7.00 cm, dy=1.49 cm, dz=-7.20 cm
+  marker distances: root=4.174 m, target=4.619 m
+
+Marker 2 [GOOD_INLIER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1332, y=-0.0973, z=0.1802
+  rotation [deg]: roll=15.256, pitch=48.527, yaw=23.309
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 17.62 cm
+  rotation error: 2.134 deg
+  coordinate errors: dx=0.62 cm, dy=3.12 cm, dz=-17.33 cm
+  marker distances: root=2.580 m, target=3.606 m
+
+Marker 7 [WEAK_INLIER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-1.9205, y=0.1433, z=0.0679
+  rotation [deg]: roll=16.402, pitch=46.900, yaw=22.678
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 45.10 cm
+  rotation error: 4.155 deg
+  coordinate errors: dx=21.89 cm, dy=27.18 cm, dz=-28.56 cm
+  marker distances: root=5.665 m, target=6.188 m
+
+Marker 8 [REJECT_FAR_MARKER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-0.9465, y=3.2022, z=0.3984
+  rotation [deg]: roll=40.382, pitch=30.470, yaw=27.163
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 353.82 cm
+  rotation error: 30.101 deg
+  coordinate errors: dx=119.29 cm, dy=333.08 cm, dz=4.49 cm
+  marker distances: root=5.929 m, target=7.223 m
+
+Marker 6 [REJECT_FAR_MARKER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=0.4257, y=2.3339, z=0.0131
+  rotation [deg]: roll=28.246, pitch=17.887, yaw=23.670
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 357.20 cm
+  rotation error: 34.904 deg
+  coordinate errors: dx=256.51 cm, dy=246.25 cm, dz=-34.04 cm
+  marker distances: root=5.616 m, target=6.294 m
+
+Marker 5 [REJECT_FAR_MARKER]
+------------------------------------------------------------
+Estimated pose: cam_edge_1 in cam_edge_3
+  position [m]: x=1.3013, y=-1.7290, z=-1.6300
+  rotation [deg]: roll=-11.602, pitch=20.771, yaw=19.383
+
+Ground Truth pose: cam_edge_1 in cam_edge_3
+  position [m]: x=-2.1394, y=-0.1285, z=0.3535
+  rotation [deg]: roll=16.174, pitch=50.492, yaw=24.588
+
+Errors
+  position error: 428.19 cm
+  rotation error: 38.642 deg
+  coordinate errors: dx=344.07 cm, dy=-160.05 cm, dz=-198.35 cm
+  marker distances: root=5.260 m, target=6.547 m
+
+Summary
+-------
+Total shared markers: 6
+Kept as inlier candidates: 3
+Rejected: 3
+
+Recommended direct-static decision for now:
+- Use marker 1 as best single-marker sanity baseline.
+- Use marker 1 and marker 2 as weak inlier set for robust development.
+- Reject marker 5, 6, 7 for direct static aggregation.
+- Marker 8 is borderline and should not dominate the result.
+
+Why:
+- The far markers have large depth/pose instability although their IDs are visible.
+- Single planar ArUco marker pose is not reliable enough at long range for final extrinsics.
+- This motivates using nearby markers, multiple markers, CharUco/multi-marker boards, or robust outlier rejection.

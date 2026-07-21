@@ -1,0 +1,242 @@
+{
+  "description": "Route 2 moving camera route from manually previewed move commands.",
+  "pose_format": "x y z roll pitch yaw",
+  "notes": [
+    "Generated from user-provided move x y z roll pitch yaw sleep commands.",
+    "The final sleep value from each move command is not stored in the route file.",
+    "Route 2 starts from the rear/cam5-side area and returns through the aisle with different viewing directions."
+  ],
+  "keyframes": [
+    {
+      "name": "route2_kf_000",
+      "pose": [
+        5.5,
+        0.5,
+        2.2,
+        0.0,
+        0.4,
+        -2.716814693
+      ]
+    },
+    {
+      "name": "route2_kf_001_pitch_yaw_fix",
+      "pose": [
+        5.3,
+        0.5,
+        2.2,
+        0.0,
+        0.5,
+        -3.2
+      ]
+    },
+    {
+      "name": "route2_kf_002",
+      "pose": [
+        4.5,
+        0.5,
+        2.2,
+        0.0,
+        0.3,
+        -2.316814693
+      ]
+    },
+    {
+      "name": "route2_kf_003",
+      "pose": [
+        4.0,
+        0.0,
+        2.2,
+        0.0,
+        0.3,
+        -3.141592654
+      ]
+    },
+    {
+      "name": "route2_kf_004",
+      "pose": [
+        2.0,
+        0.0,
+        2.2,
+        0.0,
+        0.1,
+        -3.9
+      ]
+    },
+    {
+      "name": "route2_kf_005",
+      "pose": [
+        1.5,
+        0.0,
+        2.2,
+        0.0,
+        0.8,
+        -3.516814693
+      ]
+    },
+    {
+      "name": "route2_kf_006",
+      "pose": [
+        1.4,
+        0.0,
+        2.2,
+        0.0,
+        0.55,
+        -3.141592654
+      ]
+    },
+    {
+      "name": "route2_kf_007",
+      "pose": [
+        1.2,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -3.141592654
+      ]
+    },
+    {
+      "name": "route2_kf_008",
+      "pose": [
+        1.0,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -2.7
+      ]
+    },
+    {
+      "name": "route2_kf_009",
+      "pose": [
+        -0.7,
+        0.6,
+        2.2,
+        0.0,
+        0.5,
+        -3.141692
+      ]
+    },
+    {
+      "name": "route2_kf_010",
+      "pose": [
+        -1.5,
+        0.6,
+        2.2,
+        0.0,
+        0.5,
+        -2.7
+      ]
+    },
+    {
+      "name": "route2_kf_011",
+      "pose": [
+        -3.0,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        -0.3
+      ]
+    },
+    {
+      "name": "route2_kf_012",
+      "pose": [
+        -2.0,
+        0.0,
+        2.2,
+        0.0,
+        0.6,
+        0.3
+      ]
+    },
+    {
+      "name": "route2_kf_013",
+      "pose": [
+        -0.8,
+        0.0,
+        2.2,
+        0.0,
+        0.7,
+        0.7
+      ]
+    },
+    {
+      "name": "route2_kf_014",
+      "pose": [
+        -0.6,
+        0.0,
+        2.2,
+        0.0,
+        0.1,
+        0.8
+      ]
+    },
+    {
+      "name": "route2_kf_015",
+      "pose": [
+        -0.4,
+        0.0,
+        2.2,
+        0.0,
+        0.2,
+        0.5
+      ]
+    },
+    {
+      "name": "route2_kf_016",
+      "pose": [
+        0.0,
+        0.0,
+        2.2,
+        0.0,
+        0.4,
+        -0.4
+      ]
+    },
+    {
+      "name": "route2_kf_017",
+      "pose": [
+        2.4,
+        0.0,
+        2.2,
+        0.0,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "name": "route2_kf_018",
+      "pose": [
+        3.2,
+        -0.4,
+        2.2,
+        0.0,
+        0.6,
+        -0.5
+      ]
+    },
+    {
+      "name": "route2_kf_019",
+      "pose": [
+        4.2,
+        -0.4,
+        2.2,
+        0.0,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "name": "route2_kf_020",
+      "pose": [
+        5.5,
+        -0.4,
+        2.2,
+        0.0,
+        0.4,
+        1.7
+      ]
+    }
+  ]
+}

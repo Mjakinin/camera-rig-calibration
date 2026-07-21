@@ -1,0 +1,87 @@
+REAL-DATA SINGLE-ANCHOR MARKER EDGE-LENGTH AND CROSS-CAMERA EVALUATION
+====================================================================================================================================
+
+Dataset: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/00_shared_input
+Metric anchor: marker 3 = 17.00 cm
+All physical markers are assumed to have a 17.00 cm edge length; therefore no repeated target-size column is shown.
+
+METHOD COMPARISON (NON-ANCHOR MARKERS)
+------------------------------------------------------------------------------------------------------------------------------------
+Method  Status                       Cams   Move  Markers   Mean edge [cm]   Median abs err [cm]   Mean abs err [cm]   Cross RMSE [px]  Cross corners
+AP01    NOT_AVAILABLE_ANCHOR_NOT_RECONSTRUCTED     4    387        0               NA                    NA                  NA                NA              0
+AP02    OK                              4    191       16          17.0590                0.0843              0.0792            1.2742             80
+AP03    OK                              4    387       16          17.2141                0.2161              0.2386            1.7612             80
+
+AP01: RECONSTRUCTED MARKER EDGE LENGTHS
+------------------------------------------------------------------------------------------------------------------------------------
+  Marker    Mean edge [cm]    Abs error [cm]   Rel error [%]    Cross RMSE [px]             Static cameras   Cross corners
+No marker evaluation available for this method.
+
+AP02: RECONSTRUCTED MARKER EDGE LENGTHS
+------------------------------------------------------------------------------------------------------------------------------------
+  Marker    Mean edge [cm]    Abs error [cm]   Rel error [%]    Cross RMSE [px]             Static cameras   Cross corners
+       0           17.0029            0.0029          0.0171             1.4140                 cam_edge_1               4
+       2           17.0143            0.0143          0.0841             1.5704      cam_edge_1;cam_edge_3               8
+      3*           17.0000            0.0000          0.0000             0.8214      cam_edge_1;cam_edge_3               8
+       4           17.1214            0.1214          0.7140             1.5287                 cam_edge_1               4
+       5           16.9323            0.0677          0.3984             0.6903                 cam_edge_5               4
+       6           17.1008            0.1008          0.5932             1.6961                 cam_edge_1               4
+       7           16.9830            0.0170          0.1001             0.9387                 cam_edge_5               4
+       8           17.1585            0.1585          0.9322             1.2679                 cam_edge_5               4
+       9           17.1337            0.1337          0.7866             1.2406                 cam_edge_5               4
+      10           17.1228            0.1228          0.7222             2.3476      cam_edge_1;cam_edge_5               8
+      12           17.1307            0.1307          0.7688             0.7650                 cam_edge_5               4
+      15           17.1367            0.1367          0.8040             0.7376      cam_edge_0;cam_edge_3               8
+      16           16.9847            0.0153          0.0901             0.8625      cam_edge_0;cam_edge_3               8
+      17           16.9387            0.0613          0.3606             0.8277                 cam_edge_5               4
+      18           17.0253            0.0253          0.1486                 NA                          -               0
+      19           17.1447            0.1447          0.8514             0.4356      cam_edge_0;cam_edge_3               8
+      20           17.0139            0.0139          0.0819             0.7587                 cam_edge_1               4
+
+AP03: RECONSTRUCTED MARKER EDGE LENGTHS
+------------------------------------------------------------------------------------------------------------------------------------
+  Marker    Mean edge [cm]    Abs error [cm]   Rel error [%]    Cross RMSE [px]             Static cameras   Cross corners
+       0           16.9788            0.0212          0.1249             1.3852                 cam_edge_1               4
+       2           17.1632            0.1632          0.9598             1.6734      cam_edge_1;cam_edge_3               8
+      3*           17.0000            0.0000          0.0000             1.4459      cam_edge_1;cam_edge_3               8
+       4           17.2571            0.2571          1.5123             1.5163                 cam_edge_1               4
+       5           16.9735            0.0265          0.1560             0.9341                 cam_edge_5               4
+       6           17.2387            0.2387          1.4042             2.1451                 cam_edge_1               4
+       7           16.8516            0.1484          0.8727             1.6195                 cam_edge_5               4
+       8           17.4447            0.4447          2.6161             2.0222                 cam_edge_5               4
+       9           17.3859            0.3859          2.2699             1.4306                 cam_edge_5               4
+      10           17.4295            0.4295          2.5265             2.7227      cam_edge_1;cam_edge_5               8
+      12           17.4999            0.4999          2.9404             2.1227                 cam_edge_5               4
+      15           17.2960            0.2960          1.7413             0.7390      cam_edge_0;cam_edge_3               8
+      16           17.1489            0.1489          0.8757             1.2037      cam_edge_0;cam_edge_3               8
+      17           17.1934            0.1934          1.1376             3.5434                 cam_edge_5               4
+      18           17.1697            0.1697          0.9985                 NA                          -               0
+      19           17.3489            0.3489          2.0525             0.9391      cam_edge_0;cam_edge_3               8
+      20           17.0454            0.0454          0.2669             0.5853                 cam_edge_1               4
+
+HOW TO READ CROSS-CAMERA REPROJECTION
+------------------------------------------------------------------------------------------------------------------------------------
+A marker corner is reconstructed in 3D using only moving-camera frames. The estimated camera-to-camera calibration
+then predicts where that 3D corner should appear in a static-camera image. Cross RMSE is the root-mean-square pixel
+distance between this prediction and the actually detected ArUco corner. It therefore tests whether the moving and
+static camera geometries agree. Zero pixels would be perfect. As a rough 4K interpretation, about 1-3 px is good,
+3-5 px is still plausible, above 10 px is suspicious, and errors of tens or hundreds of pixels indicate wrong geometry.
+These ranges are practical guidance rather than universal acceptance thresholds.
+
+CALCULATION
+------------------------------------------------------------------------------------------------------------------------------------
+1. Existing AP01/AP02/AP03 poses are frozen; no method is re-run or optimized.
+2. Each marker corner is triangulated only from moving-camera observations using RANSAC.
+3. Marker 3 alone sets metric scale to 17.00 cm.
+4. The reported size is the arithmetic mean of the four reconstructed marker edges, analogous to Table III of the paper.
+5. Every other marker is compared with the common physical edge length of 17.00 cm.
+6. Cross-camera reprojection uses static images only for evaluation, not for triangulating the marker corners.
+
+INTERPRETATION LIMIT
+------------------------------------------------------------------------------------------------------------------------------------
+This is a common post-hoc geometric-consistency evaluation, not independent camera-pose ground truth.
+The marker-size check evaluates metric reconstruction consistency; Cross RMSE additionally tests moving-to-static
+camera agreement. Camera/method failures remain visible through missing rows and coverage counts.
+
+* Scale anchor: its reconstructed edge is fixed to 17.00 cm by construction and is not included in summary errors.
+Detailed CSV: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/marker_consistency/REAL_DATA_MARKER_EDGE_LENGTHS_AND_REPROJECTION.csv

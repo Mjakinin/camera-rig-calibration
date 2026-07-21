@@ -1,0 +1,10 @@
+{
+  "group": "world/route",
+  "variant": "route1",
+  "parameter": "moving camera route",
+  "description": "Route ablation comparing two manually designed moving-camera trajectories.",
+  "world": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf",
+  "route_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/config/moving_camera_route1_interpolated_final.json",
+  "num_route_frames": 352,
+  "note": "Static camera images are identical world/camera setup. Moving-camera trajectory differs between route1 and route2."
+}

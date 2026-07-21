@@ -1,0 +1,21 @@
+{
+  "variant": "moving_blur_k00_baseline",
+  "effect": "linear_motion_blur",
+  "kernel_size": 0,
+  "angle_deg": 0.0,
+  "applied_to": "moving_images_only",
+  "static_images_changed": false,
+  "camera_info_changed": false,
+  "source_dataset": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1",
+  "group": "moving_cam/motion_blur",
+  "baseline_reused": true,
+  "baseline_source_variant": "route2",
+  "baseline_source": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/bus_real_data/ablation/world/route/route2",
+  "route_frame_count": 189,
+  "equivalence_contract": "Exact nominal Route-2 raw images, CameraInfo, ArUco observations and method outputs are reused; AP01/AP02/AP03 are not rerun for this mathematically identical baseline variant.",
+  "methods_reused_without_rerun": [
+    "AP01",
+    "AP02",
+    "AP03"
+  ]
+}

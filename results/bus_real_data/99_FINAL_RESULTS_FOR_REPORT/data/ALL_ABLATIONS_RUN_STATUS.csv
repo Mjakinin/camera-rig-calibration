@@ -1,0 +1,17 @@
+group,variant,parameter,AP01_STATUS,AP02_STATUS,AP03_STATUS,PAIRWISE_STATUS,SECONDARY_STATUS
+moving_cam/fov,fov_40deg,40 deg,OK_FULL,OK_FULL,SCALE_WEAK_CHECK_REQUIRED,OK,OK
+moving_cam/fov,route2,69 deg baseline,OK_FULL,OK_FULL,OK_FULL,OK,OK
+moving_cam/fov,fov_100deg,100 deg,OK_FULL,OK_FULL,OK_FULL,OK,OK
+moving_cam/fov,fov_140deg_extreme,140 deg,OK_FULL,OK_FULL,OK_FULL,OK,OK
+moving_cam/motion_blur,route2,kernel 0 baseline,OK_FULL,OK_FULL,OK_FULL,OK,OK
+moving_cam/motion_blur,moving_blur_k09_mild,kernel 9,OK_FULL,OK_FULL,OK_FULL,OK,OK
+moving_cam/motion_blur,moving_blur_k21_strong,kernel 21,PARTIAL_3_OF_4,PARTIAL_3_OF_4,FAILED_NO_PAIR,OK,OK
+moving_cam/motion_blur,moving_blur_k41_extreme,kernel 41,FAILED_NO_PAIR,PARTIAL_3_OF_4,FAILED_NO_PAIR,OK,OK
+moving_cam/res,moving_res_160x90_extreme_pixel,160x90,PARTIAL_2_OF_4,OK_FULL,FAILED_NO_PAIR,OK,OK
+moving_cam/res,moving_res_320x180_low,320x180,PARTIAL_2_OF_4,OK_FULL,OK_FULL,OK,OK
+moving_cam/res,route2,1280x720 baseline,OK_FULL,OK_FULL,OK_FULL,OK,OK
+moving_cam/res,moving_res_2560x1440_upscaled,2560x1440,OK_FULL,OK_FULL,OK_FULL,OK,OK
+world/lighting,ceiling_dark_extreme,dark extreme,OK_FULL,OK_FULL,OK_FULL,OK,OK
+world/lighting,ceiling_low,low,OK_FULL,OK_FULL,OK_FULL,OK,OK
+world/lighting,ceiling_normal,normal baseline,OK_FULL,OK_FULL,OK_FULL,OK,OK
+world/lighting,ceiling_bright,bright,OK_FULL,OK_FULL,OK_FULL,OK,OK

@@ -1,0 +1,17 @@
+Shared ArUco detection summary
+==============================
+
+Dataset: results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/raw_images
+Dictionary: DICT_4X4_50
+Marker length [m]: 0.17
+
+Static observations: 25
+Moving observations: 302
+Total observations: 327
+PnP success: 327 / 327
+
+Output files:
+- results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/aruco_observations/shared_static_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/aruco_observations/shared_moving_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/aruco_observations/shared_all_aruco_observations.csv
+- results/bus_real_data/ablation/moving_cam/res/moving_res_320x180_low/aruco_observations/debug_images

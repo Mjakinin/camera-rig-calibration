@@ -1,0 +1,96 @@
+[
+  {
+    "method": "AP01",
+    "status": "NOT_AVAILABLE_ANCHOR_NOT_RECONSTRUCTED",
+    "available_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "available_static_camera_count": 4,
+    "registered_moving_frames": 387,
+    "static_pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/02_ap01_real/03_static_extrinsics/AP01_STATIC_CAMERA_POSES_CAM3_REFERENCE.csv",
+    "trajectory": {
+      "source": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/02_ap01_real/01_moving_colmap/sparse_txt_best/images.txt",
+      "native_scale": 0.47084836108351436,
+      "anchor_alignment_observations": 74
+    },
+    "anchor_marker_id": 3,
+    "reconstructed_markers_total": 14,
+    "evaluated_non_anchor_markers": 0,
+    "original_method_status": "OK_FULL",
+    "original_method_success": true
+  },
+  {
+    "method": "AP02",
+    "status": "OK",
+    "available_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "available_static_camera_count": 4,
+    "registered_moving_frames": 191,
+    "static_pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/03_ap02_real/07_graph_ba/with_moving/optimized_static_camera_poses_ref_marker.csv",
+    "trajectory": {
+      "source": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/03_ap02_real/07_graph_ba/with_moving/optimized_moving_frame_poses_ref_marker.csv"
+    },
+    "anchor_marker_id": 3,
+    "anchor_expected_size_cm": 17.0,
+    "anchor_raw_reconstructed_size_units": 0.16887228563414095,
+    "anchor_scale_m_per_unit": 1.0066779126108487,
+    "reconstructed_markers_total": 17,
+    "evaluated_non_anchor_markers": 16,
+    "markers_with_moving_to_static_validation": 15,
+    "median_absolute_size_error_cm": 0.0842859897049672,
+    "p90_absolute_size_error_cm": 0.14070123504139886,
+    "median_relative_size_error_percent": 0.4957999394409835,
+    "p90_relative_size_error_percent": 0.8276543237729344,
+    "moving_fit_reprojection_rmse_px": 1.239947424072387,
+    "moving_fit_reprojection_median_px": 0.7551181702632539,
+    "moving_to_static_reprojection_rmse_px": 1.2742384894287542,
+    "moving_to_static_reprojection_median_px": 0.762761237410734,
+    "moving_to_static_reprojection_p90_px": 1.9380167380994977,
+    "moving_to_static_reprojection_observations": 80,
+    "original_method_status": "OK_FULL",
+    "original_method_success": true
+  },
+  {
+    "method": "AP03",
+    "status": "OK",
+    "available_static_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "available_static_camera_count": 4,
+    "registered_moving_frames": 387,
+    "static_pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/04_ap03_real/07_final_results/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+    "trajectory": {
+      "source": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_5hz/04_ap03_real/02_colmap_sparse/sparse_txt/0/images.txt",
+      "native_scale": 0.658042544908849
+    },
+    "anchor_marker_id": 3,
+    "anchor_expected_size_cm": 17.0,
+    "anchor_raw_reconstructed_size_units": 0.1675594025664717,
+    "anchor_scale_m_per_unit": 1.0145655653824626,
+    "reconstructed_markers_total": 17,
+    "evaluated_non_anchor_markers": 16,
+    "markers_with_moving_to_static_validation": 15,
+    "median_absolute_size_error_cm": 0.21605480368335345,
+    "p90_absolute_size_error_cm": 0.43711731716006286,
+    "median_relative_size_error_percent": 1.2709106099020788,
+    "p90_relative_size_error_percent": 2.5712783362356637,
+    "moving_fit_reprojection_rmse_px": 1.6606323732846293,
+    "moving_fit_reprojection_median_px": 1.0481037119262833,
+    "moving_to_static_reprojection_rmse_px": 1.7611828466573973,
+    "moving_to_static_reprojection_median_px": 1.2353743023228851,
+    "moving_to_static_reprojection_p90_px": 2.61660509382473,
+    "moving_to_static_reprojection_observations": 80,
+    "original_method_status": "OK_FULL",
+    "original_method_success": true
+  }
+]

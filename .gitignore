@@ -1,0 +1,150 @@
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.DS_Store
+
+# Bus real-data generated caches/logs
+results/bus_real_data/**/.ap01_compat_cache/
+results/bus_real_data/**/_pipeline_logs/
+run/bus_real_data/**/__pycache__/
+
+results/bus_real_data/_visible_full_pipeline_logs/
+results/bus_real_data/_overnight_pipeline_logs/
+
+# ROS build artifacts
+build/
+install/
+log/
+
+# Generated ablation images / annotations
+results/bus_real_data/ablation/*/images/
+results/bus_real_data/ablation/aruco_annotated*/
+results/bus_real_data/ablation/**/images/
+
+# Local mesh conversion artifacts / backups
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.dae
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.stl
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.bak
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.before_dae
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.obj_backup
+src/calib_lab/bus_real_data/worlds/ablation/
+src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera_ablation_light.sdf
+
+# Ablation generated images after folder restructuring
+results/bus_real_data/ablation/**/images/
+results/bus_real_data/ablation/**/aruco_annotated*/
+results/bus_real_data/ablation/**/exposure_preview/
+results/bus_real_data/ablation/plots/
+results/**/backup_before_rerun/
+results/**/_backups/
+
+# Legacy FOV intermediate/summary outputs
+results/bus_real_data/ablation/moving_cam/fov/01_shared_observations/
+results/bus_real_data/ablation/moving_cam/fov/99_summary/
+
+# Local real-vehicle raw data
+data_local/
+
+# Real-data generated caches/logs
+results/real_vehicle_data/**/_pipeline_logs/
+run/real_vehicle_data/**/__pycache__/
+
+# Transient simulation backups and selection scratch
+results/bus_real_data/.backup_shared_before_route_ablation_*/
+results/bus_real_data/_runtime_backups/
+results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT.before_*/
+results/bus_real_data/00_shared_baseline/**/*.before_route2_*/
+results/bus_real_data/method_selection/
+
+# Preview-only artifacts
+**/preview/
+**/previews/
+**/*_preview/
+
+# Canonical shared input datasets are intentionally tracked
+!results/bus_real_data/00_shared_baseline/
+!results/bus_real_data/00_shared_baseline/**
+!results/real_vehicle_data/
+!results/real_vehicle_data/**/00_shared_input/
+!results/real_vehicle_data/**/00_shared_input/**
+# Calibration runtime backups and long logs
+results/bus_real_data/_final_corrected_overnight/
+results/bus_real_data/_master_logs/
+results/bus_real_data/POST_OVERNIGHT_DIAGNOSTICS.txt
+results/**/_pipeline_logs/
+results/**/*.log
+
+# Real-vehicle 0.5x temporal-sampling ablation
+# The 1-Hz shared input is intentionally tracked as one reproducible sample.
+# Regenerable method workspaces and redundant debug copies remain local.
+results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/aruco_observations/debug_images/moving/
+results/real_vehicle_data/real_05x_4k_1hz/02_ap01_real/
+results/real_vehicle_data/real_05x_4k_1hz/03_ap02_real/
+results/real_vehicle_data/real_05x_4k_1hz/04_ap03_real/
+results/real_vehicle_data/real_05x_4k_1hz/_pipeline_logs/
+
+# For 3 Hz and 5 Hz, only configuration and final reports are tracked.
+results/real_vehicle_data/real_05x_4k_3hz/00_shared_input/
+results/real_vehicle_data/real_05x_4k_3hz/02_ap01_real/
+results/real_vehicle_data/real_05x_4k_3hz/03_ap02_real/
+results/real_vehicle_data/real_05x_4k_3hz/04_ap03_real/
+results/real_vehicle_data/real_05x_4k_3hz/_pipeline_logs/
+results/real_vehicle_data/real_05x_4k_5hz/00_shared_input/
+results/real_vehicle_data/real_05x_4k_5hz/02_ap01_real/
+results/real_vehicle_data/real_05x_4k_5hz/03_ap02_real/
+results/real_vehicle_data/real_05x_4k_5hz/04_ap03_real/
+results/real_vehicle_data/real_05x_4k_5hz/_pipeline_logs/
+
+# ============================================================
+# LFS-free repository payload policy
+# ============================================================
+
+# Ignore all real-vehicle payloads by default.
+results/real_vehicle_data/**
+
+# Direct documentation.
+!results/real_vehicle_data/*.md
+!results/real_vehicle_data/*.txt
+
+# Compact 0.5x intrinsic calibration.
+!results/real_vehicle_data/INTRINSIC_RESULTS/
+!results/real_vehicle_data/INTRINSIC_RESULTS/iphone_05x_4k/
+!results/real_vehicle_data/INTRINSIC_RESULTS/iphone_05x_4k/**
+
+# Complete reproducible 1-Hz input.
+!results/real_vehicle_data/real_05x_4k_1hz/
+!results/real_vehicle_data/real_05x_4k_1hz/EXPERIMENT_CONFIG.txt
+!results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/
+!results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/**
+
+# Redundant per-frame ArUco debug renders stay local.
+results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/aruco_observations/debug_images/moving/
+
+# Final 1-Hz reports.
+!results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/
+!results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/**
+
+# Only configuration and final reports for 3 Hz.
+!results/real_vehicle_data/real_05x_4k_3hz/
+!results/real_vehicle_data/real_05x_4k_3hz/EXPERIMENT_CONFIG.txt
+!results/real_vehicle_data/real_05x_4k_3hz/99_FINAL_RESULTS/
+!results/real_vehicle_data/real_05x_4k_3hz/99_FINAL_RESULTS/**
+
+# Only configuration and final reports for 5 Hz.
+!results/real_vehicle_data/real_05x_4k_5hz/
+!results/real_vehicle_data/real_05x_4k_5hz/EXPERIMENT_CONFIG.txt
+!results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/
+!results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/**
+
+# These source meshes exceed GitHub's regular-Git 100 MiB limit.
+
+# The simulation OBJ is intentionally tracked through Git LFS.
+!src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.obj
+
+# Unused alternative bus geometry representations.
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/dae/
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/gltf/
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/beintelli_erklarbus.glb
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.stl
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.obj_material_backup

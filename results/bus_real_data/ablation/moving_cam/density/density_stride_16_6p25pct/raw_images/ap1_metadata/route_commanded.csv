@@ -1,0 +1,14 @@
+frame,segment,x,y,z,roll,pitch,yaw,image,set_pose_ok
+0,0,5.5,0.5,2.2,0.0,0.4,-2.716814693,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0000.png,True
+16,2,4.388888888888889,0.3888888888888889,2.2,0.0,0.3,-2.5000986843333335,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0016.png,True
+32,3,2.7142857142857144,0.0,2.2,0.0,0.17142857142857143,-3.6291402335714285,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0032.png,True
+48,4,1.5416666666666667,0.0,2.2,0.0,0.7416666666666667,-3.548746801916667,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0048.png,True
+64,8,0.7,0.0,2.2,0.0,0.5,-3.0,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0064.png,True
+80,10,-0.9666666666666666,0.6,2.2,0.0,0.5,-2.994461333333333,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0080.png,True
+96,11,-2.2199999999999998,0.312,2.2,0.0,0.404,-1.548,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0096.png,True
+112,12,-2.7,0.0,2.2,0.0,0.39,0.0,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0112.png,True
+128,13,-0.74,0.0,2.2,0.0,0.14999999999999997,0.79,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0128.png,True
+144,16,0.3,0.0,2.2,0.0,0.41250000000000003,-0.35000000000000003,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0144.png,True
+160,17,2.6666666666666665,-0.13333333333333333,2.2,0.0,0.4666666666666667,-0.13333333333333333,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0160.png,True
+176,19,4.58235294117647,-0.4,2.2,0.0,0.47058823529411764,0.5,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0176.png,True
+188,19,5.5,-0.4,2.2,0.0,0.4,1.7,results/bus_real_data/ablation/moving_cam/density/density_stride_16_6p25pct/raw_images/moving/frame_0188.png,True

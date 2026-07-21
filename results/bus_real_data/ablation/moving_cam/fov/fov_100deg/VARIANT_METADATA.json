@@ -1,0 +1,7 @@
+{
+  "variant": "fov_100deg",
+  "ablation_scope": "moving_cam",
+  "ablation_study": "fov",
+  "raw_images": "results/bus_real_data/ablation/moving_cam/fov/fov_100deg/raw_images",
+  "aruco_observations": "results/bus_real_data/ablation/moving_cam/fov/fov_100deg/aruco_observations"
+}

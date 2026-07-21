@@ -1,0 +1,25 @@
+ROUTE ABLATION — AP01 / AP02 / AP03
+================================================================================================================
+
+Execution/coverage status and geometric accuracy are reported separately.
+OK_FULL means complete output coverage; it does not by itself guarantee an accurate solution.
+
+Route       Frames    Method          Coverage               Diagnostic       Mean t     Median/Max t       Mean r        Max r
+----------------------------------------------------------------------------------------------------------------
+Route 1        352      AP01           OK_FULL     CATASTROPHIC_OUTLIER    273.08 cm        520.80 cm     7.63 deg    13.72 deg
+Route 1        352      AP02           OK_FULL                  NOMINAL      3.84 cm          5.03 cm     0.47 deg     0.86 deg
+Route 1        352      AP03           OK_FULL                  NOMINAL      3.30 cm          5.49 cm     0.05 deg     0.08 deg
+Route 2        189      AP01           OK_FULL               HIGH_ERROR     27.50 cm         43.15 cm     1.92 deg     2.83 deg
+Route 2        189      AP02           OK_FULL                  NOMINAL      5.47 cm          9.30 cm     0.33 deg     0.63 deg
+Route 2        189      AP03           OK_FULL                  NOMINAL      2.92 cm          4.75 cm     0.07 deg     0.09 deg
+
+INTERPRETATION
+----------------------------------------------------------------------------------------------------------------
+
+1. Route 2 is selected as the canonical baseline route.
+2. Route 2 provides complete, non-catastrophic results for AP01, AP02 and AP03.
+3. Route 1 remains a documented acquisition-robustness failure case.
+4. Route 1 AP03 contains a near-180-degree static-camera orientation failure.
+5. AP02 is comparatively stable because explicit marker identities constrain the graph.
+6. More frames do not guarantee a better result when the route introduces ambiguous revisits.
+

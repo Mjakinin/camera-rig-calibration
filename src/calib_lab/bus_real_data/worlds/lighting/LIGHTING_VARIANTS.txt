@@ -1,0 +1,19 @@
+Diffuse bus ceiling-light ablation
+==================================
+
+Visuals:
+  Two continuous ceiling LED strips.
+  One local door-area LED panel.
+
+Physical approximation:
+  Seven weak point emitters per strip.
+  Fourteen strip emitters total.
+  One local door point emitter.
+  No spot lights and no cone falloff boundaries.
+  Ambient approximates indirect light bounce.
+
+Stages:
+  ceiling_dark_extreme
+  ceiling_low
+  ceiling_normal
+  ceiling_bright

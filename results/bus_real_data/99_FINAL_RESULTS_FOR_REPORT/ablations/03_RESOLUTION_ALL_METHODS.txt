@@ -1,0 +1,81 @@
+ABLATION — MOVING-CAMERA RESOLUTION
+================================================================================================================
+
+Parameters are listed in physical order.
+
+################################################################################################################
+160x90 — moving_res_160x90_extreme_pixel
+################################################################################################################
+
+PRIMARY
+Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
+------------------------------------------------------------------------------------------
+AP01    PARTIAL_2_OF_4                 2/4      1/6      9.91 cm      9.91 cm     0.31 deg
+AP02    OK_FULL                        4/4      6/6    271.99 cm    275.67 cm    18.92 deg
+AP03    FAILED_NO_PAIR                 1/4      0/6         - cm         - cm        - deg
+
+OPTIONAL SECONDARY
+Method  Status                     Cameras       Mean t     Median t       Mean r
+---------------------------------------------------------------------------------
+AP01    PARTIAL_2_OF_4_NO_SE3_AL       2/4         - cm         - cm        - deg
+AP02    OK_FULL                        4/4    155.97 cm    118.15 cm    13.30 deg
+AP03    PARTIAL_1_OF_4_NO_SE3_AL       1/4         - cm         - cm        - deg
+
+################################################################################################################
+320x180 — moving_res_320x180_low
+################################################################################################################
+
+PRIMARY
+Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
+------------------------------------------------------------------------------------------
+AP01    PARTIAL_2_OF_4                 2/4      1/6      9.91 cm      9.91 cm     0.31 deg
+AP02    OK_FULL                        4/4      6/6    261.75 cm    271.96 cm    23.27 deg
+AP03    OK_FULL                        4/4      6/6     19.03 cm     16.99 cm     0.22 deg
+
+OPTIONAL SECONDARY
+Method  Status                     Cameras       Mean t     Median t       Mean r
+---------------------------------------------------------------------------------
+AP01    PARTIAL_2_OF_4_NO_SE3_AL       2/4         - cm         - cm        - deg
+AP02    OK_FULL                        4/4    118.99 cm     90.04 cm    13.67 deg
+AP03    OK_FULL                        4/4     11.63 cm     11.44 cm     0.14 deg
+
+################################################################################################################
+1280x720 baseline — moving_res_1280x720_baseline
+################################################################################################################
+
+PRIMARY
+Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
+------------------------------------------------------------------------------------------
+AP01    OK_FULL                        4/4      6/6     27.50 cm     27.91 cm     1.92 deg
+AP02    OK_FULL                        4/4      6/6      5.47 cm      5.20 cm     0.33 deg
+AP03    OK_FULL                        4/4      6/6      2.92 cm      2.69 cm     0.07 deg
+
+OPTIONAL SECONDARY
+Method  Status                     Cameras       Mean t     Median t       Mean r
+---------------------------------------------------------------------------------
+AP01    OK_FULL                        4/4     15.73 cm     13.30 cm     1.22 deg
+AP02    OK_FULL                        4/4      3.48 cm      3.05 cm     0.20 deg
+AP03    OK_FULL                        4/4      1.75 cm      1.67 cm     0.04 deg
+
+################################################################################################################
+2560x1440 — moving_res_2560x1440_upscaled
+################################################################################################################
+
+PRIMARY
+Method  Status                     Cameras    Pairs       Mean t     Median t       Mean r
+------------------------------------------------------------------------------------------
+AP01    OK_FULL                        4/4      6/6     29.92 cm     30.75 cm     2.09 deg
+AP02    OK_FULL                        4/4      6/6      2.46 cm      2.38 cm     0.20 deg
+AP03    OK_FULL                        4/4      6/6      1.02 cm      1.08 cm     0.04 deg
+
+OPTIONAL SECONDARY
+Method  Status                     Cameras       Mean t     Median t       Mean r
+---------------------------------------------------------------------------------
+AP01    OK_FULL                        4/4     16.65 cm     14.28 cm     1.31 deg
+AP02    OK_FULL                        4/4      1.34 cm      1.35 cm     0.12 deg
+AP03    OK_FULL                        4/4      0.60 cm      0.54 cm     0.03 deg
+
+Exact values:
+- ../details/primary/03_RESOLUTION_CAM_TO_CAM.txt
+- ../details/secondary/03_RESOLUTION_MAP_TO_GT.txt
+

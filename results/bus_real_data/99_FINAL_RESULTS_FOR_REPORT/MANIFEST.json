@@ -1,0 +1,42 @@
+{
+  "ablation_variant_count": 16,
+  "baseline_methods": [
+    "AP01",
+    "AP02",
+    "AP03"
+  ],
+  "files": [
+    "00_READ_ME_FIRST.txt",
+    "01_BASELINE_ALL_METHODS.txt",
+    "02_ALL_ABLATIONS_ALL_METHODS.txt",
+    "03_AP01_RESULTS.txt",
+    "04_AP02_RESULTS.txt",
+    "05_AP03_RESULTS.txt",
+    "ablations/01_FOV_ALL_METHODS.txt",
+    "ablations/02_MOTION_BLUR_ALL_METHODS.txt",
+    "ablations/03_RESOLUTION_ALL_METHODS.txt",
+    "ablations/04_LIGHTING_ALL_METHODS.txt",
+    "data/ALL_ABLATIONS_RUN_STATUS.csv",
+    "data/primary/ALL_ABLATIONS_DETAIL.csv",
+    "data/primary/ALL_ABLATIONS_SUMMARY.csv",
+    "data/primary/BASELINE_DETAIL.csv",
+    "data/primary/BASELINE_SUMMARY.csv",
+    "data/secondary/ALL_ABLATIONS_ALIGNED_CAMERA_MAP_DETAIL.csv",
+    "data/secondary/ALL_ABLATIONS_ALIGNED_CAMERA_MAP_SUMMARY.csv",
+    "data/secondary/ALL_ABLATIONS_AP02_GT_ALIGNED_FULL_MAP.csv",
+    "data/secondary/BASELINE_ALIGNED_CAMERA_MAP_DETAIL.csv",
+    "data/secondary/BASELINE_ALIGNED_CAMERA_MAP_SUMMARY.csv",
+    "data/secondary/BASELINE_AP02_GT_ALIGNED_FULL_MAP.csv",
+    "details/primary/00_BASELINE_CAM_TO_CAM.txt",
+    "details/primary/01_FOV_CAM_TO_CAM.txt",
+    "details/primary/02_MOTION_BLUR_CAM_TO_CAM.txt",
+    "details/primary/03_RESOLUTION_CAM_TO_CAM.txt",
+    "details/primary/04_LIGHTING_CAM_TO_CAM.txt",
+    "details/secondary/00_BASELINE_MAP_TO_GT.txt",
+    "details/secondary/01_FOV_MAP_TO_GT.txt",
+    "details/secondary/02_MOTION_BLUR_MAP_TO_GT.txt",
+    "details/secondary/03_RESOLUTION_MAP_TO_GT.txt",
+    "details/secondary/04_LIGHTING_MAP_TO_GT.txt"
+  ],
+  "schema": "camera_rig_final_results_v1"
+}

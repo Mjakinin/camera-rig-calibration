@@ -1,0 +1,28 @@
+AP02 maximum-bottleneck pose graph initialization
+=================================================
+
+Mode: with_moving
+Reference marker id: 14
+
+Raw observations in mode: 25
+Quality-valid observer-marker edges: 25
+Used initialization edges: 13
+
+Initialized static cameras: 3 / 4
+Initialized moving frames: 0 / 0
+Initialized markers: 11 / 18
+
+Initialized static cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3']
+Missing static cameras: ['cam_edge_5']
+
+Camera path bottlenecks: {'cam_edge_0': 7.67255522330154, 'cam_edge_1': 9.760939671081772, 'cam_edge_3': 9.760939671081772}
+
+Initialized markers: [1, 2, 3, 4, 5, 6, 7, 8, 14, 19, 20]
+Missing markers: [0, 9, 10, 11, 12, 13, 16]
+
+Missing moving frames count: 0
+
+Interpretation:
+- Every entity is initialized through the path whose weakest observation has the highest possible quality.
+- This replaces first-hit BFS and avoids committing cam5 to the first weak bridge encountered.
+

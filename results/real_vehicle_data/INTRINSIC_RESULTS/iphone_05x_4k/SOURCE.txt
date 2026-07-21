@@ -1,0 +1,4 @@
+Canonical camera mode: iPhone 0.5x, native 4K
+Canonical CameraInfo source: results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input/raw_images/camera_info/moving_calib_camera.json
+Used unchanged for sampling rates: 1 3 5 Hz
+Sampling frequency changes frame density only; it does not change intrinsics.

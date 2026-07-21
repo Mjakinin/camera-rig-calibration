@@ -1,0 +1,35 @@
+PARTIAL-AWARE SECONDARY REF14/WORLD CAMERA-MAP EVALUATION
+==========================================================
+
+SE(3) alignment is evaluated only when at least three static cameras are available.
+Two-camera results remain available in the primary pairwise evaluation but are not independently aligned here.
+
+AP01
+----
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+- cam_edge_0: 6.444 cm / 1.044 deg
+- cam_edge_1: 12.080 cm / 0.767 deg
+- cam_edge_3: 12.725 cm / 1.024 deg
+- cam_edge_5: 26.079 cm / 1.774 deg
+summary: OK_FULL | mean 14.332 cm / 1.152 deg
+
+AP02
+----
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+- cam_edge_0: 1.537 cm / 0.367 deg
+- cam_edge_1: 2.795 cm / 0.142 deg
+- cam_edge_3: 2.056 cm / 0.063 deg
+- cam_edge_5: 4.517 cm / 0.200 deg
+summary: OK_FULL | mean 2.726 cm / 0.193 deg
+
+AP03
+----
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+- cam_edge_0: 0.721 cm / 0.037 deg
+- cam_edge_1: 2.094 cm / 0.011 deg
+- cam_edge_3: 1.699 cm / 0.030 deg
+- cam_edge_5: 3.598 cm / 0.040 deg
+summary: OK_FULL | mean 2.028 cm / 0.029 deg

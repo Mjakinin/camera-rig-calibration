@@ -1,0 +1,185 @@
+AP02 REF14-ANCHORED AVAILABLE MAP AUDIT
+========================================================================================================================
+
+clean_baseline
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+fov_40deg
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;18;19;20
+  missing marker IDs: 17
+  ref14 available: yes
+  evaluated rows: 23
+
+fov_69deg_baseline
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+fov_100deg
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+fov_140deg_extreme
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+moving_blur_k00_baseline
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+moving_blur_k09_mild
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+moving_blur_k21_strong
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3
+  marker IDs: 1;2;3;4;5;6;7;8;14;19;20
+  missing marker IDs: 0;9;10;11;12;13;16;17;18
+  ref14 available: yes
+  evaluated rows: 14
+
+moving_blur_k41_extreme
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3
+  marker IDs: 1;2;3;4;5;6;7;8;14;19;20
+  missing marker IDs: 0;9;10;11;12;13;16;17;18
+  ref14 available: yes
+  evaluated rows: 14
+
+moving_res_160x90_extreme_pixel
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;19;20
+  missing marker IDs: 17;18
+  ref14 available: yes
+  evaluated rows: 22
+
+moving_res_320x180_low
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;19;20
+  missing marker IDs: 18
+  ref14 available: yes
+  evaluated rows: 23
+
+moving_res_1280x720_baseline
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+moving_res_2560x1440_upscaled
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+ceiling_dark_extreme
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+ceiling_low
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+ceiling_normal
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+ceiling_bright
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+route1
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+route2
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+density_route2_125pct_recaptured
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+density_stride_1_100pct
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+density_stride_2_50pct
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+density_stride_4_25pct
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+density_stride_8_12p5pct
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;19;20
+  missing marker IDs: 18
+  ref14 available: yes
+  evaluated rows: 23
+
+density_stride_8_offset4
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;18;19;20
+  missing marker IDs: -
+  ref14 available: yes
+  evaluated rows: 24
+
+density_stride_16_6p25pct
+  cameras: cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5
+  marker IDs: 0;1;2;3;4;5;6;7;8;9;10;11;12;13;14;16;17;19;20
+  missing marker IDs: 18
+  ref14 available: yes
+  evaluated rows: 23
+

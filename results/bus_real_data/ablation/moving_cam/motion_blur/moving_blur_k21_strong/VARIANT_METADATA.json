@@ -1,0 +1,10 @@
+{
+  "variant": "moving_blur_k21_strong",
+  "effect": "linear_motion_blur",
+  "kernel_size": 21,
+  "angle_deg": 0.0,
+  "applied_to": "moving_images_only",
+  "static_images_changed": false,
+  "camera_info_changed": false,
+  "source_dataset": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1"
+}

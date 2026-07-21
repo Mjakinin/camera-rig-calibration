@@ -1,0 +1,21 @@
+{
+  "selected_route": "route2",
+  "moving_frames": 189,
+  "keyframe_source": "moving_camera_route2_keyframes_final.json",
+  "interpolated_source": "moving_camera_route2_interpolated_final.json",
+  "selection_reason": [
+    "Complete AP01, AP02 and AP03 camera coverage",
+    "No catastrophic static-camera registration failure",
+    "Best cross-method robustness",
+    "Lower capture and computation cost",
+    "Controlled overlap with fewer ambiguous revisits"
+  ],
+  "route1_interpretation": {
+    "role": "acquisition robustness and failure-case ablation",
+    "observations": [
+      "Dense marker observations improved AP02, especially cam5",
+      "AP01 accumulated severe relay-chain errors",
+      "AP03 produced a near-180-degree cam_edge_1 registration failure"
+    ]
+  }
+}

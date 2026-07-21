@@ -1,0 +1,279 @@
+MOVING-CAMERA MOTION BLUR — DETAILED OPTIONAL MAP-TO-GT RESULTS
+================================================================================================================
+
+Optional secondary:
+- best-fit SE(3)-aligned static-camera map vs GT
+- no additional scale fitting
+- Primary camera-to-camera metrics remain the main comparison
+
+################################################################################################################
+PARAMETER: kernel 0 baseline
+VARIANT:   moving_blur_k00_baseline
+################################################################################################################
+
+AP01
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            7.08 cm     1.14 deg        (0.634, -1.682, 2.083)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           12.99 cm     0.76 deg        (-4.001, 0.571, 2.215)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           13.60 cm     1.02 deg       (-3.170, -1.498, 2.159)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           29.25 cm     1.95 deg         (5.782, 0.135, 1.955)         (5.859, 0.348, 2.139)
+
+AP02
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            1.67 cm     0.40 deg        (0.584, -1.738, 2.103)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            3.51 cm     0.23 deg        (-4.008, 0.467, 2.132)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            2.59 cm     0.12 deg       (-3.248, -1.571, 2.040)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            6.16 cm     0.07 deg         (5.917, 0.367, 2.136)         (5.859, 0.348, 2.139)
+
+AP03
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            0.59 cm     0.05 deg        (0.588, -1.740, 2.086)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            1.86 cm     0.03 deg        (-3.991, 0.482, 2.130)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            1.48 cm     0.04 deg       (-3.240, -1.571, 2.055)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            3.08 cm     0.05 deg         (5.889, 0.355, 2.141)         (5.859, 0.348, 2.139)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: moving_blur_k00_baseline ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
+missing marker IDs: []
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no     2.69 cm    0.37 deg         (0.593, -1.244, 2.512)         (0.588, -1.235, 2.487)            (0.49, -0.94, 2.47)
+cam_edge_1              static_camera             no     3.30 cm    0.27 deg         (-4.001, 0.960, 2.544)         (-3.974, 0.975, 2.532)           (-2.66, -1.53, 1.22)
+cam_edge_3              static_camera             no     1.95 cm    0.13 deg        (-3.239, -1.078, 2.451)        (-3.227, -1.063, 2.454)          (-1.21, -1.51, -0.30)
+cam_edge_5              static_camera             no     6.83 cm    0.11 deg          (5.925, 0.864, 2.544)          (5.859, 0.848, 2.539)             (6.63, 1.53, 0.50)
+marker_000              aruco_marker              no     3.54 cm    1.81 deg         (-2.585, 0.484, 1.178)         (-2.550, 0.480, 1.180)           (-3.51, 0.38, -0.24)
+marker_001              aruco_marker              no     1.95 cm    0.80 deg        (-2.264, -0.538, 1.635)        (-2.250, -0.525, 1.630)           (-1.39, -1.26, 0.52)
+marker_002              aruco_marker              no     1.59 cm    0.69 deg        (-1.113, -0.534, 1.100)        (-1.100, -0.525, 1.100)          (-1.28, -0.94, -0.01)
+marker_003              aruco_marker              no     0.26 cm    0.17 deg          (0.101, 1.208, 0.798)          (0.100, 1.210, 0.800)           (0.10, -0.15, -0.18)
+marker_004              aruco_marker              no     1.16 cm    0.20 deg          (0.708, 1.205, 2.007)          (0.700, 1.210, 2.000)            (0.79, -0.50, 0.69)
+marker_005              aruco_marker              no     2.87 cm    0.67 deg         (1.926, -0.989, 1.091)         (1.900, -0.980, 1.100)           (2.59, -0.87, -0.86)
+marker_006              aruco_marker              no     1.98 cm    1.35 deg          (1.990, 0.502, 1.370)          (1.970, 0.500, 1.370)             (1.97, 0.25, 0.03)
+marker_007              aruco_marker              no     1.86 cm    0.86 deg          (1.988, 0.940, 1.372)          (1.970, 0.935, 1.370)             (1.77, 0.53, 0.17)
+marker_008              aruco_marker              no     2.96 cm    1.71 deg         (2.679, -0.528, 1.407)         (2.650, -0.525, 1.410)           (2.92, -0.35, -0.33)
+marker_009              aruco_marker              no     6.43 cm    1.24 deg          (3.083, 0.493, 1.426)          (3.020, 0.480, 1.420)             (6.28, 1.28, 0.61)
+marker_010              aruco_marker              no     6.48 cm    0.44 deg         (3.084, -0.972, 1.424)         (3.020, -0.980, 1.420)             (6.41, 0.84, 0.43)
+marker_011              aruco_marker              no     6.84 cm    0.53 deg          (4.066, 0.015, 1.540)          (4.000, 0.000, 1.530)             (6.61, 1.47, 0.99)
+marker_012              aruco_marker              no     6.95 cm    0.14 deg         (4.107, -0.962, 1.426)         (4.040, -0.980, 1.420)             (6.68, 1.83, 0.59)
+marker_013              aruco_marker              no     6.53 cm    0.70 deg          (4.113, 0.745, 1.279)          (4.050, 0.730, 1.270)             (6.29, 1.51, 0.91)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     1.96 cm    0.21 deg        (-0.967, -0.509, 1.275)        (-0.950, -0.500, 1.280)          (-1.67, -0.85, -0.55)
+marker_017              aruco_marker              no     2.64 cm    0.82 deg         (1.525, -1.209, 1.896)         (1.500, -1.200, 1.900)           (2.46, -0.89, -0.36)
+marker_018              aruco_marker              no     1.13 cm    0.46 deg        (-0.211, -1.203, 1.448)        (-0.200, -1.200, 1.450)          (-1.06, -0.30, -0.25)
+marker_019              aruco_marker              no     1.68 cm    0.09 deg         (-1.300, 1.077, 1.503)         (-1.290, 1.090, 1.500)           (-1.00, -1.31, 0.34)
+marker_020              aruco_marker              no     9.97 cm    1.41 deg         (5.769, -0.855, 1.744)         (5.670, -0.850, 1.750)           (9.94, -0.46, -0.64)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: moving_blur_k00_baseline ===
+
+################################################################################################################
+PARAMETER: kernel 9
+VARIANT:   moving_blur_k09_mild
+################################################################################################################
+
+AP01
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                           18.14 cm     3.85 deg        (0.745, -1.804, 2.029)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                           18.50 cm     2.10 deg        (-3.997, 0.639, 2.215)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                           16.23 cm     2.27 deg       (-3.221, -1.452, 2.172)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           28.72 cm     1.57 deg         (5.718, 0.143, 1.996)         (5.859, 0.348, 2.139)
+
+AP02
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            6.10 cm     1.66 deg        (0.590, -1.796, 2.088)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            4.33 cm     0.53 deg        (-3.939, 0.500, 2.126)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            7.77 cm     0.83 deg       (-3.224, -1.487, 2.069)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                            5.78 cm     0.74 deg         (5.819, 0.308, 2.129)         (5.859, 0.348, 2.139)
+
+AP03
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                            2.96 cm     0.19 deg        (0.567, -1.714, 2.092)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            7.01 cm     0.04 deg        (-3.908, 0.453, 2.129)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            5.53 cm     0.05 deg       (-3.173, -1.551, 2.054)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                           10.00 cm     0.11 deg         (5.759, 0.338, 2.138)         (5.859, 0.348, 2.139)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: moving_blur_k09_mild ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3', 'cam_edge_5']
+missing cameras: []
+available marker IDs: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
+missing marker IDs: []
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no    12.27 cm    2.85 deg         (0.643, -1.315, 2.412)         (0.588, -1.235, 2.487)           (5.48, -8.00, -7.52)
+cam_edge_1              static_camera             no    11.25 cm    0.85 deg         (-3.920, 0.914, 2.454)         (-3.974, 0.975, 2.532)           (5.40, -6.12, -7.73)
+cam_edge_3              static_camera             no     9.76 cm    0.64 deg        (-3.176, -1.061, 2.371)        (-3.227, -1.063, 2.454)            (5.15, 0.18, -8.29)
+cam_edge_5              static_camera             no     3.13 cm    1.24 deg          (5.839, 0.864, 2.520)          (5.859, 0.848, 2.539)           (-1.95, 1.58, -1.87)
+marker_000              aruco_marker              no     7.71 cm    9.84 deg         (-2.477, 0.495, 1.161)         (-2.550, 0.480, 1.180)            (7.32, 1.47, -1.93)
+marker_001              aruco_marker              no     5.81 cm    0.67 deg        (-2.216, -0.526, 1.583)        (-2.250, -0.525, 1.630)           (3.36, -0.10, -4.74)
+marker_002              aruco_marker              no     3.69 cm    7.87 deg        (-1.084, -0.517, 1.068)        (-1.100, -0.525, 1.100)            (1.60, 0.81, -3.22)
+marker_003              aruco_marker              no     8.51 cm    2.39 deg          (0.046, 1.224, 0.736)          (0.100, 1.210, 0.800)           (-5.45, 1.41, -6.39)
+marker_004              aruco_marker              no     7.57 cm    1.35 deg          (0.655, 1.150, 1.987)          (0.700, 1.210, 2.000)          (-4.51, -5.95, -1.25)
+marker_005              aruco_marker              no     3.71 cm    3.55 deg         (1.908, -0.951, 1.078)         (1.900, -0.980, 1.100)            (0.85, 2.85, -2.21)
+marker_006              aruco_marker              no     3.55 cm   12.23 deg          (1.935, 0.504, 1.364)          (1.970, 0.500, 1.370)           (-3.48, 0.43, -0.55)
+marker_007              aruco_marker              no     3.59 cm    7.45 deg          (1.934, 0.938, 1.366)          (1.970, 0.935, 1.370)           (-3.56, 0.26, -0.37)
+marker_008              aruco_marker              no     3.65 cm    7.48 deg         (2.645, -0.492, 1.396)         (2.650, -0.525, 1.410)           (-0.46, 3.33, -1.44)
+marker_009              aruco_marker              no    10.52 cm   20.01 deg          (3.117, 0.518, 1.433)          (3.020, 0.480, 1.420)             (9.73, 3.79, 1.34)
+marker_010              aruco_marker              no     6.86 cm    6.13 deg         (3.045, -0.934, 1.376)         (3.020, -0.980, 1.420)            (2.49, 4.63, -4.40)
+marker_011              aruco_marker              no     6.97 cm    1.90 deg          (4.042, 0.055, 1.526)          (4.000, 0.000, 1.530)            (4.25, 5.51, -0.36)
+marker_012              aruco_marker              no     9.24 cm    3.59 deg         (4.076, -0.900, 1.392)         (4.040, -0.980, 1.420)            (3.58, 8.03, -2.81)
+marker_013              aruco_marker              no     6.33 cm    2.28 deg          (4.095, 0.767, 1.295)          (4.050, 0.730, 1.270)             (4.51, 3.67, 2.51)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_016              aruco_marker              no     5.72 cm    4.47 deg        (-0.938, -0.492, 1.225)        (-0.950, -0.500, 1.280)            (1.19, 0.82, -5.53)
+marker_017              aruco_marker              no     4.90 cm    6.43 deg         (1.525, -1.193, 1.859)         (1.500, -1.200, 1.900)            (2.52, 0.74, -4.14)
+marker_018              aruco_marker              no    14.60 cm    8.07 deg        (-0.286, -1.221, 1.334)        (-0.200, -1.200, 1.450)         (-8.58, -2.10, -11.63)
+marker_019              aruco_marker              no     4.92 cm    2.05 deg         (-1.277, 1.057, 1.466)         (-1.290, 1.090, 1.500)           (1.35, -3.29, -3.41)
+marker_020              aruco_marker              no     5.55 cm   15.87 deg         (5.634, -0.808, 1.758)         (5.670, -0.850, 1.750)            (-3.61, 4.15, 0.77)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: moving_blur_k09_mild ===
+
+################################################################################################################
+PARAMETER: kernel 21
+VARIANT:   moving_blur_k21_strong
+################################################################################################################
+
+AP01
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_1    OK                          142.10 cm    19.14 deg        (-3.288, 1.713, 2.261)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                          214.05 cm    19.08 deg        (-1.815, 0.040, 2.184)       (-3.227, -1.563, 2.054)
+cam_edge_5    OK                          354.13 cm    40.91 deg        (3.761, -2.493, 1.880)         (5.859, 0.348, 2.139)
+
+AP02
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                           12.76 cm     1.98 deg        (0.646, -1.695, 2.194)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            5.96 cm     1.06 deg        (-4.014, 0.458, 2.091)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            7.17 cm     0.94 deg       (-3.246, -1.586, 1.989)       (-3.227, -1.563, 2.054)
+
+AP03
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_5    AVAILABLE_NOT_ALIGNED            - cm        - deg                     (-, -, -)                     (-, -, -)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: moving_blur_k21_strong ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3']
+missing cameras: ['cam_edge_5']
+available marker IDs: [1, 2, 3, 4, 5, 6, 7, 8, 14, 19, 20]
+missing marker IDs: [0, 9, 10, 11, 12, 13, 16, 17, 18]
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no    18.60 cm    3.21 deg         (0.586, -1.182, 2.666)         (0.588, -1.235, 2.487)           (-0.17, 5.27, 17.84)
+cam_edge_1              static_camera             no     8.99 cm    0.78 deg         (-4.054, 1.010, 2.509)         (-3.974, 0.975, 2.532)           (-7.95, 3.52, -2.29)
+cam_edge_3              static_camera             no     7.95 cm    0.96 deg        (-3.304, -1.042, 2.454)        (-3.227, -1.063, 2.454)           (-7.66, 2.12, -0.02)
+marker_001              aruco_marker              no     6.73 cm    0.71 deg        (-2.316, -0.519, 1.643)        (-2.250, -0.525, 1.630)            (-6.59, 0.58, 1.25)
+marker_002              aruco_marker              no     4.00 cm    1.73 deg        (-1.139, -0.526, 1.108)        (-1.100, -0.525, 1.100)           (-3.92, -0.14, 0.77)
+marker_003              aruco_marker              no     6.47 cm    2.81 deg          (0.102, 1.191, 0.862)          (0.100, 1.210, 0.800)            (0.21, -1.90, 6.18)
+marker_004              aruco_marker              no     6.77 cm    4.65 deg          (0.729, 1.241, 2.053)          (0.700, 1.210, 2.000)             (2.87, 3.14, 5.26)
+marker_005              aruco_marker              no     5.90 cm    0.87 deg         (1.939, -1.007, 1.135)         (1.900, -0.980, 1.100)            (3.91, -2.69, 3.50)
+marker_006              aruco_marker              no     4.92 cm    1.73 deg          (2.011, 0.503, 1.398)          (1.970, 0.500, 1.370)             (4.05, 0.28, 2.77)
+marker_007              aruco_marker              no     4.21 cm    0.85 deg          (2.002, 0.943, 1.396)          (1.970, 0.935, 1.370)             (3.18, 0.82, 2.63)
+marker_008              aruco_marker              no     7.43 cm    1.62 deg         (2.706, -0.544, 1.455)         (2.650, -0.525, 1.410)            (5.57, -1.93, 4.52)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_019              aruco_marker              no     3.73 cm    0.89 deg         (-1.325, 1.101, 1.496)         (-1.290, 1.090, 1.500)           (-3.55, 1.08, -0.42)
+marker_020              aruco_marker              no    14.90 cm   19.35 deg         (5.779, -0.894, 1.842)         (5.670, -0.850, 1.750)           (10.86, -4.42, 9.18)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: moving_blur_k21_strong ===
+
+################################################################################################################
+PARAMETER: kernel 41
+VARIANT:   moving_blur_k41_extreme
+################################################################################################################
+
+AP01
+----
+- no map-to-GT result
+
+AP02
+----
+Camera        Status                        t error      r error               Aligned XYZ [m]                    GT XYZ [m]
+----------------------------------------------------------------------------------------------------------------------------
+cam_edge_0    OK                           12.76 cm     1.98 deg        (0.646, -1.695, 2.194)        (0.588, -1.735, 2.087)
+cam_edge_1    OK                            5.96 cm     1.06 deg        (-4.014, 0.458, 2.091)        (-3.974, 0.475, 2.132)
+cam_edge_3    OK                            7.17 cm     0.94 deg       (-3.246, -1.586, 1.989)       (-3.227, -1.563, 2.054)
+
+AP03
+----
+- no map-to-GT result
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP BEGIN: moving_blur_k41_extreme ===
+
+AP02 REF14-ANCHORED AVAILABLE CAMERA + MARKER MAP
+=========================================================================================================================================================================
+
+Alignment definition:
+- marker 14 alone defines the estimated-local to GT-world transform
+- marker 14 is therefore marked 'yes' and has zero residual by construction
+- every camera and every other available marker is marked 'no'
+- this is the only marker-map table in this readable variant block
+
+available cameras: ['cam_edge_0', 'cam_edge_1', 'cam_edge_3']
+missing cameras: ['cam_edge_5']
+available marker IDs: [1, 2, 3, 4, 5, 6, 7, 8, 14, 19, 20]
+missing marker IDs: [0, 9, 10, 11, 12, 13, 16, 17, 18]
+
+Entity                  Type              Used align     t error     r error                Aligned XYZ [m]                     GT XYZ [m]                 Delta XYZ [cm]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+cam_edge_0              static_camera             no    18.60 cm    3.21 deg         (0.586, -1.182, 2.666)         (0.588, -1.235, 2.487)           (-0.17, 5.27, 17.84)
+cam_edge_1              static_camera             no     8.99 cm    0.78 deg         (-4.054, 1.010, 2.509)         (-3.974, 0.975, 2.532)           (-7.95, 3.52, -2.29)
+cam_edge_3              static_camera             no     7.95 cm    0.96 deg        (-3.304, -1.042, 2.454)        (-3.227, -1.063, 2.454)           (-7.66, 2.12, -0.02)
+marker_001              aruco_marker              no     6.73 cm    0.71 deg        (-2.316, -0.519, 1.643)        (-2.250, -0.525, 1.630)            (-6.59, 0.58, 1.25)
+marker_002              aruco_marker              no     4.00 cm    1.73 deg        (-1.139, -0.526, 1.108)        (-1.100, -0.525, 1.100)           (-3.92, -0.14, 0.77)
+marker_003              aruco_marker              no     6.47 cm    2.81 deg          (0.102, 1.191, 0.862)          (0.100, 1.210, 0.800)            (0.21, -1.90, 6.18)
+marker_004              aruco_marker              no     6.77 cm    4.65 deg          (0.729, 1.241, 2.053)          (0.700, 1.210, 2.000)             (2.87, 3.14, 5.26)
+marker_005              aruco_marker              no     5.90 cm    0.87 deg         (1.939, -1.007, 1.135)         (1.900, -0.980, 1.100)            (3.91, -2.69, 3.50)
+marker_006              aruco_marker              no     4.92 cm    1.73 deg          (2.011, 0.503, 1.398)          (1.970, 0.500, 1.370)             (4.05, 0.28, 2.77)
+marker_007              aruco_marker              no     4.21 cm    0.85 deg          (2.002, 0.943, 1.396)          (1.970, 0.935, 1.370)             (3.18, 0.82, 2.63)
+marker_008              aruco_marker              no     7.43 cm    1.62 deg         (2.706, -0.544, 1.455)         (2.650, -0.525, 1.410)            (5.57, -1.93, 4.52)
+aruco_ref_floor_14      aruco_marker             yes     0.00 cm    0.00 deg          (0.000, 0.500, 0.400)          (0.000, 0.500, 0.400)             (0.00, 0.00, 0.00)
+marker_019              aruco_marker              no     3.73 cm    0.89 deg         (-1.325, 1.101, 1.496)         (-1.290, 1.090, 1.500)           (-3.55, 1.08, -0.42)
+marker_020              aruco_marker              no    14.90 cm   19.35 deg         (5.779, -0.894, 1.842)         (5.670, -0.850, 1.750)           (10.87, -4.42, 9.18)
+
+=== AP02 REF14-ANCHORED AVAILABLE MAP END: moving_blur_k41_extreme ===

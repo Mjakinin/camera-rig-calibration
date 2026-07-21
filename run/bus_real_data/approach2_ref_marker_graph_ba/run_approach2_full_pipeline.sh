@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+RUN_SHARED_BASELINE=1
+RUN_GRAPH_INIT=1
+RUN_BA=1
+RUN_REPORT=1
+RUN_GT_EVAL=1
+RUN_GT_FREE_GATE=0
+
+SHARED_OBS="${SHARED_OBS:-results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/aruco_observations}"
+AP02_OBS="${AP02_OBS:-results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations}"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --skip-shared-baseline)
+      RUN_SHARED_BASELINE=0
+      shift
+      ;;
+    --skip-graph-init)
+      RUN_GRAPH_INIT=0
+      shift
+      ;;
+    --skip-ba)
+      RUN_BA=0
+      shift
+      ;;
+    --skip-report)
+      RUN_REPORT=0
+      shift
+      ;;
+    --skip-gt-eval)
+      RUN_GT_EVAL=0
+      shift
+      ;;
+    --skip-gt-free-gate)
+      RUN_GT_FREE_GATE=0
+      shift
+      ;;
+    *)
+      echo "[ERROR] Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+import_shared_observations_for_ap02() {
+  echo
+  echo "=== Import shared ArUco observations into AP02 expected filenames ==="
+
+  if [[ ! -f "$SHARED_OBS/shared_all_aruco_observations.csv" ]]; then
+    echo "[ERROR] Missing shared observations: $SHARED_OBS"
+    echo "Run: bash run/bus_real_data/_shared/baseline/run_shared_preprocessing.sh"
+    exit 1
+  fi
+
+  mkdir -p "$AP02_OBS"
+
+  cp "$SHARED_OBS/shared_static_aruco_observations.csv" "$AP02_OBS/ap02_static_aruco_observations.csv"
+  cp "$SHARED_OBS/shared_moving_aruco_observations.csv" "$AP02_OBS/ap02_moving_aruco_observations.csv"
+  cp "$SHARED_OBS/shared_all_aruco_observations.csv" "$AP02_OBS/ap02_all_aruco_observations.csv"
+
+  if [[ -f "$SHARED_OBS/SHARED_ARUCO_DETECTION_SUMMARY.txt" ]]; then
+    cp "$SHARED_OBS/SHARED_ARUCO_DETECTION_SUMMARY.txt" "$AP02_OBS/ap02_detection_summary.txt"
+    cp "$SHARED_OBS/SHARED_ARUCO_DETECTION_SUMMARY.txt" "$AP02_OBS/AP02_ARUCO_DETECTION_SUMMARY.txt"
+  fi
+
+  echo "[OK] AP02 now uses shared ArUco baseline."
+}
+
+echo "=== AP02: Ref-marker graph + distortion-aware BA pipeline ==="
+
+if [[ "$RUN_SHARED_BASELINE" == "1" ]]; then
+  echo
+  echo "=== 1/6 Shared baseline preprocessing ==="
+  bash run/bus_real_data/_shared/baseline/run_shared_preprocessing.sh
+else
+  echo
+  echo "=== 1/6 Skip shared baseline preprocessing ==="
+fi
+
+import_shared_observations_for_ap02
+
+echo
+echo "=== 2/6 AP02 debug artifacts from shared observations ==="
+python3 run/bus_real_data/approach2_ref_marker_graph_ba/03_make_ap02_debug_artifacts.py
+
+if [[ "$RUN_GRAPH_INIT" == "1" ]]; then
+  echo
+  echo "=== 3/6 Graph initialization ==="
+  bash run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_phase2_graph_init.sh
+else
+  echo
+  echo "=== 3/6 Skip graph initialization ==="
+fi
+
+if [[ "$RUN_BA" == "1" ]]; then
+  echo
+  echo "=== 4/6 Distortion-aware graph bundle adjustment ==="
+  bash run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_phase3_graph_ba_fast.sh
+else
+  echo
+  echo "=== 4/6 Skip graph BA ==="
+fi
+
+echo
+echo "=== Export final AP02 results ==="
+python3 run/bus_real_data/approach2_ref_marker_graph_ba/08_export_ap02_final_results.py
+
+AP02_GT_FREE_GATE_STATUS="SKIPPED"
+
+if [[ "$RUN_GT_FREE_GATE" == "1" ]]; then
+  echo
+  echo "=== 5/6 GT-free deployment validity gate ==="
+
+  if python3 \
+    run/bus_real_data/approach2_ref_marker_graph_ba/09_validate_ap02_solution_without_gt.py
+  then
+    AP02_GT_FREE_GATE_STATUS="ACCEPTED"
+  else
+    AP02_GT_FREE_GATE_STATUS="REJECTED"
+    echo "[WARN] AP02 poses retained despite GT-free gate rejection."
+  fi
+else
+  echo
+  echo "=== 5/6 Skip GT-free deployment validity gate ==="
+fi
+
+mkdir -p results/bus_real_data/02_ref_marker_graph_ba/08_final_results
+
+printf 'status=%s\n' "$AP02_GT_FREE_GATE_STATUS" > \
+  results/bus_real_data/02_ref_marker_graph_ba/08_final_results/AP02_GT_FREE_GATE_PIPELINE_STATUS.txt
+
+echo
+echo "=== Optional simulation GT full-map evaluation ==="
+
+AP02_GT_EVAL_STATUS="SKIPPED"
+AP02_GT_EVAL_OUT="results/bus_real_data/02_ref_marker_graph_ba/08_final_results"
+
+mkdir -p "$AP02_GT_EVAL_OUT"
+
+rm -f \
+  "$AP02_GT_EVAL_OUT/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.csv" \
+  "$AP02_GT_EVAL_OUT/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION.txt" \
+  "$AP02_GT_EVAL_OUT/AP02_FINAL_GT_ALIGNED_FULL_MAP_EVALUATION_metadata.json" \
+  "$AP02_GT_EVAL_OUT/AP02_GT_ALIGNED_FULL_MAP_STATUS.txt"
+
+if [[ "$RUN_GT_EVAL" == "1" ]]; then
+  if python3 \
+    run/bus_real_data/approach2_ref_marker_graph_ba/09_eval_ap02_gt_aligned_full_map.py
+  then
+    AP02_GT_EVAL_STATUS="OK"
+    echo "[OK] AP02 GT-aligned full-map evaluation generated."
+  else
+    AP02_GT_EVAL_STATUS="NOT_AVAILABLE"
+    echo "[WARN] AP02 GT-aligned full-map evaluation unavailable."
+    echo "[WARN] This is expected for incomplete or non-simulation data."
+  fi
+else
+  echo "[INFO] AP02 GT-aligned full-map evaluation skipped."
+fi
+
+printf 'status=%s\n' "$AP02_GT_EVAL_STATUS" \
+  > "$AP02_GT_EVAL_OUT/AP02_GT_ALIGNED_FULL_MAP_STATUS.txt"
+
+if [[ "$RUN_REPORT" == "1" ]]; then
+  echo
+  echo "=== 6/6 AP02 exported report ==="
+
+  AP02_REPORT="$AP02_GT_EVAL_OUT/ap02_final_results_report.txt"
+
+  if [[ -f "$AP02_REPORT" ]]; then
+    echo "[OK] AP02 readable report: $AP02_REPORT"
+  else
+    echo "[WARN] AP02 readable report not found after export."
+  fi
+else
+  echo
+  echo "=== 6/6 Skip report announcement ==="
+fi
+
+echo
+echo "[OK] AP02 full pipeline complete."

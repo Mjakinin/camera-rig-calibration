@@ -1,0 +1,44 @@
+AP02 RESULTS
+================================================================================================================
+
+BASELINE PRIMARY
+----------------------------------------------------------------------------------------------------------------
+- status: OK_FULL
+- cameras: 4/4
+- pairs: 6/6
+- mean translation: 5.47 cm
+- mean rotation: 0.33 deg
+
+BASELINE OPTIONAL SECONDARY
+----------------------------------------------------------------------------------------------------------------
+- status: OK_FULL
+- mean translation: 3.48 cm
+- mean rotation: 0.20 deg
+
+ABLATIONS
+----------------------------------------------------------------------------------------------------------------
+Group                   Parameter             Status                     Cams   Pairs      Mean t      Mean r
+-------------------------------------------------------------------------------------------------------------
+moving_cam/fov          40 deg                OK_FULL                     4/4     6/6   202.93 cm   14.00 deg
+moving_cam/fov          69 deg baseline       OK_FULL                     4/4     6/6     5.47 cm    0.33 deg
+moving_cam/fov          100 deg               OK_FULL                     4/4     6/6     5.72 cm    0.33 deg
+moving_cam/fov          140 deg               OK_FULL                     4/4     6/6     8.16 cm    0.37 deg
+moving_cam/motion_blur  kernel 0 baseline     OK_FULL                     4/4     6/6     5.47 cm    0.33 deg
+moving_cam/motion_blur  kernel 9              OK_FULL                     4/4     6/6    13.46 cm    1.49 deg
+moving_cam/motion_blur  kernel 21             PARTIAL_3_OF_4              3/4     3/6    17.20 cm    2.08 deg
+moving_cam/motion_blur  kernel 41             PARTIAL_3_OF_4              3/4     3/6    17.20 cm    2.08 deg
+moving_cam/res          160x90                OK_FULL                     4/4     6/6   271.99 cm   18.92 deg
+moving_cam/res          320x180               OK_FULL                     4/4     6/6   261.75 cm   23.27 deg
+moving_cam/res          1280x720 baseline     OK_FULL                     4/4     6/6     5.47 cm    0.33 deg
+moving_cam/res          2560x1440             OK_FULL                     4/4     6/6     2.46 cm    0.20 deg
+world/lighting          dark extreme          OK_FULL                     4/4     6/6    13.09 cm    1.15 deg
+world/lighting          low                   OK_FULL                     4/4     6/6     5.35 cm    0.30 deg
+world/lighting          normal baseline       OK_FULL                     4/4     6/6     4.31 cm    0.31 deg
+world/lighting          bright                OK_FULL                     4/4     6/6     4.29 cm    0.31 deg
+
+Detailed primary values:
+- details/primary/
+
+Detailed optional secondary values:
+- details/secondary/
+

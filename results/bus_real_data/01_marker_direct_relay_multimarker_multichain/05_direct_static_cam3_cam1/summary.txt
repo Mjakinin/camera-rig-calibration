@@ -1,0 +1,38 @@
+Direct static-to-static evaluation: cam_edge_3 -> cam_edge_1
+====================================================================
+
+Common markers: [2, 5, 6, 7, 8, 14]
+Number of marker estimates: 6
+
+GT frame convention test:
+- sdf_link_times_inverse_optical_to_link: median_t=1.9946 m, median_r=17.128 deg, mean_t=2.0201 m, mean_r=18.374 deg
+- raw_sdf_model_pose_as_camera_frame: median_t=3.1857 m, median_r=83.710 deg, mean_t=2.6799 m, mean_r=82.828 deg
+- sdf_link_times_optical_to_link: median_t=3.3119 m, median_r=86.585 deg, mean_t=3.2515 m, mean_r=83.361 deg
+
+Selected best GT convention: sdf_link_times_inverse_optical_to_link
+
+Best individual shared-marker estimate:
+- marker_id: 14
+- translation_error: 0.101527 m = 10.153 cm
+- rotation_error: 0.308343 deg
+- estimated target position in cam_edge_3: x=-2.2094, y=-0.1137, z=0.2815
+- GT target position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
+
+Worst individual shared-marker estimate:
+- marker_id: 5
+- translation_error: 4.281854 m = 428.185 cm
+- rotation_error: 38.642288 deg
+- estimated target position in cam_edge_3: x=1.3013, y=-1.7290, z=-1.6300
+- GT target position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
+
+Aggregate medoid estimate over all shared markers:
+- chosen medoid marker_id: 7
+- translation_error: 0.450972 m = 45.097 cm
+- rotation_error: 4.154514 deg
+- estimated target position in cam_edge_3: x=-1.9205, y=0.1433, z=0.0679
+- GT target position in cam_edge_3: x=-2.1394, y=-0.1285, z=0.3535
+
+Interpretation:
+- This direct static-static test is the sanity check for OpenCV PnP and GT frame convention.
+- If errors are still meter-scale after the best convention, the PnP/SDF frame convention or marker coordinate convention is still wrong.
+- If errors are cm-scale / few degrees, we can continue to GT moving relay chains.

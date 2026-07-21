@@ -1,0 +1,10 @@
+Experiment: 0.5x temporal sampling ablation
+Source moving video: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/0.5/0.5_60FPS.mov
+Sampling rate [Hz]: 3
+Intrinsic CameraInfo: results/real_vehicle_data/INTRINSIC_RESULTS/iphone_05x_4k/moving_calib_camera.json
+Template static dataset: results/real_vehicle_data/real_05x_4k_3hz_v1/00_shared_input
+AP02 max_nfev static: 80
+AP02 max_nfev moving: 120
+Matcher: exhaustive
+GPU: 0
+Maximum image size: 2400

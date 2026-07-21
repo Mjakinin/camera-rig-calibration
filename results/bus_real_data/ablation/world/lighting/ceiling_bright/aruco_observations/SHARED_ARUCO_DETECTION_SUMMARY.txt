@@ -1,0 +1,17 @@
+Shared ArUco detection summary
+==============================
+
+Dataset: results/bus_real_data/ablation/world/lighting/ceiling_bright/raw_images
+Dictionary: DICT_4X4_50
+Marker length [m]: 0.17
+
+Static observations: 28
+Moving observations: 519
+Total observations: 547
+PnP success: 547 / 547
+
+Output files:
+- results/bus_real_data/ablation/world/lighting/ceiling_bright/aruco_observations/shared_static_aruco_observations.csv
+- results/bus_real_data/ablation/world/lighting/ceiling_bright/aruco_observations/shared_moving_aruco_observations.csv
+- results/bus_real_data/ablation/world/lighting/ceiling_bright/aruco_observations/shared_all_aruco_observations.csv
+- results/bus_real_data/ablation/world/lighting/ceiling_bright/aruco_observations/debug_images

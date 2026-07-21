@@ -1,0 +1,12 @@
+{
+  "source_world_sdf": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf",
+  "warning": "Nominal Gazebo camera-center distances only; not real-world ground truth.",
+  "distances_m": {
+    "cam_edge_0--cam_edge_1": 5.069131069576643,
+    "cam_edge_0--cam_edge_3": 3.819152918656321,
+    "cam_edge_0--cam_edge_5": 5.667927964501032,
+    "cam_edge_1--cam_edge_3": 2.1721826797050396,
+    "cam_edge_1--cam_edge_5": 9.833844654272019,
+    "cam_edge_3--cam_edge_5": 9.285515073252316
+  }
+}

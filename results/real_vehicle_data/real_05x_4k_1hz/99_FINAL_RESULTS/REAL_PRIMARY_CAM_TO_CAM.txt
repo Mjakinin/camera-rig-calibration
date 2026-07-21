@@ -1,0 +1,19 @@
+REAL VEHICLE — PRIMARY CAMERA-TO-CAMERA RESULTS
+========================================================================================================================
+
+Evaluation type: GT-free camera-rig geometry.
+No simulation pose or marker-map position is used by the real calibration methods.
+Nominal simulation distances are context only and are not real-world accuracy measurements.
+
+Camera pair                          AP01 [m]      AP02 [m]      AP03 [m]    Method spread [cm]
+------------------------------------------------------------------------------------------------------------------------
+cam_edge_0 - cam_edge_1              4.469362      4.969724      1.556480               341.324
+cam_edge_0 - cam_edge_3              3.818549      3.770836      3.731271                 8.728
+cam_edge_0 - cam_edge_5              5.572033      5.547539      5.539026                 3.301
+cam_edge_1 - cam_edge_3              1.421068      2.088869      2.190710                76.964
+cam_edge_1 - cam_edge_5              9.349302      9.663734      6.992461               267.127
+cam_edge_3 - cam_edge_5              9.155496      9.124183      9.077125                 7.837
+
+INDEPENDENT REAL MEASUREMENTS
+------------------------------------------------------------------------------------------------------------------------
+No independent physical measurements are currently entered.

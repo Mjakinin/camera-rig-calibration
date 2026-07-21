@@ -1,0 +1,22 @@
+{
+  "group": "moving_cam/density",
+  "variant": "density_route2_125pct_recaptured",
+  "parameter": "moving camera temporal-spatial frame density",
+  "source_dataset": "results/bus_real_data/ablation/world/route/route2",
+  "source_frame_count": 189,
+  "selected_frame_count": 236,
+  "density_percent": 125.0,
+  "density_factor": 1.25,
+  "route_geometry": "same piecewise Route-2 trajectory",
+  "route_endpoints_unchanged": true,
+  "images_newly_rendered_in_gazebo": true,
+  "image_interpolation_used": false,
+  "static_images_unchanged": true,
+  "camera_info_unchanged": true,
+  "world_unchanged": true,
+  "route_file": "src/calib_lab/bus_real_data/config/moving_camera_route2_density_125pct.json",
+  "raw_images": "results/bus_real_data/ablation/moving_cam/density/density_route2_125pct_recaptured/raw_images",
+  "aruco_observations": "results/bus_real_data/ablation/moving_cam/density/density_route2_125pct_recaptured/aruco_observations",
+  "captured_utc": "2026-07-13T03:34:28.446857+00:00",
+  "changed_factor_only": "finer temporal-spatial sampling of the same Route-2 path"
+}
