@@ -312,6 +312,8 @@ def main() -> None:
                 str(args.use_gpu),
                 "--SequentialMatching.overlap",
                 "20",
+                 "--SequentialMatching.quadratic_overlap",
+                "1",
             ]
         )
 
