@@ -35,6 +35,7 @@ def main() -> None:
     parser.add_argument("--target-fps", type=float, default=3.0)
     parser.add_argument("--start-s", type=float, default=0.0)
     parser.add_argument("--end-s", type=float)
+    parser.add_argument("--max-frames", type=int)
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument(
         "--skip-sha256",
@@ -53,6 +54,8 @@ def main() -> None:
         raise RuntimeError("--start-s must be non-negative")
     if args.end_s is not None and args.end_s <= args.start_s:
         raise RuntimeError("--end-s must be greater than --start-s")
+    if args.max_frames is not None and args.max_frames <= 0:
+        raise RuntimeError("--max-frames must be positive")
 
     output = dataset / "raw_images/moving"
     metadata = dataset / "metadata/moving_video_extraction"
@@ -124,6 +127,8 @@ def main() -> None:
             )
             output_index += 1
             next_target_s = args.start_s + output_index * interval
+            if args.max_frames is not None and output_index >= args.max_frames:
+                break
 
         source_index += 1
 

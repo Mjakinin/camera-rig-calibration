@@ -40,6 +40,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-inliers", type=int, default=4)
     parser.add_argument("--reuse-colmap", action="store_true")
     parser.add_argument("--reuse-all", action="store_true")
+    parser.add_argument("--cameras", default=",".join(CAMERAS))
+    parser.add_argument("--moving-camera-id", default="moving_calib_camera")
+    parser.add_argument("--dictionary", default="DICT_4X4_50")
+    parser.add_argument("--colmap-executable", default="colmap")
+    parser.add_argument("--max-image-size", type=int)
+    parser.add_argument("--max-features", type=int)
+    parser.add_argument("--sequential-overlap", type=int, default=20)
+    parser.add_argument("--loop-detection", type=int, choices=[0, 1])
+    parser.add_argument("--mapper-min-matches", type=int, default=8)
     return parser.parse_args()
 
 
@@ -164,7 +173,9 @@ def prepare_dataset(dataset: Path, out: Path) -> None:
     )
 
 
-def configure_grouped_module(module, out: Path, dataset: Path) -> None:
+def configure_grouped_module(
+    module, out: Path, dataset: Path, moving_camera_id: str
+) -> None:
     dataset_root = out / "01_colmap_dataset"
     run_root = out / "02_colmap_sparse"
     module.AP3_ROOT = out
@@ -177,6 +188,8 @@ def configure_grouped_module(module, out: Path, dataset: Path) -> None:
     module.SPARSE_ROOT = run_root / "sparse"
     module.TXT_ROOT = run_root / "sparse_txt"
     module.GROUP_ROOT = run_root / "camera_groups"
+    module.STATIC_CAMERAS = list(CAMERAS)
+    module.MOVING_CAMERA = moving_camera_id
 
 
 def configure_inspect_module(module, out: Path) -> None:
@@ -184,6 +197,7 @@ def configure_inspect_module(module, out: Path) -> None:
     module.DATASET_ROOT = out / "01_colmap_dataset"
     module.TXT_ROOT = out / "02_colmap_sparse" / "sparse_txt"
     module.OUT_ROOT = out / "03_reconstruction_inspection"
+    module.STATIC_EXPECTED = [f"static_{camera}.png" for camera in CAMERAS]
 
 
 def configure_scale_common(module, out: Path) -> None:
@@ -196,6 +210,7 @@ def configure_scale_common(module, out: Path) -> None:
     module.OUT_ROOT = out / "06_triangulated_ref_aruco_registration"
     module.AP3_CMP = out / "07_final_results"
     module.COMBINED = out / "07_final_results"
+    module.STATIC_CAMERAS = list(CAMERAS)
 
 
 def pose_positions(path: Path) -> dict[str, np.ndarray]:
@@ -249,7 +264,11 @@ def best_model_diagnostics(summary_path: Path) -> dict:
 
 
 def main() -> None:
+    global CAMERAS
     args = parse_args()
+    CAMERAS = [value.strip() for value in args.cameras.split(",") if value.strip()]
+    if not CAMERAS:
+        raise RuntimeError("--cameras must contain at least one camera ID")
     started = time.time()
 
     dataset = Path(args.dataset).resolve()
@@ -289,11 +308,23 @@ def main() -> None:
                     "ap03_real_grouped_colmap",
                     ap03_dir / "02_run_colmap_sparse_grouped.py",
                 )
-                configure_grouped_module(grouped, out, dataset)
-                run_main(grouped, [
+                configure_grouped_module(
+                    grouped, out, dataset, args.moving_camera_id
+                )
+                grouped_args = [
+                    "--colmap", args.colmap_executable,
                     "--use-gpu", str(args.use_gpu),
                     "--matcher", args.matcher,
-                ])
+                    "--sequential-overlap", str(args.sequential_overlap),
+                    "--mapper-min-matches", str(args.mapper_min_matches),
+                ]
+                if args.max_image_size is not None:
+                    grouped_args += ["--max-image-size", str(args.max_image_size)]
+                if args.max_features is not None:
+                    grouped_args += ["--max-features", str(args.max_features)]
+                if args.loop_detection is not None:
+                    grouped_args += ["--loop-detection", str(args.loop_detection)]
+                run_main(grouped, grouped_args)
             else:
                 print("[REUSE] AP03 COLMAP sparse models:", sparse_models)
 
@@ -315,6 +346,7 @@ def main() -> None:
                 "ap03_real_marker_scale",
                 ap03_dir / "10_estimate_scale_from_marker_size_only.py",
             )
+            scale_module.STATIC_CAMERAS = list(CAMERAS)
             run_main(scale_module, [
                 "--out-dir", str(final_dir),
                 "--marker-ids", args.marker_ids,
@@ -323,6 +355,7 @@ def main() -> None:
                 "--reproj-thresh-px", str(args.reproj_thresh_px),
                 "--ransac-iters", str(args.ransac_iters),
                 "--min-inliers", str(args.min_inliers),
+                "--dictionary", args.dictionary,
             ])
 
         if not metadata_file.is_file():
@@ -351,14 +384,18 @@ def main() -> None:
         )
 
         original_status = str(metadata.get("status", "UNKNOWN"))
-        if len(positions) == 4:
+        expected_count = len(CAMERAS)
+        if len(positions) == expected_count:
             status = "OK_FULL" if original_status.startswith("OK") else original_status
         elif positions:
-            status = f"PARTIAL_{len(positions)}_OF_4"
+            status = f"PARTIAL_{len(positions)}_OF_{expected_count}"
         else:
             status = original_status if original_status.startswith("FAILED") else "FAILED"
 
-        success = len(positions) == 4 and metadata.get("scale_m_per_colmap_unit") is not None
+        success = (
+            len(positions) == expected_count
+            and metadata.get("scale_m_per_colmap_unit") is not None
+        )
         write_status(out, {
             "method": "AP03",
             "status": status,
@@ -377,9 +414,9 @@ def main() -> None:
         print("scale:", metadata.get("scale_m_per_colmap_unit"))
         print("pose file:", pose_file)
 
-        if len(positions) < 4:
+        if len(positions) < expected_count:
             raise RuntimeError(
-                f"AP03 registered only {len(positions)}/4 static cameras; "
+                f"AP03 registered only {len(positions)}/{expected_count} static cameras; "
                 f"method status remains recorded as {status}"
             )
 

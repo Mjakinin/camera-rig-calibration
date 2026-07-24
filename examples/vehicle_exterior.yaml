@@ -1,0 +1,49 @@
+schema_version: 4
+project:
+  workspace_root: ../workspace
+  dataset_cache_root: ../datasets
+  output_root: ../results
+  experiment_id: vehicle_exterior_day_01
+  run_label: ap02_baseline
+dataset:
+  id: vehicle_exterior_day_01
+  scene_type: exterior
+  input_root: /absolute/path/to/recording
+static_cameras:
+  - id: front_left
+    images: [/absolute/path/to/front_left.png]
+    intrinsics: /absolute/path/to/front_left_intrinsics.json
+  - id: front_right
+    images: [/absolute/path/to/front_right.png]
+    intrinsics: /absolute/path/to/front_right_intrinsics.json
+  - id: rear
+    images: [/absolute/path/to/rear.png]
+    intrinsics: /absolute/path/to/rear_intrinsics.json
+moving_camera:
+  id: calibration_camera
+  video: /absolute/path/to/moving_camera.mp4
+  intrinsic_calibration_video: /absolute/path/to/checkerboard.mp4
+  checkerboard_columns: 8
+  checkerboard_rows: 6
+sampling:
+  target_hz: 3.0
+markers:
+  dictionary: DICT_4X4_50
+  length_m: 0.17
+  accepted_ids: all_detected
+selection:
+  mode: review_once
+methods:
+  enabled: [ap02]
+  ap02:
+    reference_marker_id: auto
+    static_only_ba_max_function_evaluations: 100
+    combined_ba_max_function_evaluations: 120
+    ba_robust_loss: soft_l1
+    ba_robust_loss_scale_px: 3.0
+observation_quality:
+  maximum_pnp_reprojection_error_px: 25.0
+  minimum_marker_area_px2: 0.0
+  maximum_marker_distance_m: disabled
+evaluation:
+  anchor_marker_id: auto_common

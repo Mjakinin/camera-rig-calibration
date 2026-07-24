@@ -5,7 +5,7 @@ import random
 import cv2
 import numpy as np
 
-from _shared.common.geometry import clamp, R_to_rvec, median
+from run.bus_real_data._shared.common.geometry import clamp, R_to_rvec, median
 
 
 def undistort_to_normalized(u, v, K, D):

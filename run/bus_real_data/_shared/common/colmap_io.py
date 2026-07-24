@@ -2,7 +2,7 @@
 from pathlib import Path
 import numpy as np
 
-from _shared.common.geometry import qvec_to_R, make_T, invT
+from run.bus_real_data._shared.common.geometry import qvec_to_R, make_T, invT
 
 
 def parse_cameras_txt(path):

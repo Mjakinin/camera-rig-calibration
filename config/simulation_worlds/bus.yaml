@@ -1,0 +1,54 @@
+schema_version: 1
+id: bus
+display_name: Bus interior calibration world
+sdf: ../../src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf
+resource_paths:
+  - ../../src/calib_lab/bus_real_data/models
+static_cameras:
+  - id: cam_edge_0
+    model_name: cam_edge_0
+    sensor_name: cam_edge_0_sensor
+    image_topic: /bus_real_data/cam_edge_0/image
+    camera_info_topic: /bus_real_data/cam_edge_0/camera_info
+  - id: cam_edge_1
+    model_name: cam_edge_1
+    sensor_name: cam_edge_1_sensor
+    image_topic: /bus_real_data/cam_edge_1/image
+    camera_info_topic: /bus_real_data/cam_edge_1/camera_info
+  - id: cam_edge_3
+    model_name: cam_edge_3
+    sensor_name: cam_edge_3_sensor
+    image_topic: /bus_real_data/cam_edge_3/image
+    camera_info_topic: /bus_real_data/cam_edge_3/camera_info
+  - id: cam_edge_5
+    model_name: cam_edge_5
+    sensor_name: cam_edge_5_sensor
+    image_topic: /bus_real_data/cam_edge_5/image
+    camera_info_topic: /bus_real_data/cam_edge_5/camera_info
+moving_camera:
+  id: moving_calib_camera
+  model_name: moving_calib_camera
+  sensor_name: moving_calib_camera_sensor
+  image_topic: /bus_real_data/moving_calib_camera/image
+  camera_info_topic: /bus_real_data/moving_calib_camera/camera_info
+routes:
+  - id: route2
+    path: ../../src/calib_lab/bus_real_data/config/moving_camera_route2_interpolated_final.json
+    baseline: true
+  - id: route1
+    path: ../../src/calib_lab/bus_real_data/config/moving_camera_route1_interpolated_final.json
+capabilities:
+  - route
+  - density
+  - resolution
+  - fov
+  - lighting
+  - motion_blur
+  - capture
+lighting_profiles:
+  baseline: null
+  dark_extreme: ../../src/calib_lab/bus_real_data/worlds/lighting/bus_real_data_moving_camera_light_ceiling_dark_extreme.sdf
+  low: ../../src/calib_lab/bus_real_data/worlds/lighting/bus_real_data_moving_camera_light_ceiling_low.sdf
+  normal: ../../src/calib_lab/bus_real_data/worlds/lighting/bus_real_data_moving_camera_light_ceiling_normal.sdf
+  bright: ../../src/calib_lab/bus_real_data/worlds/lighting/bus_real_data_moving_camera_light_ceiling_bright.sdf
+  custom: ../../src/calib_lab/bus_real_data/worlds/lighting/bus_real_data_moving_camera_light_ceiling_normal.sdf

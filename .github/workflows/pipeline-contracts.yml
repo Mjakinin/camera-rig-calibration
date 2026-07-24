@@ -4,6 +4,10 @@ on:
   pull_request:
     paths:
       - "run/bus_real_data/**"
+      - "run/real_vehicle_data/**"
+      - "src/camera_rig_calibration/**"
+      - "tests/**"
+      - "pyproject.toml"
       - ".github/workflows/pipeline-contracts.yml"
   workflow_dispatch:
 
@@ -19,6 +23,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-numpy python3-scipy python3-opencv python3-yaml
+          python3 -m pip install ".[dev]"
+
+      - name: Test rigcal contracts without running calibration methods
+        run: pytest -m "not slow and not requires_colmap and not requires_ros"
 
       - name: Compile modified Python entry points
         run: |

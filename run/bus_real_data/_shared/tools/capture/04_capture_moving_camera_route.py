@@ -2,6 +2,7 @@
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import shutil
@@ -16,9 +17,6 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
-
-
-TOPIC = "/bus_real_data/moving_calib_camera/image"
 
 
 def rpy_to_quat(roll, pitch, yaw):
@@ -141,17 +139,17 @@ def image_msg_to_bgr(msg):
 
 
 class ImageGrabber(Node):
-    def __init__(self):
+    def __init__(self, topic):
         super().__init__("moving_camera_route_capture")
         self.last_msg = None
         self.counter = 0
         self.sub = self.create_subscription(
             Image,
-            TOPIC,
+            topic,
             self.cb,
             qos_profile_sensor_data,
         )
-        self.get_logger().info(f"subscribed: {TOPIC}")
+        self.get_logger().info(f"subscribed: {topic}")
 
     def cb(self, msg):
         self.last_msg = msg
@@ -164,7 +162,32 @@ def wait_for_image(node, min_counter, timeout):
         rclpy.spin_once(node, timeout_sec=0.05)
         if node.last_msg is not None and node.counter > min_counter:
             return node.last_msg, node.counter
-    return node.last_msg, node.counter
+    # Never relabel the previous message as a fresh frame after a timeout.
+    return None, node.counter
+
+
+def spin_for(node, duration):
+    deadline = time.monotonic() + max(0.0, duration)
+    while rclpy.ok() and time.monotonic() < deadline:
+        rclpy.spin_once(
+            node,
+            timeout_sec=min(0.05, max(0.0, deadline - time.monotonic())),
+        )
+
+
+def wait_for_distinct_image(node, min_counter, timeout, seen_hashes):
+    """Wait for a newly delivered image whose pixels were not captured before."""
+    deadline = time.monotonic() + timeout
+    counter = min_counter
+    while rclpy.ok() and time.monotonic() < deadline:
+        remaining = max(0.0, deadline - time.monotonic())
+        msg, counter = wait_for_image(node, counter, remaining)
+        if msg is None:
+            return None, counter, None
+        digest = hashlib.sha256(memoryview(msg.data)).hexdigest()
+        if digest not in seen_hashes:
+            return msg, counter, digest
+    return None, counter, None
 
 
 def main():
@@ -173,6 +196,7 @@ def main():
     ap.add_argument("--out", default="results/bus_real_data/01_marker_direct_relay_multimarker_multichain/03_moving_camera_sequence")
     ap.add_argument("--world", default="bus_real_data_camera_layout")
     ap.add_argument("--name", default="moving_calib_camera")
+    ap.add_argument("--topic", default="/bus_real_data/moving_calib_camera/image")
     ap.add_argument("--settle", type=float, default=0.80)
     ap.add_argument("--post-pose-skip", type=int, default=5)
     ap.add_argument("--timeout", type=float, default=2.0)
@@ -191,7 +215,7 @@ def main():
     frames = route_data["frames"]
 
     rclpy.init()
-    node = ImageGrabber()
+    node = ImageGrabber(args.topic)
 
     startup_timeout = max(args.timeout, 30.0)
     print(
@@ -230,30 +254,47 @@ def main():
         print(f"[INFO] flushed up to counter={cnt}")
 
     rows = []
+    captured_hashes = set()
 
     for r in frames:
         frame_idx = int(r["frame"])
         pose = [r["x"], r["y"], r["z"], r["roll"], r["pitch"], r["yaw"]]
 
         ok = set_pose(args.world, args.name, pose)
+        # Keep consuming the subscription during settling. Otherwise DDS
+        # backlog from the previous pose can be mistaken for the new pose.
+        spin_for(node, args.settle)
         before = node.counter
-        time.sleep(args.settle)
 
         msg = None
         cnt = before
+        fresh = True
 
         for _skip in range(args.post_pose_skip):
             msg, cnt = wait_for_image(node, cnt, args.timeout)
             if msg is None:
+                fresh = False
                 break
 
-        msg, cnt = wait_for_image(node, cnt, args.timeout)
+        image_sha256 = None
+        if fresh:
+            msg, cnt, image_sha256 = wait_for_distinct_image(
+                node,
+                cnt,
+                args.timeout,
+                captured_hashes,
+            )
 
         if msg is None:
-            print(f"[WARN] frame {frame_idx:04d}: no image")
+            print(
+                f"[WARN] frame {frame_idx:04d}: no fresh image after pose; "
+                "stale data was not written",
+                flush=True,
+            )
             continue
 
         bgr = image_msg_to_bgr(msg)
+        captured_hashes.add(image_sha256)
         img_path = img_dir / f"frame_{frame_idx:04d}.png"
         cv2.imwrite(str(img_path), bgr)
 
@@ -268,6 +309,8 @@ def main():
             "yaw": r["yaw"],
             "image": str(img_path),
             "set_pose_ok": ok,
+            "message_counter": cnt,
+            "image_sha256": image_sha256,
         })
 
         print(
@@ -280,7 +323,20 @@ def main():
 
     csv_path = out_dir / "route_commanded.csv"
     with csv_path.open("w", newline="") as f:
-        fields = ["frame", "segment", "x", "y", "z", "roll", "pitch", "yaw", "image", "set_pose_ok"]
+        fields = [
+            "frame",
+            "segment",
+            "x",
+            "y",
+            "z",
+            "roll",
+            "pitch",
+            "yaw",
+            "image",
+            "set_pose_ok",
+            "message_counter",
+            "image_sha256",
+        ]
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
@@ -290,7 +346,7 @@ def main():
         "Moving camera route capture\n"
         "===========================\n\n"
         f"Route: {args.route}\n"
-        f"Topic: {TOPIC}\n"
+        f"Topic: {args.topic}\n"
         f"Frames captured: {len(rows)}\n\n"
         "Files:\n"
         "- images/: captured moving camera frames\n"

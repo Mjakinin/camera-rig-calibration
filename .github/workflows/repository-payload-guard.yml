@@ -9,10 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository without downloading LFS
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          lfs: false
 
-      - name: Validate regular Git and LFS payload policy
+      - name: Validate regular-Git payload policy
         run: python3 run/check_repository_payload.py

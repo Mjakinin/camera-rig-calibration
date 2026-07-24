@@ -2,6 +2,13 @@ __pycache__/
 *.pyc
 *.pyo
 *.log
+.pytest_cache/
+*.egg-info/
+dist/
+.venv/
+.rigcal-venv/
+workspace/
+datasets/
 .DS_Store
 
 # Bus real-data generated caches/logs
@@ -43,8 +50,18 @@ results/**/_backups/
 results/bus_real_data/ablation/moving_cam/fov/01_shared_observations/
 results/bus_real_data/ablation/moving_cam/fov/99_summary/
 
-# Local real-vehicle raw data
-data_local/
+# Local real-vehicle raw data (keep the landing-zone instructions only)
+data_local/*
+!data_local/README.md
+
+# New rigcal runs are local research artifacts. Compact configs can be exported
+# deliberately; captured/prepared frames and method workspaces must not be staged.
+results/*/INPUT_DATA/
+results/*/runs/
+
+# rigcal v2 content-addressed experiment outputs (configs stay in workspace/).
+results/simulation/
+results/real_vehicle/
 
 # Real-data generated caches/logs
 results/real_vehicle_data/**/_pipeline_logs/
@@ -137,10 +154,10 @@ results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/aruco_observations/deb
 !results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/
 !results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/**
 
-# These source meshes exceed GitHub's regular-Git 100 MiB limit.
-
-# The simulation OBJ is intentionally tracked through Git LFS.
-!src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.obj
+# The 160.7 MB simulation OBJ is materialized from the tracked 31.2 MB gzip
+# archive on the first rigcal start. Never add the generated OBJ to Git.
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.obj
+!src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.obj.gz
 
 # Unused alternative bus geometry representations.
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/dae/

@@ -1,0 +1,36 @@
+schema_version: 4
+project:
+  workspace_root: ../workspace
+  dataset_cache_root: ../datasets
+  output_root: ../results
+  experiment_id: prepared_rig_example
+  run_label: ap02_baseline
+dataset:
+  id: prepared_rig_example
+  scene_type: other
+  prepared_root: /absolute/path/to/prepared_dataset
+static_cameras:
+  - id: camera_left
+  - id: camera_right
+moving_camera:
+  id: calibration_camera
+markers:
+  dictionary: DICT_4X4_50
+  length_m: 0.17
+  accepted_ids: all_detected
+selection:
+  mode: review_once
+methods:
+  enabled: [ap02]
+  ap02:
+    reference_marker_id: auto
+    static_only_ba_max_function_evaluations: 100
+    combined_ba_max_function_evaluations: 120
+    ba_robust_loss: soft_l1
+    ba_robust_loss_scale_px: 3.0
+observation_quality:
+  maximum_pnp_reprojection_error_px: 25.0
+  minimum_marker_area_px2: 0.0
+  maximum_marker_distance_m: disabled
+evaluation:
+  anchor_marker_id: auto_common

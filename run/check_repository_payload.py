@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import re
+import hashlib
 import subprocess
 from pathlib import Path
 
@@ -16,6 +16,11 @@ obj_relative = (
     "src/calib_lab/bus_real_data/models/"
     "beintelli_bus/meshes/obj/"
     "beintelli_erklarbus.obj"
+)
+obj_archive_relative = obj_relative + ".gz"
+obj_archive_size = 31_209_135
+obj_archive_sha256 = (
+    "d435f33474c3fb8b151adf2904f9355a5c0d3aa381975d897f73c2e11a3e4f6f"
 )
 
 model_prefix = (
@@ -81,11 +86,6 @@ forbidden_geometry_suffixes = (
     ".mesh",
 )
 
-expected_lfs_rule = (
-    obj_relative
-    + " filter=lfs diff=lfs merge=lfs -text"
-)
-
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -99,10 +99,8 @@ lfs_rules = [
     if "filter=lfs" in line
 ]
 
-if lfs_rules != [expected_lfs_rule]:
-    errors.append(
-        "expected exactly one LFS rule for the bus OBJ"
-    )
+if lfs_rules:
+    errors.append("Git LFS rules are not allowed; use regular-Git assets")
 
 raw_index = subprocess.check_output(
     ["git", "ls-files", "-s", "-z"],
@@ -216,31 +214,9 @@ for relative, (object_id, object_size) in entries.items():
             pointer_paths.append(relative)
 
     if relative == obj_relative:
-        content = blob_content(object_id)
-
-        if not content.startswith(
-            b"version https://git-lfs.github.com/spec/v1"
-        ):
-            errors.append(
-                "bus OBJ is not stored as a Git LFS pointer"
-            )
-            continue
-
-        match = re.search(
-            rb"(?:^|\n)size ([0-9]+)(?:\n|$)",
-            content,
+        errors.append(
+            "generated bus OBJ must not be tracked; track its .obj.gz archive"
         )
-
-        if not match:
-            errors.append(
-                "bus OBJ LFS pointer has no declared size"
-            )
-        elif int(match.group(1)) < HARD_LIMIT:
-            errors.append(
-                "bus OBJ pointer declares an unexpectedly small file"
-            )
-
-        continue
 
     if object_size >= HARD_LIMIT:
         errors.append(
@@ -253,14 +229,28 @@ for relative, (object_id, object_size) in entries.items():
             f"{relative}"
         )
 
-if pointer_paths != [obj_relative]:
+if pointer_paths:
     errors.append(
-        "LFS pointers must consist solely of the bus OBJ; found: "
+        "Git LFS pointers are not allowed; found: "
         + ", ".join(pointer_paths)
     )
 
-if obj_relative not in entries:
-    errors.append("bus OBJ is not tracked")
+if obj_archive_relative not in entries:
+    errors.append("compressed bus OBJ archive is not tracked")
+else:
+    archive_id, archive_size = entries[obj_archive_relative]
+    if archive_size != obj_archive_size:
+        errors.append(
+            "compressed bus OBJ archive has unexpected size: "
+            f"{archive_size} != {obj_archive_size}"
+        )
+    archive_content = blob_content(archive_id)
+    archive_hash = hashlib.sha256(archive_content).hexdigest()
+    if archive_hash != obj_archive_sha256:
+        errors.append(
+            "compressed bus OBJ archive has unexpected SHA-256: "
+            f"{archive_hash}"
+        )
 
 if frame_count != 78:
     errors.append(
@@ -294,7 +284,8 @@ if errors:
 
     raise SystemExit(1)
 
-print("[OK] Only the bus OBJ uses Git LFS.")
+print("[OK] Repository contains no Git LFS pointers or rules.")
+print("[OK] Bus OBJ is stored as a verified regular-Git gzip archive.")
 print("[OK] No other regular Git object reaches 100 MiB.")
 print("[OK] Real-vehicle payload policy satisfied.")
 print("[OK] Bus model references the OBJ.")

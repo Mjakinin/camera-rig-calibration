@@ -3,7 +3,7 @@ import math
 import xml.etree.ElementTree as ET
 import numpy as np
 
-from _shared.common.geometry import rpy_to_R, make_T, invT
+from run.bus_real_data._shared.common.geometry import rpy_to_R, make_T, invT
 
 
 R_MODEL_FROM_OPENCV_MARKER = np.array([

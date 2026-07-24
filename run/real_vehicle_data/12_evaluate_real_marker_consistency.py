@@ -36,6 +36,23 @@ def args_parse():
     p.add_argument("--ransac-iters", type=int, default=800)
     p.add_argument("--min-triangulation-angle-deg", type=float, default=0.5)
     p.add_argument("--max-moving-observations-per-marker", type=int, default=80)
+    p.add_argument(
+        "--cameras",
+        default=",".join(CAMERAS),
+        help="Comma-separated static camera IDs (default preserves the legacy rig).",
+    )
+    p.add_argument(
+        "--method",
+        action="append",
+        default=[],
+        metavar="NAME=DIRECTORY",
+        help="Method label and directory relative to --results-root; repeatable.",
+    )
+    p.add_argument(
+        "--output-root",
+        default="",
+        help="Output directory (default: RESULTS_ROOT/99_FINAL_RESULTS).",
+    )
     return p.parse_args()
 
 
@@ -275,8 +292,8 @@ def load_ap03(root):
 
 def load_poses(method,root,static_obs,moving_obs,anchor):
     sposes,spfile=static_poses(root)
-    if method=="AP01": mposes,meta=load_ap01(root,sposes,static_obs,moving_obs,anchor)
-    elif method=="AP02": mposes,meta=load_ap02(root)
+    if method.startswith("AP01"): mposes,meta=load_ap01(root,sposes,static_obs,moving_obs,anchor)
+    elif method.startswith("AP02"): mposes,meta=load_ap02(root)
     else: mposes,meta=load_ap03(root)
     return sposes,mposes,spfile,meta
 
@@ -362,6 +379,13 @@ def marker_lengths(c):
 
 
 def evaluate(method,sposes,mposes,spfile,meta,srows,mrows,anchor,length,args):
+    pose_frames=sorted(mposes)
+    marker_frames=sorted({
+        frame_id(r.get("frame_id",r.get("observer_id")))
+        for r in mrows
+        if frame_id(r.get("frame_id",r.get("observer_id"))) is not None
+    })
+    candidate_frames=sorted(set(pose_frames).intersection(marker_frames))
     markers=sorted({int(float(r["marker_id"])) for r in mrows}); reconstructed={}; reproj_rows=[]
     for marker in markers:
         rows=selected_marker_rows(mrows,mposes,marker,args.max_moving_observations_per_marker)
@@ -390,15 +414,31 @@ def evaluate(method,sposes,mposes,spfile,meta,srows,mrows,anchor,length,args):
             if camera_errors:static_cams.append(cam)
         ll=marker_lengths(corners)
         reconstructed[marker]={"raw":float(np.median(ll)),"fit":fit,"cross":static_errors,"cams":static_cams,"frames":frames,"angle":max(angles)}
+    inlier_frames=sorted(set().union(*(data["frames"] for data in reconstructed.values())) if reconstructed else set())
+    frame_support={
+        "pose_frame_ids":pose_frames,
+        "pose_frame_count":len(pose_frames),
+        "marker_frame_ids":marker_frames,
+        "marker_frame_count":len(marker_frames),
+        "candidate_frame_ids":candidate_frames,
+        "candidate_frame_count":len(candidate_frames),
+        "inlier_frame_ids":inlier_frames,
+        "inlier_frame_count":len(inlier_frames),
+        "rejected_frame_ids":{
+            "pose_without_marker":sorted(set(pose_frames)-set(marker_frames)),
+            "marker_without_pose":sorted(set(marker_frames)-set(pose_frames)),
+            "candidate_not_used_as_inlier":sorted(set(candidate_frames)-set(inlier_frames)),
+        },
+    }
     if anchor not in reconstructed:
-        return {"method":method,"status":"NOT_AVAILABLE_ANCHOR_NOT_RECONSTRUCTED","available_static_cameras":sorted(sposes),"available_static_camera_count":len(sposes),"registered_moving_frames":len(mposes),"static_pose_file":str(spfile),"trajectory":meta,"anchor_marker_id":anchor,"reconstructed_markers_total":len(reconstructed),"evaluated_non_anchor_markers":0},[],reproj_rows
+        return {"method":method,"status":"NOT_AVAILABLE_ANCHOR_NOT_RECONSTRUCTED","available_static_cameras":sorted(sposes),"available_static_camera_count":len(sposes),"registered_moving_frames":len(mposes),"static_pose_file":str(spfile),"trajectory":meta,"anchor_marker_id":anchor,"reconstructed_markers_total":len(reconstructed),"evaluated_non_anchor_markers":0,**frame_support},[],reproj_rows
     scale=length/reconstructed[anchor]["raw"];marker_rows=[];size_cm=[];size_pct=[];cross=[];fit=[];validated=0
     for marker,data in sorted(reconstructed.items()):
         estimated=data["raw"]*scale;is_anchor=marker==anchor;err_cm=100*abs(estimated-length);err_pct=100*abs(estimated-length)/length
         if not is_anchor:
             size_cm.append(err_cm);size_pct.append(err_pct);cross+=data["cross"];fit+=data["fit"];validated+=int(bool(data["cross"]))
         marker_rows.append({"method":method,"marker_id":marker,"is_scale_anchor":is_anchor,"moving_inlier_frame_count":len(data["frames"]),"moving_inlier_frames":";".join(map(str,sorted(data["frames"]))),"max_triangulation_angle_deg":data["angle"],"static_validation_cameras":";".join(data["cams"]),"static_validation_camera_count":len(data["cams"]),"raw_reconstructed_size_units":data["raw"],"anchor_scale_m_per_unit":scale,"estimated_marker_size_cm":100*estimated,"expected_marker_size_cm":100*length,"absolute_size_error_cm":0 if is_anchor else err_cm,"relative_size_error_percent":0 if is_anchor else err_pct,"moving_fit_reprojection_rmse_px":rmse(data["fit"]),"moving_to_static_reprojection_rmse_px":rmse(data["cross"]),"moving_to_static_reprojection_median_px":med(data["cross"]),"moving_to_static_reprojection_observations":len(data["cross"])})
-    summary={"method":method,"status":"OK" if len(sposes)==4 else f"PARTIAL_{len(sposes)}_OF_4","available_static_cameras":sorted(sposes),"available_static_camera_count":len(sposes),"registered_moving_frames":len(mposes),"static_pose_file":str(spfile),"trajectory":meta,"anchor_marker_id":anchor,"anchor_expected_size_cm":100*length,"anchor_raw_reconstructed_size_units":reconstructed[anchor]["raw"],"anchor_scale_m_per_unit":scale,"reconstructed_markers_total":len(reconstructed),"evaluated_non_anchor_markers":len(size_cm),"markers_with_moving_to_static_validation":validated,"median_absolute_size_error_cm":med(size_cm),"p90_absolute_size_error_cm":pctl(size_cm,90),"median_relative_size_error_percent":med(size_pct),"p90_relative_size_error_percent":pctl(size_pct,90),"moving_fit_reprojection_rmse_px":rmse(fit),"moving_fit_reprojection_median_px":med(fit),"moving_to_static_reprojection_rmse_px":rmse(cross),"moving_to_static_reprojection_median_px":med(cross),"moving_to_static_reprojection_p90_px":pctl(cross,90),"moving_to_static_reprojection_observations":len(cross)}
+    expected=len(CAMERAS);summary={"method":method,"status":"OK" if len(sposes)==expected else f"PARTIAL_{len(sposes)}_OF_{expected}","available_static_cameras":sorted(sposes),"available_static_camera_count":len(sposes),"registered_moving_frames":len(mposes),"static_pose_file":str(spfile),"trajectory":meta,"anchor_marker_id":anchor,"anchor_expected_size_cm":100*length,"anchor_raw_reconstructed_size_units":reconstructed[anchor]["raw"],"anchor_scale_m_per_unit":scale,"reconstructed_markers_total":len(reconstructed),"evaluated_non_anchor_markers":len(size_cm),"markers_with_moving_to_static_validation":validated,"median_absolute_size_error_cm":med(size_cm),"p90_absolute_size_error_cm":pctl(size_cm,90),"median_relative_size_error_percent":med(size_pct),"p90_relative_size_error_percent":pctl(size_pct,90),"moving_fit_reprojection_rmse_px":rmse(fit),"moving_fit_reprojection_median_px":med(fit),"moving_to_static_reprojection_rmse_px":rmse(cross),"moving_to_static_reprojection_median_px":med(cross),"moving_to_static_reprojection_p90_px":pctl(cross,90),"moving_to_static_reprojection_observations":len(cross),**frame_support}
     return summary,marker_rows,reproj_rows
 
 
@@ -413,10 +453,22 @@ def report(path,dataset,anchor,length,summaries):
 
 
 def main():
+    global CAMERAS, METHOD_DIRS
     args=args_parse();dataset=Path(args.dataset).resolve();results=Path(args.results_root).resolve();obsroot=Path(args.observations_root).resolve() if args.observations_root else dataset/"aruco_observations"
+    CAMERAS=tuple(value.strip() for value in args.cameras.split(",") if value.strip())
+    if not CAMERAS: raise RuntimeError("--cameras must contain at least one camera ID")
+    if args.method:
+        parsed={}
+        for value in args.method:
+            if "=" not in value: raise RuntimeError(f"Invalid --method value: {value!r}")
+            name,directory=value.split("=",1);name=name.strip();directory=directory.strip()
+            if not name or not directory: raise RuntimeError(f"Invalid --method value: {value!r}")
+            parsed[name]=directory
+        METHOD_DIRS=parsed
     ref=obsroot/"REFERENCE_MARKER_ID.txt";anchor=args.anchor_marker_id if args.anchor_marker_id is not None else int(ref.read_text().strip())
     srows=best_static(read_csv(obsroot/"shared_static_aruco_observations.csv"));mrows=moving_rows(read_csv(obsroot/"shared_moving_aruco_observations.csv"))
-    out=results/"99_FINAL_RESULTS/marker_consistency";out.mkdir(parents=True,exist_ok=True);summaries=[];markers=[];reproj=[]
+    final_root=Path(args.output_root).resolve() if args.output_root else results/"99_FINAL_RESULTS"
+    out=final_root/"marker_consistency";out.mkdir(parents=True,exist_ok=True);summaries=[];markers=[];reproj=[]
     for method,directory in METHOD_DIRS.items():
         root=results/directory;s=status(root)
         try:
@@ -424,17 +476,28 @@ def main():
             summary,mr,rr=evaluate(method,sp,mp,spfile,meta,srows,mrows,anchor,args.marker_length_m,args)
             summary["original_method_status"]=s.get("status","UNKNOWN");summary["original_method_success"]=s.get("success",False)
         except Exception as exc:
-            summary={"method":method,"status":"NOT_AVAILABLE","original_method_status":s.get("status","MISSING"),"original_method_success":s.get("success",False),"error":f"{type(exc).__name__}: {exc}","available_static_cameras":s.get("available_static_cameras",[]),"available_static_camera_count":len(s.get("available_static_cameras",[])),"registered_moving_frames":0,"evaluated_non_anchor_markers":0};mr=[];rr=[]
+            summary={"method":method,"status":"NOT_AVAILABLE","original_method_status":s.get("status","MISSING"),"original_method_success":s.get("success",False),"error":f"{type(exc).__name__}: {exc}","available_static_cameras":s.get("available_static_cameras",[]),"available_static_camera_count":len(s.get("available_static_cameras",[])),"registered_moving_frames":0,"evaluated_non_anchor_markers":0,"pose_frame_ids":[],"pose_frame_count":0,"marker_frame_ids":[],"marker_frame_count":0,"candidate_frame_ids":[],"candidate_frame_count":0,"inlier_frame_ids":[],"inlier_frame_count":0,"rejected_frame_ids":{}};mr=[];rr=[]
         summaries.append(summary);markers+=mr;reproj+=rr
     (out/"REAL_DATA_MARKER_CONSISTENCY_SUMMARY.json").write_text(json.dumps(summaries,indent=2)+"\n")
-    summary_fields=["method","status","original_method_status","original_method_success","available_static_camera_count","available_static_cameras","registered_moving_frames","static_pose_file","anchor_marker_id","anchor_expected_size_cm","anchor_raw_reconstructed_size_units","anchor_scale_m_per_unit","reconstructed_markers_total","evaluated_non_anchor_markers","markers_with_moving_to_static_validation","median_absolute_size_error_cm","p90_absolute_size_error_cm","median_relative_size_error_percent","p90_relative_size_error_percent","moving_fit_reprojection_rmse_px","moving_fit_reprojection_median_px","moving_to_static_reprojection_rmse_px","moving_to_static_reprojection_median_px","moving_to_static_reprojection_p90_px","moving_to_static_reprojection_observations","error"]
+    successful=[s for s in summaries if not str(s.get("status","")).startswith("NOT_AVAILABLE")]
+    pose_support=set(successful[0].get("pose_frame_ids",[])) if successful else set()
+    inlier_support=set(successful[0].get("inlier_frame_ids",[])) if successful else set()
+    for s in successful[1:]:
+        pose_support.intersection_update(s.get("pose_frame_ids",[]))
+        inlier_support.intersection_update(s.get("inlier_frame_ids",[]))
+    common_support={"schema_version":4,"methods":[s.get("method") for s in summaries],"successful_methods":[s.get("method") for s in successful],"all_methods_available":len(successful)==len(summaries),"common_pose_frame_ids":sorted(pose_support),"common_pose_frame_count":len(pose_support),"common_evaluation_inlier_frame_ids":sorted(inlier_support),"common_evaluation_inlier_frame_count":len(inlier_support),"per_method":{s.get("method"):{"pose_frame_ids":s.get("pose_frame_ids",[]),"marker_frame_ids":s.get("marker_frame_ids",[]),"candidate_frame_ids":s.get("candidate_frame_ids",[]),"inlier_frame_ids":s.get("inlier_frame_ids",[]),"rejected_frame_ids":s.get("rejected_frame_ids",{})} for s in summaries}}
+    (out/"COMMON_SUPPORT_REPORT.json").write_text(json.dumps(common_support,indent=2)+"\n")
+    summary_fields=["method","status","original_method_status","original_method_success","available_static_camera_count","available_static_cameras","registered_moving_frames","pose_frame_count","pose_frame_ids","marker_frame_count","marker_frame_ids","candidate_frame_count","candidate_frame_ids","inlier_frame_count","inlier_frame_ids","rejected_frame_ids","static_pose_file","anchor_marker_id","anchor_expected_size_cm","anchor_raw_reconstructed_size_units","anchor_scale_m_per_unit","reconstructed_markers_total","evaluated_non_anchor_markers","markers_with_moving_to_static_validation","median_absolute_size_error_cm","p90_absolute_size_error_cm","median_relative_size_error_percent","p90_relative_size_error_percent","moving_fit_reprojection_rmse_px","moving_fit_reprojection_median_px","moving_to_static_reprojection_rmse_px","moving_to_static_reprojection_median_px","moving_to_static_reprojection_p90_px","moving_to_static_reprojection_observations","error"]
     rows=[]
-    for s in summaries:r=dict(s);r["available_static_cameras"]=";".join(s.get("available_static_cameras",[]));rows.append(r)
+    for s in summaries:
+        r=dict(s);r["available_static_cameras"]=";".join(s.get("available_static_cameras",[]))
+        for name in ("pose_frame_ids","marker_frame_ids","candidate_frame_ids","inlier_frame_ids"):r[name]=";".join(map(str,s.get(name,[])))
+        r["rejected_frame_ids"]=json.dumps(s.get("rejected_frame_ids",{}),sort_keys=True);rows.append(r)
     write_csv(out/"REAL_DATA_MARKER_CONSISTENCY_SUMMARY.csv",rows,summary_fields)
     marker_fields=["method","marker_id","is_scale_anchor","moving_inlier_frame_count","moving_inlier_frames","max_triangulation_angle_deg","static_validation_cameras","static_validation_camera_count","raw_reconstructed_size_units","anchor_scale_m_per_unit","estimated_marker_size_cm","expected_marker_size_cm","absolute_size_error_cm","relative_size_error_percent","moving_fit_reprojection_rmse_px","moving_to_static_reprojection_rmse_px","moving_to_static_reprojection_median_px","moving_to_static_reprojection_observations"]
     write_csv(out/"REAL_DATA_MARKER_CONSISTENCY_BY_MARKER.csv",markers,marker_fields)
     write_csv(out/"REAL_DATA_MOVING_TO_STATIC_REPROJECTION.csv",reproj,["method","marker_id","corner_index","static_camera","cross_camera_reprojection_error_px"])
-    report_path=results/"99_FINAL_RESULTS/REAL_DATA_MARKER_CONSISTENCY.txt";report(report_path,dataset,anchor,args.marker_length_m,summaries)
+    report_path=final_root/"REAL_DATA_MARKER_CONSISTENCY.txt";report(report_path,dataset,anchor,args.marker_length_m,summaries)
     print(report_path.read_text());print("[OK] marker consistency written\n report:",report_path,"\n details:",out)
 
 
