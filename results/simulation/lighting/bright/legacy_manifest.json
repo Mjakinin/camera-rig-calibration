@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "migration": "legacy_read_only",
+  "category": "simulation",
+  "experiment_id": "ceiling_bright",
+  "source": "/workspaces/project/results/bus_real_data/ablation/world/lighting/ceiling_bright",
+  "has_input": true,
+  "has_results": true,
+  "rerunnable": true,
+  "input_id": "input_a2825366cd03",
+  "target": "/workspaces/project/results/simulation/ceiling_bright",
+  "factor": "physical ceiling lighting",
+  "value": "bright",
+  "parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "lighting": "bright",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses"
+  },
+  "storage": {
+    "hardlinked": 1,
+    "copied": 0,
+    "existing": 203
+  },
+  "input_verification": {
+    "verified": true,
+    "sha256": "9d476de991a60996658c9cb6f4eb3ab4bd39115934acf06badc9db33168b1425",
+    "file_count": 199,
+    "size_bytes": 49643128
+  },
+  "status": "available"
+}

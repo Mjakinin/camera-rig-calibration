@@ -1,0 +1,20 @@
+{
+  "experiment_id": "ceiling_bright",
+  "post_migration_inventory": {
+    "file_count": 441,
+    "sha256": "70e8402e917ba0e0084ae7dd0e6f8dcdffce4f8515d8a090808ad324f0d06e47",
+    "size_bytes": 100034799
+  },
+  "pre_migration_inventory": {
+    "file_count": 439,
+    "sha256": "26bf7f71aec83842cb49347ff6ff097d08fe9e8b1140b63fdba972ad024b3977",
+    "size_bytes": 100033753
+  },
+  "publication_kind": "verified_legacy_migration",
+  "published_at": "2026-07-24T14:43:18+00:00",
+  "schema_version": 5,
+  "source_result": "/workspaces/project/results/simulation/ceiling_bright",
+  "status": "published",
+  "target_dataset": "/workspaces/project/datasets/simulation/lighting/bright",
+  "target_result": "/workspaces/project/results/simulation/lighting/bright"
+}

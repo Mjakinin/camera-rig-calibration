@@ -28,53 +28,33 @@ model_prefix = (
     "beintelli_bus/"
 )
 
-real_root = "results/real_vehicle_data/"
-
-allowed_real_prefixes = (
-    "results/real_vehicle_data/INTRINSIC_RESULTS/iphone_05x_4k/",
-    "results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/",
-    "results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/",
-    "results/real_vehicle_data/real_05x_4k_3hz/99_FINAL_RESULTS/",
-    "results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/",
+legacy_result_roots = (
+    "results/bus_real_data/",
+    "results/real_vehicle_data/",
 )
 
-allowed_real_exact = {
-    "results/real_vehicle_data/real_05x_4k_1hz/EXPERIMENT_CONFIG.txt",
-    "results/real_vehicle_data/real_05x_4k_3hz/EXPERIMENT_CONFIG.txt",
-    "results/real_vehicle_data/real_05x_4k_5hz/EXPERIMENT_CONFIG.txt",
-}
-
-# Generated compact 1x report policy
-one_x_report_prefixes = (
-    "results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/",
-    "results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/",
-    "results/real_vehicle_data/real_1x_4k_intrinsics_v1/",
+scientific_result_roots = (
+    "results/simulation/",
+    "results/real_vehicle/",
 )
 
-one_x_report_exact = {
-    (
-        "results/real_vehicle_data/INTRINSIC_RESULTS/"
-        "iphone_1x_4k_3840x2160_INTRINSICS_REPORT.txt"
-    ),
-    (
-        "results/real_vehicle_data/INTRINSIC_RESULTS/"
-        "iphone_1x_4k_3840x2160_moving_calib_camera.json"
-    ),
+# Dataset payloads, calibration previews and transient working copies belong in
+# datasets/, data_local/ or workspace/temporary_runs/, never in published results.
+forbidden_result_directories = {
+    ".staging",
+    "debug_gallery",
+    "debug_images",
+    "diagnostics",
+    "inputs",
+    "observations",
+    "raw_images",
+    "selected_frames",
+    "working_images",
+    "workspace",
 }
 
-one_x_report_suffixes = {
-    ".txt",
-    ".csv",
-    ".json",
-    ".yaml",
-    ".yml",
-    ".md",
-}
-
-debug_prefix = (
-    "results/real_vehicle_data/"
-    "real_05x_4k_1hz/00_shared_input/"
-    "aruco_observations/debug_images/moving/"
+baseline_receipt = (
+    "results/simulation/baseline/route2/PUBLISHED.json"
 )
 
 forbidden_geometry_suffixes = (
@@ -145,35 +125,8 @@ def blob_content(object_id: str) -> bytes:
     )
 
 
-def real_path_allowed(relative: str) -> bool:
-    tail = relative[len(real_root):]
-
-    if "/" not in tail:
-        return True
-
-    if relative.startswith(debug_prefix):
-        return False
-
-    if relative in allowed_real_exact:
-        return True
-
-    if relative in one_x_report_exact:
-        return True
-
-    if relative.startswith(allowed_real_prefixes):
-        return True
-
-    if relative.startswith(one_x_report_prefixes):
-        return (
-            Path(relative).suffix.lower()
-            in one_x_report_suffixes
-        )
-
-    return False
-
-
-frame_count = 0
 pointer_paths: list[str] = []
+published_simulation_experiments = 0
 
 for relative, (object_id, object_size) in entries.items():
     if (
@@ -187,23 +140,27 @@ for relative, (object_id, object_size) in entries.items():
             f"unused alternative bus geometry tracked: {relative}"
         )
 
-    if (
-        relative.startswith(real_root)
-        and not real_path_allowed(relative)
-    ):
+    if relative.startswith(legacy_result_roots):
         errors.append(
-            f"disallowed real-vehicle payload: {relative}"
+            f"legacy result tree still tracked after schema-v5 migration: {relative}"
         )
 
-    if (
-        relative.startswith(
-            "results/real_vehicle_data/"
-            "real_05x_4k_1hz/00_shared_input/"
-            "raw_images/moving/frame_"
+    if relative.startswith(scientific_result_roots):
+        result_parts = set(Path(relative).parts)
+        forbidden_parts = sorted(
+            result_parts & forbidden_result_directories
         )
-        and relative.endswith(".png")
+        if forbidden_parts:
+            errors.append(
+                "generated input/debug payload tracked in scientific results "
+                f"({', '.join(forbidden_parts)}): {relative}"
+            )
+
+    if (
+        relative.startswith("results/simulation/")
+        and relative.endswith("/PUBLISHED.json")
     ):
-        frame_count += 1
+        published_simulation_experiments += 1
 
     if object_size <= 1024:
         content = blob_content(object_id)
@@ -252,9 +209,9 @@ else:
             f"{archive_hash}"
         )
 
-if frame_count != 78:
+if baseline_receipt not in entries:
     errors.append(
-        f"expected 78 one-Hz moving frames, found {frame_count}"
+        "schema-v5 Route-2 baseline publication receipt is missing"
     )
 
 model_path = repo / (
@@ -272,7 +229,10 @@ elif obj_uri not in model_path.read_text(encoding="utf-8"):
     errors.append("bus model.sdf does not reference the OBJ")
 
 print(f"Tracked files checked: {len(entries)}")
-print(f"One-Hz moving frames: {frame_count}")
+print(
+    "Published simulation experiments: "
+    f"{published_simulation_experiments}"
+)
 print(f"Git LFS pointers: {len(pointer_paths)}")
 
 for warning in warnings:
@@ -287,6 +247,7 @@ if errors:
 print("[OK] Repository contains no Git LFS pointers or rules.")
 print("[OK] Bus OBJ is stored as a verified regular-Git gzip archive.")
 print("[OK] No other regular Git object reaches 100 MiB.")
-print("[OK] Real-vehicle payload policy satisfied.")
+print("[OK] Schema-v5 results contain scientific outputs only.")
+print("[OK] Legacy result trees are no longer tracked.")
 print("[OK] Bus model references the OBJ.")
 print("[OK] No unused alternative bus geometry is tracked.")

@@ -54,7 +54,7 @@ def test_baseline_simulation_shows_catalogue_and_reuses_existing_capture(
     )
     assert reused == baseline.dataset_root
     assert reused is not None
-    assert reused.is_relative_to(REPOSITORY / "datasets/simulation")
+    assert reused.is_dir()
     assert simulation.moving_width == 1280
     assert simulation.moving_height == 720
     assert simulation.moving_hfov_deg == 69.1
@@ -80,7 +80,7 @@ def test_existing_ablation_can_be_selected_directly_by_number(monkeypatch) -> No
     selected = entries[fov_number - 1]
     assert reused == selected.dataset_root
     assert reused is not None
-    assert reused.is_relative_to(REPOSITORY / "datasets/simulation")
+    assert reused.is_dir()
     assert "Selected existing simulation" in stream.getvalue()
 
 

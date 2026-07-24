@@ -1,1 +1,0 @@
-observer_type,observer_id,camera_name,frame_id,image_path,marker_id,marker_length_m,fx,fy,cx,cy,pnp_success,rvec_x,rvec_y,rvec_z,tvec_x_m,tvec_y_m,tvec_z_m,distance_m,center_u,center_v,area_px2,corner0_u,corner0_v,corner1_u,corner1_v,corner2_u,corner2_v,corner3_u,corner3_v

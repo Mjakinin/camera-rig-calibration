@@ -1,0 +1,2 @@
+# detect_markers: Shared ArUco detection
+/usr/bin/python3 /workspaces/project/run/bus_real_data/_shared/baseline/02_detect_shared_aruco_observations.py --dataset /workspaces/project/results/bus_real_data/ablation/moving_cam/density/density_stride_8_offset4/raw_images --out /workspaces/project/results/reuse_density_stride_8_offset4/runs/20260722_221902_baseline_ff667213/01_OBSERVATIONS --cameras cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 --moving-camera-id moving_calib_camera --marker-length-m 0.17 --dictionary DICT_4X4_50 --allowed-marker-ids auto --minimum-area-px2 0.0

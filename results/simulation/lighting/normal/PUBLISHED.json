@@ -1,0 +1,20 @@
+{
+  "experiment_id": "ceiling_normal",
+  "post_migration_inventory": {
+    "file_count": 441,
+    "sha256": "3f0dea7481ac1416ced24f050c8566f4869060621d35f5c81b04dad7bb15157d",
+    "size_bytes": 85829540
+  },
+  "pre_migration_inventory": {
+    "file_count": 439,
+    "sha256": "8611550109541d8880e6241f35b7412d54cccd6579cd48fcfd31023012086c39",
+    "size_bytes": 85828494
+  },
+  "publication_kind": "verified_legacy_migration",
+  "published_at": "2026-07-24T14:43:20+00:00",
+  "schema_version": 5,
+  "source_result": "/workspaces/project/results/simulation/ceiling_normal",
+  "status": "published",
+  "target_dataset": "/workspaces/project/datasets/simulation/lighting/normal",
+  "target_result": "/workspaces/project/results/simulation/lighting/normal"
+}

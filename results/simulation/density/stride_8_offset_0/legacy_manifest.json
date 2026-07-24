@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "migration": "legacy_read_only",
+  "category": "simulation",
+  "experiment_id": "density_stride_8_12p5pct",
+  "source": "/workspaces/project/results/bus_real_data/ablation/moving_cam/density/density_stride_8_12p5pct",
+  "has_input": true,
+  "has_results": true,
+  "rerunnable": true,
+  "input_id": "input_5ae77b8030c4",
+  "target": "/workspaces/project/results/simulation/density_stride_8_12p5pct",
+  "factor": "route sampling density",
+  "value": "25 frames",
+  "parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 25,
+    "route_sampling_strategy": "existing_subset_stride_8_offset_0"
+  },
+  "storage": {
+    "hardlinked": 1,
+    "copied": 0,
+    "existing": 37
+  },
+  "input_verification": {
+    "verified": true,
+    "sha256": "7f162bd0028f250bb525bafc22d445db751904e9f8421231ffa89048d87034d7",
+    "file_count": 35,
+    "size_bytes": 3770029
+  },
+  "status": "available"
+}

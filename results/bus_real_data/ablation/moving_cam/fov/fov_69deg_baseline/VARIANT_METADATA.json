@@ -1,7 +1,0 @@
-{
-  "variant": "fov_69deg_baseline",
-  "ablation_scope": "moving_cam",
-  "ablation_study": "fov",
-  "raw_images": "results/bus_real_data/ablation/moving_cam/fov/fov_69deg_baseline/raw_images",
-  "aruco_observations": "results/bus_real_data/ablation/moving_cam/fov/fov_69deg_baseline/aruco_observations"
-}

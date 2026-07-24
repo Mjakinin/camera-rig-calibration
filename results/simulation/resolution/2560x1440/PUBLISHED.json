@@ -1,0 +1,20 @@
+{
+  "experiment_id": "moving_res_2560x1440_upscaled",
+  "post_migration_inventory": {
+    "file_count": 471,
+    "sha256": "c6d005343047169572dd67287eb4553735a83a0e09cec43c043c275d18c7a3f4",
+    "size_bytes": 186164119
+  },
+  "pre_migration_inventory": {
+    "file_count": 469,
+    "sha256": "aa5a728c0b3ecb17ed6f21500cebc5ec5a0db9b76069d1f00da0df1a0f448dd8",
+    "size_bytes": 186163027
+  },
+  "publication_kind": "verified_legacy_migration",
+  "published_at": "2026-07-24T14:43:26+00:00",
+  "schema_version": 5,
+  "source_result": "/workspaces/project/results/simulation/moving_res_2560x1440_upscaled",
+  "status": "published",
+  "target_dataset": "/workspaces/project/datasets/simulation/resolution/2560x1440",
+  "target_result": "/workspaces/project/results/simulation/resolution/2560x1440"
+}

@@ -1,0 +1,20 @@
+{
+  "experiment_id": "fov_40deg",
+  "post_migration_inventory": {
+    "file_count": 465,
+    "sha256": "e94158f768a4926366e3281ed03f64f066c5d37d23452d917cf2bfa1fa93bb1e",
+    "size_bytes": 32856592
+  },
+  "pre_migration_inventory": {
+    "file_count": 463,
+    "sha256": "a8cb3c00699d79621844ecfdbf80be54bf8306abdeac013bd7d24cf738e6a57c",
+    "size_bytes": 32855564
+  },
+  "publication_kind": "verified_legacy_migration",
+  "published_at": "2026-07-24T14:43:23+00:00",
+  "schema_version": 5,
+  "source_result": "/workspaces/project/results/simulation/fov_40deg",
+  "status": "published",
+  "target_dataset": "/workspaces/project/datasets/simulation/fov/40deg",
+  "target_result": "/workspaces/project/results/simulation/fov/40deg"
+}

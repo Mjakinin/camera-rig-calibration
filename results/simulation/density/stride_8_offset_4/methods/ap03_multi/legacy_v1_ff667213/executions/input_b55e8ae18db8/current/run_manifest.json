@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "status": "completed",
+  "migration": "successful_rigcal_v1_run",
+  "legacy_source_run": "/workspaces/project/results/reuse_density_stride_8_offset4/runs/20260722_221902_baseline_ff667213",
+  "experiment_id": "density_stride_8_offset4",
+  "result_category": "simulation",
+  "input_id": "input_b55e8ae18db8",
+  "method_id": "ap03_multi",
+  "variant": "legacy_v1_ff667213",
+  "method_fingerprint": "ff6672138b0bb0e896aa8af1cd03abd50f4e406b2ebd115586267538992dcf90",
+  "enabled_methods": [
+    "ap03_multi"
+  ],
+  "run_id": "20260722_221902_baseline_ff667213"
+}

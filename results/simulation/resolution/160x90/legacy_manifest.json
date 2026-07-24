@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "migration": "legacy_read_only",
+  "category": "simulation",
+  "experiment_id": "moving_res_160x90_extreme_pixel",
+  "source": "/workspaces/project/results/bus_real_data/ablation/moving_cam/res/moving_res_160x90_extreme_pixel",
+  "has_input": true,
+  "has_results": true,
+  "rerunnable": true,
+  "input_id": "input_e8a61f1dd783",
+  "target": "/workspaces/project/results/simulation/moving_res_160x90_extreme_pixel",
+  "factor": "moving-camera resolution",
+  "value": "160x90",
+  "parameters": {
+    "route": "route2",
+    "moving_width": 160,
+    "moving_height": 90,
+    "moving_hfov_deg": 69.1,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses"
+  },
+  "storage": {
+    "hardlinked": 1,
+    "copied": 0,
+    "existing": 202
+  },
+  "input_verification": {
+    "verified": true,
+    "sha256": "43105fcb8d038cd7355e21641690e21f7a32ac16d890962ea7e3b9b0fac56ba6",
+    "file_count": 198,
+    "size_bytes": 2937550
+  },
+  "status": "available"
+}

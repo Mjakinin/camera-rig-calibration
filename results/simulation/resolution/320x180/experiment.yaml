@@ -1,0 +1,22 @@
+schema_version: 5
+id: moving_res_320x180_low
+category: simulation
+source_kind: prepared
+storage:
+  category: simulation
+  relative: resolution/320x180
+input_ids:
+- input_ed4296077195
+simulation_parameters:
+  route: route2
+  moving_width: 320
+  moving_height: 180
+  moving_hfov_deg: 69.1
+  lighting: baseline
+  lighting_scale: 1.0
+  motion_blur_kernel: 0
+  motion_blur_angle_deg: 0.0
+  target_route_frames: 189
+  route_sampling_strategy: original_route_poses
+migration: rigcal_v43_verified_move
+migrated_at: '2026-07-24T14:43:26+00:00'

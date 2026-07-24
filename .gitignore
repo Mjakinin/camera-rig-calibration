@@ -59,9 +59,29 @@ data_local/*
 results/*/INPUT_DATA/
 results/*/runs/
 
-# rigcal v2 content-addressed experiment outputs (configs stay in workspace/).
-results/simulation/
-results/real_vehicle/
+# Publish compact scientific result trees, never captured/prepared inputs.
+results/simulation/**/inputs/
+results/simulation/**/raw_images/
+results/simulation/**/observations/
+results/real_vehicle/**
+!results/real_vehicle/video/
+!results/real_vehicle/video/**
+!results/real_vehicle/frames/
+!results/real_vehicle/frames/**
+!results/real_vehicle/rosbag/
+!results/real_vehicle/rosbag/**
+!results/real_vehicle/prepared/
+!results/real_vehicle/prepared/**
+!results/real_vehicle/_intrinsics/
+!results/real_vehicle/_intrinsics/**/
+!results/real_vehicle/_intrinsics/**/*.json
+!results/real_vehicle/_intrinsics/**/*.yaml
+!results/real_vehicle/_intrinsics/**/*.txt
+results/real_vehicle/**/inputs/
+results/real_vehicle/**/raw_images/
+results/real_vehicle/**/observations/
+results/real_vehicle/_intrinsics/**/selected_frames/
+results/real_vehicle/_intrinsics/**/diagnostics/
 
 # Real-data generated caches/logs
 results/real_vehicle_data/**/_pipeline_logs/
@@ -79,80 +99,18 @@ results/bus_real_data/method_selection/
 **/previews/
 **/*_preview/
 
-# Canonical shared input datasets are intentionally tracked
-!results/bus_real_data/00_shared_baseline/
-!results/bus_real_data/00_shared_baseline/**
-!results/real_vehicle_data/
-!results/real_vehicle_data/**/00_shared_input/
-!results/real_vehicle_data/**/00_shared_input/**
-# Calibration runtime backups and long logs
-results/bus_real_data/_final_corrected_overnight/
-results/bus_real_data/_master_logs/
-results/bus_real_data/POST_OVERNIGHT_DIAGNOSTICS.txt
+# Pre-rigcal result trees were migrated into the compact schema-v5 structure.
+# Keep local legacy sources readable when present, but never add them again.
+results/bus_real_data/
+results/real_vehicle_data/
+
+# Calibration runtime backups and long logs.
 results/**/_pipeline_logs/
 results/**/*.log
-
-# Real-vehicle 0.5x temporal-sampling ablation
-# The 1-Hz shared input is intentionally tracked as one reproducible sample.
-# Regenerable method workspaces and redundant debug copies remain local.
-results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/aruco_observations/debug_images/moving/
-results/real_vehicle_data/real_05x_4k_1hz/02_ap01_real/
-results/real_vehicle_data/real_05x_4k_1hz/03_ap02_real/
-results/real_vehicle_data/real_05x_4k_1hz/04_ap03_real/
-results/real_vehicle_data/real_05x_4k_1hz/_pipeline_logs/
-
-# For 3 Hz and 5 Hz, only configuration and final reports are tracked.
-results/real_vehicle_data/real_05x_4k_3hz/00_shared_input/
-results/real_vehicle_data/real_05x_4k_3hz/02_ap01_real/
-results/real_vehicle_data/real_05x_4k_3hz/03_ap02_real/
-results/real_vehicle_data/real_05x_4k_3hz/04_ap03_real/
-results/real_vehicle_data/real_05x_4k_3hz/_pipeline_logs/
-results/real_vehicle_data/real_05x_4k_5hz/00_shared_input/
-results/real_vehicle_data/real_05x_4k_5hz/02_ap01_real/
-results/real_vehicle_data/real_05x_4k_5hz/03_ap02_real/
-results/real_vehicle_data/real_05x_4k_5hz/04_ap03_real/
-results/real_vehicle_data/real_05x_4k_5hz/_pipeline_logs/
 
 # ============================================================
 # LFS-free repository payload policy
 # ============================================================
-
-# Ignore all real-vehicle payloads by default.
-results/real_vehicle_data/**
-
-# Direct documentation.
-!results/real_vehicle_data/*.md
-!results/real_vehicle_data/*.txt
-
-# Compact 0.5x intrinsic calibration.
-!results/real_vehicle_data/INTRINSIC_RESULTS/
-!results/real_vehicle_data/INTRINSIC_RESULTS/iphone_05x_4k/
-!results/real_vehicle_data/INTRINSIC_RESULTS/iphone_05x_4k/**
-
-# Complete reproducible 1-Hz input.
-!results/real_vehicle_data/real_05x_4k_1hz/
-!results/real_vehicle_data/real_05x_4k_1hz/EXPERIMENT_CONFIG.txt
-!results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/
-!results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/**
-
-# Redundant per-frame ArUco debug renders stay local.
-results/real_vehicle_data/real_05x_4k_1hz/00_shared_input/aruco_observations/debug_images/moving/
-
-# Final 1-Hz reports.
-!results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/
-!results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/**
-
-# Only configuration and final reports for 3 Hz.
-!results/real_vehicle_data/real_05x_4k_3hz/
-!results/real_vehicle_data/real_05x_4k_3hz/EXPERIMENT_CONFIG.txt
-!results/real_vehicle_data/real_05x_4k_3hz/99_FINAL_RESULTS/
-!results/real_vehicle_data/real_05x_4k_3hz/99_FINAL_RESULTS/**
-
-# Only configuration and final reports for 5 Hz.
-!results/real_vehicle_data/real_05x_4k_5hz/
-!results/real_vehicle_data/real_05x_4k_5hz/EXPERIMENT_CONFIG.txt
-!results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/
-!results/real_vehicle_data/real_05x_4k_5hz/99_FINAL_RESULTS/**
 
 # The 160.7 MB simulation OBJ is materialized from the tracked 31.2 MB gzip
 # archive on the first rigcal start. Never add the generated OBJ to Git.
@@ -165,52 +123,3 @@ src/calib_lab/bus_real_data/models/beintelli_bus/meshes/gltf/
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/beintelli_erklarbus.glb
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.stl
 src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.obj_material_backup
-
-# BEGIN compact 1x report policy
-# Only compact textual 1x reports are tracked.
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/**/
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/*.txt
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/**/*.txt
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/*.csv
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/**/*.csv
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/*.json
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/**/*.json
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/*.yaml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/**/*.yaml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/*.yml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/**/*.yml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/*.md
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4317_v1/**/*.md
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/**/
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/*.txt
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/**/*.txt
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/*.csv
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/**/*.csv
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/*.json
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/**/*.json
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/*.yaml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/**/*.yaml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/*.yml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/**/*.yml
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/*.md
-!results/real_vehicle_data/real_1x_4k_3hz_IMG_4318_v1/**/*.md
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/**/
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/*.txt
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/**/*.txt
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/*.csv
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/**/*.csv
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/*.json
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/**/*.json
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/*.yaml
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/**/*.yaml
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/*.yml
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/**/*.yml
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/*.md
-!results/real_vehicle_data/real_1x_4k_intrinsics_v1/**/*.md
-!results/real_vehicle_data/INTRINSIC_RESULTS/
-!results/real_vehicle_data/INTRINSIC_RESULTS/iphone_1x_4k_3840x2160_INTRINSICS_REPORT.txt
-!results/real_vehicle_data/INTRINSIC_RESULTS/iphone_1x_4k_3840x2160_moving_calib_camera.json
-# END compact 1x report policy

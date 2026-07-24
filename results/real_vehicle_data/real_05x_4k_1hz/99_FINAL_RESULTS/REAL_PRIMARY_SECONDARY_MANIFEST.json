@@ -1,8 +1,0 @@
-{
-  "primary_report": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/REAL_PRIMARY_CAM_TO_CAM.txt",
-  "secondary_report": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/REAL_SECONDARY_AP02_MARKER_MAP_REF3.txt",
-  "secondary_csv": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/real_vehicle_data/real_05x_4k_1hz/99_FINAL_RESULTS/REAL_SECONDARY_AP02_MARKER_MAP_REF3.csv",
-  "reference_marker_id": 3,
-  "ground_truth_used": false,
-  "simulation_marker_map_used": false
-}

@@ -235,15 +235,9 @@ def test_queue_auto_freezes_automatic_selections_and_reuses_shared_preparation(
 
     assert reviews == 0
     assert {row["status"] for row in results.values()} == {"completed"}
-    resolved_queue = (
-        tmp_path
-        / "workspace/queues/shared_preparation.resolved/queue.yaml"
-    )
-    assert resolved_queue.is_file()
     resolved_configs = [
-        load_config(path)
-        for path in resolved_queue.parent.glob("*.yaml")
-        if path.name != "queue.yaml"
+        load_config(Path(row["result"]) / "resolved_config.yaml")
+        for row in results.values()
     ]
     assert len(resolved_configs) == 2
     assert all(
@@ -257,18 +251,15 @@ def test_queue_auto_freezes_automatic_selections_and_reuses_shared_preparation(
             in (Path(row["result"]) / "commands.txt").read_text()
         )
     assert detector_commands == [False, False]
-    queue_state = json.loads(
-        (
-            tmp_path / "workspace/queues/shared_preparation.state.json"
-        ).read_text(encoding="utf-8")
-    )
-    preparation = Path(queue_state["preflight_preparation"])
-    assert (
-        (preparation / "commands.txt")
-        .read_text(encoding="utf-8")
-        .count("02_detect_shared_aruco_observations.py")
-        == 1
-    )
+    assert not (
+        tmp_path / "workspace/temporary_runs/shared_preparation"
+    ).exists()
+    assert len(
+        {
+            config.dataset.prepared_root
+            for config in resolved_configs
+        }
+    ) == 1
 
 
 @pytest.mark.integration

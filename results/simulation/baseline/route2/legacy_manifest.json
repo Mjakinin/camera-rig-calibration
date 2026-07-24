@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "migration": "legacy_read_only",
+  "category": "simulation",
+  "experiment_id": "route2",
+  "source": "/workspaces/project/results/bus_real_data/ablation/world/route/route2",
+  "has_input": true,
+  "has_results": true,
+  "rerunnable": true,
+  "input_id": "input_a5c320b0085e",
+  "target": "/workspaces/project/results/simulation/route2",
+  "factor": "BASELINE \u2014 all defaults",
+  "value": "Route 2 baseline parameter vector",
+  "parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses"
+  },
+  "storage": {
+    "hardlinked": 1,
+    "copied": 0,
+    "existing": 202
+  },
+  "input_verification": {
+    "verified": true,
+    "sha256": "303eea0baaf73255de4d05f34d691198f2025496b4a8a7d9351987f2f3dd4284",
+    "file_count": 199,
+    "size_bytes": 24099634
+  },
+  "status": "available"
+}

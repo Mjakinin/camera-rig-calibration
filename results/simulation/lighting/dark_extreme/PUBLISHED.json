@@ -1,0 +1,20 @@
+{
+  "experiment_id": "ceiling_dark_extreme",
+  "post_migration_inventory": {
+    "file_count": 440,
+    "sha256": "93f1806dcde3f910c7508a22b970bdd04609701747f4e33bbb0368d315900b9c",
+    "size_bytes": 41038123
+  },
+  "pre_migration_inventory": {
+    "file_count": 438,
+    "sha256": "0d90268ade35242ae778f1e067224ce0814b90ed9af25077114aeb654fb96b03",
+    "size_bytes": 41037041
+  },
+  "publication_kind": "verified_legacy_migration",
+  "published_at": "2026-07-24T14:43:19+00:00",
+  "schema_version": 5,
+  "source_result": "/workspaces/project/results/simulation/ceiling_dark_extreme",
+  "status": "published",
+  "target_dataset": "/workspaces/project/datasets/simulation/lighting/dark_extreme",
+  "target_result": "/workspaces/project/results/simulation/lighting/dark_extreme"
+}

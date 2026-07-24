@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "migration": "legacy_read_only",
+  "category": "simulation",
+  "experiment_id": "moving_blur_k41_extreme",
+  "source": "/workspaces/project/results/bus_real_data/ablation/moving_cam/motion_blur/moving_blur_k41_extreme",
+  "has_input": true,
+  "has_results": true,
+  "rerunnable": true,
+  "input_id": "input_29bba2996530",
+  "target": "/workspaces/project/results/simulation/moving_blur_k41_extreme",
+  "factor": "moving-camera motion blur",
+  "value": "kernel=41, angle=0 deg",
+  "parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 41,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses"
+  },
+  "storage": {
+    "hardlinked": 1,
+    "copied": 0,
+    "existing": 200
+  },
+  "input_verification": {
+    "verified": true,
+    "sha256": "e2c02dd971a2740c13dfdfc8822e306c7a7db2d99f1018e9063f182f3a1afcb7",
+    "file_count": 199,
+    "size_bytes": 52223647
+  },
+  "status": "available"
+}

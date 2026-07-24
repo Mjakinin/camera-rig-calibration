@@ -1,0 +1,22 @@
+schema_version: 5
+id: route1
+category: simulation
+source_kind: prepared
+storage:
+  category: simulation
+  relative: route/route1
+input_ids:
+- input_381b879c1c47
+simulation_parameters:
+  route: route1
+  moving_width: 1280
+  moving_height: 720
+  moving_hfov_deg: 69.1
+  lighting: baseline
+  lighting_scale: 1.0
+  motion_blur_kernel: 0
+  motion_blur_angle_deg: 0.0
+  target_route_frames: 352
+  route_sampling_strategy: original_route_poses
+migration: rigcal_v43_verified_move
+migrated_at: '2026-07-24T14:43:27+00:00'

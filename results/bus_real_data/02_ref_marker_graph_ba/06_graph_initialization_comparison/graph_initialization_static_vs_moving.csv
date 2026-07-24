@@ -1,3 +1,0 @@
-mode,static_camera_pose_count,moving_frame_pose_count,marker_pose_count,initialized_static_cameras,missing_static_cameras,initialized_markers,missing_markers
-static_only,3,0,11,3 / 4,['cam_edge_5'],11 / 18,"[0, 9, 10, 11, 12, 13, 16]"
-with_moving,4,170,20,4 / 4,[],20 / 20,[]

@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "migration": "legacy_read_only",
+  "category": "simulation",
+  "experiment_id": "density_route2_125pct_recaptured",
+  "source": "/workspaces/project/results/bus_real_data/ablation/moving_cam/density/density_route2_125pct_recaptured",
+  "has_input": true,
+  "has_results": true,
+  "rerunnable": true,
+  "input_id": "input_5afbfc04896d",
+  "target": "/workspaces/project/results/simulation/density_route2_125pct_recaptured",
+  "factor": "route sampling density",
+  "value": "236 frames",
+  "parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 236,
+    "route_sampling_strategy": "resampled_route_poses"
+  },
+  "storage": {
+    "hardlinked": 1,
+    "copied": 0,
+    "existing": 251
+  },
+  "input_verification": {
+    "verified": true,
+    "sha256": "1ae32301634313a65490abe563b06b8c7920b4275e82645c46e369e575f42d8e",
+    "file_count": 246,
+    "size_bytes": 29976708
+  },
+  "status": "available"
+}

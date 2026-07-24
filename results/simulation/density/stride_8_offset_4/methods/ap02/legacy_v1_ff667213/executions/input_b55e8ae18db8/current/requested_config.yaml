@@ -1,0 +1,121 @@
+schema_version: 1
+project:
+  workspace_root: /workspaces/project/workspace
+  dataset_cache_root: /workspaces/project/datasets
+  output_root: /workspaces/project/results
+  run_label: baseline
+  execution_mode: prepare_only
+dataset:
+  id: reuse_density_stride_8_offset4
+  scene_type: simulation
+  description: ''
+  prepared_root: /workspaces/project/results/bus_real_data/ablation/moving_cam/density/density_stride_8_offset4
+  input_root: /workspaces/project/results/bus_real_data/ablation/moving_cam/density/density_stride_8_offset4
+static_cameras:
+- id: cam_edge_0
+  images: []
+  required: true
+- id: cam_edge_1
+  images: []
+  required: true
+- id: cam_edge_3
+  images: []
+  required: true
+- id: cam_edge_5
+  images: []
+  required: true
+moving_camera:
+  id: moving_calib_camera
+  checkerboard_columns: 8
+  checkerboard_rows: 6
+  intrinsic_maximum_views: 80
+  intrinsic_minimum_frame_gap: 5
+  intrinsic_minimum_detections: 20
+mcap:
+  save_all_candidates: false
+simulation:
+  enabled: false
+  preset: existing_density_stride_8_offset4
+  world: /workspaces/project/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf
+  route: /workspaces/project/src/calib_lab/bus_real_data/config/moving_camera_route2_interpolated_final.json
+  moving_model_name: moving_calib_camera
+  settle_seconds: 0.35
+  post_pose_skip: 5
+  frame_timeout_seconds: 3.0
+  startup_timeout_seconds: 60.0
+  route_name: route2
+  moving_width: 1280
+  moving_height: 720
+  moving_hfov_deg: 69.1
+  lighting: baseline
+  lighting_scale: 1.0
+  motion_blur_kernel: 0
+  motion_blur_angle_deg: 0.0
+  target_route_frames: 25
+  route_sampling_strategy: existing_subset_stride_8_offset_4
+sampling:
+  image_format: png
+  start_seconds: 0.0
+markers:
+  dictionary: DICT_4X4_50
+  length_m: 0.17
+  allowed_ids: auto
+  minimum_area_px2: 0.0
+references:
+  root_camera: auto
+  ap02_pose_reference_marker_id: auto
+  evaluation_scale_anchor_marker_id: auto
+colmap:
+  executable: colmap
+  matcher: exhaustive
+  use_gpu: false
+  maximum_image_size: 2400
+  maximum_features: 8192
+  sequential_overlap: 20
+  loop_detection: true
+  mapper_minimum_matches: 8
+  reuse: false
+methods:
+  enabled:
+  - ap01
+  - ap02
+  - ap03_multi
+  ap01:
+    top_moving_per_marker: 8
+    scale_top_per_marker: 30
+  ap02:
+    max_nfev_static: 100
+    max_nfev_moving: 160
+    moving_selection: smart
+    top_per_marker: 8
+    top_per_pair: 4
+    max_moving_frames: 0
+  ap03_single:
+    marker_id: auto
+    minimum_area_px2: 100.0
+    reprojection_threshold_px: 5.0
+    ransac_iterations: 1000
+    minimum_inliers: 4
+  ap03_multi:
+    marker_id: auto
+    minimum_area_px2: 100.0
+    reprojection_threshold_px: 5.0
+    ransac_iterations: 1000
+    minimum_inliers: 4
+    marker_ids: auto
+  extensions: {}
+frame_selection:
+  policy: baseline
+  options: {}
+evaluation:
+  enabled: true
+  reprojection_threshold_px: 5.0
+  minimum_inliers: 4
+  ransac_iterations: 800
+  minimum_triangulation_angle_deg: 0.5
+  maximum_moving_observations_per_marker: 80
+reporting:
+  terminal_verbosity: normal
+  csv: true
+  json: true
+  text: true

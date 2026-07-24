@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "migration": "legacy_read_only",
+  "category": "simulation",
+  "experiment_id": "fov_140deg_extreme",
+  "source": "/workspaces/project/results/bus_real_data/ablation/moving_cam/fov/fov_140deg_extreme",
+  "has_input": true,
+  "has_results": true,
+  "rerunnable": true,
+  "input_id": "input_19f174ee5829",
+  "target": "/workspaces/project/results/simulation/fov_140deg_extreme",
+  "factor": "moving-camera horizontal FOV",
+  "value": "140 deg",
+  "parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 140.0,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses"
+  },
+  "storage": {
+    "hardlinked": 1,
+    "copied": 0,
+    "existing": 201
+  },
+  "input_verification": {
+    "verified": true,
+    "sha256": "00ec18f2b1efface3724149d892588ecc6cf3cbdcef18bb25b7900e857383629",
+    "file_count": 200,
+    "size_bytes": 24322904
+  },
+  "status": "available"
+}

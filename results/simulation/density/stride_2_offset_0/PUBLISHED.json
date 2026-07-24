@@ -1,0 +1,20 @@
+{
+  "experiment_id": "density_stride_2_50pct",
+  "post_migration_inventory": {
+    "file_count": 282,
+    "sha256": "f7618ef1fe795abf40055f71f745628c7647b6dee22cdc2db493b16739d37dea",
+    "size_bytes": 25559636
+  },
+  "pre_migration_inventory": {
+    "file_count": 280,
+    "sha256": "c40f8fd62ef067de233a2f6d231cb05e080b650377173e9ae7a3cef8e6688bb0",
+    "size_bytes": 25558526
+  },
+  "publication_kind": "verified_legacy_migration",
+  "published_at": "2026-07-24T14:43:21+00:00",
+  "schema_version": 5,
+  "source_result": "/workspaces/project/results/simulation/density_stride_2_50pct",
+  "status": "published",
+  "target_dataset": "/workspaces/project/datasets/simulation/density/stride_2_offset_0",
+  "target_result": "/workspaces/project/results/simulation/density/stride_2_offset_0"
+}

@@ -1,0 +1,22 @@
+schema_version: 5
+id: fov_140deg_extreme
+category: simulation
+source_kind: prepared
+storage:
+  category: simulation
+  relative: fov/140deg
+input_ids:
+- input_19f174ee5829
+simulation_parameters:
+  route: route2
+  moving_width: 1280
+  moving_height: 720
+  moving_hfov_deg: 140.0
+  lighting: baseline
+  lighting_scale: 1.0
+  motion_blur_kernel: 0
+  motion_blur_angle_deg: 0.0
+  target_route_frames: 189
+  route_sampling_strategy: original_route_poses
+migration: rigcal_v43_verified_move
+migrated_at: '2026-07-24T14:43:22+00:00'
