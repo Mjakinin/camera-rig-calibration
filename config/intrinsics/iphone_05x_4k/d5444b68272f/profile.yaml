@@ -1,0 +1,11 @@
+schema_version: 1
+profile_id: iphone_05x_4k
+display_name: iPhone 0.5x 4K
+fingerprint: d5444b68272f47416f29cd5f2236df262a72ad2b107f1d4012d291ffcdecaf86
+fingerprint_basis: intrinsics_sha256
+intrinsics: intrinsics.json
+image_width: 3840
+image_height: 2160
+distortion_model: plumb_bob
+source_video: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/appras_sose26/0.5/0.5_Intrinsics.mov
+migration: legacy_profile_preserved

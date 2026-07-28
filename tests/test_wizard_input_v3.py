@@ -4,21 +4,28 @@ import json
 from io import StringIO
 from pathlib import Path
 
+import pytest
 import typer
 from rich.console import Console
 
+import camera_rig_calibration.wizard as wizard_module
 from camera_rig_calibration.config.models import MovingCameraSettings
+from camera_rig_calibration.input.video_geometry import VideoGeometry
 from camera_rig_calibration.inventory import PreparedDatasetSummary
 from camera_rig_calibration.input.topics import McapTopic
 from camera_rig_calibration.wizard import (
+    _aruco_experiment_id,
     _camera_id_from_ros_topic,
     _checkerboard_sources,
+    _data_local_input_root,
     _detected_static_camera_groups,
     _detected_static_pairs,
     _mcap_camera_sources,
     _moving_source,
     _prepared_input,
+    _stored_prepared_marker_settings,
     _prompt_enum_choice,
+    _real_data_input,
     _related_camera_info_topics,
 )
 
@@ -36,6 +43,20 @@ def _intrinsics(path: Path, camera_id: str) -> None:
             }
         ),
         encoding="utf-8",
+    )
+
+
+def _mock_video_geometry(monkeypatch) -> None:
+    monkeypatch.setattr(
+        wizard_module,
+        "probe_video_geometry",
+        lambda path: VideoGeometry(
+            encoded_width=1920,
+            encoded_height=1080,
+            display_rotation_degrees=-90,
+            output_width=1080,
+            output_height=1920,
+        ),
     )
 
 
@@ -88,12 +109,103 @@ def test_prepared_manifest_camera_binding_needs_no_identity_or_hz_prompt(
 
     assert [camera.id for camera in cameras] == ["left", "right"]
     assert moving.id == "wand"
-    assert prompts == ["Prepared dataset number (0 = back, -1 = another path)"]
+    assert prompts == ["Prepared dataset number (0 = back)"]
+
+
+def test_prepared_dataset_reuses_its_versioned_detector_contract(
+    tmp_path: Path,
+) -> None:
+    prepared = tmp_path / "prepared"
+    observations = prepared / "observations"
+    observations.mkdir(parents=True)
+    (observations / "detection_config.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 5,
+                "markers": {
+                    "dictionary": "DICT_4X4_50",
+                    "length_m": 0.17,
+                    "accepted_ids": "all_detected",
+                    "detection_mode": "high_sensitivity",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    settings = _stored_prepared_marker_settings(prepared)
+
+    assert settings.detection_mode == "high_sensitivity"
+    assert settings.dictionary == "DICT_4X4_50"
+
+
+def test_aruco_experiment_id_replaces_an_existing_detector_suffix() -> None:
+    sensitive = "capture__aruco_high_sensitivity"
+
+    assert _aruco_experiment_id(sensitive, "high_sensitivity") == sensitive
+    assert _aruco_experiment_id(sensitive, "baseline") == "capture"
+    assert (
+        _aruco_experiment_id(sensitive, "subpixel_refined")
+        == "capture__aruco_subpixel_refined"
+    )
+
+
+def test_data_local_root_is_used_without_a_folder_prompt(
+    tmp_path: Path, monkeypatch
+) -> None:
+    landing = tmp_path / "data_local"
+    (landing / "nested").mkdir(parents=True)
+    monkeypatch.setattr(
+        typer,
+        "prompt",
+        lambda *args, **kwargs: pytest.fail(
+            "selecting the canonical data_local root must not prompt"
+        ),
+    )
+
+    assert _data_local_input_root(tmp_path) == landing.resolve()
+
+
+def test_missing_data_local_fails_without_creating_or_prompting(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setattr(
+        typer,
+        "prompt",
+        lambda *args, **kwargs: pytest.fail(
+            "missing data_local must not open a manual path prompt"
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="data_local"):
+        _data_local_input_root(tmp_path)
+
+    assert not (tmp_path / "data_local").exists()
+
+
+def test_empty_data_local_fails_before_any_configuration_prompt(
+    tmp_path: Path, monkeypatch
+) -> None:
+    (tmp_path / "data_local").mkdir()
+    monkeypatch.setattr(
+        typer,
+        "prompt",
+        lambda *args, **kwargs: pytest.fail(
+            "empty data_local must fail before configuration prompts"
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="No moving-camera"):
+        _real_data_input(
+            tmp_path,
+            Console(file=StringIO(), force_terminal=False),
+        )
 
 
 def test_target_hz_is_prompted_for_new_video_but_not_prepared_frames(
     tmp_path: Path, monkeypatch
 ) -> None:
+    _mock_video_geometry(monkeypatch)
     video_root = tmp_path / "video"
     video_root.mkdir()
     (video_root / "moving.mp4").write_bytes(b"fixture")
@@ -142,11 +254,12 @@ def test_target_hz_is_prompted_for_new_video_but_not_prepared_frames(
 def test_declining_advanced_video_settings_skips_checkerboard_prompts(
     tmp_path: Path, monkeypatch
 ) -> None:
+    _mock_video_geometry(monkeypatch)
     input_root = tmp_path / "videos"
     input_root.mkdir()
     (input_root / "moving.mp4").write_bytes(b"fixture")
     (input_root / "checkerboard.mp4").write_bytes(b"fixture")
-    responses = iter(["1", 2, 1, 1, "checkerboard_4k", 2.0])
+    responses = iter(["1", 2, 1, 1, "checkerboard_4k", 2.0, 1])
     prompts: list[str] = []
     confirmations: list[str] = []
     stream = StringIO()
@@ -193,7 +306,7 @@ def test_moving_and_checkerboard_image_folders_are_selected_independently(
     checkerboard.mkdir()
     (moving_frames / "frame_0001.png").write_bytes(b"moving")
     (checkerboard / "view_0001.png").write_bytes(b"checkerboard")
-    responses = iter(["2", 1, 1, "phone_images"])
+    responses = iter(["2", 1, 1, "phone_images", 1])
 
     def prompt(text, *args, **kwargs):
         value = next(responses)

@@ -4,9 +4,11 @@ import pytest
 
 from camera_rig_calibration.config.models import MethodSettings
 from camera_rig_calibration.experiments import (
+    automatic_method_label,
     colmap_artifact_fingerprint,
     first_invalidated_stage,
     method_fingerprint,
+    method_result_label,
     method_variant_name,
     result_category,
     experiment_paths,
@@ -56,6 +58,58 @@ def test_method_variant_names_expose_scientific_anchors(prepared_config) -> None
     assert method_variant_name(
         ap03, "ap03", _resolved()
     ).startswith("single_marker_9__multi_7-9__matcher_exhaustive_")
+
+
+def test_public_labels_are_automatic_configuration_diffs(prepared_config) -> None:
+    baseline = prepared_config.model_copy(
+        update={"methods": MethodSettings(enabled=["ap02"])},
+        deep=True,
+    )
+    changed = baseline.model_copy(
+        update={
+            "project": baseline.project.model_copy(
+                update={"run_label": "ap02_variant99"}
+            ),
+            "methods": baseline.methods.model_copy(
+                update={
+                    "ap02": baseline.methods.ap02.model_copy(
+                        update={
+                            "combined_ba_max_function_evaluations": 60,
+                            "ba_robust_loss_scale_px": 1.5,
+                        }
+                    )
+                },
+                deep=True,
+            ),
+        },
+        deep=True,
+    )
+
+    assert method_result_label(baseline, "ap02") == "baseline"
+    label = method_result_label(changed, "ap02")
+    assert "variant" not in label
+    assert "combined_nfev_60" in label
+    assert "loss_scale_px_1p5" in label
+    assert label == automatic_method_label(
+        "ap02",
+        methods=changed.methods,
+        markers=changed.markers,
+        observation_quality=changed.observation_quality,
+        colmap=changed.colmap,
+    )
+
+    sensitive = baseline.model_copy(
+        update={
+            "markers": baseline.markers.model_copy(
+                update={"detection_mode": "high_sensitivity"}
+            )
+        },
+        deep=True,
+    )
+    assert (
+        method_result_label(sensitive, "ap02")
+        == "aruco_mode_high_sensitivity"
+    )
 
 
 def test_stage_invalidation_keeps_evaluation_changes_cheap() -> None:

@@ -45,19 +45,6 @@ class DatasetSettings(StrictModel):
     prepared_root: Path | None = None
     input_root: Path | None = None
 
-    @model_validator(mode="before")
-    @classmethod
-    def infer_category_from_legacy_scene_type(cls, value: Any) -> Any:
-        if not isinstance(value, dict):
-            return value
-        payload = dict(value)
-        if (
-            "category" not in payload
-            and payload.get("scene_type") in {SceneType.SIMULATION, "simulation"}
-        ):
-            payload["category"] = DatasetCategory.SIMULATION
-        return payload
-
     @field_validator("id")
     @classmethod
     def validate_id(cls, value: str) -> str:
@@ -97,7 +84,7 @@ class StaticCameraSettings(StrictModel):
 
 
 class IntrinsicScanSettings(StrictModel):
-    mode: Literal["balanced", "exhaustive_compatibility"] = "balanced"
+    mode: Literal["balanced", "full_frame"] = "balanced"
     target_hz: float = Field(default=3.0, gt=0)
     preview_max_dimension: int = Field(default=1920, ge=320)
 
@@ -205,6 +192,15 @@ class SimulationSettings(StrictModel):
             raise ValueError("must not be empty")
         return value
 
+    @field_validator("world_id")
+    @classmethod
+    def validate_bus_world(cls, value: str) -> str:
+        if value != "bus":
+            raise ValueError(
+                "only the built-in bus Gazebo world is supported"
+            )
+        return value
+
     @field_validator("moving_sensor_name")
     @classmethod
     def validate_optional_sensor_name(cls, value: str | None) -> str | None:
@@ -254,28 +250,12 @@ class MarkerSettings(StrictModel):
     dictionary: str = "DICT_4X4_50"
     length_m: float = Field(default=0.17, gt=0)
     accepted_ids: list[int] | Literal["all_detected"] = "all_detected"
-
-    @property
-    def allowed_ids(self) -> list[int] | Literal["auto"]:
-        """Read-only compatibility alias for schema-v1/v2 callers."""
-        return "auto" if self.accepted_ids == "all_detected" else self.accepted_ids
-
-
-class ReferenceSettings(StrictModel):
-    """Legacy schema-v1 reference bundle.
-
-    New configurations keep each scientific choice with the component that
-    consumes it.  This model remains importable so old Python callers and YAML
-    files can be migrated without guessing.
-    """
-
-    root_camera: str = "auto"
-    ap02_pose_reference_marker_id: int | Literal["auto", "sweep"] = "auto"
-    evaluation_scale_anchor_marker_id: int | Literal["auto", "sweep"] = "auto"
-
+    detection_mode: Literal[
+        "baseline", "subpixel_refined", "high_sensitivity"
+    ] = "baseline"
 
 class SelectionSettings(StrictModel):
-    mode: Literal["review_once", "auto", "explicit"] = "review_once"
+    mode: Literal["review_once", "auto", "explicit"] = "auto"
 
 
 class ColmapSettings(StrictModel):
@@ -292,23 +272,9 @@ class ColmapSettings(StrictModel):
     ap03_maximum_features: int | None = Field(default=None, ge=128)
     ap03_loop_detection: bool | None = None
 
-    @model_validator(mode="before")
-    @classmethod
-    def migrate_gpu_flag(cls, value: Any) -> Any:
-        if not isinstance(value, dict):
-            return value
-        payload = dict(value)
-        old = payload.pop("use_gpu", None)
-        if "gpu_mode" not in payload and old is not None:
-            payload["gpu_mode"] = "true" if bool(old) else "false"
-        return payload
-
     @property
     def use_gpu(self) -> bool:
-        """Compatibility value for legacy command adapters.
-
-        Runtime preflight resolves ``auto`` before a command is executed.
-        """
+        """Resolved boolean consumed by the command adapters."""
         return self.gpu_mode == "true"
 
 
@@ -322,26 +288,6 @@ class AP02Settings(StrictModel):
     combined_ba_max_function_evaluations: int = Field(default=120, ge=1)
     ba_robust_loss: Literal["soft_l1", "huber", "linear"] = "soft_l1"
     ba_robust_loss_scale_px: float = Field(default=3.0, gt=0)
-
-    @model_validator(mode="before")
-    @classmethod
-    def migrate_evaluation_limits(cls, value: Any) -> Any:
-        if not isinstance(value, dict):
-            return value
-        payload = dict(value)
-        old_static = payload.pop("max_nfev_static", None)
-        old_combined = payload.pop("max_nfev_moving", None)
-        if (
-            "static_only_ba_max_function_evaluations" not in payload
-            and old_static is not None
-        ):
-            payload["static_only_ba_max_function_evaluations"] = old_static
-        if (
-            "combined_ba_max_function_evaluations" not in payload
-            and old_combined is not None
-        ):
-            payload["combined_ba_max_function_evaluations"] = old_combined
-        return payload
 
     @property
     def max_nfev_static(self) -> int:
@@ -378,48 +324,6 @@ class MethodSettings(StrictModel):
     ap02: AP02Settings = Field(default_factory=AP02Settings)
     ap03: AP03Settings = Field(default_factory=AP03Settings)
     extensions: dict[str, dict[str, Any]] = Field(default_factory=dict)
-
-    @model_validator(mode="before")
-    @classmethod
-    def migrate_split_ap03(cls, value: Any) -> Any:
-        if not isinstance(value, dict):
-            return value
-        payload = dict(value)
-        enabled = [
-            str(item).strip().lower().replace("-", "_")
-            for item in payload.get("enabled", ["ap01", "ap02", "ap03"])
-        ]
-        if "ap03_single" in enabled or "ap03_multi" in enabled:
-            enabled = [
-                item
-                for item in enabled
-                if item not in {"ap03_single", "ap03_multi"}
-            ]
-            enabled.append("ap03")
-        payload["enabled"] = list(dict.fromkeys(enabled))
-
-        ap03_value = payload.get("ap03", {})
-        ap03 = (
-            ap03_value.model_dump(mode="python")
-            if isinstance(ap03_value, BaseModel)
-            else dict(ap03_value or {})
-        )
-        single = payload.pop("ap03_single", None)
-        multi = payload.pop("ap03_multi", None)
-        if single is not None and "single" not in ap03:
-            ap03["single"] = (
-                single.model_dump(mode="python")
-                if isinstance(single, BaseModel)
-                else single
-            )
-        if multi is not None and "multi" not in ap03:
-            ap03["multi"] = (
-                multi.model_dump(mode="python")
-                if isinstance(multi, BaseModel)
-                else multi
-            )
-        payload["ap03"] = ap03
-        return payload
 
     @property
     def ap03_single(self) -> AP03SingleSettings:
@@ -484,7 +388,7 @@ class ReportingSettings(StrictModel):
 
 class ProjectSettings(StrictModel):
     workspace_root: Path = Path("workspace")
-    dataset_cache_root: Path = Path("datasets")
+    dataset_cache_root: Path = Path("workspace/preparation_cache")
     output_root: Path = Path("results")
     experiment_id: str | None = None
     run_label: str = "baseline"
@@ -523,305 +427,21 @@ class RigConfig(StrictModel):
 
     @model_validator(mode="before")
     @classmethod
-    def migrate_legacy_schemas(cls, value: Any) -> Any:
-        """Read schema v1-v4 while emitting only the schema-v5 contract."""
+    def require_schema_v5(cls, value: Any) -> Any:
+        """Reject legacy configuration contracts instead of guessing a migration."""
         if not isinstance(value, dict):
             return value
-        payload = dict(value)
-        source_version = int(payload.get("schema_version", 1))
-        if source_version not in {1, 2, 3, 4, 5}:
-            return payload
-        if source_version in {4, 5}:
-            # Schema v4 is deliberately strict.  Removed experiment switches
-            # must not be silently accepted by one of the legacy migration
-            # aliases below.
-            methods = payload.get("methods", {})
-            ap02 = methods.get("ap02", {}) if isinstance(methods, dict) else {}
-            removed_v4_fields = {
-                "frame_selection": payload.get("frame_selection"),
-                "methods.ap03_single": (
-                    methods.get("ap03_single")
-                    if isinstance(methods, dict)
-                    else None
-                ),
-                "methods.ap03_multi": (
-                    methods.get("ap03_multi")
-                    if isinstance(methods, dict)
-                    else None
-                ),
-                "methods.ap02.max_nfev_static": (
-                    ap02.get("max_nfev_static")
-                    if isinstance(ap02, dict)
-                    else None
-                ),
-                "methods.ap02.max_nfev_moving": (
-                    ap02.get("max_nfev_moving")
-                    if isinstance(ap02, dict)
-                    else None
-                ),
-            }
-            present = [
-                name
-                for name, item in removed_v4_fields.items()
-                if item is not None
-            ]
-            if present:
-                raise ValueError(
-                    "schema v4/v5 does not support removed fields: "
-                    + ", ".join(present)
-                )
-            dataset_value = payload.get("dataset", {})
-            dataset = (
-                dataset_value.model_dump(mode="python")
-                if isinstance(dataset_value, BaseModel)
-                else dict(dataset_value or {})
+        version = value.get("schema_version")
+        if version is None:
+            # Direct Python construction uses the model default. File loading
+            # validates the explicit version before model construction.
+            return value
+        if version != 5:
+            raise ValueError(
+                "Only schema_version 5 is supported. Recreate the configuration "
+                "with the current rigcal wizard."
             )
-            simulation_value = payload.get("simulation", {})
-            simulation = (
-                simulation_value.model_dump(mode="python")
-                if isinstance(simulation_value, BaseModel)
-                else dict(simulation_value or {})
-            )
-            moving_value = payload.get("moving_camera", {})
-            moving = (
-                moving_value.model_dump(mode="python")
-                if isinstance(moving_value, BaseModel)
-                else dict(moving_value or {})
-            )
-            mcap_value = payload.get("mcap", {})
-            mcap = (
-                mcap_value.model_dump(mode="python")
-                if isinstance(mcap_value, BaseModel)
-                else dict(mcap_value or {})
-            )
-            is_simulation = bool(
-                simulation.get("enabled")
-                or dataset.get("scene_type") == "simulation"
-            )
-            dataset.setdefault(
-                "category",
-                "simulation" if is_simulation else "real_vehicle",
-            )
-            if "source_kind" not in dataset:
-                if moving.get("video"):
-                    dataset["source_kind"] = "video"
-                elif moving.get("frames"):
-                    dataset["source_kind"] = "frames"
-                elif mcap.get("path") and moving.get("image_topic"):
-                    dataset["source_kind"] = "rosbag"
-                else:
-                    dataset["source_kind"] = "prepared"
-            simulation.setdefault("world_id", "bus")
-            simulation.setdefault("world_baseline", {})
-            payload["dataset"] = dataset
-            payload["simulation"] = simulation
-            payload["schema_version"] = 5
-            return payload
-
-        payload["schema_version"] = 5
-        payload.pop("frame_selection", None)
-
-        markers_value = payload.get("markers", {})
-        markers = (
-            markers_value.model_dump(mode="python")
-            if isinstance(markers_value, BaseModel)
-            else dict(markers_value or {})
-        )
-        old_allowed = markers.pop("allowed_ids", None)
-        if "accepted_ids" not in markers and old_allowed is not None:
-            markers["accepted_ids"] = (
-                "all_detected" if old_allowed == "auto" else old_allowed
-            )
-        old_minimum_area = markers.pop("minimum_area_px2", None)
-        payload["markers"] = markers
-
-        quality_value = payload.get("observation_quality", {})
-        quality = (
-            quality_value.model_dump(mode="python")
-            if isinstance(quality_value, BaseModel)
-            else dict(quality_value or {})
-        )
-        if old_minimum_area is not None:
-            quality.setdefault("minimum_marker_area_px2", old_minimum_area)
-        payload["observation_quality"] = quality
-
-        methods_value = payload.get("methods", {})
-        if isinstance(methods_value, BaseModel):
-            methods = methods_value.model_dump(mode="python")
-        else:
-            methods = dict(methods_value or {})
-        evaluation_value = payload.get("evaluation", {})
-        if isinstance(evaluation_value, BaseModel):
-            evaluation = evaluation_value.model_dump(mode="python")
-        else:
-            evaluation = dict(evaluation_value or {})
-
-        legacy = payload.pop("references", None)
-        if isinstance(legacy, BaseModel):
-            legacy = legacy.model_dump(mode="python")
-        if isinstance(legacy, dict):
-            ap01_value = methods.get("ap01", {})
-            ap01 = (
-                ap01_value.model_dump(mode="python")
-                if isinstance(ap01_value, BaseModel)
-                else dict(ap01_value or {})
-            )
-            ap01.setdefault("root_camera", legacy.get("root_camera", "auto"))
-            methods["ap01"] = ap01
-
-            ap02_value = methods.get("ap02", {})
-            ap02 = (
-                ap02_value.model_dump(mode="python")
-                if isinstance(ap02_value, BaseModel)
-                else dict(ap02_value or {})
-            )
-            ap02.setdefault(
-                "reference_marker_id",
-                legacy.get("ap02_pose_reference_marker_id", "auto"),
-            )
-            methods["ap02"] = ap02
-            legacy_anchor = legacy.get(
-                "evaluation_scale_anchor_marker_id", "auto"
-            )
-            evaluation.setdefault(
-                "anchor_marker_id",
-                "auto_common" if legacy_anchor == "auto" else legacy_anchor,
-            )
-
-        ap01_value = methods.get("ap01", {})
-        ap01 = (
-            ap01_value.model_dump(mode="python")
-            if isinstance(ap01_value, BaseModel)
-            else dict(ap01_value or {})
-        )
-        ap01.pop("top_moving_per_marker", None)
-        ap01.pop("scale_top_per_marker", None)
-        methods["ap01"] = ap01
-
-        ap02_value = methods.get("ap02", {})
-        ap02 = (
-            ap02_value.model_dump(mode="python")
-            if isinstance(ap02_value, BaseModel)
-            else dict(ap02_value or {})
-        )
-        for removed in (
-            "moving_selection",
-            "top_per_marker",
-            "top_per_pair",
-            "max_moving_frames",
-        ):
-            ap02.pop(removed, None)
-        methods["ap02"] = ap02
-
-        ap03_value = methods.get("ap03", {})
-        ap03 = (
-            ap03_value.model_dump(mode="python")
-            if isinstance(ap03_value, BaseModel)
-            else dict(ap03_value or {})
-        )
-        single_value = methods.pop("ap03_single", ap03.get("single", {}))
-        single = (
-            single_value.model_dump(mode="python")
-            if isinstance(single_value, BaseModel)
-            else dict(single_value or {})
-        )
-        if "marker_id" in single and "scale_marker_id" not in single:
-            single["scale_marker_id"] = single.pop("marker_id")
-        single_scale = {
-            key: single.pop(key)
-            for key in (
-                "reprojection_threshold_px",
-                "ransac_iterations",
-                "minimum_inliers",
-            )
-            if key in single
-        }
-        single.pop("minimum_area_px2", None)
-        ap03["single"] = single
-
-        multi_value = methods.pop("ap03_multi", ap03.get("multi", {}))
-        multi = (
-            multi_value.model_dump(mode="python")
-            if isinstance(multi_value, BaseModel)
-            else dict(multi_value or {})
-        )
-        legacy_multi_marker = multi.pop("marker_id", None)
-        if "marker_ids" not in multi and legacy_multi_marker not in {
-            None,
-            "auto",
-        }:
-            multi["marker_ids"] = [int(legacy_multi_marker)]
-        multi_scale = {
-            key: multi.pop(key)
-            for key in (
-                "reprojection_threshold_px",
-                "ransac_iterations",
-                "minimum_inliers",
-            )
-            if key in multi
-        }
-        multi.pop("minimum_area_px2", None)
-        ap03["multi"] = multi
-        scale_value = ap03.get("scale", {})
-        scale = (
-            scale_value.model_dump(mode="python")
-            if isinstance(scale_value, BaseModel)
-            else dict(scale_value or {})
-        )
-        # AP03 Multi is the primary result, so its legacy values take
-        # precedence when old Single/Multi configs disagree.
-        for key, item in {**single_scale, **multi_scale}.items():
-            scale.setdefault(key, item)
-        ap03["scale"] = scale
-        methods["ap03"] = ap03
-        payload["methods"] = methods
-        payload["evaluation"] = evaluation
-        dataset_value = payload.get("dataset", {})
-        dataset = (
-            dataset_value.model_dump(mode="python")
-            if isinstance(dataset_value, BaseModel)
-            else dict(dataset_value or {})
-        )
-        simulation_value = payload.get("simulation", {})
-        simulation = (
-            simulation_value.model_dump(mode="python")
-            if isinstance(simulation_value, BaseModel)
-            else dict(simulation_value or {})
-        )
-        moving_value = payload.get("moving_camera", {})
-        moving = (
-            moving_value.model_dump(mode="python")
-            if isinstance(moving_value, BaseModel)
-            else dict(moving_value or {})
-        )
-        mcap_value = payload.get("mcap", {})
-        mcap = (
-            mcap_value.model_dump(mode="python")
-            if isinstance(mcap_value, BaseModel)
-            else dict(mcap_value or {})
-        )
-        is_simulation = bool(
-            simulation.get("enabled")
-            or dataset.get("scene_type") == "simulation"
-        )
-        dataset.setdefault(
-            "category",
-            "simulation" if is_simulation else "real_vehicle",
-        )
-        if "source_kind" not in dataset:
-            if moving.get("video"):
-                dataset["source_kind"] = "video"
-            elif moving.get("frames"):
-                dataset["source_kind"] = "frames"
-            elif mcap.get("path") and moving.get("image_topic"):
-                dataset["source_kind"] = "rosbag"
-            else:
-                dataset["source_kind"] = "prepared"
-        simulation.setdefault("world_id", "bus")
-        simulation.setdefault("world_baseline", {})
-        payload["dataset"] = dataset
-        payload["simulation"] = simulation
-        return payload
+        return value
 
     @model_validator(mode="after")
     def validate_dataset_contract(self) -> "RigConfig":

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -22,6 +23,36 @@ from camera_rig_calibration.input.preparation import (
 from camera_rig_calibration.experiments import input_fingerprint
 
 from conftest import write_intrinsics
+
+
+def test_input_fingerprint_uses_portable_relative_paths(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "prepared"
+    frame = root / "raw_images" / "moving" / "frame_000000.png"
+    frame.parent.mkdir(parents=True)
+    frame.write_bytes(b"frame")
+    payload = {
+        "static_camera_ids": [],
+        "moving_camera_id": None,
+        "sampling_hz": None,
+        "files": [
+            {
+                "role": "prepared:raw_images/moving/frame_000000.png",
+                "sha256": hashlib.sha256(b"frame").hexdigest(),
+                "size_bytes": 5,
+            }
+        ],
+    }
+    canonical = json.dumps(
+        payload, sort_keys=True, separators=(",", ":")
+    )
+    expected = (
+        "input_"
+        + hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:12]
+    )
+
+    assert input_fingerprint(None, root) == expected
 
 
 def _direct_config(tmp_path: Path) -> RigConfig:
@@ -84,6 +115,47 @@ def test_input_content_gets_an_immutable_reusable_cache(tmp_path: Path) -> None:
     assert (
         first.dataset_root / "raw_images/static/outside-left.png"
     ).read_bytes() == b"static-v1"
+
+
+def test_authoritative_prepared_dataset_reuses_original_manifest_fingerprint(
+    tmp_path: Path,
+) -> None:
+    repository = Path(__file__).resolve().parents[1]
+    source_config = _direct_config(tmp_path)
+    source_plan = build_preparation_plan(source_config, repository)
+    source_manifest = finalize_dataset(source_config, source_plan)
+    exact = source_config.model_copy(
+        update={
+            "dataset": source_config.dataset.model_copy(
+                update={"prepared_root": source_plan.dataset_root}
+            ),
+            "moving_camera": source_config.moving_camera.model_copy(
+                update={
+                    "intrinsics": None,
+                    "intrinsics_profile": None,
+                    "intrinsic_calibration_video": None,
+                    "intrinsic_calibration_images": None,
+                },
+                deep=True,
+            ),
+        },
+        deep=True,
+    )
+
+    root_manifest = source_plan.dataset_root / "dataset_manifest.json"
+    metadata_manifest = (
+        source_plan.dataset_root
+        / "metadata"
+        / "dataset_manifest.json"
+    )
+    metadata_manifest.parent.mkdir(parents=True, exist_ok=True)
+    root_manifest.replace(metadata_manifest)
+    reused = build_preparation_plan(exact, repository)
+
+    assert reused.existing_manifest is not None
+    assert input_fingerprint(
+        reused.existing_manifest, reused.dataset_root
+    ) == input_fingerprint(source_manifest, source_plan.dataset_root)
 
 
 def test_checkerboard_image_folder_is_a_reproducible_intrinsics_source(
@@ -269,7 +341,11 @@ def test_simulation_preparation_plans_a_new_isolated_capture(tmp_path: Path) -> 
             dataset_cache_root=tmp_path / "cache",
             output_root=tmp_path / "results",
         ),
-        dataset=DatasetSettings(id="simulation_capture", scene_type="simulation"),
+        dataset=DatasetSettings(
+            id="simulation_capture",
+            category="simulation",
+            scene_type="simulation",
+        ),
         static_cameras=[
             StaticCameraSettings(
                 id="outside-left",
@@ -329,7 +405,11 @@ def test_simulation_mapping_preserves_explicit_camera_intrinsics(
             dataset_cache_root=tmp_path / "cache",
             output_root=tmp_path / "results",
         ),
-        dataset=DatasetSettings(id="explicit_intrinsics", scene_type="simulation"),
+        dataset=DatasetSettings(
+            id="explicit_intrinsics",
+            category="simulation",
+            scene_type="simulation",
+        ),
         static_cameras=[
             StaticCameraSettings(
                 id="static_camera",
@@ -395,7 +475,11 @@ def test_simulation_capture_id_forces_a_distinct_input_cache(
             dataset_cache_root=tmp_path / "cache",
             output_root=tmp_path / "results",
         ),
-        "dataset": DatasetSettings(id="simulation_capture", scene_type="simulation"),
+        "dataset": DatasetSettings(
+            id="simulation_capture",
+            category="simulation",
+            scene_type="simulation",
+        ),
         "static_cameras": [
             StaticCameraSettings(
                 id="static_camera",

@@ -6,9 +6,13 @@ import shutil
 from collections import defaultdict, deque
 from pathlib import Path
 
+from camera_rig_calibration.ap02_graph import (
+    graph_components,
+    rows_for_component,
+)
 from camera_rig_calibration.pipeline import StageResult, run_stage
 
-from .common import read_csv
+from .common import read_csv, write_csv
 
 
 def _reachability(
@@ -69,6 +73,68 @@ def run(
                 stage_root / destination_name,
             )
         rows = read_csv(source)
+        components = graph_components(rows, camera_ids)
+        primary_component = next(
+            (
+                component
+                for component in components
+                if reference_marker_id in component.marker_ids
+            ),
+            None,
+        )
+        fields = list(rows[0]) if rows else []
+        components_root = stage_root / "components"
+        for component in components:
+            component_root = components_root / component.component_id
+            component_rows = rows_for_component(rows, component)
+            write_csv(
+                component_root / "ap02_all_aruco_observations.csv",
+                component_rows,
+                fields,
+            )
+            write_csv(
+                component_root / "ap02_static_aruco_observations.csv",
+                [
+                    row
+                    for row in component_rows
+                    if row.get("observer_type") == "static"
+                ],
+                fields,
+            )
+            write_csv(
+                component_root / "ap02_moving_aruco_observations.csv",
+                [
+                    row
+                    for row in component_rows
+                    if row.get("observer_type") == "moving"
+                ],
+                fields,
+            )
+        component_manifest = stage_root / "component_manifest.json"
+        component_manifest.write_text(
+            json.dumps(
+                {
+                    "schema_version": 5,
+                    "reference_marker_id": reference_marker_id,
+                    "primary_component_id": (
+                        primary_component.component_id
+                        if primary_component is not None
+                        else None
+                    ),
+                    "expected_static_cameras": list(camera_ids),
+                    "components": [
+                        component.model_dump() for component in components
+                    ],
+                    "not_observable_between_components": (
+                        len(components) > 1
+                    ),
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
         static_observers, static_markers = _reachability(
             rows, reference_marker_id, combined=False
         )
@@ -95,6 +161,7 @@ def run(
                         "reached_camera_count": len(combined_cameras),
                         "reached_marker_count": len(combined_markers),
                     },
+                    "component_manifest": str(component_manifest),
                 },
                 indent=2,
             )
@@ -105,6 +172,7 @@ def run(
             "observations": stage_root
             / "ap02_all_aruco_observations.csv",
             "graph_summary": summary,
+            "component_manifest": component_manifest,
             "accepted_observations": len(rows),
         }
 

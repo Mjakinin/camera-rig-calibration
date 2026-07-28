@@ -16,7 +16,7 @@ from camera_rig_calibration.intrinsics_profiles import (
 def _profile(repository: Path) -> Path:
     root = (
         repository
-        / "results/real_vehicle/_intrinsics/iphone_05x/abcdef123456"
+        / "config/intrinsics/iphone_05x/abcdef123456"
     )
     root.mkdir(parents=True)
     (root / "intrinsics.json").write_text(
@@ -90,7 +90,11 @@ def test_completed_run_reference_is_reported_but_does_not_block_delete(
 ) -> None:
     root = _profile(tmp_path)
     profile = discover_intrinsic_profiles(tmp_path)[0]
-    config = tmp_path / "results/real_vehicle/video/3hz/example/config.yaml"
+    config = (
+        tmp_path
+        / "results/real_vehicle/3Hz/example/methods/ap02/baseline/"
+        "provenance/resolved_config.yaml"
+    )
     config.parent.mkdir(parents=True)
     config.write_text(
         yaml.safe_dump(
@@ -103,7 +107,7 @@ def test_completed_run_reference_is_reported_but_does_not_block_delete(
     assert not root.exists()
 
 
-def test_legacy_hidden_field_is_ignored_and_profile_is_visible(
+def test_unknown_hidden_field_is_ignored_and_profile_is_visible(
     tmp_path: Path,
 ) -> None:
     root = _profile(tmp_path)
@@ -116,3 +120,26 @@ def test_legacy_hidden_field_is_ignored_and_profile_is_visible(
 
     assert len(profiles) == 1
     assert not hasattr(profiles[0], "hidden")
+
+
+def test_repository_intrinsics_use_managed_fingerprint_layout() -> None:
+    repository = Path(__file__).resolve().parents[1]
+
+    profiles = {
+        profile.profile_id: profile
+        for profile in discover_intrinsic_profiles(repository)
+    }
+
+    assert {
+        "iphone_05x_4k",
+        "iphone_1x_4k_3840x2160",
+    }.issubset(profiles)
+    assert profiles["iphone_05x_4k"].root.name == "d5444b68272f"
+    assert (
+        profiles["iphone_1x_4k_3840x2160"].root.name
+        == "3ed2f8d6f7fe"
+    )
+    assert not (
+        repository
+        / "config/intrinsics/IMG_4320_v1"
+    ).exists()

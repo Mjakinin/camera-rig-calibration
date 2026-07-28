@@ -1,2 +1,0 @@
-method,status,camera_count,available_cameras,missing_cameras,pair_count_ok,pair_count_total,pair_coverage,mean_pair_t_cm,median_pair_t_cm,max_pair_t_cm,mean_pair_r_deg,median_pair_r_deg,max_pair_r_deg,mean_baseline_error_cm,mean_direction_error_deg,worst_pair,worst_pair_t_cm,worst_pair_r_deg,source,failure_reason,note
-AP02,FAILED_NO_PAIR,0,,cam_edge_0;cam_edge_1;cam_edge_3;cam_edge_5,0,6,0.0,,,,,,,,,,,,results/bus_real_data/02_ref_marker_graph_ba/08_final_results/ap02_with_moving_static_camera_poses_ref_marker.csv,,

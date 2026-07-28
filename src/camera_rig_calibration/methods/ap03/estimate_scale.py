@@ -22,6 +22,7 @@ def run(
     ransac_iterations: int,
     minimum_inliers: int,
     dictionary: str,
+    detection_mode: str = "baseline",
 ) -> StageResult:
     if mode not in {"single", "multi"}:
         raise ValueError(f"Unsupported AP03 scale mode: {mode}")
@@ -46,6 +47,8 @@ def run(
                 str(minimum_inliers),
                 "--dictionary",
                 dictionary,
+                "--detection-mode",
+                detection_mode,
                 "--txt-root",
                 str(output_root / "colmap/reconstruction/sparse_txt"),
                 "--image-dir",
@@ -93,6 +96,7 @@ def run(
             "ransac_iterations": ransac_iterations,
             "minimum_inliers": minimum_inliers,
             "uses_all_quality_accepted_observations": True,
+            "detection_mode": detection_mode,
         },
         failure_is_diagnostic=mode == "single",
     )
@@ -111,6 +115,11 @@ def main() -> None:
     parser.add_argument("--ransac-iterations", type=int, required=True)
     parser.add_argument("--minimum-inliers", type=int, required=True)
     parser.add_argument("--dictionary", required=True)
+    parser.add_argument(
+        "--detection-mode",
+        choices=("baseline", "subpixel_refined", "high_sensitivity"),
+        default="baseline",
+    )
     args = parser.parse_args()
     run(
         repository_root=args.repository_root.resolve(),
@@ -130,6 +139,7 @@ def main() -> None:
         ransac_iterations=args.ransac_iterations,
         minimum_inliers=args.minimum_inliers,
         dictionary=args.dictionary,
+        detection_mode=args.detection_mode,
     )
 
 

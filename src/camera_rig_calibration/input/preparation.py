@@ -20,6 +20,7 @@ from ..dataset.manifest import (
     save_dataset_manifest,
 )
 from ..intrinsics_profiles import resolve_intrinsic_profile
+from .video_geometry import open_oriented_video
 
 
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
@@ -110,9 +111,10 @@ def _extract_static_video_frame(
         raise RuntimeError(
             "OpenCV is required to extract a static-camera video frame"
         ) from exc
-    capture = cv2.VideoCapture(str(source))
+    capture = open_oriented_video(source)
     if not capture.isOpened():
         raise RuntimeError(f"Could not open static-camera video: {source}")
+    geometry = capture.geometry
     reported_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     selected_index = max(0, reported_count // 2)
     if selected_index:
@@ -139,6 +141,7 @@ def _extract_static_video_frame(
                 "selection_policy": "middle_frame_with_first_frame_fallback",
                 "selected_frame_index": selected_index,
                 "output": str(destination),
+                "video_geometry": geometry.as_dict(),
             },
             indent=2,
         )
@@ -438,7 +441,8 @@ def _real_acquisition_payload(config: RigConfig) -> dict[str, object]:
         "mcap": config.mcap.model_dump(mode="json"),
         "sampling": config.sampling.model_dump(mode="json"),
         "marker_dictionary": config.markers.dictionary,
-        "contract": "rigcal_real_acquisition_v1",
+        "video_orientation_policy": "apply_ffprobe_display_rotation",
+        "contract": "rigcal_real_acquisition_v2",
     }
 
 
@@ -494,11 +498,21 @@ def _build_real_preparation_plan(
     )
     if prepared_root is not None and not has_override:
         sources = _prepared_source_files(config, prepared_root)
+        manifest_path = prepared_root / "dataset_manifest.json"
+        if not manifest_path.is_file():
+            manifest_path = (
+                prepared_root / "metadata" / "dataset_manifest.json"
+            )
         return PreparationPlan(
             prepared_root,
             source_files=sources,
             source_hashes=_hash_sources(sources),
             prepared_input=True,
+            existing_manifest=(
+                load_dataset_manifest(manifest_path)
+                if manifest_path.is_file()
+                else None
+            ),
         )
 
     acquisition_sources = _real_acquisition_sources(config, prepared_root)
@@ -658,7 +672,7 @@ def _build_real_preparation_plan(
                 sys.executable,
                 str(
                     repository_root
-                    / "run/real_vehicle_data/01_extract_moving_video_3hz.py"
+                    / "src/camera_rig_calibration/input/video.py"
                 ),
                 "--video",
                 str(moving.video.resolve()),
@@ -720,7 +734,7 @@ def _build_real_preparation_plan(
                     "--script",
                     str(
                         repository_root
-                        / "run/real_vehicle_data/02_calibrate_intrinsics_from_video.py"
+                        / "src/camera_rig_calibration/input/intrinsics_calibration.py"
                     ),
                     source_option,
                     str(calibration_source.resolve()),
@@ -776,11 +790,19 @@ def build_preparation_plan(config: RigConfig, repository_root: Path) -> Preparat
         if root.name == "raw_images":
             root = root.parent
         sources = _prepared_source_files(config, root)
+        manifest_path = root / "dataset_manifest.json"
+        if not manifest_path.is_file():
+            manifest_path = root / "metadata" / "dataset_manifest.json"
         return PreparationPlan(
             root,
             source_files=sources,
             source_hashes=_hash_sources(sources),
             prepared_input=True,
+            existing_manifest=(
+                load_dataset_manifest(manifest_path)
+                if manifest_path.is_file()
+                else None
+            ),
         )
 
     sources = _configured_source_files(config)
@@ -938,7 +960,7 @@ def build_preparation_plan(config: RigConfig, repository_root: Path) -> Preparat
     if moving.video is not None:
         argv = [
             sys.executable,
-            str(repository_root / "run/real_vehicle_data/01_extract_moving_video_3hz.py"),
+            str(repository_root / "src/camera_rig_calibration/input/video.py"),
             "--video",
             str(moving.video.resolve()),
             "--dataset",
@@ -989,7 +1011,10 @@ def build_preparation_plan(config: RigConfig, repository_root: Path) -> Preparat
                     "-m",
                     "camera_rig_calibration.input.intrinsics",
                     "--script",
-                    str(repository_root / "run/real_vehicle_data/02_calibrate_intrinsics_from_video.py"),
+                    str(
+                        repository_root
+                        / "src/camera_rig_calibration/input/intrinsics_calibration.py"
+                    ),
                     source_option,
                     str(calibration_source.resolve()),
                     "--work-directory",
@@ -1008,6 +1033,12 @@ def build_preparation_plan(config: RigConfig, repository_root: Path) -> Preparat
                     str(moving.intrinsic_minimum_frame_gap),
                     "--minimum-detections",
                     str(moving.intrinsic_minimum_detections),
+                    "--scan-mode",
+                    moving.intrinsic_scan.mode,
+                    "--scan-target-hz",
+                    str(moving.intrinsic_scan.target_hz),
+                    "--preview-max-dimension",
+                    str(moving.intrinsic_scan.preview_max_dimension),
                 ),
                 repository_root,
                 info_destination.parent,

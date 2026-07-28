@@ -17,7 +17,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
-import yaml
 from rich.console import Console
 from rich.table import Table
 
@@ -30,7 +29,10 @@ from .dataset.validation import validate_dataset
 from .input.preparation import build_preparation_plan, finalize_dataset
 from .input.topics import resolve_rosbag_source
 from .intrinsics_profiles import resolve_intrinsic_profile
-from .gallery import build_moving_debug_gallery
+from .methods.common.aruco_utils import (
+    DETECTOR_CONTRACT,
+    effective_detector_config,
+)
 from .experiments import (
     colmap_artifact_fingerprint,
     evaluation_fingerprint,
@@ -38,7 +40,7 @@ from .experiments import (
     input_fingerprint,
     method_config_diff,
     method_fingerprint,
-    method_variant_name,
+    method_result_label,
     write_experiment_manifest,
 )
 from .observations import (
@@ -48,7 +50,7 @@ from .observations import (
     resolve_selections,
 )
 from .observation_quality import ObservationQualityError, filter_observations
-from .progress import ProgressClock, terminal_lines
+from .progress import ProgressClock, progress_text, terminal_lines
 from .pipeline import StageContract, validate_stage_dag
 from .registry import calibration_methods, evaluators, input_adapters
 from .results import write_comparison
@@ -70,6 +72,16 @@ METHOD_DIRECTORIES = {
     "ap02": "03_AP02",
     "ap03": "04_AP03",
 }
+TERMINAL_PREFIXES = (
+    "[OK]",
+    "[WARN]",
+    "[WARNING]",
+    "[ERROR]",
+    "[INFO]",
+    "[REUSE]",
+    "ERROR:",
+    "WARNING:",
+)
 
 
 def _now() -> str:
@@ -81,6 +93,14 @@ def _write_json(path: Path, payload: Any) -> None:
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
+
+
+def _read_json(path: Path) -> dict[str, Any]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
 
 
 def _run_id(config: RigConfig) -> str:
@@ -142,9 +162,8 @@ def planned_stages(
 ) -> list[tuple[str, str]]:
     stages = [
         ("prepare_inputs", "Prepare canonical inputs and provenance"),
-        ("detect_markers", "Detect shared ArUco observations"),
-        ("build_debug_gallery", "Build moving-frame ArUco debug gallery"),
         ("validate_dataset", "Validate the canonical dataset"),
+        ("detect_markers", "Detect shared ArUco observations and debug images"),
         (
             "observation_quality",
             "Apply immutable checks and job-specific observation quality",
@@ -175,6 +194,23 @@ def planned_stages(
     return stages
 
 
+def observation_id(config: RigConfig) -> str:
+    """Content ID for one versioned ArUco observation contract."""
+    payload = {
+        "dictionary": config.markers.dictionary,
+        "length_m": config.markers.length_m,
+        "detection": effective_detector_config(
+            config.markers.detection_mode,
+            config.markers.dictionary,
+        ),
+    }
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return (
+        "detection_"
+        + hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:12]
+    )
+
+
 class PipelineOrchestrator:
     def __init__(
         self,
@@ -189,6 +225,7 @@ class PipelineOrchestrator:
         job_index: int = 1,
         job_count: int = 1,
         queue_started_monotonic: float | None = None,
+        batch_started_monotonic: float | None = None,
         transaction_root: Path | None = None,
     ) -> None:
         self.repository_root = repository_root.resolve()
@@ -205,6 +242,7 @@ class PipelineOrchestrator:
             job_index=job_index,
             job_count=job_count,
             queue_started_monotonic=queue_started_monotonic,
+            batch_started_monotonic=batch_started_monotonic,
         )
         register_builtin_components()
         self.run_directory: Path | None = None
@@ -221,13 +259,40 @@ class PipelineOrchestrator:
             paths,
             root=result_root,
             dataset_root=dataset_root,
-            datasets=dataset_root / "inputs",
+            datasets=dataset_root,
             methods=result_root / "methods",
             evaluations=result_root / "evaluations",
-            comparisons=result_root / "comparisons",
+            comparisons=result_root,
+            attempts=result_root / "attempts",
             artifacts=self.transaction_root / "artifacts",
             staging=self.transaction_root / "jobs",
         )
+
+    def _input_working_root(self, config: RigConfig) -> Path:
+        """Keep extraction caches outside the dataset publication directory."""
+        if self.transaction_root is None:
+            return (
+                self._working_paths(config).staging / "input_working"
+            ).resolve()
+
+        working = (self.transaction_root / "input_working").resolve()
+        legacy = (self.transaction_root / "dataset" / ".working").resolve()
+        if legacy.is_dir():
+            if working.exists():
+                raise RuntimeError(
+                    "Both the current and obsolete input working directories "
+                    f"exist: {working} and {legacy}. Refusing to merge them."
+                )
+            working.parent.mkdir(parents=True, exist_ok=True)
+            legacy.rename(working)
+            legacy_parent = legacy.parent
+            if legacy_parent.is_dir() and not any(legacy_parent.iterdir()):
+                legacy_parent.rmdir()
+            self.console.print(
+                "[green]Reusing the already extracted input from the "
+                "interrupted queue preflight.[/green]"
+            )
+        return working
 
     def _validate_components(self, config: RigConfig) -> None:
         builtin_methods = {"ap01", "ap02", "ap03"}
@@ -401,8 +466,13 @@ class PipelineOrchestrator:
             or version_probe.stderr.strip()
             or "unknown"
         ).splitlines()[0]
+        method_id = next(iter(config.methods.enabled), "")
+        requested_label = method_result_label(config, method_id)
         resolved = config.model_copy(
             update={
+                "project": config.project.model_copy(
+                    update={"run_label": requested_label}
+                ),
                 "colmap": requested.model_copy(
                     update={
                         "executable": str(executable),
@@ -447,7 +517,7 @@ class PipelineOrchestrator:
         self.console.print(f"Planned run directory: {run}")
         self.console.print(
             "Completed result root: "
-            f"{paths.methods}/<method>/<resolved-variant>/executions/<input-id>/current"
+            f"{paths.methods}/<method>/<queue-label>"
         )
         self.console.print(
             "Dry run complete: no directories or method processes were created for a "
@@ -533,19 +603,17 @@ class PipelineOrchestrator:
         _write_json(run / "environment.json", self._environment())
         (run / "commands.txt").write_text("", encoding="utf-8")
         (run / "RUN_LAYOUT.txt").write_text(
-            "RIGCAL RUN LAYOUT\n"
+            "RIGCAL TEMPORARY METHOD WORKSPACE\n"
             "=================\n\n"
-            "00_INPUT: manifest, validation and a link to the dataset frames\n"
-            "01_OBSERVATIONS: shared ArUco observations and selection decisions\n"
-            "02-04_AP*: outputs only for the method scheduled in this queue row\n"
-            "preflight: quality decisions and method readiness reports\n"
-            "06_EVALUATION: common evaluation artifacts\n"
-            "07_COMPARISON: normalized method summary\n"
-            "99_FINAL_RESULTS: final human- and machine-readable reports\n"
-            "logs: complete subprocess logs; commands.txt: exact commands\n"
-            "timings.json: stage runtimes in seconds\n\n"
-            "The captured/prepared frames are stored once for all variants at:\n"
-            f"{paths.datasets}/<input-id>\n",
+            "This directory is an internal, resumable workspace. Its numbered "
+            "sub-stages describe execution order and are never exposed as the "
+            "public result layout.\n\n"
+            "After validation, publication exports:\n"
+            "  RESULT.txt/json and camera_extrinsics.csv\n"
+            "  diagnostics/ (preflight, method and evaluation internals)\n"
+            "  logs/ (complete child-process output)\n"
+            "  provenance/ (configs, commands, environment and timings)\n\n"
+            f"Canonical dataset: {paths.datasets}\n",
             encoding="utf-8",
         )
         return run
@@ -561,53 +629,75 @@ class PipelineOrchestrator:
         run = self.run_directory
         paths = self._working_paths(config)
         input_id = input_fingerprint(dataset_manifest, dataset_root)
-        published = paths.datasets / input_id
-        pointer_path = published / "SOURCE.json"
+        published = paths.datasets
+        pointer_path = published / "metadata" / "source.json"
+        descriptor_path = published / "dataset.json"
         source = dataset_root.resolve()
-        if not pointer_path.is_file() and published.is_dir() and any(published.iterdir()):
+        reuse_existing = False
+        if descriptor_path.is_file():
+            descriptor = json.loads(
+                descriptor_path.read_text(encoding="utf-8")
+            )
+            existing_input = str(
+                descriptor.get("input_fingerprint", "")
+            )
+            if existing_input != input_id:
+                raise RuntimeError(
+                    f"Experiment '{paths.experiment_id}' already contains a "
+                    "different immutable dataset. Choose a new experiment ID."
+                )
+            if not pointer_path.is_file() or not (
+                published / "raw_images"
+            ).is_dir():
+                raise RuntimeError(
+                    f"Existing dataset is incomplete: {published}"
+                )
+            reuse_existing = True
+        elif published.is_dir() and any(published.iterdir()):
             raise RuntimeError(
-                f"Published input directory has files but no SOURCE.json: {published}. "
+                f"Dataset directory has files but no dataset descriptor: {published}. "
                 "Refusing to mix an unknown input."
             )
-        published.mkdir(parents=True, exist_ok=True)
-        previous_sources: list[str] = []
-        if pointer_path.is_file():
-            previous = json.loads(pointer_path.read_text(encoding="utf-8"))
-            previous_sources = [
-                str(value) for value in previous.get("canonical_source_roots", [])
-            ]
-        source_text = str(source)
-        sources = list(dict.fromkeys([*previous_sources, source_text]))
-        totals = {"hardlinked": 0, "copied": 0, "existing": 0}
-        for directory in ("raw_images", "metadata"):
-            counts = _materialize_tree(source / directory, published / directory)
-            for key, value in counts.items():
-                totals[key] += value
-        _write_json(
-            pointer_path,
-            {
-                "input_id": input_id,
-                "canonical_source_roots": sources,
-                "status": "ready",
-                "published_at": _now(),
-                "storage": (
-                    "hardlinks where supported, byte copies otherwise; deleting the "
-                    "source does not remove files from this result dataset"
-                ),
-                "file_counts": totals,
-                "content_addressing": "normalized input SHA-256",
-            },
-        )
-        if dataset_manifest is not None:
-            save_dataset_manifest(dataset_manifest, published / "dataset_manifest.json")
-        (published / "README.txt").write_text(
-            "This directory contains the normalized static images, moving frames, "
-            "intrinsics and capture/preparation metadata used by every run in this "
-            "dataset result folder. Files are materialized once and never overwritten "
-            "by a method variant. SOURCE.json records their canonical provenance "
-            "and content identity.\n",
-            encoding="utf-8",
-        )
+        if not reuse_existing:
+            published.mkdir(parents=True, exist_ok=True)
+            totals = {"hardlinked": 0, "copied": 0, "existing": 0}
+            for directory in ("raw_images", "metadata"):
+                counts = _materialize_tree(
+                    source / directory, published / directory
+                )
+                for key, value in counts.items():
+                    totals[key] += value
+            _write_json(
+                pointer_path,
+                {
+                    "input_id": input_id,
+                    "layout_version": 2,
+                    "canonical_source_roots": [str(source)],
+                    "status": "ready",
+                    "published_at": _now(),
+                    "storage": (
+                        "hardlinks where supported, byte copies otherwise; "
+                        "deleting the source does not remove files from this "
+                        "dataset"
+                    ),
+                    "file_counts": totals,
+                    "content_addressing": "normalized input SHA-256",
+                },
+            )
+            if dataset_manifest is not None:
+                save_dataset_manifest(
+                    dataset_manifest,
+                    published / "metadata" / "dataset_manifest.json",
+                )
+            (published / "README.txt").write_text(
+                "Canonical immutable rigcal dataset (layout version 2).\n"
+                "raw_images/ contains static, moving and camera_info inputs.\n"
+                "observations/ contains shared ArUco CSVs, quality decisions "
+                "and the single debug_images collection. metadata/ contains provenance and "
+                "validation details.\n"
+                "Calibration methods never modify this directory.\n",
+                encoding="utf-8",
+            )
         run_view = run / "00_INPUT" / "raw_images"
         if not run_view.exists() and not run_view.is_symlink():
             try:
@@ -619,48 +709,69 @@ class PipelineOrchestrator:
                     str(published / "raw_images") + "\n", encoding="utf-8"
                 )
         write_experiment_manifest(config, paths, input_id)
-        (paths.root / "README.txt").write_text(
-            "RIGCAL EXPERIMENT RESULT\n"
-            "=====================\n\n"
-            "The matching datasets/<category>/<group>/<experiment>/inputs/"
-            "<input-id>/ contains immutable captured/prepared data and "
-            "observations/<detection-id>/.\n"
-            "methods/<method>/<variant>/ contains scientific method executions.\n"
-            "evaluations/ and comparisons/ contain post-method analysis.\n",
-            encoding="utf-8",
-        )
         self.manifest["input_id"] = input_id
         self.manifest["experiment_root"] = str(paths.root)
         self._save_state()
         return input_id
 
     def _observation_id(self, config: RigConfig) -> str:
-        payload = {
-            "dictionary": config.markers.dictionary,
-            "length_m": config.markers.length_m,
-        }
-        canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
-        return "detection_" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:12]
+        return observation_id(config)
+
+    def detect_observations_only(
+        self,
+        config: RigConfig,
+        *,
+        dataset_root: Path,
+        run_directory: Path,
+    ) -> Path:
+        """Re-run only ArUco detection on an already normalized dataset."""
+        run = run_directory.resolve()
+        run.mkdir(parents=True, exist_ok=True)
+        (run / "logs").mkdir(exist_ok=True)
+        commands = run / "commands.txt"
+        if not commands.is_file():
+            commands.write_text("", encoding="utf-8")
+        self.run_directory = run
+        self._run_command(
+            self._detector_command(config, dataset_root.resolve())
+        )
+        return run / "01_OBSERVATIONS"
 
     def _bind_observations_view(
         self, config: RigConfig, input_id: str
     ) -> Path:
         assert self.run_directory is not None
         paths = self._working_paths(config)
-        shared = (
-            paths.datasets
-            / input_id
-            / "observations"
-            / self._observation_id(config)
-        )
+        shared = paths.datasets / "observations"
         shared.mkdir(parents=True, exist_ok=True)
+        observation_id = self._observation_id(config)
+        existing_config = _read_json(shared / "detection_config.json")
+        existing_observation_id = existing_config.get("observation_id")
+        existing_csv = shared / "shared_all_aruco_observations.csv"
+        if (
+            existing_csv.is_file()
+            and existing_observation_id
+            and existing_observation_id != observation_id
+        ):
+            raise RuntimeError(
+                "This experiment already contains observations generated with "
+                "a different ArUco detector contract. Use a distinct experiment "
+                f"ID (recommended suffix: __aruco_{config.markers.detection_mode}) "
+                "instead of overwriting scientific evidence."
+            )
         _write_json(
-            shared / "DETECTION_CONFIG.json",
+            shared / "detection_config.json",
             {
                 "schema_version": 5,
+                "layout_version": 2,
                 "input_id": input_id,
-                "observation_id": shared.name,
+                "observation_id": observation_id,
                 "markers": config.markers.model_dump(mode="json"),
+                "effective_detector": effective_detector_config(
+                    config.markers.detection_mode,
+                    config.markers.dictionary,
+                ),
+                "detector_contract": DETECTOR_CONTRACT,
                 "observation_input_contract": "all_quality_passed_v1",
             },
         )
@@ -677,13 +788,88 @@ class PipelineOrchestrator:
             if view.is_dir():
                 view.rmdir()
             view.symlink_to(shared.resolve(), target_is_directory=True)
-        self.manifest["observation_id"] = shared.name
+        self.manifest["observation_id"] = observation_id
         self.manifest["observations_root"] = str(shared)
         self._save_state()
         return shared
 
+    def _finalize_dataset_observations(
+        self,
+        config: RigConfig,
+        *,
+        quality_observations_root: Path,
+    ) -> None:
+        """Freeze selection and quality evidence into the immutable dataset."""
+        assert self.run_directory is not None
+        dataset_root = self._working_paths(config).datasets
+        observations = dataset_root / "observations"
+        observations.mkdir(parents=True, exist_ok=True)
+        required_selection = (
+            "SELECTION_CANDIDATES.json",
+            "REFERENCE_SELECTIONS.json",
+            "REFERENCE_MARKER_ID.txt",
+        )
+        missing = [
+            name
+            for name in required_selection
+            if not (quality_observations_root / name).is_file()
+        ]
+        if missing:
+            raise RuntimeError(
+                "Selection analysis completed without publishable evidence: "
+                + ", ".join(missing)
+            )
+        for name in required_selection:
+            shutil.copy2(
+                quality_observations_root / name,
+                observations / name,
+            )
+
+        quality = observations / "quality"
+        quality.mkdir(parents=True, exist_ok=True)
+        for name in (
+            "accepted_observations.csv",
+            "rejected_observations.csv",
+            "observation_filter_summary.json",
+            "preflight_summary.json",
+        ):
+            source = self.run_directory / "preflight" / name
+            if source.is_file():
+                shutil.copy2(source, quality / name)
+        manifest = self.run_directory / "00_INPUT" / "dataset_manifest.json"
+        if manifest.is_file():
+            destination = dataset_root / "metadata" / "dataset_manifest.json"
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(manifest, destination)
+        completion = observations / "PUBLICATION_COMPLETE.json"
+        # A queue shares one immutable prepared dataset across all method
+        # jobs.  Its first/preflight finalization is authoritative; rewriting
+        # the timestamp for every method would make byte-identical
+        # publication look like a dataset conflict.
+        existing_completion = _read_json(completion)
+        if existing_completion.get("status") != "complete":
+            _write_json(
+                completion,
+                {
+                    "schema_version": 5,
+                    "layout_version": 2,
+                    "status": "complete",
+                    "selection_files": list(required_selection),
+                    "quality_directory": "quality",
+                    "debug_images": (
+                        "debug_images"
+                        if (observations / "debug_images").is_dir()
+                        else None
+                    ),
+                    "finalized_at": _now(),
+                },
+            )
+
     @staticmethod
-    def _observation_contract_ready(root: Path) -> bool:
+    def _observation_contract_ready(
+        root: Path,
+        expected_observation_id: str | None = None,
+    ) -> bool:
         paths = [
             root / name
             for name in (
@@ -694,6 +880,10 @@ class PipelineOrchestrator:
         ]
         if not all(path.is_file() for path in paths):
             return False
+        if expected_observation_id is not None:
+            config = _read_json(root / "detection_config.json")
+            if config.get("observation_id") != expected_observation_id:
+                return False
         try:
             with paths[-1].open(newline="", encoding="utf-8") as handle:
                 fields = set(next(csv.reader(handle)))
@@ -701,6 +891,10 @@ class PipelineOrchestrator:
             return False
         return {
             "detection_success",
+            "detection_mode",
+            "detection_source",
+            "detector_contract",
+            "opencv_version",
             "pnp_reprojection_rmse_px",
             "corner0_u",
             "corner3_v",
@@ -713,14 +907,11 @@ class PipelineOrchestrator:
         resolved: ResolvedSelections,
     ) -> tuple[Path, str, str]:
         method_id = config.methods.enabled[0]
-        variant = method_variant_name(config, method_id, resolved)
+        variant = method_result_label(config, method_id)
         target = (
             experiment_paths(config).methods
             / method_id
             / variant
-            / "executions"
-            / input_id
-            / "current"
         )
         return target, method_id, variant
 
@@ -819,18 +1010,32 @@ class PipelineOrchestrator:
         method_sha: str,
         input_id: str,
     ) -> bool:
-        manifest_path = target / "run_manifest.json"
-        if not manifest_path.is_file():
-            return False
-        try:
-            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except Exception:
-            return False
-        return (
-            payload.get("status") == "completed"
-            and payload.get("method_fingerprint") == method_sha
-            and payload.get("input_id") == input_id
-        )
+        for manifest_path in (
+            target / "RESULT.json",
+            target / "provenance" / "run_manifest.json",
+            target / "run_manifest.json",
+        ):
+            if not manifest_path.is_file():
+                continue
+            try:
+                payload = json.loads(
+                    manifest_path.read_text(encoding="utf-8")
+                )
+            except Exception:
+                continue
+            status = str(payload.get("status", "")).lower()
+            fingerprint = payload.get(
+                "method_fingerprint", payload.get("config_fingerprint")
+            )
+            stored_input = payload.get(
+                "input_fingerprint", payload.get("input_id")
+            )
+            return (
+                status in {"available", "completed"}
+                and fingerprint == method_sha
+                and stored_input == input_id
+            )
+        return False
 
     @staticmethod
     def _archive_compact_history(current: Path, history: Path) -> None:
@@ -910,20 +1115,42 @@ class PipelineOrchestrator:
     ) -> Path:
         assert self.run_directory is not None
         staging = self.run_directory
-        root = (
-            self._working_paths(config).datasets
-            / input_id
-            / "preparations"
-            / staging.name
-        )
-        root.parent.mkdir(parents=True, exist_ok=True)
-        if root.exists():
-            raise RuntimeError(f"Preparation result already exists: {root}")
-        staging.rename(root)
-        self.run_directory = root
-        self.manifest["published_result"] = str(root)
-        self._save_state()
-        return root
+        if self.transaction_root is not None:
+            root = (
+                self.transaction_root
+                / "jobs"
+                / self.progress.job_id
+                / "prepared"
+            )
+            root.parent.mkdir(parents=True, exist_ok=True)
+            if root.exists():
+                shutil.rmtree(root)
+            staging.rename(root)
+            self.run_directory = root
+            self.manifest["published_result"] = str(root)
+            self._save_state()
+            return root
+
+        dataset = experiment_paths(config).dataset_root
+        provenance = dataset / "metadata" / "preparation"
+        provenance.mkdir(parents=True, exist_ok=True)
+        for name in (
+            "run_manifest.json",
+            "requested_config.yaml",
+            "resolved_config.yaml",
+            "commands.txt",
+            "environment.json",
+            "timings.json",
+        ):
+            source = staging / name
+            if source.is_file():
+                shutil.copy2(source, provenance / name)
+        self.manifest["published_result"] = str(dataset)
+        self.manifest["status"] = "completed"
+        _write_json(provenance / "run_manifest.json", self.manifest)
+        shutil.rmtree(staging)
+        self.run_directory = dataset
+        return dataset
 
     def _load_run(self, run: Path) -> RigConfig:
         self.run_directory = run.resolve()
@@ -954,47 +1181,10 @@ class PipelineOrchestrator:
             else {}
         )
         resolved_path = self.run_directory / "resolved_config.yaml"
-        raw_config = yaml.safe_load(resolved_path.read_text(encoding="utf-8")) or {}
         config = load_config(resolved_path)
         expected = config_fingerprint(config)
         if expected != self.manifest.get("config_sha256"):
-            legacy_schema_migration = int(
-                raw_config.get("schema_version", 1)
-            ) in {1, 2, 3, 4}
-            additive_sampling_migration = (
-                "route_sampling_strategy"
-                not in (raw_config.get("simulation", {}) or {})
-            )
-            legacy_payload = config.model_dump(
-                mode="json", exclude_none=True, by_alias=True
-            )
-            legacy_payload.get("simulation", {}).pop(
-                "route_sampling_strategy", None
-            )
-            legacy_canonical = json.dumps(
-                legacy_payload, sort_keys=True, separators=(",", ":")
-            )
-            legacy_fingerprint = hashlib.sha256(
-                legacy_canonical.encode("utf-8")
-            ).hexdigest()
-            if legacy_schema_migration:
-                self.manifest.setdefault("config_migrations", []).append(
-                    "migrated legacy configuration to schema v5"
-                )
-                save_config(config, resolved_path)
-                self.manifest["config_sha256"] = expected
-                self.manifest["resolved_config_sha256"] = expected
-            elif (
-                additive_sampling_migration
-                and legacy_fingerprint == self.manifest.get("config_sha256")
-            ):
-                self.manifest.setdefault("config_migrations", []).append(
-                    "added explicit simulation.route_sampling_strategy default"
-                )
-                save_config(config, resolved_path)
-                self.manifest["config_sha256"] = expected
-                self.manifest["resolved_config_sha256"] = expected
-            elif self.manifest.get("resolution_update_pending"):
+            if self.manifest.get("resolution_update_pending"):
                 self.manifest["config_sha256"] = expected
                 self.manifest["resolved_config_sha256"] = expected
                 self.manifest.pop("resolution_update_pending", None)
@@ -1178,7 +1368,6 @@ class PipelineOrchestrator:
         environment = os.environ.copy()
         environment.update(spec.environment)
         environment.setdefault("PYTHONUNBUFFERED", "1")
-        self.console.print(f"[dim]Command: {command_text}[/dim]")
         started = time.monotonic()
         structured_stage_starts: dict[str, float] = {}
         with log_path.open("a", encoding="utf-8") as log:
@@ -1193,9 +1382,8 @@ class PipelineOrchestrator:
             )
             assert process.stdout is not None
             self.console.print(
-                f"[dim]Started PID {process.pid}; live output and a heartbeat "
-                f"every {COMMAND_HEARTBEAT_SECONDS:g} s while silent. "
-                f"Log: {log_path}[/dim]"
+                f"[dim]Running {spec.display_name} | PID {process.pid} | "
+                f"full log: {log_path}[/dim]"
             )
             output: queue.Queue[str | None] = queue.Queue()
 
@@ -1226,15 +1414,26 @@ class PipelineOrchestrator:
                             now - last_terminal_activity
                             >= COMMAND_HEARTBEAT_SECONDS
                         ):
-                            command_elapsed = now - started
                             stage_elapsed = now - self.progress.stage_started
+                            job_elapsed = now - self.progress.job_started
                             queue_elapsed = now - self.progress.queue_started
+                            batch_text = ""
+                            if self.progress.batch_started is not None:
+                                batch_text = (
+                                    " | Batch "
+                                    f"{now - self.progress.batch_started:.1f} s"
+                                )
+                            counts_text = progress_text(self.progress.counts)
+                            counts_suffix = (
+                                f" | {counts_text}" if counts_text else ""
+                            )
                             self.console.print(
-                                f"[{command_elapsed:8.1f}s] Still running: "
+                                f"Still running: "
                                 f"{spec.display_name} | PID {process.pid} | "
                                 f"Stage {stage_elapsed:.1f} s | "
-                                f"Queue {queue_elapsed:.1f} s | "
-                                f"Log: {log_path}",
+                                f"Method/job {job_elapsed:.1f} s | "
+                                f"Experiment {queue_elapsed:.1f} s"
+                                f"{batch_text}{counts_suffix} | Log: {log_path}",
                                 style="cyan",
                                 markup=False,
                             )
@@ -1246,8 +1445,8 @@ class PipelineOrchestrator:
                     line = queued_line.rstrip("\n")
                     log.write(line + "\n")
                     log.flush()
-                    last_terminal_activity = time.monotonic()
                     self.progress.update_counts(line)
+                    displayed = False
                     if line.startswith("RIGCAL_STAGE_START "):
                         substage = line.split(maxsplit=1)[1].strip()
                         structured_stage_starts[substage] = time.monotonic()
@@ -1255,6 +1454,7 @@ class PipelineOrchestrator:
                             f"[bold cyan][{self.progress.job_id}] "
                             f"{substage.replace('_', ' ')}[/bold cyan]"
                         )
+                        displayed = True
                     elif line.startswith("RIGCAL_STAGE_END "):
                         pieces = line.split()
                         substage = pieces[1] if len(pieces) > 1 else "unknown"
@@ -1277,12 +1477,28 @@ class PipelineOrchestrator:
                             f"[green]{substage.replace('_', ' ')}: "
                             f"{measured:.1f} s[/green]"
                         )
+                        displayed = True
                     elif line.startswith("RIGCAL_STAGE_WARNING "):
                         self.console.print(f"[yellow]{line}[/yellow]", markup=False)
-                    if line.startswith("[SCAN]"):
-                        self.console.print(line, markup=False)
-                    else:
-                        self.console.print(f"[{elapsed:8.1f}s] {line}", markup=False)
+                        displayed = True
+                    elif line.startswith("RIGCAL_STAGE_FAILED "):
+                        self.console.print(f"[red]{line}[/red]", markup=False)
+                        displayed = True
+                    elif line.startswith("RIGCAL_PROGRESS "):
+                        summary = progress_text(self.progress.counts)
+                        if summary:
+                            self.console.print(
+                                f"[{elapsed:8.1f}s] {spec.display_name}: {summary}",
+                                markup=False,
+                            )
+                            displayed = True
+                    elif line.startswith(TERMINAL_PREFIXES):
+                        self.console.print(
+                            f"[{elapsed:8.1f}s] {line}", markup=False
+                        )
+                        displayed = True
+                    if displayed:
+                        last_terminal_activity = time.monotonic()
             except KeyboardInterrupt:
                 process.terminate()
                 process.wait(timeout=10)
@@ -1292,7 +1508,11 @@ class PipelineOrchestrator:
             raise RuntimeError(
                 f"{spec.display_name} exited with code {code}; log: {log_path}"
             )
-        self.console.print(f"[dim]Log: {log_path}[/dim]")
+        elapsed = time.monotonic() - started
+        self.console.print(
+            f"[green]{spec.display_name}: completed in {elapsed:.1f} s[/green] "
+            f"[dim]| log: {log_path}[/dim]"
+        )
 
     def _detector_command(self, config: RigConfig, dataset_root: Path) -> CommandSpec:
         assert self.run_directory is not None
@@ -1300,7 +1520,7 @@ class PipelineOrchestrator:
             sys.executable,
             str(
                 self.repository_root
-                / "run/bus_real_data/_shared/baseline/02_detect_shared_aruco_observations.py"
+                / "src/camera_rig_calibration/observation_detection.py"
             ),
             "--dataset",
             str(dataset_root / "raw_images"),
@@ -1314,6 +1534,8 @@ class PipelineOrchestrator:
             str(config.markers.length_m),
             "--dictionary",
             config.markers.dictionary,
+            "--detection-mode",
+            config.markers.detection_mode,
             "--allowed-marker-ids",
             "auto",
             "--minimum-area-px2",
@@ -1351,9 +1573,7 @@ class PipelineOrchestrator:
             if config.dataset.prepared_root is None:
                 project = config.project.model_copy(
                     update={
-                        "dataset_cache_root": (
-                            self._working_paths(config).dataset_root / ".working"
-                        )
+                        "dataset_cache_root": self._input_working_root(config)
                     }
                 )
                 config = RigConfig.model_validate(
@@ -1443,37 +1663,22 @@ class PipelineOrchestrator:
         input_id = self._publish_input_view(
             config, dataset_root, dataset_manifest
         )
+        authoritative_dataset_root = self._working_paths(
+            config
+        ).datasets.resolve()
+        _write_json(
+            pointer_path,
+            {
+                "dataset_root": str(authoritative_dataset_root),
+                "prepared_source_root": str(dataset_root.resolve()),
+                "prepared_input": bool(
+                    preparation and preparation.prepared_input
+                ),
+                "layout_version": 2,
+                "input_id": input_id,
+            },
+        )
         observations_root = self._bind_observations_view(config, input_id)
-
-        def detect_markers() -> None:
-            if self._observation_contract_ready(observations_root):
-                self.console.print(
-                    f"[dim]Reusing compatible observations: {observations_root}[/dim]"
-                )
-                return
-            self._run_command(self._detector_command(config, dataset_root))
-
-        self._execute_stage("detect_markers", detect_markers)
-
-        def build_gallery() -> None:
-            summary = build_moving_debug_gallery(
-                dataset_root=dataset_root,
-                observations_root=observations_root,
-            )
-            self.manifest["moving_debug_gallery"] = {
-                key: summary[key]
-                for key in (
-                    "total_moving_frames",
-                    "frames_with_detections",
-                    "frames_without_markers",
-                    "frames_with_multiple_markers",
-                    "ap02_bridge_frames",
-                    "gallery_path",
-                )
-            }
-            self._save_state()
-
-        self._execute_stage("build_debug_gallery", build_gallery)
 
         validation_holder: dict[str, Any] = {}
 
@@ -1493,6 +1698,19 @@ class PipelineOrchestrator:
             validation.require_valid()
 
         self._execute_stage("validate_dataset", validate)
+
+        def detect_markers() -> None:
+            if self._observation_contract_ready(
+                observations_root,
+                self._observation_id(config),
+            ):
+                self.console.print(
+                    f"[dim]Reusing compatible observations: {observations_root}[/dim]"
+                )
+                return
+            self._run_command(self._detector_command(config, dataset_root))
+
+        self._execute_stage("detect_markers", detect_markers)
 
         filtered_holder: dict[str, Path] = {}
 
@@ -1599,6 +1817,10 @@ class PipelineOrchestrator:
             ),
         ]
         save_dataset_manifest(dataset_manifest, manifest_path)
+        self._finalize_dataset_observations(
+            config,
+            quality_observations_root=observations_root,
+        )
 
         if config.project.execution_mode == "prepare_only":
             def finalize_preparation() -> None:
@@ -1645,15 +1867,19 @@ class PipelineOrchestrator:
             self._execute_stage("finalize", finalize_preparation)
             self._save_state()
             published = self._publish_preparation(config, input_id)
-            self.console.print(
-                f"\n[bold green]Input preparation completed:[/bold green] {published}"
-            )
+            if self.transaction_root is None:
+                self.console.print(
+                    "\n[bold green]Input preparation completed:[/bold green] "
+                    f"{published}"
+                )
+            else:
+                self.console.print(
+                    "\n[green]Input preparation validated; atomic dataset "
+                    "publication is being finalized.[/green]"
+                )
             return published
 
-        if (
-            config.selection.mode == "review_once"
-            and not _automatic_scientific_selections(config)
-        ):
+        if config.selection.mode == "review_once":
             if self.selection_reviewer is None:
                 self.manifest["status"] = "waiting_for_selection"
                 self.manifest["runner_pid"] = None
@@ -1713,7 +1939,8 @@ class PipelineOrchestrator:
                 self.manifest["duplicate_of"] = str(target)
                 self._save_state()
                 self.console.print(
-                    f"[yellow]Exact method/input result already exists; skipped: "
+                    f"[yellow]Identical method configuration and input already "
+                    f"exist in results; skipped without recomputation: "
                     f"{target}[/yellow]"
                 )
                 return target
@@ -1935,8 +2162,6 @@ class PipelineOrchestrator:
             evaluation_view = (
                 self._working_paths(config).evaluations
                 / evaluation_name
-                / "executions"
-                / input_id
                 / method_id
                 / variant
             )
@@ -1946,9 +2171,16 @@ class PipelineOrchestrator:
                     (published / "06_EVALUATION").resolve(),
                     target_is_directory=True,
                 )
-        self.console.print(
-            f"\n[bold green]Calibration run completed:[/bold green] {published}"
-        )
+        if self.transaction_root is None:
+            self.console.print(
+                f"\n[bold green]Calibration run completed:[/bold green] "
+                f"{published}"
+            )
+        else:
+            self.console.print(
+                "\n[green]Method execution completed; canonical publication "
+                "is being finalized.[/green]"
+            )
         return published
 
     def mark_interrupted(self) -> None:

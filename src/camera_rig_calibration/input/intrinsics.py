@@ -38,7 +38,7 @@ def main() -> None:
     parser.add_argument("--minimum-detections", type=int, default=20)
     parser.add_argument(
         "--scan-mode",
-        choices=("balanced", "exhaustive_compatibility"),
+        choices=("balanced", "full_frame"),
         default="balanced",
     )
     parser.add_argument("--scan-target-hz", type=float, default=3.0)

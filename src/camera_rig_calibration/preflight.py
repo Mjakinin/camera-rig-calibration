@@ -1,11 +1,18 @@
 from __future__ import annotations
 
+import csv
 import json
 import shutil
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
+from .ap02_graph import (
+    AP02GraphDiagnosis,
+    diagnose_ap02_graph,
+    graph_components,
+)
 from .components import register_builtin_components
 from .config.models import RigConfig
 from .contracts import RunContext
@@ -34,6 +41,8 @@ class PreflightJobResult:
     filter_result: ObservationFilterResult | None
     selections: ResolvedSelections | None
     output_directory: Path
+    camera_coverage: tuple["CameraObservationCoverage", ...] = ()
+    ap02_graph_diagnosis: AP02GraphDiagnosis | None = None
 
     @property
     def runnable(self) -> bool:
@@ -49,10 +58,44 @@ class QueuePreflightResult:
     status: str
     jobs: tuple[PreflightJobResult, ...]
     output_directory: Path
+    camera_coverage: tuple["CameraObservationCoverage", ...] = ()
+    missing_required_cameras: tuple[str, ...] = ()
+    review_reasons: tuple[str, ...] = ()
 
     @property
     def ready(self) -> bool:
         return any(job.runnable for job in self.jobs)
+
+    @property
+    def review_required(self) -> bool:
+        return bool(self.review_reasons)
+
+
+@dataclass(frozen=True)
+class CameraObservationCoverage:
+    camera_id: str
+    required: bool
+    raw_detection_count: int
+    accepted_observation_count: int
+    marker_ids: tuple[int, ...]
+
+
+def _observation_camera_id(row: dict[str, str]) -> str:
+    return str(
+        row.get("camera_name")
+        or row.get("observer_id")
+        or ""
+    ).strip()
+
+
+def _read_observation_rows(path: Path) -> list[dict[str, str]]:
+    try:
+        with path.open(newline="", encoding="utf-8") as handle:
+            return list(csv.DictReader(handle))
+    except OSError as exc:
+        raise ObservationQualityError(
+            f"Could not read observation evidence: {path}"
+        ) from exc
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -77,6 +120,58 @@ def _copy_filter_artifacts(source: Path, destination: Path) -> None:
             shutil.copy2(path, destination / name)
 
 
+def _write_ap02_graph_diagnosis(
+    job_root: Path,
+    diagnosis: AP02GraphDiagnosis,
+) -> None:
+    _write_json(
+        job_root / "AP02_COMBINED_GRAPH.json",
+        diagnosis.model_dump(),
+    )
+    component_lines = [
+        (
+            f"{component.component_id}: cameras="
+            f"{','.join(component.static_cameras) or '-'}; "
+            f"markers={','.join(map(str, component.marker_ids))}; "
+            f"moving_frames={len(component.moving_frames)}; "
+            "connecting_moving_frames="
+            f"{len(component.connecting_moving_frames)}; "
+            f"calibratable={'yes' if component.calibratable else 'no'}"
+        )
+        for component in diagnosis.components
+    ]
+    (job_root / "AP02_COMBINED_GRAPH.txt").write_text(
+        "\n".join(
+            [
+                "AP02 COMBINED GRAPH DIAGNOSIS",
+                "=" * 72,
+                "",
+                f"Reference marker: {diagnosis.reference_marker_id}",
+                (
+                    "Primary coverage: "
+                    f"{len(diagnosis.reached_static_cameras)}/"
+                    f"{len(diagnosis.expected_static_cameras)} static cameras"
+                ),
+                f"Connected components: {len(diagnosis.components)}",
+                (
+                    "Missing from primary component: "
+                    + (
+                        ", ".join(diagnosis.missing_static_cameras)
+                        if diagnosis.missing_static_cameras
+                        else "none"
+                    )
+                ),
+                "Cause: " + ", ".join(diagnosis.cause_codes),
+                diagnosis.explanation,
+                "",
+                *component_lines,
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+
 def run_queue_preflight(
     jobs: Iterable[PreflightJob],
     *,
@@ -90,13 +185,59 @@ def run_queue_preflight(
     destination = output_directory.resolve()
     destination.mkdir(parents=True, exist_ok=True)
     results: list[PreflightJobResult] = []
-    for job in jobs:
+    job_list = list(jobs)
+    if not job_list:
+        raise ValueError("Queue preflight requires at least one method job")
+    raw_rows = _read_observation_rows(raw_observations_csv)
+    first_config = job_list[0].config
+    required_by_camera = {
+        camera.id: bool(camera.required)
+        for camera in first_config.static_cameras
+    }
+    raw_counts: dict[str, int] = defaultdict(int)
+    raw_marker_ids: dict[str, set[int]] = defaultdict(set)
+    for row in raw_rows:
+        camera_id = _observation_camera_id(row)
+        if not camera_id:
+            continue
+        raw_counts[camera_id] += 1
+        try:
+            raw_marker_ids[camera_id].add(int(float(row["marker_id"])))
+        except (KeyError, TypeError, ValueError):
+            continue
+    queue_camera_coverage = tuple(
+        CameraObservationCoverage(
+            camera_id=camera_id,
+            required=required,
+            raw_detection_count=raw_counts.get(camera_id, 0),
+            accepted_observation_count=0,
+            marker_ids=tuple(sorted(raw_marker_ids.get(camera_id, set()))),
+        )
+        for camera_id, required in required_by_camera.items()
+    )
+    missing_required = tuple(
+        item.camera_id
+        for item in queue_camera_coverage
+        if item.required and item.raw_detection_count == 0
+    )
+    for job in job_list:
         job_root = destination / "jobs" / job.job_id
         errors: list[str] = []
         warnings: list[str] = []
         details: list[str] = []
         filtered = None
         selections = None
+        ap02_graph_diagnosis = None
+        job_camera_coverage = tuple(
+            CameraObservationCoverage(
+                camera_id=item.camera_id,
+                required=item.required,
+                raw_detection_count=item.raw_detection_count,
+                accepted_observation_count=0,
+                marker_ids=item.marker_ids,
+            )
+            for item in queue_camera_coverage
+        )
         try:
             filtered = filter_observations(
                 raw_observations_csv,
@@ -108,6 +249,69 @@ def run_queue_preflight(
             if filtered.accepted_count == 0:
                 errors.append("Every raw observation was rejected")
             else:
+                accepted_rows = _read_observation_rows(
+                    filtered.accepted_path
+                )
+                accepted_counts: dict[str, int] = defaultdict(int)
+                for row in accepted_rows:
+                    camera_id = _observation_camera_id(row)
+                    if camera_id:
+                        accepted_counts[camera_id] += 1
+                method_id = job.config.methods.enabled[0]
+                if method_id == "ap02":
+                    expected_camera_ids = tuple(
+                        camera.id for camera in job.config.static_cameras
+                    )
+                    preliminary_components = graph_components(
+                        accepted_rows, expected_camera_ids
+                    )
+                    configured_reference = (
+                        job.config.methods.ap02.reference_marker_id
+                    )
+                    if isinstance(configured_reference, int):
+                        preliminary_reference = configured_reference
+                    else:
+                        preferred_component = next(
+                            (
+                                component
+                                for component in preliminary_components
+                                if component.calibratable
+                            ),
+                            (
+                                preliminary_components[0]
+                                if preliminary_components
+                                else None
+                            ),
+                        )
+                        preliminary_reference = (
+                            preferred_component.anchor_marker_id
+                            if preferred_component is not None
+                            else -1
+                        )
+                    ap02_graph_diagnosis = diagnose_ap02_graph(
+                        raw_rows=raw_rows,
+                        accepted_rows=accepted_rows,
+                        rejected_rows=_read_observation_rows(
+                            filtered.rejected_path
+                        ),
+                        static_camera_ids=expected_camera_ids,
+                        reference_marker_id=preliminary_reference,
+                    )
+                    _write_ap02_graph_diagnosis(
+                        job_root, ap02_graph_diagnosis
+                    )
+                job_camera_coverage = tuple(
+                    CameraObservationCoverage(
+                        camera_id=item.camera_id,
+                        required=item.required,
+                        raw_detection_count=item.raw_detection_count,
+                        accepted_observation_count=accepted_counts.get(
+                            item.camera_id, 0
+                        ),
+                        marker_ids=item.marker_ids,
+                    )
+                    for item in queue_camera_coverage
+                )
                 details.append(
                     "Observation quality: "
                     f"{filtered.accepted_count} accepted, "
@@ -135,12 +339,78 @@ def run_queue_preflight(
                     ),
                     resolved_marker_ids=selections.marker_ids,
                 )
-                method_id = job.config.methods.enabled[0]
+                static_ids = {
+                    camera.id for camera in job.config.static_cameras
+                }
+                accepted_static = sorted(
+                    item.camera_id
+                    for item in job_camera_coverage
+                    if item.camera_id in static_ids
+                    and item.accepted_observation_count > 0
+                )
+                missing_static = sorted(static_ids - set(accepted_static))
+                moving_accepted_count = sum(
+                    1
+                    for row in accepted_rows
+                    if str(row.get("observer_type", "")).strip()
+                    == "moving"
+                )
+                details.extend(
+                    [
+                        (
+                            "Accepted static-camera observation coverage: "
+                            f"{len(accepted_static)}/{len(static_ids)}"
+                        ),
+                        (
+                            "Static cameras without accepted observations: "
+                            + (", ".join(missing_static) if missing_static else "none")
+                        ),
+                        (
+                            "Moving-camera accepted observations: "
+                            f"{moving_accepted_count}"
+                        ),
+                        f"ArUco detection mode: {job.config.markers.detection_mode}",
+                    ]
+                )
                 requirement = calibration_methods.get(method_id).requirements(
                     context
                 )
                 if not requirement.compatible:
                     errors.extend(requirement.reasons)
+                if method_id == "ap01":
+                    root_candidate = next(
+                        (
+                            item
+                            for item in selections.payload[
+                                "ap01_root_camera"
+                            ]["candidates"]
+                            if str(item["id"]) == selections.root_camera
+                        ),
+                        {},
+                    )
+                    reachable = list(
+                        root_candidate.get("reachable_cameras", [])
+                    )
+                    unreachable = list(
+                        root_candidate.get("unreachable_cameras", [])
+                    )
+                    details.extend(
+                        [
+                            (
+                                "AP01 observation graph coverage: "
+                                f"{len(reachable)}/"
+                                f"{len(job.config.static_cameras)} cameras"
+                            ),
+                            (
+                                "AP01 unreachable cameras: "
+                                + (
+                                    ", ".join(map(str, unreachable))
+                                    if unreachable
+                                    else "none"
+                                )
+                            ),
+                        ]
+                    )
                 if method_id == "ap02":
                     candidate = next(
                         (
@@ -176,38 +446,65 @@ def run_queue_preflight(
                             )
                         )
                     )
-                    static_only = int(
-                        candidate.get(
-                            "static_graph_reachable_count", 0
-                        )
+                    rejected_rows = _read_observation_rows(
+                        filtered.rejected_path
                     )
-                    static_missing = sorted(
-                        set(camera.id for camera in job.config.static_cameras)
-                        - set(
-                            candidate.get(
-                                "static_graph_reachable_cameras", []
-                            )
+                    ap02_graph_diagnosis = diagnose_ap02_graph(
+                        raw_rows=raw_rows,
+                        accepted_rows=accepted_rows,
+                        rejected_rows=rejected_rows,
+                        static_camera_ids=(
+                            camera.id for camera in job.config.static_cameras
+                        ),
+                        reference_marker_id=(
+                            selections.ap02_reference_marker_id
+                        ),
+                    )
+                    primary_component = next(
+                        (
+                            component
+                            for component
+                            in ap02_graph_diagnosis.components
+                            if component.component_id
+                            == ap02_graph_diagnosis.reference_component_id
+                        ),
+                        None,
+                    )
+                    if (
+                        primary_component is None
+                        or not primary_component.calibratable
+                    ):
+                        errors.append(
+                            "The selected AP02 reference component is not "
+                            "calibratable as Combined BA: it requires at "
+                            "least two static cameras and one moving frame"
                         )
+                    _write_ap02_graph_diagnosis(
+                        job_root, ap02_graph_diagnosis
                     )
                     details.extend(
                         [
-                            f"Static-only coverage: {static_only}/{expected} cameras",
                             (
-                                "Missing from diagnostic branch: "
-                                + ", ".join(static_missing)
-                                if static_missing
-                                else "Missing from diagnostic branch: none"
+                                "AP02 Combined graph: "
+                                f"{combined}/{expected} cameras; "
+                                f"reference marker "
+                                f"{selections.ap02_reference_marker_id}; "
+                                f"{len(ap02_graph_diagnosis.components)} "
+                                "connected components"
                             ),
-                            f"Combined coverage: {combined}/{expected} cameras",
                             (
-                                "Missing from primary branch: "
+                                "Missing from AP02 primary component: "
                                 + ", ".join(combined_missing)
                                 if combined_missing
-                                else "Missing from primary branch: none"
+                                else "Missing from AP02 primary component: none"
                             ),
                             (
-                                "Coverage checks input connectivity only; they "
-                                "do not predict Bundle Adjustment success"
+                                "AP02 connectivity cause: "
+                                + ", ".join(
+                                    ap02_graph_diagnosis.cause_codes
+                                )
+                                + "; "
+                                + ap02_graph_diagnosis.explanation
                             ),
                         ]
                     )
@@ -226,6 +523,44 @@ def run_queue_preflight(
                             "AP03 single-scale diagnostic is unsupported; "
                             "multi-scale remains the primary result"
                         )
+                    selected_markers = set(
+                        selections.ap03_multi_marker_ids
+                    )
+                    supported_static = sorted(
+                        {
+                            str(camera)
+                            for marker_id, item in candidates.items()
+                            if marker_id in selected_markers
+                            for camera in item.get("static_cameras", [])
+                        }
+                    )
+                    missing_scale_support = sorted(
+                        set(camera.id for camera in job.config.static_cameras)
+                        - set(supported_static)
+                    )
+                    details.extend(
+                        [
+                            (
+                                "AP03 ArUco scale-support coverage: "
+                                f"{len(supported_static)}/"
+                                f"{len(job.config.static_cameras)} cameras"
+                            ),
+                            (
+                                "AP03 cameras without direct selected-marker "
+                                "support: "
+                                + (
+                                    ", ".join(missing_scale_support)
+                                    if missing_scale_support
+                                    else "none"
+                                )
+                            ),
+                            (
+                                "AP03 COLMAP registration graph coverage is "
+                                "reported during reconstruction; preflight "
+                                "does not predict feature matching"
+                            ),
+                        ]
+                    )
         except (ObservationQualityError, RuntimeError, ValueError) as exc:
             errors.append(str(exc))
 
@@ -235,30 +570,14 @@ def run_queue_preflight(
             and selections is not None
             and job.config.methods.enabled[0] == "ap02"
         ):
-            selected = next(
-                (
-                    item
-                    for item in selections.payload[
-                        "ap02_reference_marker"
-                    ]["candidates"]
-                    if int(item["id"])
-                    == selections.ap02_reference_marker_id
-                ),
-                {},
-            )
-            partial = (
-                int(
-                    selected.get(
-                        "combined_graph_reachable_static_count", 0
-                    )
-                )
-                < len(job.config.static_cameras)
+            partial = bool(
+                ap02_graph_diagnosis is not None
+                and not ap02_graph_diagnosis.complete
             )
             if partial:
                 details.append(
-                    "AP02 will run only the connected component as a "
-                    "diagnostic partial result; this is a connectivity limit, "
-                    "not an automatic reprojection-threshold fallback"
+                    "AP02 requires observation review before its primary "
+                    "component and additional calibratable components may run"
                 )
         status = (
             "FAILED_PREFLIGHT"
@@ -282,6 +601,24 @@ def run_queue_preflight(
             "observation_quality": job.config.observation_quality.model_dump(
                 mode="json"
             ),
+            "detection_mode": job.config.markers.detection_mode,
+            "ap02_combined_graph": (
+                ap02_graph_diagnosis.model_dump()
+                if ap02_graph_diagnosis is not None
+                else None
+            ),
+            "camera_coverage": [
+                {
+                    "camera_id": item.camera_id,
+                    "required": item.required,
+                    "raw_detection_count": item.raw_detection_count,
+                    "accepted_observation_count": (
+                        item.accepted_observation_count
+                    ),
+                    "marker_ids": list(item.marker_ids),
+                }
+                for item in job_camera_coverage
+            ],
             "resolved_selections": (
                 {
                     "root_camera": selections.root_camera,
@@ -310,6 +647,8 @@ def run_queue_preflight(
                 filter_result=filtered,
                 selections=selections,
                 output_directory=job_root,
+                camera_coverage=job_camera_coverage,
+                ap02_graph_diagnosis=ap02_graph_diagnosis,
             )
         )
 
@@ -324,6 +663,17 @@ def run_queue_preflight(
         if any(result.status == "READY_WITH_WARNINGS" for result in runnable)
         else "READY"
     )
+    review_reasons: list[str] = []
+    if missing_required:
+        review_reasons.append("required_camera_without_detection")
+    if any(
+        result.ap02_graph_diagnosis is not None
+        and not result.ap02_graph_diagnosis.complete
+        for result in results
+    ):
+        review_reasons.append("ap02_combined_graph_incomplete")
+    if review_reasons:
+        queue_status = "REVIEW_REQUIRED"
     _write_json(
         destination / "queue_preflight_summary.json",
         {
@@ -345,6 +695,19 @@ def run_queue_preflight(
                 for result in results
             ],
             "methods_may_start": bool(runnable),
+            "detection_mode": first_config.markers.detection_mode,
+            "camera_coverage": [
+                {
+                    "camera_id": item.camera_id,
+                    "required": item.required,
+                    "raw_detection_count": item.raw_detection_count,
+                    "marker_ids": list(item.marker_ids),
+                }
+                for item in queue_camera_coverage
+            ],
+            "missing_required_cameras": list(missing_required),
+            "review_required": bool(review_reasons),
+            "review_reasons": review_reasons,
             "runnable_jobs": [result.job_id for result in runnable],
             "skipped_jobs": [result.job_id for result in failed],
         },
@@ -353,4 +716,7 @@ def run_queue_preflight(
         status=queue_status,
         jobs=tuple(results),
         output_directory=destination,
+        camera_coverage=queue_camera_coverage,
+        missing_required_cameras=missing_required,
+        review_reasons=tuple(review_reasons),
     )

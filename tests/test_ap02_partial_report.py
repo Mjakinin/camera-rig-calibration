@@ -46,7 +46,7 @@ def test_ap02_partial_report_is_diagnostic_and_not_comparison_eligible(
     )
     assert status["status"] == "PARTIAL_3_OF_4"
     assert status["success"] is True
-    assert status["primary_result_available"] is False
+    assert status["primary_result_available"] is True
     assert status["comparison_eligible"] is False
     assert status["missing_static_cameras"] == ["cam_4"]
     assert report["diagnostic_partial"] is True

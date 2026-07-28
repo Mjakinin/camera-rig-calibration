@@ -39,6 +39,10 @@ def resolve_config_paths(config: RigConfig, config_path: Path) -> RigConfig:
 
     def visit(value: Any, key: str | None = None) -> Any:
         if isinstance(value, dict):
+            # This dictionary contains scientific baseline values. A key named
+            # `route` is a route identifier here, not a filesystem path.
+            if key == "world_baseline":
+                return value
             return {name: visit(item, name) for name, item in value.items()}
         if isinstance(value, list):
             if key in {"images", "resource_paths"}:
@@ -58,6 +62,11 @@ def load_config(path: str | Path, *, resolve_paths: bool = True) -> RigConfig:
     payload = yaml.safe_load(source.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError(f"Configuration root must be a mapping: {source}")
+    if payload.get("schema_version") != 5:
+        raise ValueError(
+            f"Only schema_version 5 is supported: {source}. Recreate the "
+            "configuration with the current rigcal wizard."
+        )
     config = RigConfig.model_validate(payload)
     return resolve_config_paths(config, source) if resolve_paths else config
 

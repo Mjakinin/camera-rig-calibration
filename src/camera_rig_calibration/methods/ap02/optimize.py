@@ -16,7 +16,7 @@ import cv2
 import numpy as np
 
 
-from . import optimize_core as legacy
+from . import optimize_core as core
 
 
 def distortion_from_row(row: dict) -> tuple[str, np.ndarray]:
@@ -24,7 +24,7 @@ def distortion_from_row(row: dict) -> tuple[str, np.ndarray]:
     model = model.strip().lower()
     values = []
     for index in range(8):
-        value = legacy.safe_float(row, f"d{index}", 0.0)
+        value = core.safe_float(row, f"d{index}", 0.0)
         values.append(value if np.isfinite(value) else 0.0)
 
     if model in {"equidistant", "fisheye"}:
@@ -71,12 +71,12 @@ def observation_residuals(row, marker_poses, observer_poses):
 
     T_ref_marker = marker_poses[marker_id]
     T_ref_observer = observer_poses[observer_id]
-    T_observer_ref = legacy.invT(T_ref_observer)
+    T_observer_ref = core.invT(T_ref_observer)
 
-    fx = legacy.safe_float(row, "fx")
-    fy = legacy.safe_float(row, "fy")
-    cx = legacy.safe_float(row, "cx")
-    cy = legacy.safe_float(row, "cy")
+    fx = core.safe_float(row, "fx")
+    fy = core.safe_float(row, "fy")
+    cx = core.safe_float(row, "cx")
+    cy = core.safe_float(row, "cy")
     K = np.array(
         [[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]],
         dtype=np.float64,
@@ -85,15 +85,15 @@ def observation_residuals(row, marker_poses, observer_poses):
         raise RuntimeError(f"Invalid intrinsics in AP02 observation: {row}")
 
     distortion_model, distortion = distortion_from_row(row)
-    marker_length_m = legacy.safe_float(row, "marker_length_m", 0.170)
-    object_points = legacy.marker_object_points(marker_length_m)
+    marker_length_m = core.safe_float(row, "marker_length_m", 0.170)
+    object_points = core.marker_object_points(marker_length_m)
 
     residuals = []
     for index, point_marker in enumerate(object_points):
         observed = np.array(
             [
-                legacy.safe_float(row, f"corner{index}_u"),
-                legacy.safe_float(row, f"corner{index}_v"),
+                core.safe_float(row, f"corner{index}_u"),
+                core.safe_float(row, f"corner{index}_v"),
             ],
             dtype=np.float64,
         )
@@ -119,7 +119,7 @@ def observation_residuals(row, marker_poses, observer_poses):
 
 # The existing BA uses this global function from all residual, diagnostic and
 # reporting paths. Replacing it here keeps every output internally consistent.
-legacy.observation_residuals = observation_residuals
+core.observation_residuals = observation_residuals
 
 
 def main() -> None:
@@ -128,7 +128,7 @@ def main() -> None:
         "--mode", choices=["static_only", "with_moving"], required=True
     )
     parser.add_argument(
-        "--ref-marker-id", type=int, default=legacy.DEFAULT_REF_MARKER_ID
+        "--ref-marker-id", type=int, default=core.DEFAULT_REF_MARKER_ID
     )
     parser.add_argument("--max-nfev", type=int, default=80)
     parser.add_argument("--ap02-root", type=Path, required=True)
@@ -147,7 +147,7 @@ def main() -> None:
     observations = args.observations.resolve()
     initialization_root = args.initialization_root.resolve()
 
-    scipy_least_squares = legacy.least_squares
+    scipy_least_squares = core.least_squares
     optimizer_report: dict[str, object] = {}
 
     def robust_cost(residuals: np.ndarray) -> float:
@@ -185,13 +185,13 @@ def main() -> None:
         )
         return result
 
-    # The legacy core still owns residuals, pose parameterization and optimizer
+    # The numerical core owns residuals, pose parameterization and optimizer
     # invocation. This adapter changes only the two explicitly configurable
     # SciPy loss arguments; defaults remain soft_l1 and 3.0 px.
-    legacy.least_squares = configured_least_squares
+    core.least_squares = configured_least_squares
 
     try:
-        legacy.run_ba(
+        core.run_ba(
             args.mode,
             args.ref_marker_id,
             args.max_nfev,
@@ -210,7 +210,7 @@ def main() -> None:
             encoding="utf-8",
         )
     finally:
-        legacy.least_squares = scipy_least_squares
+        core.least_squares = scipy_least_squares
 
 
 if __name__ == "__main__":

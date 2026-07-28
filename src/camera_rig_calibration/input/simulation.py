@@ -15,6 +15,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from ..evaluation.reporting import ensure_simulation_ground_truth
+
 from ..assets import ensure_bus_mesh
 from .simulation_variants import apply_motion_blur, compose_route, compose_world
 
@@ -390,6 +392,13 @@ def capture(repository: Path, dataset: Path, mapping_path: Path) -> None:
         # not silently rewrite its SDF update rate or intrinsics.
         static_camera_update_rate_hz=None,
     )
+    # Freeze the exact composed world before Gazebo starts. Evaluation must
+    # never depend on a later-edited source SDF.
+    ensure_simulation_ground_truth(
+        dataset,
+        world_path=world,
+        backfilled=False,
+    )
     route = compose_route(
         source_route,
         generated / "composed_route.json",
@@ -484,7 +493,7 @@ def capture(repository: Path, dataset: Path, mapping_path: Path) -> None:
                 sys.executable,
                 str(
                     repository
-                    / "run/bus_real_data/_shared/tools/capture/04_capture_moving_camera_route.py"
+                    / "src/camera_rig_calibration/input/gazebo_capture.py"
                 ),
                 "--route",
                 str(route),

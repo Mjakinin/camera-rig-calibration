@@ -6,7 +6,7 @@ import math
 import cv2
 import numpy as np
 
-from run.bus_real_data._shared.common.constants import (
+from camera_rig_calibration.methods.common.constants import (
     STATIC_CAMERAS,
     REF_MARKER_ID,
     REF_MARKER_ENTITY,
@@ -14,8 +14,8 @@ from run.bus_real_data._shared.common.constants import (
     WORLD_SDF_MOVING_CAMERA,
     ARUCO_DICT_NAME,
 )
-from run.bus_real_data._shared.common.io_utils import ensure_dir, read_csv, write_csv
-from run.bus_real_data._shared.common.geometry import (
+from camera_rig_calibration.methods.common.io_utils import ensure_dir, read_csv, write_csv
+from camera_rig_calibration.methods.common.geometry import (
     R_to_rpy_deg,
     R_to_rvec,
     rvec_to_R,
@@ -29,25 +29,25 @@ from run.bus_real_data._shared.common.geometry import (
     rot_error_deg,
     metric_pose_columns,
 )
-from run.bus_real_data._shared.common.aruco_utils import (
+from camera_rig_calibration.methods.common.aruco_utils import (
     marker_object_points,
     make_aruco_detector,
 )
-from run.bus_real_data._shared.common.colmap_io import (
+from camera_rig_calibration.methods.common.colmap_io import (
     parse_cameras_txt,
     parse_images_txt,
     parse_points3D_txt,
 )
-from run.bus_real_data._shared.common.projection import (
+from camera_rig_calibration.methods.common.projection import (
     robust_triangulate_point,
     reproj_errors_px,
 )
-from run.bus_real_data._shared.common.sdf_utils import (
+from camera_rig_calibration.methods.common.sdf_utils import (
     gt_static_camera_poses_ref_aruco,
 )
 
 
-AP3_ROOT = Path("results/bus_real_data/03_targetless_colmap_aruco_scale")
+AP3_ROOT = Path("workspace/standalone_methods/ap03")
 TXT_ROOT = AP3_ROOT / "02_colmap_sparse" / "sparse_txt"
 IMAGE_DIR = AP3_ROOT / "01_colmap_dataset" / "images"
 INSPECT_SUMMARY = AP3_ROOT / "03_reconstruction_inspection" / "colmap_model_summary.csv"

@@ -1,0 +1,29 @@
+schema_version: 1
+profile_id: 1920x1080_iphone13
+display_name: 1920x1080_iphone13
+fingerprint: e174180c0653337c9fe0f54235f50edc2b370835b31573df19401132565a3be8
+created_at: '2026-07-28T19:25:11+00:00'
+intrinsics: intrinsics.json
+image_width: 1080
+image_height: 1920
+distortion_model: plumb_bob
+settings:
+  checkerboard_columns: 8
+  checkerboard_rows: 6
+  maximum_views: 80
+  minimum_frame_gap: 5
+  minimum_detections: 20
+  scan_mode: balanced
+  scan_target_hz: 3.0
+  preview_max_dimension: 1920
+elapsed_seconds: 248.66177081099886
+source_video: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/data_local/exterior/IMG_4316.mov
+source_video_sha256: f73e7faffa876387e24e8569be4cb83e444f42bc34acfa01c4de1058be6d80e3
+video_geometry:
+  encoded_width: 1920
+  encoded_height: 1080
+  display_rotation_degrees: -90
+  output_width: 1080
+  output_height: 1920
+  orientation_policy: apply_ffprobe_display_rotation
+  contract: rigcal_video_geometry_v1

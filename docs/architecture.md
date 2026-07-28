@@ -1,148 +1,138 @@
 # Architecture
 
-## Execution graph
+## One pipeline, one package
+
+All executable capture, preparation, observation, calibration, evaluation and
+reporting code lives under `src/camera_rig_calibration`. `run/rigcal.py` is a
+thin source-checkout launcher.
+
+The central pipeline order is:
 
 ```text
-capture/import
-  → input preparation and intrinsics
-  → raw marker detection/PnP
-  → per-job observation_quality_v1
-  → candidate analysis
-  → one queue-wide review checkpoint
-  → method jobs
-  → method/common-support evaluation
-  → comparison/report
+1 Capture or import
+  → 2 Normalize, extract frames and resolve intrinsics
+  → 3 Validate the dataset
+  → 4 Detect ArUco markers and write debug images
+  → 5 Check observation quality and select references
+  → 6 Run one calibration method and its internal substages
+  → 7 Evaluate every primary method on a common anchor
+  → 8 Build the cross-method comparison
+  → 9 Atomically publish the experiment and summary
 ```
 
-The wizard only authors strict schema-v5 configs and one-dataset queues.
-Interactive and automated runs use the same registries, preflight, and runtime
-contracts.
+Numbers are terminal/documentation order only. Persistent folders are named by
+their scientific role.
 
-Queue preflight prepares the dataset and detects raw observations once. It then
-applies every job's immutable and configurable observation checks, analyzes
-candidates on those accepted observations, validates every method, and writes
-one report per job. `FAILED_PREFLIGHT` blocks only that method; independent
-jobs may finish, but the queue is not published until the failed job is fixed,
-rerun, or explicitly removed.
+## Queue and batch model
 
-Legacy multi-dataset queues are partitioned into ordered one-dataset subqueues
-when loaded.
+A strict schema-v5 queue contains one experiment and one or more independent
+method rows. A `rigcal_batch` contains an ordered list of those queues. The
+batch is the Cartesian product `experiments × method variants`; capture,
+normalization and raw ArUco detection happen once per experiment.
 
-## Scientific ownership
+Queue preflight validates every method without changing its scientific
+parameters. Independent failures do not stop later rows. A successful method
+is authoritative and published independently; a failure is retained only as
+an incomplete/non-authoritative attempt.
 
-- AP01 owns its Root Camera and has no Reference Marker.
-- AP02 owns its pose-graph Reference Marker.
-- AP03 Single owns its diagnostic scale marker.
-- AP03 Multi owns its primary robust marker set.
-- Evaluation owns an independent post-method common anchor.
+AP02 Static-only and AP03 Single are diagnostics. AP02 Combined and AP03 Multi
+are the respective primary results in the common comparison.
 
-Selection uses observed connectivity and individually recorded measurements,
-never intrinsics or project-specific camera names. Selection is lexicographic
-over displayed measurements. The comparison fields, recommendation reasons,
-and stable tie-breaks are persisted.
+## Immutable dataset contract
 
-AP02 separately initializes and runs Static-only BA (diagnostic) and Combined
-static/moving BA (primary). A Static-only runtime failure does not prevent the
-independently initialized Combined BA. AP03 runs one COLMAP reconstruction and
-then two scale stages; Multi is primary and Single is diagnostic.
-
-## Configuration and queue snapshots
-
-One queue contains one dataset. Common dataset, ArUco input, and evaluation
-values are stored in `common`, while every entry points to a full independent
-job snapshot. Queue-common values in a snapshot must match exactly. Duplicating
-a row performs a deep copy.
-
-Schema v1/v2/v3/v4 is migrated in memory to schema v5. Split AP03 Single/Multi rows
-are merged only when their COLMAP, quality, input, and combined AP03 snapshots
-are identical.
-
-## Content identity and publication
-
-Inputs have stable content hashes. Method fingerprints contain the complete
-scientific snapshot and resolved selections. Execution identity is:
+An experiment ID owns exactly one content fingerprint:
 
 ```text
-(method fingerprint, input fingerprint)
+results/real_vehicle/<rate>Hz/<experiment>/
+results/real_vehicle/native_rate/<experiment>/
+results/simulation/<factor>/<value>/
 ```
 
 ```text
-datasets/<category>/<factor-or-source>/<experiment>/
-  inputs/<input-id>/
-    raw_images/
-    metadata/
-    observations/<detection-id>/
-      shared_*.csv
-      connectivity_report.json
-      debug_gallery/
+dataset.json
+raw_images/
+  static/
+  moving/
+  camera_info/
+observations/
+  shared_static_aruco_observations.csv
+  shared_moving_aruco_observations.csv
+  shared_all_aruco_observations.csv
+  debug_images/
+  quality and selection reports
+metadata/
+methods/
+evaluations/
+attempts/
+```
 
-results/<category>/<same-group>/<experiment>/
-  methods/<method>/<variant>/executions/<input-id>/current/
+`video`, `frames`, `rosbag` and `prepared` are source metadata, not directory
+levels. A byte-identical dataset is reused. Different content under the same
+experiment ID is rejected and requires a new ID. Method publication never
+modifies the dataset.
+
+## Result front door
+
+```text
+results/<category>/<same rate-or-factor>/<experiment>/
+  RESULTS.txt
+  RESULTS.json
+  SUMMARY.json
+  COMPARISON.csv
+  COMPARISON.json
+  methods/<method>/<label>/
+    RESULT.txt
+    RESULT.json
+    camera_extrinsics.csv
+    pairwise_camera_extrinsics.csv
+    diagnostics/
+    logs/
+    provenance/
   evaluations/
-  comparisons/
-  PUBLISHED.json
+  attempts/
 ```
 
-Capture, preparation, observations, jobs and evaluations begin below
-`workspace/temporary_runs/<queue-id>/`. Publication builds complete dataset and
-result `.incoming` snapshots, verifies content, and atomically swaps each
-canonical experiment. `PUBLISHED.json` is the visibility boundary. A crash is
-recovered from the transaction journal, and an incomplete queue never replaces
-a known-good experiment.
+The method label comes from the queue (`baseline`, `variant2`, and so on). The
+same label and fingerprint are skipped. The same label with a different
+configuration is a clear conflict; the user must choose another label.
 
-Simulation factor folders are canonical. Only baseline-default aliases are
-relative links (for example `fov/69.1deg → baseline/route2`); there is no
-separate `_views` hierarchy.
+`camera_extrinsics.csv` states the reference frame and transform convention.
+Native method outputs and all intermediate scientific artifacts remain under
+`diagnostics`; complete subprocess output remains under `logs`; requested and
+resolved configs, config diff, command list, environment, manifest and timings
+remain under `provenance`.
 
-## Reuse boundaries
+`RESULTS.txt` is the human-readable experiment front door. `SUMMARY.json` is
+the inventory index and `COMPARISON.csv/json` are machine-readable. Simulation
+experiments add direct camera-pair GT results plus separate best-fit camera-map
+and AP02 marker-map diagnostics.
 
-```text
-capture/import → preparation → raw detection/PnP → observation quality
-→ COLMAP → method estimation/scale → evaluation
-→ comparison
-```
+`View results` indexes only root `SUMMARY.json` files with `layout_version: 2`,
+then displays the public `RESULTS.txt` and method reports. It never reconstructs
+state from workspace runs or method internals.
 
-- Changing AP01 Root reruns AP01 estimation but can reuse COLMAP.
-- Changing AP02 Reference Marker reruns AP02 graph initialization and BA.
-- Changing AP03 scale markers reuses compatible COLMAP and reruns scale.
-- Changing observation quality invalidates work from filtering onward.
-- Changing the Evaluation Anchor reruns evaluation only.
+## Scientific ownership and reuse
 
-AP01 and AP03 use distinct content-addressed COLMAP artifact families. A cache
-key includes input and all COLMAP settings but excludes AP01 Root and AP03
-scale-marker choices.
+- AP01 owns its Root Camera and moving-COLMAP relay.
+- AP02 owns its graph Reference Marker.
+- AP03 Single owns a diagnostic scale marker.
+- AP03 Multi owns the primary robust marker set.
+- Evaluation owns an independent common anchor.
 
-The active method implementations are explicit importable stages:
+AP01 and AP03 COLMAP caches live under `workspace/cache`; they are not public
+results. A cache key includes the immutable input fingerprint and complete
+COLMAP settings, but excludes downstream root/scale selections.
 
-```text
-AP01: observations → COLMAP → scale → candidates → solution → report
-AP02: observations → graph → static/combined initialization
-      → static/combined BA → report
-AP03: observations → grouped COLMAP → inspection
-      → single/multi scale → report
-```
-
-Each stage writes a schema-v5 `stage_manifest.json`. Resume skips completed
-stages. The stage implementations do not alter transformation direction,
-ArUco corner order, PnP, distortion, COLMAP conventions, residual definitions,
-triangulation, or robust estimators.
+The stage implementations preserve transformation direction, ArUco corner
+order, PnP and distortion models, COLMAP conventions, residual definitions,
+triangulation and robust estimators.
 
 ## Runtime records
 
-Adapters emit structured stage events around unchanged scientific runners.
-Terminal output is flushed immediately and includes stage/job/queue elapsed
-seconds, useful counts, and the log path. `timings.json` and
-`run_manifest.json` preserve the same information. No estimated completion time
-is fabricated.
+The terminal shows stage, method, experiment and batch elapsed time plus
+meaningful frame or reconstruction progress. Verbose COLMAP and optimizer
+output is written unchanged to log files. No ETA is fabricated.
 
-AP02 optimizer reports include limits, actual `nfev`, success, status, message,
-initial/final robust cost, reprojection metrics, loss, loss scale, and runtime.
-Common evaluation reports supplied pose/support frame IDs and their
-intersection; AP03 Single is additionally evaluated as a diagnostic.
-
-## Legacy safety
-
-Historical successful results are indexed through verified manifests and remain
-byte-identical. Missing real inputs are labeled `input unavailable / not
-rerunnable`. Incomplete-run cleanup never removes shared inputs or successful
-results.
+Interrupted, selection-waiting and publication-failed queues remain resumable
+under `workspace/temporary_runs`. Terminal successful or failed queues close
+automatically.

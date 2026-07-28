@@ -4,7 +4,7 @@ import csv
 import json
 from pathlib import Path
 
-from camera_rig_calibration.observations import resolve_references
+from camera_rig_calibration.observations import resolve_selections
 
 
 def _row(observer_type: str, observer_id: str, marker: int, area: float) -> dict[str, object]:
@@ -35,7 +35,7 @@ def test_automatic_references_use_visible_fields_and_are_logged(
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    resolved = resolve_references(prepared_config, root)
+    resolved = resolve_selections(prepared_config, root)
     assert resolved.root_camera == "front-left"
     assert resolved.ap02_reference_marker_id == 7
     assert resolved.ap03_single_scale_marker_id == 7

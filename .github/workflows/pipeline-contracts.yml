@@ -3,9 +3,9 @@ name: Pipeline contracts
 on:
   pull_request:
     paths:
-      - "run/bus_real_data/**"
-      - "run/real_vehicle_data/**"
+      - "run/rigcal.py"
       - "src/camera_rig_calibration/**"
+      - "src/calib_lab/**"
       - "tests/**"
       - "pyproject.toml"
       - ".github/workflows/pipeline-contracts.yml"
@@ -19,43 +19,15 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install Python runtime dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-numpy python3-scipy python3-opencv python3-yaml
-          python3 -m pip install ".[dev]"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install rigcal and test dependencies
+        run: python -m pip install -e ".[dev,scientific,standalone]"
 
       - name: Test rigcal contracts without running calibration methods
         run: pytest -m "not slow and not requires_colmap and not requires_ros"
 
-      - name: Compile modified Python entry points
-        run: |
-          python3 -m py_compile \
-            run/bus_real_data/_shared/baseline/04_attach_camera_models_to_observations.py \
-            run/bus_real_data/approach1_marker_direct_relay/12_estimate_colmap_scale_from_aruco_resolution_aware.py \
-            run/bus_real_data/approach1_marker_direct_relay/13_eval_direct_static_cam3_cam1_multimarker_resolution_aware.py \
-            run/bus_real_data/approach1_marker_direct_relay/14_eval_moving_relay_chains_resolution_aware.py \
-            run/bus_real_data/approach2_ref_marker_graph_ba/07_run_ref_marker_graph_ba_distortion.py \
-            run/bus_real_data/approach2_ref_marker_graph_ba/09_validate_ap02_solution_without_gt.py \
-            run/bus_real_data/approach3_targetless_colmap_aruco_scale/02_run_colmap_sparse_grouped.py
-
-      - name: Validate shell syntax
-        run: |
-          bash -n run/bus_real_data/_shared/baseline/run_shared_preprocessing.sh
-          bash -n run/bus_real_data/approach1_marker_direct_relay/run_approach1_full_pipeline.sh
-          bash -n run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_full_pipeline.sh
-          bash -n run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_phase3_graph_ba_fast.sh
-          bash -n run/bus_real_data/approach3_targetless_colmap_aruco_scale/02_run_colmap_sparse.sh
-          bash -n run/bus_real_data/approach3_targetless_colmap_aruco_scale/run_approach3_full_pipeline.sh
-
-      - name: Validate output contracts
-        run: |
-          grep -q "10_estimate_scale_from_marker_size_only.py" \
-            run/bus_real_data/approach3_targetless_colmap_aruco_scale/run_approach3_full_pipeline.sh
-          grep -q "AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv" \
-            run/bus_real_data/approach3_targetless_colmap_aruco_scale/run_approach3_full_pipeline.sh
-          grep -q "09_validate_ap02_solution_without_gt.py" \
-            run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_full_pipeline.sh
-          grep -q "07_run_ref_marker_graph_ba_distortion.py" \
-            run/bus_real_data/approach2_ref_marker_graph_ba/run_approach2_phase3_graph_ba_fast.sh
-          test -z "$(find run -type f -name '*.bak*' -print -quit)"
+      - name: Compile the maintained Python source tree
+        run: python -m compileall -q src/camera_rig_calibration run/rigcal.py

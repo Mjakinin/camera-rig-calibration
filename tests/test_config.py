@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -71,7 +72,7 @@ def test_config_round_trip_is_reproducible(
     assert config_fingerprint(loaded) == config_fingerprint(prepared_config)
 
 
-def test_schema_v1_references_migrate_to_method_owned_v5_fields(
+def test_schema_v1_config_is_rejected_by_file_loader(
     prepared_config: RigConfig, tmp_path: Path
 ) -> None:
     payload = prepared_config.model_dump(mode="json")
@@ -93,17 +94,8 @@ def test_schema_v1_references_migrate_to_method_owned_v5_fields(
     source = tmp_path / "legacy.yaml"
     source.write_text(yaml.safe_dump(payload), encoding="utf-8")
 
-    migrated = load_config(source, resolve_paths=False)
-    destination = save_config(migrated, tmp_path / "v5.yaml")
-    saved = yaml.safe_load(destination.read_text(encoding="utf-8"))
-
-    assert migrated.schema_version == 5
-    assert migrated.methods.ap01.root_camera == "front-left"
-    assert migrated.methods.ap02.reference_marker_id == 7
-    assert migrated.methods.ap03.single.scale_marker_id == "auto"
-    assert migrated.methods.enabled == ["ap01", "ap02", "ap03"]
-    assert migrated.evaluation.anchor_marker_id == 9
-    assert "references" not in saved
+    with pytest.raises(ValueError, match="Only schema_version 5"):
+        load_config(source, resolve_paths=False)
 
 
 def test_schema_v5_rejects_removed_selection_fields(
@@ -137,7 +129,7 @@ def test_schema_v5_rejects_removed_selection_fields(
         RigConfig.model_validate(payload)
 
 
-def test_schema_v1_ap03_legacy_marker_fields_are_migrated(
+def test_schema_v1_payload_is_rejected_by_model(
     prepared_config: RigConfig,
 ) -> None:
     payload = prepared_config.model_dump(
@@ -150,10 +142,8 @@ def test_schema_v1_ap03_legacy_marker_fields_are_migrated(
         "marker_ids": [7, 9],
     }
 
-    migrated = RigConfig.model_validate(payload)
-
-    assert migrated.methods.ap03.single.scale_marker_id == 9
-    assert migrated.methods.ap03.multi.marker_ids == [7, 9]
+    with pytest.raises(ValidationError, match="Only schema_version 5"):
+        RigConfig.model_validate(payload)
 
 
 def test_simulation_capture_has_an_explicit_generic_contract(tmp_path: Path) -> None:
@@ -167,7 +157,11 @@ def test_simulation_capture_has_an_explicit_generic_contract(tmp_path: Path) -> 
             dataset_cache_root=tmp_path / "datasets",
             output_root=tmp_path / "results",
         ),
-        dataset=DatasetSettings(id="simulation_fixture", scene_type="simulation"),
+        dataset=DatasetSettings(
+            id="simulation_fixture",
+            category="simulation",
+            scene_type="simulation",
+        ),
         static_cameras=[
             StaticCameraSettings(
                 id="left",
@@ -180,7 +174,15 @@ def test_simulation_capture_has_an_explicit_generic_contract(tmp_path: Path) -> 
             image_topic="/wand/image",
             camera_info_topic="/wand/camera_info",
         ),
-        simulation=SimulationSettings(enabled=True, world=world, route=route),
+        simulation=SimulationSettings(
+            enabled=True,
+            world=world,
+            route=route,
+            world_baseline={
+                "route": "route2",
+                "moving_width": 1280,
+            },
+        ),
         methods=MethodSettings(enabled=["ap02"]),
     )
     assert config.simulation.enabled
@@ -190,6 +192,15 @@ def test_simulation_capture_has_an_explicit_generic_contract(tmp_path: Path) -> 
     changed_metadata = RigConfig.model_validate(payload)
     assert changed_metadata.dataset.category.value == "simulation"
     assert changed_metadata.dataset.scene_type.value == "exterior"
+
+    loaded = load_config(save_config(config, tmp_path / "simulation.yaml"))
+    assert loaded.simulation.world == world.resolve()
+    assert loaded.simulation.route == route.resolve()
+    assert loaded.simulation.world_baseline["route"] == "route2"
+    assert not isinstance(
+        loaded.simulation.world_baseline["route"], Path
+    )
+    json.dumps(loaded.simulation.world_baseline)
 
 
 def test_ros_recording_can_supply_both_static_and_moving_camera_topics(

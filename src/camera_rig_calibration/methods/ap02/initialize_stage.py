@@ -13,6 +13,7 @@ def run(
     output_root: Path,
     reference_marker_id: int,
     mode: str,
+    log_path: Path | None = None,
 ) -> StageResult:
     stage_root = output_root / "05_graph_initialization" / mode
     observations = (
@@ -22,22 +23,31 @@ def run(
     )
 
     def action() -> dict[str, Path]:
-        subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "camera_rig_calibration.methods.ap02.initialize",
-                "--mode",
-                mode,
-                "--ref-marker-id",
-                str(reference_marker_id),
-                "--out-root",
-                str(output_root / "05_graph_initialization"),
-                "--observations",
-                str(observations),
-            ],
-            check=True,
-        )
+        command = [
+            sys.executable,
+            "-m",
+            "camera_rig_calibration.methods.ap02.initialize",
+            "--mode",
+            mode,
+            "--ref-marker-id",
+            str(reference_marker_id),
+            "--out-root",
+            str(output_root / "05_graph_initialization"),
+            "--observations",
+            str(observations),
+        ]
+        if log_path is None:
+            subprocess.run(command, check=True)
+        else:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with log_path.open("w", encoding="utf-8") as handle:
+                subprocess.run(
+                    command,
+                    check=True,
+                    stdout=handle,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                )
         return {
             "static_poses": stage_root
             / "initial_static_camera_poses_ref_marker.csv",

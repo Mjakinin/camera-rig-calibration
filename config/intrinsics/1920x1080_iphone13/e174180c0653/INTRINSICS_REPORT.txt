@@ -1,0 +1,39 @@
+MOVING-CAMERA INTRINSIC CALIBRATION
+============================================================================
+
+Source: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/data_local/exterior/IMG_4316.mov
+Source type: video
+Resolution: 1080x1920
+Encoded resolution: 1920x1080
+Display rotation: -90 deg
+Orientation policy: apply_ffprobe_display_rotation
+Source FPS: 30.000000
+Source frames: 1648
+Checkerboard frames tested: 165
+Scan mode: balanced
+Checkerboard: 8x6 inner corners
+Successful detections: 154
+Initially selected views: 80
+Final calibration views: 76
+Removed outliers: 4
+
+Model comparison:
+Standard holdout median RMSE: 0.476505 px
+Rational holdout median RMSE: 0.476029 px
+Selected model: plumb_bob
+
+OpenCV calibration RMS: 0.491049 px
+Median per-view RMSE: 0.465733 px
+Maximum per-view RMSE: 1.011523 px
+
+Camera matrix K:
+[[1.6703568220e+03 0.0000000000e+00 5.4522213034e+02]
+ [0.0000000000e+00 1.6687609491e+03 9.5961419055e+02]
+ [0.0000000000e+00 0.0000000000e+00 1.0000000000e+00]]
+
+Distortion D:
+[ 2.399974308321e-01 -1.635806903970e+00 -4.493422589848e-05
+  1.746893161985e-03  3.716608863790e+00]
+
+CameraInfo JSON: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/config/intrinsics/1920x1080_iphone13/.e174180c0653.staging-y0eehfai/moving_calib_camera.json
+Contact sheet: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/config/intrinsics/1920x1080_iphone13/.e174180c0653.staging-y0eehfai/SELECTED_VIEWS_CONTACT_SHEET.jpg

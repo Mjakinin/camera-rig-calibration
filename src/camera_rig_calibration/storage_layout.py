@@ -10,7 +10,6 @@ from typing import Any
 
 from .config.models import (
     DatasetCategory,
-    InputSourceKind,
     RigConfig,
 )
 from .dataset.discovery import safe_id
@@ -67,22 +66,20 @@ def _number(value: float | int) -> str:
 def _sampling_bucket(config: RigConfig) -> str:
     value = config.sampling.target_hz
     if value is not None:
-        return f"{_number(value)}hz"
-    if config.dataset.source_kind is InputSourceKind.ROSBAG:
-        return "stored_rate"
-    return "unknown_hz"
+        return f"{_number(value)}Hz"
+    return "native_rate"
 
 
 def _real_storage_key(config: RigConfig) -> StorageKey:
-    source = config.dataset.source_kind.value
-    relative = Path(source) / _sampling_bucket(config) / safe_id(
+    rate = _sampling_bucket(config)
+    relative = Path(rate) / safe_id(
         config.project.experiment_id or config.dataset.id
     )
     return StorageKey(
         category=DatasetCategory.REAL_VEHICLE.value,
         relative=relative,
-        factor=source,
-        value=_sampling_bucket(config),
+        factor="sampling_rate",
+        value=rate,
         canonical_id=config.project.experiment_id or config.dataset.id,
     )
 
@@ -249,6 +246,10 @@ def classify_simulation_parameters(
     baseline: dict[str, Any] | None = None,
 ) -> Path:
     """Return the canonical schema-v5 relative path for an inventory row."""
+    if world_id != "bus":
+        raise ValueError(
+            "only the built-in bus Gazebo world is supported"
+        )
     normalized_baseline = {**BUS_BASELINE, **(baseline or {})}
     normalized = dict(normalized_baseline)
     supplied = dict(parameters)
@@ -262,11 +263,7 @@ def classify_simulation_parameters(
         }
     )
     changed = _changed_groups(normalized, normalized_baseline)
-    prefix = (
-        Path()
-        if world_id == "bus"
-        else Path("worlds") / safe_id(world_id)
-    )
+    prefix = Path()
     if not changed:
         return (
             prefix
@@ -297,12 +294,13 @@ def canonical_result_root(config: RigConfig) -> Path:
 
 
 def canonical_dataset_root(config: RigConfig) -> Path:
-    key = storage_key(config)
-    return (
-        config.project.dataset_cache_root.resolve()
-        / key.category
-        / key.relative
-    )
+    """Return the experiment root that owns both input and result artifacts.
+
+    ``dataset_cache_root`` remains an internal preparation-cache setting.  A
+    published dataset is part of its experiment and therefore lives beside
+    ``methods/`` and ``RESULTS.*`` instead of in a second public tree.
+    """
+    return canonical_result_root(config)
 
 
 def queue_temporary_root(config: RigConfig, queue_id: str) -> Path:
@@ -317,6 +315,7 @@ def storage_manifest(config: RigConfig) -> dict[str, Any]:
     key = storage_key(config)
     return {
         "schema_version": 5,
+        "layout_version": 2,
         "category": key.category,
         "relative_path": key.relative.as_posix(),
         "factor": key.factor,

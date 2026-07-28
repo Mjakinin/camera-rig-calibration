@@ -25,16 +25,19 @@ central_aruco_reference.json
 Central/reference marker metadata used by the calibration setup. Marker 14 is the main Ref-ArUco anchor used in the current AP03 registration.
 
 ```text
-moving_camera_route_keyframes.json
+moving_camera_route1_keyframes_final.json
+moving_camera_route2_keyframes_final.json
 ```
 
-Manual keyframes for the moving calibration camera route.
+Manual keyframes for the two retained moving-camera routes.
 
 ```text
-moving_camera_route_interpolated.json
+moving_camera_route1_interpolated_final.json
+moving_camera_route2_interpolated_final.json
 ```
 
-Dense generated route used by preview/capture tooling.
+Dense generated routes used by capture tooling. Route 2 is the selected
+baseline; Route 1 is retained as an acquisition-robustness ablation.
 
 ```text
 target_transforms.json

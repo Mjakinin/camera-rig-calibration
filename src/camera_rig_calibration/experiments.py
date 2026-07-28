@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -16,10 +17,13 @@ from .config.models import (
     ColmapSettings,
     EvaluationSettings,
     MarkerSettings,
+    ObservationQualitySettings,
     RigConfig,
 )
 from .dataset.manifest import DatasetManifest
+from .dataset.discovery import safe_id
 from .observations import ResolvedSelections
+from .methods.common.aruco_utils import effective_detector_config
 from .storage_layout import (
     canonical_dataset_root,
     canonical_result_root,
@@ -52,6 +56,7 @@ PARAMETER_INVALIDATION: dict[str, str] = {
     "simulation.motion_blur_angle_deg": "capture_import",
     "sampling.target_hz": "input_preparation",
     "markers.dictionary": "marker_detection_pnp",
+    "markers.detection_mode": "marker_detection_pnp",
     "markers.accepted_ids": "observation_quality",
     "observation_quality": "observation_quality",
     "markers.length_m": "method_estimation",
@@ -75,12 +80,13 @@ class ExperimentPaths:
     methods: Path
     evaluations: Path
     comparisons: Path
+    attempts: Path
     artifacts: Path
     staging: Path
 
     @property
     def inputs(self) -> Path:
-        """Compatibility alias for callers written before the v4.2 layout."""
+        """The layout-v2 experiment has one dataset and no input-id layer."""
         return self.datasets
 
 
@@ -121,7 +127,10 @@ def input_fingerprint(
         for path in sorted(item for item in raw_images.rglob("*") if item.is_file()):
             provenance.append(
                 {
-                    "role": f"prepared:{path.relative_to(dataset_root)}",
+                    "role": (
+                        "prepared:"
+                        f"{path.relative_to(dataset_root).as_posix()}"
+                    ),
                     "sha256": _file_sha256(path),
                     "size_bytes": path.stat().st_size,
                 }
@@ -132,7 +141,10 @@ def input_fingerprint(
             for path in sorted(item for item in metadata.rglob("*") if item.is_file()):
                 provenance.append(
                     {
-                        "role": f"prepared:{path.relative_to(dataset_root)}",
+                        "role": (
+                            "prepared:"
+                            f"{path.relative_to(dataset_root).as_posix()}"
+                        ),
                         "sha256": _file_sha256(path),
                         "size_bytes": path.stat().st_size,
                     }
@@ -176,11 +188,18 @@ def experiment_paths(config: RigConfig) -> ExperimentPaths:
         experiment_id=experiment_id,
         root=root,
         dataset_root=dataset_root,
-        datasets=dataset_root / "inputs",
+        datasets=dataset_root,
         methods=root / "methods",
         evaluations=root / "evaluations",
-        comparisons=root / "comparisons",
-        artifacts=root / "artifacts",
+        comparisons=root,
+        attempts=root / "attempts",
+        artifacts=(
+            config.project.workspace_root.resolve()
+            / "cache"
+            / "colmap"
+            / key.category
+            / key.relative
+        ),
         staging=staging,
     )
 
@@ -244,7 +263,6 @@ def experiment_fingerprint(config: RigConfig) -> str:
         "category": result_category(config),
         "experiment_id": config.project.experiment_id or config.dataset.id,
         "scene_type": config.dataset.scene_type.value,
-        "source_kind": config.dataset.source_kind.value,
         "static_cameras": [
             {"id": camera.id, "label": camera.label}
             for camera in config.static_cameras
@@ -271,7 +289,13 @@ def _method_payload(
     payload: dict[str, Any] = {
         "method_id": method_id,
         "settings": method_settings,
-        "marker_detection": config.markers.model_dump(mode="json"),
+        "marker_detection": {
+            "settings": config.markers.model_dump(mode="json"),
+            "effective_detector": effective_detector_config(
+                config.markers.detection_mode,
+                config.markers.dictionary,
+            ),
+        },
         "observation_quality": config.observation_quality.model_dump(mode="json"),
     }
     if method_id in {"ap01", "ap03"}:
@@ -279,7 +303,7 @@ def _method_payload(
     if method_id == "ap01":
         payload["resolved_root_camera"] = selections.root_camera
     elif method_id == "ap02":
-        payload["resolved_reference_marker_id"] = (
+        payload["resolved_ap02_reference_marker_id"] = (
             selections.ap02_reference_marker_id
         )
     elif method_id == "ap03":
@@ -338,13 +362,16 @@ def _method_defaults(method_id: str) -> dict[str, Any]:
 
 
 def method_config_diff(
-    config: RigConfig, method_id: str, selections: ResolvedSelections
+    config: RigConfig,
+    method_id: str,
+    selections: ResolvedSelections | None = None,
 ) -> dict[str, dict[str, Any]]:
+    del selections
     if method_id in {"ap01", "ap02", "ap03"}:
         current = getattr(config.methods, method_id).model_dump(mode="json")
         defaults = _method_defaults(method_id)
     else:
-        current = config.methods.extensions.get(method_id, {})
+        current = dict(config.methods.extensions.get(method_id, {}))
         defaults = {}
     if method_id in {"ap01", "ap03"}:
         current["colmap"] = config.colmap.model_dump(mode="json")
@@ -364,6 +391,92 @@ def method_config_diff(
         for key, value in flat_current.items()
         if value != flat_defaults.get(key)
     }
+
+
+_LABEL_FIELDS = {
+    "root_camera": "root",
+    "reference_marker_id": "ref_marker",
+    "static_only_ba_max_function_evaluations": "static_nfev",
+    "combined_ba_max_function_evaluations": "combined_nfev",
+    "ba_robust_loss": "loss",
+    "ba_robust_loss_scale_px": "loss_scale_px",
+    "single.scale_marker_id": "single_marker",
+    "multi.marker_ids": "multi_markers",
+    "scale.reprojection_threshold_px": "scale_reproj_px",
+    "scale.ransac_iterations": "scale_ransac",
+    "scale.minimum_inliers": "scale_inliers",
+    "colmap.matcher": "matcher",
+    "colmap.gpu_mode": "gpu",
+    "colmap.maximum_image_size": "image_size",
+    "colmap.maximum_features": "features",
+    "colmap.sequential_overlap": "overlap",
+    "colmap.loop_detection": "loop",
+    "colmap.mapper_minimum_matches": "mapper_matches",
+    "colmap.ap03_maximum_image_size": "ap03_image_size",
+    "colmap.ap03_maximum_features": "ap03_features",
+    "colmap.ap03_loop_detection": "ap03_loop",
+    "markers.dictionary": "aruco",
+    "markers.length_m": "marker_m",
+    "markers.accepted_ids": "marker_ids",
+    "markers.detection_mode": "aruco_mode",
+    "observation_quality.maximum_pnp_reprojection_error_px": "pnp_reproj_px",
+    "observation_quality.minimum_marker_area_px2": "marker_area_px2",
+    "observation_quality.maximum_marker_distance_m": "marker_distance_m",
+}
+
+
+def _label_value(value: Any) -> str:
+    if isinstance(value, list):
+        return "-".join(_token(item) for item in value)
+    return _token(value)
+
+
+def automatic_method_label(
+    method_id: str,
+    *,
+    methods: Any,
+    markers: MarkerSettings,
+    observation_quality: ObservationQualitySettings,
+    colmap: ColmapSettings,
+) -> str:
+    """Name a result only from calibration-affecting deviations to baseline."""
+    if method_id in {"ap01", "ap02", "ap03"}:
+        current = getattr(methods, method_id).model_dump(mode="json")
+        defaults = _method_defaults(method_id)
+    else:
+        current = dict(methods.extensions.get(method_id, {}))
+        defaults = {}
+    if method_id in {"ap01", "ap03"}:
+        current["colmap"] = colmap.model_dump(mode="json")
+        defaults["colmap"] = ColmapSettings().model_dump(mode="json")
+    current["markers"] = markers.model_dump(mode="json")
+    defaults["markers"] = MarkerSettings().model_dump(mode="json")
+    current["observation_quality"] = observation_quality.model_dump(mode="json")
+    defaults["observation_quality"] = ObservationQualitySettings().model_dump(
+        mode="json"
+    )
+    flat_current = _flatten(current)
+    flat_defaults = _flatten(defaults)
+    differences = [
+        (path, value)
+        for path, value in sorted(flat_current.items())
+        if value != flat_defaults.get(path)
+        and path not in {"colmap.executable", "colmap.reuse"}
+    ]
+    if not differences:
+        return "baseline"
+    tokens = [
+        f"{_LABEL_FIELDS.get(path, path.replace('.', '_'))}_{_label_value(value)}"
+        for path, value in differences
+    ]
+    readable = "__".join(tokens)
+    if len(readable) <= 88:
+        return safe_id(readable)
+    digest = _digest(
+        {path: value for path, value in differences},
+        8,
+    )
+    return safe_id(f"{readable[:79].rstrip('_')}__{digest}")
 
 
 def method_variant_name(
@@ -429,20 +542,46 @@ def method_variant_name(
     return f"{readable}_{fingerprint}"
 
 
-def write_experiment_manifest(
-    config: RigConfig, paths: ExperimentPaths, input_id: str
-) -> Path:
-    paths.root.mkdir(parents=True, exist_ok=True)
-    destination = paths.root / "experiment.yaml"
-    payload = {
+def method_result_label(config: RigConfig, method_id: str) -> str:
+    """Return the deterministic public label for the effective configuration."""
+    if (
+        method_id in {"ap01", "ap03"}
+        and config.colmap.executable != "auto"
+        and Path(config.colmap.executable).is_absolute()
+    ):
+        return safe_id(config.project.run_label or "baseline")
+    return automatic_method_label(
+        method_id,
+        methods=config.methods,
+        markers=config.markers,
+        observation_quality=config.observation_quality,
+        colmap=config.colmap,
+    )
+
+
+def experiment_manifest_payload(
+    config: RigConfig,
+    paths: ExperimentPaths,
+    input_id: str,
+    *,
+    created_at: str | None = None,
+) -> dict[str, Any]:
+    """Build the canonical dataset identity from the final experiment config."""
+
+    return {
         "schema_version": 5,
+        "layout_version": 2,
         "id": paths.experiment_id,
         "category": paths.category,
         "scene_type": config.dataset.scene_type.value,
         "source_kind": config.dataset.source_kind.value,
         "storage": storage_manifest(config),
         "experiment_fingerprint": experiment_fingerprint(config),
-        "input_ids": [input_id],
+        "input_fingerprint": input_id,
+        "created_at": (
+            created_at
+            or datetime.now(timezone.utc).isoformat(timespec="seconds")
+        ),
         "static_cameras": [
             {"id": camera.id, "label": camera.label}
             for camera in config.static_cameras
@@ -479,8 +618,17 @@ def write_experiment_manifest(
             else None
         ),
     }
+
+
+def write_experiment_manifest(
+    config: RigConfig, paths: ExperimentPaths, input_id: str
+) -> Path:
+    """Write and validate the single immutable layout-v2 dataset descriptor."""
+    paths.dataset_root.mkdir(parents=True, exist_ok=True)
+    destination = paths.dataset_root / "dataset.json"
+    payload = experiment_manifest_payload(config, paths, input_id)
     if destination.is_file():
-        existing = yaml.safe_load(destination.read_text(encoding="utf-8")) or {}
+        existing = json.loads(destination.read_text(encoding="utf-8"))
         previous_fingerprint = existing.get(
             "experiment_fingerprint"
         )
@@ -494,11 +642,16 @@ def write_experiment_manifest(
                 "different rig/capture parameter contract. Choose a new "
                 "dataset/experiment ID instead of mixing inputs."
             )
-        input_ids = list(dict.fromkeys([*existing.get("input_ids", []), input_id]))
-        payload["input_ids"] = input_ids
-    temporary = destination.with_suffix(".yaml.tmp")
+        previous_input = existing.get("input_fingerprint")
+        if previous_input and previous_input != input_id:
+            raise RuntimeError(
+                f"Experiment ID '{paths.experiment_id}' already contains a "
+                "different immutable dataset. Choose a new experiment ID."
+            )
+        return destination
+    temporary = destination.with_suffix(".json.tmp")
     temporary.write_text(
-        yaml.safe_dump(payload, sort_keys=False, allow_unicode=True),
+        json.dumps(payload, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
     temporary.replace(destination)

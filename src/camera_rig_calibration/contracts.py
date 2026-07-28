@@ -53,44 +53,14 @@ class RunContext:
     resolved_ap03_multi_marker_ids: tuple[int, ...] = ()
     resolved_evaluation_anchor_marker_id: int | None = None
     reuse_colmap_artifact: bool = False
-    # Schema-v1 aliases retained for external method plugins during migration.
-    resolved_reference_marker_id: int | None = None
-    resolved_scale_anchor_marker_id: int | None = None
     resolved_marker_ids: tuple[int, ...] = ()
 
     def __post_init__(self) -> None:
-        if (
-            self.resolved_ap02_reference_marker_id is None
-            and self.resolved_reference_marker_id is not None
-        ):
-            object.__setattr__(
-                self,
-                "resolved_ap02_reference_marker_id",
-                self.resolved_reference_marker_id,
-            )
-        if (
-            self.resolved_ap03_single_scale_marker_id is None
-            and self.resolved_scale_anchor_marker_id is not None
-        ):
-            object.__setattr__(
-                self,
-                "resolved_ap03_single_scale_marker_id",
-                self.resolved_scale_anchor_marker_id,
-            )
         if not self.resolved_ap03_multi_marker_ids and self.resolved_marker_ids:
             object.__setattr__(
                 self,
                 "resolved_ap03_multi_marker_ids",
                 self.resolved_marker_ids,
-            )
-        if (
-            self.resolved_evaluation_anchor_marker_id is None
-            and self.resolved_scale_anchor_marker_id is not None
-        ):
-            object.__setattr__(
-                self,
-                "resolved_evaluation_anchor_marker_id",
-                self.resolved_scale_anchor_marker_id,
             )
 
 

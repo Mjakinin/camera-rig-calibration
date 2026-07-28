@@ -54,9 +54,8 @@ def test_prepare_only_plan_never_schedules_a_calibration_method(
     stage_ids = [stage_id for stage_id, _ in planned_stages(config)]
     assert stage_ids == [
         "prepare_inputs",
-        "detect_markers",
-        "build_debug_gallery",
         "validate_dataset",
+        "detect_markers",
         "observation_quality",
         "analyze_selections",
         "finalize",
@@ -92,10 +91,36 @@ def test_new_result_dataset_contains_a_shared_input_view(prepared_config) -> Non
 
     from camera_rig_calibration.experiments import experiment_paths
 
-    input_root = experiment_paths(prepared_config).datasets / input_id
+    input_root = experiment_paths(prepared_config).datasets
     assert (input_root / "raw_images/static/front-left.png").is_file()
     assert (input_root / "raw_images/moving/frame_000000.png").is_file()
-    assert (input_root / "SOURCE.json").is_file()
+    assert (input_root / "metadata/source.json").is_file()
     assert (run / "00_INPUT/raw_images").is_dir()
     assert (run / "03_AP02").is_dir()
     assert not (run / "02_AP01").exists()
+
+
+def test_transaction_input_cache_is_separate_and_reuses_obsolete_working_data(
+    prepared_config,
+    tmp_path: Path,
+) -> None:
+    transaction = tmp_path / "transaction"
+    obsolete = transaction / "dataset" / ".working"
+    extracted = obsolete / "_acquisitions" / "capture" / "frame.png"
+    extracted.parent.mkdir(parents=True)
+    extracted.write_bytes(b"already extracted")
+    stream = io.StringIO()
+    orchestrator = PipelineOrchestrator(
+        Path(__file__).resolve().parents[1],
+        Console(file=stream, force_terminal=False),
+        transaction_root=transaction,
+    )
+
+    working = orchestrator._input_working_root(prepared_config)
+
+    assert working == (transaction / "input_working").resolve()
+    assert (working / "_acquisitions/capture/frame.png").read_bytes() == (
+        b"already extracted"
+    )
+    assert not (transaction / "dataset").exists()
+    assert "Reusing the already extracted input" in stream.getvalue()

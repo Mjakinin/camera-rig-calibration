@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from camera_rig_calibration.inventory import (
     BASELINE_SIMULATION_PARAMETERS,
+    SimulationExperimentSummary,
     discover_prepared_datasets,
     discover_raw_input_folders,
     discover_simulation_experiments,
@@ -14,9 +16,6 @@ from camera_rig_calibration.dataset.discovery import (
     discover_image_directories,
     media_path_role,
 )
-
-
-REPOSITORY = Path(__file__).resolve().parents[1]
 
 
 def test_local_inputs_and_prepared_datasets_are_discovered_recursively(
@@ -30,12 +29,23 @@ def test_local_inputs_and_prepared_datasets_are_discovered_recursively(
     (raw / "static/front-left.png").write_bytes(b"image")
     (raw / "camera_info/front-left.yaml").write_text("camera_name: front-left")
 
-    prepared = tmp_path / "results/existing"
+    prepared = tmp_path / "results/real_vehicle/native_rate/existing"
     for name in ("static", "moving", "camera_info"):
         (prepared / "raw_images" / name).mkdir(parents=True, exist_ok=True)
     (prepared / "raw_images/static/front-left.png").write_bytes(b"image")
     (prepared / "raw_images/moving/frame_000000.png").write_bytes(b"frame")
     (prepared / "raw_images/camera_info/front-left.json").write_text("{}")
+    (prepared / "dataset.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "id": "existing",
+                "category": "real_vehicle",
+            }
+        ),
+        encoding="utf-8",
+    )
 
     raw_entries = discover_raw_input_folders(tmp_path)
     prepared_entries = discover_prepared_datasets(tmp_path)
@@ -49,6 +59,48 @@ def test_local_inputs_and_prepared_datasets_are_discovered_recursively(
     assert len(prepared_entries) == 1
     assert prepared_entries[0].static_camera_ids == ("front-left",)
     assert prepared_entries[0].moving_frames == 1
+
+
+def test_prepared_dataset_without_completed_method_is_not_called_a_result(
+    tmp_path: Path,
+) -> None:
+    prepared = tmp_path / "results/real_vehicle/3Hz/detector_retry"
+    for name in ("static", "moving", "camera_info"):
+        (prepared / "raw_images" / name).mkdir(parents=True, exist_ok=True)
+    (prepared / "raw_images/static/cam.png").write_bytes(b"image")
+    (prepared / "raw_images/moving/frame.png").write_bytes(b"frame")
+    (prepared / "raw_images/camera_info/cam.json").write_text("{}")
+    (prepared / "dataset.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "id": "detector_retry",
+                "category": "real_vehicle",
+            }
+        ),
+        encoding="utf-8",
+    )
+    (prepared / "SUMMARY.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "status": "prepared",
+                "available_methods": 0,
+                "methods": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    entry = next(
+        item
+        for item in discover_prepared_datasets(tmp_path)
+        if item.id == "detector_retry"
+    )
+
+    assert entry.has_results is False
 
 
 def test_loose_data_local_files_absorb_nested_rosbag_without_duplicate_row(
@@ -132,18 +184,101 @@ def test_arbitrary_video_names_inherit_role_from_versioned_folder(
     }
 
 
-def test_legacy_prepared_aliases_are_shown_once_and_real_data_is_named_clearly() -> None:
-    entries = discover_prepared_datasets(REPOSITORY)
+def test_layout_v2_datasets_are_shown_once_and_named_clearly(
+    tmp_path: Path,
+) -> None:
+    simulation = tmp_path / "results/simulation/fov/100deg"
+    simulation.mkdir(parents=True)
+    (simulation / "dataset.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "id": "fov_100deg",
+                "category": "simulation",
+                "storage": {"factor": "fov", "value": "100deg"},
+                "simulation_parameters": {"moving_hfov_deg": 100.0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    raw = simulation / "raw_images"
+    for name in ("static", "moving", "camera_info"):
+        (raw / name).mkdir(parents=True)
+    (raw / "static/cam1.png").write_bytes(b"image")
+    (raw / "moving/frame.png").write_bytes(b"image")
+    (raw / "camera_info/cam1.json").write_text("{}")
+    real = tmp_path / "results/real_vehicle/1Hz/real_05x_4k_1hz"
+    real.mkdir(parents=True)
+    (real / "dataset.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "id": "real_05x_4k_1hz",
+                "category": "real_vehicle",
+            }
+        ),
+        encoding="utf-8",
+    )
+    real_raw = real / "raw_images"
+    for name in ("static", "moving", "camera_info"):
+        (real_raw / name).mkdir(parents=True)
+    (real_raw / "static/cam1.png").write_bytes(b"image")
+    (real_raw / "moving/frame.png").write_bytes(b"image")
+    (real_raw / "camera_info/cam1.json").write_text("{}")
+
+    entries = discover_prepared_datasets(tmp_path)
     identifiers = [entry.id for entry in entries]
-    real = [entry for entry in entries if entry.category == "real_vehicle"]
+    real_entries = [
+        entry for entry in entries if entry.category == "real_vehicle"
+    ]
 
     assert identifiers.count("fov_100deg") == 1
-    assert any(entry.display_name == "real_05x_4k_1hz" for entry in real)
-    assert all(entry.id != "00_shared_input" for entry in real)
+    assert any(
+        entry.display_name == "real_05x_4k_1hz"
+        for entry in real_entries
+    )
+    assert all(entry.id != "00_shared_input" for entry in real_entries)
 
 
-def test_historical_simulation_catalogue_uses_parameters_not_sdf_files() -> None:
-    entries = discover_simulation_experiments(REPOSITORY)
+def test_simulation_catalogue_uses_layout_v2_parameters_not_sdf_files(
+    tmp_path: Path,
+) -> None:
+    variants = (
+        ("fov_100deg", "fov", "100deg", {"moving_hfov_deg": 100.0}),
+        (
+            "moving_blur_k21_strong",
+            "motion_blur",
+            "kernel_21",
+            {"motion_blur_kernel": 21},
+        ),
+        (
+            "ceiling_normal",
+            "lighting",
+            "normal",
+            {"lighting": "normal"},
+        ),
+    )
+    for variant, factor, value, parameters in variants:
+        root = tmp_path / "results/simulation" / factor / value
+        for name in ("static", "moving", "camera_info"):
+            (root / "raw_images" / name).mkdir(parents=True, exist_ok=True)
+        (root / "dataset.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": 5,
+                    "layout_version": 2,
+                    "id": variant,
+                    "category": "simulation",
+                    "storage": {"factor": factor, "value": value},
+                    "simulation_parameters": parameters,
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    entries = discover_simulation_experiments(tmp_path)
     by_variant = {entry.variant: entry for entry in entries}
 
     assert "route2" in by_variant
@@ -160,18 +295,42 @@ def test_historical_simulation_catalogue_uses_parameters_not_sdf_files() -> None
     assert ".sdf" not in format_simulation_parameters(by_variant["route2"].parameters)
 
 
-def test_exact_baseline_match_prefers_canonical_route2_dataset() -> None:
-    entries = discover_simulation_experiments(REPOSITORY)
+def test_exact_baseline_match_prefers_a_local_canonical_dataset(
+    tmp_path: Path,
+) -> None:
+    parameters = dict(BASELINE_SIMULATION_PARAMETERS)
+    entries = [
+        SimulationExperimentSummary(
+            "route2",
+            "baseline",
+            "result only",
+            189,
+            True,
+            None,
+            parameters,
+        ),
+        SimulationExperimentSummary(
+            "route2",
+            "baseline",
+            "local input",
+            189,
+            True,
+            tmp_path / "input_route2",
+            parameters,
+        ),
+    ]
     match = find_matching_simulation(entries, dict(BASELINE_SIMULATION_PARAMETERS))
 
     assert match is not None
     assert match.variant == "route2"
-    assert match.dataset_root is not None
+    assert match.dataset_root == tmp_path / "input_route2"
     assert match.has_results
 
 
-def test_capture_timing_is_part_of_exact_simulation_matching() -> None:
-    entries = discover_simulation_experiments(REPOSITORY)
+def test_capture_timing_is_part_of_exact_simulation_matching(
+    tmp_path: Path,
+) -> None:
+    entries = discover_simulation_experiments(tmp_path)
     parameters = dict(BASELINE_SIMULATION_PARAMETERS)
     parameters["settle_seconds"] = 0.5
 

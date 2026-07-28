@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import json
 import sys
+import time
 from io import StringIO
 from pathlib import Path
 
 from rich.console import Console
 
 from camera_rig_calibration.contracts import CommandSpec
-from camera_rig_calibration.progress import ProgressClock, terminal_lines
+from camera_rig_calibration.progress import (
+    ProgressClock,
+    progress_text,
+    terminal_lines,
+)
 from camera_rig_calibration.runtime import PipelineOrchestrator
 
 
@@ -69,6 +74,37 @@ def test_structured_substage_is_flushed_to_log_and_timings(
     assert persisted["_sub_stages"]["method_ap03"]["colmap_mapping"] == 1.25
 
 
+def test_frame_and_optimizer_progress_are_compact() -> None:
+    clock_start = time.monotonic()
+    clock = ProgressClock(
+        job_id="ap02",
+        batch_started_monotonic=clock_start,
+    )
+
+    counts = clock.update_counts(
+        "RIGCAL_PROGRESS current=45 total=180 unit=frames "
+        "label=ArUco observations"
+    )
+    assert progress_text(counts) == (
+        "ArUco observations: 45/180 frames (25%)"
+    )
+    clock.begin_stage()
+    counts = clock.update_counts(
+        "       8             17         1.1203e+09      1.96e+06"
+    )
+    assert progress_text(counts) == "optimizer iteration 8"
+    event = clock.event(
+        event="stage_progress",
+        stage_id="ap02_ba",
+        stage_name="AP02 bundle adjustment",
+        stage_index=2,
+        stage_count=3,
+    )
+    assert event.batch_elapsed_seconds is not None
+    assert event.batch_elapsed_seconds >= 0
+    assert clock_start <= time.monotonic()
+
+
 def test_silent_subprocess_prints_periodic_runtime_heartbeat(
     prepared_config, monkeypatch
 ) -> None:
@@ -96,8 +132,9 @@ def test_silent_subprocess_prints_periodic_runtime_heartbeat(
     orchestrator._run_command(command)
 
     output = stream.getvalue()
-    assert "Started PID" in output
+    assert "Running Silent progress fixture" in output
     assert "Still running: Silent progress fixture" in output
     assert "Stage " in output
-    assert "Queue " in output
+    assert "Method/job " in output
+    assert "Experiment " in output
     assert "ETA" not in output

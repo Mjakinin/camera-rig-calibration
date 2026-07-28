@@ -11,7 +11,9 @@ import numpy as np
 import pytest
 import yaml
 
+import camera_rig_calibration.intrinsics_profiles as profile_module
 from camera_rig_calibration.input import intrinsics as profile_runner
+from camera_rig_calibration.input.video_geometry import VideoGeometry
 from camera_rig_calibration.intrinsics_profiles import (
     discover_intrinsic_profiles,
     profile_fingerprint,
@@ -20,9 +22,10 @@ from camera_rig_calibration.intrinsics_profiles import (
 
 ENGINE_PATH = (
     Path(__file__).resolve().parents[1]
-    / "run"
-    / "real_vehicle_data"
-    / "02_calibrate_intrinsics_from_video.py"
+    / "src"
+    / "camera_rig_calibration"
+    / "input"
+    / "intrinsics_calibration.py"
 )
 SPEC = importlib.util.spec_from_file_location("rigcal_intrinsics_engine", ENGINE_PATH)
 assert SPEC is not None and SPEC.loader is not None
@@ -153,8 +156,8 @@ def test_intrinsics_engine_accepts_checkerboard_image_folder(
     assert (output / "selected_frames/frame_000000.png").is_file()
 
 
-def test_profile_catalog_indexes_new_and_legacy_profiles(tmp_path: Path) -> None:
-    catalog = tmp_path / "results/real_vehicle/_intrinsics"
+def test_profile_catalog_indexes_managed_profiles_only(tmp_path: Path) -> None:
+    catalog = tmp_path / "config/intrinsics"
     new_root = catalog / "iphone_05x_4k/abcdef123456"
     _intrinsics(new_root / "intrinsics.json", width=3840, height=2160)
     (new_root / "profile.yaml").write_text(
@@ -168,27 +171,34 @@ def test_profile_catalog_indexes_new_and_legacy_profiles(tmp_path: Path) -> None
         ),
         encoding="utf-8",
     )
-    _intrinsics(
-        catalog / "legacy_1x/moving_calib_camera.json",
-        width=3840,
-        height=2160,
-    )
+    _intrinsics(tmp_path / "results/real_vehicle/_intrinsics/legacy.json")
 
     profiles = discover_intrinsic_profiles(tmp_path)
 
-    assert {profile.profile_id for profile in profiles} == {
-        "iphone_05x_4k",
-        "legacy_1x",
-    }
+    assert {profile.profile_id for profile in profiles} == {"iphone_05x_4k"}
     assert next(
         profile for profile in profiles if profile.profile_id == "iphone_05x_4k"
     ).key == "iphone_05x_4k@abcdef1234567890"
-    assert next(
-        profile for profile in profiles if profile.profile_id == "legacy_1x"
-    ).legacy
 
 
-def test_profile_fingerprint_changes_with_scan_contract(tmp_path: Path) -> None:
+def _mock_video_geometry(monkeypatch) -> None:
+    monkeypatch.setattr(
+        profile_module,
+        "probe_video_geometry",
+        lambda path: VideoGeometry(
+            encoded_width=1920,
+            encoded_height=1080,
+            display_rotation_degrees=-90,
+            output_width=1080,
+            output_height=1920,
+        ),
+    )
+
+
+def test_profile_fingerprint_changes_with_scan_contract(
+    tmp_path: Path, monkeypatch
+) -> None:
+    _mock_video_geometry(monkeypatch)
     video = tmp_path / "checkerboard.mov"
     video.write_bytes(b"video")
     common = {
@@ -203,7 +213,7 @@ def test_profile_fingerprint_changes_with_scan_contract(tmp_path: Path) -> None:
 
     balanced = profile_fingerprint(video, scan_mode="balanced", **common)
     exhaustive = profile_fingerprint(
-        video, scan_mode="exhaustive_compatibility", **common
+        video, scan_mode="full_frame", **common
     )
 
     assert balanced != exhaustive
@@ -284,6 +294,7 @@ def test_profile_runner_passes_checkerboard_image_folder_to_engine(
 def test_failed_profile_generation_is_not_published(
     tmp_path: Path, monkeypatch
 ) -> None:
+    _mock_video_geometry(monkeypatch)
     video = tmp_path / "checkerboard.mov"
     script = tmp_path / "engine.py"
     video.write_bytes(b"video")
@@ -322,7 +333,7 @@ def test_failed_profile_generation_is_not_published(
         profile_runner.main()
 
     profile_parent = (
-        tmp_path / "results/real_vehicle/_intrinsics/phone_4k"
+        tmp_path / "config/intrinsics/phone_4k"
     )
     assert not list(profile_parent.glob("*/profile.yaml"))
     assert not list(profile_parent.glob(".*.staging-*"))
@@ -332,6 +343,7 @@ def test_failed_profile_generation_is_not_published(
 def test_successful_profile_is_published_atomically_with_clean_layout(
     tmp_path: Path, monkeypatch
 ) -> None:
+    _mock_video_geometry(monkeypatch)
     video = tmp_path / "checkerboard.mov"
     script = tmp_path / "engine.py"
     video.write_bytes(b"video")

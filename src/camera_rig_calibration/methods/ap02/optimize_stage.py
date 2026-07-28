@@ -16,6 +16,7 @@ def run(
     maximum_function_evaluations: int,
     robust_loss: str,
     robust_loss_scale_px: float,
+    log_path: Path | None = None,
 ) -> StageResult:
     stage_root = output_root / "07_graph_ba" / mode
     observations = (
@@ -26,30 +27,39 @@ def run(
     initialization = output_root / "05_graph_initialization"
 
     def action() -> dict[str, Path]:
-        subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "camera_rig_calibration.methods.ap02.optimize",
-                "--mode",
-                mode,
-                "--ref-marker-id",
-                str(reference_marker_id),
-                "--max-nfev",
-                str(maximum_function_evaluations),
-                "--ap02-root",
-                str(output_root),
-                "--observations",
-                str(observations),
-                "--initialization-root",
-                str(initialization),
-                "--robust-loss",
-                robust_loss,
-                "--robust-loss-scale-px",
-                str(robust_loss_scale_px),
-            ],
-            check=True,
-        )
+        command = [
+            sys.executable,
+            "-m",
+            "camera_rig_calibration.methods.ap02.optimize",
+            "--mode",
+            mode,
+            "--ref-marker-id",
+            str(reference_marker_id),
+            "--max-nfev",
+            str(maximum_function_evaluations),
+            "--ap02-root",
+            str(output_root),
+            "--observations",
+            str(observations),
+            "--initialization-root",
+            str(initialization),
+            "--robust-loss",
+            robust_loss,
+            "--robust-loss-scale-px",
+            str(robust_loss_scale_px),
+        ]
+        if log_path is None:
+            subprocess.run(command, check=True)
+        else:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with log_path.open("w", encoding="utf-8") as handle:
+                subprocess.run(
+                    command,
+                    check=True,
+                    stdout=handle,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                )
         return {
             "static_poses": stage_root
             / "optimized_static_camera_poses_ref_marker.csv",

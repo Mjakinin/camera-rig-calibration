@@ -64,23 +64,6 @@ class ResolvedSelections:
     marker_ids: tuple[int, ...]
     payload: dict[str, Any]
 
-    # Schema-v1 compatibility for callers that have not migrated yet.
-    @property
-    def reference_marker_id(self) -> int:
-        return self.ap02_reference_marker_id
-
-    @property
-    def scale_anchor_marker_id(self) -> int:
-        return (
-            self.evaluation_anchor_marker_id
-            if self.evaluation_anchor_marker_id is not None
-            else self.ap03_single_scale_marker_id
-        )
-
-
-ResolvedReferences = ResolvedSelections
-
-
 def _read_observations(root: Path) -> list[dict[str, str]]:
     path = root / "shared_all_aruco_observations.csv"
     if not path.is_file():
@@ -698,13 +681,6 @@ def resolve_selections(
         marker_ids,
         payload,
     )
-
-
-def resolve_references(
-    config: RigConfig, observations_root: Path
-) -> ResolvedSelections:
-    """Compatibility name for schema-v1 callers."""
-    return resolve_selections(config, observations_root)
 
 
 def freeze_selections(

@@ -32,18 +32,18 @@ from collections import defaultdict
 import cv2
 import numpy as np
 
-from run.bus_real_data._shared.common.constants import (
+from camera_rig_calibration.methods.common.constants import (
     ARUCO_DICT_NAME,
     MARKER_LENGTH_M,
     STATIC_CAMERAS,
 )
-from run.bus_real_data._shared.common.geometry import (
+from camera_rig_calibration.methods.common.geometry import (
     R_to_rpy_deg,
     R_to_rvec,
     make_T,
 )
-from run.bus_real_data._shared.common.aruco_utils import make_aruco_detector
-from run.bus_real_data._shared.common.projection import (
+from camera_rig_calibration.methods.common.aruco_utils import make_aruco_detector
+from camera_rig_calibration.methods.common.projection import (
     reproj_errors_px,
     robust_triangulate_point,
 )
@@ -51,7 +51,7 @@ from run.bus_real_data._shared.common.projection import (
 from .scale_common import load_best_colmap_model, source_id_from_image_name
 
 
-AP03_ROOT = Path("results/bus_real_data/03_targetless_colmap_aruco_scale")
+AP03_ROOT = Path("workspace/standalone_methods/ap03")
 DEFAULT_OUT = AP03_ROOT / "07_final_results"
 
 
@@ -121,8 +121,9 @@ def detect_marker_observations(
     marker_ids: set[int],
     dictionary: str,
     image_dir: Path,
+    detection_mode: str = "baseline",
 ) -> list[dict]:
-    detect = make_aruco_detector(dictionary)
+    detect = make_aruco_detector(dictionary, detection_mode)
     obs = []
 
     for image_name in sorted(images.keys()):
@@ -307,6 +308,11 @@ def main() -> None:
     ap.add_argument("--min-inliers", type=int, default=4)
     ap.add_argument("--max-rel-scale-std-warn", type=float, default=0.10)
     ap.add_argument("--dictionary", default=ARUCO_DICT_NAME)
+    ap.add_argument(
+        "--detection-mode",
+        choices=("baseline", "subpixel_refined", "high_sensitivity"),
+        default="baseline",
+    )
     ap.add_argument("--txt-root", type=Path)
     ap.add_argument("--image-dir", type=Path)
     ap.add_argument("--inspect-summary", type=Path)
@@ -382,7 +388,11 @@ def main() -> None:
 
         try:
             obs = detect_marker_observations(
-                images, marker_ids, args.dictionary, image_dir
+                images,
+                marker_ids,
+                args.dictionary,
+                image_dir,
+                args.detection_mode,
             )
             if args.accepted_observations is not None:
                 allowed: set[tuple[str, int]] = set()
@@ -516,6 +526,7 @@ def main() -> None:
         "num_sparse_points3d": len(points3d),
         "marker_ids_requested": sorted(marker_ids),
         "marker_length_m": args.marker_length_m,
+        "detection_mode": args.detection_mode,
         "detected_corner_observations": len(obs),
         "triangulated_marker_corners": len(corners_3d),
         **scale_meta,

@@ -2,7 +2,10 @@
 
 `src/calib_lab` is the ROS 2 package and simulation-source area for the APPRAS camera-rig calibration project.
 
-This folder is intentionally separated from the executable experiment pipelines in `run/bus_real_data/`. The `src/calib_lab` package defines the world, camera layout, marker layout and model assets. The `run/` folder consumes those assets and produces calibration/evaluation outputs in `results/`.
+This folder is intentionally separated from the executable package in
+`src/camera_rig_calibration/`. `src/calib_lab` defines the world, camera
+layout, marker layout and model assets; the package consumes those assets and
+publishes calibration/evaluation outputs in `results/`.
 
 ## Package role
 
@@ -13,15 +16,8 @@ The package provides:
 - A4 ArUco marker placement configuration and generated marker models.
 - BeIntelli bus model assets used by the simulation world.
 - Python utility scripts for generating/updating world files.
-- Shared transform utilities used by older and current scripts.
 
 ## Main subfolders
-
-```text
-common/
-```
-
-Small Python helpers that are shared across setup scripts. Use this only for code that is genuinely reusable across experiment worlds.
 
 ```text
 bus_real_data/
@@ -49,13 +45,14 @@ Use `src/calib_lab` when you want to change the simulation setup:
 - generated SDF worlds
 - model assets
 
-Use `run/bus_real_data` when you want to run calibration approaches:
+Use the `rigcal` CLI when you want to run calibration approaches:
 
 - AP01 marker direct relay
 - AP02 reference-marker graph + BA
 - AP03 targetless COLMAP + ArUco scale
 
-Use `results/bus_real_data` when you want to inspect generated outputs, reports and final metrics.
+Use `results/simulation` when you want to inspect generated outputs, reports
+and final metrics.
 
 ## Main world
 

@@ -10,7 +10,9 @@ import cv2
 import numpy as np
 
 STATIC_CAMERAS = ["cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"]
-SHARED_RAW_ROOT = Path("results/bus_real_data/00_raw_images")
+SHARED_RAW_ROOT = Path(
+    "results/simulation/baseline/route2/raw_images"
+)
 MARKER_LENGTH_M = 0.170
 REF_MARKER_ID = 14
 
@@ -18,7 +20,7 @@ REF_MARKER_ID = 14
 AP02_ROOT = Path(
     os.environ.get(
         "AP02_ROOT",
-        "results/bus_real_data/02_ref_marker_graph_ba",
+        "workspace/standalone_methods/ap02",
     )
 )
 

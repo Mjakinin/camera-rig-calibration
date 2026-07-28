@@ -42,7 +42,7 @@ def test_delete_incomplete_transaction_never_deletes_external_inputs_or_configs(
     tmp_path: Path,
 ) -> None:
     entry = _incomplete_run(tmp_path)
-    private_dataset = tmp_path / "datasets/fixture/hash123"
+    private_dataset = tmp_path / "workspace/preparation_cache/fixture/hash123"
     private_dataset.mkdir(parents=True)
     (private_dataset / "frame.png").write_bytes(b"frame")
     run = entry.path / "jobs/ap02/run_001"
@@ -63,21 +63,24 @@ def test_delete_incomplete_transaction_never_deletes_external_inputs_or_configs(
     assert workspace_config.exists()
 
 
-def test_delete_incomplete_run_never_removes_reused_historical_input(
+def test_delete_incomplete_run_never_removes_canonical_dataset(
     tmp_path: Path,
 ) -> None:
     entry = _incomplete_run(tmp_path)
-    historical = tmp_path / "results/bus_real_data/ablation/world/route/route2"
-    historical.mkdir(parents=True)
-    (historical / "keep.txt").write_text("historical", encoding="utf-8")
+    canonical = (
+        tmp_path
+        / "results/simulation/baseline/route2"
+    )
+    canonical.mkdir(parents=True)
+    (canonical / "keep.txt").write_text("canonical", encoding="utf-8")
     (entry.path / "jobs/ap02/run_001/00_INPUT/dataset_pointer.json").write_text(
-        json.dumps({"dataset_root": str(historical)}), encoding="utf-8"
+        json.dumps({"dataset_root": str(canonical)}), encoding="utf-8"
     )
 
     _delete_incomplete_run(tmp_path, entry, delete_private_inputs=True)
 
-    assert historical.is_dir()
-    assert (historical / "keep.txt").read_text(encoding="utf-8") == "historical"
+    assert canonical.is_dir()
+    assert (canonical / "keep.txt").read_text(encoding="utf-8") == "canonical"
 
 
 def test_abort_marks_a_stale_running_stage_resumable(tmp_path: Path) -> None:

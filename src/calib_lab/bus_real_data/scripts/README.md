@@ -5,7 +5,7 @@ This folder contains setup/build scripts for generating marker models and SDF wo
 These scripts are not the main calibration pipelines. The calibration/evaluation pipelines live in:
 
 ```text
-run/bus_real_data/
+src/camera_rig_calibration/
 ```
 
 ## Typical scripts

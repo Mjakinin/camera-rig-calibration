@@ -17,14 +17,11 @@ import subprocess
 from pathlib import Path
 
 
-AP3_ROOT = Path("results/bus_real_data/03_targetless_colmap_aruco_scale")
+AP3_ROOT = Path("workspace/standalone_methods/ap03")
 DATASET_ROOT = AP3_ROOT / "01_colmap_dataset"
 IMAGE_DIR = DATASET_ROOT / "images"
 MANIFEST = DATASET_ROOT / "image_manifest.csv"
-SHARED_RAW = Path(
-    "results/bus_real_data/00_shared_baseline/"
-    "bus_real_data_ref_marker_v1/raw_images"
-)
+SHARED_RAW = Path("results/simulation/baseline/route2/raw_images")
 RUN_ROOT = AP3_ROOT / "02_colmap_sparse"
 DB = RUN_ROOT / "database.db"
 SPARSE_ROOT = RUN_ROOT / "sparse"

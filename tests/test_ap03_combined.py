@@ -2,24 +2,23 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from camera_rig_calibration.components import register_builtin_components
 from camera_rig_calibration.config.models import MethodSettings
 from camera_rig_calibration.contracts import RunContext
 from camera_rig_calibration.registry import calibration_methods
 
 
-def test_v2_split_ap03_configuration_migrates_to_one_combined_job() -> None:
-    settings = MethodSettings.model_validate(
-        {
-            "enabled": ["ap03_single", "ap03_multi"],
-            "ap03_single": {"scale_marker_id": 7},
-            "ap03_multi": {"marker_ids": [7, 9]},
-        }
-    )
-
-    assert settings.enabled == ["ap03"]
-    assert settings.ap03.single.scale_marker_id == 7
-    assert settings.ap03.multi.marker_ids == [7, 9]
+def test_split_ap03_legacy_fields_are_rejected() -> None:
+    with pytest.raises(ValueError):
+        MethodSettings.model_validate(
+            {
+                "enabled": ["ap03_single", "ap03_multi"],
+                "ap03_single": {"scale_marker_id": 7},
+                "ap03_multi": {"marker_ids": [7, 9]},
+            }
+        )
 
 
 def test_ap03_component_declares_explicit_stage_commands(

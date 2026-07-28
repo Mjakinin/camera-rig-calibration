@@ -27,16 +27,16 @@ def run_checks(repository_root: Path, *, needs_ros: bool = False) -> list[Check]
         ),
         Check("Repository", (repository_root / ".git").exists(), str(repository_root)),
         Check(
-            "Legacy method runners",
+            "Package calibration methods",
             all(
                 (repository_root / path).is_file()
                 for path in (
-                    "run/real_vehicle_data/07_run_ap01_real.py",
-                    "run/real_vehicle_data/08_run_ap02_real.py",
-                    "run/real_vehicle_data/09_run_ap03_real.py",
+                    "src/camera_rig_calibration/methods/ap01/report.py",
+                    "src/camera_rig_calibration/methods/ap02/report.py",
+                    "src/camera_rig_calibration/methods/ap03/report.py",
                 )
             ),
-            "AP01/AP02/AP03 wrappers",
+            "AP01/AP02/AP03 package components",
         ),
     ]
     for module, required in (
@@ -52,6 +52,14 @@ def run_checks(repository_root: Path, *, needs_ros: bool = False) -> list[Check]
         checks.append(Check(f"Python module: {module}", available, "installed" if available else "missing", required))
     colmap = shutil.which("colmap")
     checks.append(Check("COLMAP", colmap is not None, colmap or "not found in PATH"))
+    ffprobe = shutil.which("ffprobe")
+    checks.append(
+        Check(
+            "FFprobe video geometry",
+            ffprobe is not None,
+            ffprobe or "not found in PATH; install FFmpeg",
+        )
+    )
     if needs_ros:
         ros2 = shutil.which("ros2")
         checks.append(Check("ROS 2", ros2 is not None, ros2 or "not found in PATH"))

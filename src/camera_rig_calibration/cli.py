@@ -1,22 +1,30 @@
 from __future__ import annotations
 
+import json
 import sys
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 import typer
 from pydantic import ValidationError
 from rich.console import Console
 from rich.panel import Panel
+from rich.table import Table
 
 from .assets import ensure_bus_mesh
 from .components import register_builtin_components
 from .config import load_config
 from .runtime import PipelineOrchestrator
 from .queueing import (
+    BatchConfig,
+    ObservationReviewDecision,
     QueueConfig,
     QueueEntry,
     QueueRunner,
+    is_batch_config,
     is_queue_config,
+    load_batch,
     load_queue,
     load_queue_partitions,
 )
@@ -32,12 +40,130 @@ from .wizard import (
     show_results,
     show_queue_summary,
     show_summary,
+    review_queue_selection_candidates,
     review_selection_candidates,
     WizardBack,
 )
 
 
 console = Console()
+
+
+def _review_queue_selections(jobs, run_directory):
+    return review_queue_selection_candidates(
+        jobs, run_directory, console
+    )
+
+
+def _review_single_selection(config, resolved, run_directory):
+    return review_selection_candidates(
+        config, resolved, run_directory, console
+    )
+
+
+def _review_observation_coverage(preflight, run_directory):
+    missing = ", ".join(preflight.missing_required_cameras) or "none"
+    console.print(
+        "\n[bold yellow]Observation review required[/bold yellow]\n"
+        f"Required cameras without detections: {missing}\n"
+        f"Evidence: {run_directory}"
+    )
+    for job in preflight.jobs:
+        diagnosis = job.ap02_graph_diagnosis
+        if diagnosis is None or diagnosis.complete:
+            continue
+        console.print(
+            f"\n[bold]AP02 {job.job_id}:[/bold] Combined "
+            f"{len(diagnosis.reached_static_cameras)}/"
+            f"{len(diagnosis.expected_static_cameras)} cameras, "
+            f"{len(diagnosis.components)} connected components; "
+            f"reference component "
+            f"{diagnosis.reference_component_id or 'not available'}"
+        )
+        component_table = Table(show_header=True)
+        component_table.add_column("Component")
+        component_table.add_column("Role")
+        component_table.add_column("Cameras")
+        component_table.add_column("Markers")
+        component_table.add_column("Moving", justify="right")
+        component_table.add_column("Bridging", justify="right")
+        component_table.add_column("Runnable")
+        for component in diagnosis.components:
+            component_table.add_row(
+                component.component_id,
+                (
+                    "primary"
+                    if component.component_id
+                    == diagnosis.reference_component_id
+                    else "diagnostic"
+                ),
+                ",".join(component.static_cameras) or "-",
+                ",".join(map(str, component.marker_ids)),
+                str(len(component.moving_frames)),
+                str(len(component.connecting_moving_frames)),
+                "diagnostic" if component.calibratable else "no",
+            )
+        console.print(component_table)
+        console.print(
+            "Not reachable from reference component: "
+            + (
+                ", ".join(diagnosis.missing_static_cameras)
+                if diagnosis.missing_static_cameras
+                else "none"
+            )
+            + "\n"
+            "Cause: "
+            + ", ".join(diagnosis.cause_codes)
+            + "\n"
+            + diagnosis.explanation
+        )
+
+    console.print(
+        "\n  1. retry ArUco detection on the same normalized frames\n"
+        "  2. continue explicitly with diagnostic partial coverage\n"
+        "  3. save this queue and return to the main menu"
+    )
+    action = typer.prompt("Selection", default="1").strip().lower()
+    while action not in {"1", "2", "3"}:
+        action = typer.prompt("Selection", default="1").strip().lower()
+    if action == "2":
+        return ObservationReviewDecision("continue_partial")
+    if action == "3":
+        return ObservationReviewDecision("pause")
+
+    summary = json.loads(
+        (run_directory / "queue_preflight_summary.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    current = str(summary.get("detection_mode", "baseline"))
+    modes = [
+        mode
+        for mode in ("high_sensitivity", "subpixel_refined", "baseline")
+        if mode != current
+    ]
+    descriptions = {
+        "high_sensitivity": (
+            "recommended for dark, small or previously missed markers"
+        ),
+        "subpixel_refined": (
+            "baseline candidates with subpixel corner refinement"
+        ),
+        "baseline": "original OpenCV detector behavior",
+    }
+    mode_table = Table(title=f"Detector retry — current: {current}")
+    mode_table.add_column("#")
+    mode_table.add_column("Mode")
+    mode_table.add_column("Meaning")
+    for index, mode in enumerate(modes, 1):
+        mode_table.add_row(str(index), mode, descriptions[mode])
+    console.print(mode_table)
+    selected = typer.prompt("Detector number", default="1").strip()
+    while not selected.isdigit() or not 1 <= int(selected) <= len(modes):
+        selected = typer.prompt("Detector number", default="1").strip()
+    return ObservationReviewDecision(
+        "retry_detector", modes[int(selected) - 1]
+    )
 
 
 def _run_pipeline(orchestrator: PipelineOrchestrator, **kwargs) -> Path | None:
@@ -63,6 +189,214 @@ def repository_root() -> Path:
     raise RuntimeError("Could not locate the camera-rig-calibration repository")
 
 
+def _short_runtime(seconds: float | int | None) -> str:
+    if seconds is None:
+        return "-"
+    total = max(0, int(round(float(seconds))))
+    hours, remainder = divmod(total, 3600)
+    minutes, seconds_left = divmod(remainder, 60)
+    if hours:
+        return f"{hours}h{minutes:02d}m{seconds_left:02d}s"
+    if minutes:
+        return f"{minutes}m{seconds_left:02d}s"
+    return f"{seconds_left}s"
+
+
+def _run_batch(
+    batch: BatchConfig,
+    *,
+    root: Path,
+    dry_run: bool,
+    assume_yes: bool,
+) -> bool:
+    queues = [load_queue(entry.queue) for entry in batch.queues]
+    total_jobs = sum(len(queue.entries) for queue in queues)
+    if not dry_run and not assume_yes and not typer.confirm(
+        f"Start {len(queues)} experiment queues with {total_jobs} method jobs?",
+        default=True,
+    ):
+        console.print("Batch cancelled; all saved queue files were kept.")
+        return False
+    batch_started = time.monotonic()
+    successful = True
+    batch_results: dict[str, object] = {}
+    state_path = (
+        root
+        / "workspace"
+        / "batches"
+        / batch.id
+        / "batch_state.json"
+    )
+    def save_batch_state(status: str) -> None:
+        state_path.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "schema_version": 1,
+            "kind": "rigcal_batch_state",
+            "batch_id": batch.id,
+            "status": status,
+            "updated_at": datetime.now(timezone.utc).isoformat(
+                timespec="seconds"
+            ),
+            "elapsed_seconds": time.monotonic() - batch_started,
+            "experiments": batch_results,
+        }
+        temporary = state_path.with_suffix(".json.tmp")
+        temporary.write_text(
+            json.dumps(payload, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        temporary.replace(state_path)
+
+    save_batch_state("running")
+    for batch_index, (entry, queue) in enumerate(
+        zip(batch.queues, queues, strict=True), 1
+    ):
+        experiment_started = time.monotonic()
+        console.print(
+            f"\n[bold]EXPERIMENT {batch_index}/{len(queues)} — "
+            f"{entry.experiment_id}[/bold]"
+        )
+        runner = QueueRunner(
+            root,
+            console,
+            selection_reviewer=(
+                _review_queue_selections if sys.stdin.isatty() else None
+            ),
+            observation_reviewer=(
+                _review_observation_coverage if sys.stdin.isatty() else None
+            ),
+        )
+        runner.show(queue)
+        try:
+            results = runner.run(
+                queue,
+                dry_run=dry_run,
+                batch_started_monotonic=batch_started,
+            )
+        except KeyboardInterrupt:
+            save_batch_state("interrupted")
+            raise
+        except Exception as exc:
+            results = {
+                "_experiment": {
+                    "status": "failed",
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+            }
+            console.print(
+                f"[red]Experiment queue failed: "
+                f"{entry.experiment_id}: {exc}[/red]"
+            )
+        experiment_terminal = all(
+            row.get("status")
+            in {
+                "completed",
+                "duplicate_skipped",
+                "published",
+                "failed_published",
+                "dry_run",
+            }
+            for row in results.values()
+        )
+        successful = successful and experiment_terminal
+        batch_results[entry.experiment_id] = {
+            "queue": str(entry.queue),
+            "status": (
+                "terminal"
+                if experiment_terminal
+                else "failed_or_incomplete"
+            ),
+            "elapsed_seconds": time.monotonic() - experiment_started,
+            "entries": results,
+        }
+        save_batch_state("running")
+        if not experiment_terminal and not batch.continue_independent:
+            break
+    save_batch_state("completed" if successful else "completed_with_failures")
+    if not dry_run:
+        table = Table(
+            title="Calibration batch completed",
+            caption=(
+                f"Batch time: {time.monotonic() - batch_started:.1f} s | "
+                f"{len(batch_results)} experiment(s)"
+            ),
+            expand=True,
+        )
+        table.add_column("Experiment")
+        table.add_column("Method variant")
+        table.add_column("Status")
+        table.add_column("Method time")
+        table.add_column("Experiment time")
+        table.add_column("Canonical result", overflow="fold")
+        table.add_column("Experiment reports", overflow="fold")
+        for experiment_id, experiment_payload in batch_results.items():
+            entries = (
+                experiment_payload.get("entries", {})
+                if isinstance(experiment_payload, dict)
+                else {}
+            )
+            for entry_id, row in entries.items():
+                if not isinstance(row, dict):
+                    continue
+                result = Path(str(row.get("result", "")))
+                result_payload: dict[str, object] = {}
+                result_json = result / "RESULT.json"
+                if result_json.is_file():
+                    try:
+                        candidate = json.loads(
+                            result_json.read_text(encoding="utf-8")
+                        )
+                        if isinstance(candidate, dict):
+                            result_payload = candidate
+                    except (OSError, json.JSONDecodeError):
+                        pass
+                experiment_root = next(
+                    (
+                        parent
+                        for parent in (result, *result.parents)
+                        if (parent / "SUMMARY.json").is_file()
+                    ),
+                    None,
+                )
+                table.add_row(
+                    experiment_id,
+                    (
+                        f"{result_payload.get('method')}/"
+                        f"{result_payload.get('label')}"
+                        if result_payload
+                        else entry_id
+                    ),
+                    (
+                        "available"
+                        if row.get("status")
+                        in {"completed", "duplicate_skipped"}
+                        else str(
+                            row.get("failure", {}).get(
+                                "cause_code",
+                                row.get("status", "unknown"),
+                            )
+                        )
+                    ),
+                    _short_runtime(result_payload.get("runtime_seconds")),
+                    _short_runtime(
+                        experiment_payload.get("elapsed_seconds")
+                        if isinstance(experiment_payload, dict)
+                        else None
+                    ),
+                    str(result),
+                    (
+                        (
+                            f"{experiment_root / 'RESULTS.txt'} | "
+                            f"{experiment_root / 'COMPARISON.json'}"
+                        )
+                        if experiment_root is not None
+                        else "-"
+                    ),
+                )
+        console.print(table)
+    return successful
+
+
 def _execute(
     config_path: Path,
     *,
@@ -70,23 +404,16 @@ def _execute(
     assume_yes: bool,
 ) -> None:
     root = repository_root()
+    if is_batch_config(config_path):
+        _run_batch(
+            load_batch(config_path),
+            root=root,
+            dry_run=dry_run,
+            assume_yes=assume_yes,
+        )
+        return
     if is_queue_config(config_path):
         partitions = load_queue_partitions(config_path)
-        selection_cache: dict[tuple[object, ...], dict[str, object]] = {}
-
-        def reviewer(config, resolved, run_directory):
-            key = (
-                config.dataset.id,
-                tuple(camera.id for camera in config.static_cameras),
-                tuple(resolved.marker_ids),
-                str(config.dataset.prepared_root or config.dataset.input_root),
-            )
-            if key not in selection_cache:
-                selection_cache[key] = review_selection_candidates(
-                    config, resolved, run_directory, console
-                )
-            return selection_cache[key]
-
         total = sum(len(queue.entries) for queue in partitions)
         if len(partitions) > 1:
             console.print(
@@ -103,7 +430,16 @@ def _execute(
             runner = QueueRunner(
                 root,
                 console,
-                selection_reviewer=reviewer if sys.stdin.isatty() else None,
+                selection_reviewer=(
+                    _review_queue_selections
+                    if sys.stdin.isatty()
+                    else None
+                ),
+                observation_reviewer=(
+                    _review_observation_coverage
+                    if sys.stdin.isatty()
+                    else None
+                ),
             )
             runner.show(queue)
             runner.run(queue, dry_run=dry_run)
@@ -138,14 +474,15 @@ def _execute(
     ):
         console.print(f"Cancelled. Reproducible configuration kept at {config_path}")
         return
-    reviewer = None
-    if sys.stdin.isatty():
-        def reviewer(config, resolved, run_directory):
-            return review_selection_candidates(
-                config, resolved, run_directory, console
-            )
     QueueRunner(
-        root, console, selection_reviewer=reviewer
+        root,
+        console,
+        selection_reviewer=(
+            _review_queue_selections if sys.stdin.isatty() else None
+        ),
+        observation_reviewer=(
+            _review_observation_coverage if sys.stdin.isatty() else None
+        ),
     ).run(
         QueueConfig(
             id=(
@@ -170,26 +507,14 @@ def _execute_wizard_outcome(
     assume_yes: bool,
 ) -> bool:
     """Show, validate and execute an ordered interactive run queue."""
-    selection_cache: dict[tuple[object, ...], dict[str, object]] = {}
-
-    def reviewer(config, resolved, run_directory):
-        key = (
-            config.dataset.id,
-            tuple(camera.id for camera in config.static_cameras),
-            tuple(resolved.marker_ids),
-            str(config.dataset.prepared_root or config.dataset.input_root),
+    if outcome.batch_path is not None:
+        show_queue_summary(outcome, console)
+        return _run_batch(
+            load_batch(outcome.batch_path),
+            root=root,
+            dry_run=dry_run,
+            assume_yes=assume_yes,
         )
-        if key not in selection_cache:
-            selection_cache[key] = review_selection_candidates(
-                config, resolved, run_directory, console
-            )
-        else:
-            console.print(
-                "[dim]Reusing the selections already confirmed for this queue "
-                "input; no additional prompt is required.[/dim]"
-            )
-        return selection_cache[key]
-
     show_queue_summary(outcome, console)
     if dry_run:
         for index, queued in enumerate(outcome.runs, 1):
@@ -230,7 +555,10 @@ def _execute_wizard_outcome(
             ],
         )
     runner = QueueRunner(
-        root, console, selection_reviewer=reviewer
+        root,
+        console,
+        selection_reviewer=_review_queue_selections,
+        observation_reviewer=_review_observation_coverage,
     )
     try:
         results = runner.run(queue)
@@ -292,18 +620,14 @@ def _interactive(*, dry_run: bool, assume_yes: bool) -> None:
         if choice == "3":
             resume = manage_incomplete_runs(root, console)
             if resume is not None:
-                def resume_reviewer(config, resolved, run_directory):
-                    return review_selection_candidates(
-                        config, resolved, run_directory, console
-                    )
-
                 kind, source = incomplete_resume_source(resume)
                 if kind == "queue":
                     try:
                         QueueRunner(
                             root,
                             console,
-                            selection_reviewer=resume_reviewer,
+                            selection_reviewer=_review_queue_selections,
+                            observation_reviewer=_review_observation_coverage,
                         ).run(load_queue(source))
                     except KeyboardInterrupt:
                         console.print(
@@ -316,7 +640,7 @@ def _interactive(*, dry_run: bool, assume_yes: bool) -> None:
                         PipelineOrchestrator(
                             root,
                             console,
-                            selection_reviewer=resume_reviewer,
+                            selection_reviewer=_review_single_selection,
                         ),
                         resume_directory=source,
                     )
@@ -362,17 +686,22 @@ def entry(
             if dry_run:
                 raise typer.BadParameter("--dry-run cannot be combined with --resume")
             transaction = find_incomplete_transaction(root, resume)
-            reviewer = None
-            if sys.stdin.isatty():
-                def reviewer(config, resolved, run_directory):
-                    return review_selection_candidates(
-                        config, resolved, run_directory, console
-                    )
             kind, source = incomplete_resume_source(transaction)
             if kind == "queue":
                 try:
                     QueueRunner(
-                        root, console, selection_reviewer=reviewer
+                        root,
+                        console,
+                        selection_reviewer=(
+                            _review_queue_selections
+                            if sys.stdin.isatty()
+                            else None
+                        ),
+                        observation_reviewer=(
+                            _review_observation_coverage
+                            if sys.stdin.isatty()
+                            else None
+                        ),
                     ).run(load_queue(source))
                 except KeyboardInterrupt:
                     console.print(
@@ -382,7 +711,13 @@ def entry(
             else:
                 _run_pipeline(
                     PipelineOrchestrator(
-                        root, console, selection_reviewer=reviewer
+                        root,
+                        console,
+                        selection_reviewer=(
+                            _review_single_selection
+                            if sys.stdin.isatty()
+                            else None
+                        ),
                     ),
                     resume_directory=source,
                 )

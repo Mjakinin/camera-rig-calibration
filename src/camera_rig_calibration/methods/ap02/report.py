@@ -80,6 +80,26 @@ def run(
             / "with_moving"
             / "optimizer_report.json"
         )
+        component_manifest_path = (
+            output_root
+            / "02_aruco_observations"
+            / "component_manifest.json"
+        )
+        component_manifest = (
+            json.loads(component_manifest_path.read_text(encoding="utf-8"))
+            if component_manifest_path.is_file()
+            else {}
+        )
+        component_results_path = (
+            output_root
+            / "09_component_diagnostics"
+            / "AP02_COMPONENT_RESULTS.json"
+        )
+        component_results = (
+            json.loads(component_results_path.read_text(encoding="utf-8"))
+            if component_results_path.is_file()
+            else {}
+        )
         complete = not missing
         status = (
             "OK"
@@ -92,10 +112,14 @@ def run(
             "schema_version": 5,
             "method": "AP02",
             "status": status,
-            "primary_result": "combined" if complete else None,
-            "primary_result_available": complete,
+            "primary_result": "combined",
+            "primary_result_available": bool(combined),
+            "full_rig_result_available": complete,
             "comparison_eligible": complete,
             "diagnostic_partial": not complete,
+            "quality_status": (
+                "converged" if complete else "partial_coverage"
+            ),
             "reference_marker_id": reference_marker_id,
             "static_only_diagnostic_status": static_status,
             "combined_optimizer": json.loads(
@@ -106,6 +130,21 @@ def run(
                 "expected": list(camera_ids),
                 "missing": missing,
             },
+            "combined_graph": {
+                "component_count": len(
+                    component_manifest.get("components", [])
+                ),
+                "primary_component_id": component_manifest.get(
+                    "primary_component_id"
+                ),
+                "components": component_manifest.get("components", []),
+                "cross_component_extrinsics": (
+                    "not_observable"
+                    if not complete
+                    else "not_applicable"
+                ),
+            },
+            "diagnostic_component_results": component_results,
         }
         report_path = stage_root / "AP02_REPORT.json"
         report_path.parent.mkdir(parents=True, exist_ok=True)
@@ -120,11 +159,22 @@ def run(
                     "status": report["status"],
                     "success": True,
                     "primary_result": report["primary_result"],
-                    "primary_result_available": complete,
+                    "primary_result_available": bool(combined),
+                    "full_rig_result_available": complete,
                     "comparison_eligible": complete,
                     "diagnostic_partial": not complete,
+                    "quality_status": report["quality_status"],
                     "available_static_cameras": sorted(combined),
                     "missing_static_cameras": missing,
+                    "graph_component_count": report["combined_graph"][
+                        "component_count"
+                    ],
+                    "primary_component_id": report["combined_graph"][
+                        "primary_component_id"
+                    ],
+                    "cross_component_extrinsics": report[
+                        "combined_graph"
+                    ]["cross_component_extrinsics"],
                     "static_only_diagnostic_status": static_status,
                     "reference_marker_id": reference_marker_id,
                 },

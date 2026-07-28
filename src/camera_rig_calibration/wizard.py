@@ -8,8 +8,9 @@ import signal
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Iterable
@@ -39,6 +40,7 @@ from .config.models import (
     RigConfig,
     SamplingSettings,
     SceneType,
+    SelectionSettings,
     SimulationSettings,
     StaticCameraSettings,
 )
@@ -51,7 +53,9 @@ from .dataset.discovery import (
     safe_id,
 )
 from .doctor import run_checks
+from .experiments import automatic_method_label
 from .input.topics import McapTopic, list_mcap_topics
+from .input.video_geometry import probe_video_geometry
 from .intrinsics_profiles import (
     IntrinsicProfile,
     delete_profile,
@@ -78,13 +82,9 @@ from .registry import (
 )
 from .results import ResultEntry, index_results
 from .runtime import PipelineOrchestrator
-from .observations import ResolvedSelections
-from .simulation_worlds import (
-    SimulationWorldManifest,
-    discover_world_manifests,
-    install_world_manifest,
-    load_world_manifest,
-)
+from .observation_quality import filter_observations
+from .observations import ResolvedSelections, resolve_selections
+from .queueing import SelectionReviewJob, save_batch
 from .storage import (
     build_cleanup_plan,
     build_data_local_cleanup_plan,
@@ -97,6 +97,8 @@ class WizardOutcome:
     config: RigConfig
     path: Path
     queued_runs: tuple["QueuedRun", ...] = ()
+    batch_path: Path | None = None
+    queue_paths: tuple[Path, ...] = ()
 
     @property
     def runs(self) -> tuple["QueuedRun", ...]:
@@ -118,6 +120,264 @@ class MethodQueueJob:
     observation_quality: ObservationQualitySettings
     colmap: ColmapSettings
     evaluation: EvaluationSettings
+    selection: SelectionSettings = field(default_factory=SelectionSettings)
+    context_methods: dict[str, MethodSettings] = field(default_factory=dict)
+    context_selections: dict[str, SelectionSettings] = field(
+        default_factory=dict
+    )
+    deferred_selection_keys: set[str] = field(default_factory=set)
+    context_deferred_selection_keys: dict[str, set[str]] = field(
+        default_factory=dict
+    )
+
+
+@dataclass(frozen=True)
+class SelectionDatasetContext:
+    """A dataset whose existing observations may support an immediate choice."""
+
+    key: str
+    display_name: str
+    dataset_root: Path | None
+    static_cameras: tuple[StaticCameraSettings, ...]
+
+    @property
+    def observations_csv(self) -> Path | None:
+        if self.dataset_root is None:
+            return None
+        candidate = (
+            self.dataset_root
+            / "observations"
+            / "shared_all_aruco_observations.csv"
+        )
+        return candidate if candidate.is_file() else None
+
+
+def _refresh_method_job_label(job: MethodQueueJob) -> str:
+    job.label = _method_job_label(job)
+    return job.label
+
+
+_MANUAL_SELECTION_LABELS = {
+    "root_camera": "root_manual",
+    "ap02_reference": "ref_manual",
+    "single_marker": "single_manual",
+    "multi_markers": "multi_manual",
+}
+
+
+def _pending_selection_keys(
+    job: MethodQueueJob, context_key: str | None = None
+) -> set[str]:
+    if context_key is not None:
+        contextual = job.context_deferred_selection_keys
+        if context_key in contextual:
+            return set(contextual[context_key])
+    pending = set(job.deferred_selection_keys)
+    if context_key is None:
+        for contextual in job.context_deferred_selection_keys.values():
+            pending.update(contextual)
+    return pending
+
+
+def _method_job_label(
+    job: MethodQueueJob, context_key: str | None = None
+) -> str:
+    methods = (
+        job.context_methods[context_key]
+        if context_key is not None and context_key in job.context_methods
+        else job.methods
+    )
+    baseline_label = automatic_method_label(
+        job.method_id,
+        methods=methods,
+        markers=job.markers,
+        observation_quality=job.observation_quality,
+        colmap=job.colmap,
+    )
+    manual_tokens = [
+        label
+        for key, label in _MANUAL_SELECTION_LABELS.items()
+        if key in _pending_selection_keys(job, context_key)
+    ]
+    if not manual_tokens:
+        return baseline_label
+    return safe_id("__".join((baseline_label, *manual_tokens)))
+
+
+def _method_job_identity(job: MethodQueueJob) -> str:
+    """Identify the complete requested job, including deferred selections."""
+
+    payload = {
+        "method_id": job.method_id,
+        "methods": job.methods.model_dump(mode="json", exclude_none=True),
+        "markers": job.markers.model_dump(mode="json", exclude_none=True),
+        "observation_quality": job.observation_quality.model_dump(
+            mode="json", exclude_none=True
+        ),
+        "colmap": job.colmap.model_dump(mode="json", exclude_none=True),
+        "evaluation": job.evaluation.model_dump(mode="json", exclude_none=True),
+        "selection": job.selection.model_dump(mode="json", exclude_none=True),
+        "deferred_selection_keys": sorted(job.deferred_selection_keys),
+        "context_methods": {
+            key: value.model_dump(mode="json", exclude_none=True)
+            for key, value in sorted(job.context_methods.items())
+        },
+        "context_selections": {
+            key: value.model_dump(mode="json", exclude_none=True)
+            for key, value in sorted(job.context_selections.items())
+        },
+        "context_deferred_selection_keys": {
+            key: sorted(value)
+            for key, value in sorted(
+                job.context_deferred_selection_keys.items()
+            )
+        },
+    }
+    return hashlib.sha256(
+        json.dumps(
+            payload, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+@dataclass(frozen=True)
+class SimulationQueueJob:
+    experiment_id: str
+    parameters: dict[str, object]
+    cameras: tuple[StaticCameraSettings, ...]
+    moving_camera: MovingCameraSettings
+    simulation: SimulationSettings
+    prepared_root: Path | None
+    source: str
+
+    @property
+    def input_mode(self) -> str:
+        return (
+            "reuse local dataset"
+            if self.prepared_root is not None
+            else "new capture required"
+        )
+
+
+@dataclass(frozen=True)
+class _BusCamera:
+    id: str
+    image_topic: str
+    camera_info_topic: str
+    model_name: str
+    sensor_name: str
+
+
+@dataclass(frozen=True)
+class _BusRoute:
+    id: str
+    path: Path
+
+
+@dataclass(frozen=True)
+class _BusDefinition:
+    id: str
+    display_name: str
+    sdf: Path
+    resource_paths: tuple[Path, ...]
+    static_cameras: tuple[_BusCamera, ...]
+    moving_camera: _BusCamera
+    routes: tuple[_BusRoute, ...]
+    baseline_route: _BusRoute
+    capabilities: tuple[str, ...]
+    lighting_profiles: dict[str, Path | None]
+    baseline: dict[str, object]
+
+
+def _bus_definition(repository_root: Path) -> _BusDefinition:
+    root = repository_root.resolve()
+    route_root = root / "src/calib_lab/bus_real_data/config"
+    world_root = root / "src/calib_lab/bus_real_data/worlds"
+    routes = (
+        _BusRoute(
+            "route2",
+            (
+                route_root
+                / "moving_camera_route2_interpolated_final.json"
+            ).resolve(),
+        ),
+        _BusRoute(
+            "route1",
+            (
+                route_root
+                / "moving_camera_route1_interpolated_final.json"
+            ).resolve(),
+        ),
+    )
+    static_cameras = tuple(
+        _BusCamera(
+            id=camera_id,
+            model_name=camera_id,
+            sensor_name=f"{camera_id}_sensor",
+            image_topic=f"/bus_real_data/{camera_id}/image",
+            camera_info_topic=f"/bus_real_data/{camera_id}/camera_info",
+        )
+        for camera_id in (
+            "cam_edge_0",
+            "cam_edge_1",
+            "cam_edge_3",
+            "cam_edge_5",
+        )
+    )
+    return _BusDefinition(
+        id="bus",
+        display_name="Bus interior calibration world",
+        sdf=(world_root / "bus_real_data_moving_camera.sdf").resolve(),
+        resource_paths=(
+            (root / "src/calib_lab/bus_real_data/models").resolve(),
+        ),
+        static_cameras=static_cameras,
+        moving_camera=_BusCamera(
+            id="moving_calib_camera",
+            model_name="moving_calib_camera",
+            sensor_name="moving_calib_camera_sensor",
+            image_topic="/bus_real_data/moving_calib_camera/image",
+            camera_info_topic=(
+                "/bus_real_data/moving_calib_camera/camera_info"
+            ),
+        ),
+        routes=routes,
+        baseline_route=routes[0],
+        capabilities=(
+            "route",
+            "density",
+            "resolution",
+            "fov",
+            "lighting",
+            "motion_blur",
+            "capture",
+        ),
+        lighting_profiles={
+            "baseline": None,
+            **{
+                name: (
+                    world_root
+                    / "lighting"
+                    / (
+                        "bus_real_data_moving_camera_light_ceiling_"
+                        f"{name}.sdf"
+                    )
+                ).resolve()
+                for name in (
+                    "dark_extreme",
+                    "low",
+                    "normal",
+                    "bright",
+                )
+            },
+            "custom": (
+                world_root
+                / "lighting"
+                / "bus_real_data_moving_camera_light_ceiling_normal.sdf"
+            ).resolve(),
+        },
+        baseline=dict(BASELINE_SIMULATION_PARAMETERS),
+    )
 
 
 class WizardBack(Exception):
@@ -238,30 +498,6 @@ def _simulation_experiment_id(parameters: dict[str, object]) -> str:
     return safe_id(f"{readable[:63]}_{digest}")
 
 
-def _prompt_path(
-    label: str,
-    default: Path | None = None,
-    *,
-    directory: bool | None = None,
-    allow_back: bool = True,
-) -> Path:
-    default_text = str(default) if default is not None else None
-    while True:
-        suffix = " (0 = back)" if allow_back else ""
-        value = typer.prompt(
-            label + suffix,
-            default=default_text,
-            show_default=default_text is not None,
-        )
-        if allow_back and str(value).strip().lower() in {"0", "b", "back"}:
-            raise WizardBack()
-        path = Path(value).expanduser().resolve()
-        valid = path.is_dir() if directory is True else path.is_file() if directory is False else path.exists()
-        if valid:
-            return path
-        typer.echo(f"Path does not exist or has the wrong type: {path}")
-
-
 def _choice(label: str, choices: dict[str, str], default: str) -> str:
     typer.echo(f"\n{label}:")
     for key, description in choices.items():
@@ -286,18 +522,20 @@ def _select_detected_path(
     preferred: int = 0,
 ) -> Path:
     if not paths:
-        return _prompt_path(label, directory=directory)
+        raise RuntimeError(
+            f"No {label.lower()} was discovered. Place it below data_local "
+            "or in a canonical dataset and restart the wizard."
+        )
     typer.echo(f"\n{label}:")
     for index, path in enumerate(paths, 1):
         typer.echo(f"  {index}. {path}")
-    typer.echo("  0. enter another path")
     selected = _prompt_index(
-        "Selection",
+        "Selection (0/b = back)",
         default=preferred + 1,
         maximum=len(paths),
     )
     if selected is None:
-        return _prompt_path(label, directory=directory)
+        raise WizardBack()
     return paths[selected - 1]
 
 
@@ -354,12 +592,10 @@ def _select_checkerboard_source(
 ) -> tuple[Path | None, Path | None]:
     sources = sources if sources is not None else _checkerboard_sources(input_root)
     if not sources:
-        typer.echo(
-            "\nNo named checkerboard source was detected; enter a video or "
-            "image-folder path."
+        raise RuntimeError(
+            "No checkerboard video or image folder was discovered below "
+            f"{input_root}. Add it below data_local and restart the wizard."
         )
-        path = _prompt_path("Checkerboard video or image folder")
-        return (None, path) if path.is_dir() else (path, None)
     if len(sources) == 1:
         kind, path, description = sources[0]
         typer.echo(f"\nCheckerboard calibration input: {description} (automatic)")
@@ -367,15 +603,13 @@ def _select_checkerboard_source(
     typer.echo("\nCheckerboard calibration input:")
     for index, (_, _, description) in enumerate(sources, 1):
         typer.echo(f"  {index}. {description}")
-    typer.echo("  0. enter another path")
     selected = _prompt_index(
-        "Selection",
+        "Selection (0/b = back)",
         default=1,
         maximum=len(sources),
     )
     if selected is None:
-        path = _prompt_path("Checkerboard video or image folder")
-        return (None, path) if path.is_dir() else (path, None)
+        raise WizardBack()
     kind, path, _ = sources[selected - 1]
     return (path, None) if kind == "video" else (None, path)
 
@@ -388,11 +622,11 @@ def _moving_media_dimensions(
     except ImportError:
         return None
     if video is not None:
-        capture = cv2.VideoCapture(str(video))
-        width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        capture.release()
-        return (width, height) if width > 0 and height > 0 else None
+        try:
+            geometry = probe_video_geometry(video)
+        except RuntimeError:
+            return None
+        return geometry.output_width, geometry.output_height
     if frames is not None:
         candidates = [
             path
@@ -407,6 +641,41 @@ def _moving_media_dimensions(
                 height, width = image.shape[:2]
                 return int(width), int(height)
     return None
+
+
+def _show_video_geometry(
+    console: Console,
+    label: str,
+    video: Path,
+) -> None:
+    geometry = probe_video_geometry(video)
+    console.print(
+        f"{label}: encoded "
+        f"{geometry.encoded_width}x{geometry.encoded_height}, "
+        f"rotation {geometry.display_rotation_degrees:+d} deg, "
+        f"normalized {geometry.output_width}x{geometry.output_height} "
+        f"({geometry.orientation_policy})."
+    )
+
+
+def _prompt_intrinsic_scan_settings() -> IntrinsicScanSettings:
+    mode = _prompt_enum_choice(
+        "Intrinsic analysis mode",
+        "balanced",
+        (
+            (
+                "balanced",
+                "recommended; adaptive 3/6/12 Hz search and full-resolution "
+                "corner refinement",
+            ),
+            (
+                "full_frame",
+                "every original frame at full resolution; much slower with "
+                "maximum search coverage",
+            ),
+        ),
+    )
+    return IntrinsicScanSettings(mode=mode)
 
 
 def _moving_source(
@@ -441,6 +710,7 @@ def _moving_source(
         )
         frames = None
         suggested_id = safe_id(video.stem)
+        _show_video_geometry(console, "Moving video geometry", video)
     else:
         video = None
         frames = _select_detected_path(
@@ -537,7 +807,11 @@ def _moving_source(
             )
         )
     if not options:
-        options.append(("file_manual", None, "enter an intrinsic file path"))
+        raise RuntimeError(
+            "No moving-camera intrinsics or compatible managed profile was "
+            f"discovered below {input_root}. Add CameraInfo/intrinsics or "
+            "checkerboard data below data_local and restart the wizard."
+        )
     typer.echo("\nMoving intrinsics:")
     for index, (_, _, description) in enumerate(options, 1):
         typer.echo(f"  {index}. {description}")
@@ -552,10 +826,6 @@ def _moving_source(
     if intrinsic_mode == "file":
         assert isinstance(selected_value, Path)
         intrinsics = selected_value
-    elif intrinsic_mode == "file_manual":
-        intrinsics = _prompt_path(
-            "Moving-camera intrinsics JSON/YAML", directory=False
-        )
     elif intrinsic_mode == "profile":
         assert isinstance(selected_value, IntrinsicProfile)
         intrinsics = selected_value.intrinsics
@@ -567,6 +837,12 @@ def _moving_source(
         )
         calibration_source = calibration_video or calibration_images
         assert calibration_source is not None
+        if calibration_video is not None:
+            _show_video_geometry(
+                console,
+                "Intrinsic video geometry",
+                calibration_video,
+            )
         profile_id = typer.prompt(
             "New intrinsics profile ID",
             default=safe_id(calibration_source.stem),
@@ -587,6 +863,11 @@ def _moving_source(
     advanced_preparation = False
     calibration_requested = (
         calibration_video is not None or calibration_images is not None
+    )
+    intrinsic_scan = (
+        _prompt_intrinsic_scan_settings()
+        if calibration_requested
+        else IntrinsicScanSettings()
     )
     if video is not None and calibration_requested:
         advanced_preparation = typer.confirm(
@@ -614,7 +895,6 @@ def _moving_source(
     intrinsic_maximum_views = 80
     intrinsic_minimum_frame_gap = 0 if calibration_images is not None else 5
     intrinsic_minimum_detections = 20
-    intrinsic_scan = IntrinsicScanSettings()
     if calibration_requested and advanced_preparation:
         console.print("Checkerboard settings (press Enter for recommended defaults):")
         checkerboard_columns = typer.prompt("Inner corner columns", default=8, type=int)
@@ -626,23 +906,9 @@ def _moving_source(
             type=int,
         )
         intrinsic_minimum_detections = typer.prompt("Minimum detections", default=20, type=int)
-        scan_mode = _prompt_enum_choice(
-            "Checkerboard scan mode",
-            "balanced",
-            (
-                (
-                    "balanced",
-                    "3/6/12 Hz preview detection with full-resolution refinement",
-                ),
-                (
-                    "exhaustive_compatibility",
-                    "legacy every-frame full-resolution detector",
-                ),
-            ),
-        )
         scan_target_hz = 3.0
         preview_max_dimension = 1920
-        if scan_mode == "balanced":
+        if intrinsic_scan.mode == "balanced":
             scan_target_hz = typer.prompt(
                 "Initial checkerboard scan rate [Hz]",
                 default=3.0,
@@ -654,7 +920,7 @@ def _moving_source(
                 type=int,
             )
         intrinsic_scan = IntrinsicScanSettings(
-            mode=scan_mode,
+            mode=intrinsic_scan.mode,
             target_hz=scan_target_hz,
             preview_max_dimension=preview_max_dimension,
         )
@@ -925,19 +1191,12 @@ def _direct_static_cameras(
                 )
             )
 
-    count = typer.prompt("Number of static cameras", type=int)
-    if count < 1:
-        raise typer.BadParameter("At least one static camera is required")
-    cameras = cameras if groups else []
-    for index in range(count):
-        console.print(f"\nStatic camera {index + 1}/{count}")
-        camera_id = typer.prompt("Camera ID", default=f"camera_{index + 1}").strip()
-        image = _prompt_path("Static image", directory=False)
-        intrinsics = _prompt_path("Static intrinsics JSON/YAML", directory=False)
-        cameras.append(
-            StaticCameraSettings(id=camera_id, images=[image], intrinsics=intrinsics)
-        )
-    return cameras
+        return cameras
+    raise RuntimeError(
+        "No unambiguous static image/intrinsics pairs were discovered below "
+        f"{input_root}. Add matching media and CameraInfo files below data_local "
+        "and restart the wizard."
+    )
 
 
 def _relative_display(path: Path, repository_root: Path) -> str:
@@ -985,33 +1244,30 @@ def _show_input_inventory(
     else:
         console.print("No prepared real-vehicle dataset was detected.")
 
-    raw_table = Table(title="Local raw input folders (data_local)")
-    raw_table.add_column("#", justify="right")
+    raw_table = Table(title="Local raw input (data_local)")
     raw_table.add_column("Folder")
     raw_table.add_column("Videos", justify="right")
     raw_table.add_column("Images", justify="right")
     raw_table.add_column("Intrinsics", justify="right")
     raw_table.add_column("MCAP/DB3", justify="right")
-    for index, item in enumerate(raw_inputs, 1):
-        raw_table.add_row(
-            str(index),
-            _relative_display(item.path, repository_root),
-            str(item.videos),
-            str(item.images),
-            str(item.intrinsics),
-            str(item.recordings),
-        )
     if raw_inputs:
+        raw_table.add_row(
+            "data_local",
+            str(sum(item.videos for item in raw_inputs)),
+            str(sum(item.images for item in raw_inputs)),
+            str(sum(item.intrinsics for item in raw_inputs)),
+            str(sum(item.recordings for item in raw_inputs)),
+        )
         console.print(raw_table)
     else:
         console.print(
             Panel(
                 f"Put every file for one recording anywhere below:\n"
-                f"{repository_root / 'data_local' / '<dataset-id>'}\n\n"
+                f"{repository_root / 'data_local'}\n\n"
                 "Subfolders are optional. rigcal scans recursively for moving videos, "
                 "frame folders, static images, YAML/JSON intrinsics, checkerboard "
                 "videos, and .mcap/.db3 ROS recordings.",
-                title="No local real-data folders detected",
+                title="No local real-data input detected",
             )
         )
     console.print(
@@ -1061,25 +1317,23 @@ def _prepared_input(
     repository_root: Path,
     prepared: list[PreparedDatasetSummary],
 ) -> tuple[Path, list[StaticCameraSettings], MovingCameraSettings, str]:
-    if prepared:
-        selected = typer.prompt(
-            "Prepared dataset number (0 = back, -1 = another path)",
-            default=1,
-            type=int,
+    if not prepared:
+        raise RuntimeError(
+            "No prepared dataset was discovered. Place canonical inputs below "
+            "results/<category>/<rate-or-factor>/<experiment>/ or add raw "
+            "input below data_local/, then restart the wizard."
         )
-        if selected == 0:
-            raise WizardBack()
-        if selected < -1 or selected > len(prepared):
-            raise typer.BadParameter("Invalid prepared dataset number")
-        root = (
-            prepared[selected - 1].path
-            if selected > 0
-            else _prompt_path("Prepared dataset directory", Path.cwd(), directory=True)
-        )
-        selected_summary = prepared[selected - 1] if selected > 0 else None
-    else:
-        root = _prompt_path("Prepared dataset directory", Path.cwd(), directory=True)
-        selected_summary = None
+    selected = typer.prompt(
+        "Prepared dataset number (0 = back)",
+        default=1,
+        type=int,
+    )
+    if selected == 0:
+        raise WizardBack()
+    if selected < 1 or selected > len(prepared):
+        raise typer.BadParameter("Invalid prepared dataset number")
+    root = prepared[selected - 1].path
+    selected_summary = prepared[selected - 1]
     inspection = inspect_prepared_dataset(root)
     detected_ids = list(inspection["static_camera_ids"])
     intrinsic_ids = sorted(inspection["intrinsic_ids"])
@@ -1146,6 +1400,23 @@ def _prepared_input(
     cameras = [StaticCameraSettings(id=camera_id) for camera_id in camera_ids]
     suggested_id = selected_summary.id if selected_summary else safe_id(root.name)
     return root, cameras, MovingCameraSettings(id=moving_id), suggested_id
+
+
+def _stored_prepared_marker_settings(prepared_root: Path) -> MarkerSettings:
+    """Reuse the exact detector contract of a canonical prepared dataset."""
+
+    path = prepared_root / "observations" / "detection_config.json"
+    if not path.is_file():
+        return MarkerSettings()
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        markers = payload["markers"]
+        return MarkerSettings.model_validate(markers)
+    except (OSError, json.JSONDecodeError, KeyError, ValidationError) as exc:
+        raise RuntimeError(
+            "Prepared dataset has an invalid ArUco detection contract: "
+            f"{path}. Repair or regenerate its observations before reuse."
+        ) from exc
 
 
 def _prepared_moving_intrinsics(
@@ -1219,7 +1490,12 @@ def _prepared_moving_intrinsics(
                 "calculate a new profile from data_local checkerboard images/video",
             )
         )
-    options.append(("manual", None, "enter another intrinsic file path"))
+    if not options:
+        raise RuntimeError(
+            "No compatible moving-camera intrinsics were discovered for the "
+            "prepared frames. Add a managed profile or checkerboard input and "
+            "restart the wizard."
+        )
     typer.echo("\nMoving intrinsics for the selected prepared frames:")
     for index, (_, _, description) in enumerate(options, 1):
         typer.echo(f"  {index}. {description}")
@@ -1240,12 +1516,6 @@ def _prepared_moving_intrinsics(
             },
             deep=True,
         )
-    if mode == "manual":
-        path = _prompt_path(
-            "Moving-camera intrinsics JSON/YAML", directory=False
-        )
-        return moving.model_copy(update={"intrinsics": path}, deep=True)
-
     calibration_sources = [
         ("video", path, f"video: {path}") for path in checkerboard_videos
     ]
@@ -1263,6 +1533,12 @@ def _prepared_moving_intrinsics(
     )
     calibration_source = calibration_video or calibration_images
     assert calibration_source is not None
+    if calibration_video is not None:
+        _show_video_geometry(
+            console,
+            "Intrinsic video geometry",
+            calibration_video,
+        )
     profile_id = typer.prompt(
         "New intrinsics profile ID",
         default=safe_id(calibration_source.stem),
@@ -1275,6 +1551,7 @@ def _prepared_moving_intrinsics(
             0 if calibration_images is not None else 5
         ),
     }
+    updates["intrinsic_scan"] = _prompt_intrinsic_scan_settings()
     if typer.confirm(
         "Open advanced checkerboard calibration settings?", default=False
     ):
@@ -1299,20 +1576,11 @@ def _prepared_moving_intrinsics(
                 ),
             }
         )
-        scan_mode = _prompt_enum_choice(
-            "Checkerboard scan mode",
-            "balanced",
-            (
-                ("balanced", "fast adaptive scan with 4K refinement"),
-                (
-                    "exhaustive_compatibility",
-                    "legacy every-frame full-resolution scan",
-                ),
-            ),
-        )
+        scan = updates["intrinsic_scan"]
+        assert isinstance(scan, IntrinsicScanSettings)
         target_hz = 3.0
         preview_dimension = 1920
-        if scan_mode == "balanced":
+        if scan.mode == "balanced":
             target_hz = typer.prompt(
                 "Initial checkerboard scan rate [Hz]",
                 default=3.0,
@@ -1324,7 +1592,7 @@ def _prepared_moving_intrinsics(
                 type=int,
             )
         updates["intrinsic_scan"] = IntrinsicScanSettings(
-            mode=scan_mode,
+            mode=scan.mode,
             target_hz=target_hz,
             preview_max_dimension=preview_dimension,
         )
@@ -1367,29 +1635,14 @@ def _stored_prepared_sampling(root: Path) -> tuple[float | None, str]:
     return None, "unknown"
 
 
-def _choose_raw_input_root(
-    console: Console,
-    raw_inputs: list[RawInputSummary],
-    repository_root: Path,
-) -> Path:
-    if not raw_inputs:
-        landing = repository_root / "data_local"
-        landing.mkdir(parents=True, exist_ok=True)
-        return _prompt_path("Folder containing the real-data files", landing, directory=True)
-    selected = typer.prompt(
-        "Local input folder number (0 = back, -1 = another path)",
-        default=1,
-        type=int,
-    )
-    if selected == 0:
-        raise WizardBack()
-    if selected < -1 or selected > len(raw_inputs):
-        raise typer.BadParameter("Invalid local input folder number")
-    return (
-        raw_inputs[selected - 1].path
-        if selected > 0
-        else _prompt_path("Input directory", Path.cwd(), directory=True)
-    )
+def _data_local_input_root(repository_root: Path) -> Path:
+    landing = (repository_root / "data_local").resolve()
+    if not landing.is_dir():
+        raise RuntimeError(
+            f"No local acquisition was discovered below {landing}. Add the "
+            "recording, videos or frame folders there and restart the wizard."
+        )
+    return landing
 
 
 def _ros_image_stream_prefix(topic_name: str) -> str:
@@ -1489,16 +1742,16 @@ def _mcap_camera_sources(
         moving_info = related[0] if len(related) == 1 else typer.prompt(
             "Moving-camera CameraInfo topic", default=""
         ).strip()
-        moving_intrinsics = None
         if not moving_info:
-            moving_intrinsics = _prompt_path(
-                f"External intrinsics for {moving_id}", directory=False
+            raise RuntimeError(
+                f"No unambiguous CameraInfo topic was discovered for {moving_id}. "
+                "Add CameraInfo to the recording or prepare a canonical dataset "
+                "before starting the wizard."
             )
         moving = MovingCameraSettings(
             id=moving_id,
-            intrinsics=moving_intrinsics,
             image_topic=moving_topic.name,
-            camera_info_topic=moving_info or None,
+            camera_info_topic=moving_info,
         )
     static_indices = [
         index for index in range(len(image_topics)) if index != moving_index
@@ -1550,17 +1803,17 @@ def _mcap_camera_sources(
                 f"CameraInfo topic for {camera_id} (optional)", default=""
             ).strip()
         )
-        intrinsics = None
         if not info_topic:
-            intrinsics = _prompt_path(
-                f"Existing intrinsics for {camera_id}", directory=False
+            raise RuntimeError(
+                f"No unambiguous CameraInfo topic was discovered for {camera_id}. "
+                "Add CameraInfo to the recording or prepare a canonical dataset "
+                "before starting the wizard."
             )
         cameras.append(
             StaticCameraSettings(
                 id=camera_id,
-                intrinsics=intrinsics,
                 image_topic=topic.name,
-                camera_info_topic=info_topic or None,
+                camera_info_topic=info_topic,
             )
         )
     return cameras, moving
@@ -1569,7 +1822,6 @@ def _mcap_camera_sources(
 def _real_data_input(
     repository_root: Path,
     console: Console,
-    raw_inputs: list[RawInputSummary],
 ) -> tuple[
     Path,
     list[StaticCameraSettings],
@@ -1578,7 +1830,7 @@ def _real_data_input(
     McapSettings,
     str,
 ]:
-    input_root = _choose_raw_input_root(console, raw_inputs, repository_root)
+    input_root = _data_local_input_root(repository_root)
     discovered = discover_inputs(input_root, recursive=True)
     recordings = [item.path for item in discovered if item.kind == "mcap"]
     videos = [
@@ -1608,7 +1860,7 @@ def _real_data_input(
     elif recordings:
         proposal = "moving and static camera topics from the ROS recording"
     else:
-        proposal = "moving video/frames + manually confirmed static files"
+        proposal = "moving video/frames; no static camera pairs detected"
     console.print(
         Panel(
             f"Folder: {input_root}\n"
@@ -2000,16 +2252,7 @@ def _simulation_input(
     str,
     Path | None,
 ]:
-    registered_worlds = discover_world_manifests(repository_root)
-    bus_world = next(
-        (world for world in registered_worlds if world.id == "bus"),
-        None,
-    )
-    if bus_world is None:
-        raise RuntimeError(
-            "The built-in bus world manifest is missing: "
-            "config/simulation_worlds/bus.yaml"
-        )
+    bus_world = _bus_definition(repository_root)
     experiments = discover_simulation_experiments(repository_root)
     console.print(
         Panel(
@@ -2044,7 +2287,6 @@ def _simulation_input(
             "1": "use the Route-2 baseline (recommended; reuse existing capture)",
             "2": "reuse one existing simulation/ablation by its table number",
             "3": "create a new bus-simulation parameter combination from baseline",
-            "4": "import a new Gazebo world/rig (advanced: SDF, route and ROS topics)",
             "0": "back to input type",
         },
         "1",
@@ -2214,205 +2456,6 @@ def _simulation_input(
                 "Reuse its captured dataset instead of recording it again?", default=True
             ):
                 reused_dataset = match.dataset_root
-    else:
-        custom_worlds = [
-            item for item in registered_worlds if item.id != "bus"
-        ]
-        table = Table(title="Registered Gazebo worlds")
-        table.add_column("#", justify="right")
-        table.add_column("World")
-        table.add_column("Manifest", overflow="fold")
-        for index, item in enumerate(custom_worlds, 1):
-            table.add_row(
-                str(index),
-                f"{item.display_name} ({item.id})",
-                str(item.manifest_path),
-            )
-        register_number = len(custom_worlds) + 1
-        table.add_row(
-            str(register_number),
-            "register/import another world",
-            "manifest YAML or guided SDF/route setup",
-        )
-        console.print(table)
-        selected = _prompt_index(
-            "World number (0/b = back)",
-            default=1 if custom_worlds else register_number,
-            maximum=register_number,
-        )
-        if selected is None:
-            raise WizardBack()
-        if selected == register_number:
-            manifest_text = typer.prompt(
-                "Existing world-manifest YAML (Enter = guided SDF setup)",
-                default="",
-                show_default=False,
-            ).strip()
-            if manifest_text:
-                manifest = install_world_manifest(
-                    repository_root, Path(manifest_text).expanduser()
-                )
-            else:
-                console.print(
-                    Panel(
-                        "This writes a reusable manifest below "
-                        "config/simulation_worlds/. It is discovered on every "
-                        "future rigcal start; no Python changes are required.",
-                        title="Register a Gazebo world",
-                    )
-                )
-                world_path = _prompt_path("Gazebo SDF world", directory=False)
-                route_path = _prompt_path(
-                    "Moving-camera baseline route JSON", directory=False
-                )
-                world_id_input = safe_id(
-                    typer.prompt("World ID", default=world_path.stem).strip()
-                )
-                display_name = typer.prompt(
-                    "Display name", default=world_id_input
-                ).strip()
-                count = typer.prompt(
-                    "Number of static simulation cameras", type=int
-                )
-                if count < 1:
-                    raise typer.BadParameter(
-                        "At least one static camera is required"
-                    )
-                static_payload = []
-                for index in range(count):
-                    camera_id = typer.prompt(
-                        f"Static camera {index + 1} ID",
-                        default=f"camera_{index + 1}",
-                    ).strip()
-                    static_payload.append(
-                        {
-                            "id": camera_id,
-                            "model_name": typer.prompt(
-                                f"Gazebo model for {camera_id}",
-                                default=camera_id,
-                            ).strip(),
-                            "sensor_name": typer.prompt(
-                                f"Gazebo sensor for {camera_id} "
-                                "(blank = auto)",
-                                default="",
-                                show_default=False,
-                            ).strip()
-                            or None,
-                            "image_topic": typer.prompt(
-                                f"Image topic for {camera_id}",
-                                default=f"/{camera_id}/image",
-                            ).strip(),
-                            "camera_info_topic": typer.prompt(
-                                f"CameraInfo topic for {camera_id}",
-                                default=f"/{camera_id}/camera_info",
-                            ).strip(),
-                        }
-                    )
-                moving_id = typer.prompt(
-                    "Moving camera ID", default="calibration_camera"
-                ).strip()
-                manifest_path = (
-                    repository_root
-                    / "config"
-                    / "simulation_worlds"
-                    / f"{world_id_input}.yaml"
-                )
-                payload = {
-                    "schema_version": 1,
-                    "id": world_id_input,
-                    "display_name": display_name,
-                    "sdf": str(world_path),
-                    "resource_paths": [str(world_path.parent)],
-                    "static_cameras": static_payload,
-                    "moving_camera": {
-                        "id": moving_id,
-                        "model_name": typer.prompt(
-                            "Gazebo moving-camera model name",
-                            default=moving_id,
-                        ).strip(),
-                        "sensor_name": typer.prompt(
-                            "Gazebo moving-camera sensor name "
-                            "(blank = auto)",
-                            default="",
-                            show_default=False,
-                        ).strip()
-                        or None,
-                        "image_topic": typer.prompt(
-                            "Moving-camera image topic",
-                            default=f"/{moving_id}/image",
-                        ).strip(),
-                        "camera_info_topic": typer.prompt(
-                            "Moving-camera CameraInfo topic",
-                            default=f"/{moving_id}/camera_info",
-                        ).strip(),
-                    },
-                    "routes": [
-                        {
-                            "id": safe_id(route_path.stem),
-                            "path": str(route_path),
-                            "baseline": True,
-                        }
-                    ],
-                }
-                manifest_path.parent.mkdir(parents=True, exist_ok=True)
-                temporary = manifest_path.with_suffix(".yaml.tmp")
-                temporary.write_text(
-                    yaml.safe_dump(
-                        payload, sort_keys=False, allow_unicode=True
-                    ),
-                    encoding="utf-8",
-                )
-                temporary.replace(manifest_path)
-                manifest = load_world_manifest(manifest_path)
-        else:
-            manifest = custom_worlds[selected - 1]
-        world = manifest.sdf
-        route = manifest.baseline_route.path
-        cameras = [
-            StaticCameraSettings(
-                id=camera.id,
-                image_topic=camera.image_topic,
-                camera_info_topic=camera.camera_info_topic,
-            )
-            for camera in manifest.static_cameras
-        ]
-        moving = MovingCameraSettings(
-            id=manifest.moving_camera.id,
-            image_topic=manifest.moving_camera.image_topic,
-            camera_info_topic=manifest.moving_camera.camera_info_topic,
-        )
-        model_name = manifest.moving_camera.model_name
-        moving_sensor_name = manifest.moving_camera.sensor_name
-        resource_paths = manifest.resource_paths
-        world_id = manifest.id
-        world_baseline = manifest.baseline
-        preset_id = f"world_{manifest.id}"
-        parameters = {
-            "route": manifest.baseline["route_name"],
-            **{
-                key: value
-                for key, value in manifest.baseline.items()
-                if key != "route_name"
-            },
-        }
-        parameters, route, capture_overrides = _edit_simulation_parameters(
-            repository_root,
-            console,
-            parameters,
-            route,
-            world_name=manifest.display_name,
-            capabilities=manifest.capabilities,
-            available_routes={
-                item.id: item.path for item in manifest.routes
-            },
-            lighting_profiles=manifest.lighting_profiles,
-        )
-        selected_lighting_world = manifest.lighting_profiles.get(
-            str(parameters["lighting"])
-        )
-        if selected_lighting_world is not None:
-            world = selected_lighting_world
-
     capture_overrides = locals().get(
         "capture_overrides",
         {
@@ -2503,10 +2546,361 @@ def _simulation_input(
     return cameras, moving, simulation, suggested_id, reused_dataset
 
 
+def _simulation_job_from_parameters(
+    repository_root: Path,
+    parameters: dict[str, object],
+    *,
+    experiment_id: str,
+    prepared_root: Path | None,
+    source: str,
+) -> SimulationQueueJob:
+    bus = _bus_definition(repository_root)
+    normalized: dict[str, object] = {
+        **BASELINE_SIMULATION_PARAMETERS,
+        **parameters,
+    }
+    route_name = str(normalized["route"])
+    route = next(
+        (candidate.path for candidate in bus.routes if candidate.id == route_name),
+        None,
+    )
+    if route is None:
+        raise ValueError(
+            f"Unsupported bus route '{route_name}'; choose route1 or route2"
+        )
+    world = bus.lighting_profiles.get(str(normalized["lighting"]))
+    if world is None:
+        world = bus.sdf
+    cameras = tuple(
+        StaticCameraSettings(
+            id=camera.id,
+            image_topic=camera.image_topic,
+            camera_info_topic=camera.camera_info_topic,
+        )
+        for camera in bus.static_cameras
+    )
+    moving = MovingCameraSettings(
+        id=bus.moving_camera.id,
+        image_topic=bus.moving_camera.image_topic,
+        camera_info_topic=bus.moving_camera.camera_info_topic,
+    )
+    capture_id = (
+        None
+        if prepared_root is not None
+        else datetime.now().strftime("capture_%Y%m%d_%H%M%S_%f")
+    )
+    simulation = SimulationSettings(
+        enabled=prepared_root is None,
+        preset=(
+            f"existing_{safe_id(experiment_id)}"
+            if prepared_root is not None
+            else "bus_batch_capture"
+        ),
+        world_id="bus",
+        world_baseline=dict(BASELINE_SIMULATION_PARAMETERS),
+        capture_id=capture_id,
+        world=world,
+        route=route,
+        resource_paths=list(bus.resource_paths),
+        moving_model_name=bus.moving_camera.model_name,
+        moving_sensor_name=bus.moving_camera.sensor_name,
+        settle_seconds=float(normalized["settle_seconds"]),
+        post_pose_skip=int(normalized["post_pose_skip"]),
+        frame_timeout_seconds=float(normalized["frame_timeout_seconds"]),
+        startup_timeout_seconds=float(
+            normalized["startup_timeout_seconds"]
+        ),
+        route_name=route_name,
+        moving_width=int(normalized["moving_width"]),
+        moving_height=int(normalized["moving_height"]),
+        moving_hfov_deg=float(normalized["moving_hfov_deg"]),
+        lighting=str(normalized["lighting"]),
+        lighting_scale=float(normalized["lighting_scale"]),
+        motion_blur_kernel=int(normalized["motion_blur_kernel"]),
+        motion_blur_angle_deg=float(
+            normalized["motion_blur_angle_deg"]
+        ),
+        target_route_frames=int(normalized["target_route_frames"]),
+        route_sampling_strategy=str(
+            normalized["route_sampling_strategy"]
+        ),
+    )
+    return SimulationQueueJob(
+        experiment_id=safe_id(experiment_id),
+        parameters=normalized,
+        cameras=cameras,
+        moving_camera=moving,
+        simulation=simulation,
+        prepared_root=(
+            prepared_root.resolve() if prepared_root is not None else None
+        ),
+        source=source,
+    )
+
+
+def _simulation_signature(parameters: dict[str, object]) -> str:
+    return hashlib.sha256(
+        json.dumps(parameters, sort_keys=True, default=str).encode("utf-8")
+    ).hexdigest()
+
+
+def _show_simulation_input_queue(
+    console: Console, jobs: list[SimulationQueueJob]
+) -> None:
+    if not jobs:
+        console.print("[dim]Simulation experiment queue is empty.[/dim]")
+        return
+    table = Table(title="Simulation experiment queue")
+    table.add_column("#", justify="right")
+    table.add_column("Experiment")
+    table.add_column("Input")
+    table.add_column("Source")
+    table.add_column("Complete parameters", overflow="fold")
+    for index, job in enumerate(jobs, 1):
+        table.add_row(
+            str(index),
+            job.experiment_id,
+            job.input_mode,
+            job.source,
+            format_simulation_parameters(job.parameters),
+        )
+    console.print(table)
+
+
+def _parse_experiment_numbers(
+    raw: str, maximum: int
+) -> list[int]:
+    normalized = raw.strip().lower()
+    if normalized == "all":
+        return list(range(1, maximum + 1))
+    numbers = list(
+        dict.fromkeys(
+            int(value.strip())
+            for value in normalized.split(",")
+            if value.strip()
+        )
+    )
+    if not numbers or min(numbers) < 1 or max(numbers) > maximum:
+        raise ValueError(f"choose numbers between 1 and {maximum}, or all")
+    return numbers
+
+
+def _simulation_input_queue(
+    repository_root: Path, console: Console
+) -> list[SimulationQueueJob]:
+    experiments = discover_simulation_experiments(repository_root)
+    planned: list[SimulationQueueJob] = []
+    if experiments:
+        table = Table(title="Existing bus simulation experiments")
+        table.add_column("#", justify="right")
+        table.add_column("Experiment")
+        table.add_column("Input")
+        table.add_column("Result")
+        table.add_column("Complete parameters", overflow="fold")
+        for index, experiment in enumerate(experiments, 1):
+            table.add_row(
+                str(index),
+                experiment.variant,
+                (
+                    "reuse local"
+                    if experiment.dataset_root is not None
+                    else "new capture required"
+                ),
+                "available" if experiment.has_results else "input only",
+                format_simulation_parameters(experiment.parameters),
+            )
+        console.print(table)
+
+    def append(job: SimulationQueueJob) -> None:
+        signature = _simulation_signature(job.parameters)
+        if any(
+            _simulation_signature(candidate.parameters) == signature
+            for candidate in planned
+        ):
+            console.print(
+                f"[yellow]{job.experiment_id} has the same complete parameter "
+                "vector as an experiment already in the queue; it was not "
+                "added twice.[/yellow]"
+            )
+            return
+        used_ids = {candidate.experiment_id for candidate in planned}
+        candidate_id = job.experiment_id
+        suffix = 2
+        while candidate_id in used_ids:
+            candidate_id = safe_id(f"{job.experiment_id}_{suffix}")
+            suffix += 1
+        if candidate_id != job.experiment_id:
+            job = SimulationQueueJob(
+                experiment_id=candidate_id,
+                parameters=job.parameters,
+                cameras=job.cameras,
+                moving_camera=job.moving_camera,
+                simulation=job.simulation,
+                prepared_root=job.prepared_root,
+                source=job.source,
+            )
+        planned.append(job)
+
+    while True:
+        _show_simulation_input_queue(console, planned)
+        action = _choice(
+            "Bus simulation experiment queue",
+            {
+                "1": "add the Route-2 baseline",
+                "2": "add existing experiments (comma-separated or all)",
+                "3": "add a new mixed parameter combination",
+                "4": "remove queued experiments",
+                "5": "accept this experiment queue",
+                "0": "back to input type",
+            },
+            "5" if planned else "1",
+        )
+        if action == "0":
+            raise WizardBack()
+        if action == "1":
+            parameters = dict(BASELINE_SIMULATION_PARAMETERS)
+            match = find_matching_simulation(experiments, parameters)
+            append(
+                _simulation_job_from_parameters(
+                    repository_root,
+                    parameters,
+                    experiment_id="route2",
+                    prepared_root=(
+                        match.dataset_root if match is not None else None
+                    ),
+                    source=(
+                        f"existing {match.variant}"
+                        if match is not None
+                        else "Route-2 baseline"
+                    ),
+                )
+            )
+        elif action == "2":
+            if not experiments:
+                _show_input_error(
+                    "No historical bus simulation experiment is discoverable."
+                )
+                continue
+            raw = typer.prompt(
+                "Existing experiment number(s), comma-separated, all, or 0/b = back"
+            ).strip()
+            if raw.lower() in {"0", "b", "back"}:
+                continue
+            try:
+                numbers = _parse_experiment_numbers(raw, len(experiments))
+            except (TypeError, ValueError) as exc:
+                _show_input_error(str(exc))
+                continue
+            for number in numbers:
+                experiment = experiments[number - 1]
+                append(
+                    _simulation_job_from_parameters(
+                        repository_root,
+                        experiment.parameters,
+                        experiment_id=experiment.variant,
+                        prepared_root=experiment.dataset_root,
+                        source=f"existing {experiment.variant}",
+                    )
+                )
+        elif action == "3":
+            bases: list[
+                tuple[str, dict[str, object], Path | None]
+            ] = [
+                (
+                    "Route-2 baseline",
+                    dict(BASELINE_SIMULATION_PARAMETERS),
+                    None,
+                ),
+                *[
+                    (
+                        f"existing {experiment.variant}",
+                        dict(experiment.parameters),
+                        experiment.dataset_root,
+                    )
+                    for experiment in experiments
+                ],
+                *[
+                    (
+                        f"queued {job.experiment_id}",
+                        dict(job.parameters),
+                        job.prepared_root,
+                    )
+                    for job in planned
+                ],
+            ]
+            base_table = Table(title="Base for the new combination")
+            base_table.add_column("#", justify="right")
+            base_table.add_column("Base")
+            base_table.add_column("Parameters", overflow="fold")
+            for index, (label, parameters, _) in enumerate(bases, 1):
+                base_table.add_row(
+                    str(index),
+                    label,
+                    format_simulation_parameters(parameters),
+                )
+            console.print(base_table)
+            selected = _prompt_index(
+                "Base number (0/b = back)",
+                default=1,
+                maximum=len(bases),
+            )
+            if selected is None:
+                continue
+            label, parameters, _ = bases[selected - 1]
+            route_name = str(parameters.get("route", "route2"))
+            route = next(
+                item.path
+                for item in _bus_definition(repository_root).routes
+                if item.id == route_name
+            )
+            edited, _, capture = _edit_simulation_parameters(
+                repository_root,
+                console,
+                dict(parameters),
+                route,
+            )
+            edited.update(capture)
+            experiment_id = _simulation_experiment_id(edited)
+            append(
+                _simulation_job_from_parameters(
+                    repository_root,
+                    edited,
+                    experiment_id=experiment_id,
+                    prepared_root=None,
+                    source=f"new combination from {label}",
+                )
+            )
+        elif action == "4":
+            if not planned:
+                _show_input_error("The experiment queue is already empty.")
+                continue
+            raw = typer.prompt(
+                "Queue row number(s), comma-separated, all, or 0/b = back"
+            ).strip()
+            if raw.lower() in {"0", "b", "back"}:
+                continue
+            try:
+                numbers = _parse_experiment_numbers(raw, len(planned))
+            except (TypeError, ValueError) as exc:
+                _show_input_error(str(exc))
+                continue
+            removed = set(numbers)
+            planned = [
+                job
+                for index, job in enumerate(planned, 1)
+                if index not in removed
+            ]
+        elif planned:
+            return planned
+        else:
+            _show_input_error("Add at least one simulation experiment.")
+
+
 def _new_method_job(
     method_id: str,
     *,
     prompt_for_single_marker: bool,
+    markers: MarkerSettings | None = None,
 ) -> MethodQueueJob:
     method = calibration_methods.get(method_id)
     methods = MethodSettings(enabled=[method_id])
@@ -2521,9 +2915,9 @@ def _new_method_job(
         methods = methods.model_copy(update={"extensions": extensions}, deep=True)
     return MethodQueueJob(
         method_id=method_id,
-        label=safe_id(f"{method_id}_baseline"),
+        label="baseline",
         methods=methods,
-        markers=MarkerSettings(),
+        markers=(markers or MarkerSettings()).model_copy(deep=True),
         observation_quality=ObservationQualitySettings(),
         colmap=ColmapSettings(),
         evaluation=EvaluationSettings(),
@@ -2531,47 +2925,89 @@ def _new_method_job(
 
 
 def _method_job_summary(job: MethodQueueJob) -> str:
+    pending = _pending_selection_keys(job)
+
+    def selection_text(key: str, value: object) -> str:
+        if key in pending:
+            return "manual after preflight"
+        contextual = [
+            _selection_value(methods, key)
+            for methods in job.context_methods.values()
+        ]
+        serialized = {
+            json.dumps(item, sort_keys=True)
+            for item in contextual
+        }
+        if len(serialized) > 1:
+            return "per experiment"
+        if contextual:
+            value = contextual[0]
+        if isinstance(value, list):
+            return ",".join(map(str, value))
+        return str(value)
+
     if job.method_id == "ap01":
         return (
             f"matcher={job.colmap.matcher}, GPU={job.colmap.gpu_mode}, "
-            f"root={job.methods.ap01.root_camera}, observations=all passing quality"
+            f"root={selection_text('root_camera', job.methods.ap01.root_camera)}, "
+            f"ArUco={job.markers.detection_mode}, "
+            "observations=all passing quality"
         )
     if job.method_id == "ap02":
         value = job.methods.ap02
         return (
             f"nfev={value.max_nfev_static}/{value.max_nfev_moving}, "
             f"loss={value.ba_robust_loss}@{value.ba_robust_loss_scale_px:g}px, "
-            f"ref={value.reference_marker_id}, observations=all passing quality"
+            f"ref={selection_text('ap02_reference', value.reference_marker_id)}, "
+            f"ArUco={job.markers.detection_mode}, "
+            "observations=all passing quality"
         )
     if job.method_id == "ap03":
         single = job.methods.ap03.single
         multi = job.methods.ap03.multi
-        ids = multi.marker_ids
-        ids_text = ids if ids == "auto" else ",".join(map(str, ids))
         return (
-            f"single={single.scale_marker_id}, multi={ids_text}, "
-            f"matcher={job.colmap.matcher}; one COLMAP, multi primary"
+            f"single={selection_text('single_marker', single.scale_marker_id)}, "
+            f"multi={selection_text('multi_markers', multi.marker_ids)}, "
+            f"matcher={job.colmap.matcher}, ArUco={job.markers.detection_mode}; "
+            "one COLMAP, multi primary"
         )
-    return "registered extension defaults"
+    payload = job.methods.extensions.get(job.method_id, {})
+    return (
+        "options="
+        + yaml.safe_dump(payload, default_flow_style=True).strip()
+    )
 
 
 def _show_method_queue(console: Console, jobs: list[MethodQueueJob]) -> None:
+    for job in jobs:
+        _refresh_method_job_label(job)
     table = Table(title="Calibration queue — one reproducible result run per row")
     table.add_column("#", justify="right")
     table.add_column("Run label")
     table.add_column("Method")
     table.add_column("Resolved baseline/config summary", overflow="fold")
+    table.add_column("Execution")
+    first_identical_row: dict[str, int] = {}
     for index, job in enumerate(jobs, 1):
+        identity = _method_job_identity(job)
+        duplicate_of = first_identical_row.get(identity)
+        if duplicate_of is None:
+            first_identical_row[identity] = index
         table.add_row(
             str(index),
             job.label,
             calibration_methods.get(job.method_id).display_name,
             _method_job_summary(job),
+            (
+                f"exact duplicate of row {duplicate_of}; skipped after first"
+                if duplicate_of is not None
+                else "independent"
+            ),
         )
     console.print(table)
     console.print(
-        "[dim]Each row is independent: duplicate a row to compare another marker, "
-        "matcher or parameter set without overwriting the baseline.[/dim]"
+        "[dim]Names are generated from deviations to baseline. Exact duplicate "
+        "configurations do not recompute or overwrite an existing result.[/dim]"
     )
 
 
@@ -2587,6 +3023,504 @@ def _parse_ids(value: str) -> str | list[int]:
     if not result:
         raise ValueError("enter 'auto' or at least one marker ID")
     return result
+
+
+GUIDED_SELECTION_KEYS = frozenset(
+    {"root_camera", "ap02_reference", "single_marker", "multi_markers"}
+)
+
+
+def _methods_with_automatic_selections(methods: MethodSettings) -> MethodSettings:
+    ap03 = methods.ap03.model_copy(
+        update={
+            "single": methods.ap03.single.model_copy(
+                update={"scale_marker_id": "auto"}
+            ),
+            "multi": methods.ap03.multi.model_copy(
+                update={"marker_ids": "auto"}
+            ),
+        },
+        deep=True,
+    )
+    return methods.model_copy(
+        update={
+            "ap01": methods.ap01.model_copy(
+                update={"root_camera": "auto"}
+            ),
+            "ap02": methods.ap02.model_copy(
+                update={"reference_marker_id": "auto"}
+            ),
+            "ap03": ap03,
+        },
+        deep=True,
+    )
+
+
+def _selection_value(methods: MethodSettings, key: str) -> object:
+    if key == "root_camera":
+        return methods.ap01.root_camera
+    if key == "ap02_reference":
+        return methods.ap02.reference_marker_id
+    if key == "single_marker":
+        return methods.ap03.single.scale_marker_id
+    if key == "multi_markers":
+        return methods.ap03.multi.marker_ids
+    raise KeyError(key)
+
+
+def _methods_with_selection(
+    methods: MethodSettings, key: str, value: object
+) -> MethodSettings:
+    if key == "root_camera":
+        return methods.model_copy(
+            update={
+                "ap01": methods.ap01.model_copy(
+                    update={"root_camera": str(value)}
+                )
+            },
+            deep=True,
+        )
+    if key == "ap02_reference":
+        return methods.model_copy(
+            update={
+                "ap02": methods.ap02.model_copy(
+                    update={"reference_marker_id": value}
+                )
+            },
+            deep=True,
+        )
+    if key == "single_marker":
+        ap03 = methods.ap03.model_copy(
+            update={
+                "single": methods.ap03.single.model_copy(
+                    update={"scale_marker_id": value}
+                )
+            },
+            deep=True,
+        )
+        return methods.model_copy(update={"ap03": ap03}, deep=True)
+    if key == "multi_markers":
+        ap03 = methods.ap03.model_copy(
+            update={
+                "multi": methods.ap03.multi.model_copy(
+                    update={"marker_ids": value}
+                )
+            },
+            deep=True,
+        )
+        return methods.model_copy(update={"ap03": ap03}, deep=True)
+    raise KeyError(key)
+
+
+def _selection_mode_for_methods(
+    method_id: str, methods: MethodSettings
+) -> SelectionSettings:
+    explicit = (
+        method_id == "ap01"
+        and methods.ap01.root_camera != "auto"
+        or method_id == "ap02"
+        and methods.ap02.reference_marker_id != "auto"
+        or method_id == "ap03"
+        and methods.ap03.single.scale_marker_id != "auto"
+        and methods.ap03.multi.marker_ids != "auto"
+    )
+    return SelectionSettings(mode="explicit" if explicit else "auto")
+
+
+def _job_methods(
+    job: MethodQueueJob, context_key: str | None = None
+) -> MethodSettings:
+    if context_key is not None and context_key in job.context_methods:
+        return job.context_methods[context_key]
+    return job.methods
+
+
+def _job_selection(
+    job: MethodQueueJob, context_key: str | None = None
+) -> SelectionSettings:
+    if context_key is not None and context_key in job.context_selections:
+        return job.context_selections[context_key]
+    return job.selection
+
+
+def _refresh_job_selection_mode(
+    job: MethodQueueJob, context_key: str | None = None
+) -> None:
+    if context_key is None:
+        pending = job.deferred_selection_keys
+        methods = job.methods
+        job.selection = (
+            SelectionSettings(mode="review_once")
+            if pending
+            else _selection_mode_for_methods(job.method_id, methods)
+        )
+        return
+    pending = job.context_deferred_selection_keys.get(context_key, set())
+    methods = _job_methods(job, context_key)
+    job.context_selections[context_key] = (
+        SelectionSettings(mode="review_once")
+        if pending
+        else _selection_mode_for_methods(job.method_id, methods)
+    )
+
+
+def _sync_context_methods(job: MethodQueueJob) -> None:
+    """Apply common method edits without losing per-dataset selections."""
+
+    for context_key, contextual in tuple(job.context_methods.items()):
+        merged = job.methods.model_copy(deep=True)
+        for key in GUIDED_SELECTION_KEYS:
+            merged = _methods_with_selection(
+                merged, key, _selection_value(contextual, key)
+            )
+        job.context_methods[context_key] = MethodSettings.model_validate(
+            merged.model_dump(mode="python")
+        )
+        _refresh_job_selection_mode(job, context_key)
+
+
+def _preview_prepared_selections(
+    job: MethodQueueJob,
+    context: SelectionDatasetContext,
+    *,
+    automatic: bool = True,
+) -> ResolvedSelections | None:
+    observations_csv = context.observations_csv
+    if observations_csv is None:
+        return None
+    configured_methods = _job_methods(job, context.key)
+    methods = (
+        _methods_with_automatic_selections(configured_methods)
+        if automatic
+        else configured_methods
+    )
+    config = RigConfig(
+        dataset=DatasetSettings(
+            id=safe_id(context.key),
+            category=DatasetCategory.REAL_VEHICLE,
+            source_kind=InputSourceKind.PREPARED,
+            prepared_root=context.dataset_root,
+            input_root=context.dataset_root,
+        ),
+        static_cameras=list(context.static_cameras),
+        methods=methods,
+        markers=job.markers,
+        observation_quality=job.observation_quality,
+        evaluation=job.evaluation,
+        selection=(
+            SelectionSettings(mode="auto")
+            if automatic
+            else _job_selection(job, context.key)
+        ),
+    )
+    with tempfile.TemporaryDirectory(prefix="rigcal_selection_preview_") as temp:
+        filtered = filter_observations(
+            observations_csv,
+            Path(temp),
+            job_id=f"preview_{safe_id(context.key)}_{job.method_id}",
+            marker_settings=job.markers,
+            quality=job.observation_quality,
+        )
+        if filtered.accepted_count == 0:
+            raise ValueError(
+                f"{context.display_name}: no observation survives the "
+                "current ArUco and quality filters"
+            )
+        return resolve_selections(
+            config, filtered.filtered_observations_root
+        )
+
+
+def _validate_prepared_job_selections(
+    jobs: list[MethodQueueJob],
+    contexts: tuple[SelectionDatasetContext, ...],
+) -> None:
+    for job in jobs:
+        for context in contexts:
+            if context.observations_csv is None:
+                continue
+            methods = _job_methods(job, context.key)
+            configured = (
+                methods.ap01.root_camera != "auto"
+                if job.method_id == "ap01"
+                else methods.ap02.reference_marker_id != "auto"
+                if job.method_id == "ap02"
+                else (
+                    methods.ap03.single.scale_marker_id != "auto"
+                    or methods.ap03.multi.marker_ids != "auto"
+                )
+                if job.method_id == "ap03"
+                else False
+            )
+            if not configured:
+                continue
+            try:
+                resolved = _preview_prepared_selections(
+                    job, context, automatic=False
+                )
+            except (RuntimeError, ValueError) as exc:
+                raise ValueError(
+                    f"{context.display_name}/{job.label}: the selected "
+                    f"root/marker is no longer compatible after the current "
+                    f"filters: {exc}"
+                ) from exc
+            if resolved is None:
+                raise ValueError(
+                    f"{context.display_name}/{job.label}: no observation "
+                    "survives the current filters"
+                )
+
+
+def _selection_candidates(
+    resolved: ResolvedSelections, key: str
+) -> list[dict[str, object]]:
+    if key == "root_camera":
+        return list(
+            resolved.payload["ap01_root_camera"]["candidates"]
+        )
+    if key == "ap02_reference":
+        return list(
+            resolved.payload["ap02_reference_marker"]["candidates"]
+        )
+    return list(
+        resolved.payload["ap03_single_scale_marker"]["candidates"]
+    )
+
+
+def _candidate_compatible(item: dict[str, object], key: str) -> bool:
+    if key == "root_camera":
+        return bool(item.get("compatible", True))
+    if key == "ap02_reference":
+        return bool(item.get("compatible", False))
+    return bool(item.get("ap03_compatible", False))
+
+
+def _show_guided_candidates(
+    console: Console,
+    *,
+    context: SelectionDatasetContext,
+    resolved: ResolvedSelections,
+    key: str,
+) -> list[dict[str, object]]:
+    candidates = _selection_candidates(resolved, key)
+    table = Table(
+        title=f"{context.display_name} — compatible selection candidates"
+    )
+    table.add_column("#", justify="right")
+    table.add_column("Camera" if key == "root_camera" else "Marker")
+    table.add_column("Coverage")
+    table.add_column("Moving")
+    table.add_column("Accepted")
+    table.add_column("Median PnP RMSE")
+    table.add_column("Status")
+    for index, item in enumerate(candidates, 1):
+        if key == "root_camera":
+            coverage = (
+                f"{len(item.get('reachable_cameras', []))}/"
+                f"{len(context.static_cameras)}"
+            )
+            moving = str(len(item.get("moving_bridges", [])))
+            accepted = str(item.get("observations", 0))
+        else:
+            coverage = (
+                f"{item.get('combined_graph_reachable_static_count', 0)}/"
+                f"{len(context.static_cameras)}"
+            )
+            moving = str(item.get("moving_frames", 0))
+            accepted = str(item.get("accepted_observations", 0))
+        rmse = item.get("median_pnp_reprojection_rmse_px")
+        status = (
+            "recommended"
+            if item.get("recommended")
+            else "compatible"
+            if _candidate_compatible(item, key)
+            else "not compatible"
+        )
+        table.add_row(
+            str(index),
+            str(item["id"]),
+            coverage,
+            moving,
+            accepted,
+            f"{float(rmse):.2f} px" if rmse is not None else "unknown",
+            status,
+        )
+    console.print(table)
+    return candidates
+
+
+def _prompt_guided_candidate(
+    candidates: list[dict[str, object]],
+    key: str,
+) -> object:
+    compatible = {
+        index: item
+        for index, item in enumerate(candidates, 1)
+        if _candidate_compatible(item, key)
+    }
+    if not compatible:
+        raise ValueError("No compatible selection candidate is available")
+    if key == "multi_markers":
+        default = ",".join(map(str, compatible))
+        while True:
+            raw = typer.prompt(
+                "Compatible table numbers, comma-separated, or all "
+                "(b = back)",
+                default=default,
+            ).strip().lower()
+            if raw in {"b", "back"}:
+                raise WizardBack()
+            if raw == "all":
+                return [int(item["id"]) for item in compatible.values()]
+            try:
+                numbers = list(
+                    dict.fromkeys(
+                        int(value.strip())
+                        for value in raw.split(",")
+                        if value.strip()
+                    )
+                )
+            except ValueError:
+                numbers = []
+            if numbers and all(number in compatible for number in numbers):
+                return [
+                    int(compatible[number]["id"]) for number in numbers
+                ]
+            _show_input_error(
+                "Choose compatible table numbers or enter 'all'."
+            )
+    recommended = next(
+        (
+            index
+            for index, item in compatible.items()
+            if item.get("recommended")
+        ),
+        next(iter(compatible)),
+    )
+    while True:
+        selected = _prompt_index(
+            "Compatible table number (0/b = back)",
+            default=recommended,
+            maximum=len(candidates),
+        )
+        if selected is None:
+            raise WizardBack()
+        if selected in compatible:
+            return compatible[selected]["id"]
+        _show_input_error(
+            "That row is not compatible with this method configuration."
+        )
+
+
+def _configure_guided_selection(
+    console: Console,
+    job: MethodQueueJob,
+    *,
+    key: str,
+    label: str,
+    contexts: tuple[SelectionDatasetContext, ...],
+) -> None:
+    configured_values = [
+        _selection_value(job.methods, key),
+        *(
+            _selection_value(methods, key)
+            for methods in job.context_methods.values()
+        ),
+    ]
+    current_mode = (
+        "manual"
+        if (
+            job.selection.mode == "review_once"
+            or any(
+                selection.mode == "review_once"
+                for selection in job.context_selections.values()
+            )
+            or any(
+                value != "auto"
+                for value in configured_values
+            )
+        )
+        else "auto"
+    )
+    mode = _prompt_enum_choice(
+        label,
+        current_mode,
+        (
+            (
+                "auto",
+                "use the deterministic recommendation and continue without a pause",
+            ),
+            (
+                "manual",
+                "choose from compatible candidates now or after preflight",
+            ),
+        ),
+    )
+    if mode == "auto":
+        job.methods = _methods_with_selection(job.methods, key, "auto")
+        job.deferred_selection_keys.discard(key)
+        _refresh_job_selection_mode(job)
+        for context in contexts:
+            methods = _methods_with_selection(
+                _job_methods(job, context.key), key, "auto"
+            )
+            job.context_methods[context.key] = methods
+            job.context_deferred_selection_keys.setdefault(
+                context.key, set()
+            ).discard(key)
+            _refresh_job_selection_mode(job, context.key)
+        return
+
+    if not contexts:
+        job.methods = _methods_with_selection(job.methods, key, "auto")
+        job.deferred_selection_keys.add(key)
+        _refresh_job_selection_mode(job)
+        typer.echo(
+            "Manual selection scheduled after ArUco detection and the "
+            "job-specific observation-quality preflight."
+        )
+        return
+
+    immediate_values: list[object] = []
+    for context in contexts:
+        resolved = _preview_prepared_selections(job, context)
+        if resolved is None:
+            methods = _methods_with_selection(
+                _job_methods(job, context.key), key, "auto"
+            )
+            job.context_methods[context.key] = methods
+            job.context_deferred_selection_keys.setdefault(
+                context.key, set()
+            ).add(key)
+            _refresh_job_selection_mode(job, context.key)
+            typer.echo(
+                f"{context.display_name}: complete observations are unavailable; "
+                "manual selection will occur after preflight."
+            )
+            continue
+        candidates = _show_guided_candidates(
+            console,
+            context=context,
+            resolved=resolved,
+            key=key,
+        )
+        chosen = _prompt_guided_candidate(candidates, key)
+        immediate_values.append(chosen)
+        methods = _methods_with_selection(
+            _job_methods(job, context.key), key, chosen
+        )
+        job.context_methods[context.key] = methods
+        job.context_deferred_selection_keys.setdefault(
+            context.key, set()
+        ).discard(key)
+        _refresh_job_selection_mode(job, context.key)
+
+    if len(contexts) == 1 and immediate_values:
+        job.methods = _methods_with_selection(
+            job.methods, key, immediate_values[0]
+        )
+        job.deferred_selection_keys.discard(key)
+        _refresh_job_selection_mode(job)
 
 
 METHOD_JOB_GROUPS = frozenset(
@@ -2609,29 +3543,53 @@ def _setting_rows(
         else ",".join(map(str, job.markers.accepted_ids))
     )
     rows: list[tuple[str, str, str, object, object, str]] = [
-        ("label", "RUN IDENTITY", "Run label", job.label, defaults.label, "Names this independent result snapshot."),
         ("evaluation_anchor", "COMMON EVALUATION", "Evaluation anchor", job.evaluation.anchor_marker_id, defaults.evaluation.anchor_marker_id, "auto_common selects one marker shared by every compared method after estimation."),
         ("evaluation_reprojection", "COMMON EVALUATION", "Evaluation reprojection threshold [px]", job.evaluation.reprojection_threshold_px, defaults.evaluation.reprojection_threshold_px, "Smaller requires tighter common post-hoc triangulation support."),
         ("evaluation_inliers", "COMMON EVALUATION", "Evaluation minimum inliers", job.evaluation.minimum_inliers, defaults.evaluation.minimum_inliers, "Higher requires more common-support observations."),
         ("evaluation_ransac", "COMMON EVALUATION", "Evaluation RANSAC iterations", job.evaluation.ransac_iterations, defaults.evaluation.ransac_iterations, "Higher tests more hypotheses and increases evaluation runtime."),
         ("evaluation_angle", "COMMON EVALUATION", "Minimum triangulation angle [deg]", job.evaluation.minimum_triangulation_angle_deg, defaults.evaluation.minimum_triangulation_angle_deg, "Larger rejects weak-baseline triangulation geometry."),
         ("evaluation_max_observations", "COMMON EVALUATION", "Maximum moving observations per marker", job.evaluation.maximum_moving_observations_per_marker, defaults.evaluation.maximum_moving_observations_per_marker, "Caps deterministic evaluation work per marker."),
-        ("accepted_ids", "ARUCO INPUT", "Accepted marker IDs", accepted, "all detected IDs", "Use all detections or a comma-separated ID list."),
-        ("dictionary", "ARUCO INPUT", "ArUco dictionary", job.markers.dictionary, defaults.markers.dictionary, "Must match the printed marker family."),
-        ("marker_length", "ARUCO INPUT", "Marker edge length [m]", job.markers.length_m, defaults.markers.length_m, "Positive physical size used for metric scale."),
+        ("detection_mode", "QUEUE-WIDE ARUCO", "Detection mode", job.markers.detection_mode, defaults.markers.detection_mode, "One versioned detector mode is shared by every method in this queue."),
+        ("accepted_ids", "QUEUE-WIDE ARUCO", "Accepted marker IDs", accepted, "all detected IDs", "Use all detections or a comma-separated ID list."),
+        ("dictionary", "QUEUE-WIDE ARUCO", "ArUco dictionary", job.markers.dictionary, defaults.markers.dictionary, "Must match the printed marker family."),
+        ("marker_length", "QUEUE-WIDE ARUCO", "Marker edge length [m]", job.markers.length_m, defaults.markers.length_m, "Positive physical size used for metric scale."),
         ("quality_reprojection", "OBSERVATION QUALITY", "Maximum PnP reprojection RMSE [px]", job.observation_quality.maximum_pnp_reprojection_error_px, 25.0, "Smaller rejects imprecise PnP observations; 25 px is the compatibility default."),
         ("quality_area", "OBSERVATION QUALITY", "Minimum marker area [px²]", job.observation_quality.minimum_marker_area_px2, 0.0, "Larger rejects small/distant detections; 0 preserves compatibility."),
         ("quality_distance", "OBSERVATION QUALITY", "Maximum marker distance [m]", job.observation_quality.maximum_marker_distance_m, "disabled", "Smaller keeps near PnP observations; useful tests depend on rig size."),
     ]
+    def guided_current(key: str, value: object) -> object:
+        contextual = [
+            _selection_value(methods, key)
+            for methods in job.context_methods.values()
+        ]
+        values = {
+            json.dumps(item, sort_keys=True)
+            for item in contextual
+        }
+        review_pending = (
+            job.selection.mode == "review_once"
+            or any(
+                selection.mode == "review_once"
+                for selection in job.context_selections.values()
+            )
+        )
+        if review_pending:
+            return "manual after preflight"
+        if len(values) > 1:
+            return "manual per experiment"
+        if contextual:
+            return contextual[0]
+        return value
+
     if job.method_id == "ap01":
         value, base = job.methods.ap01, defaults.methods.ap01
         rows.extend([
-            ("root_camera", "METHOD-SPECIFIC SETTINGS", "Root camera", value.root_camera, base.root_camera, "Coordinate origin; auto is resolved from filtered graph coverage."),
+            ("root_camera", "METHOD-SPECIFIC SETTINGS", "Root camera", guided_current("root_camera", value.root_camera), base.root_camera, "Coordinate origin; auto is resolved from filtered graph coverage."),
         ])
     elif job.method_id == "ap02":
         value, base = job.methods.ap02, defaults.methods.ap02
         rows.extend([
-            ("ap02_reference", "METHOD-SPECIFIC SETTINGS", "Reference marker", value.reference_marker_id, base.reference_marker_id, "Pose-graph anchor selected after filtered observations."),
+            ("ap02_reference", "METHOD-SPECIFIC SETTINGS", "Reference marker", guided_current("ap02_reference", value.reference_marker_id), base.reference_marker_id, "Pose-graph anchor selected after filtered observations."),
             ("max_nfev_static", "METHOD-SPECIFIC SETTINGS", "Static-only BA function evaluation limit", value.max_nfev_static, base.max_nfev_static, "Bundle-adjustment optimizer budget for the diagnostic static-only result."),
             ("max_nfev_moving", "METHOD-SPECIFIC SETTINGS", "Combined static + moving BA function evaluation limit", value.max_nfev_moving, base.max_nfev_moving, "Bundle-adjustment optimizer budget for the primary combined result."),
             ("ba_loss", "METHOD-SPECIFIC SETTINGS", "BA robust loss", value.ba_robust_loss, base.ba_robust_loss, "soft_l1 baseline; huber is piecewise robust; linear disables robustness."),
@@ -2649,12 +3607,29 @@ def _setting_rows(
             defaults.methods.ap03.scale,
         )
         rows.extend([
-            ("single_marker", "METHOD-SPECIFIC SETTINGS", "Single diagnostic scale marker", single.scale_marker_id, base_single.scale_marker_id, "Diagnostic marker chosen after filtered observations."),
-            ("multi_markers", "METHOD-SPECIFIC SETTINGS", "Multi primary marker set", _ids_text(multi.marker_ids), "auto", "Auto uses every compatible filtered marker."),
+            ("single_marker", "METHOD-SPECIFIC SETTINGS", "Single diagnostic scale marker", guided_current("single_marker", single.scale_marker_id), base_single.scale_marker_id, "Diagnostic marker chosen after filtered observations."),
+            ("multi_markers", "METHOD-SPECIFIC SETTINGS", "Multi primary marker set", guided_current("multi_markers", _ids_text(multi.marker_ids)), "auto", "Auto uses every compatible filtered marker."),
             ("scale_reprojection", "METHOD-SPECIFIC SETTINGS", "Scale RANSAC threshold [px]", scale.reprojection_threshold_px, base_scale.reprojection_threshold_px, "Shared by Single and Multi; smaller requires tighter triangulation support."),
             ("scale_ransac", "METHOD-SPECIFIC SETTINGS", "Scale RANSAC iterations", scale.ransac_iterations, base_scale.ransac_iterations, "Shared by Single and Multi; higher explores more hypotheses but increases runtime."),
             ("scale_inliers", "METHOD-SPECIFIC SETTINGS", "Scale minimum inliers", scale.minimum_inliers, base_scale.minimum_inliers, "Shared by Single and Multi; higher requires more supporting views per marker corner."),
         ])
+    else:
+        current_extension = job.methods.extensions.get(job.method_id, {})
+        default_extension = defaults.methods.extensions.get(job.method_id, {})
+        rows.append(
+            (
+                "extension",
+                "METHOD-SPECIFIC SETTINGS",
+                "Extension options (YAML)",
+                yaml.safe_dump(
+                    current_extension, default_flow_style=True
+                ).strip(),
+                yaml.safe_dump(
+                    default_extension, default_flow_style=True
+                ).strip(),
+                "Validated against the registered method config model.",
+            )
+        )
     if job.method_id in {"ap01", "ap03"}:
         rows.extend([
             ("matcher", "COLMAP SETTINGS", "Matcher", job.colmap.matcher, "exhaustive", "Exhaustive compares all image pairs; sequential limits temporal pairs."),
@@ -2717,6 +3692,7 @@ def _edit_method_job(
     *,
     groups: set[str] | frozenset[str] = METHOD_JOB_GROUPS,
     title: str | None = None,
+    selection_contexts: tuple[SelectionDatasetContext, ...] = (),
 ) -> MethodQueueJob:
     while True:
         rows = _setting_rows(job, groups)
@@ -2762,6 +3738,15 @@ def _edit_method_job(
                 typer.echo("COLMAP is not applicable to AP02.")
                 continue
             try:
+                if key in GUIDED_SELECTION_KEYS:
+                    _configure_guided_selection(
+                        console,
+                        job,
+                        key=key,
+                        label=label,
+                        contexts=selection_contexts,
+                    )
+                    continue
                 if key == "matcher":
                     value = _prompt_enum_choice(
                         label,
@@ -2797,6 +3782,25 @@ def _edit_method_job(
                             ("linear", "plain least squares without robust downweighting"),
                         ),
                     )
+                elif key == "detection_mode":
+                    value = _prompt_enum_choice(
+                        label,
+                        str(current),
+                        (
+                            (
+                                "baseline",
+                                "unchanged OpenCV default detector",
+                            ),
+                            (
+                                "subpixel_refined",
+                                "baseline candidates with subpixel corner refinement",
+                            ),
+                            (
+                                "high_sensitivity",
+                                "confirmed two-gamma search for small or dark markers",
+                            ),
+                        ),
+                    )
                 else:
                     value = typer.prompt(
                         f"{label} (b = back)",
@@ -2808,9 +3812,7 @@ def _edit_method_job(
                 _clear_terminal()
                 back_to_table = True
                 break
-            if key == "label":
-                job.label = safe_id(value)
-            elif key == "evaluation_anchor":
+            if key == "evaluation_anchor":
                 anchor: str | int = (
                     "auto_common"
                     if value.lower() in {"auto", "auto_common"}
@@ -2858,6 +3860,10 @@ def _edit_method_job(
                 )
             elif key == "dictionary":
                 job.markers = job.markers.model_copy(update={"dictionary": value})
+            elif key == "detection_mode":
+                job.markers = job.markers.model_copy(
+                    update={"detection_mode": value}
+                )
             elif key == "marker_length":
                 job.markers = job.markers.model_copy(update={"length_m": float(value)})
             elif key in {
@@ -2877,26 +3883,6 @@ def _edit_method_job(
                 )
                 job.observation_quality = job.observation_quality.model_copy(
                     update={field: typed}
-                )
-            elif key == "root_camera":
-                job.methods = job.methods.model_copy(
-                    update={
-                        "ap01": job.methods.ap01.model_copy(
-                            update={"root_camera": value}
-                        )
-                    },
-                    deep=True,
-                )
-            elif key == "ap02_reference":
-                job.methods = job.methods.model_copy(
-                    update={
-                        "ap02": job.methods.ap02.model_copy(
-                            update={
-                                "reference_marker_id": _optional_marker(value)
-                            }
-                        )
-                    },
-                    deep=True,
                 )
             elif key in {"max_nfev_static", "max_nfev_moving"}:
                 field = {
@@ -2919,26 +3905,6 @@ def _edit_method_job(
                     },
                     deep=True,
                 )
-            elif key == "single_marker":
-                ap03 = job.methods.ap03.model_copy(
-                    update={
-                        "single": job.methods.ap03.single.model_copy(
-                            update={"scale_marker_id": _optional_marker(value)}
-                        )
-                    },
-                    deep=True,
-                )
-                job.methods = job.methods.model_copy(update={"ap03": ap03}, deep=True)
-            elif key == "multi_markers":
-                ap03 = job.methods.ap03.model_copy(
-                    update={
-                        "multi": job.methods.ap03.multi.model_copy(
-                            update={"marker_ids": _parse_ids(value)}
-                        )
-                    },
-                    deep=True,
-                )
-                job.methods = job.methods.model_copy(update={"ap03": ap03}, deep=True)
             elif key in {
                 "scale_reprojection",
                 "scale_ransac",
@@ -2994,33 +3960,64 @@ def _edit_method_job(
         # Validate all copied models and then show the resolved values again. This also
         # reveals sequential-only settings immediately after changing the matcher.
         job.methods = MethodSettings.model_validate(job.methods.model_dump(mode="python"))
+        _sync_context_methods(job)
         job.markers = MarkerSettings.model_validate(job.markers.model_dump(mode="python"))
         job.colmap = ColmapSettings.model_validate(job.colmap.model_dump(mode="python"))
         job.observation_quality = ObservationQualitySettings.model_validate(
             job.observation_quality.model_dump(mode="python")
         )
+        _refresh_method_job_label(job)
         if not typer.confirm("Change more values in this menu?", default=False):
             return job
 
 
 def _clone_method_job(job: MethodQueueJob, label: str) -> MethodQueueJob:
-    return MethodQueueJob(
+    del label
+    clone = MethodQueueJob(
         method_id=job.method_id,
-        label=safe_id(label),
+        label=job.label,
         methods=job.methods.model_copy(deep=True),
         markers=job.markers.model_copy(deep=True),
         observation_quality=job.observation_quality.model_copy(deep=True),
         colmap=job.colmap.model_copy(deep=True),
         evaluation=job.evaluation.model_copy(deep=True),
+        selection=job.selection.model_copy(deep=True),
+        context_methods={
+            key: value.model_copy(deep=True)
+            for key, value in job.context_methods.items()
+        },
+        context_selections={
+            key: value.model_copy(deep=True)
+            for key, value in job.context_selections.items()
+        },
+        deferred_selection_keys=set(job.deferred_selection_keys),
+        context_deferred_selection_keys={
+            key: set(value)
+            for key, value in job.context_deferred_selection_keys.items()
+        },
     )
+    _refresh_method_job_label(clone)
+    return clone
 
 
-def _method_queue(console: Console) -> list[MethodQueueJob]:
-    methods = [
-        calibration_methods.get(method_id)
-        for method_id in ("ap01", "ap02", "ap03")
-    ]
+def _method_queue(
+    console: Console,
+    selection_contexts: tuple[SelectionDatasetContext, ...] = (),
+    *,
+    initial_markers: MarkerSettings | None = None,
+) -> list[MethodQueueJob]:
     recommended_ids = ["ap01", "ap02", "ap03"]
+    methods = sorted(
+        calibration_methods.all(),
+        key=lambda method: (
+            (
+                recommended_ids.index(method.id)
+                if method.id in recommended_ids
+                else len(recommended_ids)
+            ),
+            method.id,
+        ),
+    )
     explanations = {
         "ap01": "experimental baseline; marker-direct and moving-COLMAP relay",
         "ap02": "primary candidate; static-only diagnostic and combined bundle adjustment",
@@ -3030,7 +4027,8 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
     def show_choices() -> None:
         for index, method in enumerate(methods, 1):
             typer.echo(
-                f"  {index}. {method.id.upper()} — {explanations[method.id]}"
+                f"  {index}. {method.id.upper()} — "
+                f"{explanations.get(method.id, method.display_name)}"
             )
 
     while True:
@@ -3058,7 +4056,11 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
             _clear_terminal()
             raise WizardBack()
         try:
-            numbers = list(dict.fromkeys(int(value.strip()) for value in raw.split(",")))
+            numbers = [
+                int(value.strip())
+                for value in raw.split(",")
+                if value.strip()
+            ]
         except ValueError:
             _show_input_error(
                 "Use comma-separated method numbers, for example 1,2,3."
@@ -3067,13 +4069,17 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
         if not numbers or min(numbers) < 1 or max(numbers) > len(methods):
             typer.echo(f"Choose method numbers between 1 and {len(methods)}.")
             continue
-        jobs = [
-            _new_method_job(
-                methods[number - 1].id,
+        jobs = []
+        method_counts: dict[str, int] = {}
+        for number in numbers:
+            method_id = methods[number - 1].id
+            method_counts[method_id] = method_counts.get(method_id, 0) + 1
+            job = _new_method_job(
+                method_id,
                 prompt_for_single_marker=True,
+                markers=initial_markers,
             )
-            for number in numbers
-        ]
+            jobs.append(job)
         while True:
             _show_method_queue(console, jobs)
             action = _choice(
@@ -3083,18 +4089,23 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
                     "2": "add another method job",
                     "3": "duplicate a job (best for ablations/parameter comparisons)",
                     "4": "edit one method job (quality, method and COLMAP settings)",
-                    "5": "rename one method job",
-                    "6": "edit queue-wide ArUco input",
-                    "7": "edit queue-wide common evaluation",
-                    "8": "remove jobs (comma-separated or all)",
+                    "5": "edit queue-wide ArUco input",
+                    "6": "edit queue-wide common evaluation",
+                    "7": "remove jobs (comma-separated or all)",
                     "0": "back to method selection",
                 },
                 "1",
             )
             if action == "1":
-                labels = [job.label for job in jobs]
-                if len(labels) != len(set(labels)):
-                    typer.echo("Run labels must be unique; edit the duplicated labels.")
+                try:
+                    _validate_prepared_job_selections(
+                        jobs, selection_contexts
+                    )
+                except ValueError as exc:
+                    _show_input_error(
+                        f"{exc}. Re-open that method row and choose from the "
+                        "updated candidates."
+                    )
                     continue
                 if any(
                     job.markers != jobs[0].markers
@@ -3123,9 +4134,6 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
                 )
                 new_job.markers = jobs[0].markers.model_copy(deep=True)
                 new_job.evaluation = jobs[0].evaluation.model_copy(deep=True)
-                new_job.label = safe_id(
-                    typer.prompt("New run label", default=new_job.label)
-                )
                 jobs.append(new_job)
             elif action == "3":
                 number = _prompt_index(
@@ -3135,11 +4143,11 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
                 if number is None:
                     continue
                 source = jobs[number - 1]
-                label = typer.prompt(
-                    "Label for the copied variant",
-                    default=f"{source.label}_variant2",
+                jobs.append(_clone_method_job(source, source.label))
+                typer.echo(
+                    "Copied configuration. Edit the new row to create a distinct "
+                    "automatic result name; unchanged duplicates are skipped."
                 )
-                jobs.append(_clone_method_job(source, label))
             elif action == "4":
                 number = _prompt_index(
                     "Queue row to edit (0/b = back)",
@@ -3151,36 +4159,38 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
                 candidate = _clone_method_job(current, current.label)
                 try:
                     jobs[number - 1] = _edit_method_job(
-                        console, candidate
+                        console,
+                        candidate,
+                        selection_contexts=selection_contexts,
                     )
-                except (ValidationError, ValueError, TypeError, yaml.YAMLError) as exc:
+                except (
+                    ValidationError,
+                    ValueError,
+                    RuntimeError,
+                    TypeError,
+                    yaml.YAMLError,
+                ) as exc:
                     _show_input_error(
                         f"Invalid method setting: {exc}. "
                         "The previous row was kept unchanged."
                     )
             elif action == "5":
-                number = _prompt_index(
-                    "Queue row to rename (0/b = back)",
-                    maximum=len(jobs),
-                )
-                if number is None:
-                    continue
-                jobs[number - 1].label = safe_id(
-                    typer.prompt(
-                        "New run label",
-                        default=jobs[number - 1].label,
-                    )
-                )
-            elif action == "6":
                 candidate = _clone_method_job(jobs[0], jobs[0].label)
                 try:
                     source = _edit_method_job(
                         console,
                         candidate,
-                        groups={"ARUCO INPUT"},
+                        groups={"QUEUE-WIDE ARUCO"},
                         title="Queue-wide ArUco input",
+                        selection_contexts=selection_contexts,
                     )
-                except (ValidationError, ValueError, TypeError, yaml.YAMLError) as exc:
+                except (
+                    ValidationError,
+                    ValueError,
+                    RuntimeError,
+                    TypeError,
+                    yaml.YAMLError,
+                ) as exc:
                     _show_input_error(
                         f"Invalid ArUco setting: {exc}. "
                         "Queue values were kept unchanged."
@@ -3188,10 +4198,11 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
                     continue
                 for target in jobs:
                     target.markers = source.markers.model_copy(deep=True)
+                    _refresh_method_job_label(target)
                 typer.echo(
                     "Applied the ArUco input to every queue job."
                 )
-            elif action == "7":
+            elif action == "6":
                 candidate = _clone_method_job(jobs[0], jobs[0].label)
                 try:
                     source = _edit_method_job(
@@ -3199,8 +4210,15 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
                         candidate,
                         groups={"COMMON EVALUATION"},
                         title="Queue-wide common evaluation",
+                        selection_contexts=selection_contexts,
                     )
-                except (ValidationError, ValueError, TypeError, yaml.YAMLError) as exc:
+                except (
+                    ValidationError,
+                    ValueError,
+                    RuntimeError,
+                    TypeError,
+                    yaml.YAMLError,
+                ) as exc:
                     _show_input_error(
                         f"Invalid evaluation setting: {exc}. "
                         "Queue values were kept unchanged."
@@ -3211,7 +4229,7 @@ def _method_queue(console: Console) -> list[MethodQueueJob]:
                 typer.echo(
                     "Applied the common evaluation settings to every queue job."
                 )
-            elif action == "8":
+            elif action == "7":
                 value = typer.prompt(
                     "Queue rows to remove "
                     "(comma-separated, all, or 0/b = back)"
@@ -3277,11 +4295,6 @@ def _prompt_component_options(display_name: str, model_class: type) -> dict:
             typer.echo(f"Invalid options: {exc}")
 
 
-def _optional_marker(value: str) -> str | int:
-    value = value.strip().lower()
-    return value if value == "auto" else int(value)
-
-
 def _base_project(
     repository_root: Path,
     run_label: str = "baseline",
@@ -3289,7 +4302,7 @@ def _base_project(
 ) -> ProjectSettings:
     return ProjectSettings(
         workspace_root=repository_root / "workspace",
-        dataset_cache_root=repository_root / "datasets",
+        dataset_cache_root=repository_root / "workspace" / "preparation_cache",
         output_root=repository_root / "results",
         run_label=run_label,
         execution_mode=execution_mode,
@@ -3321,6 +4334,8 @@ def _create_intrinsic_profile_only(
     )
     source = video or images
     assert source is not None
+    if video is not None:
+        _show_video_geometry(console, "Intrinsic video geometry", video)
     profile_id = typer.prompt(
         "New intrinsics profile ID", default=safe_id(source.stem)
     ).strip()
@@ -3329,7 +4344,7 @@ def _create_intrinsic_profile_only(
     maximum_views = 80
     minimum_gap = 0 if images is not None else 5
     minimum_detections = 20
-    scan = IntrinsicScanSettings()
+    scan = _prompt_intrinsic_scan_settings()
     if typer.confirm(
         "Open advanced checkerboard calibration settings?", default=False
     ):
@@ -3342,20 +4357,9 @@ def _create_intrinsic_profile_only(
         minimum_detections = typer.prompt(
             "Minimum detections", default=20, type=int
         )
-        mode = _prompt_enum_choice(
-            "Checkerboard scan mode",
-            "balanced",
-            (
-                ("balanced", "fast adaptive scan with 4K refinement"),
-                (
-                    "exhaustive_compatibility",
-                    "legacy every-frame full-resolution scan",
-                ),
-            ),
-        )
         target_hz = 3.0
         preview = 1920
-        if mode == "balanced":
+        if scan.mode == "balanced":
             target_hz = typer.prompt(
                 "Initial checkerboard scan rate [Hz]",
                 default=3.0,
@@ -3367,7 +4371,7 @@ def _create_intrinsic_profile_only(
                 type=int,
             )
         scan = IntrinsicScanSettings(
-            mode=mode,
+            mode=scan.mode,
             target_hz=target_hz,
             preview_max_dimension=preview,
         )
@@ -3384,7 +4388,7 @@ def _create_intrinsic_profile_only(
         "--script",
         str(
             repository_root
-            / "run/real_vehicle_data/02_calibrate_intrinsics_from_video.py"
+            / "src/camera_rig_calibration/input/intrinsics_calibration.py"
         ),
         "--video" if video is not None else "--images",
         str(source),
@@ -3454,11 +4458,188 @@ def _create_intrinsic_profile_only(
 def _new_dataset_id(repository_root: Path, suggested: str) -> str:
     exists = any(
         (repository_root / directory / suggested).exists()
-        for directory in ("workspace", "datasets", "results")
+        for directory in ("workspace", "results")
     )
     if not exists:
         return suggested
     return f"{suggested}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+
+def _aruco_experiment_id(dataset_id: str, detection_mode: str) -> str:
+    base_id = dataset_id
+    for mode in ("baseline", "subpixel_refined", "high_sensitivity"):
+        suffix = f"__aruco_{mode}"
+        if base_id.endswith(suffix):
+            base_id = base_id[: -len(suffix)]
+            break
+    if detection_mode == "baseline":
+        return safe_id(base_id)
+    suffix = f"__aruco_{detection_mode}"
+    return safe_id(base_id + suffix)
+
+
+def _rekey_method_contexts(
+    jobs: list[MethodQueueJob],
+    old_key: str,
+    new_key: str,
+) -> None:
+    if old_key == new_key:
+        return
+    for job in jobs:
+        for mapping in (
+            job.context_methods,
+            job.context_selections,
+            job.context_deferred_selection_keys,
+        ):
+            if old_key in mapping:
+                mapping[new_key] = mapping.pop(old_key)
+
+
+def _build_simulation_batch_outcome(
+    repository_root: Path,
+    console: Console,
+    experiment_jobs: list[SimulationQueueJob],
+) -> WizardOutcome:
+    action = _choice(
+        "After simulation input selection",
+        {
+            "1": "run the complete calibration pipeline for every experiment",
+            "2": "prepare and validate every input only (no AP methods)",
+        },
+        "1",
+    )
+    execution_mode = "prepare_only" if action == "2" else "complete"
+    if execution_mode == "prepare_only":
+        console.print(
+            "Prepare-only mode creates each canonical input exactly once and "
+            "does not schedule AP preflight or calibration methods."
+        )
+        method_jobs: list[MethodQueueJob] = []
+    else:
+        method_jobs = _method_queue(
+            console,
+            tuple(
+                SelectionDatasetContext(
+                    key=experiment.experiment_id,
+                    display_name=experiment.experiment_id,
+                    dataset_root=experiment.prepared_root,
+                    static_cameras=experiment.cameras,
+                )
+                for experiment in experiment_jobs
+            ),
+        )
+    default_batch_id = (
+        f"simulation_batch_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    )
+    batch_id = safe_id(
+        typer.prompt("Simulation batch ID", default=default_batch_id).strip()
+    )
+    batch_root = repository_root / "workspace" / "batches" / batch_id
+    queued_runs: list[QueuedRun] = []
+    queues: list[tuple[str, Path]] = []
+    used_dataset_ids: set[str] = set()
+    for experiment_index, experiment in enumerate(experiment_jobs, 1):
+        dataset_id = safe_id(experiment.experiment_id)
+        if method_jobs:
+            dataset_id = _aruco_experiment_id(
+                dataset_id, method_jobs[0].markers.detection_mode
+            )
+        suffix = 2
+        while dataset_id in used_dataset_ids:
+            dataset_id = safe_id(f"{experiment.experiment_id}_{suffix}")
+            suffix += 1
+        used_dataset_ids.add(dataset_id)
+        dataset = DatasetSettings(
+            id=dataset_id,
+            category=DatasetCategory.SIMULATION,
+            source_kind=InputSourceKind.PREPARED,
+            scene_type=SceneType.SIMULATION,
+            prepared_root=experiment.prepared_root,
+            input_root=(
+                experiment.prepared_root
+                if experiment.prepared_root is not None
+                else (
+                    experiment.simulation.world.parent
+                    if experiment.simulation.world is not None
+                    else None
+                )
+            ),
+        )
+        common = {
+            "dataset": dataset,
+            "static_cameras": list(experiment.cameras),
+            "moving_camera": experiment.moving_camera,
+            "simulation": experiment.simulation,
+            "sampling": SamplingSettings(target_hz=None),
+        }
+        experiment_queue_root = (
+            batch_root
+            / f"{experiment_index:02d}_{dataset_id}"
+            / "queue"
+        )
+        experiment_runs: list[QueuedRun] = []
+        if execution_mode == "prepare_only":
+            project = _base_project(
+                repository_root,
+                run_label="prepare_input",
+                execution_mode="prepare_only",
+            ).model_copy(update={"experiment_id": dataset_id})
+            config = RigConfig(
+                project=project,
+                methods=MethodSettings(),
+                evaluation=EvaluationSettings(enabled=False),
+                **common,
+            )
+            path = experiment_queue_root / "01_prepare_input.yaml"
+            save_config(config, path)
+            experiment_runs.append(QueuedRun(config, path))
+        else:
+            for method_index, job in enumerate(method_jobs, 1):
+                methods = _job_methods(job, experiment.experiment_id)
+                selection = _job_selection(job, experiment.experiment_id)
+                label = _method_job_label(
+                    job, experiment.experiment_id
+                )
+                project = _base_project(
+                    repository_root,
+                    run_label=label,
+                ).model_copy(update={"experiment_id": dataset_id})
+                config = RigConfig(
+                    project=project,
+                    markers=job.markers,
+                    observation_quality=job.observation_quality,
+                    colmap=job.colmap,
+                    methods=methods,
+                    evaluation=job.evaluation,
+                    selection=selection,
+                    **common,
+                )
+                path = (
+                    experiment_queue_root
+                    / f"{method_index:02d}_{label}.yaml"
+                )
+                save_config(config, path)
+                experiment_runs.append(QueuedRun(config, path))
+        queue_path = _save_wizard_queue(
+            experiment_queue_root,
+            f"{batch_id}__{dataset_id}",
+            experiment_runs,
+        )
+        queues.append((dataset_id, queue_path))
+        queued_runs.extend(experiment_runs)
+    batch_path = save_batch(
+        batch_id,
+        queues,
+        batch_root / "batch.yaml",
+    )
+    first, *rest = queued_runs
+    return WizardOutcome(
+        first.config,
+        first.path,
+        tuple(rest),
+        batch_path=batch_path,
+        queue_paths=tuple(path for _, path in queues),
+    )
 
 
 def new_calibration_wizard(
@@ -3474,9 +4655,6 @@ def new_calibration_wizard(
     real_prepared = [
         item for item in prepared_inventory if item.category == "real_vehicle"
     ]
-    other_prepared = [
-        item for item in prepared_inventory if item.category == "other"
-    ]
     while True:
         mode = _choice(
             "Input type",
@@ -3487,7 +4665,6 @@ def new_calibration_wizard(
                     "recommended)"
                 ),
                 "2": "Gazebo simulation — baseline, existing ablation, or new combination",
-                "3": "other prepared canonical dataset / manual path",
                 "0": "back to main menu",
             },
             "1",
@@ -3495,6 +4672,7 @@ def new_calibration_wizard(
         if mode == "0":
             return None
         prepared_root = None
+        prepared_markers = None
         mcap = McapSettings()
         simulation = SimulationSettings()
         scene_type = SceneType.OTHER
@@ -3542,9 +4720,7 @@ def new_calibration_wizard(
                         sampling,
                         mcap,
                         suggested_id,
-                    ) = _real_data_input(
-                        repository_root, console, raw_inventory
-                    )
+                    ) = _real_data_input(repository_root, console)
                     source_kind = (
                         InputSourceKind.VIDEO
                         if moving.video is not None
@@ -3575,47 +4751,27 @@ def new_calibration_wizard(
                     )
                     stored_hz, _ = _stored_prepared_sampling(prepared_root)
                     sampling = SamplingSettings(target_hz=stored_hz)
+                    prepared_markers = _stored_prepared_marker_settings(
+                        prepared_root
+                    )
                     input_root = prepared_root
                     source_kind = InputSourceKind.PREPARED
             elif mode == "2":
-                cameras, moving, simulation, suggested_id, reused_root = _simulation_input(
+                experiment_jobs = _simulation_input_queue(
                     repository_root, console
                 )
-                sampling = SamplingSettings(target_hz=None)
-                if reused_root is not None:
-                    prepared_root = reused_root
-                    reused_existing_simulation = True
-                    simulation = simulation.model_copy(update={"enabled": False})
-                    input_root = reused_root
-                else:
-                    input_root = (
-                        simulation.world.parent
-                        if simulation.world is not None
-                        else None
-                    )
-                scene_type = SceneType.SIMULATION
-                category = DatasetCategory.SIMULATION
-                source_kind = InputSourceKind.PREPARED
-            else:
-                _show_prepared_choices(
+                return _build_simulation_batch_outcome(
                     repository_root,
                     console,
-                    other_prepared,
-                    title="Other prepared datasets",
+                    experiment_jobs,
                 )
-                prepared_root, cameras, moving, suggested_id = _prepared_input(
-                    console, repository_root, other_prepared
-                )
-                stored_hz, _ = _stored_prepared_sampling(prepared_root)
-                sampling = SamplingSettings(target_hz=stored_hz)
-                input_root = prepared_root
             break
         except WizardBack:
             continue
 
     default_dataset_id = (
         suggested_id
-        if scene_type is SceneType.SIMULATION
+        if scene_type is SceneType.SIMULATION or prepared_root is not None
         else _new_dataset_id(repository_root, suggested_id)
     )
     dataset_id = typer.prompt(
@@ -3650,7 +4806,35 @@ def new_calibration_wizard(
         jobs: list[MethodQueueJob] = []
     else:
         try:
-            jobs = _method_queue(console)
+            selection_contexts = (
+                (
+                    SelectionDatasetContext(
+                        key=dataset_id,
+                        display_name=dataset_id,
+                        dataset_root=prepared_root,
+                        static_cameras=tuple(cameras),
+                    ),
+                )
+                if prepared_root is not None
+                else ()
+            )
+            jobs = _method_queue(
+                console,
+                selection_contexts,
+                initial_markers=prepared_markers,
+            )
+            original_dataset_id = dataset_id
+            dataset_id = _aruco_experiment_id(
+                dataset_id, jobs[0].markers.detection_mode
+            )
+            _rekey_method_contexts(
+                jobs, original_dataset_id, dataset_id
+            )
+            if dataset_id != original_dataset_id:
+                console.print(
+                    "Non-baseline ArUco observations use the distinct "
+                    f"experiment ID: [cyan]{dataset_id}[/cyan]"
+                )
         except WizardBack:
             return new_calibration_wizard(repository_root, console)
     common = {
@@ -3681,16 +4865,20 @@ def new_calibration_wizard(
     queued: list[QueuedRun] = []
     queue_root = repository_root / "workspace" / dataset_id / "queue"
     for index, job in enumerate(jobs, 1):
+        methods = _job_methods(job, dataset_id)
+        selection = _job_selection(job, dataset_id)
+        label = _method_job_label(job, dataset_id)
         config = RigConfig(
-            project=_base_project(repository_root, run_label=job.label),
+            project=_base_project(repository_root, run_label=label),
             markers=job.markers,
             observation_quality=job.observation_quality,
             colmap=job.colmap,
-            methods=job.methods,
+            methods=methods,
             evaluation=job.evaluation,
+            selection=selection,
             **common,
         )
-        path = queue_root / f"{index:02d}_{job.label}.yaml"
+        path = queue_root / f"{index:02d}_{label}.yaml"
         save_config(config, path)
         queued.append(QueuedRun(config, path))
     manifest = {
@@ -3711,11 +4899,15 @@ def new_calibration_wizard(
         },
         "entries": [
             {
-                "id": queued_run.config.project.run_label,
+                "id": (
+                    f"{queued_run.config.dataset.id}__"
+                    f"{queued_run.config.methods.enabled[0]}__"
+                    f"{queued_run.config.project.run_label}__{index:02d}"
+                ),
                 "config": queued_run.path.name,
                 "depends_on": [],
             }
-            for queued_run in queued
+            for index, queued_run in enumerate(queued, 1)
         ],
     }
     queue_root.mkdir(parents=True, exist_ok=True)
@@ -3805,6 +4997,7 @@ def _save_wizard_queue(
             {
                 "id": (
                     f"{run.config.dataset.id}__"
+                    f"{run.config.methods.enabled[0]}__"
                     f"{run.config.project.run_label}__{index:02d}"
                 ),
                 "config": run.path.name,
@@ -4261,6 +5454,7 @@ def review_selection_candidates(
 
     marker_rows = payload["ap03_single_scale_marker"]["candidates"]
     marker_table = Table(title="Method-marker candidates")
+    marker_table.add_column("#", justify="right")
     marker_table.add_column("Marker")
     marker_table.add_column("Static-only reached")
     marker_table.add_column("Combined reached")
@@ -4279,9 +5473,10 @@ def review_selection_candidates(
         for item in payload["ap02_reference_marker"]["candidates"]
         if item.get("recommended")
     }
-    for item in marker_rows:
+    for index, item in enumerate(marker_rows, 1):
         marker_id = int(item["id"])
         cells = [
+            str(index),
             str(marker_id),
             f"{item['static_graph_reachable_count']}/{len(config.static_cameras)}",
             (
@@ -4409,42 +5604,122 @@ def review_selection_candidates(
             typer.echo("Press Enter to accept, O to override, or B to go back.")
             continue
         if "ap01" in selected_methods:
-            root_raw = typer.prompt(
-                "AP01 root camera (table number or exact camera ID; b = back)",
-                default=str(root_default),
-            ).strip()
+            while True:
+                root_raw = typer.prompt(
+                    "AP01 root camera table number (b = back)",
+                    default=str(root_default),
+                ).strip()
+                if root_raw.lower() in {"b", "back"}:
+                    break
+                if (
+                    root_raw.isdigit()
+                    and 1 <= int(root_raw) <= len(roots)
+                    and roots[int(root_raw) - 1].get("compatible", True)
+                ):
+                    root = str(roots[int(root_raw) - 1]["id"])
+                    break
+                typer.echo(
+                    "Choose the table number of a compatible root camera."
+                )
             if root_raw.lower() in {"b", "back"}:
                 continue
-            if root_raw.isdigit() and 1 <= int(root_raw) <= len(roots):
-                root = str(roots[int(root_raw) - 1]["id"])
-            else:
-                root = root_raw
         if "ap02" in selected_methods:
-            raw = typer.prompt(
-                "AP02 reference marker ID (b = back)",
-                default=str(ap02),
-            ).strip()
-            if raw.lower() in {"b", "back"}:
-                continue
-            ap02 = int(raw)
-        if "ap03" in selected_methods:
-            raw = typer.prompt(
-                "AP03 Single scale marker ID (b = back)",
-                default=str(single),
-            ).strip()
-            if raw.lower() in {"b", "back"}:
-                continue
-            single = int(raw)
-            multi_default = ",".join(
-                str(value) for value in resolved.ap03_multi_marker_ids
+            ap02_default = next(
+                index
+                for index, item in enumerate(marker_rows, 1)
+                if int(item["id"]) == ap02
             )
-            raw = typer.prompt(
-                "AP03 Multi marker IDs, comma-separated (b = back)",
-                default=multi_default,
-            ).strip()
+            while True:
+                raw = typer.prompt(
+                    "AP02 reference marker table number (b = back)",
+                    default=str(ap02_default),
+                ).strip()
+                if raw.lower() in {"b", "back"}:
+                    break
+                if raw.isdigit() and 1 <= int(raw) <= len(marker_rows):
+                    selected = marker_rows[int(raw) - 1]
+                    ap02_candidate = next(
+                        (
+                            candidate
+                            for candidate in payload[
+                                "ap02_reference_marker"
+                            ]["candidates"]
+                            if int(candidate["id"]) == int(selected["id"])
+                        ),
+                        selected,
+                    )
+                    if ap02_candidate.get("compatible"):
+                        ap02 = int(selected["id"])
+                        break
+                typer.echo(
+                    "Choose the table number of an AP02-compatible marker."
+                )
             if raw.lower() in {"b", "back"}:
                 continue
-            multi = _parse_ids(raw)
+        if "ap03" in selected_methods:
+            single_default = next(
+                index
+                for index, item in enumerate(marker_rows, 1)
+                if int(item["id"]) == single
+            )
+            while True:
+                raw = typer.prompt(
+                    "AP03 Single scale marker table number (b = back)",
+                    default=str(single_default),
+                ).strip()
+                if raw.lower() in {"b", "back"}:
+                    break
+                if raw.isdigit() and 1 <= int(raw) <= len(marker_rows):
+                    selected = marker_rows[int(raw) - 1]
+                    if selected.get("ap03_compatible"):
+                        single = int(selected["id"])
+                        break
+                typer.echo(
+                    "Choose the table number of an AP03-compatible marker."
+                )
+            if raw.lower() in {"b", "back"}:
+                continue
+            compatible_rows = {
+                index: int(item["id"])
+                for index, item in enumerate(marker_rows, 1)
+                if item.get("ap03_compatible")
+            }
+            multi_default = ",".join(
+                str(index)
+                for index, marker_id in compatible_rows.items()
+                if marker_id in resolved.ap03_multi_marker_ids
+            )
+            while True:
+                raw = typer.prompt(
+                    "AP03 Multi marker table numbers, comma-separated, "
+                    "or all (b = back)",
+                    default=multi_default,
+                ).strip().lower()
+                if raw in {"b", "back"}:
+                    break
+                if raw == "all":
+                    multi = list(compatible_rows.values())
+                    break
+                try:
+                    numbers = list(
+                        dict.fromkeys(
+                            int(item.strip())
+                            for item in raw.split(",")
+                            if item.strip()
+                        )
+                    )
+                except ValueError:
+                    numbers = []
+                if numbers and all(
+                    number in compatible_rows for number in numbers
+                ):
+                    multi = [compatible_rows[number] for number in numbers]
+                    break
+                typer.echo(
+                    "Choose compatible table numbers or enter 'all'."
+                )
+            if raw in {"b", "back"}:
+                continue
         break
     if multi == "auto":
         multi = list(resolved.ap03_multi_marker_ids)
@@ -4476,17 +5751,58 @@ def review_selection_candidates(
     return choices
 
 
+def review_queue_selection_candidates(
+    jobs: tuple[SelectionReviewJob, ...],
+    run_directory: Path,
+    console: Console,
+) -> dict[str, dict[str, object]]:
+    """Review every manual queue variant at one post-preflight checkpoint."""
+
+    console.print(
+        Panel(
+            f"{len(jobs)} manually configured method variant(s) are ready. "
+            "Each section below uses that variant's own ArUco and observation-"
+            "quality filters. Automatic variants need no confirmation.",
+            title="Queue selection review",
+        )
+    )
+    decisions: dict[str, dict[str, object]] = {}
+    for index, job in enumerate(jobs, 1):
+        console.print(
+            Panel(
+                f"Variant {index}/{len(jobs)}\n"
+                f"Queue entry: {job.entry_id}\n"
+                f"Method: {job.config.methods.enabled[0]}\n"
+                f"Preflight evidence: {job.output_directory}",
+                title="Manual selection",
+            )
+        )
+        decisions[job.entry_id] = review_selection_candidates(
+            job.config,
+            job.selections,
+            run_directory,
+            console,
+        )
+    return decisions
+
+
 def show_queue_summary(outcome: WizardOutcome, console: Console) -> None:
     if len(outcome.runs) == 1:
         show_summary(outcome.config, outcome.path, console)
         return
     table = Table(title="Final calibration queue")
     table.add_column("#", justify="right")
+    if outcome.batch_path is not None:
+        table.add_column("Experiment")
+        table.add_column("Input")
     table.add_column("Run label")
     table.add_column("Method")
     table.add_column("Key configuration", overflow="fold")
     table.add_column("Saved config", overflow="fold")
     for index, queued in enumerate(outcome.runs, 1):
+        prepare_only = (
+            queued.config.project.execution_mode == "prepare_only"
+        )
         method_id = queued.config.methods.enabled[0]
         job = MethodQueueJob(
             method_id=method_id,
@@ -4497,278 +5813,204 @@ def show_queue_summary(outcome: WizardOutcome, console: Console) -> None:
             colmap=queued.config.colmap,
             evaluation=queued.config.evaluation,
         )
-        table.add_row(
-            str(index),
-            queued.config.project.run_label,
-            calibration_methods.get(method_id).display_name,
-            _method_job_summary(job),
-            str(queued.path),
+        row = [str(index)]
+        if outcome.batch_path is not None:
+            row.extend(
+                [
+                    queued.config.dataset.id,
+                    (
+                        "reuse local"
+                        if queued.config.dataset.prepared_root is not None
+                        else "new capture"
+                    ),
+                ]
+            )
+        row.extend(
+            [
+                queued.config.project.run_label,
+                (
+                    "prepare input only"
+                    if prepare_only
+                    else calibration_methods.get(method_id).display_name
+                ),
+                (
+                    "capture/prepare/validate once; no AP method"
+                    if prepare_only
+                    else _method_job_summary(job)
+                ),
+                str(queued.path),
+            ]
         )
+        table.add_row(*row)
     console.print(table)
+    if outcome.batch_path is not None:
+        console.print(
+            f"Batch: {outcome.batch_path} | "
+            f"{len(outcome.queue_paths)} experiments | "
+            f"{len(outcome.runs)} total queue rows"
+        )
+        return
     console.print(
         f"Dataset: {outcome.config.dataset.id} | {len(outcome.runs)} independent runs | "
         "shared immutable input under "
-        "datasets/<category>/<source-or-factor>/<experiment>/inputs/<input-id>"
+        "results/<category>/<rate-or-factor>/<experiment>/"
     )
 
 
 def show_results(repository_root: Path, console: Console) -> None:
     entries = index_results(repository_root / "results")
     if not entries:
-        console.print("No new or historical result runs were found.")
+        console.print(
+            "No layout-v2 calibration result was found. Completed experiments "
+            "appear here after SUMMARY.json has been published."
+        )
         return
     table = Table(title="Calibration results", expand=True)
     table.add_column("#", justify="right", width=3)
-    table.add_column("Category", width=10)
-    table.add_column("Experiment / dataset", ratio=2, overflow="fold")
-    table.add_column("Status", ratio=1, overflow="fold")
-    table.add_column("Method result / variant", ratio=2, overflow="fold")
+    table.add_column("Experiment", ratio=2, overflow="fold")
+    table.add_column("Dataset / input", ratio=2, overflow="fold")
+    table.add_column("Result status", ratio=1, overflow="fold")
+    table.add_column("Methods", ratio=1, overflow="fold")
     for index, entry in enumerate(entries, 1):
-        status = (
-            "input unavailable\nnot rerunnable"
-            if entry.status == "input unavailable / not rerunnable"
-            else entry.status
+        summary_payload = json.loads(
+            (entry.path / "SUMMARY.json").read_text(encoding="utf-8")
         )
-        result_label = (
-            ", ".join(entry.methods)
-            + (f"\n{entry.variant}" if entry.variant else "")
-        ).strip()
-        if not result_label:
-            result_label = (
-                "historical result"
-                if entry.legacy
-                else entry.run_id
-            )
+        input_label = (
+            f"{summary_payload.get('sampling_rate', 'native_rate')}\n"
+            f"{entry.dataset_state}"
+        )
+        result_label = ", ".join(entry.method_statuses) or "-"
         table.add_row(
             str(index),
-            {
-                "simulation": "SIMULATION",
-                "real_vehicle": "REAL DATA",
-            }.get(
-                entry.category,
-                "LEGACY" if entry.legacy else "",
-            ),
             entry.experiment_id or entry.dataset_id,
-            status,
+            input_label,
+            entry.status,
             result_label,
         )
     console.print(table)
+    console.print(
+        "[dim]Simulation scope: route, density, resolution, FOV and blur affect "
+        "the moving camera; lighting affects the whole world. pct = percent.[/dim]"
+    )
     selected = typer.prompt("Result number to inspect (0 = back)", default=0, type=int)
     if selected == 0:
         return
     if selected < 1 or selected > len(entries):
         raise typer.BadParameter("Invalid result number")
     entry = entries[selected - 1]
-    console.print(Panel(str(entry.path), title=f"{entry.dataset_id} / {entry.run_id}"))
-    removed_path = entry.path / "INPUT_REMOVED.json"
-    if removed_path.is_file():
-        removed = json.loads(removed_path.read_text(encoding="utf-8"))
-        console.print(
-            Panel(
-                "Results available; input cleaned; not rerunnable.\n"
-                f"Removed files: {removed.get('file_count', 'unknown')}\n"
-                f"Recorded reclaimable size: "
-                f"{_human_size(int(removed.get('reclaimable_bytes_estimate', 0)))}",
-                title="Storage state",
-            )
+    results_txt = entry.path / "RESULTS.txt"
+    console.print(
+        Panel(
+            f"Human-readable results: {results_txt}\n"
+            f"Result folder: {entry.path}",
+            title=f"{entry.dataset_id} — result folder",
         )
-    gallery_candidates = [
-        *entry.path.glob(
-            "datasets/*/observations/*/connectivity_report.json"
-        ),
-        *entry.path.glob(
-            "observations/*/*/connectivity_report.json"
-        ),
+    )
+    comparison_payload = json.loads(
+        (entry.path / "COMPARISON.json").read_text(encoding="utf-8")
+    )
+    rows = [
+        row
+        for row in comparison_payload.get("methods", [])
+        if isinstance(row, dict)
     ]
-    if gallery_candidates:
-        latest_gallery = sorted(gallery_candidates)[-1]
-        try:
-            gallery = json.loads(
-                latest_gallery.read_text(encoding="utf-8")
-            )
-        except (OSError, json.JSONDecodeError):
-            gallery = {}
-        if gallery:
-            diagnostics = Table(title="Moving-frame ArUco diagnostics")
-            diagnostics.add_column("Metric")
-            diagnostics.add_column("Value")
-            diagnostics.add_row(
-                "Moving frames",
-                str(gallery.get("total_moving_frames", "unknown")),
-            )
-            diagnostics.add_row(
-                "Frames with detections",
-                str(gallery.get("frames_with_detections", "unknown")),
-            )
-            diagnostics.add_row(
-                "Frames without markers",
-                str(gallery.get("frames_without_markers", "unknown")),
-            )
-            diagnostics.add_row(
-                "Frames with multiple markers",
-                str(
-                    gallery.get(
-                        "frames_with_multiple_markers", "unknown"
-                    )
-                ),
-            )
-            diagnostics.add_row(
-                "AP02 bridge frames",
-                str(gallery.get("ap02_bridge_frames", "unknown")),
-            )
-            diagnostics.add_row(
-                "Gallery",
-                (
-                    str(gallery.get("gallery_path"))
-                    if gallery.get("gallery_path")
-                    and Path(str(gallery["gallery_path"])).is_dir()
-                    else "cleaned"
-                ),
-            )
-            console.print(diagnostics)
-    manifest_path = entry.path / "run_manifest.json"
-    dataset_manifest_path = entry.path / "00_INPUT" / "dataset_manifest.json"
-    comparison_path = entry.path / "07_COMPARISON" / "method_status.json"
-    if manifest_path.is_file():
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        dataset_manifest = (
-            json.loads(dataset_manifest_path.read_text(encoding="utf-8"))
-            if dataset_manifest_path.is_file()
-            else {}
-        )
-        detail = Table(title="Run details")
-        detail.add_column("Field")
-        detail.add_column("Value")
-        detail.add_row("Status", str(manifest.get("status", "unknown")))
-        detail.add_row(
-            "Execution", str(manifest.get("execution_mode", "complete"))
-        )
-        simulation_parameters = manifest.get("simulation_parameters", {})
-        if simulation_parameters:
-            detail.add_row(
-                "Simulation parameters",
-                format_simulation_parameters(simulation_parameters),
-            )
-        method_label = (
-            "Methods configured (not executed)"
-            if manifest.get("execution_mode") == "prepare_only"
-            else "Methods"
-        )
-        detail.add_row(
-            method_label, ", ".join(manifest.get("enabled_methods", []))
-        )
-        detail.add_row(
-            "Static cameras",
-            str(len(dataset_manifest.get("static_cameras", []))),
-        )
-        detail.add_row(
-            "Moving frames",
-            str(dataset_manifest.get("moving_camera", {}).get("image_count", "unknown")),
-        )
-        runtime = sum(
-            float(stage.get("runtime_seconds", 0.0) or 0.0)
-            for stage in manifest.get("stages", [])
-        )
-        detail.add_row("Recorded runtime", f"{runtime:.1f} s")
-        detail.add_row("Output", str(entry.path))
-        console.print(detail)
-    elif entry.category in {"simulation", "real_vehicle"}:
-        detail = Table(title="Experiment method executions")
-        detail.add_column("Method")
-        detail.add_column("Status")
-        detail.add_column("Variant", overflow="fold")
-        detail.add_column("Input")
-        detail.add_column("Output", overflow="fold")
-        manifests = [
-            path
-            for path in entry.path.rglob("run_manifest.json")
-            if "run_history" not in path.parts and "_views" not in path.parts
-        ]
-        for child in sorted(manifests):
-            try:
-                payload = json.loads(child.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
-                continue
-            detail.add_row(
-                ", ".join(payload.get("enabled_methods", [])) or "-",
-                str(payload.get("status", "unknown")),
-                str(payload.get("variant", "-")),
-                str(payload.get("input_id", "-")),
-                str(child.parent),
-            )
-        legacy_path = entry.path / "legacy_manifest.json"
-        if legacy_path.is_file():
-            legacy = json.loads(legacy_path.read_text(encoding="utf-8"))
-            detail.add_row(
-                ", ".join(entry.methods) or "legacy",
-                str(legacy.get("status", "legacy")),
-                "migrated historical executions",
-                str(legacy.get("input_id", "-")),
-                str(entry.path / "legacy_results"),
-            )
-        console.print(detail)
-    elif (entry.path / "legacy_manifest.json").is_file():
-        legacy = json.loads(
-            (entry.path / "legacy_manifest.json").read_text(
-                encoding="utf-8"
-            )
-        )
-        detail = Table(title="Migrated historical result details")
-        detail.add_column("Field")
-        detail.add_column("Value", overflow="fold")
-        detail.add_row(
-            "Experiment",
-            str(legacy.get("experiment_id", entry.dataset_id)),
-        )
-        detail.add_row("Category", str(legacy.get("category", "")))
-        detail.add_row("Status", str(legacy.get("status", "")))
-        detail.add_row("Input ID", str(legacy.get("input_id", "")))
-        detail.add_row(
-            "Rerunnable", str(bool(legacy.get("rerunnable", False)))
-        )
-        verification = legacy.get("input_verification", {})
-        detail.add_row(
-            "Input verification",
-            (
-                f"verified={verification.get('verified')}, "
-                f"files={verification.get('file_count')}, "
-                f"sha256={verification.get('sha256')}"
+    methods = Table(title="Method variants and scientific status")
+    methods.add_column("#", justify="right")
+    methods.add_column("Method / variant")
+    methods.add_column("Artifact")
+    methods.add_column("Quality")
+    methods.add_column("Runtime")
+    methods.add_column("Coverage")
+    methods.add_column("Primary")
+    methods.add_column("Result path", overflow="fold")
+    methods.add_column("Configuration / warning", overflow="fold")
+    readable: list[Path] = []
+    for index, row in enumerate(rows, 1):
+        result_path = entry.path / str(row.get("result_path", ""))
+        if (
+            row.get("artifact_status") == "available"
+            or row.get("status") == "available"
+        ):
+            readable.append(result_path)
+        runtime = row.get("runtime_seconds")
+        methods.add_row(
+            str(index),
+            f"{row.get('method', '-')}/{row.get('label', '-')}",
+            str(row.get("artifact_status") or row.get("status", "-")),
+            str(row.get("quality_status") or "-"),
+            f"{float(runtime):.1f}s" if runtime is not None else "-",
+            str(row.get("static_camera_count") or "-"),
+            str(row.get("primary_result") or "-"),
+            str(result_path),
+            "; ".join(
+                value
+                for value in (
+                    ", ".join(
+                        f"{key}={item}"
+                        for key, item in (
+                            row.get("config_summary") or {}
+                        ).items()
+                        if item is not None
+                    ),
+                    str(row.get("warning") or ""),
+                )
+                if value
             ),
         )
-        parameters = legacy.get("parameters", {})
-        if parameters:
-            detail.add_row(
-                "Simulation parameters",
-                format_simulation_parameters(parameters),
-            )
-        detail.add_row("Current v2 result", str(entry.path))
-        detail.add_row(
-            "Historical artifacts",
-            str(entry.path / "legacy_results"),
+    console.print(methods)
+    console.print(
+        f"Human-readable experiment results: {results_txt}\n"
+        f"Machine comparison: {entry.path / 'COMPARISON.json'}\n"
+        f"Common evaluations: {entry.path / 'evaluations'}\n"
+        f"Failed attempts: {entry.path / 'attempts'}"
+    )
+    report_options = {"1": results_txt}
+    camera_map = entry.path / "SECONDARY_CAMERA_MAP_RESULTS.txt"
+    marker_map = entry.path / "SECONDARY_AP02_MARKER_MAP_RESULTS.txt"
+    option_labels = ["1 = overall RESULTS.txt", "2 = one method RESULT.txt"]
+    if camera_map.is_file():
+        report_options["3"] = camera_map
+        option_labels.append("3 = secondary camera-map GT")
+    if marker_map.is_file():
+        report_options["4"] = marker_map
+        option_labels.append("4 = secondary AP02 marker-map GT")
+    choice = str(
+        typer.prompt(
+            "Read " + ", ".join(option_labels) + ", 0 = back",
+            default="1",
         )
-        console.print(detail)
-    if comparison_path.is_file():
-        rows = json.loads(comparison_path.read_text(encoding="utf-8"))
-        methods = Table(title="Method results")
-        methods.add_column("Method")
-        methods.add_column("Status")
-        methods.add_column("Cameras")
-        methods.add_column("Moving")
-        methods.add_column("Cross RMSE [px]")
-        methods.add_column("Warning")
-        for row in rows:
-            methods.add_row(
-                str(row.get("method", "")),
-                str(row.get("status", "")),
-                str(row.get("static_camera_count", "")),
-                str(row.get("registered_moving_frames", "")),
-                str(row.get("cross_camera_reprojection_rmse_px", "")),
-                str(row.get("warning", "")),
+    ).strip()
+    if choice == "0":
+        return
+    if choice in report_options:
+        selected_report = report_options[choice]
+        if not selected_report.is_file():
+            console.print(
+                "The requested report is unavailable; see RESULTS.json for "
+                "the recorded reason."
             )
-        console.print(methods)
-    summary = entry.path / "99_FINAL_RESULTS" / "SUMMARY.txt"
-    if summary.is_file():
-        console.print(summary.read_text(encoding="utf-8"), markup=False)
+            return
+        console.print(
+            selected_report.read_text(encoding="utf-8"), markup=False
+        )
+        return
+    if choice != "2" or not readable:
+        raise typer.BadParameter("Invalid result view")
+    inspect = typer.prompt("Method number", type=int)
+    if inspect < 1 or inspect > len(rows):
+        raise typer.BadParameter("Invalid method number")
+    selected_row = rows[inspect - 1]
+    selected_path = entry.path / str(selected_row.get("result_path", ""))
+    result_txt = selected_path / "RESULT.txt"
+    if not result_txt.is_file():
+        console.print("This row is a failed attempt; see FAILURE.txt there.")
+        return
+    console.print(result_txt.read_text(encoding="utf-8"), markup=False)
+    console.print(
+        f"Diagnostics: {selected_path / 'diagnostics'}\n"
+        f"Complete logs: {selected_path / 'logs'}\n"
+        f"Provenance: {selected_path / 'provenance'}"
+    )
 
 
 def _human_size(value: int) -> str:
@@ -4786,22 +6028,20 @@ def cleanup_storage_wizard(
     console.print(
         Panel(
             "Cleanup removes:\n"
-            "- generated dataset caches and inactive staging data\n"
-            "- raw static and moving frames stored with experiments\n"
-            "- ArUco debug images and galleries\n"
-            "- temporary/COLMAP working-image copies\n"
-            "- large intrinsic-calibration selected/debug images\n\n"
+            "- reproducible COLMAP and method caches under workspace/cache\n"
+            "- reproducible workspace artifacts outside active transactions\n\n"
             "Cleanup keeps:\n"
-            "- all method results and final result figures\n"
-            "- reports, configs, manifests, logs and timings\n"
-            "- observation CSV files and connectivity reports\n"
-            "- numeric COLMAP reconstructions\n"
-            "- reusable intrinsic parameters and profile metadata",
+            "- canonical raw datasets and every observation file\n"
+            "- ArUco debug images and galleries\n"
+            "- all method results, diagnostics, logs and provenance\n"
+            "- common evaluations and comparisons\n"
+            "- managed intrinsic profiles\n"
+            "- active or resumable transactions",
             title="Cleanup storage",
         )
     )
     plan = build_cleanup_plan(repository_root)
-    table = Table(title="Generated input and working data")
+    table = Table(title="Reproducible workspace caches")
     table.add_column("Kind")
     table.add_column("Targets", justify="right")
     grouped: dict[str, int] = {}
@@ -4831,7 +6071,7 @@ def cleanup_storage_wizard(
             f"{_human_size(int(result['reclaimable_bytes_estimate']))}.[/green]"
         )
     elif not plan.targets:
-        console.print("No generated input or working data is eligible for cleanup.")
+        console.print("No reproducible workspace cache is eligible for cleanup.")
 
     if not typer.confirm(
         "Also delete everything inside data_local/?", default=False
@@ -4879,6 +6119,7 @@ def manage_intrinsics_profiles(
         table.add_column("Model")
         table.add_column("Size")
         table.add_column("References")
+        table.add_column("Storage", overflow="fold")
         references: dict[str, tuple[Path, ...]] = {}
         for index, profile in enumerate(profiles, 1):
             refs = intrinsic_profile_references(repository_root, profile)
@@ -4890,6 +6131,7 @@ def manage_intrinsics_profiles(
                 profile.distortion_model,
                 _human_size(profile.size_bytes),
                 str(len(refs)),
+                _relative_display(profile.root, repository_root),
             )
         if profiles:
             console.print(table)
@@ -4984,79 +6226,6 @@ def _manifest_process_is_active(manifest_path: Path) -> bool:
     return b"rigcal" in command or b"camera_rig_calibration" in command
 
 
-def _migrate_legacy_staging(repository_root: Path) -> None:
-    """Move inactive pre-v5 staging runs out of published result trees."""
-    root = repository_root.resolve()
-    results_root = root / "results"
-    temporary_root = root / "workspace" / "temporary_runs"
-    if not results_root.is_dir():
-        return
-    for staging in sorted(results_root.rglob(".staging")):
-        if not staging.is_dir():
-            continue
-        try:
-            relative = staging.parent.relative_to(results_root)
-        except ValueError:
-            continue
-        for child in sorted(staging.iterdir()):
-            if not child.is_dir():
-                continue
-            manifests = list(child.rglob("run_manifest.json"))
-            if any(_manifest_process_is_active(path) for path in manifests):
-                continue
-            queue_id = safe_id(
-                "legacy_" + "_".join((*relative.parts, child.name))
-            )
-            destination = temporary_root / queue_id
-            suffix = 2
-            while destination.exists():
-                destination = temporary_root / f"{queue_id}_{suffix}"
-                suffix += 1
-            file_inventory = []
-            for path in sorted(item for item in child.rglob("*") if item.is_file()):
-                file_hash = hashlib.sha256()
-                with path.open("rb") as handle:
-                    for chunk in iter(
-                        lambda: handle.read(8 * 1024 * 1024), b""
-                    ):
-                        file_hash.update(chunk)
-                digest = file_hash.hexdigest()
-                file_inventory.append(
-                    {
-                        "path": str(path.relative_to(child)),
-                        "size_bytes": path.stat().st_size,
-                        "sha256": digest,
-                    }
-                )
-            destination.mkdir(parents=True, exist_ok=False)
-            migrated_run = destination / "jobs" / "legacy"
-            migrated_run.parent.mkdir(parents=True, exist_ok=True)
-            child.rename(migrated_run)
-            transaction = {
-                "schema_version": 5,
-                "queue_id": destination.name,
-                "status": "incomplete",
-                "legacy_single_run": True,
-                "migrated_from": str(child),
-                "migrated_at": datetime.now().astimezone().isoformat(
-                    timespec="seconds"
-                ),
-                "file_count": len(file_inventory),
-                "size_bytes": sum(
-                    int(row["size_bytes"]) for row in file_inventory
-                ),
-                "inventory": file_inventory,
-            }
-            temporary = destination / "queue_transaction.json.tmp"
-            temporary.write_text(
-                json.dumps(transaction, indent=2) + "\n",
-                encoding="utf-8",
-            )
-            temporary.replace(destination / "queue_transaction.json")
-        if not any(staging.iterdir()):
-            staging.rmdir()
-
-
 def _transaction_payload(path: Path, name: str) -> dict:
     candidate = path / name
     try:
@@ -5067,7 +6236,6 @@ def _transaction_payload(path: Path, name: str) -> dict:
 
 
 def incomplete_runs(repository_root: Path) -> list[ResultEntry]:
-    _migrate_legacy_staging(repository_root)
     entries: list[ResultEntry] = []
     temporary_root = (
         repository_root.resolve() / "workspace" / "temporary_runs"
@@ -5114,6 +6282,8 @@ def incomplete_runs(repository_root: Path) -> list[ResultEntry]:
             status = "interrupted"
         elif "waiting_for_selection" in statuses:
             status = "waiting_for_selection"
+        elif "waiting_for_observation_review" in statuses:
+            status = "waiting_for_observation_review"
         else:
             status = journal_status or "incomplete"
         first = manifests[0] if manifests else {}
@@ -5356,7 +6526,7 @@ def _remove_failed_queue_jobs(transaction: Path, console: Console) -> None:
     state_path = transaction / "queue_state.json"
     if not queue_path.is_file() or not state_path.is_file():
         raise RuntimeError(
-            "This migrated legacy run has no editable queue manifest"
+            "This transaction has no editable schema-v5 queue manifest"
         )
     queue_payload = yaml.safe_load(
         queue_path.read_text(encoding="utf-8")
@@ -5368,6 +6538,7 @@ def _remove_failed_queue_jobs(transaction: Path, console: Console) -> None:
         "failed_preflight",
         "interrupted",
         "waiting_for_selection",
+        "waiting_for_observation_review",
         "skipped_dependency",
     }
     candidates = [

@@ -7,6 +7,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from ..methods.common.aruco_utils import (
+    effective_detector_config,
+    make_aruco_detector,
+)
 from .topics import resolve_rosbag_source
 
 
@@ -155,15 +159,13 @@ def main() -> None:
         topic: get_message(topic_types[topic]) for topic in requested
     }
     dictionary_name = str(mapping.get("marker_dictionary", "DICT_4X4_50"))
-    if not hasattr(cv2.aruco, dictionary_name):
-        raise RuntimeError(f"Unknown OpenCV ArUco dictionary: {dictionary_name}")
-    dictionary = cv2.aruco.getPredefinedDictionary(getattr(cv2.aruco, dictionary_name))
-    if hasattr(cv2.aruco, "ArucoDetector"):
-        detector: Any = cv2.aruco.ArucoDetector(
-            dictionary, cv2.aruco.DetectorParameters()
-        )
-    else:
-        detector = None
+    # Raw acquisition remains mode-independent. The canonical shared detector
+    # is used in baseline mode only to choose a representative MCAP frame;
+    # the queue-selected mode is applied later to immutable raw images.
+    selection_detection_mode = "baseline"
+    detect_markers = make_aruco_detector(
+        dictionary_name, selection_detection_mode
+    )
 
     best: dict[str, Candidate] = {}
     infos: dict[str, dict[str, Any]] = {}
@@ -207,10 +209,7 @@ def main() -> None:
         camera_id = camera["id"]
         image = _decode(message, topic_types[topic], cv2, np)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        if detector is not None:
-            corners, ids, _ = detector.detectMarkers(gray)
-        else:
-            corners, ids, _ = cv2.aruco.detectMarkers(gray, dictionary)
+        corners, ids, _ = detect_markers(gray)
         marker_ids = [] if ids is None else [int(value) for value in ids.reshape(-1)]
         total_area = sum(
             abs(float(cv2.contourArea(np.asarray(corner).reshape(4, 2).astype(np.float32))))
@@ -294,6 +293,10 @@ def main() -> None:
                 "moving_camera": moving_camera,
                 "moving_frames": moving_count,
                 "moving_sampling_hz": moving_hz or None,
+                "static_frame_selection_detector": effective_detector_config(
+                    selection_detection_mode,
+                    dictionary_name,
+                ),
             },
             indent=2,
         )

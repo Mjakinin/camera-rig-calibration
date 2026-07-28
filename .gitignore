@@ -3,6 +3,13 @@ __pycache__/
 *.pyo
 *.log
 .pytest_cache/
+# Keep tests/ versioned; ignore only generated test and coverage output.
+.coverage
+.coverage.*
+coverage.xml
+junit.xml
+htmlcov/
+test-results/
 *.egg-info/
 dist/
 .venv/

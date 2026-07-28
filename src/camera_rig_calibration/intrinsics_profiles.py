@@ -11,6 +11,11 @@ from typing import Any
 import yaml
 
 from .dataset.discovery import safe_id
+from .input.video_geometry import (
+    DISPLAY_ORIENTATION_POLICY,
+    VIDEO_GEOMETRY_CONTRACT,
+    probe_video_geometry,
+)
 
 
 @dataclass(frozen=True)
@@ -24,7 +29,6 @@ class IntrinsicProfile:
     distortion_model: str
     source_video: str | None
     created_at: str | None
-    legacy: bool = False
     display_name: str | None = None
 
     @property
@@ -106,8 +110,9 @@ def profile_fingerprint(
     scan_target_hz: float,
     preview_max_dimension: int,
 ) -> str:
+    source = video.resolve()
     payload = {
-        "source_sha256": sha256_source(video.resolve()),
+        "source_sha256": sha256_source(source),
         "columns": columns,
         "rows": rows,
         "maximum_views": maximum_views,
@@ -116,10 +121,14 @@ def profile_fingerprint(
         "scan_mode": scan_mode,
         "scan_target_hz": scan_target_hz,
         "preview_max_dimension": preview_max_dimension,
-        "engine_contract": "rigcal_intrinsics_v3_1",
+        "orientation_policy": DISPLAY_ORIENTATION_POLICY,
+        "video_geometry_contract": VIDEO_GEOMETRY_CONTRACT,
+        "engine_contract": "rigcal_intrinsics_v3_2",
     }
-    if video.resolve().is_dir():
+    if source.is_dir():
         payload["source_kind"] = "image_directory"
+    else:
+        payload["video_geometry"] = probe_video_geometry(source).as_dict()
     canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
@@ -129,9 +138,8 @@ def profile_directory(
 ) -> Path:
     return (
         repository_root.resolve()
-        / "results"
-        / "real_vehicle"
-        / "_intrinsics"
+        / "config"
+        / "intrinsics"
         / safe_id(profile_id)
         / fingerprint[:12]
     )
@@ -200,56 +208,16 @@ def _profile_from_manifest(path: Path) -> IntrinsicProfile | None:
 def discover_intrinsic_profiles(repository_root: Path) -> list[IntrinsicProfile]:
     root = (
         repository_root.resolve()
-        / "results"
-        / "real_vehicle"
-        / "_intrinsics"
+        / "config"
+        / "intrinsics"
     )
     if not root.is_dir():
         return []
     profiles: list[IntrinsicProfile] = []
-    covered: set[Path] = set()
-    covered_roots: set[Path] = set()
     for manifest in sorted(root.rglob("profile.yaml")):
         profile = _profile_from_manifest(manifest)
         if profile is not None:
             profiles.append(profile)
-            covered.add(profile.intrinsics.resolve())
-            covered_roots.add(profile.root.resolve())
-    for path in sorted(root.rglob("*.json")):
-        if (
-            path.name in {"timings.json", "profile.json"}
-            or path.resolve() in covered
-            or any(path.resolve().is_relative_to(item) for item in covered_roots)
-        ):
-            continue
-        try:
-            payload = read_intrinsics(path)
-            width = int(payload.get("width", payload.get("image_width", 0)) or 0)
-            height = int(payload.get("height", payload.get("image_height", 0)) or 0)
-            matrix = payload.get("K", payload.get("k"))
-            if width <= 0 or height <= 0 or not isinstance(matrix, list):
-                continue
-        except (OSError, ValueError, json.JSONDecodeError, yaml.YAMLError):
-            continue
-        profile_id = safe_id(
-            path.parent.name
-            if path.parent != root
-            else path.stem.removesuffix("_moving_calib_camera")
-        )
-        profiles.append(
-            IntrinsicProfile(
-                profile_id=profile_id,
-                fingerprint=sha256_file(path),
-                root=path.parent.resolve(),
-                intrinsics=path.resolve(),
-                width=width,
-                height=height,
-                distortion_model=str(payload.get("distortion_model", "unknown")),
-                source_video=payload.get("source_video"),
-                created_at=None,
-                legacy=True,
-            )
-        )
     unique: dict[tuple[str, str], IntrinsicProfile] = {}
     for profile in profiles:
         unique[(profile.profile_id, profile.fingerprint)] = profile
@@ -321,10 +289,12 @@ def profile_manifest(
             }
         )
     else:
+        geometry = probe_video_geometry(source)
         result.update(
             {
                 "source_video": str(source),
                 "source_video_sha256": sha256_file(source),
+                "video_geometry": geometry.as_dict(),
             }
         )
     return result
@@ -409,17 +379,11 @@ def delete_profile(
         )
     profiles_root = (
         repository_root.resolve()
-        / "results"
-        / "real_vehicle"
-        / "_intrinsics"
+        / "config"
+        / "intrinsics"
     )
     if not profile.root.is_relative_to(profiles_root):
-        raise RuntimeError("Refusing to delete a profile outside _intrinsics")
-    if profile.legacy and not (profile.root / "profile.yaml").is_file():
-        profile.intrinsics.unlink()
-        try:
-            profile.root.rmdir()
-        except OSError:
-            pass
-        return
+        raise RuntimeError(
+            "Refusing to delete a profile outside config/intrinsics"
+        )
     shutil.rmtree(profile.root)

@@ -1,12 +1,14 @@
-schema_version: 4
+schema_version: 5
 project:
   workspace_root: ../workspace
-  dataset_cache_root: ../datasets
+  dataset_cache_root: ../workspace/preparation_cache
   output_root: ../results
   experiment_id: prepared_rig_example
-  run_label: ap02_baseline
+  run_label: baseline
 dataset:
   id: prepared_rig_example
+  category: real_vehicle
+  source_kind: prepared
   scene_type: other
   prepared_root: /absolute/path/to/prepared_dataset
 static_cameras:
@@ -19,7 +21,7 @@ markers:
   length_m: 0.17
   accepted_ids: all_detected
 selection:
-  mode: review_once
+  mode: auto
 methods:
   enabled: [ap02]
   ap02:

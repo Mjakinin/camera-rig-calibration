@@ -5,7 +5,7 @@ import csv
 from pathlib import Path
 
 
-AP3_ROOT = Path("results/bus_real_data/03_targetless_colmap_aruco_scale")
+AP3_ROOT = Path("workspace/standalone_methods/ap03")
 DATASET_ROOT = AP3_ROOT / "01_colmap_dataset"
 TXT_ROOT = AP3_ROOT / "02_colmap_sparse" / "sparse_txt"
 OUT_ROOT = AP3_ROOT / "03_reconstruction_inspection"
