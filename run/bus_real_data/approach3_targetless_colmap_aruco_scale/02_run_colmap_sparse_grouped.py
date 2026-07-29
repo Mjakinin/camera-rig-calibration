@@ -249,7 +249,30 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--colmap", default="colmap")
     parser.add_argument("--use-gpu", type=int, default=0)
-    parser.add_argument("--matcher", choices=["exhaustive", "sequential"], default="exhaustive")
+    parser.add_argument(
+        "--matcher",
+        choices=["exhaustive", "sequential"],
+        default="exhaustive",
+    )
+
+    parser.add_argument(
+        "--mapper-min-num-matches",
+        type=int,
+        default=15,
+    )
+
+    parser.add_argument(
+        "--abs-pose-min-num-inliers",
+        type=int,
+        default=30,
+    )
+
+    parser.add_argument(
+        "--abs-pose-min-inlier-ratio",
+        type=float,
+        default=0.25,
+    )
+
     args = parser.parse_args()
 
     executable = shutil.which(args.colmap)
@@ -319,22 +342,26 @@ def main() -> None:
 
     run(
         [
-            executable,
-            "mapper",
-            "--database_path",
-            str(DB),
-            "--image_path",
-            str(IMAGE_DIR),
-            "--output_path",
-            str(SPARSE_ROOT),
-            "--Mapper.ba_refine_focal_length",
-            "0",
-            "--Mapper.ba_refine_principal_point",
-            "0",
-            "--Mapper.ba_refine_extra_params",
-            "0",
-            "--Mapper.min_num_matches",
-            "8",
+        executable,
+        "mapper",
+        "--database_path",
+        str(DB),
+        "--image_path",
+        str(IMAGE_DIR),
+        "--output_path",
+        str(SPARSE_ROOT),
+        "--Mapper.ba_refine_focal_length",
+        "0",
+        "--Mapper.ba_refine_principal_point",
+        "0",
+        "--Mapper.ba_refine_extra_params",
+        "0",
+        "--Mapper.min_num_matches",
+        str(args.mapper_min_num_matches),
+        "--Mapper.abs_pose_min_num_inliers",
+        str(args.abs_pose_min_num_inliers),
+        "--Mapper.abs_pose_min_inlier_ratio",
+        str(args.abs_pose_min_inlier_ratio),
         ]
     )
 

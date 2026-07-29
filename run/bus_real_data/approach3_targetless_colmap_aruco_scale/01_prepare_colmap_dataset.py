@@ -48,14 +48,23 @@ def main():
     ap.add_argument("--moving-stride", type=int, default=1)
     ap.add_argument("--max-moving", type=int, default=0)
     ap.add_argument("--copy-mode", choices=["link", "copy"], default="link")
+    ap.add_argument(
+        "--moving-dir",
+        type=Path,
+        default=None,
+        help="Optional directory containing an alternative moving-camera sequence.",
+    )
     args = ap.parse_args()
 
     if not SHARED_RAW.exists():
         raise RuntimeError(f"Missing shared raw dataset: {SHARED_RAW}")
 
     static_dir = SHARED_RAW / "static"
-    moving_dir = SHARED_RAW / "moving"
 
+    if args.moving_dir is None:
+        moving_dir = SHARED_RAW / "moving"
+    else:
+        moving_dir = args.moving_dir
     if not static_dir.exists():
         raise RuntimeError(f"Missing static raw folder: {static_dir}")
     if not moving_dir.exists():

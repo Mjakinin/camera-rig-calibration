@@ -3,10 +3,20 @@
 import json
 import math
 from pathlib import Path
+import argparse
 
-KEYFRAME_PATH = Path("src/calib_lab/bus_real_data/config/moving_camera_route_keyframes.json")
-OUT_JSON = Path("src/calib_lab/bus_real_data/config/moving_camera_route_interpolated.json")
-OUT_CSV = Path("results/bus_real_data/01_marker_direct_relay_multimarker_multichain/02_moving_camera_route/moving_camera_route_interpolated.csv")
+DEFAULT_KEYFRAME_PATH = Path(
+    "src/calib_lab/bus_real_data/config/moving_camera_route_keyframes.json"
+)
+
+DEFAULT_OUT_JSON = Path(
+    "src/calib_lab/bus_real_data/config/moving_camera_route_interpolated.json"
+)
+
+DEFAULT_OUT_CSV = Path(
+    "results/bus_real_data/01_marker_direct_relay_multimarker_multichain/"
+    "02_moving_camera_route/moving_camera_route_interpolated.csv"
+)
 
 # Smaller = more frames / smoother motion.
 MAX_TRANSLATION_STEP_M = 0.15
@@ -38,7 +48,29 @@ def lerp(a, b, t):
 
 
 def main():
-    data = json.loads(KEYFRAME_PATH.read_text())
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--keyframes",
+        type=Path,
+        default=DEFAULT_KEYFRAME_PATH,
+    )
+    parser.add_argument(
+        "--out-json",
+        type=Path,
+        default=DEFAULT_OUT_JSON,
+    )
+    parser.add_argument(
+        "--out-csv",
+        type=Path,
+        default=DEFAULT_OUT_CSV,
+    )
+    args = parser.parse_args()
+
+    keyframe_path = args.keyframes
+    out_json = args.out_json
+    out_csv = args.out_csv
+
+    data = json.loads(keyframe_path.read_text())
     keyframes = data["keyframes"]
 
     route = []
@@ -91,10 +123,10 @@ def main():
         "yaw": last_pose[5]
     })
 
-    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
+    out_json.parent.mkdir(parents=True, exist_ok=True)
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
 
-    OUT_JSON.write_text(json.dumps({
+    out_json.write_text(json.dumps({
         "description": "Interpolated moving camera route generated from moving_camera_route_keyframes.json. Translation and rotation are both bounded per frame.",
         "pose_format": "x y z roll pitch yaw",
         "num_frames": len(route),
@@ -104,7 +136,7 @@ def main():
         "frames": route
     }, indent=2) + "\n")
 
-    with OUT_CSV.open("w") as f:
+    with out_csv.open("w") as f:
         f.write("frame,segment,x,y,z,roll,pitch,yaw\n")
         for r in route:
             f.write(
@@ -114,8 +146,8 @@ def main():
             )
 
     print()
-    print("[OK] wrote:", OUT_JSON)
-    print("[OK] wrote:", OUT_CSV)
+    print("[OK] wrote:", out_json)
+    print("[OK] wrote:", out_csv)
     print("[OK] number of route frames:", len(route))
 
 
