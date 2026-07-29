@@ -68,9 +68,12 @@ methods:
       reprojection_threshold_px: 5.0
       ransac_iterations: 1000
       minimum_inliers: 4
+      maximum_observations_per_marker: null
 observation_quality:
   maximum_pnp_reprojection_error_px: 25.0
-  minimum_marker_area_px2: 0.0
+  minimum_marker_area_ratio: 0.000008
+  require_positive_depth: true
   maximum_marker_distance_m: disabled
 evaluation:
-  anchor_marker_id: auto_common
+  enabled: true
+  anchor_marker_id: auto

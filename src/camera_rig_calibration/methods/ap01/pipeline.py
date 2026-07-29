@@ -54,6 +54,20 @@ class AP01Method:
             "--moving-camera-id",
             config.moving_camera.id,
         ]
+        if config.methods.ap01.top_moving_per_marker is not None:
+            arguments.extend(
+                [
+                    "--top-moving-per-marker",
+                    str(config.methods.ap01.top_moving_per_marker),
+                ]
+            )
+        if config.methods.ap01.scale_top_per_marker is not None:
+            arguments.extend(
+                [
+                    "--scale-top-per-marker",
+                    str(config.methods.ap01.scale_top_per_marker),
+                ]
+            )
         reconstruct = [
             *python_module,
             "camera_rig_calibration.methods.ap01.reconstruct_moving",

@@ -49,16 +49,22 @@ methods:
   enabled: [ap02]
   ap02:
     reference_marker_id: auto
+    reference_marker_maximum_frames: null
+    top_per_marker: 8
+    top_per_marker_pair: 4
+    maximum_total_frames: null
     static_only_ba_max_function_evaluations: 100
     combined_ba_max_function_evaluations: 120
     ba_robust_loss: soft_l1
     ba_robust_loss_scale_px: 3.0
 observation_quality:
   maximum_pnp_reprojection_error_px: 25.0
-  minimum_marker_area_px2: 0.0
+  minimum_marker_area_ratio: 0.000008
+  require_positive_depth: true
   maximum_marker_distance_m: disabled
 evaluation:
-  anchor_marker_id: auto_common
+  enabled: true
+  anchor_marker_id: auto
 ```
 
 One job snapshot enables exactly one method. Variants belong in a queue.
@@ -77,6 +83,7 @@ methods:
       reprojection_threshold_px: 5.0
       ransac_iterations: 1000
       minimum_inliers: 4
+      maximum_observations_per_marker: null
 colmap:
   executable: auto
   matcher: exhaustive
@@ -106,8 +113,14 @@ common:
     dictionary: DICT_4X4_50
     length_m: 0.17
     accepted_ids: all_detected
+  observation_quality:
+    maximum_pnp_reprojection_error_px: 25.0
+    minimum_marker_area_ratio: 0.000008
+    require_positive_depth: true
+    maximum_marker_distance_m: disabled
   evaluation:
-    anchor_marker_id: auto_common
+    enabled: true
+    anchor_marker_id: auto
 entries:
   - id: vehicle_exterior_day_01__ap01__baseline__01
     config: configs/01_baseline.yaml
@@ -118,7 +131,8 @@ entries:
 ```
 
 New queues contain one dataset. Each config is a complete deep-copy snapshot;
-its dataset, markers, and evaluation values must equal `common`. Dependencies
+its dataset, markers, observation-quality baseline, and evaluation values must
+equal `common`. Dependencies
 must refer to preceding entries. Independent entries continue after runtime
 failure. Queue-wide preparation is shared, while an invalid preflight row
 blocks and archives only that method.
@@ -153,22 +167,41 @@ second preparation.
 
 ## Observation quality
 
-Every method job owns:
+The queue owns a baseline:
 
 ```yaml
 observation_quality:
   maximum_pnp_reprojection_error_px: 25.0
-  minimum_marker_area_px2: 0.0
+  minimum_marker_area_ratio: 0.000008
+  require_positive_depth: true
   maximum_marker_distance_m: disabled
 ```
 
-Optional maximums are either `disabled` or greater than zero. Minimum area is
-zero or greater. These settings are separate from AP03 scale-estimator
-thresholds. Every method consumes all observations that pass these checks.
+Each AP method has an `observation_quality` mapping with the same four fields.
+`null` means inherit the queue baseline; any explicit value is a method-only
+override. Resolved configs and manifests store both the effective values and
+whether each came from `global` or `method_override`.
 
-The following checks are immutable: successful detection, four finite corners,
-successful PnP, finite rotation/translation, positive depth, and positive
-finite translation norm.
+```yaml
+methods:
+  ap02:
+    observation_quality:
+      maximum_pnp_reprojection_error_px: 10.0
+      minimum_marker_area_ratio: null
+      require_positive_depth: null
+      maximum_marker_distance_m: null
+```
+
+Optional numeric limits use `null` for unlimited and reject `0`. Distance and
+PnP maximums also support the explicit string `disabled`. Marker area is a
+ratio of marker pixels to total image pixels, so it remains comparable across
+resolutions. These settings are separate from AP03 scale RANSAC and common
+evaluation reprojection thresholds.
+
+Successful detection, four finite corners, successful PnP, finite
+rotation/translation and a positive finite translation norm remain fixed
+validity checks. Positive depth is enabled by default and can only be changed
+explicitly through `require_positive_depth`.
 
 ## Scientific selections
 
@@ -178,15 +211,22 @@ selection:
 methods:
   ap01:
     root_camera: auto
+    top_moving_per_marker: 8
+    scale_top_per_marker: 30
   ap02:
     reference_marker_id: auto
+    reference_marker_maximum_frames: null
+    top_per_marker: 8
+    top_per_marker_pair: 4
+    maximum_total_frames: null
   ap03:
     single:
       scale_marker_id: auto
     multi:
       marker_ids: auto
 evaluation:
-  anchor_marker_id: auto_common
+  enabled: true
+  anchor_marker_id: auto
 ```
 
 `auto` is the default: it deterministically freezes the computed candidates and
@@ -209,6 +249,12 @@ and filtering. In a non-interactive run this checkpoint is stored as
 the complete immutable dataset.
 
 These five scientific roles are independent. AP01 has no Reference ArUco.
+The evaluation anchor is selected exactly once in preflight and then frozen
+for every method. A method that cannot reconstruct it keeps its calibration
+result, while the common evaluation is reported as unavailable; no fallback
+anchor is substituted. If no repeat-supported common candidate exists,
+preflight stops. The wizard can explicitly set `evaluation.enabled: false`;
+this disables only the shared evaluation, not calibration.
 
 ## AP02
 
@@ -222,7 +268,16 @@ ba_robust_loss_scale_px: 3.0
 ```
 
 Static-only BA is diagnostic; Combined static/moving BA is primary. No
-method-specific smart/stride/Top-N or moving-frame cap is active.
+static-only result is promoted to the main comparison. AP02 selects
+quality-ranked reference, per-marker and per-marker-pair frames, deduplicates
+them, and preserves the accepted graph. If `maximum_total_frames` is below the
+minimum graph-preserving set, preflight fails and reports the required count.
+
+`ap02_optimization_summary.json` records SciPy status, `nfev`/`njev`, cost,
+RMSE, optimality, runtime, variables and residual counts.
+`ap02_optimization_history.csv` numbers actual residual-function evaluations;
+it intentionally leaves solver-iteration and per-call `nfev` cells empty when
+SciPy does not expose those values reliably.
 
 ## COLMAP
 
@@ -326,8 +381,10 @@ historical or already queued experiments.
 ## Duplicate and result behavior
 
 `duplicate_policy: skip` reuses an exact completed input/method fingerprint.
-The same human label with a different configuration is rejected; choose a new
-label such as `variant2`. Public results are immutable and have no `current` or
+Labels are generated from effective deviations, including method-quality
+override provenance. A same-label/different-fingerprint conflict therefore
+signals inconsistent stored evidence instead of asking for a manual
+`variant2` name. Public results are immutable and have no `current` or
 `run_history` wrapper.
 
 Resolved root/marker/matcher values and non-baseline differences are visible in

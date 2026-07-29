@@ -278,16 +278,84 @@ class ColmapSettings(StrictModel):
         return self.gpu_mode == "true"
 
 
+class ObservationQualitySettings(StrictModel):
+    minimum_marker_area_ratio: float = Field(
+        default=0.000008, ge=0.0, le=1.0
+    )
+    maximum_pnp_reprojection_error_px: float | Literal["disabled"] = 25.0
+    require_positive_depth: bool = True
+    maximum_marker_distance_m: float | Literal["disabled"] = "disabled"
+
+    @field_validator(
+        "maximum_pnp_reprojection_error_px",
+        "maximum_marker_distance_m",
+    )
+    @classmethod
+    def validate_optional_positive_limit(
+        cls, value: float | Literal["disabled"]
+    ) -> float | Literal["disabled"]:
+        if value == "disabled":
+            return value
+        number = float(value)
+        if number <= 0:
+            raise ValueError("must be 'disabled' or greater than zero")
+        return number
+
+
+class ObservationQualityOverrides(StrictModel):
+    """Per-method overrides; ``None`` means inherit the global baseline."""
+
+    minimum_marker_area_ratio: float | None = Field(
+        default=None, ge=0.0, le=1.0
+    )
+    maximum_pnp_reprojection_error_px: (
+        float | Literal["disabled"] | None
+    ) = None
+    require_positive_depth: bool | None = None
+    maximum_marker_distance_m: float | Literal["disabled"] | None = None
+
+    @field_validator(
+        "maximum_pnp_reprojection_error_px",
+        "maximum_marker_distance_m",
+    )
+    @classmethod
+    def validate_optional_positive_override(
+        cls, value: float | Literal["disabled"] | None
+    ) -> float | Literal["disabled"] | None:
+        if value is None or value == "disabled":
+            return value
+        number = float(value)
+        if number <= 0:
+            raise ValueError(
+                "must be null, 'disabled', or greater than zero"
+            )
+        return number
+
+
 class AP01Settings(StrictModel):
     root_camera: str = "auto"
+    top_moving_per_marker: int | None = Field(default=8, ge=1)
+    scale_top_per_marker: int | None = Field(default=30, ge=1)
+    observation_quality: ObservationQualityOverrides = Field(
+        default_factory=ObservationQualityOverrides
+    )
 
 
 class AP02Settings(StrictModel):
     reference_marker_id: int | Literal["auto"] = "auto"
+    reference_marker_maximum_frames: int | None = Field(
+        default=None, ge=1
+    )
+    top_per_marker: int | None = Field(default=8, ge=1)
+    top_per_marker_pair: int | None = Field(default=4, ge=1)
+    maximum_total_frames: int | None = Field(default=None, ge=1)
     static_only_ba_max_function_evaluations: int = Field(default=100, ge=1)
     combined_ba_max_function_evaluations: int = Field(default=120, ge=1)
     ba_robust_loss: Literal["soft_l1", "huber", "linear"] = "soft_l1"
     ba_robust_loss_scale_px: float = Field(default=3.0, gt=0)
+    observation_quality: ObservationQualityOverrides = Field(
+        default_factory=ObservationQualityOverrides
+    )
 
     @property
     def max_nfev_static(self) -> int:
@@ -302,6 +370,9 @@ class AP03ScaleSettings(StrictModel):
     reprojection_threshold_px: float = Field(default=5.0, gt=0)
     ransac_iterations: int = Field(default=1000, ge=1)
     minimum_inliers: int = Field(default=4, ge=2)
+    maximum_observations_per_marker: int | None = Field(
+        default=None, ge=1
+    )
 
 
 class AP03SingleSettings(StrictModel):
@@ -316,6 +387,9 @@ class AP03Settings(StrictModel):
     single: AP03SingleSettings = Field(default_factory=AP03SingleSettings)
     multi: AP03MultiSettings = Field(default_factory=AP03MultiSettings)
     scale: AP03ScaleSettings = Field(default_factory=AP03ScaleSettings)
+    observation_quality: ObservationQualityOverrides = Field(
+        default_factory=ObservationQualityOverrides
+    )
 
 
 class MethodSettings(StrictModel):
@@ -348,30 +422,9 @@ class MethodSettings(StrictModel):
         return result
 
 
-class ObservationQualitySettings(StrictModel):
-    maximum_pnp_reprojection_error_px: float | Literal["disabled"] = 25.0
-    minimum_marker_area_px2: float = Field(default=0.0, ge=0)
-    maximum_marker_distance_m: float | Literal["disabled"] = "disabled"
-
-    @field_validator(
-        "maximum_pnp_reprojection_error_px",
-        "maximum_marker_distance_m",
-    )
-    @classmethod
-    def validate_optional_positive_limit(
-        cls, value: float | Literal["disabled"]
-    ) -> float | Literal["disabled"]:
-        if value == "disabled":
-            return value
-        number = float(value)
-        if number <= 0:
-            raise ValueError("must be 'disabled' or greater than zero")
-        return number
-
-
 class EvaluationSettings(StrictModel):
     enabled: bool = True
-    anchor_marker_id: int | Literal["auto_common"] = "auto_common"
+    anchor_marker_id: int | Literal["auto"] = "auto"
     reprojection_threshold_px: float = Field(default=5.0, gt=0)
     minimum_inliers: int = Field(default=4, ge=2)
     ransac_iterations: int = Field(default=800, ge=1)
@@ -496,3 +549,25 @@ class RigConfig(StrictModel):
         if self.moving_camera.video is not None and self.sampling.target_hz is None:
             raise ValueError("sampling.target_hz is required for moving-video input")
         return self
+
+
+def effective_observation_quality(
+    config: RigConfig,
+    method_id: str,
+) -> tuple[ObservationQualitySettings, dict[str, Literal["global", "method_override"]]]:
+    """Resolve one method's quality settings and record each value's origin."""
+
+    normalized = method_id.strip().lower().replace("-", "_")
+    baseline = config.observation_quality.model_dump(mode="python")
+    sources: dict[str, Literal["global", "method_override"]] = {
+        field_name: "global" for field_name in baseline
+    }
+    method_settings = getattr(config.methods, normalized, None)
+    overrides = getattr(method_settings, "observation_quality", None)
+    if overrides is not None:
+        for field_name, value in overrides.model_dump(mode="python").items():
+            if value is None:
+                continue
+            baseline[field_name] = value
+            sources[field_name] = "method_override"
+    return ObservationQualitySettings.model_validate(baseline), sources

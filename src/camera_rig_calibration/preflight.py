@@ -4,7 +4,7 @@ import csv
 import json
 import shutil
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -14,15 +14,24 @@ from .ap02_graph import (
     graph_components,
 )
 from .components import register_builtin_components
-from .config.models import RigConfig
+from .config.models import RigConfig, effective_observation_quality
 from .contracts import RunContext
 from .observation_quality import (
     ObservationFilterResult,
     ObservationQualityError,
     filter_observations,
 )
-from .observations import ResolvedSelections, resolve_selections
+from .observations import (
+    ResolvedSelections,
+    resolve_selections,
+    write_selection_candidates_csv,
+)
 from .registry import calibration_methods
+from .methods.ap02.frame_selection import (
+    AP02FrameSelectionError,
+    select_ap02_frames,
+    write_ap02_frame_selection,
+)
 
 
 @dataclass(frozen=True)
@@ -61,6 +70,7 @@ class QueuePreflightResult:
     camera_coverage: tuple["CameraObservationCoverage", ...] = ()
     missing_required_cameras: tuple[str, ...] = ()
     review_reasons: tuple[str, ...] = ()
+    common_evaluation_anchor_marker_id: int | None = None
 
     @property
     def ready(self) -> bool:
@@ -114,6 +124,8 @@ def _copy_filter_artifacts(source: Path, destination: Path) -> None:
         "observation_filter_summary.json",
         "accepted_observations.csv",
         "rejected_observations.csv",
+        "marker_inventory.csv",
+        "marker_inventory.json",
     ):
         path = source / name
         if path.is_file():
@@ -228,6 +240,9 @@ def run_queue_preflight(
         filtered = None
         selections = None
         ap02_graph_diagnosis = None
+        ap02_frame_selection_summary = None
+        effective_quality = None
+        quality_sources = None
         job_camera_coverage = tuple(
             CameraObservationCoverage(
                 camera_id=item.camera_id,
@@ -239,12 +254,16 @@ def run_queue_preflight(
             for item in queue_camera_coverage
         )
         try:
+            method_id = job.config.methods.enabled[0]
+            effective_quality, quality_sources = (
+                effective_observation_quality(job.config, method_id)
+            )
             filtered = filter_observations(
                 raw_observations_csv,
                 job_root,
                 job_id=job.job_id,
                 marker_settings=job.config.markers,
-                quality=job.config.observation_quality,
+                quality=effective_quality,
             )
             if filtered.accepted_count == 0:
                 errors.append("Every raw observation was rejected")
@@ -257,7 +276,6 @@ def run_queue_preflight(
                     camera_id = _observation_camera_id(row)
                     if camera_id:
                         accepted_counts[camera_id] += 1
-                method_id = job.config.methods.enabled[0]
                 if method_id == "ap02":
                     expected_camera_ids = tuple(
                         camera.id for camera in job.config.static_cameras
@@ -318,9 +336,49 @@ def run_queue_preflight(
                     f"{filtered.rejected_count} rejected; configured limits "
                     "were not altered"
                 )
+                details.append(
+                    "Effective quality sources: "
+                    + ", ".join(
+                        f"{name}={source}"
+                        for name, source in sorted(quality_sources.items())
+                    )
+                )
                 selections = resolve_selections(
                     job.config, filtered.filtered_observations_root
                 )
+                if method_id == "ap02":
+                    settings = job.config.methods.ap02
+                    frame_selection = select_ap02_frames(
+                        accepted_rows,
+                        camera_ids=tuple(
+                            camera.id
+                            for camera in job.config.static_cameras
+                        ),
+                        reference_marker_id=(
+                            selections.ap02_reference_marker_id
+                        ),
+                        reference_marker_maximum_frames=(
+                            settings.reference_marker_maximum_frames
+                        ),
+                        top_per_marker=settings.top_per_marker,
+                        top_per_marker_pair=settings.top_per_marker_pair,
+                        maximum_total_frames=(
+                            settings.maximum_total_frames
+                        ),
+                    )
+                    write_ap02_frame_selection(
+                        frame_selection, job_root
+                    )
+                    ap02_frame_selection_summary = (
+                        frame_selection.summary
+                    )
+                    details.append(
+                        "AP02 moving-frame selection: "
+                        f"{len(frame_selection.selected_frame_ids)}/"
+                        f"{frame_selection.summary['input_moving_frames']} "
+                        "frames; minimum graph-preserving set "
+                        f"{frame_selection.summary['minimum_graph_preserving_frames']}"
+                    )
                 context = RunContext(
                     repository_root=repository_root.resolve(),
                     config=job.config,
@@ -561,7 +619,12 @@ def run_queue_preflight(
                             ),
                         ]
                     )
-        except (ObservationQualityError, RuntimeError, ValueError) as exc:
+        except (
+            AP02FrameSelectionError,
+            ObservationQualityError,
+            RuntimeError,
+            ValueError,
+        ) as exc:
             errors.append(str(exc))
 
         partial = False
@@ -598,15 +661,21 @@ def run_queue_preflight(
             "errors": errors,
             "warnings": warnings,
             "details": details,
-            "observation_quality": job.config.observation_quality.model_dump(
-                mode="json"
-            ),
+            "observation_quality": {
+                "effective": (
+                    effective_quality.model_dump(mode="json")
+                    if effective_quality is not None
+                    else None
+                ),
+                "sources": quality_sources,
+            },
             "detection_mode": job.config.markers.detection_mode,
             "ap02_combined_graph": (
                 ap02_graph_diagnosis.model_dump()
                 if ap02_graph_diagnosis is not None
                 else None
             ),
+            "ap02_frame_selection": ap02_frame_selection_summary,
             "camera_coverage": [
                 {
                     "camera_id": item.camera_id,
@@ -631,7 +700,15 @@ def run_queue_preflight(
                     "ap03_multi_marker_ids": list(
                         selections.ap03_multi_marker_ids
                     ),
+                    "evaluation_anchor_marker_id": (
+                        selections.evaluation_anchor_marker_id
+                    ),
                 }
+                if selections is not None
+                else None
+            ),
+            "automatic_recommendations": (
+                selections.payload.get("automatic_recommendations")
                 if selections is not None
                 else None
             ),
@@ -651,6 +728,162 @@ def run_queue_preflight(
                 ap02_graph_diagnosis=ap02_graph_diagnosis,
             )
         )
+
+    common_evaluation_anchor: int | None = None
+    evaluation_rows = [
+        (index, job, result)
+        for index, (job, result) in enumerate(
+            zip(job_list, results, strict=True)
+        )
+        if job.config.evaluation.enabled
+        and result.runnable
+        and result.selections is not None
+    ]
+    if evaluation_rows:
+        explicit = {
+            int(job.config.evaluation.anchor_marker_id)
+            for _, job, _ in evaluation_rows
+            if isinstance(job.config.evaluation.anchor_marker_id, int)
+        }
+        candidate_sets = [
+            set(
+                int(value)
+                for value in result.selections.payload[
+                    "evaluation_anchor"
+                ][
+                    (
+                        "automatic_observation_candidates"
+                        if job.config.evaluation.anchor_marker_id == "auto"
+                        else "observation_candidates"
+                    )
+                ]
+            )
+            for _, job, result in evaluation_rows
+        ]
+        common_candidates = set.intersection(*candidate_sets)
+        anchor_error: str | None = None
+        if len(explicit) > 1:
+            anchor_error = (
+                "Enabled queue jobs request conflicting explicit evaluation "
+                f"anchors: {sorted(explicit)}"
+            )
+        elif explicit:
+            requested = next(iter(explicit))
+            if requested not in common_candidates:
+                anchor_error = (
+                    f"Evaluation anchor {requested} is not compatible with "
+                    "every enabled method after its effective quality filter."
+                )
+            else:
+                common_evaluation_anchor = requested
+        elif not common_candidates:
+            anchor_error = (
+                "Evaluation is enabled, but no repeat-supported marker is "
+                "compatible with every runnable method after their effective "
+                "quality filters. Adjust filters/whitelist or disable "
+                "evaluation explicitly."
+            )
+        else:
+            aggregate: dict[int, tuple[float, int]] = {}
+            for marker_id in common_candidates:
+                scores: list[float] = []
+                support = 0
+                for _, _, result in evaluation_rows:
+                    candidates = {
+                        int(item["id"]): item
+                        for item in result.selections.payload[
+                            "ap03_single_scale_marker"
+                        ]["candidates"]
+                    }
+                    details = candidates[marker_id]
+                    scores.append(
+                        float(details.get("median_selection_score") or 0.0)
+                    )
+                    support += int(details.get("accepted_observations", 0))
+                aggregate[marker_id] = (min(scores), support)
+            common_evaluation_anchor = max(
+                common_candidates,
+                key=lambda marker_id: (
+                    aggregate[marker_id][0],
+                    aggregate[marker_id][1],
+                    -marker_id,
+                ),
+            )
+
+        if anchor_error is not None:
+            for index, _, result in evaluation_rows:
+                results[index] = replace(
+                    result,
+                    status="FAILED_PREFLIGHT",
+                    errors=(*result.errors, anchor_error),
+                    details=(
+                        *result.details,
+                        "Common evaluation anchor: unavailable",
+                    ),
+                )
+        else:
+            for index, _, result in evaluation_rows:
+                assert result.selections is not None
+                payload = json.loads(
+                    json.dumps(result.selections.payload)
+                )
+                payload["evaluation_anchor"]["selected"] = (
+                    common_evaluation_anchor
+                )
+                payload["evaluation_anchor"]["reason"] = (
+                    "one deterministic anchor frozen across all runnable "
+                    "queue methods before calibration"
+                )
+                payload["automatic_recommendations"][
+                    "evaluation_anchor_marker_id"
+                ] = common_evaluation_anchor
+                selections = replace(
+                    result.selections,
+                    evaluation_anchor_marker_id=common_evaluation_anchor,
+                    payload=payload,
+                )
+                if result.filter_result is not None:
+                    for name in (
+                        "SELECTION_CANDIDATES.json",
+                        "REFERENCE_SELECTIONS.json",
+                    ):
+                        _write_json(
+                            result.filter_result.filtered_observations_root
+                            / name,
+                            payload,
+                        )
+                    write_selection_candidates_csv(
+                        result.filter_result.filtered_observations_root,
+                        payload,
+                    )
+                results[index] = replace(
+                    result,
+                    selections=selections,
+                    details=(
+                        *result.details,
+                        "Common evaluation anchor frozen before methods: "
+                        f"marker {common_evaluation_anchor}",
+                    ),
+                )
+                summary_path = (
+                    result.output_directory / "preflight_summary.json"
+                )
+                updated_summary = json.loads(
+                    summary_path.read_text(encoding="utf-8")
+                )
+                updated_summary["resolved_selections"] = {
+                    **(
+                        updated_summary.get("resolved_selections")
+                        or {}
+                    ),
+                    "evaluation_anchor_marker_id": (
+                        common_evaluation_anchor
+                    ),
+                }
+                updated_summary[
+                    "common_evaluation_anchor_marker_id"
+                ] = common_evaluation_anchor
+                _write_json(summary_path, updated_summary)
 
     runnable = [result for result in results if result.runnable]
     failed = [result for result in results if not result.runnable]
@@ -708,6 +941,9 @@ def run_queue_preflight(
             "missing_required_cameras": list(missing_required),
             "review_required": bool(review_reasons),
             "review_reasons": review_reasons,
+            "common_evaluation_anchor_marker_id": (
+                common_evaluation_anchor
+            ),
             "runnable_jobs": [result.job_id for result in runnable],
             "skipped_jobs": [result.job_id for result in failed],
         },
@@ -719,4 +955,5 @@ def run_queue_preflight(
         camera_coverage=queue_camera_coverage,
         missing_required_cameras=missing_required,
         review_reasons=tuple(review_reasons),
+        common_evaluation_anchor_marker_id=common_evaluation_anchor,
     )

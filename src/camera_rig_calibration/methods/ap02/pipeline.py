@@ -37,6 +37,18 @@ class AP02Method:
             camera.id for camera in context.config.static_cameras
         )
         python_module = [sys.executable, "-m"]
+        selection_arguments: list[str] = []
+        for option, value in (
+            (
+                "--reference-marker-maximum-frames",
+                settings.reference_marker_maximum_frames,
+            ),
+            ("--top-per-marker", settings.top_per_marker),
+            ("--top-per-marker-pair", settings.top_per_marker_pair),
+            ("--maximum-total-frames", settings.maximum_total_frames),
+        ):
+            if value is not None:
+                selection_arguments.extend([option, str(value)])
         stages = [
             (
                 "ap02_build_graph",
@@ -52,6 +64,7 @@ class AP02Method:
                     cameras,
                     "--ref-marker-id",
                     reference,
+                    *selection_arguments,
                 ],
                 output / "02_aruco_observations",
                 (),

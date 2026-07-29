@@ -31,7 +31,9 @@ def fields():
         "detection_success", "pnp_success", "pnp_reprojection_rmse_px",
         "rvec_x", "rvec_y", "rvec_z",
         "tvec_x_m", "tvec_y_m", "tvec_z_m",
-        "distance_m", "center_u", "center_v", "area_px2",
+        "distance_m", "center_u", "center_v",
+        "image_width_px", "image_height_px", "area_px2",
+        "marker_area_ratio",
     ]
     base += [f"d{i}" for i in range(8)]
     for i in range(4):
@@ -114,6 +116,7 @@ def detect_image(
     )
 
     objp = marker_object_points(marker_length_m).astype(np.float32)
+    image_height_px, image_width_px = image.shape[:2]
 
     for det in detections:
         marker_id = int(det["marker_id"])
@@ -182,7 +185,10 @@ def detect_image(
             "distance_m": distance,
             "center_u": float(center[0]),
             "center_v": float(center[1]),
+            "image_width_px": int(image_width_px),
+            "image_height_px": int(image_height_px),
             "area_px2": area,
+            "marker_area_ratio": area / float(image_width_px * image_height_px),
         }
 
         coefficients = list(np.asarray(dist, dtype=np.float64).reshape(-1))

@@ -309,7 +309,7 @@ def run_ba(
 
         print(
             "[INFO] with_moving observations:"
-            " every observation accepted by observation_quality_v1"
+            " every observation selected by AP02 after observation_quality_v2"
         )
         print(
             f"[INFO] available moving frames="
@@ -339,7 +339,7 @@ def run_ba(
         loss="soft_l1",
         f_scale=3.0,
         max_nfev=max_nfev,
-        verbose=2,
+        verbose=0,
     )
 
     marker_opt, observer_opt = unpack_params(result.x, names, ref_marker_id)

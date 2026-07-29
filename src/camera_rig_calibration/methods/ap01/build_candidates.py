@@ -17,6 +17,7 @@ def run(
     camera_ids: tuple[str, ...],
     root_camera: str,
     moving_camera_id: str,
+    top_moving_per_marker: int | None,
 ) -> StageResult:
     stage_root = output_root / "03_candidates"
 
@@ -38,7 +39,65 @@ def run(
             .strip()
         )
         static = core.best_static_by_camera_marker(static_rows)
-        moving = core.moving_by_marker(moving_rows, set(poses))
+        registered_by_marker: dict[int, list[dict]] = {}
+        for row in moving_rows:
+            if row["_frame"] in poses:
+                registered_by_marker.setdefault(
+                    int(row["_marker"]), []
+                ).append(row)
+        moving = core.moving_by_marker(
+            moving_rows,
+            set(poses),
+            top_per_marker=top_moving_per_marker,
+        )
+        selection_rows: list[dict] = []
+        for marker_id, registered in sorted(
+            registered_by_marker.items()
+        ):
+            ranked = sorted(
+                registered,
+                key=lambda row: (
+                    -float(row["_quality"]),
+                    int(row["_frame"]),
+                ),
+            )
+            selected_frames = {
+                int(row["_frame"])
+                for row in moving.get(marker_id, [])
+            }
+            for rank, row in enumerate(ranked, 1):
+                selection_rows.append(
+                    {
+                        "marker_id": marker_id,
+                        "frame_id": int(row["_frame"]),
+                        "quality_rank": rank,
+                        "selection_score": float(row["_quality"]),
+                        "selected": (
+                            int(row["_frame"]) in selected_frames
+                        ),
+                        "registered_observations_for_marker": len(
+                            ranked
+                        ),
+                        "selected_observations_for_marker": len(
+                            selected_frames
+                        ),
+                        "top_moving_per_marker": (
+                            top_moving_per_marker
+                        ),
+                        "tie_breaker": (
+                            "stable ascending moving-frame number"
+                        ),
+                    }
+                )
+        stage_root.mkdir(parents=True, exist_ok=True)
+        core.write_csv(
+            stage_root / "AP01_RELAY_SELECTION.csv",
+            selection_rows,
+        )
+        (stage_root / "AP01_RELAY_SELECTION.json").write_text(
+            json.dumps(selection_rows, indent=2) + "\n",
+            encoding="utf-8",
+        )
         records: list[dict] = []
         for target in camera_ids:
             if target == root_camera:
@@ -74,7 +133,10 @@ def run(
             "colmap": output_root / "01_moving_colmap",
             "scale": output_root / "02_metric_scale/metric_scale.txt",
         },
-        parameters={"uses_all_quality_accepted_observations": True},
+        parameters={
+            "selection": "quality_ranked_per_marker",
+            "top_moving_per_marker": top_moving_per_marker,
+        },
     )
 
 
@@ -87,6 +149,7 @@ def main() -> None:
         camera_ids=cameras(args),
         root_camera=args.root_camera,
         moving_camera_id=args.moving_camera_id,
+        top_moving_per_marker=args.top_moving_per_marker,
     )
 
 

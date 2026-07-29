@@ -14,6 +14,7 @@ from camera_rig_calibration.evaluation.reporting import (
     _real_results_text,
     _real_variant_disagreement,
     _simulation_pairwise,
+    _simulation_primary_text,
     ensure_simulation_ground_truth,
     pairwise_rows,
     refresh_method_reports,
@@ -206,6 +207,74 @@ def test_real_report_starts_with_marker_metric_and_has_no_how_to_text(
     assert combined.index("REAL-DATA MARKER LENGTH") < combined.index(
         "METHOD / VARIANT OVERVIEW"
     )
+
+
+def test_simulation_front_door_includes_anchor_scale_config_and_paths() -> None:
+    payloads = [
+        {
+            "method": "ap03",
+            "label": "scale_top_12",
+            "artifact_status": "available",
+            "quality_status": "converged",
+            "config_summary": {
+                "scale_maximum_observations_per_marker": 12,
+            },
+            "metrics": {
+                "ap03_scale": {
+                    "scale_m_per_colmap_unit": 0.25,
+                    "num_scale_observations_used": 8,
+                    "num_scale_observations_total": 10,
+                    "used_rel_std_scale": 0.01,
+                }
+            },
+            "detail_artifacts": [
+                "diagnostics/method/scale_multi/scale_selection.csv"
+            ],
+        }
+    ]
+    text = _simulation_primary_text(
+        "synthetic",
+        {"route": 2},
+        [
+            {
+                "method": "ap03",
+                "label": "scale_top_12",
+                "count": 1,
+                "mean_translation_error_cm": 0.1,
+                "mean_rotation_error_deg": 0.2,
+                "max_translation_error_cm": 0.1,
+                "max_rotation_error_deg": 0.2,
+            }
+        ],
+        [
+            {
+                "method": "ap03",
+                "label": "scale_top_12",
+                "pair": "cam0-cam1",
+                "translation_error_cm": 0.1,
+                "rotation_error_deg": 0.2,
+                "gt_baseline_m": 1.0,
+                "estimated_baseline_m": 1.001,
+                "baseline_error_cm": 0.1,
+                "direction_error_deg": 0.05,
+            }
+        ],
+        payloads,
+        {
+            "selected": 7,
+            "configured": "auto",
+            "reason": "best repeated support",
+        },
+    )
+
+    assert "Anchor reason: best repeated support" in text
+    assert "SCALE COMPARISON" in text
+    assert "0.250000" in text
+    assert "scale_maximum_observations_per_marker=12" in text
+    assert "methods\\ap03\\scale_top_12\\RESULT.txt" in text or (
+        "methods/ap03/scale_top_12/RESULT.txt" in text
+    )
+    assert "scale_selection.csv" in text
 
 
 def test_ground_truth_snapshot_is_exact_and_idempotent(

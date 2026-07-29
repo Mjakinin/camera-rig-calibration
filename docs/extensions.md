@@ -44,7 +44,9 @@ one reviewed reproducibility boundary. Supporting another rig later requires a
 new versioned product contract, not a manual path or an unvalidated manifest.
 
 Schema v5 intentionally has no frame-selection policy contract. All active
-methods receive every observation accepted by `observation_quality_v1`.
+methods receive observations accepted by their effective
+`observation_quality_v2` configuration and any deterministic method-specific
+selection stage.
 Future research selection must be introduced as a new versioned stage and
 config contract rather than reusing the removed v1-v3 policy switches.
 

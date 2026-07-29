@@ -156,13 +156,23 @@ def _transaction_dataset(transaction: Path, fingerprint: str = "input_fixture") 
         (observations / name).write_text("frame\n", encoding="utf-8")
     for name in ("SELECTION_CANDIDATES.json", "REFERENCE_SELECTIONS.json"):
         (observations / name).write_text("{}", encoding="utf-8")
+    (observations / "SELECTION_CANDIDATES.csv").write_text(
+        "selection,rank\n", encoding="utf-8"
+    )
     (observations / "REFERENCE_MARKER_ID.txt").write_text(
         "3\n", encoding="utf-8"
     )
     (observations / "PUBLICATION_COMPLETE.json").write_text(
         json.dumps({"status": "complete"}), encoding="utf-8"
     )
-    (observations / "quality").mkdir()
+    quality = observations / "quality"
+    quality.mkdir()
+    (quality / "marker_inventory.csv").write_text(
+        "marker_id\n", encoding="utf-8"
+    )
+    (quality / "marker_inventory.json").write_text(
+        "[]\n", encoding="utf-8"
+    )
     (observations / "debug_images").mkdir()
     (dataset / "metadata").mkdir()
     (dataset / "metadata/source.json").write_text(

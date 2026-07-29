@@ -27,7 +27,7 @@ import csv
 import json
 import math
 from pathlib import Path
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 import cv2
 import numpy as np
@@ -159,6 +159,67 @@ def detect_marker_observations(
     return obs
 
 
+def select_observations_per_marker(
+    observations: list[dict],
+    maximum_observations_per_marker: int | None,
+) -> tuple[list[dict], list[dict]]:
+    """Select whole image/marker detections before corner triangulation."""
+
+    grouped: dict[int, dict[str, list[dict]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    for row in observations:
+        grouped[int(row["marker_id"])][str(row["image_name"])].append(row)
+    selected: list[dict] = []
+    diagnostics: list[dict] = []
+    for marker_id, by_image in sorted(grouped.items()):
+        ranked_images = sorted(
+            by_image,
+            key=lambda image_name: (
+                -max(
+                    float(row.get("selection_score") or 0.0)
+                    for row in by_image[image_name]
+                ),
+                -max(
+                    float(row.get("area_px2") or 0.0)
+                    for row in by_image[image_name]
+                ),
+                image_name,
+            ),
+        )
+        chosen = (
+            ranked_images
+            if maximum_observations_per_marker is None
+            else ranked_images[:maximum_observations_per_marker]
+        )
+        selected_images = set(chosen)
+        for rank, image_name in enumerate(ranked_images, 1):
+            image_rows = by_image[image_name]
+            diagnostics.append(
+                {
+                    "marker_id": marker_id,
+                    "image_name": image_name,
+                    "quality_rank": rank,
+                    "selected": image_name in selected_images,
+                    "selection_score": max(
+                        float(row.get("selection_score") or 0.0)
+                        for row in image_rows
+                    ),
+                    "area_px2": max(
+                        float(row.get("area_px2") or 0.0)
+                        for row in image_rows
+                    ),
+                    "maximum_observations_per_marker": (
+                        maximum_observations_per_marker
+                    ),
+                    "tie_breaker": "stable ascending image name",
+                }
+            )
+            if image_name in selected_images:
+                selected.extend(image_rows)
+    return selected, diagnostics
+
+
 def triangulate_marker_corners(obs: list[dict], images: dict, cameras: dict, args) -> tuple[dict, list[dict]]:
     grouped = defaultdict(list)
     for o in obs:
@@ -284,6 +345,14 @@ def robust_scale(scale_rows: list[dict]) -> tuple[float, list[dict], dict]:
 
     used_vals_np = np.array(used_vals, dtype=np.float64)
     scale = float(np.median(used_vals_np))
+    total_by_marker = Counter(
+        int(row["marker_id"]) for row in scale_rows
+    )
+    used_by_marker = Counter(
+        int(row["marker_id"])
+        for row in keep
+        if str(row["used_for_scale"]).startswith("yes")
+    )
     meta = {
         "scale_m_per_colmap_unit": scale,
         "num_scale_observations_total": int(len(scale_rows)),
@@ -294,6 +363,12 @@ def robust_scale(scale_rows: list[dict]) -> tuple[float, list[dict], dict]:
         "used_mean_scale": float(np.mean(used_vals_np)),
         "used_std_scale": float(np.std(used_vals_np)),
         "used_rel_std_scale": float(np.std(used_vals_np) / scale) if scale > 0 else float("inf"),
+        "scale_candidates_per_marker": dict(sorted(total_by_marker.items())),
+        "scale_inliers_per_marker": dict(sorted(used_by_marker.items())),
+        "scale_outliers_per_marker": {
+            marker: total_by_marker[marker] - used_by_marker[marker]
+            for marker in sorted(total_by_marker)
+        },
     }
     return scale, keep, meta
 
@@ -317,6 +392,7 @@ def main() -> None:
     ap.add_argument("--image-dir", type=Path)
     ap.add_argument("--inspect-summary", type=Path)
     ap.add_argument("--accepted-observations", type=Path)
+    ap.add_argument("--maximum-observations-per-marker", type=int)
     ap.add_argument("--static-cameras", default=",".join(STATIC_CAMERAS))
     args = ap.parse_args()
     static_cameras = [
@@ -356,6 +432,8 @@ def main() -> None:
     corners_3d = {}
     tri_rows = []
     scale_rows = []
+    observation_selection_rows = []
+    detected_corner_observation_count = 0
     scaled_pose_rows = []
 
     scale = None
@@ -395,7 +473,7 @@ def main() -> None:
                 args.detection_mode,
             )
             if args.accepted_observations is not None:
-                allowed: set[tuple[str, int]] = set()
+                allowed: dict[tuple[str, int], dict[str, str]] = {}
                 for row in read_csv(args.accepted_observations):
                     marker = int(float(row["marker_id"]))
                     if row.get("observer_type") == "static":
@@ -414,13 +492,31 @@ def main() -> None:
                                 f"frame_{int(float(row['frame_id'])):06d}.png"
                             )
                         name = f"moving_{source}"
-                    allowed.add((name, marker))
+                    key = (name, marker)
+                    previous = allowed.get(key)
+                    if (
+                        previous is None
+                        or float(row.get("selection_score") or 0.0)
+                        > float(previous.get("selection_score") or 0.0)
+                    ):
+                        allowed[key] = row
                 obs = [
-                    row
+                    {
+                        **row,
+                        "selection_score": allowed[
+                            (str(row["image_name"]), int(row["marker_id"]))
+                        ].get("selection_score", 0.0),
+                    }
                     for row in obs
                     if (str(row["image_name"]), int(row["marker_id"]))
                     in allowed
                 ]
+            detected_corner_observation_count = len(obs)
+            obs, observation_selection_rows = (
+                select_observations_per_marker(
+                    obs, args.maximum_observations_per_marker
+                )
+            )
             corners_3d, tri_rows = triangulate_marker_corners(
                 obs, images, cameras, args
             )
@@ -478,6 +574,21 @@ def main() -> None:
     )
 
     write_csv(
+        args.out_dir / "AP03_OBSERVATION_SELECTION.csv",
+        observation_selection_rows,
+        [
+            "marker_id",
+            "image_name",
+            "quality_rank",
+            "selected",
+            "selection_score",
+            "area_px2",
+            "maximum_observations_per_marker",
+            "tie_breaker",
+        ],
+    )
+
+    write_csv(
         args.out_dir / "AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
         scaled_pose_rows,
         pose_fields(),
@@ -527,7 +638,16 @@ def main() -> None:
         "marker_ids_requested": sorted(marker_ids),
         "marker_length_m": args.marker_length_m,
         "detection_mode": args.detection_mode,
+        "maximum_observations_per_marker": (
+            args.maximum_observations_per_marker
+        ),
+        "detected_corner_observations_before_selection": (
+            detected_corner_observation_count
+        ),
         "detected_corner_observations": len(obs),
+        "selected_image_marker_observations": sum(
+            bool(row["selected"]) for row in observation_selection_rows
+        ),
         "triangulated_marker_corners": len(corners_3d),
         **scale_meta,
     }

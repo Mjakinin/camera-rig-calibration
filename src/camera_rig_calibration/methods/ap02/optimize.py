@@ -8,6 +8,7 @@ silently discarded.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import time
 from pathlib import Path
@@ -149,6 +150,8 @@ def main() -> None:
 
     scipy_least_squares = core.least_squares
     optimizer_report: dict[str, object] = {}
+    optimization_summary: dict[str, object] = {}
+    optimization_history: list[dict[str, object]] = []
 
     def robust_cost(residuals: np.ndarray) -> float:
         residuals = np.asarray(residuals, dtype=np.float64)
@@ -165,9 +168,120 @@ def main() -> None:
     def configured_least_squares(function, initial, **kwargs):
         kwargs["loss"] = args.robust_loss
         kwargs["f_scale"] = args.robust_loss_scale_px
-        initial_residuals = np.asarray(function(initial), dtype=np.float64)
         started = time.monotonic()
-        result = scipy_least_squares(function, initial, **kwargs)
+        evaluation_index = 0
+        previous_parameters: np.ndarray | None = None
+
+        def evaluate(
+            parameters: np.ndarray,
+            *,
+            source: str,
+        ) -> np.ndarray:
+            nonlocal evaluation_index, previous_parameters
+            residuals = np.asarray(
+                function(parameters), dtype=np.float64
+            )
+            evaluation_index += 1
+            pairwise = residuals.reshape(-1, 2)
+            norms = np.linalg.norm(pairwise, axis=1)
+            step_norm = (
+                float(
+                    np.linalg.norm(
+                        np.asarray(parameters) - previous_parameters
+                    )
+                )
+                if previous_parameters is not None
+                else None
+            )
+            optimization_history.append(
+                {
+                    "residual_evaluation_index": evaluation_index,
+                    "source": source,
+                    "solver_iteration": "",
+                    "solver_nfev": "",
+                    "elapsed_seconds": time.monotonic() - started,
+                    "robust_cost": robust_cost(residuals),
+                    "reprojection_rmse_px": (
+                        float(np.sqrt(np.mean(norms * norms)))
+                        if len(norms)
+                        else None
+                    ),
+                    "mean_reprojection_error_px": (
+                        float(np.mean(norms)) if len(norms) else None
+                    ),
+                    "maximum_reprojection_error_px": (
+                        float(np.max(norms)) if len(norms) else None
+                    ),
+                    "parameter_step_norm": step_norm,
+                }
+            )
+            previous_parameters = np.asarray(
+                parameters, dtype=np.float64
+            ).copy()
+            return residuals
+
+        initial_residuals = evaluate(
+            np.asarray(initial, dtype=np.float64),
+            source="initial_diagnostic",
+        )
+        result = scipy_least_squares(
+            lambda parameters: evaluate(
+                parameters, source="solver_residual_call"
+            ),
+            initial,
+            **kwargs,
+        )
+        initial_cost = robust_cost(initial_residuals)
+        final_cost = float(result.cost)
+        initial_norms = np.linalg.norm(
+            initial_residuals.reshape(-1, 2), axis=1
+        )
+        final_norms = np.linalg.norm(
+            np.asarray(result.fun).reshape(-1, 2), axis=1
+        )
+        runtime_seconds = time.monotonic() - started
+        optimization_summary.update(
+            {
+                "schema_version": 5,
+                "mode": args.mode,
+                "solver_success": bool(result.success),
+                "solver_status": int(result.status),
+                "solver_message": str(result.message),
+                "nfev": int(result.nfev),
+                "njev": (
+                    int(result.njev)
+                    if getattr(result, "njev", None) is not None
+                    else None
+                ),
+                "maximum_function_evaluations": int(args.max_nfev),
+                "residual_evaluation_calls_recorded": evaluation_index,
+                "initial_cost": initial_cost,
+                "final_cost": final_cost,
+                "absolute_cost_improvement": initial_cost - final_cost,
+                "relative_cost_improvement": (
+                    (initial_cost - final_cost) / initial_cost
+                    if initial_cost > 0
+                    else None
+                ),
+                "initial_reprojection_rmse_px": (
+                    float(np.sqrt(np.mean(initial_norms**2)))
+                    if len(initial_norms)
+                    else None
+                ),
+                "final_reprojection_rmse_px": (
+                    float(np.sqrt(np.mean(final_norms**2)))
+                    if len(final_norms)
+                    else None
+                ),
+                "optimality": float(result.optimality),
+                "runtime_seconds": runtime_seconds,
+                "variable_count": int(len(initial)),
+                "scalar_residual_count": int(len(initial_residuals)),
+                "corner_residual_count": int(len(initial_residuals) // 2),
+                "loss": args.robust_loss,
+                "loss_scale_px": float(args.robust_loss_scale_px),
+            }
+        )
         optimizer_report.update(
             {
                 "mode": args.mode,
@@ -176,11 +290,17 @@ def main() -> None:
                 "message": str(result.message),
                 "nfev": int(result.nfev),
                 "maximum_function_evaluations": int(args.max_nfev),
-                "initial_cost": robust_cost(initial_residuals),
-                "final_cost": float(result.cost),
+                "initial_cost": initial_cost,
+                "final_cost": final_cost,
                 "loss": args.robust_loss,
                 "loss_scale_px": float(args.robust_loss_scale_px),
-                "runtime_seconds": time.monotonic() - started,
+                "runtime_seconds": runtime_seconds,
+                "final_reprojection_rmse_px": (
+                    optimization_summary[
+                        "final_reprojection_rmse_px"
+                    ]
+                ),
+                "optimality": optimization_summary["optimality"],
             }
         )
         return result
@@ -209,6 +329,25 @@ def main() -> None:
             json.dumps(optimizer_report, indent=2) + "\n",
             encoding="utf-8",
         )
+        (report_path.parent / "ap02_optimization_summary.json").write_text(
+            json.dumps(
+                optimization_summary, indent=2, sort_keys=True
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        history_path = (
+            report_path.parent / "ap02_optimization_history.csv"
+        )
+        with history_path.open(
+            "w", newline="", encoding="utf-8"
+        ) as handle:
+            writer = csv.DictWriter(
+                handle,
+                fieldnames=list(optimization_history[0]),
+            )
+            writer.writeheader()
+            writer.writerows(optimization_history)
     finally:
         core.least_squares = scipy_least_squares
 

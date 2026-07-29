@@ -7,7 +7,12 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
-from camera_rig_calibration.config import config_fingerprint, load_config, save_config
+from camera_rig_calibration.config import (
+    config_fingerprint,
+    effective_observation_quality,
+    load_config,
+    save_config,
+)
 from camera_rig_calibration.config.models import (
     AP02Settings,
     DatasetSettings,
@@ -26,17 +31,28 @@ from camera_rig_calibration.config.models import (
 def test_ap02_recommended_defaults_are_explicit() -> None:
     assert AP02Settings().model_dump() == {
         "reference_marker_id": "auto",
+        "reference_marker_maximum_frames": None,
+        "top_per_marker": 8,
+        "top_per_marker_pair": 4,
+        "maximum_total_frames": None,
         "static_only_ba_max_function_evaluations": 100,
         "combined_ba_max_function_evaluations": 120,
         "ba_robust_loss": "soft_l1",
         "ba_robust_loss_scale_px": 3.0,
+        "observation_quality": {
+            "minimum_marker_area_ratio": None,
+            "maximum_pnp_reprojection_error_px": None,
+            "require_positive_depth": None,
+            "maximum_marker_distance_m": None,
+        },
     }
 
 
 def test_observation_quality_v5_defaults_are_explicit() -> None:
     assert ObservationQualitySettings().model_dump() == {
         "maximum_pnp_reprojection_error_px": 25.0,
-        "minimum_marker_area_px2": 0.0,
+        "minimum_marker_area_ratio": 0.000008,
+        "require_positive_depth": True,
         "maximum_marker_distance_m": "disabled",
     }
 
@@ -70,6 +86,16 @@ def test_config_round_trip_is_reproducible(
     loaded = load_config(path)
     assert loaded == prepared_config
     assert config_fingerprint(loaded) == config_fingerprint(prepared_config)
+    serialized = yaml.safe_load(path.read_text(encoding="utf-8"))
+    assert (
+        serialized["methods"]["ap02"]["maximum_total_frames"] is None
+    )
+    assert (
+        serialized["methods"]["ap02"]["observation_quality"][
+            "minimum_marker_area_ratio"
+        ]
+        is None
+    )
 
 
 def test_schema_v1_config_is_rejected_by_file_loader(
@@ -107,9 +133,7 @@ def test_schema_v5_rejects_removed_selection_fields(
         RigConfig.model_validate(payload)
 
     removed_nested_fields = (
-        ("ap01", "top_moving_per_marker", 8),
         ("ap02", "moving_selection", "smart"),
-        ("ap02", "top_per_marker", 8),
         ("ap02", "max_moving_frames", 100),
     )
     for method, field, value in removed_nested_fields:
@@ -127,6 +151,51 @@ def test_schema_v5_rejects_removed_selection_fields(
     payload["methods"]["ap02"]["reference_marker_id"] = "sweep"
     with pytest.raises(ValidationError, match="reference_marker_id"):
         RigConfig.model_validate(payload)
+
+
+def test_optional_scientific_limits_reject_zero() -> None:
+    with pytest.raises(ValidationError, match="top_per_marker"):
+        AP02Settings(top_per_marker=0)
+
+
+def test_schema_v5_unambiguous_migrations(
+    prepared_config: RigConfig, tmp_path: Path
+) -> None:
+    payload = prepared_config.model_dump(mode="json", exclude_none=True)
+    payload["observation_quality"]["minimum_marker_area_px2"] = 0
+    payload["observation_quality"].pop("minimum_marker_area_ratio", None)
+    payload["evaluation"]["anchor_marker_id"] = "auto_common"
+    payload["methods"]["ap02"]["maximum_total_frames"] = 0
+    source = tmp_path / "old_v5.yaml"
+    source.write_text(yaml.safe_dump(payload), encoding="utf-8")
+
+    with pytest.warns(DeprecationWarning):
+        loaded = load_config(source, resolve_paths=False)
+    assert loaded.observation_quality.minimum_marker_area_ratio == 0.000008
+    assert loaded.evaluation.anchor_marker_id == "auto"
+    assert loaded.methods.ap02.maximum_total_frames is None
+
+
+def test_positive_pixel_area_threshold_requires_manual_migration(
+    prepared_config: RigConfig, tmp_path: Path
+) -> None:
+    payload = prepared_config.model_dump(mode="json", exclude_none=True)
+    payload["observation_quality"]["minimum_marker_area_px2"] = 100.0
+    source = tmp_path / "invalid_v5.yaml"
+    source.write_text(yaml.safe_dump(payload), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="cannot be converted"):
+        load_config(source, resolve_paths=False)
+
+
+def test_method_quality_overrides_resolve_with_sources(
+    prepared_config: RigConfig,
+) -> None:
+    prepared_config.methods.ap02.observation_quality.minimum_marker_area_ratio = 0.01
+    effective, sources = effective_observation_quality(prepared_config, "ap02")
+    assert effective.minimum_marker_area_ratio == 0.01
+    assert sources["minimum_marker_area_ratio"] == "method_override"
+    assert sources["maximum_pnp_reprojection_error_px"] == "global"
 
 
 def test_schema_v1_payload_is_rejected_by_model(

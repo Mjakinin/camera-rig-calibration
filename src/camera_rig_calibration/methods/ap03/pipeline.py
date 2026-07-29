@@ -127,6 +127,13 @@ class AP03Method:
             "--detection-mode",
             config.markers.detection_mode,
         ]
+        if scale.maximum_observations_per_marker is not None:
+            scale_common.extend(
+                [
+                    "--maximum-observations-per-marker",
+                    str(scale.maximum_observations_per_marker),
+                ]
+            )
         stages = (
             (
                 "ap03_prepare_colmap",

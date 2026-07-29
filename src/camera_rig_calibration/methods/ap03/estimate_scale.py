@@ -21,6 +21,7 @@ def run(
     reprojection_threshold_px: float,
     ransac_iterations: int,
     minimum_inliers: int,
+    maximum_observations_per_marker: int | None,
     dictionary: str,
     detection_mode: str = "baseline",
 ) -> StageResult:
@@ -28,8 +29,7 @@ def run(
         raise ValueError(f"Unsupported AP03 scale mode: {mode}")
     stage_root = output_root / f"scale_{mode}"
     def action() -> dict[str, Path | str]:
-        subprocess.run(
-            [
+        command = [
                 sys.executable,
                 "-m",
                 "camera_rig_calibration.methods.ap03.scale_core",
@@ -59,7 +59,16 @@ def run(
                 str(observations_root / "shared_all_aruco_observations.csv"),
                 "--static-cameras",
                 ",".join(camera_ids),
-            ],
+            ]
+        if maximum_observations_per_marker is not None:
+            command.extend(
+                [
+                    "--maximum-observations-per-marker",
+                    str(maximum_observations_per_marker),
+                ]
+            )
+        subprocess.run(
+            command,
             cwd=repository_root,
             check=True,
         )
@@ -95,7 +104,10 @@ def run(
             "reprojection_threshold_px": reprojection_threshold_px,
             "ransac_iterations": ransac_iterations,
             "minimum_inliers": minimum_inliers,
-            "uses_all_quality_accepted_observations": True,
+            "maximum_observations_per_marker": (
+                maximum_observations_per_marker
+            ),
+            "selection": "quality_ranked_per_marker_before_triangulation",
             "detection_mode": detection_mode,
         },
         failure_is_diagnostic=mode == "single",
@@ -114,6 +126,7 @@ def main() -> None:
     parser.add_argument("--reprojection-threshold-px", type=float, required=True)
     parser.add_argument("--ransac-iterations", type=int, required=True)
     parser.add_argument("--minimum-inliers", type=int, required=True)
+    parser.add_argument("--maximum-observations-per-marker", type=int)
     parser.add_argument("--dictionary", required=True)
     parser.add_argument(
         "--detection-mode",
@@ -138,6 +151,9 @@ def main() -> None:
         reprojection_threshold_px=args.reprojection_threshold_px,
         ransac_iterations=args.ransac_iterations,
         minimum_inliers=args.minimum_inliers,
+        maximum_observations_per_marker=(
+            args.maximum_observations_per_marker
+        ),
         dictionary=args.dictionary,
         detection_mode=args.detection_mode,
     )

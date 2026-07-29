@@ -19,6 +19,7 @@ from .config.models import (
     MarkerSettings,
     ObservationQualitySettings,
     RigConfig,
+    effective_observation_quality,
 )
 from .dataset.manifest import DatasetManifest
 from .dataset.discovery import safe_id
@@ -286,6 +287,9 @@ def _method_payload(
         if method_id in {"ap01", "ap02", "ap03"}
         else config.methods.extensions.get(method_id, {})
     )
+    effective_quality, quality_sources = effective_observation_quality(
+        config, method_id
+    )
     payload: dict[str, Any] = {
         "method_id": method_id,
         "settings": method_settings,
@@ -296,7 +300,10 @@ def _method_payload(
                 config.markers.dictionary,
             ),
         },
-        "observation_quality": config.observation_quality.model_dump(mode="json"),
+        "observation_quality": {
+            "effective": effective_quality.model_dump(mode="json"),
+            "sources": quality_sources,
+        },
     }
     if method_id in {"ap01", "ap03"}:
         payload["colmap"] = config.colmap.model_dump(mode="json")
@@ -370,6 +377,8 @@ def method_config_diff(
     if method_id in {"ap01", "ap02", "ap03"}:
         current = getattr(config.methods, method_id).model_dump(mode="json")
         defaults = _method_defaults(method_id)
+        current.pop("observation_quality", None)
+        defaults.pop("observation_quality", None)
     else:
         current = dict(config.methods.extensions.get(method_id, {}))
         defaults = {}
@@ -378,12 +387,18 @@ def method_config_diff(
         defaults["colmap"] = ColmapSettings().model_dump(mode="json")
     current["markers"] = config.markers.model_dump(mode="json")
     defaults["markers"] = MarkerSettings().model_dump(mode="json")
-    current["observation_quality"] = config.observation_quality.model_dump(
-        mode="json"
+    effective_quality, quality_sources = effective_observation_quality(
+        config, method_id
     )
+    current["observation_quality"] = effective_quality.model_dump(mode="json")
+    current["observation_quality_source"] = quality_sources
     defaults["observation_quality"] = (
         type(config.observation_quality)().model_dump(mode="json")
     )
+    defaults["observation_quality_source"] = {
+        field_name: "global"
+        for field_name in defaults["observation_quality"]
+    }
     flat_current = _flatten(current)
     flat_defaults = _flatten(defaults)
     return {
@@ -395,7 +410,13 @@ def method_config_diff(
 
 _LABEL_FIELDS = {
     "root_camera": "root",
+    "top_moving_per_marker": "moving_top_per_marker",
+    "scale_top_per_marker": "scale_top_per_marker",
     "reference_marker_id": "ref_marker",
+    "reference_marker_maximum_frames": "ref_frames",
+    "top_per_marker": "frame_top_per_marker",
+    "top_per_marker_pair": "frame_top_per_pair",
+    "maximum_total_frames": "frame_cap",
     "static_only_ba_max_function_evaluations": "static_nfev",
     "combined_ba_max_function_evaluations": "combined_nfev",
     "ba_robust_loss": "loss",
@@ -405,6 +426,7 @@ _LABEL_FIELDS = {
     "scale.reprojection_threshold_px": "scale_reproj_px",
     "scale.ransac_iterations": "scale_ransac",
     "scale.minimum_inliers": "scale_inliers",
+    "scale.maximum_observations_per_marker": "scale_obs_per_marker",
     "colmap.matcher": "matcher",
     "colmap.gpu_mode": "gpu",
     "colmap.maximum_image_size": "image_size",
@@ -420,8 +442,10 @@ _LABEL_FIELDS = {
     "markers.accepted_ids": "marker_ids",
     "markers.detection_mode": "aruco_mode",
     "observation_quality.maximum_pnp_reprojection_error_px": "pnp_reproj_px",
-    "observation_quality.minimum_marker_area_px2": "marker_area_px2",
+    "observation_quality.minimum_marker_area_ratio": "marker_area_ratio",
+    "observation_quality.require_positive_depth": "positive_depth",
     "observation_quality.maximum_marker_distance_m": "marker_distance_m",
+    "quality_override_fields": "quality_override",
 }
 
 
@@ -440,9 +464,12 @@ def automatic_method_label(
     colmap: ColmapSettings,
 ) -> str:
     """Name a result only from calibration-affecting deviations to baseline."""
+    overrides: dict[str, Any] = {}
     if method_id in {"ap01", "ap02", "ap03"}:
         current = getattr(methods, method_id).model_dump(mode="json")
         defaults = _method_defaults(method_id)
+        overrides = current.pop("observation_quality", {})
+        defaults.pop("observation_quality", None)
     else:
         current = dict(methods.extensions.get(method_id, {}))
         defaults = {}
@@ -451,10 +478,20 @@ def automatic_method_label(
         defaults["colmap"] = ColmapSettings().model_dump(mode="json")
     current["markers"] = markers.model_dump(mode="json")
     defaults["markers"] = MarkerSettings().model_dump(mode="json")
-    current["observation_quality"] = observation_quality.model_dump(mode="json")
+    effective_quality = observation_quality.model_dump(mode="json")
+    for field_name, value in overrides.items():
+        if value is not None:
+            effective_quality[field_name] = value
+    current["observation_quality"] = effective_quality
+    current["quality_override_fields"] = sorted(
+        field_name
+        for field_name, value in overrides.items()
+        if value is not None
+    )
     defaults["observation_quality"] = ObservationQualitySettings().model_dump(
         mode="json"
     )
+    defaults["quality_override_fields"] = []
     flat_current = _flatten(current)
     flat_defaults = _flatten(defaults)
     differences = [
@@ -524,7 +561,7 @@ def method_variant_name(
             "reprojection_threshold_px": "reproj",
             "minimum_inliers": "inliers",
             "markers.length_m": "marker_size_m",
-            "observation_quality.minimum_marker_area_px2": "area",
+            "observation_quality.minimum_marker_area_ratio": "area_ratio",
             "observation_quality.maximum_pnp_reprojection_error_px": "pnp_reproj",
             "observation_quality.maximum_marker_distance_m": "distance_max",
         }.get(path, path.split(".")[-1])

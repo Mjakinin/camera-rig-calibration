@@ -124,3 +124,41 @@ def test_transaction_input_cache_is_separate_and_reuses_obsolete_working_data(
     )
     assert not (transaction / "dataset").exists()
     assert "Reusing the already extracted input" in stream.getvalue()
+
+
+def test_completed_dataset_observation_evidence_is_not_rewritten_by_method(
+    prepared_config, tmp_path: Path
+) -> None:
+    transaction = tmp_path / "transaction"
+    observations = transaction / "dataset" / "observations"
+    observations.mkdir(parents=True)
+    (observations / "PUBLICATION_COMPLETE.json").write_text(
+        json.dumps({"status": "complete"}) + "\n",
+        encoding="utf-8",
+    )
+    candidates = observations / "SELECTION_CANDIDATES.json"
+    candidates.write_text(
+        json.dumps({"scope": "queue_preflight"}) + "\n",
+        encoding="utf-8",
+    )
+    run = tmp_path / "method_run"
+    run.mkdir()
+    orchestrator = PipelineOrchestrator(
+        Path(__file__).resolve().parents[1],
+        transaction_root=transaction,
+    )
+    orchestrator.run_directory = run
+    orchestrator.manifest = {}
+
+    orchestrator._finalize_dataset_observations(
+        prepared_config,
+        quality_observations_root=tmp_path / "method_specific",
+    )
+
+    assert json.loads(candidates.read_text(encoding="utf-8")) == {
+        "scope": "queue_preflight"
+    }
+    manifest = json.loads(
+        (run / "run_manifest.json").read_text(encoding="utf-8")
+    )
+    assert manifest["dataset_observation_evidence_reused"] is True

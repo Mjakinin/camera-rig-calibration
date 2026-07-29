@@ -290,6 +290,32 @@ def test_queue_rejects_multiple_experiments_and_legacy_schema(
         load_queue_partitions(destination)
 
 
+def test_queue_common_snapshots_observation_quality_baseline(
+    prepared_config, tmp_path: Path
+) -> None:
+    configured = prepared_config.model_copy(deep=True)
+    configured.observation_quality.minimum_marker_area_ratio = 0.001
+    config_path = save_config(
+        configured, tmp_path / "configs/method.yaml"
+    )
+    queue_path = save_queue(
+        "quality_queue",
+        [("ap02", config_path)],
+        tmp_path / "queue/queue.yaml",
+    )
+
+    payload = yaml.safe_load(queue_path.read_text(encoding="utf-8"))
+    assert payload["common"]["observation_quality"][
+        "minimum_marker_area_ratio"
+    ] == 0.001
+    loaded = load_queue_partitions(queue_path)[0]
+    assert loaded.common is not None
+    assert (
+        loaded.common.observation_quality.minimum_marker_area_ratio
+        == 0.001
+    )
+
+
 def test_queue_rejects_forward_or_unknown_dependencies() -> None:
     with pytest.raises(ValueError, match="dependencies"):
         QueueConfig.model_validate(

@@ -37,7 +37,6 @@ from .methods.common.aruco_utils import (
 )
 from .observations import (
     ResolvedSelections,
-    ap03_candidate_rank,
     freeze_selections,
 )
 from .runtime import PipelineOrchestrator, observation_id
@@ -46,6 +45,7 @@ from .preflight import (
     QueuePreflightResult,
     run_queue_preflight,
 )
+from .observation_quality import filter_observations
 from .publication import (
     publish_preparation_transaction,
     publish_queue_transaction,
@@ -186,9 +186,124 @@ def _write_observation_detection_config(
                 config.markers.dictionary,
             ),
             "detector_contract": DETECTOR_CONTRACT,
-            "observation_input_contract": "all_quality_passed_v1",
+            "observation_input_contract": (
+                "raw_detection_with_dimensions_and_area_ratio_v2"
+            ),
         },
     )
+
+
+def _freeze_queue_preflight_dataset_evidence(
+    *,
+    transaction_root: Path,
+    resolved_root: Path,
+    configs: list[RigConfig],
+    preflight: QueuePreflightResult,
+    raw_observations_csv: Path,
+) -> None:
+    """Freeze queue-global evidence once without later method mutation."""
+
+    observations = transaction_root / "dataset" / "observations"
+    observations.mkdir(parents=True, exist_ok=True)
+    baseline = filter_observations(
+        raw_observations_csv,
+        resolved_root / "preflight" / "global_baseline",
+        job_id="queue_global_baseline",
+        marker_settings=configs[0].markers,
+        quality=configs[0].observation_quality,
+    )
+    quality = observations / "quality"
+    quality.mkdir(parents=True, exist_ok=True)
+    for name in (
+        "accepted_observations.csv",
+        "rejected_observations.csv",
+        "observation_filter_summary.json",
+        "marker_inventory.csv",
+        "marker_inventory.json",
+    ):
+        source = baseline.output_directory / name
+        if source.is_file():
+            shutil.copy2(source, quality / name)
+    _write_json(
+        quality / "preflight_summary.json",
+        {
+            "schema_version": 5,
+            "status": (
+                "READY"
+                if baseline.accepted_count
+                else "FAILED_PREFLIGHT"
+            ),
+            "scope": "queue_global_observation_quality_baseline",
+            "effective_observation_quality": (
+                configs[0].observation_quality.model_dump(mode="json")
+            ),
+            "observation_quality_sources": {
+                field_name: "global"
+                for field_name in configs[
+                    0
+                ].observation_quality.model_dump(mode="json")
+            },
+            "accepted_observations": baseline.accepted_count,
+            "rejected_observations": baseline.rejected_count,
+        },
+    )
+
+    runnable = next(
+        (
+            result
+            for result in preflight.jobs
+            if result.runnable
+            and result.selections is not None
+            and result.filter_result is not None
+        ),
+        None,
+    )
+    if runnable is not None:
+        selection_root = (
+            runnable.filter_result.filtered_observations_root
+        )
+        for name in (
+            "SELECTION_CANDIDATES.json",
+            "SELECTION_CANDIDATES.csv",
+            "REFERENCE_SELECTIONS.json",
+            "REFERENCE_MARKER_ID.txt",
+        ):
+            shutil.copy2(selection_root / name, observations / name)
+    _write_json(
+        observations / "QUEUE_SELECTIONS.json",
+        {
+            "schema_version": 5,
+            "scope": "per_method_preflight",
+            "common_evaluation_anchor_marker_id": (
+                preflight.common_evaluation_anchor_marker_id
+            ),
+            "jobs": {
+                result.job_id: result.selections.payload
+                for result in preflight.jobs
+                if result.selections is not None
+            },
+        },
+    )
+    completion = observations / "PUBLICATION_COMPLETE.json"
+    payload = _read_json(completion)
+    payload.update(
+        {
+            "schema_version": 5,
+            "layout_version": 2,
+            "status": "complete",
+            "quality_scope": "queue_global_baseline",
+            "method_quality_evidence": (
+                "stored with each method diagnostic"
+            ),
+            "selection_scope": "per_method_preflight",
+            "queue_selections": "QUEUE_SELECTIONS.json",
+            "common_evaluation_anchor_marker_id": (
+                preflight.common_evaluation_anchor_marker_id
+            ),
+            "frozen_before_methods": True,
+        }
+    )
+    _write_json(completion, payload)
 
 
 def _queue_job_fingerprint(config: RigConfig) -> str:
@@ -512,6 +627,9 @@ class QueueEntry(StrictModel):
 class QueueCommon(StrictModel):
     dataset: DatasetSettings
     aruco: MarkerSettings = Field(default_factory=MarkerSettings)
+    observation_quality: ObservationQualitySettings = Field(
+        default_factory=ObservationQualitySettings
+    )
     evaluation: EvaluationSettings = Field(default_factory=EvaluationSettings)
 
 
@@ -747,6 +865,9 @@ def save_queue(
         "common": {
             "dataset": first.dataset.model_dump(mode="json", exclude_none=True),
             "aruco": first.markers.model_dump(mode="json", exclude_none=True),
+            "observation_quality": first.observation_quality.model_dump(
+                mode="json", exclude_none=True
+            ),
             "evaluation": first.evaluation.model_dump(
                 mode="json", exclude_none=True
             ),
@@ -810,6 +931,11 @@ class QueueRunner:
                     mismatches.append("dataset")
                 if config.markers != queue.common.aruco:
                     mismatches.append("aruco")
+                if (
+                    config.observation_quality
+                    != queue.common.observation_quality
+                ):
+                    mismatches.append("observation_quality")
                 if config.evaluation != queue.common.evaluation:
                     mismatches.append("evaluation")
                 if mismatches:
@@ -1399,6 +1525,11 @@ class QueueRunner:
                     "aruco": configs[0].markers.model_dump(
                         mode="json", exclude_none=True
                     ),
+                    "observation_quality": configs[
+                        0
+                    ].observation_quality.model_dump(
+                        mode="json", exclude_none=True
+                    ),
                     "evaluation": configs[0].evaluation.model_dump(
                         mode="json", exclude_none=True
                     ),
@@ -1524,7 +1655,15 @@ class QueueRunner:
                             "markers": base.markers.model_copy(
                                 update={"accepted_ids": "all_detected"}
                             ),
-                            "observation_quality": ObservationQualitySettings(),
+                            # Queue preparation must retain every observation
+                            # that any later method override could accept.
+                            # Scientific filtering is performed per queue row.
+                            "observation_quality": ObservationQualitySettings(
+                                minimum_marker_area_ratio=0.0,
+                                maximum_pnp_reprojection_error_px="disabled",
+                                require_positive_depth=False,
+                                maximum_marker_distance_m="disabled",
+                            ),
                             "evaluation": base.evaluation.model_copy(
                                 update={"enabled": False}
                             ),
@@ -1610,6 +1749,10 @@ class QueueRunner:
                     "a filesystem lock. Capture, frames, intrinsics and "
                     "ArUco detection were reused.[/green]"
                 )
+            raw_observations_csv = (
+                raw_observations_root
+                / "shared_all_aruco_observations.csv"
+            )
             preflight_result = run_queue_preflight(
                 (
                     PreflightJob(entry.id, config)
@@ -1617,13 +1760,17 @@ class QueueRunner:
                         queue.entries, configs, strict=True
                     )
                 ),
-                raw_observations_csv=(
-                    raw_observations_root
-                    / "shared_all_aruco_observations.csv"
-                ),
+                raw_observations_csv=raw_observations_csv,
                 dataset_root=prepared_root,
                 output_directory=resolved_root / "preflight",
                 repository_root=self.repository_root,
+            )
+            _freeze_queue_preflight_dataset_evidence(
+                transaction_root=transaction_root,
+                resolved_root=resolved_root,
+                configs=configs,
+                preflight=preflight_result,
+                raw_observations_csv=raw_observations_csv,
             )
             required_total = sum(
                 item.required
@@ -2149,6 +2296,7 @@ class QueueRunner:
             )
             for name in (
                 "SELECTION_CANDIDATES.json",
+                "SELECTION_CANDIDATES.csv",
                 "REFERENCE_SELECTIONS.json",
                 "REFERENCE_MARKER_ID.txt",
             ):
@@ -2206,6 +2354,7 @@ class QueueRunner:
                     "status": "complete",
                     "selection_files": [
                         "SELECTION_CANDIDATES.json",
+                        "SELECTION_CANDIDATES.csv",
                         "REFERENCE_SELECTIONS.json",
                         "REFERENCE_MARKER_ID.txt",
                     ],
@@ -2382,6 +2531,10 @@ class QueueRunner:
                         "observation_filter_summary.json",
                         "accepted_observations.csv",
                         "rejected_observations.csv",
+                        "marker_inventory.csv",
+                        "marker_inventory.json",
+                        "ap02_frame_selection.csv",
+                        "ap02_frame_selection.json",
                         "REQUIRED_CAMERA_OVERRIDE.json",
                         "OBSERVATION_REVIEW_OVERRIDE.json",
                         "AP02_COMBINED_GRAPH.json",
@@ -2579,24 +2732,19 @@ class QueueRunner:
                     "observation_candidates"
                 ]
             )
-            ranked = [
-                item
-                for item in payload["ap03_single_scale_marker"]["candidates"]
-                if int(item["id"]) in eligible
-            ]
-            ranked.sort(
-                key=lambda item: (
-                    ap03_candidate_rank(item),
-                    -int(item["id"]),
-                ),
-                reverse=True,
-            )
-            explicit_anchors = {
-                int(config.evaluation.anchor_marker_id)
+            configured_anchors = [
+                config.evaluation.anchor_marker_id
                 for _, _, config in group
-                if config.evaluation.anchor_marker_id != "auto_common"
+            ]
+            explicit_anchors = {
+                int(value)
+                for value in configured_anchors
+                if isinstance(value, int)
             }
-            if len(explicit_anchors) > 1:
+            if len(explicit_anchors) != 1 or any(
+                not isinstance(value, int)
+                for value in configured_anchors
+            ):
                 final = (
                     experiment
                     / "evaluations"
@@ -2608,8 +2756,9 @@ class QueueRunner:
                         {
                             "status": "unavailable",
                             "reason": (
-                                "Compared queue entries request conflicting "
-                                "explicit evaluation anchors"
+                                "The queue did not contain exactly one "
+                                "evaluation anchor frozen for every method "
+                                "during preflight."
                             ),
                             "configured_anchor_marker_ids": sorted(
                                 explicit_anchors
@@ -2621,13 +2770,13 @@ class QueueRunner:
                     encoding="utf-8",
                 )
                 continue
-            if explicit_anchors:
-                requested_anchor = next(iter(explicit_anchors))
-                ranked = [
-                    item
-                    for item in ranked
-                    if int(item["id"]) == requested_anchor
-                ]
+            requested_anchor = next(iter(explicit_anchors))
+            ranked = [
+                item
+                for item in payload["ap03_single_scale_marker"]["candidates"]
+                if int(item["id"]) == requested_anchor
+                and int(item["id"]) in eligible
+            ]
             methods: list[tuple[str, Path]] = []
             for result_path, manifest, _ in group:
                 method_id = str(manifest.get("method_id", ""))
@@ -2761,7 +2910,7 @@ class QueueRunner:
                 for label, directory in methods:
                     argv += ["--method", f"{label}={directory.resolve()}"]
                 self.console.print(
-                    f"[cyan]Common evaluation candidate marker {anchor} "
+                    f"[cyan]Common evaluation with frozen marker {anchor} "
                     f"for {len(methods)} methods[/cyan]"
                 )
                 started = time.monotonic()
@@ -2940,9 +3089,10 @@ class QueueRunner:
                     or {
                         "status": "unavailable",
                         "reason": (
-                            "No single observation candidate was reconstructable "
-                            "for every completed method. No per-method anchor "
-                            "substitution was performed."
+                            "The single preflight-frozen evaluation anchor was "
+                            "not reconstructable for every completed method. "
+                            "Calibration results remain available and no "
+                            "replacement anchor was attempted."
                         ),
                         "candidate_marker_ids": [
                             int(item["id"]) for item in ranked

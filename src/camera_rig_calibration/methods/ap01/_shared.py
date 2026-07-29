@@ -15,6 +15,8 @@ def parser(description: str) -> argparse.ArgumentParser:
     result = method_parser(description)
     result.add_argument("--root-camera", required=True)
     result.add_argument("--moving-camera-id", required=True)
+    result.add_argument("--top-moving-per-marker", type=int, default=None)
+    result.add_argument("--scale-top-per-marker", type=int, default=None)
     return result
 
 

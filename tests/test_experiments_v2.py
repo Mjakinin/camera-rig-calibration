@@ -111,6 +111,18 @@ def test_public_labels_are_automatic_configuration_diffs(prepared_config) -> Non
         == "aruco_mode_high_sensitivity"
     )
 
+    inherited = baseline
+    explicit_same_value = baseline.model_copy(deep=True)
+    explicit_same_value.methods.ap02.observation_quality.minimum_marker_area_ratio = (
+        baseline.observation_quality.minimum_marker_area_ratio
+    )
+    override_label = method_result_label(explicit_same_value, "ap02")
+    assert "quality_override" in override_label
+    assert override_label != method_result_label(inherited, "ap02")
+    assert method_fingerprint(
+        explicit_same_value, "ap02", _resolved()
+    ) != method_fingerprint(inherited, "ap02", _resolved())
+
 
 def test_stage_invalidation_keeps_evaluation_changes_cheap() -> None:
     assert first_invalidated_stage(["evaluation.anchor_marker_id"]) == "evaluation"

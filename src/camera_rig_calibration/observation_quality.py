@@ -14,7 +14,7 @@ import numpy as np
 from .config.models import MarkerSettings, ObservationQualitySettings
 
 
-FILTER_VERSION = "observation_quality_v1"
+FILTER_VERSION = "observation_quality_v2"
 REQUIRED_COLUMNS = {
     "observer_type",
     "marker_id",
@@ -41,6 +41,11 @@ DECISION_COLUMNS = [
     "reason",
     "threshold",
     "measured_value",
+    "selection_score",
+    "score_area",
+    "score_reprojection",
+    "score_border",
+    "score_distance",
 ]
 
 
@@ -188,6 +193,73 @@ def _identity(row: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def _resolve_dimensions(
+    row: dict[str, Any],
+    *,
+    source: Path,
+    line_number: int,
+) -> tuple[int, int]:
+    try:
+        width = int(float(row.get("image_width_px", "")))
+        height = int(float(row.get("image_height_px", "")))
+    except (TypeError, ValueError):
+        width = height = 0
+    if width > 0 and height > 0:
+        return width, height
+
+    image_value = str(row.get("image_path", "")).strip()
+    candidates: list[Path] = []
+    if image_value:
+        image_path = Path(image_value)
+        candidates.append(image_path)
+        if not image_path.is_absolute():
+            candidates.append(source.parent / image_path)
+    for candidate in candidates:
+        image = cv2.imread(str(candidate), cv2.IMREAD_GRAYSCALE)
+        if image is not None:
+            height, width = image.shape[:2]
+            return int(width), int(height)
+    raise ObservationQualityError(
+        f"{source}:{line_number}: exact image dimensions are missing and "
+        f"the referenced image cannot be read: {image_value or '<missing>'}"
+    )
+
+
+def observation_selection_score(row: dict[str, Any]) -> dict[str, float]:
+    """Return the deterministic, auditable ranking used by every selector."""
+
+    width = float(row["image_width_px"])
+    height = float(row["image_height_px"])
+    ratio = max(0.0, float(row["marker_area_ratio"]))
+    reprojection = max(0.0, float(row["pnp_reprojection_rmse_px"]))
+    distance = max(0.0, float(row["distance_m"]))
+    center_u = float(row["center_u"])
+    center_v = float(row["center_v"])
+    edge_distance = min(
+        center_u,
+        center_v,
+        width - center_u,
+        height - center_v,
+    )
+    border = max(0.0, min(1.0, edge_distance / (0.5 * min(width, height))))
+    area = min(1.0, math.sqrt(ratio / 0.01))
+    reprojection_score = 1.0 / (1.0 + reprojection)
+    distance_score = 1.0 / (1.0 + distance)
+    total = (
+        0.40 * area
+        + 0.30 * reprojection_score
+        + 0.20 * border
+        + 0.10 * distance_score
+    )
+    return {
+        "selection_score": total,
+        "score_area": area,
+        "score_reprojection": reprojection_score,
+        "score_border": border,
+        "score_distance": distance_score,
+    }
+
+
 def _decision(
     row: dict[str, str],
     *,
@@ -229,7 +301,7 @@ def _decision(
     if pose is None:
         return False, "pnp_pose_non_finite", "finite rotation/translation", ""
     tvec = np.asarray(pose[3:], dtype=np.float64)
-    if tvec[2] <= 0:
+    if quality.require_positive_depth and tvec[2] <= 0:
         return False, "marker_depth_not_positive", "> 0 m", float(tvec[2])
     distance = float(np.linalg.norm(tvec))
     if not math.isfinite(distance) or distance <= 0:
@@ -247,13 +319,16 @@ def _decision(
             marker_id,
         )
 
-    area = float(row["area_px2"])
-    if not math.isfinite(area) or area < quality.minimum_marker_area_px2:
+    area_ratio = float(row["marker_area_ratio"])
+    if (
+        not math.isfinite(area_ratio)
+        or area_ratio < quality.minimum_marker_area_ratio
+    ):
         return (
             False,
-            "marker_area_below_minimum",
-            quality.minimum_marker_area_px2,
-            area,
+            "marker_area_ratio_below_minimum",
+            quality.minimum_marker_area_ratio,
+            area_ratio,
         )
 
     reprojection = float(row["pnp_reprojection_rmse_px"])
@@ -298,7 +373,7 @@ def filter_observations(
     marker_settings: MarkerSettings,
     quality: ObservationQualitySettings,
 ) -> ObservationFilterResult:
-    """Apply the immutable checks and job-specific v1 quality thresholds."""
+    """Apply immutable checks and the job-specific v2 quality thresholds."""
     source = raw_observations_csv.resolve()
     if not source.is_file():
         raise ObservationQualityError(f"Raw observation table is missing: {source}")
@@ -309,7 +384,7 @@ def filter_observations(
     missing = sorted(REQUIRED_COLUMNS - set(source_fields))
     if missing:
         raise ObservationQualityError(
-            "Raw observation table cannot satisfy observation_quality_v1; "
+            "Raw observation table cannot satisfy observation_quality_v2; "
             f"missing columns: {', '.join(missing)}"
         )
     if not rows:
@@ -320,11 +395,39 @@ def filter_observations(
         fields.append("detection_success")
     if "pnp_reprojection_rmse_px" not in fields:
         fields.append("pnp_reprojection_rmse_px")
+    for field_name in (
+        "image_width_px",
+        "image_height_px",
+        "marker_area_ratio",
+        "selection_score",
+        "score_area",
+        "score_reprojection",
+        "score_border",
+        "score_distance",
+    ):
+        if field_name not in fields:
+            fields.append(field_name)
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     decisions: list[dict[str, Any]] = []
     reasons: Counter[str] = Counter()
     for index, row in enumerate(rows, 2):
+        width, height = _resolve_dimensions(
+            row, source=source, line_number=index
+        )
+        row["image_width_px"] = width
+        row["image_height_px"] = height
+        try:
+            area_px2 = float(row["area_px2"])
+        except (TypeError, ValueError, KeyError) as exc:
+            raise ObservationQualityError(
+                f"{source}:{index}: invalid marker area: {exc}"
+            ) from exc
+        if not math.isfinite(area_px2) or area_px2 < 0:
+            raise ObservationQualityError(
+                f"{source}:{index}: marker area must be finite and non-negative"
+            )
+        row["marker_area_ratio"] = area_px2 / float(width * height)
         row.setdefault("detection_success", "True")
         if _truthy(row.get("pnp_success")):
             try:
@@ -352,6 +455,10 @@ def filter_observations(
             "threshold": threshold,
             "measured_value": measured,
         }
+        if is_accepted:
+            score = observation_selection_score(row)
+            row.update(score)
+            decision.update(score)
         decisions.append(decision)
         reasons[reason] += 1
         enriched = {**row, **decision}
@@ -387,6 +494,117 @@ def filter_observations(
     accepted_markers = sorted(
         {int(float(row["marker_id"])) for row in accepted}
     )
+    inventory: list[dict[str, Any]] = []
+    for marker_id in sorted({int(float(row["marker_id"])) for row in rows}):
+        raw_marker = [
+            row for row in rows if int(float(row["marker_id"])) == marker_id
+        ]
+        accepted_marker = [
+            row
+            for row in accepted
+            if int(float(row["marker_id"])) == marker_id
+        ]
+        rejected_marker = [
+            row
+            for row in rejected
+            if int(float(row["marker_id"])) == marker_id
+        ]
+        observer_ids = sorted(
+            {
+                str(row.get("observer_id") or row.get("camera_name") or "")
+                for row in accepted_marker
+            }
+        )
+        frames = sorted(
+            {
+                str(row.get("frame_id", ""))
+                for row in accepted_marker
+                if str(row.get("frame_id", ""))
+            }
+        )
+        ratios = sorted(float(row["marker_area_ratio"]) for row in accepted_marker)
+        reprojections = sorted(
+            float(row["pnp_reprojection_rmse_px"])
+            for row in accepted_marker
+        )
+        whitelisted = (
+            marker_settings.accepted_ids == "all_detected"
+            or marker_id in marker_settings.accepted_ids
+        )
+        suspicious_reasons: list[str] = []
+        if len(accepted_marker) < 2:
+            suspicious_reasons.append("fewer_than_two_accepted_observations")
+        if len(observer_ids) < 2 and len(frames) < 2:
+            suspicious_reasons.append("no_repeated_observer_or_frame_support")
+        inventory.append(
+            {
+                "marker_id": marker_id,
+                "whitelisted": whitelisted,
+                "raw_observations": len(raw_marker),
+                "accepted_observations": len(accepted_marker),
+                "rejected_observations": len(rejected_marker),
+                "observer_ids": observer_ids,
+                "frame_ids": frames,
+                "minimum_area_ratio": ratios[0] if ratios else None,
+                "median_area_ratio": (
+                    float(np.median(ratios)) if ratios else None
+                ),
+                "maximum_area_ratio": ratios[-1] if ratios else None,
+                "minimum_pnp_rmse_px": (
+                    reprojections[0] if reprojections else None
+                ),
+                "median_pnp_rmse_px": (
+                    float(np.median(reprojections))
+                    if reprojections
+                    else None
+                ),
+                "maximum_pnp_rmse_px": (
+                    reprojections[-1] if reprojections else None
+                ),
+                "reject_reasons": dict(
+                    sorted(
+                        Counter(
+                            str(row.get("reason", "unknown"))
+                            for row in rejected_marker
+                        ).items()
+                    )
+                ),
+                "suspicious": bool(suspicious_reasons),
+                "suspicious_reasons": suspicious_reasons,
+                "automatic_candidate": (
+                    whitelisted
+                    and len(accepted_marker) >= 2
+                    and (len(observer_ids) >= 2 or len(frames) >= 2)
+                ),
+            }
+        )
+    inventory_json = destination / "marker_inventory.json"
+    inventory_json.write_text(
+        json.dumps(inventory, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    inventory_csv_rows = [
+        {
+            **item,
+            "observer_ids": ",".join(item["observer_ids"]),
+            "frame_ids": ",".join(item["frame_ids"]),
+            "reject_reasons": json.dumps(
+                item["reject_reasons"], sort_keys=True
+            ),
+            "suspicious_reasons": ",".join(item["suspicious_reasons"]),
+        }
+        for item in inventory
+    ]
+    _write_csv(
+        destination / "marker_inventory.csv",
+        inventory_csv_rows,
+        list(inventory_csv_rows[0]) if inventory_csv_rows else [
+            "marker_id",
+            "whitelisted",
+            "raw_observations",
+            "accepted_observations",
+        ],
+    )
     summary = {
         "schema_version": 5,
         "filter": FILTER_VERSION,
@@ -406,6 +624,8 @@ def filter_observations(
             row["observer_type"] == "moving" for row in accepted
         ),
         "decision_counts": dict(sorted(reasons.items())),
+        "marker_inventory": inventory,
+        "marker_inventory_json": str(inventory_json),
         "decisions": decisions,
     }
     summary_path = destination / "observation_filter_summary.json"

@@ -43,6 +43,7 @@ from .config.models import (
     SelectionSettings,
     SimulationSettings,
     StaticCameraSettings,
+    effective_observation_quality,
 )
 from .dataset.discovery import (
     IMAGE_SUFFIXES,
@@ -2926,6 +2927,25 @@ def _new_method_job(
 
 def _method_job_summary(job: MethodQueueJob) -> str:
     pending = _pending_selection_keys(job)
+    method_settings = getattr(job.methods, job.method_id, None)
+    method_quality = getattr(
+        method_settings, "observation_quality", None
+    )
+    override_count = (
+        sum(
+            value is not None
+            for value in method_quality.model_dump(
+                mode="python"
+            ).values()
+        )
+        if method_quality is not None
+        else 0
+    )
+    quality_text = (
+        "quality=global"
+        if override_count == 0
+        else f"quality=global+{override_count} override(s)"
+    )
 
     def selection_text(key: str, value: object) -> str:
         if key in pending:
@@ -2950,8 +2970,10 @@ def _method_job_summary(job: MethodQueueJob) -> str:
         return (
             f"matcher={job.colmap.matcher}, GPU={job.colmap.gpu_mode}, "
             f"root={selection_text('root_camera', job.methods.ap01.root_camera)}, "
+            f"relay_top={job.methods.ap01.top_moving_per_marker}, "
+            f"scale_top={job.methods.ap01.scale_top_per_marker}, "
             f"ArUco={job.markers.detection_mode}, "
-            "observations=all passing quality"
+            f"{quality_text}"
         )
     if job.method_id == "ap02":
         value = job.methods.ap02
@@ -2959,8 +2981,10 @@ def _method_job_summary(job: MethodQueueJob) -> str:
             f"nfev={value.max_nfev_static}/{value.max_nfev_moving}, "
             f"loss={value.ba_robust_loss}@{value.ba_robust_loss_scale_px:g}px, "
             f"ref={selection_text('ap02_reference', value.reference_marker_id)}, "
+            f"frames=marker:{value.top_per_marker}/pair:"
+            f"{value.top_per_marker_pair}/total:{value.maximum_total_frames}, "
             f"ArUco={job.markers.detection_mode}, "
-            "observations=all passing quality"
+            f"{quality_text}"
         )
     if job.method_id == "ap03":
         single = job.methods.ap03.single
@@ -2969,7 +2993,8 @@ def _method_job_summary(job: MethodQueueJob) -> str:
             f"single={selection_text('single_marker', single.scale_marker_id)}, "
             f"multi={selection_text('multi_markers', multi.marker_ids)}, "
             f"matcher={job.colmap.matcher}, ArUco={job.markers.detection_mode}; "
-            "one COLMAP, multi primary"
+            f"scale_top={job.methods.ap03.scale.maximum_observations_per_marker}, "
+            f"{quality_text}; one COLMAP, multi primary"
         )
     payload = job.methods.extensions.get(job.method_id, {})
     return (
@@ -3219,7 +3244,9 @@ def _preview_prepared_selections(
             Path(temp),
             job_id=f"preview_{safe_id(context.key)}_{job.method_id}",
             marker_settings=job.markers,
-            quality=job.observation_quality,
+            quality=effective_observation_quality(
+                config, job.method_id
+            )[0],
         )
         if filtered.accepted_count == 0:
             raise ValueError(
@@ -3525,7 +3552,7 @@ def _configure_guided_selection(
 
 METHOD_JOB_GROUPS = frozenset(
     {
-        "OBSERVATION QUALITY",
+        "OBSERVATION QUALITY OVERRIDE",
         "METHOD-SPECIFIC SETTINGS",
         "COLMAP SETTINGS",
     }
@@ -3542,8 +3569,26 @@ def _setting_rows(
         if job.markers.accepted_ids == "all_detected"
         else ",".join(map(str, job.markers.accepted_ids))
     )
+    method_quality = getattr(
+        getattr(job.methods, job.method_id, None),
+        "observation_quality",
+        None,
+    )
+
+    def override_text(field_name: str) -> str:
+        if method_quality is None:
+            return "inherit"
+        value = getattr(method_quality, field_name)
+        inherited = getattr(job.observation_quality, field_name)
+        return (
+            f"inherit (effective {inherited})"
+            if value is None
+            else str(value)
+        )
+
     rows: list[tuple[str, str, str, object, object, str]] = [
-        ("evaluation_anchor", "COMMON EVALUATION", "Evaluation anchor", job.evaluation.anchor_marker_id, defaults.evaluation.anchor_marker_id, "auto_common selects one marker shared by every compared method after estimation."),
+        ("evaluation_enabled", "COMMON EVALUATION", "Common evaluation enabled", job.evaluation.enabled, defaults.evaluation.enabled, "Disable only when no repeat-supported common marker can be frozen; calibration results remain available without cross-method RMSE."),
+        ("evaluation_anchor", "COMMON EVALUATION", "Evaluation anchor", job.evaluation.anchor_marker_id, defaults.evaluation.anchor_marker_id, "auto freezes one compatible marker before any method starts."),
         ("evaluation_reprojection", "COMMON EVALUATION", "Evaluation reprojection threshold [px]", job.evaluation.reprojection_threshold_px, defaults.evaluation.reprojection_threshold_px, "Smaller requires tighter common post-hoc triangulation support."),
         ("evaluation_inliers", "COMMON EVALUATION", "Evaluation minimum inliers", job.evaluation.minimum_inliers, defaults.evaluation.minimum_inliers, "Higher requires more common-support observations."),
         ("evaluation_ransac", "COMMON EVALUATION", "Evaluation RANSAC iterations", job.evaluation.ransac_iterations, defaults.evaluation.ransac_iterations, "Higher tests more hypotheses and increases evaluation runtime."),
@@ -3553,10 +3598,21 @@ def _setting_rows(
         ("accepted_ids", "QUEUE-WIDE ARUCO", "Accepted marker IDs", accepted, "all detected IDs", "Use all detections or a comma-separated ID list."),
         ("dictionary", "QUEUE-WIDE ARUCO", "ArUco dictionary", job.markers.dictionary, defaults.markers.dictionary, "Must match the printed marker family."),
         ("marker_length", "QUEUE-WIDE ARUCO", "Marker edge length [m]", job.markers.length_m, defaults.markers.length_m, "Positive physical size used for metric scale."),
-        ("quality_reprojection", "OBSERVATION QUALITY", "Maximum PnP reprojection RMSE [px]", job.observation_quality.maximum_pnp_reprojection_error_px, 25.0, "Smaller rejects imprecise PnP observations; 25 px is the compatibility default."),
-        ("quality_area", "OBSERVATION QUALITY", "Minimum marker area [px²]", job.observation_quality.minimum_marker_area_px2, 0.0, "Larger rejects small/distant detections; 0 preserves compatibility."),
-        ("quality_distance", "OBSERVATION QUALITY", "Maximum marker distance [m]", job.observation_quality.maximum_marker_distance_m, "disabled", "Smaller keeps near PnP observations; useful tests depend on rig size."),
+        ("quality_reprojection", "OBSERVATION QUALITY BASELINE", "Global maximum PnP reprojection RMSE [px]", job.observation_quality.maximum_pnp_reprojection_error_px, 25.0, "PnP quality only; smaller rejects observations before any method runs."),
+        ("quality_area", "OBSERVATION QUALITY BASELINE", "Global minimum marker area ratio", job.observation_quality.minimum_marker_area_ratio, 0.000008, "Marker pixels divided by image pixels; larger rejects small/distant detections independently of resolution."),
+        ("quality_positive_depth", "OBSERVATION QUALITY BASELINE", "Global require positive marker depth", job.observation_quality.require_positive_depth, True, "Rejects PnP poses behind the camera; disable only for a documented diagnostic."),
+        ("quality_distance", "OBSERVATION QUALITY BASELINE", "Global maximum marker distance [m]", job.observation_quality.maximum_marker_distance_m, "disabled", "Smaller retains only near PnP observations; disabled applies no distance cap."),
+        ("quality_override_reprojection", "OBSERVATION QUALITY OVERRIDE", "Method maximum PnP reprojection RMSE [px]", override_text("maximum_pnp_reprojection_error_px"), "inherit", "inherit uses the queue baseline; an explicit value affects only this method row."),
+        ("quality_override_area", "OBSERVATION QUALITY OVERRIDE", "Method minimum marker area ratio", override_text("minimum_marker_area_ratio"), "inherit", "inherit uses the queue baseline; larger values reject smaller marker detections."),
+        ("quality_override_positive_depth", "OBSERVATION QUALITY OVERRIDE", "Method require positive marker depth", override_text("require_positive_depth"), "inherit", "inherit uses the queue baseline; explicit yes/no affects only this method."),
+        ("quality_override_distance", "OBSERVATION QUALITY OVERRIDE", "Method maximum marker distance [m]", override_text("maximum_marker_distance_m"), "inherit", "inherit uses the queue baseline; disabled explicitly removes the distance cap."),
     ]
+    if method_quality is None:
+        rows = [
+            row
+            for row in rows
+            if row[1] != "OBSERVATION QUALITY OVERRIDE"
+        ]
     def guided_current(key: str, value: object) -> object:
         contextual = [
             _selection_value(methods, key)
@@ -3585,11 +3641,17 @@ def _setting_rows(
         value, base = job.methods.ap01, defaults.methods.ap01
         rows.extend([
             ("root_camera", "METHOD-SPECIFIC SETTINGS", "Root camera", guided_current("root_camera", value.root_camera), base.root_camera, "Coordinate origin; auto is resolved from filtered graph coverage."),
+            ("ap01_top_moving", "METHOD-SPECIFIC SETTINGS", "Relay observations per marker", value.top_moving_per_marker, base.top_moving_per_marker, "Quality-ranked moving observations kept per marker; null keeps all."),
+            ("ap01_scale_top", "METHOD-SPECIFIC SETTINGS", "Scale observations per marker", value.scale_top_per_marker, base.scale_top_per_marker, "Quality-ranked observations kept before scale-pair construction; null keeps all."),
         ])
     elif job.method_id == "ap02":
         value, base = job.methods.ap02, defaults.methods.ap02
         rows.extend([
             ("ap02_reference", "METHOD-SPECIFIC SETTINGS", "Reference marker", guided_current("ap02_reference", value.reference_marker_id), base.reference_marker_id, "Pose-graph anchor selected after filtered observations."),
+            ("ap02_reference_frames", "METHOD-SPECIFIC SETTINGS", "Reference-marker frame limit", value.reference_marker_maximum_frames, base.reference_marker_maximum_frames, "Quality-ranked reference-marker frames; null is unlimited."),
+            ("ap02_top_marker", "METHOD-SPECIFIC SETTINGS", "Top frames per marker", value.top_per_marker, base.top_per_marker, "Quality-ranked frames retained for each marker; null keeps all."),
+            ("ap02_top_pair", "METHOD-SPECIFIC SETTINGS", "Top frames per marker pair", value.top_per_marker_pair, base.top_per_marker_pair, "Prioritizes cross-marker bridge frames; null keeps all."),
+            ("ap02_total_frames", "METHOD-SPECIFIC SETTINGS", "Maximum total moving frames", value.maximum_total_frames, base.maximum_total_frames, "Hard cap; preflight rejects values below the graph-preserving minimum."),
             ("max_nfev_static", "METHOD-SPECIFIC SETTINGS", "Static-only BA function evaluation limit", value.max_nfev_static, base.max_nfev_static, "Bundle-adjustment optimizer budget for the diagnostic static-only result."),
             ("max_nfev_moving", "METHOD-SPECIFIC SETTINGS", "Combined static + moving BA function evaluation limit", value.max_nfev_moving, base.max_nfev_moving, "Bundle-adjustment optimizer budget for the primary combined result."),
             ("ba_loss", "METHOD-SPECIFIC SETTINGS", "BA robust loss", value.ba_robust_loss, base.ba_robust_loss, "soft_l1 baseline; huber is piecewise robust; linear disables robustness."),
@@ -3612,6 +3674,7 @@ def _setting_rows(
             ("scale_reprojection", "METHOD-SPECIFIC SETTINGS", "Scale RANSAC threshold [px]", scale.reprojection_threshold_px, base_scale.reprojection_threshold_px, "Shared by Single and Multi; smaller requires tighter triangulation support."),
             ("scale_ransac", "METHOD-SPECIFIC SETTINGS", "Scale RANSAC iterations", scale.ransac_iterations, base_scale.ransac_iterations, "Shared by Single and Multi; higher explores more hypotheses but increases runtime."),
             ("scale_inliers", "METHOD-SPECIFIC SETTINGS", "Scale minimum inliers", scale.minimum_inliers, base_scale.minimum_inliers, "Shared by Single and Multi; higher requires more supporting views per marker corner."),
+            ("scale_max_observations", "METHOD-SPECIFIC SETTINGS", "Maximum observations per marker", scale.maximum_observations_per_marker, base_scale.maximum_observations_per_marker, "Quality-ranked cap before corner triangulation; null keeps all."),
         ])
     else:
         current_extension = job.methods.extensions.get(job.method_id, {})
@@ -3653,6 +3716,16 @@ def _bool_value(value: str) -> bool:
     if normalized in {"n", "no", "false", "0", "off"}:
         return False
     raise ValueError("enter yes or no")
+
+
+def _optional_positive_int(value: str) -> int | None:
+    normalized = value.strip().lower()
+    if normalized in {"", "none", "null", "unlimited", "disabled"}:
+        return None
+    parsed = int(value)
+    if parsed <= 0:
+        raise ValueError("enter a positive integer or null")
+    return parsed
 
 
 def _prompt_enum_choice(
@@ -3812,9 +3885,13 @@ def _edit_method_job(
                 _clear_terminal()
                 back_to_table = True
                 break
-            if key == "evaluation_anchor":
+            if key == "evaluation_enabled":
+                job.evaluation = job.evaluation.model_copy(
+                    update={"enabled": _bool_value(value)}
+                )
+            elif key == "evaluation_anchor":
                 anchor: str | int = (
-                    "auto_common"
+                    "auto"
                     if value.lower() in {"auto", "auto_common"}
                     else int(value)
                 )
@@ -3869,20 +3946,102 @@ def _edit_method_job(
             elif key in {
                 "quality_reprojection",
                 "quality_area",
+                "quality_positive_depth",
                 "quality_distance",
             }:
                 field = {
                     "quality_reprojection": "maximum_pnp_reprojection_error_px",
-                    "quality_area": "minimum_marker_area_px2",
+                    "quality_area": "minimum_marker_area_ratio",
+                    "quality_positive_depth": "require_positive_depth",
                     "quality_distance": "maximum_marker_distance_m",
                 }[key]
-                typed: str | float = (
-                    "disabled"
-                    if value.lower() == "disabled"
-                    else float(value)
-                )
+                typed: str | float | bool
+                if key == "quality_positive_depth":
+                    typed = _bool_value(value)
+                else:
+                    typed = (
+                        "disabled"
+                        if value.lower() == "disabled"
+                        else float(value)
+                    )
                 job.observation_quality = job.observation_quality.model_copy(
                     update={field: typed}
+                )
+            elif key in {
+                "quality_override_reprojection",
+                "quality_override_area",
+                "quality_override_positive_depth",
+                "quality_override_distance",
+            }:
+                field = {
+                    "quality_override_reprojection": (
+                        "maximum_pnp_reprojection_error_px"
+                    ),
+                    "quality_override_area": "minimum_marker_area_ratio",
+                    "quality_override_positive_depth": (
+                        "require_positive_depth"
+                    ),
+                    "quality_override_distance": (
+                        "maximum_marker_distance_m"
+                    ),
+                }[key]
+                normalized = value.strip().lower()
+                if normalized.startswith("inherit"):
+                    override_value: str | float | bool | None = None
+                elif key == "quality_override_positive_depth":
+                    override_value = _bool_value(value)
+                elif normalized == "disabled":
+                    override_value = "disabled"
+                else:
+                    override_value = float(value)
+                method_settings = getattr(
+                    job.methods, job.method_id
+                )
+                quality_override = (
+                    method_settings.observation_quality.model_copy(
+                        update={field: override_value}
+                    )
+                )
+                updated_method = method_settings.model_copy(
+                    update={"observation_quality": quality_override}
+                )
+                job.methods = job.methods.model_copy(
+                    update={job.method_id: updated_method},
+                    deep=True,
+                )
+            elif key in {
+                "ap01_top_moving",
+                "ap01_scale_top",
+            }:
+                field = {
+                    "ap01_top_moving": "top_moving_per_marker",
+                    "ap01_scale_top": "scale_top_per_marker",
+                }[key]
+                ap01 = job.methods.ap01.model_copy(
+                    update={field: _optional_positive_int(value)}
+                )
+                job.methods = job.methods.model_copy(
+                    update={"ap01": ap01}, deep=True
+                )
+            elif key in {
+                "ap02_reference_frames",
+                "ap02_top_marker",
+                "ap02_top_pair",
+                "ap02_total_frames",
+            }:
+                field = {
+                    "ap02_reference_frames": (
+                        "reference_marker_maximum_frames"
+                    ),
+                    "ap02_top_marker": "top_per_marker",
+                    "ap02_top_pair": "top_per_marker_pair",
+                    "ap02_total_frames": "maximum_total_frames",
+                }[key]
+                ap02 = job.methods.ap02.model_copy(
+                    update={field: _optional_positive_int(value)}
+                )
+                job.methods = job.methods.model_copy(
+                    update={"ap02": ap02}, deep=True
                 )
             elif key in {"max_nfev_static", "max_nfev_moving"}:
                 field = {
@@ -3909,17 +4068,24 @@ def _edit_method_job(
                 "scale_reprojection",
                 "scale_ransac",
                 "scale_inliers",
+                "scale_max_observations",
             }:
                 if key.endswith("reprojection"):
                     field = "reprojection_threshold_px"
                 elif key.endswith("ransac"):
                     field = "ransac_iterations"
-                else:
+                elif key.endswith("inliers"):
                     field = "minimum_inliers"
+                else:
+                    field = "maximum_observations_per_marker"
                 typed = (
                     float(value)
                     if field == "reprojection_threshold_px"
-                    else int(value)
+                    else (
+                        _optional_positive_int(value)
+                        if field == "maximum_observations_per_marker"
+                        else int(value)
+                    )
                 )
                 ap03 = job.methods.ap03.model_copy(
                     update={
@@ -4092,6 +4258,7 @@ def _method_queue(
                     "5": "edit queue-wide ArUco input",
                     "6": "edit queue-wide common evaluation",
                     "7": "remove jobs (comma-separated or all)",
+                    "8": "edit queue-wide observation-quality baseline",
                     "0": "back to method selection",
                 },
                 "1",
@@ -4110,11 +4277,14 @@ def _method_queue(
                 if any(
                     job.markers != jobs[0].markers
                     or job.evaluation != jobs[0].evaluation
+                    or job.observation_quality
+                    != jobs[0].observation_quality
                     for job in jobs[1:]
                 ):
                     typer.echo(
-                        "ArUco input and common evaluation belong to the queue. "
-                        "Use actions 6 and 7 to edit the queue-wide values."
+                        "ArUco input, observation-quality baseline and common "
+                        "evaluation belong to the queue. Use the queue-wide "
+                        "actions to edit them."
                     )
                     continue
                 return jobs
@@ -4134,6 +4304,9 @@ def _method_queue(
                 )
                 new_job.markers = jobs[0].markers.model_copy(deep=True)
                 new_job.evaluation = jobs[0].evaluation.model_copy(deep=True)
+                new_job.observation_quality = (
+                    jobs[0].observation_quality.model_copy(deep=True)
+                )
                 jobs.append(new_job)
             elif action == "3":
                 number = _prompt_index(
@@ -4271,6 +4444,37 @@ def _method_queue(
                 if not jobs:
                     typer.echo("The queue needs at least one job; returning to method selection.")
                     break
+            elif action == "8":
+                candidate = _clone_method_job(jobs[0], jobs[0].label)
+                try:
+                    source = _edit_method_job(
+                        console,
+                        candidate,
+                        groups={"OBSERVATION QUALITY BASELINE"},
+                        title="Queue-wide observation-quality baseline",
+                        selection_contexts=selection_contexts,
+                    )
+                except (
+                    ValidationError,
+                    ValueError,
+                    RuntimeError,
+                    TypeError,
+                    yaml.YAMLError,
+                ) as exc:
+                    _show_input_error(
+                        f"Invalid quality baseline: {exc}. "
+                        "Queue values were kept unchanged."
+                    )
+                    continue
+                for target in jobs:
+                    target.observation_quality = (
+                        source.observation_quality.model_copy(deep=True)
+                    )
+                    _refresh_method_job_label(target)
+                typer.echo(
+                    "Applied the observation-quality baseline to every "
+                    "queue job; method overrides remain unchanged."
+                )
 
 
 def _prompt_component_options(display_name: str, model_class: type) -> dict:
@@ -5745,7 +5949,10 @@ def review_selection_candidates(
         )
     summary.add_row(
         "Evaluation anchor",
-        "auto_common after method outputs; evaluation-only rerun is possible",
+        (
+            f"marker {resolved.evaluation_anchor_marker_id} "
+            "(already selected and frozen by preflight)"
+        ),
     )
     console.print(summary)
     return choices

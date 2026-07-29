@@ -17,6 +17,7 @@ def run(
     camera_ids: tuple[str, ...],
     root_camera: str,
     moving_camera_id: str,
+    scale_top_per_marker: int | None,
 ) -> StageResult:
     stage_root = output_root / "02_metric_scale"
 
@@ -33,7 +34,9 @@ def run(
     def action() -> dict[str, Path | float | int]:
         _, moving_rows, colmap_poses = prepared_observations(arguments)
         scale, statistics, pairs = core.robust_scale(
-            moving_rows, colmap_poses
+            moving_rows,
+            colmap_poses,
+            maximum_observations_per_marker=scale_top_per_marker,
         )
         stage_root.mkdir(parents=True, exist_ok=True)
         scale_file = stage_root / "metric_scale.txt"
@@ -60,7 +63,10 @@ def run(
             "observations": observations_root,
             "colmap": output_root / "01_moving_colmap",
         },
-        parameters={"uses_all_quality_accepted_observations": True},
+        parameters={
+            "selection": "quality_ranked_per_marker_before_pairing",
+            "scale_top_per_marker": scale_top_per_marker,
+        },
     )
 
 
@@ -73,6 +79,7 @@ def main() -> None:
         camera_ids=cameras(args),
         root_camera=args.root_camera,
         moving_camera_id=args.moving_camera_id,
+        scale_top_per_marker=args.scale_top_per_marker,
     )
 
 

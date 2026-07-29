@@ -4,6 +4,8 @@ import csv
 import json
 from pathlib import Path
 
+import cv2
+import numpy as np
 import pytest
 
 from camera_rig_calibration.config.models import (
@@ -54,7 +56,13 @@ def _row(
         "tvec_x_m": 0.0,
         "tvec_y_m": 0.0,
         "tvec_z_m": z,
+        "distance_m": abs(z),
+        "center_u": 50.0,
+        "center_v": 50.0,
+        "image_width_px": 100,
+        "image_height_px": 100,
         "area_px2": area,
+        "marker_area_ratio": area / 10_000.0,
     }
     for index, (u, v) in enumerate(corners):
         row[f"corner{index}_u"] = u + corner_shift
@@ -90,7 +98,7 @@ def test_filter_recomputes_rmse_and_writes_complete_audit(tmp_path: Path) -> Non
         marker_settings=MarkerSettings(),
         quality=ObservationQualitySettings(
             maximum_pnp_reprojection_error_px=3.0,
-            minimum_marker_area_px2=100.0,
+            minimum_marker_area_ratio=0.01,
             maximum_marker_distance_m=2.0,
         ),
     )
@@ -100,10 +108,10 @@ def test_filter_recomputes_rmse_and_writes_complete_audit(tmp_path: Path) -> Non
     summary = json.loads(
         (result.output_directory / "observation_filter_summary.json").read_text()
     )
-    assert summary["filter"] == "observation_quality_v1"
+    assert summary["filter"] == "observation_quality_v2"
     assert summary["decision_counts"] == {
         "accepted": 1,
-        "marker_area_below_minimum": 1,
+        "marker_area_ratio_below_minimum": 1,
         "marker_distance_above_maximum": 1,
         "pnp_reprojection_error_above_maximum": 1,
     }
@@ -118,7 +126,7 @@ def test_filter_recomputes_rmse_and_writes_complete_audit(tmp_path: Path) -> Non
     assert [int(row["marker_id"]) for row in filtered] == [7]
 
 
-def test_fixed_positive_depth_check_cannot_be_disabled(tmp_path: Path) -> None:
+def test_positive_depth_check_is_enabled_by_default(tmp_path: Path) -> None:
     source = tmp_path / "raw.csv"
     _write(source, [_row("static", "left", 7, z=-1.0)])
 
@@ -134,6 +142,24 @@ def test_fixed_positive_depth_check_cannot_be_disabled(tmp_path: Path) -> None:
     with result.rejected_path.open(newline="", encoding="utf-8") as handle:
         rejected = list(csv.DictReader(handle))
     assert rejected[0]["reason"] == "marker_depth_not_positive"
+
+
+def test_positive_depth_check_can_be_explicitly_disabled(tmp_path: Path) -> None:
+    source = tmp_path / "raw.csv"
+    _write(source, [_row("static", "left", 7, z=-1.0)])
+
+    result = filter_observations(
+        source,
+        tmp_path / "filter",
+        job_id="diagnostic_depth",
+        marker_settings=MarkerSettings(),
+        quality=ObservationQualitySettings(
+            require_positive_depth=False,
+            maximum_pnp_reprojection_error_px="disabled",
+        ),
+    )
+
+    assert result.accepted_count == 1
 
 
 def test_missing_legacy_reprojection_inputs_fail_preflight(tmp_path: Path) -> None:
@@ -163,6 +189,61 @@ def test_missing_legacy_distortion_data_fails_preflight(tmp_path: Path) -> None:
             source,
             tmp_path / "filter",
             job_id="legacy",
+            marker_settings=MarkerSettings(),
+            quality=ObservationQualitySettings(),
+        )
+
+
+def test_dimensions_are_recovered_from_referenced_image(
+    tmp_path: Path,
+) -> None:
+    image = np.zeros((120, 200, 3), dtype=np.uint8)
+    image_path = tmp_path / "frame.png"
+    assert cv2.imwrite(str(image_path), image)
+    row = _row("static", "left", 7, area=240.0)
+    row.pop("image_width_px")
+    row.pop("image_height_px")
+    row.pop("marker_area_ratio")
+    row["image_path"] = image_path.name
+    source = tmp_path / "raw.csv"
+    _write(source, [row])
+
+    result = filter_observations(
+        source,
+        tmp_path / "filter",
+        job_id="dimension_recovery",
+        marker_settings=MarkerSettings(),
+        quality=ObservationQualitySettings(),
+    )
+
+    with result.accepted_path.open(
+        newline="", encoding="utf-8"
+    ) as handle:
+        accepted = next(csv.DictReader(handle))
+    assert int(accepted["image_width_px"]) == 200
+    assert int(accepted["image_height_px"]) == 120
+    assert float(accepted["marker_area_ratio"]) == pytest.approx(0.01)
+
+
+def test_missing_dimensions_and_unreadable_image_stop_preflight(
+    tmp_path: Path,
+) -> None:
+    row = _row("static", "left", 7)
+    row.pop("image_width_px")
+    row.pop("image_height_px")
+    row.pop("marker_area_ratio")
+    row["image_path"] = "missing.png"
+    source = tmp_path / "raw.csv"
+    _write(source, [row])
+
+    with pytest.raises(
+        ObservationQualityError,
+        match="exact image dimensions are missing",
+    ):
+        filter_observations(
+            source,
+            tmp_path / "filter",
+            job_id="missing_dimensions",
             marker_settings=MarkerSettings(),
             quality=ObservationQualitySettings(),
         )

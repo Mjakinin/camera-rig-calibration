@@ -131,7 +131,7 @@ def test_review_freezes_distinct_method_selections(
         update={
             "methods": MethodSettings(enabled=["ap03"]),
             "selection": SelectionSettings(mode="review_once"),
-            "evaluation": EvaluationSettings(anchor_marker_id="auto_common"),
+            "evaluation": EvaluationSettings(anchor_marker_id="auto"),
         },
         deep=True,
     )
@@ -152,7 +152,7 @@ def test_review_freezes_distinct_method_selections(
     assert frozen.methods.ap01.root_camera == "roof.camera"
     assert frozen.methods.ap02.reference_marker_id == 7
     assert frozen.methods.ap03.single.scale_marker_id == 9
-    assert frozen.evaluation.anchor_marker_id == "auto_common"
+    assert frozen.evaluation.anchor_marker_id == 7
 
 
 def test_ap01_contract_has_no_reference_marker_requirement(
@@ -172,3 +172,37 @@ def test_ap01_contract_has_no_reference_marker_requirement(
     )
 
     assert calibration_methods.get("ap01").requirements(context).compatible
+
+
+def test_disabled_methods_do_not_promote_singleton_marker_recommendations(
+    prepared_config: RigConfig, tmp_path: Path
+) -> None:
+    root = tmp_path / "observations"
+    _write(root, [_row("static", "front-left", 7)])
+    config = prepared_config.model_copy(
+        update={
+            "methods": MethodSettings(
+                enabled=["diagnostic_extension"],
+                extensions={"diagnostic_extension": {}},
+            ),
+            "evaluation": EvaluationSettings(enabled=False),
+        },
+        deep=True,
+    )
+
+    resolved = resolve_selections(config, root)
+
+    assert resolved.ap02_reference_marker_id == 7
+    assert resolved.ap03_single_scale_marker_id == 7
+    assert (
+        resolved.payload["automatic_recommendations"][
+            "ap02_reference_marker_id"
+        ]
+        is None
+    )
+    assert (
+        resolved.payload["automatic_recommendations"][
+            "ap03_single_scale_marker_id"
+        ]
+        is None
+    )

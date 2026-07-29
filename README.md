@@ -108,6 +108,20 @@ Additional registered `CalibrationMethod` components appear automatically.
 AP01–AP03 keep their dedicated editors; extension methods use their strict
 validated YAML configuration model.
 
+Observation quality has one queue-wide baseline and optional overrides per
+method row. The default area threshold is the resolution-neutral marker/image
+ratio `0.000008`; PnP RMSE, positive depth and maximum distance are separate
+filters. In the editor, `inherit` uses the queue baseline and an explicit
+value affects only that method variant. Optional selection limits use `null`
+for unlimited and reject `0`.
+
+AP01, AP02 and AP03 make deterministic quality-ranked selections and write
+their candidates, score components and tie-breakers to CSV/JSON diagnostics.
+The common evaluation anchor is selected and frozen once during preflight—no
+method may silently substitute another anchor afterward. PnP observation
+RMSE, AP03 scale-RANSAC reprojection and common evaluation reprojection are
+independent settings and are labeled separately in the wizard.
+
 ## Pipeline
 
 The terminal shows this central order:

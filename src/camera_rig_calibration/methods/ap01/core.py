@@ -16,7 +16,7 @@ import subprocess
 import sys
 import time
 import traceback
-from collections import defaultdict
+from collections import Counter, defaultdict
 from itertools import combinations
 from pathlib import Path
 
@@ -369,7 +369,11 @@ def prepare_observations(
         item = dict(row)
         item["_marker"] = int(float(row["marker_id"]))
         item["_camera"] = row["camera_name"]
-        item["_quality"] = observation_quality(row, *static_size)
+        item["_quality"] = safe_float(
+            row,
+            "selection_score",
+            observation_quality(row, *static_size),
+        )
         item["_T_cam_marker"] = T_from_observation(row)
         prepared_static.append(item)
 
@@ -380,7 +384,11 @@ def prepare_observations(
         item = dict(row)
         item["_marker"] = int(float(row["marker_id"]))
         item["_frame"] = frame_number(row)
-        item["_quality"] = observation_quality(row, *moving_size)
+        item["_quality"] = safe_float(
+            row,
+            "selection_score",
+            observation_quality(row, *moving_size),
+        )
         item["_T_cam_marker"] = T_from_observation(row)
         prepared_moving.append(item)
 
@@ -390,11 +398,30 @@ def prepare_observations(
 def robust_scale(
     moving_rows: list[dict],
     colmap_poses: dict[int, np.ndarray],
+    maximum_observations_per_marker: int | None = None,
 ) -> tuple[float, dict, list[dict]]:
     by_marker = defaultdict(list)
     for row in moving_rows:
         if row["_frame"] in colmap_poses:
             by_marker[row["_marker"]].append(row)
+
+    registered_counts = {
+        int(marker): len(rows) for marker, rows in sorted(by_marker.items())
+    }
+    for marker, rows in by_marker.items():
+        ranked = sorted(
+            rows,
+            key=lambda row: (
+                -float(row["_quality"]),
+                int(row["_frame"]),
+            ),
+        )
+        if maximum_observations_per_marker is not None:
+            ranked = ranked[:maximum_observations_per_marker]
+        by_marker[marker] = ranked
+    selected_counts = {
+        int(marker): len(rows) for marker, rows in sorted(by_marker.items())
+    }
 
     pairs = []
     for marker, rows in by_marker.items():
@@ -446,6 +473,12 @@ def robust_scale(
     for row in pairs:
         row["used_for_scale"] = id(row) in kept_ids
 
+    marker_pair_counts = Counter(
+        int(row["marker_id"]) for row in pairs
+    )
+    marker_inlier_counts = Counter(
+        int(row["marker_id"]) for row in kept
+    )
     stats = {
         "scale_m_per_colmap_unit": scale,
         "raw_pairs": len(pairs),
@@ -456,6 +489,15 @@ def robust_scale(
         "used_std": float(np.std(kept_values)),
         "used_relative_std": float(np.std(kept_values) / scale),
         "markers_with_registered_observations": sorted(by_marker),
+        "maximum_observations_per_marker": maximum_observations_per_marker,
+        "registered_observations_per_marker": registered_counts,
+        "selected_observations_per_marker": selected_counts,
+        "candidate_pairs_per_marker": dict(sorted(marker_pair_counts.items())),
+        "inlier_pairs_per_marker": dict(sorted(marker_inlier_counts.items())),
+        "outlier_pairs_per_marker": {
+            marker: marker_pair_counts[marker] - marker_inlier_counts[marker]
+            for marker in sorted(marker_pair_counts)
+        },
     }
     return scale, stats, pairs
 
@@ -599,17 +641,27 @@ def best_static_by_camera_marker(rows: list[dict]) -> dict[tuple[str, int], dict
 
 
 def moving_by_marker(
-    rows: list[dict], registered_frames: set[int]
+    rows: list[dict],
+    registered_frames: set[int],
+    top_per_marker: int | None = None,
 ) -> dict[int, list[dict]]:
-    """Return every quality-accepted registered moving observation."""
+    """Rank registered moving observations and apply the AP01 relay cap."""
     grouped = defaultdict(list)
     for row in rows:
         if row["_frame"] in registered_frames:
             grouped[row["_marker"]].append(row)
     for marker in grouped:
-        grouped[marker] = sorted(
+        ranked = sorted(
             grouped[marker],
-            key=lambda row: row["_frame"],
+            key=lambda row: (
+                -float(row["_quality"]),
+                int(row["_frame"]),
+            ),
+        )
+        if top_per_marker is not None:
+            ranked = ranked[:top_per_marker]
+        grouped[marker] = sorted(
+            ranked, key=lambda row: int(row["_frame"])
         )
     return grouped
 

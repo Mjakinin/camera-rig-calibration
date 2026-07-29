@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import shutil
 from collections import defaultdict, deque
 from pathlib import Path
 
@@ -13,6 +12,10 @@ from camera_rig_calibration.ap02_graph import (
 from camera_rig_calibration.pipeline import StageResult, run_stage
 
 from .common import read_csv, write_csv
+from .frame_selection import (
+    select_ap02_frames,
+    write_ap02_frame_selection,
+)
 
 
 def _reachability(
@@ -53,26 +56,53 @@ def run(
     output_root: Path,
     camera_ids: tuple[str, ...],
     reference_marker_id: int,
+    reference_marker_maximum_frames: int | None,
+    top_per_marker: int | None,
+    top_per_marker_pair: int | None,
+    maximum_total_frames: int | None,
 ) -> StageResult:
     stage_root = output_root / "02_aruco_observations"
     source = observations_root / "shared_all_aruco_observations.csv"
 
     def action() -> dict[str, Path | int]:
         stage_root.mkdir(parents=True, exist_ok=True)
-        mapping = {
-            "shared_static_aruco_observations.csv":
-                "ap02_static_aruco_observations.csv",
-            "shared_moving_aruco_observations.csv":
-                "ap02_moving_aruco_observations.csv",
-            "shared_all_aruco_observations.csv":
-                "ap02_all_aruco_observations.csv",
-        }
-        for source_name, destination_name in mapping.items():
-            shutil.copy2(
-                observations_root / source_name,
-                stage_root / destination_name,
-            )
-        rows = read_csv(source)
+        accepted_rows = read_csv(source)
+        frame_selection = select_ap02_frames(
+            accepted_rows,
+            camera_ids=camera_ids,
+            reference_marker_id=reference_marker_id,
+            reference_marker_maximum_frames=(
+                reference_marker_maximum_frames
+            ),
+            top_per_marker=top_per_marker,
+            top_per_marker_pair=top_per_marker_pair,
+            maximum_total_frames=maximum_total_frames,
+        )
+        write_ap02_frame_selection(frame_selection, stage_root)
+        rows = list(frame_selection.selected_rows)
+        write_csv(
+            stage_root / "ap02_all_aruco_observations.csv",
+            rows,
+            list(rows[0]) if rows else [],
+        )
+        write_csv(
+            stage_root / "ap02_static_aruco_observations.csv",
+            [
+                row
+                for row in rows
+                if row.get("observer_type") == "static"
+            ],
+            list(rows[0]) if rows else [],
+        )
+        write_csv(
+            stage_root / "ap02_moving_aruco_observations.csv",
+            [
+                row
+                for row in rows
+                if row.get("observer_type") == "moving"
+            ],
+            list(rows[0]) if rows else [],
+        )
         components = graph_components(rows, camera_ids)
         primary_component = next(
             (
@@ -174,6 +204,9 @@ def run(
             "graph_summary": summary,
             "component_manifest": component_manifest,
             "accepted_observations": len(rows),
+            "selected_moving_frames": len(
+                frame_selection.selected_frame_ids
+            ),
         }
 
     return run_stage(
@@ -184,6 +217,7 @@ def run(
         parameters={
             "reference_marker_id": reference_marker_id,
             "weighted_graph": False,
+            "frame_selection": frame_selection.summary["limits"],
         },
     )
 
@@ -194,6 +228,10 @@ def main() -> None:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--cameras", required=True)
     parser.add_argument("--ref-marker-id", type=int, required=True)
+    parser.add_argument("--reference-marker-maximum-frames", type=int)
+    parser.add_argument("--top-per-marker", type=int)
+    parser.add_argument("--top-per-marker-pair", type=int)
+    parser.add_argument("--maximum-total-frames", type=int)
     args = parser.parse_args()
     run(
         observations_root=args.observations_root.resolve(),
@@ -202,6 +240,12 @@ def main() -> None:
             item.strip() for item in args.cameras.split(",") if item.strip()
         ),
         reference_marker_id=args.ref_marker_id,
+        reference_marker_maximum_frames=(
+            args.reference_marker_maximum_frames
+        ),
+        top_per_marker=args.top_per_marker,
+        top_per_marker_pair=args.top_per_marker_pair,
+        maximum_total_frames=args.maximum_total_frames,
     )
 
 

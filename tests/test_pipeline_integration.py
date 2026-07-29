@@ -109,7 +109,7 @@ def test_complete_orchestrator_contract_without_running_ap_methods(tmp_path: Pat
     assert resolved.methods.ap01.root_camera in camera_ids
     assert resolved.methods.ap02.reference_marker_id == 7
     assert resolved.methods.ap03_single.scale_marker_id == 7
-    assert resolved.evaluation.anchor_marker_id == "auto_common"
+    assert resolved.evaluation.anchor_marker_id == "auto"
     assert resolved.markers.accepted_ids == "all_detected"
     dataset_manifest = json.loads(
         (run / "00_INPUT" / "dataset_manifest.json").read_text()
@@ -562,7 +562,7 @@ def test_queue_runs_ready_job_when_an_independent_job_fails_preflight(
     ready = RigConfig(**common)
     rejected = RigConfig(
         **common,
-        observation_quality={"minimum_marker_area_px2": 1_000_000.0},
+        observation_quality={"minimum_marker_area_ratio": 0.99},
     )
     ready_path = save_config(ready, tmp_path / "queue/ready.yaml")
     rejected_path = save_config(

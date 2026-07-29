@@ -64,6 +64,100 @@ class ResolvedSelections:
     marker_ids: tuple[int, ...]
     payload: dict[str, Any]
 
+
+def write_selection_candidates_csv(
+    observations_root: Path,
+    payload: dict[str, Any],
+) -> Path:
+    """Write the auditable score table for every preflight selection."""
+
+    root_candidates = payload["ap01_root_camera"]["candidates"]
+    ap02_candidates = payload["ap02_reference_marker"]["candidates"]
+    ap03_candidates = payload["ap03_single_scale_marker"]["candidates"]
+    evaluation = payload["evaluation_anchor"]
+    evaluation_ids = {
+        int(value) for value in evaluation["observation_candidates"]
+    }
+    automatic_evaluation_ids = {
+        int(value)
+        for value in evaluation["automatic_observation_candidates"]
+    }
+    evaluation_candidates = [
+        {
+            **candidate,
+            "compatible": int(candidate["id"]) in evaluation_ids,
+            "automatic_candidate": (
+                int(candidate["id"]) in automatic_evaluation_ids
+            ),
+            "recommended": (
+                evaluation.get("selected") is not None
+                and int(candidate["id"]) == int(evaluation["selected"])
+            ),
+        }
+        for candidate in ap03_candidates
+    ]
+    selection_rows: list[dict[str, Any]] = []
+    for selection_name, candidates in (
+        ("ap01_root_camera", root_candidates),
+        ("ap02_reference_marker", ap02_candidates),
+        ("ap03_scale_marker", ap03_candidates),
+        ("evaluation_anchor", evaluation_candidates),
+    ):
+        for candidate in candidates:
+            selection_rows.append(
+                {
+                    "selection": selection_name,
+                    "candidate_id": candidate["id"],
+                    "compatible": candidate.get("compatible", False),
+                    "automatic_candidate": candidate.get(
+                        "automatic_candidate", True
+                    ),
+                    "recommended": candidate.get("recommended", False),
+                    "selection_score": candidate.get(
+                        "median_selection_score"
+                    ),
+                    "score_area": candidate.get("median_score_area"),
+                    "score_reprojection": candidate.get(
+                        "median_score_reprojection"
+                    ),
+                    "score_border": candidate.get("median_score_border"),
+                    "score_distance": candidate.get(
+                        "median_score_distance"
+                    ),
+                    "tie_breaker": (
+                        "stable ascending camera ID"
+                        if selection_name == "ap01_root_camera"
+                        else "stable ascending marker ID"
+                    ),
+                }
+            )
+    destination = observations_root / "SELECTION_CANDIDATES.csv"
+    with destination.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=(
+                list(selection_rows[0])
+                if selection_rows
+                else [
+                    "selection",
+                    "candidate_id",
+                    "compatible",
+                    "automatic_candidate",
+                    "recommended",
+                    "selection_score",
+                    "score_area",
+                    "score_reprojection",
+                    "score_border",
+                    "score_distance",
+                    "tie_breaker",
+                ]
+            ),
+        )
+        writer.writeheader()
+        writer.writerows(selection_rows)
+    return destination
+
+
 def _read_observations(root: Path) -> list[dict[str, str]]:
     path = root / "shared_all_aruco_observations.csv"
     if not path.is_file():
@@ -112,8 +206,9 @@ def _root_rank(candidate: dict[str, Any]) -> tuple[Any, ...]:
         len(candidate["moving_bridges"]),
         candidate["distinct_markers"],
         candidate["observations"],
+        _higher_is_better(candidate["median_selection_score"]),
         _lower_is_better(candidate["median_pnp_reprojection_rmse_px"]),
-        _higher_is_better(candidate["median_marker_area_px2"]),
+        _higher_is_better(candidate["median_marker_area_ratio"]),
     )
 
 
@@ -123,8 +218,9 @@ def _ap02_rank(candidate: dict[str, Any]) -> tuple[Any, ...]:
         candidate["static_camera_count"],
         candidate["moving_frames"],
         candidate["accepted_observations"],
+        _higher_is_better(candidate["median_selection_score"]),
         _lower_is_better(candidate["median_pnp_reprojection_rmse_px"]),
-        _higher_is_better(candidate["median_marker_area_px2"]),
+        _higher_is_better(candidate["median_marker_area_ratio"]),
     )
 
 
@@ -132,8 +228,9 @@ def ap03_candidate_rank(candidate: dict[str, Any]) -> tuple[Any, ...]:
     return (
         candidate["moving_frames"],
         candidate["static_camera_count"],
+        _higher_is_better(candidate["moving_median_selection_score"]),
         _lower_is_better(candidate["moving_median_pnp_reprojection_rmse_px"]),
-        _higher_is_better(candidate["moving_median_marker_area_px2"]),
+        _higher_is_better(candidate["moving_median_marker_area_ratio"]),
     )
 
 
@@ -203,6 +300,24 @@ def _root_candidates(
             ),
             "median_marker_area_px2": _median_value(
                 static_rows[root], "area_px2"
+            ),
+            "median_marker_area_ratio": _median_value(
+                static_rows[root], "marker_area_ratio"
+            ),
+            "median_selection_score": _median_value(
+                static_rows[root], "selection_score"
+            ),
+            "median_score_area": _median_value(
+                static_rows[root], "score_area"
+            ),
+            "median_score_reprojection": _median_value(
+                static_rows[root], "score_reprojection"
+            ),
+            "median_score_border": _median_value(
+                static_rows[root], "score_border"
+            ),
+            "median_score_distance": _median_value(
+                static_rows[root], "score_distance"
             ),
         }
     return result
@@ -308,6 +423,7 @@ def _marker_candidates(
                 combined_static_cameras
             ),
             "combined_graph_reachable_marker_count": len(combined_markers),
+            "combined_graph_reachable_marker_ids": sorted(combined_markers),
             "combined_graph_reachable_moving_frames": len(
                 combined_moving_observers
             ),
@@ -322,6 +438,12 @@ def _marker_candidates(
             "median_marker_area_px2": _median_value(
                 marker_rows, "area_px2"
             ),
+            "median_marker_area_ratio": _median_value(
+                marker_rows, "marker_area_ratio"
+            ),
+            "median_selection_score": _median_value(
+                marker_rows, "selection_score"
+            ),
             "moving_median_pnp_reprojection_rmse_px": _median_value(
                 moving,
                 "pnp_reprojection_rmse_px",
@@ -331,10 +453,33 @@ def _marker_candidates(
             "moving_median_marker_area_px2": _median_value(
                 moving, "area_px2"
             ),
+            "moving_median_marker_area_ratio": _median_value(
+                moving, "marker_area_ratio"
+            ),
+            "moving_median_selection_score": _median_value(
+                moving, "selection_score"
+            ),
+            "median_score_area": _median_value(marker_rows, "score_area"),
+            "median_score_reprojection": _median_value(
+                marker_rows, "score_reprojection"
+            ),
+            "median_score_border": _median_value(
+                marker_rows, "score_border"
+            ),
+            "median_score_distance": _median_value(
+                marker_rows, "score_distance"
+            ),
             "ap02_compatible": len(combined_static_cameras) == len(camera_ids),
             "ap02_partial_compatible": partial_compatible,
             "ap02_static_only_partial": len(reachable) < len(camera_ids),
             "ap03_compatible": len(moving_frames) >= 2,
+            "automatic_candidate": (
+                len(marker_rows) >= 2
+                and (
+                    len(marker_to_observers[marker]) >= 2
+                    or len(moving_frames) >= 2
+                )
+            ),
         }
     return result
 
@@ -360,6 +505,7 @@ def _marker_choice(
                 marker: details
                 for marker, details in candidates.items()
                 if details.get("ap02_partial_compatible", False)
+                and details.get("automatic_candidate", False)
             }
             if partial:
                 return int(
@@ -399,10 +545,33 @@ def _marker_choice(
         raise RuntimeError(
             f"No compatible selection candidates are available for {purpose}"
         )
+    if configured == "auto":
+        auto_candidates = {
+            marker: details
+            for marker, details in candidates.items()
+            if (
+                details.get(compatibility_key, False)
+                or (
+                    purpose == "AP02 reference"
+                    and details.get("ap02_partial_compatible", False)
+                )
+                or not require_compatibility
+            )
+            and details.get("automatic_candidate", False)
+        }
+        if not auto_candidates:
+            raise RuntimeError(
+                f"No repeat-supported automatic candidate is available for "
+                f"{purpose}; singleton observations remain visible for "
+                "diagnostics or explicit review."
+            )
+        candidates_for_choice = auto_candidates
+    else:
+        candidates_for_choice = candidates
     selected = (
         int(
             _best_candidate(
-                candidates,
+                candidates_for_choice,
                 rank,
                 compatibility_key=(
                     compatibility_key if require_compatibility else "_all"
@@ -448,8 +617,9 @@ def resolve_selections(
     markers = _marker_candidates(rows, camera_ids)
     enabled = set(config.methods.enabled)
     configured_root = config.methods.ap01.root_camera
+    recommended_root = str(_best_candidate(roots, _root_rank))
     root = (
-        str(_best_candidate(roots, _root_rank))
+        recommended_root
         if configured_root == "auto"
         else configured_root
     )
@@ -460,8 +630,36 @@ def resolve_selections(
             f"Configured AP01 root camera '{root}' has no successful observations"
         )
 
+    try:
+        recommended_ap02_reference: int | None = _marker_choice(
+            "auto",
+            markers,
+            compatibility_key="ap02_compatible",
+            purpose="AP02 reference",
+            rank=_ap02_rank,
+            require_compatibility="ap02" in enabled,
+            expected_camera_ids=camera_ids,
+        )
+    except RuntimeError:
+        if "ap02" in enabled:
+            raise
+        recommended_ap02_reference = None
+    configured_ap02_reference = (
+        int(
+            _best_candidate(
+                markers,
+                _ap02_rank,
+                compatibility_key="_all",
+            )
+        )
+        if (
+            config.methods.ap02.reference_marker_id == "auto"
+            and recommended_ap02_reference is None
+        )
+        else config.methods.ap02.reference_marker_id
+    )
     ap02_reference = _marker_choice(
-        config.methods.ap02.reference_marker_id,
+        configured_ap02_reference,
         markers,
         compatibility_key="ap02_compatible",
         purpose="AP02 reference",
@@ -469,8 +667,35 @@ def resolve_selections(
         require_compatibility="ap02" in enabled,
         expected_camera_ids=camera_ids,
     )
+    try:
+        recommended_single_marker: int | None = _marker_choice(
+            "auto",
+            markers,
+            compatibility_key="ap03_compatible",
+            purpose="AP03 Single scale",
+            rank=ap03_candidate_rank,
+            require_compatibility="ap03" in enabled,
+        )
+    except RuntimeError:
+        if "ap03" in enabled:
+            raise
+        recommended_single_marker = None
+    configured_single_marker = (
+        int(
+            _best_candidate(
+                markers,
+                ap03_candidate_rank,
+                compatibility_key="_all",
+            )
+        )
+        if (
+            config.methods.ap03_single.scale_marker_id == "auto"
+            and recommended_single_marker is None
+        )
+        else config.methods.ap03_single.scale_marker_id
+    )
     single_marker = _marker_choice(
-        config.methods.ap03_single.scale_marker_id,
+        configured_single_marker,
         markers,
         compatibility_key="ap03_compatible",
         purpose="AP03 Single scale",
@@ -517,15 +742,58 @@ def resolve_selections(
         marker: details
         for marker, details in markers.items()
         if marker in moving_markers
+        and bool(details["static_cameras"])
         and (
             "ap01" not in enabled
             or marker in root_markers
         )
     }
+    if "ap02" in enabled:
+        ap02_component_markers = set(
+            markers[ap02_reference][
+                "combined_graph_reachable_marker_ids"
+            ]
+        )
+        evaluation_candidates = {
+            marker: details
+            for marker, details in evaluation_candidates.items()
+            if marker in ap02_component_markers
+        }
+    if "ap03" in enabled:
+        evaluation_candidates = {
+            marker: details
+            for marker, details in evaluation_candidates.items()
+            if details["ap03_compatible"]
+        }
     configured_evaluation = config.evaluation.anchor_marker_id
     evaluation_anchor: int | None
-    if configured_evaluation == "auto_common":
+    automatic_evaluation_candidates = {
+        marker: details
+        for marker, details in evaluation_candidates.items()
+        if details.get("automatic_candidate", False)
+    }
+    recommended_evaluation_anchor = (
+        int(
+            _best_candidate(
+                automatic_evaluation_candidates,
+                ap03_candidate_rank,
+                compatibility_key="_all",
+            )
+        )
+        if automatic_evaluation_candidates
+        else None
+    )
+    if not config.evaluation.enabled:
         evaluation_anchor = None
+    elif configured_evaluation == "auto":
+        if recommended_evaluation_anchor is None:
+            raise RuntimeError(
+                "Evaluation is enabled, but preflight found no common marker "
+                "with repeated accepted static/moving support for every "
+                "enabled method. Adjust quality filters/whitelist or disable "
+                "evaluation explicitly."
+            )
+        evaluation_anchor = recommended_evaluation_anchor
     else:
         evaluation_anchor = int(configured_evaluation)
         if evaluation_anchor not in evaluation_candidates:
@@ -566,7 +834,7 @@ def resolve_selections(
 
     marker_ids = tuple(sorted(markers))
     root_payload = [
-        {**details, "recommended": camera == root}
+        {**details, "recommended": camera == recommended_root}
         for camera, details in sorted(roots.items())
     ]
     ap02_payload = [
@@ -580,7 +848,7 @@ def resolve_selections(
                 not details["ap02_compatible"]
                 and details["ap02_partial_compatible"]
             ),
-            "recommended": marker == ap02_reference,
+            "recommended": marker == recommended_ap02_reference,
         }
         for marker, details in sorted(markers.items())
     ]
@@ -588,7 +856,7 @@ def resolve_selections(
         {
             **details,
             "compatible": details["ap03_compatible"],
-            "recommended": marker == single_marker,
+            "recommended": marker == recommended_single_marker,
         }
         for marker, details in sorted(markers.items())
     ]
@@ -646,16 +914,32 @@ def resolve_selections(
         "evaluation_anchor": {
             "configured": configured_evaluation,
             "selected": evaluation_anchor,
-            "resolution_stage": (
-                "after_methods"
-                if configured_evaluation == "auto_common"
-                else "before_methods_explicit"
-            ),
+            "resolution_stage": "disabled" if not config.evaluation.enabled else "preflight",
             "observation_candidates": sorted(evaluation_candidates),
+            "automatic_observation_candidates": sorted(
+                marker
+                for marker, details in evaluation_candidates.items()
+                if details.get("automatic_candidate", False)
+            ),
             "reason": (
-                "resolved after method outputs from their common available markers"
-                if configured_evaluation == "auto_common"
-                else "explicit user configuration"
+                "evaluation disabled explicitly"
+                if not config.evaluation.enabled
+                else (
+                    "deterministic common preflight recommendation from repeated "
+                    "support, selection score, PnP RMSE, marker area ratio and "
+                    "stable marker ID"
+                    if configured_evaluation == "auto"
+                    else "explicit user configuration"
+                )
+            ),
+        },
+        "automatic_recommendations": {
+            "ap01_root_camera": recommended_root,
+            "ap02_reference_marker_id": recommended_ap02_reference,
+            "ap03_single_scale_marker_id": recommended_single_marker,
+            "ap03_multi_marker_ids": list(compatible_multi),
+            "evaluation_anchor_marker_id": (
+                recommended_evaluation_anchor
             ),
         },
         "detected_marker_ids": list(marker_ids),
@@ -672,6 +956,7 @@ def resolve_selections(
     (observations_root / "REFERENCE_MARKER_ID.txt").write_text(
         f"{ap02_reference}\n", encoding="utf-8"
     )
+    write_selection_candidates_csv(observations_root, payload)
     return ResolvedSelections(
         root,
         ap02_reference,
@@ -706,6 +991,10 @@ def freeze_selections(
         "ap03_multi_marker_ids", resolved.ap03_multi_marker_ids
     )
     multi_markers = tuple(sorted(dict.fromkeys(int(item) for item in multi_value)))
+    evaluation_anchor = values.get(
+        "evaluation_anchor_marker_id",
+        resolved.evaluation_anchor_marker_id,
+    )
 
     available_roots = {
         str(item["id"])
@@ -770,6 +1059,15 @@ def freeze_selections(
         },
         deep=True,
     )
+    evaluation = config.evaluation.model_copy(
+        update={
+            "anchor_marker_id": (
+                int(evaluation_anchor)
+                if evaluation_anchor is not None
+                else config.evaluation.anchor_marker_id
+            )
+        }
+    )
     return RigConfig.model_validate(
         config.model_copy(
             update={
@@ -777,6 +1075,7 @@ def freeze_selections(
                     update={"mode": "explicit"}
                 ),
                 "methods": methods,
+                "evaluation": evaluation,
             },
             deep=True,
         ).model_dump(mode="python")

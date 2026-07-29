@@ -508,7 +508,7 @@ def test_method_editor_rows_exclude_queue_wide_aruco_and_evaluation() -> None:
     }
 
     assert groups == {
-        "OBSERVATION QUALITY",
+        "OBSERVATION QUALITY OVERRIDE",
         "METHOD-SPECIFIC SETTINGS",
         "COLMAP SETTINGS",
     }

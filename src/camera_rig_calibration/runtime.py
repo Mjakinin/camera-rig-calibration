@@ -22,7 +22,7 @@ from rich.table import Table
 
 from .components import register_builtin_components
 from .config import config_fingerprint, load_config, save_config
-from .config.models import RigConfig
+from .config.models import RigConfig, effective_observation_quality
 from .contracts import CommandSpec, RunContext
 from .dataset.manifest import AutoSelection, load_dataset_manifest, save_dataset_manifest
 from .dataset.validation import validate_dataset
@@ -45,7 +45,6 @@ from .experiments import (
 )
 from .observations import (
     ResolvedSelections,
-    ap03_candidate_rank,
     freeze_selections,
     resolve_selections,
 )
@@ -123,7 +122,7 @@ def _automatic_scientific_selections(config: RigConfig) -> bool:
         and config.methods.ap02.reference_marker_id == "auto"
         and config.methods.ap03_single.scale_marker_id == "auto"
         and config.methods.ap03_multi.marker_ids == "auto"
-        and config.evaluation.anchor_marker_id == "auto_common"
+        and config.evaluation.anchor_marker_id == "auto"
     )
 
 
@@ -178,13 +177,7 @@ def planned_stages(
         for method_id in config.methods.enabled
     )
     if config.evaluation.enabled and not defer_evaluation:
-        stages.append(
-            (
-                "resolve_evaluation_anchor",
-                "Resolve a common post-method evaluation anchor",
-            )
-        )
-        stages.append(("evaluation", "Common method evaluation"))
+        stages.append(("evaluation", "Evaluate with the frozen preflight anchor"))
     stages.extend(
         [
             ("comparison", "Normalize and compare method results"),
@@ -491,6 +484,13 @@ class PipelineOrchestrator:
             "gpu_probe_available": gpu_available,
         }
         self._save_state()
+        self.console.print(
+            "[dim]COLMAP resolved: "
+            f"matcher={requested.matcher}, GPU={requested.gpu_mode}"
+            f" -> {resolved_gpu}, image_size={requested.maximum_image_size}, "
+            f"features={requested.maximum_features}, "
+            f"mapper_matches={requested.mapper_minimum_matches}[/dim]"
+        )
         return RigConfig.model_validate(resolved.model_dump(mode="python"))
 
     def show_dry_run(self, config: RigConfig) -> None:
@@ -567,7 +567,7 @@ class PipelineOrchestrator:
             "config_sha256": config_fingerprint(config),
             "requested_config_sha256": config_fingerprint(config),
             "enabled_methods": config.methods.enabled,
-            "observation_input_contract": "all_quality_passed_v1",
+            "observation_input_contract": "observation_quality_v2",
             "execution_mode": config.project.execution_mode,
             "selection_mode": config.selection.mode,
             "evaluation_deferred_to_queue": self.defer_evaluation,
@@ -772,7 +772,9 @@ class PipelineOrchestrator:
                     config.markers.dictionary,
                 ),
                 "detector_contract": DETECTOR_CONTRACT,
-                "observation_input_contract": "all_quality_passed_v1",
+                "observation_input_contract": (
+                    "raw_detection_with_dimensions_and_area_ratio_v2"
+                ),
             },
         )
         view = self.run_directory / "01_OBSERVATIONS"
@@ -804,8 +806,15 @@ class PipelineOrchestrator:
         dataset_root = self._working_paths(config).datasets
         observations = dataset_root / "observations"
         observations.mkdir(parents=True, exist_ok=True)
+        completion = observations / "PUBLICATION_COMPLETE.json"
+        existing_completion = _read_json(completion)
+        if existing_completion.get("status") == "complete":
+            self.manifest["dataset_observation_evidence_reused"] = True
+            self._save_state()
+            return
         required_selection = (
             "SELECTION_CANDIDATES.json",
+            "SELECTION_CANDIDATES.csv",
             "REFERENCE_SELECTIONS.json",
             "REFERENCE_MARKER_ID.txt",
         )
@@ -832,6 +841,8 @@ class PipelineOrchestrator:
             "rejected_observations.csv",
             "observation_filter_summary.json",
             "preflight_summary.json",
+            "marker_inventory.csv",
+            "marker_inventory.json",
         ):
             source = self.run_directory / "preflight" / name
             if source.is_file():
@@ -841,29 +852,26 @@ class PipelineOrchestrator:
             destination = dataset_root / "metadata" / "dataset_manifest.json"
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(manifest, destination)
-        completion = observations / "PUBLICATION_COMPLETE.json"
         # A queue shares one immutable prepared dataset across all method
         # jobs.  Its first/preflight finalization is authoritative; rewriting
         # the timestamp for every method would make byte-identical
         # publication look like a dataset conflict.
-        existing_completion = _read_json(completion)
-        if existing_completion.get("status") != "complete":
-            _write_json(
-                completion,
-                {
-                    "schema_version": 5,
-                    "layout_version": 2,
-                    "status": "complete",
-                    "selection_files": list(required_selection),
-                    "quality_directory": "quality",
-                    "debug_images": (
-                        "debug_images"
-                        if (observations / "debug_images").is_dir()
-                        else None
-                    ),
-                    "finalized_at": _now(),
-                },
-            )
+        _write_json(
+            completion,
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "status": "complete",
+                "selection_files": list(required_selection),
+                "quality_directory": "quality",
+                "debug_images": (
+                    "debug_images"
+                    if (observations / "debug_images").is_dir()
+                    else None
+                ),
+                "finalized_at": _now(),
+            },
+        )
 
     @staticmethod
     def _observation_contract_ready(
@@ -1716,13 +1724,17 @@ class PipelineOrchestrator:
 
         def apply_observation_quality() -> None:
             try:
+                method_id = config.methods.enabled[0]
+                effective_quality, quality_sources = (
+                    effective_observation_quality(config, method_id)
+                )
                 result = filter_observations(
                     observations_root
                     / "shared_all_aruco_observations.csv",
                     run / "preflight",
                     job_id=run.name,
                     marker_settings=config.markers,
-                    quality=config.observation_quality,
+                    quality=effective_quality,
                 )
             except ObservationQualityError as exc:
                 _write_json(
@@ -1748,6 +1760,10 @@ class PipelineOrchestrator:
                     "status": "READY",
                     "job_id": run.name,
                     "filter": result.summary,
+                    "effective_observation_quality": (
+                        effective_quality.model_dump(mode="json")
+                    ),
+                    "observation_quality_sources": quality_sources,
                     "filtered_observations_root": str(
                         result.filtered_observations_root
                     ),
@@ -1912,8 +1928,25 @@ class PipelineOrchestrator:
             "ap03_multi_marker_ids": list(
                 resolved.ap03_multi_marker_ids
             ),
-            "evaluation_anchor_marker_id": None,
+            "evaluation_anchor_marker_id": (
+                resolved.evaluation_anchor_marker_id
+            ),
         }
+        effective_quality, quality_sources = (
+            effective_observation_quality(
+                config, config.methods.enabled[0]
+            )
+        )
+        self.manifest["effective_observation_quality"] = (
+            effective_quality.model_dump(mode="json")
+        )
+        self.manifest["observation_quality_sources"] = quality_sources
+        self.manifest["automatic_recommendations"] = (
+            selection_payload["automatic_recommendations"]
+        )
+        self.manifest["final_decisions"] = dict(
+            self.manifest["resolved_selections"]
+        )
         self.manifest.pop("resolution_update_pending", None)
         self._save_state()
 
@@ -2023,71 +2056,27 @@ class PipelineOrchestrator:
             method_results[method_id] = method.collect(context)
 
         if config.evaluation.enabled and not self.defer_evaluation:
-            anchor_holder: dict[str, int] = {}
-
-            def resolve_evaluation_anchor() -> None:
-                configured = config.evaluation.anchor_marker_id
-                if configured != "auto_common":
-                    anchor = int(configured)
-                    reason = "explicit user configuration"
-                else:
-                    eligible = set(
-                        int(value)
-                        for value in resolved.payload["evaluation_anchor"][
-                            "observation_candidates"
-                        ]
-                    )
-                    candidates = {
-                        int(item["id"]): item
-                        for item in resolved.payload[
-                            "ap03_single_scale_marker"
-                        ]["candidates"]
-                        if int(item["id"]) in eligible
-                    }
-                    if not candidates:
-                        raise RuntimeError(
-                            "No evaluation marker is shared by the AP01 root "
-                            "camera and moving-camera observations"
-                        )
-                    best_rank = max(
-                        ap03_candidate_rank(item)
-                        for item in candidates.values()
-                    )
-                    anchor = min(
-                        marker
-                        for marker, item in candidates.items()
-                        if ap03_candidate_rank(item) == best_rank
-                    )
-                    reason = (
-                        "best observation-supported candidate; every method is "
-                        "evaluated with this same marker and failures stay visible"
-                    )
-                anchor_holder["value"] = anchor
-                _write_json(
-                    observations_root / "EVALUATION_ANCHOR_SELECTION.json",
-                    {
-                        "schema_version": 5,
-                        "configured": configured,
-                        "selected": anchor,
-                        "resolved_after_methods": True,
-                        "reason": reason,
-                    },
+            if resolved.evaluation_anchor_marker_id is None:
+                raise RuntimeError(
+                    "Evaluation is enabled, but no evaluation anchor was "
+                    "frozen during preflight."
                 )
-
-            self._execute_stage(
-                "resolve_evaluation_anchor", resolve_evaluation_anchor
+            evaluation_anchor = int(
+                resolved.evaluation_anchor_marker_id
             )
-            if "value" in anchor_holder:
-                evaluation_anchor = anchor_holder["value"]
-            else:
-                evaluation_anchor = int(
-                    json.loads(
-                        (
-                            observations_root
-                            / "EVALUATION_ANCHOR_SELECTION.json"
-                        ).read_text(encoding="utf-8")
-                    )["selected"]
-                )
+            _write_json(
+                observations_root / "EVALUATION_ANCHOR_SELECTION.json",
+                {
+                    "schema_version": 5,
+                    "configured": config.evaluation.anchor_marker_id,
+                    "selected": evaluation_anchor,
+                    "resolved_after_methods": False,
+                    "resolution_stage": "preflight",
+                    "reason": (
+                        resolved.payload["evaluation_anchor"]["reason"]
+                    ),
+                },
+            )
             evaluation_settings = config.evaluation.model_copy(
                 update={"anchor_marker_id": evaluation_anchor}
             )

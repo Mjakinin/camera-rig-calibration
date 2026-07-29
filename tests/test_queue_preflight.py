@@ -40,7 +40,13 @@ def _row(
         "tvec_x_m": 0,
         "tvec_y_m": 0,
         "tvec_z_m": 1,
+        "distance_m": 1,
+        "center_u": 50,
+        "center_v": 50,
+        "image_width_px": 100,
+        "image_height_px": 100,
         "area_px2": 400,
+        "marker_area_ratio": 0.04,
     }
     for index, (u, v) in enumerate(corners):
         row[f"corner{index}_u"] = u
@@ -70,7 +76,7 @@ def test_failed_job_does_not_block_independent_runnable_job(
     rejected = ready.model_copy(
         update={
             "observation_quality": ObservationQualitySettings(
-                minimum_marker_area_px2=1000.0
+                minimum_marker_area_ratio=0.1
             )
         },
         deep=True,
@@ -89,6 +95,7 @@ def test_failed_job_does_not_block_independent_runnable_job(
 
     assert result.status == "READY_PARTIAL"
     assert result.ready
+    assert result.common_evaluation_anchor_marker_id == 7
     assert [job.status for job in result.jobs] == ["READY", "FAILED_PREFLIGHT"]
     summary = json.loads(
         (tmp_path / "preflight/queue_preflight_summary.json").read_text()
@@ -102,6 +109,16 @@ def test_failed_job_does_not_block_independent_runnable_job(
         assert (root / "observation_filter_summary.json").is_file()
         assert (root / "accepted_observations.csv").is_file()
         assert (root / "rejected_observations.csv").is_file()
+    ready_summary = json.loads(
+        (
+            tmp_path
+            / "preflight/jobs/ready/preflight_summary.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert ready_summary["resolved_selections"][
+        "evaluation_anchor_marker_id"
+    ] == 7
+    assert ready_summary["common_evaluation_anchor_marker_id"] == 7
 
 
 def test_ap02_partial_static_and_complete_combined_is_ready_without_warning(

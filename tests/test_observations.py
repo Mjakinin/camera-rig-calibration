@@ -39,11 +39,27 @@ def test_automatic_references_use_visible_fields_and_are_logged(
     assert resolved.root_camera == "front-left"
     assert resolved.ap02_reference_marker_id == 7
     assert resolved.ap03_single_scale_marker_id == 7
-    assert resolved.evaluation_anchor_marker_id is None
+    assert resolved.evaluation_anchor_marker_id == 7
     audit = json.loads((root / "REFERENCE_SELECTIONS.json").read_text())
     assert audit["ap01_root_camera"]["configured"] == "auto"
-    assert audit["evaluation_anchor"]["resolution_stage"] == "after_methods"
+    assert audit["evaluation_anchor"]["resolution_stage"] == "preflight"
     assert audit["detected_marker_ids"] == [7, 9]
     serialized = json.dumps(audit).lower()
     assert "bottleneck" not in serialized
-    assert '"score"' not in serialized
+    assert "selection_score" in serialized
+    assert (root / "SELECTION_CANDIDATES.csv").is_file()
+    with (root / "SELECTION_CANDIDATES.csv").open(
+        newline="", encoding="utf-8"
+    ) as handle:
+        selection_rows = list(csv.DictReader(handle))
+    evaluation_rows = [
+        row
+        for row in selection_rows
+        if row["selection"] == "evaluation_anchor"
+    ]
+    assert {int(row["candidate_id"]) for row in evaluation_rows} == {7, 9}
+    assert [
+        int(row["candidate_id"])
+        for row in evaluation_rows
+        if row["recommended"] == "True"
+    ] == [7]

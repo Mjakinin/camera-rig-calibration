@@ -68,6 +68,10 @@ def run(
             "marker_poses": stage_root
             / "optimized_marker_poses_ref_marker.csv",
             "optimizer_report": stage_root / "optimizer_report.json",
+            "optimization_summary": stage_root
+            / "ap02_optimization_summary.json",
+            "optimization_history": stage_root
+            / "ap02_optimization_history.csv",
         }
 
     return run_stage(
@@ -84,7 +88,9 @@ def run(
             "maximum_function_evaluations": maximum_function_evaluations,
             "robust_loss": robust_loss,
             "robust_loss_scale_px": robust_loss_scale_px,
-            "uses_all_quality_accepted_observations": True,
+            "observation_input": (
+                "quality-ranked, graph-preserving AP02 frame selection"
+            ),
         },
         failure_is_diagnostic=mode == "static_only",
     )

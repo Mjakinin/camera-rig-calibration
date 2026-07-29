@@ -186,6 +186,7 @@ def _validate_dataset(root: Path) -> None:
         "shared_moving_aruco_observations.csv",
         "shared_all_aruco_observations.csv",
         "SELECTION_CANDIDATES.json",
+        "SELECTION_CANDIDATES.csv",
         "REFERENCE_SELECTIONS.json",
         "REFERENCE_MARKER_ID.txt",
         "PUBLICATION_COMPLETE.json",
@@ -202,6 +203,21 @@ def _validate_dataset(root: Path) -> None:
         raise RuntimeError(
             "The canonical dataset is not publishable because observation "
             "quality evidence is missing."
+        )
+    quality_required = (
+        "marker_inventory.csv",
+        "marker_inventory.json",
+    )
+    missing_quality = [
+        name
+        for name in quality_required
+        if not (root / "observations" / "quality" / name).is_file()
+    ]
+    if missing_quality:
+        raise RuntimeError(
+            "The canonical dataset is not publishable because marker "
+            "inventory evidence is incomplete: "
+            + ", ".join(missing_quality)
         )
     if not (root / "observations" / "debug_images").is_dir():
         raise RuntimeError(

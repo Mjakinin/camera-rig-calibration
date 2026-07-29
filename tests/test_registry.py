@@ -121,9 +121,10 @@ def test_schema_v5_has_no_active_frame_selection_registry() -> None:
 def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
     register_builtin_components()
     common = {
-        "quality_reprojection",
-        "quality_area",
-        "quality_distance",
+        "quality_override_reprojection",
+        "quality_override_area",
+        "quality_override_positive_depth",
+        "quality_override_distance",
     }
     ap01 = {
         row[0]
@@ -149,6 +150,8 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
 
     assert common | {
         "root_camera",
+        "ap01_top_moving",
+        "ap01_scale_top",
         "matcher",
         "gpu_mode",
         "mapper_matches",
@@ -157,6 +160,10 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
     } <= ap01
     assert common | {
         "ap02_reference",
+        "ap02_reference_frames",
+        "ap02_top_marker",
+        "ap02_top_pair",
+        "ap02_total_frames",
         "max_nfev_static",
         "max_nfev_moving",
         "ba_loss",
@@ -168,6 +175,7 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
         "scale_reprojection",
         "scale_ransac",
         "scale_inliers",
+        "scale_max_observations",
         "matcher",
         "gpu_mode",
         "mapper_matches",

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import warnings
+from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -27,6 +29,103 @@ PATH_FIELDS = {
     "route",
     "resource_paths",
 }
+
+OPTIONAL_LIMIT_PATHS = (
+    ("methods", "ap01", "top_moving_per_marker"),
+    ("methods", "ap01", "scale_top_per_marker"),
+    ("methods", "ap02", "reference_marker_maximum_frames"),
+    ("methods", "ap02", "top_per_marker"),
+    ("methods", "ap02", "top_per_marker_pair"),
+    ("methods", "ap02", "maximum_total_frames"),
+    ("methods", "ap03", "scale", "maximum_observations_per_marker"),
+)
+QUALITY_OVERRIDE_PATHS = tuple(
+    ("methods", method_id, "observation_quality", field_name)
+    for method_id in ("ap01", "ap02", "ap03")
+    for field_name in (
+        "minimum_marker_area_ratio",
+        "maximum_pnp_reprojection_error_px",
+        "require_positive_depth",
+        "maximum_marker_distance_m",
+    )
+)
+EXPLICIT_NULL_PATHS = OPTIONAL_LIMIT_PATHS + QUALITY_OVERRIDE_PATHS
+
+
+def _nested_get(payload: dict[str, Any], path: tuple[str, ...]) -> tuple[bool, Any]:
+    current: Any = payload
+    for part in path:
+        if not isinstance(current, dict) or part not in current:
+            return False, None
+        current = current[part]
+    return True, current
+
+
+def _nested_set(payload: dict[str, Any], path: tuple[str, ...], value: Any) -> None:
+    current = payload
+    for part in path[:-1]:
+        nested = current.get(part)
+        if not isinstance(nested, dict):
+            nested = {}
+            current[part] = nested
+        current = nested
+    current[path[-1]] = value
+
+
+def _migrate_schema_v5(payload: dict[str, Any], source: Path) -> dict[str, Any]:
+    """Apply only unambiguous migrations within the supported v5 contract."""
+
+    migrated = deepcopy(payload)
+    quality = migrated.setdefault("observation_quality", {})
+    if not isinstance(quality, dict):
+        return migrated
+    if "minimum_marker_area_px2" in quality:
+        old_area = quality.pop("minimum_marker_area_px2")
+        if old_area not in (0, 0.0, None):
+            raise ValueError(
+                "observation_quality.minimum_marker_area_px2 uses an "
+                "absolute pixel-area threshold that cannot be converted to an "
+                "image-resolution-neutral ratio. Remove it and configure "
+                "minimum_marker_area_ratio explicitly in "
+                f"{source}."
+            )
+        quality.setdefault("minimum_marker_area_ratio", 0.000008)
+        warnings.warn(
+            "Migrated observation_quality.minimum_marker_area_px2=0 to "
+            "minimum_marker_area_ratio=0.000008.",
+            DeprecationWarning,
+            stacklevel=3,
+        )
+
+    evaluation = migrated.get("evaluation")
+    if isinstance(evaluation, dict) and evaluation.get("anchor_marker_id") == "auto_common":
+        evaluation["anchor_marker_id"] = "auto"
+        warnings.warn(
+            "evaluation.anchor_marker_id=auto_common is deprecated; migrated "
+            "to auto.",
+            DeprecationWarning,
+            stacklevel=3,
+        )
+
+    for path in OPTIONAL_LIMIT_PATHS:
+        present, value = _nested_get(migrated, path)
+        if present and value == 0:
+            _nested_set(migrated, path, None)
+            warnings.warn(
+                f"Migrated {'.'.join(path)}=0 to null (unlimited).",
+                DeprecationWarning,
+                stacklevel=3,
+            )
+    return migrated
+
+
+def _serialized_config_payload(config: RigConfig) -> dict[str, Any]:
+    payload = config.model_dump(mode="json", exclude_none=True, by_alias=True)
+    complete = config.model_dump(mode="json", exclude_none=False, by_alias=True)
+    for path in EXPLICIT_NULL_PATHS:
+        _present, value = _nested_get(complete, path)
+        _nested_set(payload, path, value)
+    return payload
 
 
 def _resolve_path(path: Path, base: Path) -> Path:
@@ -67,6 +166,7 @@ def load_config(path: str | Path, *, resolve_paths: bool = True) -> RigConfig:
             f"Only schema_version 5 is supported: {source}. Recreate the "
             "configuration with the current rigcal wizard."
         )
+    payload = _migrate_schema_v5(payload, source)
     config = RigConfig.model_validate(payload)
     return resolve_config_paths(config, source) if resolve_paths else config
 
@@ -74,7 +174,7 @@ def load_config(path: str | Path, *, resolve_paths: bool = True) -> RigConfig:
 def save_config(config: RigConfig, path: str | Path) -> Path:
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    payload = config.model_dump(mode="json", exclude_none=True, by_alias=True)
+    payload = _serialized_config_payload(config)
     temporary = destination.with_name(destination.name + ".tmp")
     temporary.write_text(
         yaml.safe_dump(payload, sort_keys=False, allow_unicode=True),
@@ -86,7 +186,7 @@ def save_config(config: RigConfig, path: str | Path) -> Path:
 
 def config_fingerprint(config: RigConfig) -> str:
     canonical = json.dumps(
-        config.model_dump(mode="json", exclude_none=True, by_alias=True),
+        _serialized_config_payload(config),
         sort_keys=True,
         separators=(",", ":"),
     )

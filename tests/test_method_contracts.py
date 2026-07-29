@@ -47,7 +47,8 @@ def test_ap02_command_uses_generic_cameras_and_recommended_defaults(
     )
     assert "moving-selection" not in flattened
     assert "max-moving-frames" not in flattened
-    assert "top-per-marker" not in flattened
+    assert "--top-per-marker 8" in flattened
+    assert "--top-per-marker-pair 4" in flattened
     assert commands[1].diagnostic is True
     assert commands[2].diagnostic is True
     assert commands[5].depends_on == ("ap02_combined_initialization",)
@@ -107,7 +108,7 @@ def test_ap03_combines_single_and_multi_with_one_colmap_run(
     )
 
 
-def test_ap01_uses_every_quality_accepted_observation(
+def test_ap01_uses_configured_quality_ranked_caps(
     prepared_config, tmp_path: Path
 ) -> None:
     register_builtin_components()
@@ -133,8 +134,8 @@ def test_ap01_uses_every_quality_accepted_observation(
     flattened = " ".join(
         token for command in commands for token in command.argv
     )
-    assert "top-moving" not in flattened
-    assert "top-per-marker" not in flattened
+    assert "--top-moving-per-marker 8" in flattened
+    assert "--scale-top-per-marker 30" in flattened
     assert commands[-1].depends_on == ("ap01_solve_extrinsics",)
 
 
@@ -170,6 +171,7 @@ def test_nondefault_gui_parameters_reach_ap01_ap02_ap03_commands(
                             "reprojection_threshold_px": 2.5,
                             "ransac_iterations": 321,
                             "minimum_inliers": 6,
+                            "maximum_observations_per_marker": 12,
                         }
                     ),
                 },
@@ -235,6 +237,12 @@ def test_nondefault_gui_parameters_reach_ap01_ap02_ap03_commands(
         assert command[command.index("--reprojection-threshold-px") + 1] == "2.5"
         assert command[command.index("--ransac-iterations") + 1] == "321"
         assert command[command.index("--minimum-inliers") + 1] == "6"
+        assert (
+            command[
+                command.index("--maximum-observations-per-marker") + 1
+            ]
+            == "12"
+        )
 
 
 def test_common_evaluation_parameters_reach_evaluator_command(

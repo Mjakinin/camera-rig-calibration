@@ -277,18 +277,88 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
         else {}
     )
     markers = config.get("markers", {}) if isinstance(config, dict) else {}
+    evaluation = (
+        config.get("evaluation", {}) if isinstance(config, dict) else {}
+    )
+    method_config = methods.get(method, {})
+    overrides = (
+        method_config.get("observation_quality", {})
+        if isinstance(method_config, dict)
+        else {}
+    )
+    effective_quality = dict(quality)
+    quality_sources = {
+        key: "global" for key in effective_quality
+    }
+    for key, value in overrides.items():
+        if value is not None:
+            effective_quality[key] = value
+            quality_sources[key] = "method_override"
+    manifest = _read_json(
+        result_root / "provenance" / "run_manifest.json"
+    )
+    colmap_resolution = manifest.get("colmap_resolution", {})
+    common = {
+        "evaluation_anchor_marker_id": evaluation.get(
+            "anchor_marker_id"
+        ),
+        "quality_area_ratio": effective_quality.get(
+            "minimum_marker_area_ratio"
+        ),
+        "quality_pnp_rmse_px": effective_quality.get(
+            "maximum_pnp_reprojection_error_px"
+        ),
+        "quality_positive_depth": effective_quality.get(
+            "require_positive_depth"
+        ),
+        "quality_max_distance_m": effective_quality.get(
+            "maximum_marker_distance_m"
+        ),
+        "quality_sources": ",".join(
+            f"{key}:{value}"
+            for key, value in sorted(quality_sources.items())
+        ),
+        "aruco_detection_mode": markers.get(
+            "detection_mode", "baseline"
+        ),
+    }
     if method == "ap01":
-        method_config = methods.get("ap01", {})
         return {
+            **common,
             "root_camera": method_config.get("root_camera"),
+            "top_moving_per_marker": method_config.get(
+                "top_moving_per_marker"
+            ),
+            "scale_top_per_marker": method_config.get(
+                "scale_top_per_marker"
+            ),
             "matcher": colmap.get("matcher"),
-            "gpu_mode": colmap.get("gpu_mode"),
-            "aruco_detection_mode": markers.get("detection_mode", "baseline"),
+            "gpu_requested": colmap_resolution.get(
+                "requested_gpu_mode", colmap.get("gpu_mode")
+            ),
+            "gpu_resolved": colmap_resolution.get(
+                "resolved_gpu_mode", colmap.get("gpu_mode")
+            ),
+            "maximum_image_size": colmap.get("maximum_image_size"),
+            "maximum_features": colmap.get("maximum_features"),
+            "mapper_minimum_matches": colmap.get(
+                "mapper_minimum_matches"
+            ),
         }
     if method == "ap02":
-        method_config = methods.get("ap02", {})
         return {
+            **common,
             "reference_marker_id": method_config.get("reference_marker_id"),
+            "reference_marker_maximum_frames": method_config.get(
+                "reference_marker_maximum_frames"
+            ),
+            "top_per_marker": method_config.get("top_per_marker"),
+            "top_per_marker_pair": method_config.get(
+                "top_per_marker_pair"
+            ),
+            "maximum_total_frames": method_config.get(
+                "maximum_total_frames"
+            ),
             "static_max_nfev": method_config.get(
                 "static_only_ba_max_function_evaluations"
             ),
@@ -297,23 +367,48 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
             ),
             "loss": method_config.get("ba_robust_loss"),
             "loss_scale_px": method_config.get("ba_robust_loss_scale_px"),
-            "maximum_pnp_reprojection_error_px": quality.get(
-                "maximum_pnp_reprojection_error_px"
-            ),
-            "aruco_detection_mode": markers.get("detection_mode", "baseline"),
         }
-    method_config = methods.get("ap03", {})
     single = method_config.get("single", {})
     multi = method_config.get("multi", {})
     marker_ids = multi.get("marker_ids")
     return {
+        **common,
         "single_scale_marker_id": single.get("scale_marker_id"),
         "multi_marker_count": (
             len(marker_ids) if isinstance(marker_ids, list) else marker_ids
         ),
         "matcher": colmap.get("matcher"),
-        "gpu_mode": colmap.get("gpu_mode"),
-        "aruco_detection_mode": markers.get("detection_mode", "baseline"),
+        "gpu_requested": colmap_resolution.get(
+            "requested_gpu_mode", colmap.get("gpu_mode")
+        ),
+        "gpu_resolved": colmap_resolution.get(
+            "resolved_gpu_mode", colmap.get("gpu_mode")
+        ),
+        "maximum_image_size": (
+            colmap.get("ap03_maximum_image_size")
+            or colmap.get("maximum_image_size")
+        ),
+        "maximum_features": (
+            colmap.get("ap03_maximum_features")
+            or colmap.get("maximum_features")
+        ),
+        "mapper_minimum_matches": colmap.get("mapper_minimum_matches"),
+        "scale_reprojection_threshold_px": (
+            method_config.get("scale", {}).get(
+                "reprojection_threshold_px"
+            )
+        ),
+        "scale_ransac_iterations": method_config.get("scale", {}).get(
+            "ransac_iterations"
+        ),
+        "scale_minimum_inliers": method_config.get("scale", {}).get(
+            "minimum_inliers"
+        ),
+        "scale_maximum_observations_per_marker": (
+            method_config.get("scale", {}).get(
+                "maximum_observations_per_marker"
+            )
+        ),
     }
 
 
@@ -465,6 +560,156 @@ def _config_text(summary: dict[str, Any]) -> str:
     ) or "baseline/default configuration"
 
 
+def _method_diagnostics(
+    result_root: Path, method: str
+) -> tuple[dict[str, Any], list[str]]:
+    method_root = result_root / "diagnostics" / "method"
+    diagnostics: dict[str, Any] = {}
+    paths: list[str] = []
+    candidates: tuple[tuple[str, Path], ...]
+    if method == "ap01":
+        candidates = (
+            (
+                "ap01_scale",
+                method_root / "metric_scale" / "SCALE_DIAGNOSTICS.json",
+            ),
+            (
+                "ap01_relay_selection",
+                method_root / "candidates" / "AP01_RELAY_SELECTION.json",
+            ),
+        )
+    elif method == "ap02":
+        candidates = (
+            (
+                "ap02_frame_selection",
+                method_root
+                / "aruco_observations"
+                / "ap02_frame_selection.json",
+            ),
+            (
+                "ap02_combined_optimization",
+                method_root
+                / "graph_ba"
+                / "with_moving"
+                / "ap02_optimization_summary.json",
+            ),
+        )
+    else:
+        candidates = (
+            (
+                "ap03_scale",
+                method_root
+                / "scale_multi"
+                / "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+            ),
+        )
+    for key, path in candidates:
+        if not path.is_file():
+            continue
+        value = json.loads(path.read_text(encoding="utf-8"))
+        diagnostics[key] = value
+        paths.append(str(path.relative_to(result_root)))
+    for path in (
+        method_root.rglob("*optimization_history.csv")
+        if method == "ap02"
+        else ()
+    ):
+        paths.append(str(path.relative_to(result_root)))
+    return diagnostics, sorted(set(paths))
+
+
+def _scale_comparison_rows(
+    method_payloads: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Summarize method scale mechanisms without treating unlike values alike."""
+    rows: list[dict[str, Any]] = []
+    for payload in method_payloads:
+        method = str(payload.get("method", ""))
+        metrics = payload.get("metrics", {})
+        if method == "ap01":
+            scale = metrics.get("ap01_scale", {})
+            rows.append(
+                {
+                    "method": method,
+                    "label": payload.get("label", "-"),
+                    "mechanism": "marker-motion pair scale",
+                    "scale_m_per_colmap_unit": scale.get(
+                        "scale_m_per_colmap_unit"
+                    ),
+                    "used": scale.get("used_pairs"),
+                    "total": scale.get("raw_pairs"),
+                    "relative_std": scale.get("used_relative_std"),
+                }
+            )
+        elif method == "ap02":
+            rows.append(
+                {
+                    "method": method,
+                    "label": payload.get("label", "-"),
+                    "mechanism": "metric marker-graph BA",
+                    "scale_m_per_colmap_unit": None,
+                    "used": None,
+                    "total": None,
+                    "relative_std": None,
+                }
+            )
+        elif method == "ap03":
+            scale = metrics.get("ap03_scale", {})
+            rows.append(
+                {
+                    "method": method,
+                    "label": payload.get("label", "-"),
+                    "mechanism": "marker-corner RANSAC scale",
+                    "scale_m_per_colmap_unit": scale.get(
+                        "scale_m_per_colmap_unit"
+                    ),
+                    "used": scale.get("num_scale_observations_used"),
+                    "total": scale.get("num_scale_observations_total"),
+                    "relative_std": scale.get("used_rel_std_scale"),
+                }
+            )
+    return rows
+
+
+def _scale_comparison_text(rows: list[dict[str, Any]]) -> str:
+    if not rows:
+        return "No successful method scale result is available."
+    return _text_table(
+        [
+            "Method",
+            "Variant",
+            "Scale mechanism",
+            "Scale [m/COLMAP unit]",
+            "Used/total",
+            "Relative std",
+        ],
+        [
+            [
+                row["method"],
+                row["label"],
+                row["mechanism"],
+                (
+                    _fmt(row["scale_m_per_colmap_unit"], 6)
+                    if row["scale_m_per_colmap_unit"] is not None
+                    else "n/a (already metric)"
+                ),
+                (
+                    f"{row['used']}/{row['total']}"
+                    if row["used"] is not None
+                    and row["total"] is not None
+                    else "-"
+                ),
+                (
+                    _fmt(row["relative_std"], 6)
+                    if row["relative_std"] is not None
+                    else "-"
+                ),
+            ]
+            for row in rows
+        ],
+    )
+
+
 def _method_report_text(
     payload: dict[str, Any],
     poses: dict[str, PoseRecord],
@@ -544,6 +789,103 @@ def _method_report_text(
                 "",
             ]
         )
+    diagnostics = payload.get("metrics", {})
+    if payload.get("method") == "ap01":
+        scale = diagnostics.get("ap01_scale", {})
+        relay = diagnostics.get("ap01_relay_selection", [])
+        if scale or relay:
+            relay_markers = {
+                int(row["marker_id"])
+                for row in relay
+                if isinstance(row, dict) and row.get("marker_id") is not None
+            }
+            relay_selected = sum(
+                str(row.get("selected", "")).strip().lower()
+                in {"true", "1", "yes"}
+                for row in relay
+                if isinstance(row, dict)
+            )
+            lines.extend(
+                [
+                    "AP01 SELECTION AND SCALE DIAGNOSTICS",
+                    "-" * width,
+                    (
+                        "Relay markers: "
+                        f"{len(relay_markers)}; relay observations "
+                        f"selected/registered: {relay_selected}/"
+                        f"{len(relay)}; scale pairs used/total: "
+                        f"{scale.get('used_pairs', '-')}/"
+                        f"{scale.get('raw_pairs', '-')}; scale: "
+                        f"{_fmt(scale.get('scale_m_per_colmap_unit'), 6)} "
+                        "m/COLMAP-unit"
+                    ),
+                    (
+                        "Scale observations selected per marker: "
+                        + json.dumps(
+                            scale.get(
+                                "selected_observations_per_marker", {}
+                            ),
+                            sort_keys=True,
+                        )
+                    ),
+                    "",
+                ]
+            )
+    elif payload.get("method") == "ap02":
+        frames = diagnostics.get("ap02_frame_selection", {})
+        optimization = diagnostics.get(
+            "ap02_combined_optimization", {}
+        )
+        if frames or optimization:
+            lines.extend(
+                [
+                    "AP02 FRAME SELECTION AND COMBINED BA",
+                    "-" * width,
+                    (
+                        "Moving frames selected/input/minimum graph set: "
+                        f"{frames.get('selected_moving_frames', '-')}/"
+                        f"{frames.get('input_moving_frames', '-')}/"
+                        f"{frames.get('minimum_graph_preserving_frames', '-')}"
+                    ),
+                    (
+                        "Combined BA: status="
+                        f"{optimization.get('solver_status', '-')}, "
+                        f"nfev={optimization.get('nfev', '-')}/"
+                        f"{optimization.get('maximum_function_evaluations', '-')}, "
+                        "RMSE initial/final="
+                        f"{_fmt(optimization.get('initial_reprojection_rmse_px'))}/"
+                        f"{_fmt(optimization.get('final_reprojection_rmse_px'))} px, "
+                        f"cost={_fmt(optimization.get('initial_cost'))} -> "
+                        f"{_fmt(optimization.get('final_cost'))}"
+                    ),
+                    "",
+                ]
+            )
+    elif payload.get("method") == "ap03":
+        scale = diagnostics.get("ap03_scale", {})
+        if scale:
+            lines.extend(
+                [
+                    "AP03 COLMAP / RANSAC / SCALE DIAGNOSTICS",
+                    "-" * width,
+                    (
+                        "Registered images/static cameras: "
+                        f"{scale.get('registered_images', '-')}/"
+                        f"{scale.get('registered_static_cameras', '-')}; "
+                        "triangulated corners="
+                        f"{scale.get('triangulated_marker_corners', '-')}"
+                    ),
+                    (
+                        "Scale observations used/total: "
+                        f"{scale.get('num_scale_observations_used', '-')}/"
+                        f"{scale.get('num_scale_observations_total', '-')}; "
+                        f"scale={_fmt(scale.get('scale_m_per_colmap_unit'), 6)} "
+                        "m/COLMAP-unit; relative std="
+                        f"{_fmt(scale.get('used_rel_std_scale'), 6)}"
+                    ),
+                    "",
+                ]
+            )
     pose_rows: list[list[str]] = []
     for camera, record in sorted(poses.items()):
         transform = record.transform
@@ -615,6 +957,16 @@ def _method_report_text(
         else "Fewer than two camera poses are available."
     )
     lines.append("")
+    detail_paths = payload.get("detail_artifacts", [])
+    if detail_paths:
+        lines.extend(
+            [
+                "DETAIL ARTIFACTS",
+                "-" * width,
+                *(f"- {path}" for path in detail_paths),
+                "",
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -639,6 +991,10 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
         pairs = pairwise_rows(poses, method=method, label=label)
         _write_csv(root / "pairwise_camera_extrinsics.csv", pairs)
         quality, warnings, metrics = _quality_details(root, method)
+        method_diagnostics, detail_paths = _method_diagnostics(
+            root, method
+        )
+        metrics.update(method_diagnostics)
         config_summary = _configuration_summary(root, method)
         payload.update(
             {
@@ -658,6 +1014,7 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
                     "pairwise_camera_extrinsics.csv"
                 ),
                 "pairwise_camera_count": len(pairs),
+                "detail_artifacts": detail_paths,
             }
         )
         _write_json(result_path, payload)
@@ -740,12 +1097,14 @@ def run_real_marker_consistency(
     force: bool = False,
 ) -> Path | None:
     """Evaluate every published real-data method without rerunning it."""
-    reference_path = (
-        dataset_root / "observations" / "REFERENCE_MARKER_ID.txt"
+    selection_path = (
+        dataset_root / "observations" / "SELECTION_CANDIDATES.json"
     )
-    if not reference_path.is_file():
+    selection = _read_json(selection_path)
+    anchor_value = selection.get("evaluation_anchor", {}).get("selected")
+    if anchor_value is None:
         return None
-    anchor = int(reference_path.read_text(encoding="utf-8").strip())
+    anchor = int(anchor_value)
     output = (
         experiment_root
         / "evaluations"
@@ -754,7 +1113,7 @@ def run_real_marker_consistency(
     report = output / "REAL_DATA_MARKER_CONSISTENCY.txt"
     if report.is_file() and not force:
         return report
-    methods: list[tuple[str, Path, int]] = []
+    methods: list[tuple[str, Path]] = []
     for result_path in sorted(
         (experiment_root / "methods").glob("*/*/RESULT.json")
     ):
@@ -764,42 +1123,6 @@ def run_real_marker_consistency(
         if method_root.is_dir():
             payload = _read_json(result_path)
             config_summary = payload.get("config_summary", {})
-            method_anchor = anchor
-            if method == "ap02":
-                method_anchor = int(
-                    payload.get("reference_marker_id")
-                    or payload.get("config_summary", {}).get(
-                        "reference_marker_id", anchor
-                    )
-                )
-            elif method == "ap03":
-                scale_observations = (
-                    method_root
-                    / "scale_multi"
-                    / "AP03_MARKER_SIZE_SCALE_ONLY_SCALE_OBSERVATIONS.csv"
-                )
-                support: dict[int, int] = {}
-                if scale_observations.is_file():
-                    with scale_observations.open(
-                        newline="", encoding="utf-8"
-                    ) as handle:
-                        for row in csv.DictReader(handle):
-                            if str(row.get("used_for_scale", "")).lower() not in {
-                                "yes",
-                                "true",
-                                "1",
-                            }:
-                                continue
-                            marker_id = int(row["marker_id"])
-                            support[marker_id] = support.get(marker_id, 0) + 1
-                if support:
-                    method_anchor = min(
-                        support,
-                        key=lambda marker_id: (
-                            -support[marker_id],
-                            marker_id,
-                        ),
-                    )
             if method == "ap01":
                 display_name = (
                     "AP01 "
@@ -809,7 +1132,7 @@ def run_real_marker_consistency(
             elif method == "ap02":
                 display_name = (
                     "AP02 "
-                    f"(ref {method_anchor}, "
+                    f"(ref {config_summary.get('reference_marker_id', 'auto')}, "
                     f"nfev {config_summary.get('combined_max_nfev', '-')}, "
                     f"aruco {config_summary.get('aruco_detection_mode', 'baseline')})"
                 )
@@ -825,7 +1148,6 @@ def run_real_marker_consistency(
                 (
                     display_name,
                     method_root,
-                    method_anchor,
                 )
             )
     if not methods:
@@ -881,11 +1203,8 @@ def run_real_marker_consistency(
         "--cameras",
         ",".join(cameras),
     ]
-    for name, method_root, method_anchor in methods:
+    for name, method_root in methods:
         command.extend(["--method", f"{name}={method_root.resolve()}"])
-        command.extend(
-            ["--method-anchor", f"{name}={method_anchor}"]
-        )
     completed = subprocess.run(
         command,
         cwd=_repository_root(experiment_root),
@@ -918,12 +1237,9 @@ def run_real_marker_consistency(
             "schema_version": 5,
             "layout_version": 2,
                 "status": "available",
-                "evaluation_scope": "per_method_metric_anchor",
-                "method_anchors": {
-                    name: method_anchor
-                    for name, _, method_anchor in methods
-                },
-                "methods": [name for name, _, _ in methods],
+                "evaluation_scope": "single_preflight_frozen_anchor",
+                "anchor_marker_id": anchor,
+                "methods": [name for name, _ in methods],
                 "reconciled_without_method_rerun": True,
             },
         )
@@ -1217,6 +1533,7 @@ def _simulation_primary_text(
     summaries: list[dict[str, Any]],
     rows: list[dict[str, Any]],
     method_payloads: list[dict[str, Any]],
+    evaluation_anchor: dict[str, Any],
 ) -> str:
     width = 138
     lines = [
@@ -1226,6 +1543,13 @@ def _simulation_primary_text(
         f"Experiment: {experiment}",
         "Simulation parameters: "
         + ", ".join(f"{key}={value}" for key, value in parameters.items()),
+        (
+            "Common evaluation anchor: marker "
+            f"{evaluation_anchor.get('selected', '-')} "
+            f"(configured {evaluation_anchor.get('configured', '-')}; "
+            "frozen during preflight)"
+        ),
+        f"Anchor reason: {evaluation_anchor.get('reason', '-')}",
         "",
         "METHOD / VARIANT SUMMARY",
         "-" * width,
@@ -1248,6 +1572,7 @@ def _simulation_primary_text(
                 _fmt(item["mean_rotation_error_deg"]),
                 _fmt(item["max_translation_error_cm"]),
                 _fmt(item["max_rotation_error_deg"]),
+                _config_text(payload.get("config_summary", {})),
             ]
         )
     lines.extend(
@@ -1263,8 +1588,15 @@ def _simulation_primary_text(
                     "mean r [deg]",
                     "max t [cm]",
                     "max r [deg]",
+                    "Key configuration",
                 ],
                 summary_table,
+            ),
+            "",
+            "SCALE COMPARISON",
+            "-" * width,
+            _scale_comparison_text(
+                _scale_comparison_rows(method_payloads)
             ),
             "",
             "DETAILED CAMERA-PAIR RESULTS",
@@ -1308,6 +1640,20 @@ def _simulation_primary_text(
                 ),
             ]
         )
+    lines.extend(
+        [
+            "",
+            "METHOD REPORTS AND DETAIL ARTIFACTS",
+            "-" * width,
+        ]
+    )
+    for payload in method_payloads:
+        method = str(payload.get("method", "-"))
+        label = str(payload.get("label", "-"))
+        prefix = Path("methods") / method / label
+        lines.append(f"- {prefix / 'RESULT.txt'}")
+        for path in payload.get("detail_artifacts", []):
+            lines.append(f"  - {prefix / str(path)}")
     lines.append("")
     return "\n".join(lines)
 
@@ -1631,13 +1977,28 @@ def _real_variant_disagreement(
 def _real_results_text(
     experiment_root: Path,
     method_payloads: list[dict[str, Any]],
+    dataset_root: Path | None = None,
 ) -> tuple[str, dict[str, Any]]:
     width = 138
+    dataset_root = dataset_root or experiment_root
+    dataset = _read_json(dataset_root / "dataset.json")
+    selection = _read_json(
+        dataset_root / "observations" / "SELECTION_CANDIDATES.json"
+    )
+    evaluation_anchor = selection.get("evaluation_anchor", {})
     lines = [
         "REAL-VEHICLE CAMERA-RIG CALIBRATION RESULTS",
         "=" * width,
         "",
         f"Experiment: {experiment_root.name}",
+        f"Dataset: {dataset.get('id', dataset_root.name)}",
+        (
+            "Common evaluation anchor: marker "
+            f"{evaluation_anchor.get('selected', '-')} "
+            f"(configured {evaluation_anchor.get('configured', '-')}; "
+            "frozen during preflight)"
+        ),
+        f"Anchor reason: {evaluation_anchor.get('reason', '-')}",
         "",
     ]
     marker_text, marker_path = _latest_marker_report(experiment_root)
@@ -1705,6 +2066,12 @@ def _real_results_text(
                 overview,
             ),
             "",
+            "SCALE COMPARISON",
+            "-" * width,
+            _scale_comparison_text(
+                _scale_comparison_rows(method_payloads)
+            ),
+            "",
         ]
     )
     for payload in method_payloads:
@@ -1769,6 +2136,8 @@ def _real_results_text(
             if marker_path is not None
             else None
         ),
+        "evaluation_anchor": evaluation_anchor,
+        "scale_comparison": _scale_comparison_rows(method_payloads),
     }
     return "\n".join(lines), payload
 
@@ -1861,6 +2230,11 @@ def _simulation_results(
         summaries,
         pair_rows,
         method_payloads,
+        _read_json(
+            dataset_root
+            / "observations"
+            / "SELECTION_CANDIDATES.json"
+        ).get("evaluation_anchor", {}),
     )
     return text, {
         "category": "simulation",
@@ -1879,6 +2253,7 @@ def _simulation_results(
             )
         },
         "methods": method_payloads,
+        "scale_comparison": _scale_comparison_rows(method_payloads),
         "primary_camera_pairwise": {
             "summaries": summaries,
             "rows": pair_rows,
@@ -2051,7 +2426,7 @@ def write_scientific_experiment_reports(
         )
     else:
         text, payload = _real_results_text(
-            experiment_root, method_payloads
+            experiment_root, method_payloads, dataset_root
         )
     payload.update(
         {
