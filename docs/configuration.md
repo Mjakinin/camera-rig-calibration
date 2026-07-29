@@ -65,6 +65,7 @@ observation_quality:
 evaluation:
   enabled: true
   anchor_marker_id: auto
+  anchor_selection_mode: auto       # auto | review_once | explicit
 ```
 
 One job snapshot enables exactly one method. Variants belong in a queue.
@@ -121,6 +122,7 @@ common:
   evaluation:
     enabled: true
     anchor_marker_id: auto
+    anchor_selection_mode: auto
 entries:
   - id: vehicle_exterior_day_01__ap01__baseline__01
     config: configs/01_baseline.yaml
@@ -164,6 +166,29 @@ writes `batch_state.json` and continues after an independent experiment error.
 exactly one capture/import/preparation/observation pass, publishes only the
 canonical dataset input, and schedules no AP preflight, calibration result or
 second preparation.
+
+## Common evaluation and export anchor
+
+`evaluation.anchor_marker_id` is the one marker frame used by common
+post-method evaluation, the 6-DoF camera export and RViz. It is independent
+from AP02's internal `methods.ap02.reference_marker_id`.
+
+- `anchor_selection_mode: auto` ranks only repeat-supported markers compatible
+  with every queued method variant and freezes the deterministic recommendation
+  before calibration.
+- `anchor_selection_mode: review_once` keeps `anchor_marker_id: auto` in the
+  requested config, pauses once after shared detection and lists every raw
+  detected marker ID. A problematic marker may be confirmed deliberately; a
+  method that cannot reconstruct it reports an unavailable anchor export and
+  never substitutes another marker.
+- Resolved prompt-free configs store the selected integer together with
+  `anchor_selection_mode: explicit`.
+
+Anchor-relative method outputs use `T_parent_child`, with
+`p_parent = T_parent_child @ p_child`, an
+`evaluation_anchor_marker_<ID>` parent and `<camera>_optical_frame` children.
+Translation is expressed in metres; RPY uses radians and
+`R = Rz(yaw) @ Ry(pitch) @ Rx(roll)`; quaternions use `qx,qy,qz,qw`.
 
 ## Observation quality
 

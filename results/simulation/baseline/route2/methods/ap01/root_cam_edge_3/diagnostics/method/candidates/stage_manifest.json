@@ -1,20 +1,21 @@
 {
-  "completed_at": "2026-07-28T23:00:17.510+00:00",
+  "completed_at": "2026-07-29T16:43:56.447+00:00",
   "inputs": {
-    "colmap": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap01__baseline__01/20260729_005326_baseline_1430a227/02_AP01/01_moving_colmap",
-    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap01__baseline__01/20260729_005326_baseline_1430a227/preflight/observations",
-    "scale": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap01__baseline__01/20260729_005326_baseline_1430a227/02_AP01/02_metric_scale/metric_scale.txt"
+    "colmap": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap01__baseline__01/20260729_184053_baseline_a27dec69/02_AP01/01_moving_colmap",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap01__baseline__01/20260729_184053_baseline_a27dec69/preflight/observations",
+    "scale": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap01__baseline__01/20260729_184053_baseline_a27dec69/02_AP01/02_metric_scale/metric_scale.txt"
   },
   "outputs": {
-    "candidate_count": 95322,
-    "candidates": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap01__baseline__01/20260729_005326_baseline_1430a227/02_AP01/03_candidates/transform_candidates.json"
+    "candidate_count": 9167,
+    "candidates": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap01__baseline__01/20260729_184053_baseline_a27dec69/02_AP01/03_candidates/transform_candidates.json"
   },
   "parameters": {
-    "uses_all_quality_accepted_observations": true
+    "selection": "quality_ranked_per_marker",
+    "top_moving_per_marker": 8
   },
-  "runtime_seconds": 7.248476752996794,
+  "runtime_seconds": 0.5682990610002889,
   "schema_version": 5,
   "stage_id": "ap01.build_candidates",
-  "started_at": "2026-07-28T23:00:10.262+00:00",
+  "started_at": "2026-07-29T16:43:55.879+00:00",
   "status": "COMPLETED"
 }

@@ -1895,7 +1895,13 @@ class PipelineOrchestrator:
                 )
             return published
 
-        if config.selection.mode == "review_once":
+        if (
+            config.selection.mode == "review_once"
+            or (
+                config.evaluation.enabled
+                and config.evaluation.anchor_selection_mode == "review_once"
+            )
+        ):
             if self.selection_reviewer is None:
                 self.manifest["status"] = "waiting_for_selection"
                 self.manifest["runner_pid"] = None

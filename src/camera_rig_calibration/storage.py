@@ -19,6 +19,7 @@ class CleanupTarget:
 class CleanupPlan:
     targets: tuple[CleanupTarget, ...]
     protected_paths: tuple[Path, ...]
+    scope_roots: tuple[Path, ...]
     file_count: int
     logical_bytes: int
     reclaimable_bytes: int
@@ -81,78 +82,135 @@ def _sizes(files: Iterable[Path]) -> tuple[int, int, int]:
     return count, logical, reclaimable
 
 
-def protected_storage_paths(repository_root: Path) -> tuple[Path, ...]:
-    """Return active transaction storage that cleanup must never touch."""
-    temporary = repository_root.resolve() / "workspace" / "temporary_runs"
-    return (temporary.resolve(),) if temporary.exists() else ()
+def _lexically_within(path: Path, parent: Path) -> bool:
+    try:
+        path.absolute().relative_to(parent.absolute())
+        return True
+    except ValueError:
+        return False
 
 
-def build_cleanup_plan(
-    repository_root: Path, *, include_data_local: bool = False
+def _build_plan(
+    targets: Iterable[CleanupTarget],
+    *,
+    scope_roots: Iterable[Path],
+    protected_paths: Iterable[Path] = (),
 ) -> CleanupPlan:
-    """Plan removal of reproducible caches, never canonical science data.
-
-    Layout-v2 datasets and results are intentionally absent from this plan:
-    raw images, observations, debug galleries, diagnostics, logs and
-    provenance are all part of the experiment record.
-    """
-    root = repository_root.resolve()
-    protected = protected_storage_paths(root)
-    candidates: list[CleanupTarget] = []
-
-    def add(path: Path, kind: str) -> None:
-        if not (path.exists() or path.is_symlink()):
-            return
-        absolute = path.absolute()
-        if any(
-            _is_within(absolute, item) or _is_within(item, absolute)
-            for item in protected
-        ):
-            return
-        candidates.append(CleanupTarget(absolute, kind))
-
-    workspace = root / "workspace"
-    for relative in ("cache", "artifacts"):
-        add(workspace / relative, "reproducible workspace cache")
-
-    if include_data_local:
-        local = root / "data_local"
-        if local.is_dir():
-            for child in sorted(local.iterdir()):
-                add(child, "user data_local input")
-
-    ordered = sorted(candidates, key=lambda item: len(item.path.parts))
-    targets: list[CleanupTarget] = []
+    ordered = sorted(
+        targets, key=lambda item: (len(item.path.parts), str(item.path))
+    )
+    selected: list[CleanupTarget] = []
     for candidate in ordered:
-        if any(_is_within(candidate.path, kept.path) for kept in targets):
+        if any(
+            _lexically_within(candidate.path, existing.path)
+            for existing in selected
+        ):
             continue
-        targets.append(candidate)
-    files = _files(targets)
+        selected.append(candidate)
+    files = _files(selected)
     count, logical, reclaimable = _sizes(files)
     return CleanupPlan(
-        targets=tuple(targets),
-        protected_paths=protected,
+        targets=tuple(selected),
+        protected_paths=tuple(
+            path.absolute() for path in protected_paths
+        ),
+        scope_roots=tuple(path.absolute() for path in scope_roots),
         file_count=count,
         logical_bytes=logical,
         reclaimable_bytes=reclaimable,
     )
 
 
-def build_data_local_cleanup_plan(repository_root: Path) -> CleanupPlan:
-    combined = build_cleanup_plan(repository_root, include_data_local=True)
-    targets = tuple(
-        target
-        for target in combined.targets
-        if target.kind == "user data_local input"
+def _children(
+    directory: Path,
+    kind: str,
+    *,
+    excluded_names: frozenset[str] = frozenset(),
+) -> list[CleanupTarget]:
+    if not directory.is_dir():
+        return []
+    return [
+        CleanupTarget(child.absolute(), kind)
+        for child in sorted(directory.iterdir(), key=lambda item: item.name)
+        if child.name not in excluded_names
+    ]
+
+
+def build_results_cleanup_plan(repository_root: Path) -> CleanupPlan:
+    """Select every published result while retaining the empty root itself."""
+    root = repository_root.resolve()
+    results = root / "results"
+    return _build_plan(
+        _children(results, "published result and embedded dataset"),
+        scope_roots=(results,),
     )
-    files = _files(targets)
-    count, logical, reclaimable = _sizes(files)
-    return CleanupPlan(
-        targets=targets,
-        protected_paths=combined.protected_paths,
-        file_count=count,
-        logical_bytes=logical,
-        reclaimable_bytes=reclaimable,
+
+
+def build_dataset_cleanup_plan(repository_root: Path) -> CleanupPlan:
+    """Select legacy datasets and preparation caches, never ``data_local``."""
+    root = repository_root.resolve()
+    workspace = root / "workspace"
+    legacy = root / "datasets"
+    candidates = _children(legacy, "legacy canonical dataset")
+    dataset_cache_names = (
+        "preparation_cache",
+        "dataset_cache",
+        "datasets",
+    )
+    for name in dataset_cache_names:
+        path = workspace / name
+        if path.exists() or path.is_symlink():
+            candidates.append(
+                CleanupTarget(path.absolute(), "prepared dataset cache")
+            )
+    return _build_plan(
+        candidates,
+        scope_roots=(legacy, workspace),
+    )
+
+
+def build_temporary_cleanup_plan(repository_root: Path) -> CleanupPlan:
+    """Select all generated workspace state except dataset caches."""
+    root = repository_root.resolve()
+    workspace = root / "workspace"
+    return _build_plan(
+        _children(
+            workspace,
+            "temporary run, queue, batch or reusable artifact",
+            excluded_names=frozenset(
+                {"preparation_cache", "dataset_cache", "datasets"}
+            ),
+        ),
+        scope_roots=(workspace,),
+    )
+
+
+def combine_cleanup_plans(*plans: CleanupPlan) -> CleanupPlan:
+    """Combine independently reviewed plans and recalculate hardlink sizes."""
+    return _build_plan(
+        (
+            target
+            for plan in plans
+            for target in plan.targets
+        ),
+        scope_roots=(
+            root
+            for plan in plans
+            for root in plan.scope_roots
+        ),
+        protected_paths=(
+            path
+            for plan in plans
+            for path in plan.protected_paths
+        ),
+    )
+
+
+def build_cleanup_plan(repository_root: Path) -> CleanupPlan:
+    """Compatibility helper for all non-result generated storage."""
+    return combine_cleanup_plans(
+        build_dataset_cleanup_plan(repository_root),
+        build_temporary_cleanup_plan(repository_root),
     )
 
 
@@ -177,6 +235,24 @@ def _target_digest(targets: Iterable[CleanupTarget]) -> str:
 
 def execute_cleanup(plan: CleanupPlan) -> dict[str, object]:
     """Delete exactly the paths previously returned in a reviewed plan."""
+    for target in plan.targets:
+        if not any(
+            _lexically_within(target.path, root)
+            and target.path.absolute() != root.absolute()
+            for root in plan.scope_roots
+        ):
+            raise RuntimeError(
+                "Refusing cleanup target outside its reviewed storage roots: "
+                f"{target.path}"
+            )
+        if any(
+            _is_within(target.path, protected)
+            or _is_within(protected, target.path)
+            for protected in plan.protected_paths
+        ):
+            raise RuntimeError(
+                f"Refusing protected cleanup target: {target.path}"
+            )
     digest = _target_digest(plan.targets)
     removed_targets: list[str] = []
     for target in sorted(
@@ -188,8 +264,20 @@ def execute_cleanup(plan: CleanupPlan) -> dict[str, object]:
         elif path.is_dir():
             shutil.rmtree(path)
         removed_targets.append(str(path))
+    remaining_targets = [
+        str(target.path)
+        for target in plan.targets
+        if target.path.exists() or target.path.is_symlink()
+    ]
+    if remaining_targets:
+        raise RuntimeError(
+            "Cleanup verification failed; these selected targets remain: "
+            + ", ".join(remaining_targets)
+        )
     return {
         "removed_targets": removed_targets,
+        "verified_removed": True,
+        "remaining_targets": remaining_targets,
         "file_count": plan.file_count,
         "logical_bytes": plan.logical_bytes,
         "reclaimable_bytes_estimate": plan.reclaimable_bytes,

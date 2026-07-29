@@ -16,7 +16,7 @@ dataset:
   scene_type: simulation
   description: ''
   prepared_root: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous
-    Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/dataset
+    Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/dataset
   input_root: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/worlds
 static_cameras:
 - id: cam_edge_0
@@ -41,7 +41,7 @@ static_cameras:
   camera_info_topic: /bus_real_data/cam_edge_5/camera_info
 moving_camera:
   id: moving_calib_camera
-  intrinsics: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/dataset/raw_images/camera_info/moving_calib_camera.json
+  intrinsics: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/dataset/raw_images/camera_info/moving_calib_camera.json
   intrinsic_scan:
     mode: balanced
     target_hz: 3.0
@@ -74,7 +74,7 @@ simulation:
     post_pose_skip: 5
     frame_timeout_seconds: 3.0
     startup_timeout_seconds: 60.0
-  capture_id: capture_20260729_004213_862445
+  capture_id: capture_20260729_182525_506545
   world: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf
   route: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/config/moving_camera_route2_interpolated_final.json
   resource_paths:
@@ -120,12 +120,28 @@ methods:
   - ap01
   ap01:
     root_camera: cam_edge_3
+    top_moving_per_marker: 8
+    scale_top_per_marker: 30
+    observation_quality:
+      minimum_marker_area_ratio: null
+      maximum_pnp_reprojection_error_px: null
+      require_positive_depth: null
+      maximum_marker_distance_m: null
   ap02:
     reference_marker_id: 7
+    top_per_marker: 8
+    top_per_marker_pair: 4
     static_only_ba_max_function_evaluations: 100
     combined_ba_max_function_evaluations: 120
     ba_robust_loss: soft_l1
     ba_robust_loss_scale_px: 3.0
+    observation_quality:
+      minimum_marker_area_ratio: null
+      maximum_pnp_reprojection_error_px: null
+      require_positive_depth: null
+      maximum_marker_distance_m: null
+    reference_marker_maximum_frames: null
+    maximum_total_frames: null
   ap03:
     single:
       scale_marker_id: 0
@@ -155,14 +171,22 @@ methods:
       reprojection_threshold_px: 5.0
       ransac_iterations: 1000
       minimum_inliers: 4
+      maximum_observations_per_marker: null
+    observation_quality:
+      minimum_marker_area_ratio: null
+      maximum_pnp_reprojection_error_px: null
+      require_positive_depth: null
+      maximum_marker_distance_m: null
   extensions: {}
 observation_quality:
+  minimum_marker_area_ratio: 8.0e-06
   maximum_pnp_reprojection_error_px: 25.0
-  minimum_marker_area_px2: 0.0
+  require_positive_depth: true
   maximum_marker_distance_m: disabled
 evaluation:
   enabled: true
-  anchor_marker_id: auto_common
+  anchor_marker_id: 14
+  anchor_selection_mode: explicit
   reprojection_threshold_px: 5.0
   minimum_inliers: 4
   ransac_iterations: 800

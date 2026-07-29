@@ -1,0 +1,163 @@
+{
+  "prepare_inputs": 2.2966497510024055,
+  "_structured": {
+    "prepare_inputs": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "prepare_inputs",
+      "stage_name": "Prepare canonical inputs and provenance",
+      "stage_index": 1,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 2.2966768689984747,
+      "job_elapsed_seconds": 2.5239177019975614,
+      "queue_elapsed_seconds": 2235.4790594629994,
+      "batch_elapsed_seconds": 2236.0222644749992,
+      "log": null,
+      "counts": {}
+    },
+    "validate_dataset": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "validate_dataset",
+      "stage_name": "Validate the canonical dataset",
+      "stage_index": 2,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.11777595399689744,
+      "job_elapsed_seconds": 4.591045604996907,
+      "queue_elapsed_seconds": 2237.546187365999,
+      "batch_elapsed_seconds": 2238.0893923779986,
+      "log": null,
+      "counts": {}
+    },
+    "detect_markers": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "detect_markers",
+      "stage_name": "Detect shared ArUco observations and debug images",
+      "stage_index": 3,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.03471613500005333,
+      "job_elapsed_seconds": 4.650572016998922,
+      "queue_elapsed_seconds": 2237.605713778001,
+      "batch_elapsed_seconds": 2238.1489187900006,
+      "log": null,
+      "counts": {}
+    },
+    "observation_quality": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "observation_quality",
+      "stage_name": "Apply immutable checks and job-specific observation quality",
+      "stage_index": 4,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.29099203099758597,
+      "job_elapsed_seconds": 4.964060635997157,
+      "queue_elapsed_seconds": 2237.919202396999,
+      "batch_elapsed_seconds": 2238.462407408999,
+      "log": null,
+      "counts": {}
+    },
+    "analyze_selections": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "analyze_selections",
+      "stage_name": "Analyze root-camera and method-marker candidates",
+      "stage_index": 5,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.074218836001819,
+      "job_elapsed_seconds": 5.062201536999055,
+      "queue_elapsed_seconds": 2238.017343298001,
+      "batch_elapsed_seconds": 2238.5605483100007,
+      "log": null,
+      "counts": {}
+    },
+    "method_ap02": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "method_ap02",
+      "stage_name": "AP02 Baseline",
+      "stage_index": 6,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 1381.2263060990008,
+      "job_elapsed_seconds": 1386.531436235,
+      "queue_elapsed_seconds": 3619.486577996002,
+      "batch_elapsed_seconds": 3620.0297830080017,
+      "log": null,
+      "counts": {}
+    },
+    "comparison": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "comparison",
+      "stage_name": "Normalize and compare method results",
+      "stage_index": 7,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.0482604850003554,
+      "job_elapsed_seconds": 1386.6115511850003,
+      "queue_elapsed_seconds": 3619.566692946002,
+      "batch_elapsed_seconds": 3620.109897958002,
+      "log": null,
+      "counts": {}
+    },
+    "finalize": {
+      "event": "stage_completed",
+      "job_id": "route2__ap02__combined_nfev_80__03",
+      "job_index": 3,
+      "job_count": 4,
+      "stage_id": "finalize",
+      "stage_name": "Write final report",
+      "stage_index": 8,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.029362370001763338,
+      "job_elapsed_seconds": 1386.670640753,
+      "queue_elapsed_seconds": 3619.625782514002,
+      "batch_elapsed_seconds": 3620.1689875260017,
+      "log": null,
+      "counts": {}
+    }
+  },
+  "validate_dataset": 0.11770426099974429,
+  "detect_markers": 0.03469391600083327,
+  "observation_quality": 0.29095160399810993,
+  "analyze_selections": 0.0741895859973738,
+  "_sub_stages": {
+    "ap02_build_graph": {
+      "ap02.build_graph": 0.219
+    },
+    "ap02_component_diagnostics": {
+      "ap02.component_diagnostics": 0.025
+    },
+    "ap02_static_initialization": {
+      "ap02.initialize.static_only": 0.535
+    },
+    "ap02_static_ba": {
+      "ap02.optimize.static_only": 2.895
+    },
+    "ap02_combined_initialization": {
+      "ap02.initialize.with_moving": 0.536
+    },
+    "ap02_combined_ba": {
+      "ap02.optimize.with_moving": 1374.131
+    },
+    "ap02_report": {
+      "ap02.report": 0.038
+    }
+  },
+  "method_ap02": 1381.2262813810012,
+  "comparison": 0.048231576998659875,
+  "finalize": 0.029357580999203492
+}

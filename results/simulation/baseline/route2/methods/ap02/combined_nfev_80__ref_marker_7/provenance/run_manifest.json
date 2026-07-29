@@ -1,0 +1,223 @@
+{
+  "schema_version": 5,
+  "run_id": "20260729_190454_combined_nfev_80_52ef0562",
+  "execution_id": "20260729_190454_combined_nfev_80_52ef0562",
+  "experiment_id": "route2",
+  "canonical_experiment_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2",
+  "transaction_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2",
+  "result_category": "simulation",
+  "dataset_id": "route2",
+  "scene_type": "simulation",
+  "status": "completed",
+  "created_at": "2026-07-29T17:04:54+00:00",
+  "updated_at": "2026-07-29T17:28:28+00:00",
+  "config_sha256": "8823b19fc9efafe22f08803dedba265d980bb392b33870409a0afc429681ca7f",
+  "requested_config_sha256": "52ef05625bb1b81090aa34f3735cbe77e9c5d540a0c452330f2c75d118730d4a",
+  "enabled_methods": [
+    "ap02"
+  ],
+  "observation_input_contract": "observation_quality_v2",
+  "execution_mode": "complete",
+  "selection_mode": "explicit",
+  "evaluation_deferred_to_queue": true,
+  "runner_pid": null,
+  "simulation_parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses",
+    "settle_seconds": 0.35,
+    "post_pose_skip": 5,
+    "frame_timeout_seconds": 3.0,
+    "startup_timeout_seconds": 60.0
+  },
+  "stages": [
+    {
+      "id": "prepare_inputs",
+      "display_name": "Prepare canonical inputs and provenance",
+      "status": "completed",
+      "started_at": "2026-07-29T17:04:54+00:00",
+      "finished_at": "2026-07-29T17:04:56+00:00",
+      "runtime_seconds": 2.2966497510024055
+    },
+    {
+      "id": "validate_dataset",
+      "display_name": "Validate the canonical dataset",
+      "status": "completed",
+      "started_at": "2026-07-29T17:04:58+00:00",
+      "finished_at": "2026-07-29T17:04:59+00:00",
+      "runtime_seconds": 0.11770426099974429
+    },
+    {
+      "id": "detect_markers",
+      "display_name": "Detect shared ArUco observations and debug images",
+      "status": "completed",
+      "started_at": "2026-07-29T17:04:59+00:00",
+      "finished_at": "2026-07-29T17:04:59+00:00",
+      "runtime_seconds": 0.03469391600083327
+    },
+    {
+      "id": "observation_quality",
+      "display_name": "Apply immutable checks and job-specific observation quality",
+      "status": "completed",
+      "started_at": "2026-07-29T17:04:59+00:00",
+      "finished_at": "2026-07-29T17:04:59+00:00",
+      "runtime_seconds": 0.29095160399810993
+    },
+    {
+      "id": "analyze_selections",
+      "display_name": "Analyze root-camera and method-marker candidates",
+      "status": "completed",
+      "started_at": "2026-07-29T17:04:59+00:00",
+      "finished_at": "2026-07-29T17:04:59+00:00",
+      "runtime_seconds": 0.0741895859973738
+    },
+    {
+      "id": "method_ap02",
+      "display_name": "AP02 Baseline",
+      "status": "completed",
+      "started_at": "2026-07-29T17:04:59+00:00",
+      "finished_at": "2026-07-29T17:28:27+00:00",
+      "runtime_seconds": 1381.2262813810012
+    },
+    {
+      "id": "comparison",
+      "display_name": "Normalize and compare method results",
+      "status": "completed",
+      "started_at": "2026-07-29T17:28:27+00:00",
+      "finished_at": "2026-07-29T17:28:27+00:00",
+      "runtime_seconds": 0.048231576998659875
+    },
+    {
+      "id": "finalize",
+      "display_name": "Write final report",
+      "status": "completed",
+      "started_at": "2026-07-29T17:28:28+00:00",
+      "finished_at": "2026-07-29T17:28:28+00:00",
+      "runtime_seconds": 0.029357580999203492
+    }
+  ],
+  "resolved_config_sha256": "8823b19fc9efafe22f08803dedba265d980bb392b33870409a0afc429681ca7f",
+  "moving_intrinsics": {
+    "profile": null,
+    "path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/dataset/raw_images/camera_info/moving_calib_camera.json",
+    "sha256": "0b7e48c1466153b417ee4e654569bfd03c04b3abd3207bdc0961e948d47f6c93",
+    "width": 1280,
+    "height": 720,
+    "distortion_model": "plumb_bob"
+  },
+  "input_id": "input_0ffd7d57d0b8",
+  "experiment_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/results",
+  "observation_id": "detection_9fc5bf6dc969",
+  "observations_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/dataset/observations",
+  "dataset_observation_evidence_reused": true,
+  "resolved_selections": {
+    "ap01_root_camera": "cam_edge_3",
+    "ap02_reference_marker_id": 7,
+    "ap03_single_scale_marker_id": 0,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "evaluation_anchor_marker_id": 14
+  },
+  "effective_observation_quality": {
+    "minimum_marker_area_ratio": 8e-06,
+    "maximum_pnp_reprojection_error_px": 25.0,
+    "require_positive_depth": true,
+    "maximum_marker_distance_m": "disabled"
+  },
+  "observation_quality_sources": {
+    "minimum_marker_area_ratio": "global",
+    "maximum_pnp_reprojection_error_px": "global",
+    "require_positive_depth": "global",
+    "maximum_marker_distance_m": "global"
+  },
+  "automatic_recommendations": {
+    "ap01_root_camera": "cam_edge_3",
+    "ap02_reference_marker_id": 7,
+    "ap03_single_scale_marker_id": 0,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "evaluation_anchor_marker_id": 0
+  },
+  "final_decisions": {
+    "ap01_root_camera": "cam_edge_3",
+    "ap02_reference_marker_id": 7,
+    "ap03_single_scale_marker_id": 0,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "evaluation_anchor_marker_id": 14
+  },
+  "method_id": "ap02",
+  "method_fingerprint": "e9c1881e95a456b83de60cab8be02670deb9348e53bab85f392af459befcb546",
+  "variant": "combined_nfev_80__ref_marker_7",
+  "variant_target": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap02/combined_nfev_80__ref_marker_7",
+  "completed_at": "2026-07-29T17:28:28+00:00",
+  "intended_result_target": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap02/combined_nfev_80__ref_marker_7",
+  "published_result": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_80__03/completed"
+}

@@ -1,6 +1,6 @@
 {
   "preset": "bus_batch_capture",
-  "capture_id": "capture_20260729_004213_862445",
+  "capture_id": "capture_20260729_182525_506545",
   "world": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf",
   "route": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/config/moving_camera_route2_interpolated_final.json",
   "moving_model_name": "moving_calib_camera",

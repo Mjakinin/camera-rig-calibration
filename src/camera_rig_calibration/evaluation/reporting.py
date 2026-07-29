@@ -18,6 +18,9 @@ from typing import Any, Iterable
 import numpy as np
 import yaml
 
+from ..anchor_export import ensure_experiment_anchor_exports
+from ..visualization.scene import ensure_visualization_artifacts
+
 from ..methods.common.geometry import (
     R_to_rpy_deg,
     R_to_rvec,
@@ -714,6 +717,7 @@ def _method_report_text(
     payload: dict[str, Any],
     poses: dict[str, PoseRecord],
     pairs: list[dict[str, Any]],
+    anchor_cameras: list[dict[str, Any]] | None = None,
 ) -> str:
     width = 118
     lines = [
@@ -723,6 +727,8 @@ def _method_report_text(
         f"Method / variant: {payload['method']} / {payload['label']}",
         f"Artifact status: {payload['artifact_status']}",
         f"Quality status: {payload['quality_status']}",
+        f"Anchor export status: {payload.get('anchor_export_status', 'unavailable')}",
+        f"RViz visualization status: {payload.get('visualization_status', 'unavailable')}",
         f"Primary result: {payload.get('primary_result', '-')}",
         (
             f"Runtime: {float(payload['runtime_seconds']):.1f} s"
@@ -739,6 +745,63 @@ def _method_report_text(
         lines.extend(["WARNINGS", "-" * width])
         lines.extend(f"- {warning}" for warning in warnings)
         lines.append("")
+    anchor_cameras = anchor_cameras or []
+    lines.extend(
+        [
+            "COMMON EVALUATION / EXPORT ANCHOR",
+            "-" * width,
+            (
+                f"Marker: {payload.get('anchor_marker_id', '-')}; "
+                f"export status: {payload.get('anchor_export_status', 'unavailable')}"
+            ),
+        ]
+    )
+    anchor_rows = [
+        [
+            str(camera.get("camera_id", "-")),
+            _fmt(camera.get("x_m")),
+            _fmt(camera.get("y_m")),
+            _fmt(camera.get("z_m")),
+            _fmt(camera.get("roll_rad")),
+            _fmt(camera.get("pitch_rad")),
+            _fmt(camera.get("yaw_rad")),
+            _fmt(camera.get("qx"), 6),
+            _fmt(camera.get("qy"), 6),
+            _fmt(camera.get("qz"), 6),
+            _fmt(camera.get("qw"), 6),
+        ]
+        for camera in anchor_cameras
+    ]
+    lines.extend(
+        [
+            _text_table(
+                [
+                    "Camera",
+                    "x [m]",
+                    "y [m]",
+                    "z [m]",
+                    "roll [rad]",
+                    "pitch [rad]",
+                    "yaw [rad]",
+                    "qx",
+                    "qy",
+                    "qz",
+                    "qw",
+                ],
+                anchor_rows,
+            )
+            if anchor_rows
+            else (
+                "No common-anchor camera pose is available. "
+                "See diagnostics/anchor_alignment.json."
+            ),
+            (
+                "Full exports: camera_extrinsics_anchor.csv, "
+                "camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml"
+            ),
+            "",
+        ]
+    )
     graph = payload.get("metrics", {}).get("ap02_combined_graph", {})
     if payload.get("method") == "ap02" and graph:
         component_rows = [
@@ -996,6 +1059,12 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
         )
         metrics.update(method_diagnostics)
         config_summary = _configuration_summary(root, method)
+        anchor_payload = _read_json(root / "camera_extrinsics_anchor.json")
+        anchor_cameras = [
+            item
+            for item in anchor_payload.get("cameras", [])
+            if isinstance(item, dict)
+        ]
         payload.update(
             {
                 "schema_version": 5,
@@ -1015,11 +1084,22 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
                 ),
                 "pairwise_camera_count": len(pairs),
                 "detail_artifacts": detail_paths,
+                "calibration_status": payload.get(
+                    "calibration_status", "available"
+                ),
+                "evaluation_status": payload.get(
+                    "evaluation_status", "not_run"
+                ),
+                "anchor_export_status": payload.get(
+                    "anchor_export_status", "ANCHOR_NOT_AVAILABLE"
+                ),
+                "anchor_export_available": bool(anchor_cameras),
+                "anchor_camera_count": len(anchor_cameras),
             }
         )
         _write_json(result_path, payload)
         (root / "RESULT.txt").write_text(
-            _method_report_text(payload, poses, pairs),
+            _method_report_text(payload, poses, pairs, anchor_cameras),
             encoding="utf-8",
         )
         results.append(payload)
@@ -1419,6 +1499,52 @@ def _simulation_pairwise(
         }
         row.update(_pose_columns("gt_", gt))
         row.update(_pose_columns("estimated_", est))
+        rows.append(row)
+    return rows
+
+
+def _anchor_camera_gt_rows(
+    method: str,
+    label: str,
+    anchor_payload: dict[str, Any],
+    *,
+    anchor_marker_id: int,
+    gt_cameras: dict[str, np.ndarray],
+    gt_markers: dict[int, np.ndarray],
+) -> list[dict[str, Any]]:
+    gt_anchor = gt_markers.get(anchor_marker_id)
+    if gt_anchor is None:
+        return []
+    anchor_world = invT(gt_anchor)
+    rows: list[dict[str, Any]] = []
+    for camera in anchor_payload.get("cameras", []):
+        if not isinstance(camera, dict):
+            continue
+        camera_id = str(camera.get("camera_id", ""))
+        if camera_id not in gt_cameras or camera.get("matrix") is None:
+            continue
+        estimated = _matrix(camera["matrix"])
+        ground_truth = anchor_world @ gt_cameras[camera_id]
+        row: dict[str, Any] = {
+            "method": method,
+            "label": label,
+            "anchor_marker_id": anchor_marker_id,
+            "camera": camera_id,
+            "translation_error_cm": 100.0
+            * float(
+                np.linalg.norm(
+                    estimated[:3, 3] - ground_truth[:3, 3]
+                )
+            ),
+            "rotation_error_deg": float(
+                rot_error_deg(estimated, ground_truth)
+            ),
+            "evaluation": (
+                "direct_anchor_relative_posthoc_gt_no_fit_no_scale"
+            ),
+        }
+        row.update(_pose_columns("estimated_", estimated))
+        row.update(_pose_columns("gt_", ground_truth))
         rows.append(row)
     return rows
 
@@ -2169,6 +2295,13 @@ def _simulation_results(
     summaries: list[dict[str, Any]] = []
     marker_results: list[dict[str, Any]] = []
     marker_texts: list[str] = []
+    selection = _read_json(
+        dataset_root / "observations" / "SELECTION_CANDIDATES.json"
+    )
+    anchor_value = selection.get("evaluation_anchor", {}).get("selected")
+    anchor_marker_id = int(anchor_value) if anchor_value is not None else None
+    anchor_gt_rows: list[dict[str, Any]] = []
+    anchor_gt_summaries: list[dict[str, Any]] = []
     for payload in method_payloads:
         method = str(payload["method"])
         label = str(payload["label"])
@@ -2181,6 +2314,23 @@ def _simulation_results(
         summaries.append(
             {"method": method, "label": label, **_summary(rows)}
         )
+        if anchor_marker_id is not None:
+            direct_rows = _anchor_camera_gt_rows(
+                method,
+                label,
+                _read_json(root / "camera_extrinsics_anchor.json"),
+                anchor_marker_id=anchor_marker_id,
+                gt_cameras=gt_cameras,
+                gt_markers=gt_markers,
+            )
+            anchor_gt_rows.extend(direct_rows)
+            anchor_gt_summaries.append(
+                {
+                    "method": method,
+                    "label": label,
+                    **_summary(direct_rows),
+                }
+            )
         try:
             map_rows.extend(
                 _camera_map_rows(method, label, estimated, gt_cameras)
@@ -2207,6 +2357,20 @@ def _simulation_results(
     _write_json(
         evaluation_root / "ap02_marker_map_gt.json",
         {"variants": marker_results},
+    )
+    _write_csv(
+        evaluation_root / "anchor_camera_gt.csv", anchor_gt_rows
+    )
+    _write_json(
+        evaluation_root / "anchor_camera_gt.json",
+        {
+            "anchor_marker_id": anchor_marker_id,
+            "evaluation": (
+                "direct_anchor_relative_posthoc_gt_no_fit_no_scale"
+            ),
+            "summaries": anchor_gt_summaries,
+            "rows": anchor_gt_rows,
+        },
     )
     map_text = _camera_map_text(experiment_root.name, map_rows)
     (experiment_root / "SECONDARY_CAMERA_MAP_RESULTS.txt").write_text(
@@ -2236,6 +2400,42 @@ def _simulation_results(
             / "SELECTION_CANDIDATES.json"
         ).get("evaluation_anchor", {}),
     )
+    text += (
+        "\n\nDIRECT COMMON-ANCHOR CAMERA POSES VS GROUND TRUTH\n"
+        + "-" * 138
+        + "\n"
+        + (
+            _text_table(
+                [
+                    "Method",
+                    "Variant",
+                    "Cameras",
+                    "mean translation [cm]",
+                    "max translation [cm]",
+                    "mean rotation [deg]",
+                    "max rotation [deg]",
+                ],
+                [
+                    [
+                        row["method"],
+                        row["label"],
+                        row["count"],
+                        _fmt(row["mean_translation_error_cm"]),
+                        _fmt(row["max_translation_error_cm"]),
+                        _fmt(row["mean_rotation_error_deg"]),
+                        _fmt(row["max_rotation_error_deg"]),
+                    ]
+                    for row in anchor_gt_summaries
+                ],
+            )
+            if any(row["count"] for row in anchor_gt_summaries)
+            else (
+                "Unavailable: the frozen anchor or a method-specific "
+                "anchor export is missing."
+            )
+        )
+        + "\nDetailed values: evaluations/anchor_camera_gt.csv\n"
+    )
     return text, {
         "category": "simulation",
         "experiment": experiment_root.name,
@@ -2257,6 +2457,12 @@ def _simulation_results(
         "primary_camera_pairwise": {
             "summaries": summaries,
             "rows": pair_rows,
+        },
+        "anchor_camera_ground_truth": {
+            "anchor_marker_id": anchor_marker_id,
+            "summaries": anchor_gt_summaries,
+            "rows": anchor_gt_rows,
+            "path": "evaluations/anchor_camera_gt.csv",
         },
         "secondary_camera_map": {
             "rows": map_rows,
@@ -2419,6 +2625,8 @@ def write_scientific_experiment_reports(
     category: str,
 ) -> dict[str, Any]:
     """Write the canonical human and machine result front doors."""
+    ensure_experiment_anchor_exports(experiment_root)
+    visualization = ensure_visualization_artifacts(experiment_root)
     method_payloads = refresh_method_reports(experiment_root)
     if category == "simulation":
         text, payload = _simulation_results(
@@ -2428,13 +2636,77 @@ def write_scientific_experiment_reports(
         text, payload = _real_results_text(
             experiment_root, method_payloads, dataset_root
         )
+    evaluation_by_method: dict[tuple[str, str], str] = {}
+    if category == "simulation":
+        summaries = payload.get(
+            "anchor_camera_ground_truth", {}
+        ).get("summaries", [])
+        evaluation_by_method = {
+            (str(item.get("method")), str(item.get("label"))): (
+                "available"
+                if int(item.get("count") or 0) > 0
+                else "unavailable"
+            )
+            for item in summaries
+            if isinstance(item, dict)
+        }
+    else:
+        marker_available = bool(payload.get("marker_consistency_path"))
+        evaluation_by_method = {
+            (str(item.get("method")), str(item.get("label"))): (
+                "available"
+                if marker_available
+                and bool(item.get("anchor_export_available"))
+                else "unavailable"
+            )
+            for item in method_payloads
+        }
+    statuses_changed = False
+    for result_path in sorted(
+        (experiment_root / "methods").glob("*/*/RESULT.json")
+    ):
+        method_result = _read_json(result_path)
+        key = (
+            str(method_result.get("method") or result_path.parents[1].name),
+            str(method_result.get("label") or result_path.parent.name),
+        )
+        evaluation_status = evaluation_by_method.get(key, "unavailable")
+        if method_result.get("evaluation_status") != evaluation_status:
+            method_result["evaluation_status"] = evaluation_status
+            _write_json(result_path, method_result)
+            statuses_changed = True
+    if statuses_changed:
+        method_payloads = refresh_method_reports(experiment_root)
+        if category == "simulation":
+            text, payload = _simulation_results(
+                experiment_root, dataset_root, method_payloads
+            )
+        else:
+            text, payload = _real_results_text(
+                experiment_root, method_payloads, dataset_root
+            )
     payload.update(
         {
             "schema_version": 5,
             "layout_version": 2,
             "generated_at": _now(),
             "human_report": "RESULTS.txt",
+            "visualization": visualization,
         }
+    )
+    text = (
+        text.rstrip()
+        + "\n\nRVIZ VISUALIZATION\n"
+        + "-" * 72
+        + "\n"
+        + f"Status: {visualization.get('status', 'unavailable')}\n"
+        + "Manifest: visualization/visualization_manifest.json\n"
+        + (
+            "Open from rigcal View results; each window uses an isolated "
+            "ROS_DOMAIN_ID.\n"
+            if visualization.get("available")
+            else f"Reason: {visualization.get('reason', '-')}\n"
+        )
     )
     (experiment_root / "RESULTS.txt").write_text(text, encoding="utf-8")
     _write_json(experiment_root / "RESULTS.json", payload)

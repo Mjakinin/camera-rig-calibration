@@ -1,0 +1,39 @@
+{
+  "available": true,
+  "contract": "rigcal_rviz_scene_v1",
+  "fingerprint": "d315de8d8ab6170288878c16d5a7a07d62266ed985f9d7859b6a6516b29a2515",
+  "fixed_frame": "evaluation_anchor_marker_14",
+  "frustums": "camera_frustums.json",
+  "note": "The point cloud is AP03/COLMAP context. Camera poses retain their own method/variant identity.",
+  "point_cloud": "scene_anchor_frame.ply",
+  "point_count": 7316,
+  "poses": "poses_anchor_frame.json",
+  "publisher": "camera_rig_calibration.visualization.ros_scene",
+  "rviz_config": "rigcal_result.rviz",
+  "schema_version": 1,
+  "source": {
+    "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+    "method": "ap03",
+    "points3D": "methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/diagnostics/method/colmap/reconstruction/sparse_txt/0/points3D.txt",
+    "scale_m_per_colmap_unit": 0.7897140991367362
+  },
+  "status": "OK",
+  "variants": [
+    {
+      "label": "root_cam_edge_3",
+      "method": "ap01"
+    },
+    {
+      "label": "combined_nfev_60__ref_marker_7",
+      "method": "ap02"
+    },
+    {
+      "label": "combined_nfev_80__ref_marker_7",
+      "method": "ap02"
+    },
+    {
+      "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+      "method": "ap03"
+    }
+  ]
+}

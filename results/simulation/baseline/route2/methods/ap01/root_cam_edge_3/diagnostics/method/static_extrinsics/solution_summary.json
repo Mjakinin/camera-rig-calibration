@@ -18,14 +18,14 @@
         "rotation_threshold_deg": 4.0
       },
       "relay": {
-        "candidates": 18290,
-        "inliers": 14412,
-        "translation_deviation_median_m": 0.7155922394321297,
-        "rotation_deviation_median_deg": 16.11553708872224,
-        "translation_threshold_m": 1.81931971800849,
-        "rotation_threshold_deg": 56.711899986454085
+        "candidates": 1720,
+        "inliers": 1096,
+        "translation_deviation_median_m": 0.24230135916329212,
+        "rotation_deviation_median_deg": 10.649089481194311,
+        "translation_threshold_m": 0.7588711179115426,
+        "rotation_threshold_deg": 20.835843671010814
       },
-      "relay_candidates": 18290
+      "relay_candidates": 1720
     },
     "cam_edge_1": {
       "selected_method": "direct_multimarker",
@@ -33,32 +33,32 @@
         "candidates": 6,
         "inliers": 6,
         "translation_deviation_median_m": 1.8660167060595794,
-        "rotation_deviation_median_deg": 16.00313832843298,
+        "rotation_deviation_median_deg": 17.17500661476985,
         "translation_threshold_m": 6.764745203868269,
-        "rotation_threshold_deg": 55.819295774062255
+        "rotation_threshold_deg": 35.300953787542454
       },
       "relay": {
-        "candidates": 33744,
-        "inliers": 32317,
-        "translation_deviation_median_m": 1.9993270155239236,
-        "rotation_deviation_median_deg": 17.949788378319035,
-        "translation_threshold_m": 6.9296759262756735,
-        "rotation_threshold_deg": 53.7285394410523
+        "candidates": 3408,
+        "inliers": 2406,
+        "translation_deviation_median_m": 0.9121065450224471,
+        "rotation_deviation_median_deg": 15.743972572136798,
+        "translation_threshold_m": 3.3605082124560655,
+        "rotation_threshold_deg": 38.160110035815364
       },
-      "relay_candidates": 33744
+      "relay_candidates": 3408
     },
     "cam_edge_5": {
       "selected_method": "moving_colmap_relay",
       "direct": null,
       "relay": {
-        "candidates": 43281,
-        "inliers": 42859,
-        "translation_deviation_median_m": 3.366355672916835,
-        "rotation_deviation_median_deg": 26.69425895972702,
-        "translation_threshold_m": 11.091854566701931,
-        "rotation_threshold_deg": 64.1547674366939
+        "candidates": 4032,
+        "inliers": 2448,
+        "translation_deviation_median_m": 1.3550170645596362,
+        "rotation_deviation_median_deg": 23.611202113739267,
+        "translation_threshold_m": 3.893365299492448,
+        "rotation_threshold_deg": 42.22207502949088
       },
-      "relay_candidates": 43281
+      "relay_candidates": 4032
     }
   },
   "available_static_cameras": [

@@ -1,7 +1,7 @@
 camera_a,camera_b,distance_m
-cam_edge_0,cam_edge_1,5.011139838586253
-cam_edge_0,cam_edge_3,4.0656343332116975
-cam_edge_0,cam_edge_5,5.942776142930941
-cam_edge_1,cam_edge_3,2.0163305600516885
-cam_edge_1,cam_edge_5,10.702183484804761
-cam_edge_3,cam_edge_5,9.753320456739925
+cam_edge_0,cam_edge_1,5.0819323777656775
+cam_edge_0,cam_edge_3,4.078736206857918
+cam_edge_0,cam_edge_5,6.381710137665495
+cam_edge_1,cam_edge_3,2.100778441470357
+cam_edge_1,cam_edge_5,11.170299255444906
+cam_edge_3,cam_edge_5,10.253835696407227

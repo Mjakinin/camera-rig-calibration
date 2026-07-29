@@ -195,12 +195,16 @@ methods/<method>/<label>/
   RESULT.txt
   RESULT.json
   camera_extrinsics.csv
+  camera_extrinsics_anchor.csv
+  camera_extrinsics_anchor.json
+  camera_extrinsics_anchor.yaml
   pairwise_camera_extrinsics.csv
   diagnostics/
   logs/
   provenance/
 evaluations/
 attempts/
+visualization/
 ```
 
 For simulation experiments the same folder additionally contains
@@ -214,6 +218,22 @@ There are no separate `datasets`, `video/prepared`, `inputs/<hash>`,
 storage.
 
 `camera_extrinsics.csv` records the reference frame and transform convention.
+The three `camera_extrinsics_anchor.*` files provide the same primary camera
+estimates as 6-DoF poses in the one common evaluation-marker frame. AP02's
+internal reference marker remains a separate method setting. The common anchor
+is selected automatically from repeat-supported observations or manually once
+after preflight from every actually detected marker ID. A warned manual marker
+is allowed without a hidden fallback; unsupported method exports are reported
+as unavailable.
+
+`View results` can derive missing anchor exports from already published
+artifacts without rerunning AP01--AP03. When a scaled AP03 Multi sparse model is
+available, it also prepares `visualization/` and can open an isolated RViz 2
+session. Each RViz window receives its own `ROS_DOMAIN_ID`, so several
+experiments can remain open without mixing TF or marker topics. The displayed
+point cloud is explicitly AP03/COLMAP context; all method poses keep separate
+namespaces.
+
 `diagnostics` retains all scientifically important intermediate artifacts;
 `logs` contains complete process output; `provenance` contains requested and
 resolved configs, config diff, commands, environment, manifest and timings.
@@ -249,6 +269,14 @@ model failure, preflight, timeout, configuration and optimizer failures.
 Interrupted, selection-waiting and publication-failed work remains under
 `workspace/temporary_runs`. Terminal successful/failed queues close
 automatically.
+
+`Cleanup storage` reviews three independent permanent-deletion groups in this
+order: published `results` (including their embedded datasets), legacy/prepared
+datasets and dataset caches, then temporary workspace runs/queues/batches.
+Each group defaults to “no”; selected groups require a final typed `DELETE`
+confirmation and are verified after deletion. Cleanup is blocked while another
+rigcal process is active. `data_local` and `config/intrinsics` are never
+selected or queried by this action.
 
 The public code is package-first:
 

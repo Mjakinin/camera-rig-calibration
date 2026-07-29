@@ -14,7 +14,7 @@ Input dataset:
 Number of COLMAP models: 1
 
 Models:
-- model 0: 180 images, 4/4 static cameras, 176 moving frames, 7254 3D points
+- model 0: 180 images, 4/4 static cameras, 176 moving frames, 7316 3D points
   static registered: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
   static missing: none
 
@@ -23,7 +23,7 @@ Best model by static-camera coverage:
 - registered images: 180
 - registered static cameras: 4/4
 - registered moving frames: 176
-- 3D points: 7254
+- 3D points: 7316
 
 Interpretation:
 - COLMAP registered all static cameras.
@@ -34,7 +34,7 @@ Important:
 - Metric scale and Ref-ArUco alignment are planned for AP03 Phase 2.
 
 Output files:
-- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap03__baseline__03/20260729_020350_baseline_424df539/04_AP03/colmap/inspection/colmap_model_summary.csv
-- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap03__baseline__03/20260729_020350_baseline_424df539/04_AP03/colmap/inspection/registered_images_by_model.csv
-- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap03__baseline__03/20260729_020350_baseline_424df539/04_AP03/colmap/inspection/ap03_colmap_inspection_report.txt
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap03__baseline__04/20260729_192836_baseline_7f800f53/04_AP03/colmap/inspection/colmap_model_summary.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap03__baseline__04/20260729_192836_baseline_7f800f53/04_AP03/colmap/inspection/registered_images_by_model.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap03__baseline__04/20260729_192836_baseline_7f800f53/04_AP03/colmap/inspection/ap03_colmap_inspection_report.txt
 

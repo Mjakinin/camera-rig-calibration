@@ -1,26 +1,28 @@
 {
-  "completed_at": "2026-07-28T23:01:39.696+00:00",
+  "completed_at": "2026-07-29T16:44:16.264+00:00",
   "inputs": {
-    "initialization": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/05_graph_initialization/static_only",
-    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv"
+    "initialization": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/05_graph_initialization/static_only",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv"
   },
   "outputs": {
-    "marker_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/static_only/optimized_marker_poses_ref_marker.csv",
-    "moving_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/static_only/optimized_moving_frame_poses_ref_marker.csv",
-    "optimizer_report": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/static_only/optimizer_report.json",
-    "static_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/static_only/optimized_static_camera_poses_ref_marker.csv"
+    "marker_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/07_graph_ba/static_only/optimized_marker_poses_ref_marker.csv",
+    "moving_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/07_graph_ba/static_only/optimized_moving_frame_poses_ref_marker.csv",
+    "optimization_history": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/07_graph_ba/static_only/ap02_optimization_history.csv",
+    "optimization_summary": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/07_graph_ba/static_only/ap02_optimization_summary.json",
+    "optimizer_report": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/07_graph_ba/static_only/optimizer_report.json",
+    "static_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_184404_combined_nfev_60_fc1b3773/03_AP02/07_graph_ba/static_only/optimized_static_camera_poses_ref_marker.csv"
   },
   "parameters": {
     "maximum_function_evaluations": 100,
     "mode": "static_only",
+    "observation_input": "quality-ranked, graph-preserving AP02 frame selection",
     "reference_marker_id": 7,
     "robust_loss": "soft_l1",
-    "robust_loss_scale_px": 3.0,
-    "uses_all_quality_accepted_observations": true
+    "robust_loss_scale_px": 3.0
   },
-  "runtime_seconds": 5.372112793003907,
+  "runtime_seconds": 3.632201600001281,
   "schema_version": 5,
   "stage_id": "ap02.optimize.static_only",
-  "started_at": "2026-07-28T23:01:34.324+00:00",
+  "started_at": "2026-07-29T16:44:12.632+00:00",
   "status": "COMPLETED"
 }

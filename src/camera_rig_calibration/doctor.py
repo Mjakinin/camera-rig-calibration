@@ -70,6 +70,31 @@ def run_checks(repository_root: Path, *, needs_ros: bool = False) -> list[Check]
                 "installed" if importlib.util.find_spec("rosbag2_py") else "missing",
             )
         )
+        rviz = shutil.which("rviz2")
+        checks.append(
+            Check(
+                "RViz 2 result visualization",
+                rviz is not None,
+                rviz or "not found in PATH; install/source rviz2",
+                required=False,
+            )
+        )
+        for module in (
+            "rclpy",
+            "sensor_msgs",
+            "geometry_msgs",
+            "visualization_msgs",
+            "tf2_ros",
+        ):
+            available = importlib.util.find_spec(module) is not None
+            checks.append(
+                Check(
+                    f"RViz Python module: {module}",
+                    available,
+                    "installed" if available else "missing",
+                    required=False,
+                )
+            )
         readers: set[str] = set()
         if importlib.util.find_spec("rosbag2_py") is not None:
             try:

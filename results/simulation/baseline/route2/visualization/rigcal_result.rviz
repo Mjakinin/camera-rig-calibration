@@ -1,0 +1,46 @@
+Panels:
+  - Class: rviz_common/Displays
+Visualization Manager:
+  Global Options:
+    Fixed Frame: evaluation_anchor_marker_14
+    Background Color: 35; 35; 35
+  Displays:
+    - Class: rviz_default_plugins/TF
+      Name: Coordinate frames
+      Enabled: true
+    - Class: rviz_default_plugins/PointCloud2
+      Name: AP03 COLMAP context
+      Enabled: true
+      Topic:
+        Value: /rigcal/scene/points
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Common anchor
+      Enabled: true
+      Topic:
+        Value: /rigcal/scene/anchor
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/root_cam_edge_3
+      Enabled: true
+      Topic:
+        Value: /rigcal/methods/ap01/root_cam_edge_3/markers
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/combined_nfev_60__ref_marker_7
+      Enabled: true
+      Topic:
+        Value: /rigcal/methods/ap02/combined_nfev_60__ref_marker_7/markers
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/combined_nfev_80__ref_marker_7
+      Enabled: true
+      Topic:
+        Value: /rigcal/methods/ap02/combined_nfev_80__ref_marker_7/markers
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0
+      Enabled: true
+      Topic:
+        Value: /rigcal/methods/ap03/multi_markers_0_1_2_3_4_5_6_7_8_9_10_11_12_13_14_16_17_18_19_20__single_marker_0/markers
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+Window Geometry:
+  Width: 1400
+  Height: 900

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-07-29T17:04:54+00:00",
+  "python": "3.10.12 (main, Jun 22 2026, 18:55:27) [GCC 11.4.0]",
+  "python_executable": "/home/maxim/.venvs/rigcal/bin/python",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "working_directory": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration",
+  "git_commit": "1b0328f0857efab6ea374c0c999d0dc73bb54114",
+  "git_branch": "final/rigcal-v4.3",
+  "scientific_packages": {
+    "numpy": "1.21.5",
+    "scipy": "1.8.0",
+    "cv2": "4.5.4"
+  },
+  "colmap": "/usr/bin/colmap"
+}

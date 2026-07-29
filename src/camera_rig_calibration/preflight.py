@@ -729,6 +729,102 @@ def run_queue_preflight(
             )
         )
 
+    raw_inventory: dict[int, dict[str, Any]] = {}
+    for row in raw_rows:
+        try:
+            marker_id = int(float(row.get("marker_id", "")))
+        except (TypeError, ValueError):
+            continue
+        item = raw_inventory.setdefault(
+            marker_id,
+            {
+                "id": marker_id,
+                "raw_observations": 0,
+                "static_cameras": set(),
+                "moving_frames": set(),
+            },
+        )
+        item["raw_observations"] += 1
+        observer_type = str(row.get("observer_type", "")).strip()
+        if observer_type == "static":
+            camera_id = _observation_camera_id(row)
+            if camera_id:
+                item["static_cameras"].add(camera_id)
+        elif observer_type == "moving":
+            frame_id = str(row.get("frame_id", "")).strip()
+            if frame_id:
+                item["moving_frames"].add(frame_id)
+
+    # Keep the complete raw marker inventory beside every job's filtered
+    # candidates. Manual common-anchor review may therefore select a genuinely
+    # detected marker even when that job's quality filter rejected it.
+    for result_index, result in enumerate(results):
+        if result.selections is None:
+            continue
+        payload = json.loads(json.dumps(result.selections.payload))
+        compatible = set(
+            int(value)
+            for value in payload["evaluation_anchor"].get(
+                "observation_candidates", []
+            )
+        )
+        automatic = set(
+            int(value)
+            for value in payload["evaluation_anchor"].get(
+                "automatic_observation_candidates", []
+            )
+        )
+        candidate_details = {
+            int(item["id"]): item
+            for item in payload["ap03_single_scale_marker"]["candidates"]
+        }
+        inventory_rows: list[dict[str, Any]] = []
+        for marker_id, raw in sorted(raw_inventory.items()):
+            details = candidate_details.get(marker_id, {})
+            issues: list[str] = []
+            if marker_id not in candidate_details:
+                issues.append("rejected by this job's quality/whitelist filter")
+            if marker_id not in compatible:
+                issues.append("not reconstructable by every enabled stage")
+            if marker_id not in automatic:
+                issues.append("insufficient repeated support for auto")
+            inventory_rows.append(
+                {
+                    "id": marker_id,
+                    "raw_observations": raw["raw_observations"],
+                    "static_cameras": sorted(raw["static_cameras"]),
+                    "static_camera_count": len(raw["static_cameras"]),
+                    "moving_frames": len(raw["moving_frames"]),
+                    "accepted_observations": int(
+                        details.get("accepted_observations", 0)
+                    ),
+                    "median_selection_score": details.get(
+                        "median_selection_score"
+                    ),
+                    "median_pnp_reprojection_rmse_px": details.get(
+                        "median_pnp_reprojection_rmse_px"
+                    ),
+                    "median_marker_area_ratio": details.get(
+                        "median_marker_area_ratio"
+                    ),
+                    "compatible": marker_id in compatible,
+                    "automatic_candidate": marker_id in automatic,
+                    "issues": issues,
+                }
+            )
+        payload["raw_marker_inventory"] = inventory_rows
+        selections = replace(result.selections, payload=payload)
+        results[result_index] = replace(result, selections=selections)
+        if result.filter_result is not None:
+            for name in (
+                "SELECTION_CANDIDATES.json",
+                "REFERENCE_SELECTIONS.json",
+            ):
+                _write_json(
+                    result.filter_result.filtered_observations_root / name,
+                    payload,
+                )
+
     common_evaluation_anchor: int | None = None
     evaluation_rows = [
         (index, job, result)
@@ -740,12 +836,16 @@ def run_queue_preflight(
         and result.selections is not None
     ]
     if evaluation_rows:
+        manual_review = any(
+            job.config.evaluation.anchor_selection_mode == "review_once"
+            for _, job, _ in evaluation_rows
+        )
         explicit = {
             int(job.config.evaluation.anchor_marker_id)
             for _, job, _ in evaluation_rows
             if isinstance(job.config.evaluation.anchor_marker_id, int)
         }
-        candidate_sets = [
+        strict_candidate_sets = [
             set(
                 int(value)
                 for value in result.selections.payload[
@@ -760,7 +860,24 @@ def run_queue_preflight(
             )
             for _, job, result in evaluation_rows
         ]
-        common_candidates = set.intersection(*candidate_sets)
+        strict_common_candidates = set.intersection(*strict_candidate_sets)
+        raw_candidate_sets = [
+            {
+                int(item["id"])
+                for item in result.selections.payload.get(
+                    "raw_marker_inventory", []
+                )
+            }
+            for _, _, result in evaluation_rows
+        ]
+        raw_common_candidates = (
+            set.intersection(*raw_candidate_sets)
+            if raw_candidate_sets
+            else set()
+        )
+        common_candidates = (
+            raw_common_candidates if manual_review else strict_common_candidates
+        )
         anchor_error: str | None = None
         if len(explicit) > 1:
             anchor_error = (
@@ -778,11 +895,42 @@ def run_queue_preflight(
                 common_evaluation_anchor = requested
         elif not common_candidates:
             anchor_error = (
-                "Evaluation is enabled, but no repeat-supported marker is "
-                "compatible with every runnable method after their effective "
-                "quality filters. Adjust filters/whitelist or disable "
-                "evaluation explicitly."
+                "Evaluation is enabled, but shared detection found no marker "
+                "that can be selected as the common anchor."
             )
+        elif manual_review:
+            if strict_common_candidates:
+                aggregate: dict[int, tuple[float, int]] = {}
+                for marker_id in strict_common_candidates:
+                    scores: list[float] = []
+                    support = 0
+                    for _, _, result in evaluation_rows:
+                        candidates = {
+                            int(item["id"]): item
+                            for item in result.selections.payload[
+                                "ap03_single_scale_marker"
+                            ]["candidates"]
+                        }
+                        details = candidates[marker_id]
+                        scores.append(
+                            float(
+                                details.get("median_selection_score") or 0.0
+                            )
+                        )
+                        support += int(
+                            details.get("accepted_observations", 0)
+                        )
+                    aggregate[marker_id] = (min(scores), support)
+                common_evaluation_anchor = max(
+                    strict_common_candidates,
+                    key=lambda marker_id: (
+                        aggregate[marker_id][0],
+                        aggregate[marker_id][1],
+                        -marker_id,
+                    ),
+                )
+            else:
+                common_evaluation_anchor = None
         else:
             aggregate: dict[int, tuple[float, int]] = {}
             for marker_id in common_candidates:
@@ -831,8 +979,13 @@ def run_queue_preflight(
                     common_evaluation_anchor
                 )
                 payload["evaluation_anchor"]["reason"] = (
-                    "one deterministic anchor frozen across all runnable "
-                    "queue methods before calibration"
+                    (
+                        "recommended common anchor awaiting one manual "
+                        "post-preflight decision"
+                        if manual_review
+                        else "one deterministic anchor frozen across all "
+                        "runnable queue methods before calibration"
+                    )
                 )
                 payload["automatic_recommendations"][
                     "evaluation_anchor_marker_id"
@@ -862,7 +1015,11 @@ def run_queue_preflight(
                     details=(
                         *result.details,
                         "Common evaluation anchor frozen before methods: "
-                        f"marker {common_evaluation_anchor}",
+                        + (
+                            f"marker {common_evaluation_anchor}"
+                            if common_evaluation_anchor is not None
+                            else "manual selection pending"
+                        ),
                     ),
                 )
                 summary_path = (

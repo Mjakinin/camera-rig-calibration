@@ -787,25 +787,19 @@ def resolve_selections(
         evaluation_anchor = None
     elif configured_evaluation == "auto":
         if recommended_evaluation_anchor is None:
-            raise RuntimeError(
-                "Evaluation is enabled, but preflight found no common marker "
-                "with repeated accepted static/moving support for every "
-                "enabled method. Adjust quality filters/whitelist or disable "
-                "evaluation explicitly."
-            )
-        evaluation_anchor = recommended_evaluation_anchor
+            if config.evaluation.anchor_selection_mode == "review_once":
+                evaluation_anchor = None
+            else:
+                raise RuntimeError(
+                    "Evaluation is enabled, but preflight found no common marker "
+                    "with repeated accepted static/moving support for every "
+                    "enabled method. Adjust quality filters/whitelist or disable "
+                    "evaluation explicitly."
+                )
+        else:
+            evaluation_anchor = recommended_evaluation_anchor
     else:
         evaluation_anchor = int(configured_evaluation)
-        if evaluation_anchor not in evaluation_candidates:
-            requirement = (
-                f"AP01 root '{root}' and moving-camera observations"
-                if "ap01" in enabled
-                else "moving-camera and static observations"
-            )
-            raise RuntimeError(
-                f"Evaluation anchor {evaluation_anchor} must be visible in "
-                f"{requirement}"
-            )
 
     if config.selection.mode == "explicit":
         unresolved: list[str] = []
@@ -914,6 +908,7 @@ def resolve_selections(
         "evaluation_anchor": {
             "configured": configured_evaluation,
             "selected": evaluation_anchor,
+            "selection_mode": config.evaluation.anchor_selection_mode,
             "resolution_stage": "disabled" if not config.evaluation.enabled else "preflight",
             "observation_candidates": sorted(evaluation_candidates),
             "automatic_observation_candidates": sorted(
@@ -929,7 +924,12 @@ def resolve_selections(
                     "support, selection score, PnP RMSE, marker area ratio and "
                     "stable marker ID"
                     if configured_evaluation == "auto"
-                    else "explicit user configuration"
+                    and config.evaluation.anchor_selection_mode == "auto"
+                    else (
+                        "manual selection requested after shared detection"
+                        if config.evaluation.anchor_selection_mode == "review_once"
+                        else "explicit user configuration"
+                    )
                 )
             ),
         },
@@ -1035,6 +1035,25 @@ def freeze_selections(
     ]
     if "ap03" in config.methods.enabled and invalid_multi:
         raise ValueError(f"AP03 Multi markers are not compatible: {invalid_multi}")
+    raw_anchor_ids = {
+        int(item["id"])
+        for item in resolved.payload.get("raw_marker_inventory", [])
+        if isinstance(item, dict) and item.get("id") is not None
+    }
+    if not raw_anchor_ids:
+        raw_anchor_ids = {
+            int(value)
+            for value in resolved.payload.get("detected_marker_ids", [])
+        }
+    if (
+        config.evaluation.enabled
+        and evaluation_anchor is not None
+        and int(evaluation_anchor) not in raw_anchor_ids
+    ):
+        raise ValueError(
+            "Common evaluation/export anchor was not detected in the shared "
+            f"preflight: marker {evaluation_anchor}"
+        )
 
     ap03 = config.methods.ap03.model_copy(
         update={
@@ -1065,7 +1084,12 @@ def freeze_selections(
                 int(evaluation_anchor)
                 if evaluation_anchor is not None
                 else config.evaluation.anchor_marker_id
-            )
+            ),
+            "anchor_selection_mode": (
+                "explicit"
+                if evaluation_anchor is not None
+                else config.evaluation.anchor_selection_mode
+            ),
         }
     )
     return RigConfig.model_validate(

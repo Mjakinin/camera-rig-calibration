@@ -425,6 +425,7 @@ class MethodSettings(StrictModel):
 class EvaluationSettings(StrictModel):
     enabled: bool = True
     anchor_marker_id: int | Literal["auto"] = "auto"
+    anchor_selection_mode: Literal["auto", "review_once", "explicit"] = "auto"
     reprojection_threshold_px: float = Field(default=5.0, gt=0)
     minimum_inliers: int = Field(default=4, ge=2)
     ransac_iterations: int = Field(default=800, ge=1)

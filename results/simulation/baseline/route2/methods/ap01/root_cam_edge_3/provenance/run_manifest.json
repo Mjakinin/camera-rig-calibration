@@ -1,22 +1,22 @@
 {
   "schema_version": 5,
-  "run_id": "20260729_005326_baseline_1430a227",
-  "execution_id": "20260729_005326_baseline_1430a227",
+  "run_id": "20260729_184053_baseline_a27dec69",
+  "execution_id": "20260729_184053_baseline_a27dec69",
   "experiment_id": "route2",
   "canonical_experiment_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2",
-  "transaction_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2",
+  "transaction_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2",
   "result_category": "simulation",
   "dataset_id": "route2",
   "scene_type": "simulation",
   "status": "completed",
-  "created_at": "2026-07-28T22:53:26+00:00",
-  "updated_at": "2026-07-28T23:01:09+00:00",
-  "config_sha256": "34539113c0a62d599bfc1a5e39c37929b36bcba33790e6f624f5bcd4dfc96418",
-  "requested_config_sha256": "1430a22721cc763d215fa472a5fad841114f8b23e3add54cfd7b5735f041caa2",
+  "created_at": "2026-07-29T16:40:53+00:00",
+  "updated_at": "2026-07-29T16:43:58+00:00",
+  "config_sha256": "0e3ecb9be5b8dadf4b9d26a89c0148dc01b80ef60021181af731d2b683e9b5d5",
+  "requested_config_sha256": "a27dec691287696aa981d83ce08776d196f6dcae84a87fd0b0a35a9cd6116f24",
   "enabled_methods": [
     "ap01"
   ],
-  "observation_input_contract": "all_quality_passed_v1",
+  "observation_input_contract": "observation_quality_v2",
   "execution_mode": "complete",
   "selection_mode": "explicit",
   "evaluation_deferred_to_queue": true,
@@ -42,80 +42,81 @@
       "id": "prepare_inputs",
       "display_name": "Prepare canonical inputs and provenance",
       "status": "completed",
-      "started_at": "2026-07-28T22:53:26+00:00",
-      "finished_at": "2026-07-28T22:53:28+00:00",
-      "runtime_seconds": 2.030227758004912
+      "started_at": "2026-07-29T16:40:53+00:00",
+      "finished_at": "2026-07-29T16:40:56+00:00",
+      "runtime_seconds": 2.534425559999363
     },
     {
       "id": "validate_dataset",
       "display_name": "Validate the canonical dataset",
       "status": "completed",
-      "started_at": "2026-07-28T22:53:30+00:00",
-      "finished_at": "2026-07-28T22:53:30+00:00",
-      "runtime_seconds": 0.10731519499677233
+      "started_at": "2026-07-29T16:40:58+00:00",
+      "finished_at": "2026-07-29T16:40:58+00:00",
+      "runtime_seconds": 0.13510578199930023
     },
     {
       "id": "detect_markers",
       "display_name": "Detect shared ArUco observations and debug images",
       "status": "completed",
-      "started_at": "2026-07-28T22:53:30+00:00",
-      "finished_at": "2026-07-28T22:53:30+00:00",
-      "runtime_seconds": 0.03338206199987326
+      "started_at": "2026-07-29T16:40:58+00:00",
+      "finished_at": "2026-07-29T16:40:59+00:00",
+      "runtime_seconds": 0.046661401000164915
     },
     {
       "id": "observation_quality",
       "display_name": "Apply immutable checks and job-specific observation quality",
       "status": "completed",
-      "started_at": "2026-07-28T22:53:30+00:00",
-      "finished_at": "2026-07-28T22:53:30+00:00",
-      "runtime_seconds": 0.2279136230063159
+      "started_at": "2026-07-29T16:40:59+00:00",
+      "finished_at": "2026-07-29T16:40:59+00:00",
+      "runtime_seconds": 0.35699399200166226
     },
     {
       "id": "analyze_selections",
       "display_name": "Analyze root-camera and method-marker candidates",
       "status": "completed",
-      "started_at": "2026-07-28T22:53:30+00:00",
-      "finished_at": "2026-07-28T22:53:30+00:00",
-      "runtime_seconds": 0.06722666599671356
+      "started_at": "2026-07-29T16:40:59+00:00",
+      "finished_at": "2026-07-29T16:40:59+00:00",
+      "runtime_seconds": 0.08863331700194976
     },
     {
       "id": "method_ap01",
       "display_name": "AP01 Baseline",
       "status": "completed",
-      "started_at": "2026-07-28T22:53:31+00:00",
-      "finished_at": "2026-07-28T23:01:08+00:00",
-      "runtime_seconds": 448.84849440200196
+      "started_at": "2026-07-29T16:40:59+00:00",
+      "finished_at": "2026-07-29T16:43:58+00:00",
+      "runtime_seconds": 176.67069812800037
     },
     {
       "id": "comparison",
       "display_name": "Normalize and compare method results",
       "status": "completed",
-      "started_at": "2026-07-28T23:01:09+00:00",
-      "finished_at": "2026-07-28T23:01:09+00:00",
-      "runtime_seconds": 0.1289707090036245
+      "started_at": "2026-07-29T16:43:58+00:00",
+      "finished_at": "2026-07-29T16:43:58+00:00",
+      "runtime_seconds": 0.050618089000636246
     },
     {
       "id": "finalize",
       "display_name": "Write final report",
       "status": "completed",
-      "started_at": "2026-07-28T23:01:09+00:00",
-      "finished_at": "2026-07-28T23:01:09+00:00",
-      "runtime_seconds": 0.032431045998237096
+      "started_at": "2026-07-29T16:43:58+00:00",
+      "finished_at": "2026-07-29T16:43:58+00:00",
+      "runtime_seconds": 0.02850608600056148
     }
   ],
-  "resolved_config_sha256": "34539113c0a62d599bfc1a5e39c37929b36bcba33790e6f624f5bcd4dfc96418",
+  "resolved_config_sha256": "0e3ecb9be5b8dadf4b9d26a89c0148dc01b80ef60021181af731d2b683e9b5d5",
   "moving_intrinsics": {
     "profile": null,
-    "path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/dataset/raw_images/camera_info/moving_calib_camera.json",
+    "path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/dataset/raw_images/camera_info/moving_calib_camera.json",
     "sha256": "0b7e48c1466153b417ee4e654569bfd03c04b3abd3207bdc0961e948d47f6c93",
     "width": 1280,
     "height": 720,
     "distortion_model": "plumb_bob"
   },
   "input_id": "input_0ffd7d57d0b8",
-  "experiment_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/results",
+  "experiment_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/results",
   "observation_id": "detection_9fc5bf6dc969",
-  "observations_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/dataset/observations",
+  "observations_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/dataset/observations",
+  "dataset_observation_evidence_reused": true,
   "colmap_resolution": {
     "requested_executable": "auto",
     "resolved_executable": "/usr/bin/colmap",
@@ -150,13 +151,81 @@
       19,
       20
     ],
-    "evaluation_anchor_marker_id": null
+    "evaluation_anchor_marker_id": 14
+  },
+  "effective_observation_quality": {
+    "minimum_marker_area_ratio": 8e-06,
+    "maximum_pnp_reprojection_error_px": 25.0,
+    "require_positive_depth": true,
+    "maximum_marker_distance_m": "disabled"
+  },
+  "observation_quality_sources": {
+    "minimum_marker_area_ratio": "global",
+    "maximum_pnp_reprojection_error_px": "global",
+    "require_positive_depth": "global",
+    "maximum_marker_distance_m": "global"
+  },
+  "automatic_recommendations": {
+    "ap01_root_camera": "cam_edge_3",
+    "ap02_reference_marker_id": 7,
+    "ap03_single_scale_marker_id": 0,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "evaluation_anchor_marker_id": 20
+  },
+  "final_decisions": {
+    "ap01_root_camera": "cam_edge_3",
+    "ap02_reference_marker_id": 7,
+    "ap03_single_scale_marker_id": 0,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "evaluation_anchor_marker_id": 14
   },
   "method_id": "ap01",
-  "method_fingerprint": "f238b30c9a85fe37b46776e2007d0c7e37de04d5a014155209470ad61b908042",
+  "method_fingerprint": "dd639d7d6186f4d62e32ebbcf585a1eb5a53e5d422ba852a38d8a557d55645b1",
   "variant": "root_cam_edge_3",
   "variant_target": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap01/root_cam_edge_3",
-  "completed_at": "2026-07-28T23:01:09+00:00",
+  "completed_at": "2026-07-29T16:43:58+00:00",
   "intended_result_target": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap01/root_cam_edge_3",
-  "published_result": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap01__baseline__01/completed"
+  "published_result": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/jobs/route2__ap01__baseline__01/completed"
 }

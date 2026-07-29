@@ -1,19 +1,19 @@
 {
-  "prepare_inputs": 4.910542262005038,
+  "prepare_inputs": 2.3540407979999145,
   "_structured": {
     "prepare_inputs": {
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "prepare_inputs",
       "stage_name": "Prepare canonical inputs and provenance",
       "stage_index": 1,
       "stage_count": 8,
-      "stage_elapsed_seconds": 4.91056957100227,
-      "job_elapsed_seconds": 5.542154141003266,
-      "queue_elapsed_seconds": 1082.311360406995,
-      "batch_elapsed_seconds": 1082.819866742997,
+      "stage_elapsed_seconds": 2.354067005999241,
+      "job_elapsed_seconds": 2.606734087999939,
+      "queue_elapsed_seconds": 1005.8222740919991,
+      "batch_elapsed_seconds": 1006.365479103999,
       "log": null,
       "counts": {}
     },
@@ -21,15 +21,15 @@
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "validate_dataset",
       "stage_name": "Validate the canonical dataset",
       "stage_index": 2,
       "stage_count": 8,
-      "stage_elapsed_seconds": 0.2133570809965022,
-      "job_elapsed_seconds": 9.137040322995745,
-      "queue_elapsed_seconds": 1085.9062465889874,
-      "batch_elapsed_seconds": 1086.4147529249894,
+      "stage_elapsed_seconds": 0.13486965500123915,
+      "job_elapsed_seconds": 4.811745832001179,
+      "queue_elapsed_seconds": 1008.0272858360004,
+      "batch_elapsed_seconds": 1008.5704908480002,
       "log": null,
       "counts": {}
     },
@@ -37,15 +37,15 @@
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "detect_markers",
       "stage_name": "Detect shared ArUco observations and debug images",
       "stage_index": 3,
       "stage_count": 8,
-      "stage_elapsed_seconds": 0.05406260000017937,
-      "job_elapsed_seconds": 9.226698886996019,
-      "queue_elapsed_seconds": 1085.9959051529877,
-      "batch_elapsed_seconds": 1086.5044114889897,
+      "stage_elapsed_seconds": 0.04524449699965771,
+      "job_elapsed_seconds": 4.886917773001187,
+      "queue_elapsed_seconds": 1008.1024577770004,
+      "batch_elapsed_seconds": 1008.6456627890002,
       "log": null,
       "counts": {}
     },
@@ -53,15 +53,15 @@
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "observation_quality",
       "stage_name": "Apply immutable checks and job-specific observation quality",
       "stage_index": 4,
       "stage_count": 8,
-      "stage_elapsed_seconds": 0.8112392350012669,
-      "job_elapsed_seconds": 10.067814453999745,
-      "queue_elapsed_seconds": 1086.8370207199914,
-      "batch_elapsed_seconds": 1087.3455270559934,
+      "stage_elapsed_seconds": 0.33794653799850494,
+      "job_elapsed_seconds": 5.2538912130003155,
+      "queue_elapsed_seconds": 1008.4694312169995,
+      "batch_elapsed_seconds": 1009.0126362289993,
       "log": null,
       "counts": {}
     },
@@ -69,15 +69,15 @@
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "analyze_selections",
       "stage_name": "Analyze root-camera and method-marker candidates",
       "stage_index": 5,
       "stage_count": 8,
-      "stage_elapsed_seconds": 0.14486880600452423,
-      "job_elapsed_seconds": 10.23262321400398,
-      "queue_elapsed_seconds": 1087.0018294799956,
-      "batch_elapsed_seconds": 1087.5103358159977,
+      "stage_elapsed_seconds": 0.08612266599811846,
+      "job_elapsed_seconds": 5.363532510000368,
+      "queue_elapsed_seconds": 1008.5790725139996,
+      "batch_elapsed_seconds": 1009.1222775259994,
       "log": null,
       "counts": {}
     },
@@ -85,33 +85,31 @@
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "method_ap02",
       "stage_name": "AP02 Baseline",
       "stage_index": 6,
       "stage_count": 8,
-      "stage_elapsed_seconds": 3658.8892798580055,
-      "job_elapsed_seconds": 3670.299955484006,
-      "queue_elapsed_seconds": 4747.069161749998,
-      "batch_elapsed_seconds": 4747.577668086,
+      "stage_elapsed_seconds": 1217.0716817440007,
+      "job_elapsed_seconds": 1222.7451702830003,
+      "queue_elapsed_seconds": 2225.9607102869995,
+      "batch_elapsed_seconds": 2226.5039152989993,
       "log": null,
-      "counts": {
-        "optimizer_iteration": 53
-      }
+      "counts": {}
     },
     "comparison": {
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "comparison",
       "stage_name": "Normalize and compare method results",
       "stage_index": 7,
       "stage_count": 8,
-      "stage_elapsed_seconds": 0.047349429994937964,
-      "job_elapsed_seconds": 3670.377189285995,
-      "queue_elapsed_seconds": 4747.146395551987,
-      "batch_elapsed_seconds": 4747.654901887989,
+      "stage_elapsed_seconds": 0.056372212999121984,
+      "job_elapsed_seconds": 1222.834679615,
+      "queue_elapsed_seconds": 2226.050219618999,
+      "batch_elapsed_seconds": 2226.593424630999,
       "log": null,
       "counts": {}
     },
@@ -119,47 +117,47 @@
       "event": "stage_completed",
       "job_id": "route2__ap02__combined_nfev_60__02",
       "job_index": 2,
-      "job_count": 3,
+      "job_count": 4,
       "stage_id": "finalize",
       "stage_name": "Write final report",
       "stage_index": 8,
       "stage_count": 8,
-      "stage_elapsed_seconds": 0.023101193000911735,
-      "job_elapsed_seconds": 3670.423860037001,
-      "queue_elapsed_seconds": 4747.1930663029925,
-      "batch_elapsed_seconds": 4747.701572638995,
+      "stage_elapsed_seconds": 0.027157751999766333,
+      "job_elapsed_seconds": 1222.887446154,
+      "queue_elapsed_seconds": 2226.102986157999,
+      "batch_elapsed_seconds": 2226.646191169999,
       "log": null,
       "counts": {}
     }
   },
-  "validate_dataset": 0.21333008300280198,
-  "detect_markers": 0.05403365999518428,
-  "observation_quality": 0.811207906997879,
-  "analyze_selections": 0.1448353970044991,
+  "validate_dataset": 0.13482440100051463,
+  "detect_markers": 0.04521942900100839,
+  "observation_quality": 0.3379118599987123,
+  "analyze_selections": 0.08607751800082042,
   "_sub_stages": {
     "ap02_build_graph": {
-      "ap02.build_graph": 0.51
+      "ap02.build_graph": 0.232
     },
     "ap02_component_diagnostics": {
-      "ap02.component_diagnostics": 0.071
+      "ap02.component_diagnostics": 0.022
     },
     "ap02_static_initialization": {
-      "ap02.initialize.static_only": 1.052
+      "ap02.initialize.static_only": 0.537
     },
     "ap02_static_ba": {
-      "ap02.optimize.static_only": 5.372
+      "ap02.optimize.static_only": 3.632
     },
     "ap02_combined_initialization": {
-      "ap02.initialize.with_moving": 1.302
+      "ap02.initialize.with_moving": 0.718
     },
     "ap02_combined_ba": {
-      "ap02.optimize.with_moving": 3644.059
+      "ap02.optimize.with_moving": 1208.732
     },
     "ap02_report": {
-      "ap02.report": 0.06
+      "ap02.report": 0.042
     }
   },
-  "method_ap02": 3658.889255383998,
-  "comparison": 0.047317068005213514,
-  "finalize": 0.023096299002645537
+  "method_ap02": 1217.071656461998,
+  "comparison": 0.056329597002331866,
+  "finalize": 0.02715382400128874
 }

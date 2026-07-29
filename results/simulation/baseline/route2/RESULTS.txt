@@ -3,14 +3,56 @@ SIMULATION CALIBRATION RESULTS — CAMERA-TO-CAMERA VS GROUND TRUTH
 
 Experiment: route2
 Simulation parameters: frame_timeout_seconds=3.0, lighting=baseline, lighting_scale=1.0, motion_blur_angle_deg=0.0, motion_blur_kernel=0, moving_height=720, moving_hfov_deg=69.1, moving_width=1280, post_pose_skip=5, route=route2, route_sampling_strategy=original_route_poses, settle_seconds=0.35, startup_timeout_seconds=60.0, target_route_frames=189
+Common evaluation anchor: marker 14 (configured auto; frozen during preflight)
+Anchor reason: manual post-preflight selection from every raw detected marker ID
 
 METHOD / VARIANT SUMMARY
 ------------------------------------------------------------------------------------------------------------------------------------------
-Method | Variant                                                                          | Artifact  | Quality                 | Pairs | mean t [cm] | mean r [deg] | max t [cm] | max r [deg]
--------+----------------------------------------------------------------------------------+-----------+-------------------------+-------+-------------+--------------+------------+------------
-ap01   | root_cam_edge_3                                                                  | available | converged               | 0     | -           | -            | -          | -          
-ap02   | combined_nfev_60__ref_marker_7                                                   | available | optimizer_limit_reached | 0     | -           | -            | -          | -          
-ap03   | multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 | available | converged               | 0     | -           | -            | -          | -          
+Method | Variant                                                                          | Artifact  | Quality                 | Pairs | mean t [cm] | mean r [deg] | max t [cm] | max r [deg] | Key configuration                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+-------+----------------------------------------------------------------------------------+-----------+-------------------------+-------+-------------+--------------+------------+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ap01   | root_cam_edge_3                                                                  | available | converged               | 0     | -           | -            | -          | -           | evaluation_anchor_marker_id=14, quality_area_ratio=8e-06, quality_pnp_rmse_px=25.0, quality_positive_depth=True, quality_max_distance_m=disabled, quality_sources=maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global, aruco_detection_mode=baseline, root_camera=cam_edge_3, top_moving_per_marker=8, scale_top_per_marker=30, matcher=exhaustive, gpu_requested=auto, gpu_resolved=true, maximum_image_size=2400, maximum_features=8192, mapper_minimum_matches=8                                                                   
+ap02   | combined_nfev_60__ref_marker_7                                                   | available | optimizer_limit_reached | 0     | -           | -            | -          | -           | evaluation_anchor_marker_id=14, quality_area_ratio=8e-06, quality_pnp_rmse_px=25.0, quality_positive_depth=True, quality_max_distance_m=disabled, quality_sources=maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global, aruco_detection_mode=baseline, reference_marker_id=7, top_per_marker=8, top_per_marker_pair=4, static_max_nfev=100, combined_max_nfev=60, loss=soft_l1, loss_scale_px=3.0                                                                                                                                      
+ap02   | combined_nfev_80__ref_marker_7                                                   | available | converged               | 0     | -           | -            | -          | -           | evaluation_anchor_marker_id=14, quality_area_ratio=8e-06, quality_pnp_rmse_px=25.0, quality_positive_depth=True, quality_max_distance_m=disabled, quality_sources=maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global, aruco_detection_mode=baseline, reference_marker_id=7, top_per_marker=8, top_per_marker_pair=4, static_max_nfev=100, combined_max_nfev=80, loss=soft_l1, loss_scale_px=3.0                                                                                                                                      
+ap03   | multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 | available | converged               | 0     | -           | -            | -          | -           | evaluation_anchor_marker_id=14, quality_area_ratio=8e-06, quality_pnp_rmse_px=25.0, quality_positive_depth=True, quality_max_distance_m=disabled, quality_sources=maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global, aruco_detection_mode=baseline, single_scale_marker_id=0, multi_marker_count=20, matcher=exhaustive, gpu_requested=auto, gpu_resolved=true, maximum_image_size=2400, maximum_features=8192, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+
+SCALE COMPARISON
+------------------------------------------------------------------------------------------------------------------------------------------
+Method | Variant                                                                          | Scale mechanism            | Scale [m/COLMAP unit] | Used/total | Relative std
+-------+----------------------------------------------------------------------------------+----------------------------+-----------------------+------------+-------------
+ap01   | root_cam_edge_3                                                                  | marker-motion pair scale   | 0.769069              | 3058/4032  | 0.068712    
+ap02   | combined_nfev_60__ref_marker_7                                                   | metric marker-graph BA     | n/a (already metric)  | -          | -           
+ap02   | combined_nfev_80__ref_marker_7                                                   | metric marker-graph BA     | n/a (already metric)  | -          | -           
+ap03   | multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 | marker-corner RANSAC scale | 0.789714              | 113/120    | 0.022371    
 
 DETAILED CAMERA-PAIR RESULTS
 ------------------------------------------------------------------------------------------------------------------------------------------
+
+METHOD REPORTS AND DETAIL ARTIFACTS
+------------------------------------------------------------------------------------------------------------------------------------------
+- methods/ap01/root_cam_edge_3/RESULT.txt
+  - methods/ap01/root_cam_edge_3/diagnostics/method/candidates/AP01_RELAY_SELECTION.json
+  - methods/ap01/root_cam_edge_3/diagnostics/method/metric_scale/SCALE_DIAGNOSTICS.json
+- methods/ap02/combined_nfev_60__ref_marker_7/RESULT.txt
+  - methods/ap02/combined_nfev_60__ref_marker_7/diagnostics/method/aruco_observations/ap02_frame_selection.json
+  - methods/ap02/combined_nfev_60__ref_marker_7/diagnostics/method/graph_ba/static_only/ap02_optimization_history.csv
+  - methods/ap02/combined_nfev_60__ref_marker_7/diagnostics/method/graph_ba/with_moving/ap02_optimization_history.csv
+  - methods/ap02/combined_nfev_60__ref_marker_7/diagnostics/method/graph_ba/with_moving/ap02_optimization_summary.json
+- methods/ap02/combined_nfev_80__ref_marker_7/RESULT.txt
+  - methods/ap02/combined_nfev_80__ref_marker_7/diagnostics/method/aruco_observations/ap02_frame_selection.json
+  - methods/ap02/combined_nfev_80__ref_marker_7/diagnostics/method/graph_ba/static_only/ap02_optimization_history.csv
+  - methods/ap02/combined_nfev_80__ref_marker_7/diagnostics/method/graph_ba/with_moving/ap02_optimization_history.csv
+  - methods/ap02/combined_nfev_80__ref_marker_7/diagnostics/method/graph_ba/with_moving/ap02_optimization_summary.json
+- methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/RESULT.txt
+  - methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json
+
+
+DIRECT COMMON-ANCHOR CAMERA POSES VS GROUND TRUTH
+------------------------------------------------------------------------------------------------------------------------------------------
+Unavailable: the frozen anchor or a method-specific anchor export is missing.
+Detailed values: evaluations/anchor_camera_gt.csv
+
+RVIZ VISUALIZATION
+------------------------------------------------------------------------
+Status: OK
+Manifest: visualization/visualization_manifest.json
+Open from rigcal View results; each window uses an isolated ROS_DOMAIN_ID.

@@ -20,6 +20,7 @@ from camera_rig_calibration.registry import (
 from camera_rig_calibration.wizard import (
     METHOD_JOB_GROUPS,
     _edit_method_job,
+    _format_setting_value,
     _method_queue,
     _new_method_job,
     _setting_rows,
@@ -183,6 +184,57 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
         "maximum_features",
     } <= ap03
     assert "label" not in ap01 | ap02 | ap03
+
+
+def test_method_quality_table_shows_effective_absolute_values_without_mutation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    register_builtin_components()
+    job = _new_method_job("ap02", prompt_for_single_marker=False)
+    before = job.methods.model_dump(mode="python")
+    rows = {
+        row[0]: row
+        for row in _setting_rows(job, METHOD_JOB_GROUPS)
+    }
+
+    assert rows["quality_override_reprojection"][3:5] == (25.0, 25.0)
+    assert rows["quality_override_area"][3:5] == (
+        0.000008,
+        0.000008,
+    )
+    assert rows["quality_override_positive_depth"][3:5] == (
+        True,
+        True,
+    )
+    assert rows["quality_override_distance"][3:5] == (
+        "disabled",
+        "disabled",
+    )
+    assert _format_setting_value(0.000008) == "0.000008"
+    assert _format_setting_value(0.000000000001) == "0.000000000001"
+    assert _format_setting_value(25.0) == "25.0"
+    assert _format_setting_value(True) == "true"
+
+    monkeypatch.setattr(
+        typer,
+        "prompt",
+        lambda *args, **kwargs: "",
+    )
+    stream = StringIO()
+    _edit_method_job(
+        Console(
+            file=stream,
+            force_terminal=False,
+            width=220,
+        ),
+        job,
+    )
+    rendered = stream.getvalue()
+
+    assert "0.000008" in rendered
+    assert "8e-06" not in rendered
+    assert "inherit (effective" not in rendered
+    assert job.methods.model_dump(mode="python") == before
 
 
 def test_active_package_never_imports_historical_run_scripts() -> None:

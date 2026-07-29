@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import csv
+import json
+
 import pytest
 
+from camera_rig_calibration.methods.ap02.build_graph import run as build_graph
 from camera_rig_calibration.methods.ap02.frame_selection import (
     AP02FrameSelectionError,
     select_ap02_frames,
@@ -101,3 +105,45 @@ def test_ap02_frame_tie_breaker_uses_ascending_string_id() -> None:
     )
 
     assert selection.selected_frame_ids == ("frame_alpha",)
+
+
+def test_ap02_build_graph_records_requested_frame_limits(
+    tmp_path,
+) -> None:
+    observations_root = tmp_path / "observations"
+    observations_root.mkdir()
+    rows = _fixture_rows()
+    source = observations_root / "shared_all_aruco_observations.csv"
+    with source.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+
+    result = build_graph(
+        observations_root=observations_root,
+        output_root=tmp_path / "ap02",
+        camera_ids=("cam_1", "cam_2"),
+        reference_marker_id=1,
+        reference_marker_maximum_frames=None,
+        top_per_marker=1,
+        top_per_marker_pair=1,
+        maximum_total_frames=1,
+    )
+
+    assert result.status == "COMPLETED"
+    stage_root = tmp_path / "ap02" / "02_aruco_observations"
+    manifest = json.loads(
+        (stage_root / "stage_manifest.json").read_text(encoding="utf-8")
+    )
+    assert manifest["parameters"]["frame_selection"] == {
+        "maximum_total_frames": 1,
+        "reference_marker_maximum_frames": None,
+        "top_per_marker": 1,
+        "top_per_marker_pair": 1,
+    }
+    selection = json.loads(
+        (stage_root / "ap02_frame_selection.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert selection["selected_frame_ids"] == ["moving_frame_1"]

@@ -1,6 +1,6 @@
 {
   "camera_transform_convention": "T_world_camera_optical maps OpenCV camera coordinates to world",
-  "generated_at": "2026-07-28T22:43:03+00:00",
+  "generated_at": "2026-07-29T16:27:20+00:00",
   "layout_version": 2,
   "marker_transform_convention": "T_world_marker_opencv maps OpenCV ArUco coordinates to world",
   "markers": {

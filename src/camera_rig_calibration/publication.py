@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import load_config
+from .anchor_export import export_method_anchor_poses
 from .dataset.discovery import safe_id
 from .evaluation.reporting import write_scientific_experiment_reports
 from .experiments import (
@@ -578,6 +579,9 @@ def _publish_success(
         "",
     ]
     (incoming / "RESULT.txt").write_text("\n".join(lines), encoding="utf-8")
+    # Derive the common-anchor export only from the already completed primary
+    # method artifacts. This never invokes or modifies a calibration method.
+    export_method_anchor_poses(incoming)
     target.parent.mkdir(parents=True, exist_ok=True)
     _atomic_replace(incoming, target)
     return target, "completed"
@@ -762,6 +766,19 @@ def _comparison_rows(root: Path) -> list[dict[str, Any]]:
                     "artifact_status", payload.get("status", "available")
                 ),
                 "quality_status": payload.get("quality_status", "unknown"),
+                "calibration_status": payload.get(
+                    "calibration_status",
+                    payload.get("artifact_status", "available"),
+                ),
+                "evaluation_status": payload.get(
+                    "evaluation_status", "not_run"
+                ),
+                "anchor_export_status": payload.get(
+                    "anchor_export_status", "ANCHOR_NOT_AVAILABLE"
+                ),
+                "visualization_status": payload.get(
+                    "visualization_status", "unavailable"
+                ),
                 "warnings": payload.get("warnings", []),
                 "config_summary": payload.get("config_summary", {}),
                 "metrics": payload.get("metrics", {}),
@@ -810,6 +827,9 @@ def _write_inventory_reports(
         "evaluation_path": "evaluations",
         "human_report": "RESULTS.txt",
         "quality_status": "warnings" if warning_count else "ok",
+        "visualization": _read_json(
+            root / "visualization" / "visualization_manifest.json"
+        ),
         "generated_at": _now(),
     }
     _write_json(root / "COMPARISON.json", comparison)
@@ -824,6 +844,10 @@ def _write_inventory_reports(
         "warning",
         "artifact_status",
         "quality_status",
+        "calibration_status",
+        "evaluation_status",
+        "anchor_export_status",
+        "visualization_status",
         "config_summary",
     ]
     with (root / "COMPARISON.csv").open("w", newline="", encoding="utf-8") as handle:
@@ -855,6 +879,9 @@ def _write_inventory_reports(
         "available_methods": successful,
         "failed_attempts": failed,
         "quality_warnings": warning_count,
+        "visualization": _read_json(
+            root / "visualization" / "visualization_manifest.json"
+        ),
         "methods": rows,
         "updated_at": _now(),
     }
@@ -914,7 +941,7 @@ def reconcile_existing_experiment(
 
     complete_existing_dataset(dataset_root, root)
     if category == "real_vehicle":
-        run_real_marker_consistency(root, dataset_root, force=True)
+        run_real_marker_consistency(root, dataset_root, force=False)
     payload = write_scientific_experiment_reports(
         root,
         dataset_root=dataset_root,

@@ -63,6 +63,14 @@ def run(
 ) -> StageResult:
     stage_root = output_root / "02_aruco_observations"
     source = observations_root / "shared_all_aruco_observations.csv"
+    frame_selection_limits = {
+        "reference_marker_maximum_frames": (
+            reference_marker_maximum_frames
+        ),
+        "top_per_marker": top_per_marker,
+        "top_per_marker_pair": top_per_marker_pair,
+        "maximum_total_frames": maximum_total_frames,
+    }
 
     def action() -> dict[str, Path | int]:
         stage_root.mkdir(parents=True, exist_ok=True)
@@ -71,12 +79,7 @@ def run(
             accepted_rows,
             camera_ids=camera_ids,
             reference_marker_id=reference_marker_id,
-            reference_marker_maximum_frames=(
-                reference_marker_maximum_frames
-            ),
-            top_per_marker=top_per_marker,
-            top_per_marker_pair=top_per_marker_pair,
-            maximum_total_frames=maximum_total_frames,
+            **frame_selection_limits,
         )
         write_ap02_frame_selection(frame_selection, stage_root)
         rows = list(frame_selection.selected_rows)
@@ -217,7 +220,7 @@ def run(
         parameters={
             "reference_marker_id": reference_marker_id,
             "weighted_graph": False,
-            "frame_selection": frame_selection.summary["limits"],
+            "frame_selection": frame_selection_limits,
         },
     )
 

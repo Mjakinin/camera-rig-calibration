@@ -1,6 +1,6 @@
 {
-  "captured_at": "2026-07-28T22:52:41.476163+00:00",
-  "capture_id": "capture_20260729_004213_862445",
+  "captured_at": "2026-07-29T16:35:39.095612+00:00",
+  "capture_id": "capture_20260729_182525_506545",
   "preset": "bus_batch_capture",
   "world": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf",
   "world_name": "bus_real_data_camera_layout",

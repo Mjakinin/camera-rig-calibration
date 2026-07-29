@@ -12,6 +12,7 @@ import tempfile
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
+from decimal import Decimal
 from pathlib import Path
 from typing import Iterable
 
@@ -86,9 +87,14 @@ from .runtime import PipelineOrchestrator
 from .observation_quality import filter_observations
 from .observations import ResolvedSelections, resolve_selections
 from .queueing import SelectionReviewJob, save_batch
+from .publication import reconcile_existing_experiment
+from .visualization import launch_isolated_rviz
 from .storage import (
-    build_cleanup_plan,
-    build_data_local_cleanup_plan,
+    CleanupPlan,
+    build_dataset_cleanup_plan,
+    build_results_cleanup_plan,
+    build_temporary_cleanup_plan,
+    combine_cleanup_plans,
     execute_cleanup,
 )
 
@@ -3575,20 +3581,33 @@ def _setting_rows(
         None,
     )
 
-    def override_text(field_name: str) -> str:
-        if method_quality is None:
-            return "inherit"
-        value = getattr(method_quality, field_name)
-        inherited = getattr(job.observation_quality, field_name)
+    def effective_override_value(field_name: str) -> object:
+        value = (
+            getattr(method_quality, field_name)
+            if method_quality is not None
+            else None
+        )
         return (
-            f"inherit (effective {inherited})"
+            getattr(job.observation_quality, field_name)
             if value is None
-            else str(value)
+            else value
         )
 
+    def default_quality_value(field_name: str) -> object:
+        return getattr(defaults.observation_quality, field_name)
+
+    evaluation_anchor_current = (
+        "manual after preflight"
+        if job.evaluation.anchor_selection_mode == "review_once"
+        else (
+            f"marker {job.evaluation.anchor_marker_id}"
+            if isinstance(job.evaluation.anchor_marker_id, int)
+            else "auto"
+        )
+    )
     rows: list[tuple[str, str, str, object, object, str]] = [
         ("evaluation_enabled", "COMMON EVALUATION", "Common evaluation enabled", job.evaluation.enabled, defaults.evaluation.enabled, "Disable only when no repeat-supported common marker can be frozen; calibration results remain available without cross-method RMSE."),
-        ("evaluation_anchor", "COMMON EVALUATION", "Evaluation anchor", job.evaluation.anchor_marker_id, defaults.evaluation.anchor_marker_id, "auto freezes one compatible marker before any method starts."),
+        ("evaluation_anchor", "COMMON EVALUATION", "Common evaluation and export anchor", evaluation_anchor_current, "auto", "Auto freezes the strongest compatible marker. Manual lists every detected ID once after preflight, including warned candidates."),
         ("evaluation_reprojection", "COMMON EVALUATION", "Evaluation reprojection threshold [px]", job.evaluation.reprojection_threshold_px, defaults.evaluation.reprojection_threshold_px, "Smaller requires tighter common post-hoc triangulation support."),
         ("evaluation_inliers", "COMMON EVALUATION", "Evaluation minimum inliers", job.evaluation.minimum_inliers, defaults.evaluation.minimum_inliers, "Higher requires more common-support observations."),
         ("evaluation_ransac", "COMMON EVALUATION", "Evaluation RANSAC iterations", job.evaluation.ransac_iterations, defaults.evaluation.ransac_iterations, "Higher tests more hypotheses and increases evaluation runtime."),
@@ -3602,10 +3621,10 @@ def _setting_rows(
         ("quality_area", "OBSERVATION QUALITY BASELINE", "Global minimum marker area ratio", job.observation_quality.minimum_marker_area_ratio, 0.000008, "Marker pixels divided by image pixels; larger rejects small/distant detections independently of resolution."),
         ("quality_positive_depth", "OBSERVATION QUALITY BASELINE", "Global require positive marker depth", job.observation_quality.require_positive_depth, True, "Rejects PnP poses behind the camera; disable only for a documented diagnostic."),
         ("quality_distance", "OBSERVATION QUALITY BASELINE", "Global maximum marker distance [m]", job.observation_quality.maximum_marker_distance_m, "disabled", "Smaller retains only near PnP observations; disabled applies no distance cap."),
-        ("quality_override_reprojection", "OBSERVATION QUALITY OVERRIDE", "Method maximum PnP reprojection RMSE [px]", override_text("maximum_pnp_reprojection_error_px"), "inherit", "inherit uses the queue baseline; an explicit value affects only this method row."),
-        ("quality_override_area", "OBSERVATION QUALITY OVERRIDE", "Method minimum marker area ratio", override_text("minimum_marker_area_ratio"), "inherit", "inherit uses the queue baseline; larger values reject smaller marker detections."),
-        ("quality_override_positive_depth", "OBSERVATION QUALITY OVERRIDE", "Method require positive marker depth", override_text("require_positive_depth"), "inherit", "inherit uses the queue baseline; explicit yes/no affects only this method."),
-        ("quality_override_distance", "OBSERVATION QUALITY OVERRIDE", "Method maximum marker distance [m]", override_text("maximum_marker_distance_m"), "inherit", "inherit uses the queue baseline; disabled explicitly removes the distance cap."),
+        ("quality_override_reprojection", "OBSERVATION QUALITY OVERRIDE", "Method maximum PnP reprojection RMSE [px]", effective_override_value("maximum_pnp_reprojection_error_px"), default_quality_value("maximum_pnp_reprojection_error_px"), "An unset method override internally uses the queue baseline; an explicit value affects only this method row."),
+        ("quality_override_area", "OBSERVATION QUALITY OVERRIDE", "Method minimum marker area ratio", effective_override_value("minimum_marker_area_ratio"), default_quality_value("minimum_marker_area_ratio"), "An unset method override internally uses the queue baseline; larger values reject smaller marker detections."),
+        ("quality_override_positive_depth", "OBSERVATION QUALITY OVERRIDE", "Method require positive marker depth", effective_override_value("require_positive_depth"), default_quality_value("require_positive_depth"), "An unset method override internally uses the queue baseline; explicit yes/no affects only this method."),
+        ("quality_override_distance", "OBSERVATION QUALITY OVERRIDE", "Method maximum marker distance [m]", effective_override_value("maximum_marker_distance_m"), default_quality_value("maximum_marker_distance_m"), "An unset method override internally uses the queue baseline; disabled explicitly removes the distance cap."),
     ]
     if method_quality is None:
         rows = [
@@ -3718,6 +3737,15 @@ def _bool_value(value: str) -> bool:
     raise ValueError("enter yes or no")
 
 
+def _format_setting_value(value: object) -> str:
+    """Format wizard values without scientific notation or Python booleans."""
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, float):
+        return format(Decimal(str(value)), "f")
+    return str(value)
+
+
 def _optional_positive_int(value: str) -> int | None:
     normalized = value.strip().lower()
     if normalized in {"", "none", "null", "unlimited", "disabled"}:
@@ -3778,7 +3806,12 @@ def _edit_method_job(
         table.add_column("Meaning", overflow="fold")
         for index, (_, group, label, current, default, meaning) in enumerate(rows, 1):
             table.add_row(
-                str(index), group, label, str(current), str(default), meaning
+                str(index),
+                group,
+                label,
+                _format_setting_value(current),
+                _format_setting_value(default),
+                meaning,
             )
         console.print(table)
         selection = typer.prompt(
@@ -3820,7 +3853,27 @@ def _edit_method_job(
                         contexts=selection_contexts,
                     )
                     continue
-                if key == "matcher":
+                if key == "evaluation_anchor":
+                    value = _prompt_enum_choice(
+                        label,
+                        (
+                            "manual"
+                            if job.evaluation.anchor_selection_mode
+                            == "review_once"
+                            else "auto"
+                        ),
+                        (
+                            (
+                                "auto",
+                                "freeze the strongest repeat-supported marker without pausing",
+                            ),
+                            (
+                                "manual",
+                                "show every detected marker once after preflight",
+                            ),
+                        ),
+                    )
+                elif key == "matcher":
                     value = _prompt_enum_choice(
                         label,
                         str(current),
@@ -3875,9 +3928,41 @@ def _edit_method_job(
                         ),
                     )
                 else:
+                    prompt_default = _format_setting_value(current)
+                    if key in {
+                        "quality_override_reprojection",
+                        "quality_override_area",
+                        "quality_override_positive_depth",
+                        "quality_override_distance",
+                    }:
+                        override_field = {
+                            "quality_override_reprojection": (
+                                "maximum_pnp_reprojection_error_px"
+                            ),
+                            "quality_override_area": (
+                                "minimum_marker_area_ratio"
+                            ),
+                            "quality_override_positive_depth": (
+                                "require_positive_depth"
+                            ),
+                            "quality_override_distance": (
+                                "maximum_marker_distance_m"
+                            ),
+                        }[key]
+                        method_settings = getattr(
+                            job.methods, job.method_id
+                        )
+                        if (
+                            getattr(
+                                method_settings.observation_quality,
+                                override_field,
+                            )
+                            is None
+                        ):
+                            prompt_default = "inherit"
                     value = typer.prompt(
                         f"{label} (b = back)",
-                        default=str(current),
+                        default=prompt_default,
                     ).strip()
                     if value.lower() in {"b", "back"}:
                         raise WizardBack()
@@ -3890,13 +3975,15 @@ def _edit_method_job(
                     update={"enabled": _bool_value(value)}
                 )
             elif key == "evaluation_anchor":
-                anchor: str | int = (
-                    "auto"
-                    if value.lower() in {"auto", "auto_common"}
-                    else int(value)
-                )
                 job.evaluation = job.evaluation.model_copy(
-                    update={"anchor_marker_id": anchor}
+                    update={
+                        "anchor_marker_id": "auto",
+                        "anchor_selection_mode": (
+                            "review_once"
+                            if value.lower() == "manual"
+                            else "auto"
+                        ),
+                    }
                 )
             elif key in {
                 "evaluation_reprojection",
@@ -5595,11 +5682,170 @@ def show_summary(config: RigConfig, config_path: Path, console: Console) -> None
     console.print(table)
 
 
+def _review_common_anchor(
+    selections: list[ResolvedSelections],
+    console: Console,
+) -> tuple[int, bool]:
+    aggregate: dict[int, dict[str, object]] = {}
+    for resolved in selections:
+        inventory = resolved.payload.get("raw_marker_inventory") or [
+            {
+                "id": marker_id,
+                "raw_observations": 0,
+                "static_cameras": [],
+                "moving_frames": 0,
+                "accepted_observations": 0,
+                "compatible": marker_id
+                in resolved.payload["evaluation_anchor"].get(
+                    "observation_candidates", []
+                ),
+                "automatic_candidate": marker_id
+                in resolved.payload["evaluation_anchor"].get(
+                    "automatic_observation_candidates", []
+                ),
+                "issues": [],
+            }
+            for marker_id in resolved.detected_marker_ids
+        ]
+        for item in inventory:
+            marker_id = int(item["id"])
+            row = aggregate.setdefault(
+                marker_id,
+                {
+                    "id": marker_id,
+                    "raw_observations": 0,
+                    "accepted_observations": 0,
+                    "static_cameras": set(),
+                    "moving_frames": 0,
+                    "compatible_jobs": 0,
+                    "automatic_jobs": 0,
+                    "scores": [],
+                    "rmse": [],
+                    "areas": [],
+                    "issues": set(),
+                },
+            )
+            row["raw_observations"] = max(
+                int(row["raw_observations"]),
+                int(item.get("raw_observations") or 0),
+            )
+            row["accepted_observations"] = int(
+                row["accepted_observations"]
+            ) + int(item.get("accepted_observations") or 0)
+            row["static_cameras"].update(item.get("static_cameras") or [])
+            row["moving_frames"] = max(
+                int(row["moving_frames"]),
+                int(item.get("moving_frames") or 0),
+            )
+            row["compatible_jobs"] = int(row["compatible_jobs"]) + int(
+                bool(item.get("compatible"))
+            )
+            row["automatic_jobs"] = int(row["automatic_jobs"]) + int(
+                bool(item.get("automatic_candidate"))
+            )
+            for source, key in (
+                ("median_selection_score", "scores"),
+                ("median_pnp_reprojection_rmse_px", "rmse"),
+                ("median_marker_area_ratio", "areas"),
+            ):
+                value = item.get(source)
+                if value is not None:
+                    row[key].append(float(value))
+            row["issues"].update(str(value) for value in item.get("issues", []))
+    if not aggregate:
+        raise RuntimeError(
+            "Manual common-anchor review found no actually detected marker ID."
+        )
+    job_count = len(selections)
+    compatible = [
+        row
+        for row in aggregate.values()
+        if int(row["automatic_jobs"]) == job_count
+    ]
+
+    def rank(row: dict[str, object]) -> tuple[object, ...]:
+        scores = list(row["scores"])
+        rmse = list(row["rmse"])
+        areas = list(row["areas"])
+        return (
+            int(row["compatible_jobs"]),
+            len(row["static_cameras"]),
+            int(row["moving_frames"]),
+            min(scores) if scores else 0.0,
+            int(row["accepted_observations"]),
+            -(max(rmse) if rmse else float("inf")),
+            min(areas) if areas else 0.0,
+            -int(row["id"]),
+        )
+
+    recommended = max(compatible or list(aggregate.values()), key=rank)
+    ordered = sorted(aggregate.values(), key=lambda row: int(row["id"]))
+    table = Table(title="Common evaluation and export anchor")
+    table.add_column("#", justify="right")
+    table.add_column("Marker ID")
+    table.add_column("Raw")
+    table.add_column("Accepted")
+    table.add_column("Static cameras")
+    table.add_column("Moving frames")
+    table.add_column("Compatible jobs")
+    table.add_column("Assessment", overflow="fold")
+    for index, row in enumerate(ordered, 1):
+        fully_compatible = int(row["compatible_jobs"]) == job_count
+        assessment = (
+            "recommended"
+            if row is recommended
+            else "compatible"
+            if fully_compatible
+            else "problematic: "
+            + (
+                "; ".join(sorted(row["issues"]))
+                or "not supported by every method variant"
+            )
+        )
+        table.add_row(
+            str(index),
+            str(row["id"]),
+            str(row["raw_observations"]),
+            str(row["accepted_observations"]),
+            ",".join(sorted(row["static_cameras"])) or "-",
+            str(row["moving_frames"]),
+            f"{row['compatible_jobs']}/{job_count}",
+            assessment,
+        )
+    console.print(table)
+    default = ordered.index(recommended) + 1
+    while True:
+        raw = str(
+            typer.prompt(
+                "Common anchor marker table number (b = back)",
+                default=default,
+            )
+        ).strip().lower()
+        if raw in {"b", "back", "0"}:
+            raise WizardBack(
+                "Common anchor review paused; prepared observations remain reusable."
+            )
+        if raw.isdigit() and 1 <= int(raw) <= len(ordered):
+            chosen = ordered[int(raw) - 1]
+            break
+        typer.echo(f"Choose a table number from 1 to {len(ordered)}.")
+    warned = int(chosen["compatible_jobs"]) != job_count
+    if warned and not typer.confirm(
+        "This marker is not compatible with every method variant. Continue "
+        "without any fallback anchor? Unsupported exports will be unavailable.",
+        default=False,
+    ):
+        return _review_common_anchor(selections, console)
+    return int(chosen["id"]), warned
+
+
 def review_selection_candidates(
     config: RigConfig,
     resolved: ResolvedSelections,
     run_directory: Path,
     console: Console,
+    *,
+    review_evaluation_anchor: bool = True,
 ) -> dict[str, object]:
     """One attended checkpoint after all static and moving observations exist."""
     payload = resolved.payload
@@ -5608,7 +5854,8 @@ def review_selection_candidates(
             "Intrinsics validate the camera models but do not select a coordinate "
             "origin. The recommendations below use the actual static and moving "
             "ArUco observation graph. These values are frozen before any AP method "
-            "starts; the evaluation anchor is selected separately after methods.",
+            "starts. The common evaluation/export anchor is also frozen here "
+            "when manual review was requested.",
             title="One-time scientific selection review",
         )
     )
@@ -5933,6 +6180,14 @@ def review_selection_candidates(
         "ap03_single_scale_marker_id": single,
         "ap03_multi_marker_ids": multi,
     }
+    evaluation_anchor = resolved.evaluation_anchor_marker_id
+    if (
+        review_evaluation_anchor
+        and config.evaluation.enabled
+        and config.evaluation.anchor_selection_mode == "review_once"
+    ):
+        evaluation_anchor, _ = _review_common_anchor([resolved], console)
+        choices["evaluation_anchor_marker_id"] = evaluation_anchor
     summary = Table(title="Selections to freeze before the method queue")
     summary.add_column("Role")
     summary.add_column("Selected")
@@ -5948,10 +6203,22 @@ def review_selection_candidates(
             ",".join(str(value) for value in multi),
         )
     summary.add_row(
-        "Evaluation anchor",
+        "Common evaluation and export anchor",
         (
-            f"marker {resolved.evaluation_anchor_marker_id} "
-            "(already selected and frozen by preflight)"
+            "pending queue-wide marker review"
+            if (
+                config.evaluation.anchor_selection_mode == "review_once"
+                and not review_evaluation_anchor
+            )
+            else (
+                f"marker {evaluation_anchor} "
+                + (
+                    "(manual post-preflight selection)"
+                    if config.evaluation.anchor_selection_mode
+                    == "review_once"
+                    else "(automatic preflight recommendation)"
+                )
+            )
         ),
     )
     console.print(summary)
@@ -5984,12 +6251,50 @@ def review_queue_selection_candidates(
                 title="Manual selection",
             )
         )
-        decisions[job.entry_id] = review_selection_candidates(
-            job.config,
-            job.selections,
-            run_directory,
+        decisions[job.entry_id] = {}
+        anchor_only_review = (
+            job.config.selection.mode != "review_once"
+            and job.config.evaluation.enabled
+            and job.config.evaluation.anchor_selection_mode == "review_once"
+        )
+        if not anchor_only_review:
+            if (
+                job.config.evaluation.enabled
+                and job.config.evaluation.anchor_selection_mode == "review_once"
+            ):
+                decisions[job.entry_id] = review_selection_candidates(
+                    job.config,
+                    job.selections,
+                    run_directory,
+                    console,
+                    review_evaluation_anchor=False,
+                )
+            else:
+                # Keep the long-standing four-argument reviewer contract for
+                # method-only reviews.  The common anchor has its own
+                # queue-wide review below.
+                decisions[job.entry_id] = review_selection_candidates(
+                    job.config,
+                    job.selections,
+                    run_directory,
+                    console,
+                )
+    anchor_jobs = [
+        job
+        for job in jobs
+        if job.config.evaluation.enabled
+        and job.config.evaluation.anchor_selection_mode == "review_once"
+    ]
+    if anchor_jobs:
+        anchor, warned = _review_common_anchor(
+            [job.selections for job in anchor_jobs],
             console,
         )
+        for job in anchor_jobs:
+            decisions[job.entry_id]["evaluation_anchor_marker_id"] = anchor
+            decisions[job.entry_id][
+                "evaluation_anchor_warning_confirmed"
+            ] = warned
     return decisions
 
 
@@ -6105,6 +6410,13 @@ def show_results(repository_root: Path, console: Console) -> None:
     if selected < 1 or selected > len(entries):
         raise typer.BadParameter("Invalid result number")
     entry = entries[selected - 1]
+    # Layout-v2 scientific products are derived idempotently from published
+    # artifacts on first access. Calibration methods are never rerun here.
+    reconcile_existing_experiment(
+        entry.path,
+        dataset_root=entry.path,
+        category=entry.category,
+    )
     results_txt = entry.path / "RESULTS.txt"
     console.print(
         Panel(
@@ -6126,6 +6438,7 @@ def show_results(repository_root: Path, console: Console) -> None:
     methods.add_column("Method / variant")
     methods.add_column("Artifact")
     methods.add_column("Quality")
+    methods.add_column("Anchor export")
     methods.add_column("Runtime")
     methods.add_column("Coverage")
     methods.add_column("Primary")
@@ -6145,6 +6458,7 @@ def show_results(repository_root: Path, console: Console) -> None:
             f"{row.get('method', '-')}/{row.get('label', '-')}",
             str(row.get("artifact_status") or row.get("status", "-")),
             str(row.get("quality_status") or "-"),
+            str(row.get("anchor_export_status") or "-"),
             f"{float(runtime):.1f}s" if runtime is not None else "-",
             str(row.get("static_camera_count") or "-"),
             str(row.get("primary_result") or "-"),
@@ -6181,6 +6495,7 @@ def show_results(repository_root: Path, console: Console) -> None:
     if marker_map.is_file():
         report_options["4"] = marker_map
         option_labels.append("4 = secondary AP02 marker-map GT")
+    option_labels.append("5 = open isolated RViz visualization")
     choice = str(
         typer.prompt(
             "Read " + ", ".join(option_labels) + ", 0 = back",
@@ -6188,6 +6503,33 @@ def show_results(repository_root: Path, console: Console) -> None:
         )
     ).strip()
     if choice == "0":
+        return
+    if choice == "5":
+        try:
+            session = launch_isolated_rviz(entry.path, repository_root)
+        except RuntimeError as exc:
+            console.print(
+                Panel(
+                    str(exc),
+                    title="RViz visualization unavailable",
+                    border_style="yellow",
+                )
+            )
+            return
+        console.print(
+            Panel(
+                (
+                    f"Session: {session['session_id']}\n"
+                    f"ROS_DOMAIN_ID: {session['ros_domain_id']}\n"
+                    f"PID: {session['pid']}\n"
+                    f"Log: {session['log']}\n\n"
+                    "RViz runs independently in the background. You can open "
+                    "another result without closing this window."
+                ),
+                title="RViz session started",
+                border_style="green",
+            )
+        )
         return
     if choice in report_options:
         selected_report = report_options[choice]
@@ -6232,85 +6574,166 @@ def _human_size(value: int) -> str:
 def cleanup_storage_wizard(
     repository_root: Path, console: Console
 ) -> None:
+    temporary_root = (
+        repository_root.resolve() / "workspace" / "temporary_runs"
+    )
+    active_runs = [
+        path
+        for path in (
+            sorted(temporary_root.iterdir())
+            if temporary_root.is_dir()
+            else ()
+        )
+        if path.is_dir() and _run_process_is_active(path)
+    ]
+    if active_runs:
+        console.print(
+            Panel(
+                "Cleanup was not started because another rigcal calibration "
+                "is still active:\n"
+                + "\n".join(f"- {path}" for path in active_runs)
+                + "\n\nStop the active run first, then open Cleanup storage "
+                "again.",
+                title="Cleanup blocked",
+                border_style="red",
+            )
+        )
+        return
+
     console.print(
         Panel(
-            "Cleanup removes:\n"
-            "- reproducible COLMAP and method caches under workspace/cache\n"
-            "- reproducible workspace artifacts outside active transactions\n\n"
-            "Cleanup keeps:\n"
-            "- canonical raw datasets and every observation file\n"
-            "- ArUco debug images and galleries\n"
-            "- all method results, diagnostics, logs and provenance\n"
-            "- common evaluations and comparisons\n"
-            "- managed intrinsic profiles\n"
-            "- active or resumable transactions",
+            "Choose three storage groups independently. Every selected group "
+            "is shown first and deleted only after one final confirmation.\n\n"
+            "Published results include their embedded canonical raw images, "
+            "observations and diagnostics. Dataset cleanup additionally "
+            "covers legacy datasets/ and workspace/preparation_cache. "
+            "Temporary cleanup covers runs, queues, batches and caches under "
+            "workspace/.\n\n"
+            "Always kept: data_local/, config/intrinsics/, source code and "
+            "simulation assets. rigcal never asks to delete data_local here.",
             title="Cleanup storage",
         )
     )
-    plan = build_cleanup_plan(repository_root)
-    table = Table(title="Reproducible workspace caches")
-    table.add_column("Kind")
-    table.add_column("Targets", justify="right")
-    grouped: dict[str, int] = {}
-    for target in plan.targets:
-        grouped[target.kind] = grouped.get(target.kind, 0) + 1
-    for kind, count in sorted(grouped.items()):
-        table.add_row(kind, str(count))
-    table.add_row("Files", str(plan.file_count))
-    table.add_row("Logical size", _human_size(plan.logical_bytes))
-    table.add_row(
-        "Actually reclaimable (hardlink-aware)",
-        _human_size(plan.reclaimable_bytes),
-    )
-    console.print(table)
-    if plan.protected_paths:
-        console.print(
-            f"[yellow]{len(plan.protected_paths)} active/resumable path(s) "
-            "are protected and excluded.[/yellow]"
-        )
-    if plan.targets and typer.confirm(
-        "Delete generated input and working data?", default=False
-    ):
-        result = execute_cleanup(plan)
-        console.print(
-            "[green]Generated data removed. Scientific results remain. "
-            f"Estimated reclaimed space: "
-            f"{_human_size(int(result['reclaimable_bytes_estimate']))}.[/green]"
-        )
-    elif not plan.targets:
-        console.print("No reproducible workspace cache is eligible for cleanup.")
 
-    if not typer.confirm(
-        "Also delete everything inside data_local/?", default=False
-    ):
-        return
-    local_plan = build_data_local_cleanup_plan(repository_root)
-    if not local_plan.targets:
-        console.print("data_local is already empty.")
-        return
-    local_table = Table(title="data_local contents selected for deletion")
-    local_table.add_column("Path", overflow="fold")
-    local_table.add_column("Type")
-    for target in local_plan.targets:
-        local_table.add_row(
-            str(target.path.relative_to(repository_root)),
-            "directory" if target.path.is_dir() else "file",
+    def review(
+        plan: CleanupPlan,
+        *,
+        title: str,
+        prompt: str,
+    ) -> CleanupPlan | None:
+        if not plan.targets:
+            console.print(f"{title}: already empty.")
+            return None
+        table = Table(title=title)
+        table.add_column("Selected path", overflow="fold")
+        table.add_column("Kind")
+        for target in plan.targets:
+            try:
+                display = target.path.relative_to(
+                    repository_root.resolve()
+                )
+            except ValueError:
+                display = target.path
+            table.add_row(str(display), target.kind)
+        table.add_row(
+            f"{plan.file_count} files",
+            (
+                f"{_human_size(plan.logical_bytes)} logical; "
+                f"{_human_size(plan.reclaimable_bytes)} reclaimable"
+            ),
         )
-    local_table.add_row(
-        f"{local_plan.file_count} files",
-        _human_size(local_plan.reclaimable_bytes),
-    )
-    console.print(local_table)
-    if not typer.confirm(
-        "Permanently delete the listed data_local contents?", default=False
+        console.print(table)
+        return plan if typer.confirm(prompt, default=False) else None
+
+    selected: list[tuple[str, CleanupPlan]] = []
+    for name, plan, title, prompt in (
+        (
+            "results",
+            build_results_cleanup_plan(repository_root),
+            "1. Published results",
+            (
+                "Select all published results, including embedded raw "
+                "datasets, for permanent deletion?"
+            ),
+        ),
+        (
+            "datasets",
+            build_dataset_cleanup_plan(repository_root),
+            "2. Prepared datasets and dataset caches",
+            (
+                "Select all legacy/prepared datasets and dataset caches for "
+                "permanent deletion?"
+            ),
+        ),
+        (
+            "temporary workspace",
+            build_temporary_cleanup_plan(repository_root),
+            "3. Temporary workspace data",
+            (
+                "Select all temporary runs, queues, batches and workspace "
+                "caches for permanent deletion?"
+            ),
+        ),
     ):
-        console.print("data_local was kept.")
+        reviewed = review(plan, title=title, prompt=prompt)
+        if reviewed is not None:
+            selected.append((name, reviewed))
+
+    if not selected:
+        console.print("Nothing was selected. Storage was left unchanged.")
         return
-    result = execute_cleanup(local_plan)
+
+    final_plan = combine_cleanup_plans(
+        *(plan for _, plan in selected)
+    )
     console.print(
-        "[green]data_local contents removed. Results and intrinsics profiles "
-        f"remain. Estimated reclaimed space: "
-        f"{_human_size(int(result['reclaimable_bytes_estimate']))}.[/green]"
+        Panel(
+            "Selected groups: "
+            + ", ".join(name for name, _ in selected)
+            + f"\nTargets: {len(final_plan.targets)}"
+            + f"\nFiles: {final_plan.file_count}"
+            + f"\nReclaimable: {_human_size(final_plan.reclaimable_bytes)}"
+            + "\n\ndata_local/ is not selected and will not be touched.",
+            title="Final permanent-deletion confirmation",
+            border_style="red",
+        )
+    )
+    confirmation = typer.prompt(
+        "Type DELETE to permanently remove exactly the selected storage",
+        default="",
+        show_default=False,
+    ).strip()
+    if confirmation != "DELETE":
+        console.print("Confirmation did not match. Storage was left unchanged.")
+        return
+
+    try:
+        result = execute_cleanup(final_plan)
+    except (OSError, RuntimeError) as exc:
+        _show_input_error(
+            "Cleanup stopped because deletion or verification failed: "
+            f"{exc}"
+        )
+        return
+
+    (repository_root / "results").mkdir(parents=True, exist_ok=True)
+    (repository_root / "workspace").mkdir(parents=True, exist_ok=True)
+    selected_names = {name for name, _ in selected}
+    if "results" in selected_names and index_results(
+        repository_root / "results"
+    ):
+        _show_input_error(
+            "Cleanup verification failed: View results still indexes a "
+            "published experiment."
+        )
+        return
+    console.print(
+        "[green]Cleanup completed and verified. "
+        f"{len(result['removed_targets'])} selected path(s) and "
+        f"{result['file_count']} file(s) were removed. "
+        f"Estimated reclaimed space: "
+        f"{_human_size(int(result['reclaimable_bytes_estimate']))}. "
+        "data_local was not touched.[/green]"
     )
 
 
@@ -6427,8 +6850,17 @@ def _manifest_process_is_active(manifest_path: Path) -> bool:
         return False
     try:
         os.kill(pid, 0)
-        command = Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ")
     except (OSError, ValueError):
+        return False
+    command_path = Path(f"/proc/{pid}/cmdline")
+    if not command_path.is_file():
+        # Windows has no /proc command line. A live PID recorded by a rigcal
+        # manifest is treated conservatively as active instead of risking
+        # deletion underneath another process.
+        return os.name == "nt"
+    try:
+        command = command_path.read_bytes().replace(b"\0", b" ")
+    except OSError:
         return False
     return b"rigcal" in command or b"camera_rig_calibration" in command
 

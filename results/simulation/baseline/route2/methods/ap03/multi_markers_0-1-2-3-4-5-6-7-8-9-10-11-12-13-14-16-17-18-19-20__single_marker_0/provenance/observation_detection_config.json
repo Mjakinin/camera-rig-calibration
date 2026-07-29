@@ -17,5 +17,5 @@
     "parameters": "opencv_defaults"
   },
   "detector_contract": "rigcal_aruco_detector_v2",
-  "observation_input_contract": "all_quality_passed_v1"
+  "observation_input_contract": "raw_detection_with_dimensions_and_area_ratio_v2"
 }

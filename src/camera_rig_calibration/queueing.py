@@ -38,6 +38,7 @@ from .methods.common.aruco_utils import (
 from .observations import (
     ResolvedSelections,
     freeze_selections,
+    write_selection_candidates_csv,
 )
 from .runtime import PipelineOrchestrator, observation_id
 from .preflight import (
@@ -2145,7 +2146,14 @@ class QueueRunner:
                     strict=True,
                 )
                 if report.runnable
-                and config.selection.mode == "review_once"
+                and (
+                    config.selection.mode == "review_once"
+                    or (
+                        config.evaluation.enabled
+                        and config.evaluation.anchor_selection_mode
+                        == "review_once"
+                    )
+                )
                 and report.selections is not None
             ]
             if review_jobs:
@@ -2307,6 +2315,53 @@ class QueueRunner:
                         f"{source}"
                     )
                 shutil.copy2(source, canonical_observations / name)
+            final_anchor = (
+                int(configs[0].evaluation.anchor_marker_id)
+                if isinstance(configs[0].evaluation.anchor_marker_id, int)
+                else None
+            )
+            selection_payload_path = (
+                canonical_observations / "SELECTION_CANDIDATES.json"
+            )
+            selection_payload = json.loads(
+                selection_payload_path.read_text(encoding="utf-8")
+            )
+            selection_payload["evaluation_anchor"].update(
+                {
+                    "selected": final_anchor,
+                    "selection_mode": (
+                        configs[0].evaluation.anchor_selection_mode
+                    ),
+                    "reason": (
+                        "manual post-preflight selection from every raw "
+                        "detected marker ID"
+                        if review_jobs
+                        and any(
+                            "evaluation_anchor_marker_id" in values
+                            for values in overrides_by_job.values()
+                        )
+                        else selection_payload["evaluation_anchor"].get(
+                            "reason"
+                        )
+                    ),
+                    "warning_confirmed": any(
+                        bool(
+                            values.get(
+                                "evaluation_anchor_warning_confirmed"
+                            )
+                        )
+                        for values in overrides_by_job.values()
+                    ),
+                }
+            )
+            for name in (
+                "SELECTION_CANDIDATES.json",
+                "REFERENCE_SELECTIONS.json",
+            ):
+                _write_json(canonical_observations / name, selection_payload)
+            write_selection_candidates_csv(
+                canonical_observations, selection_payload
+            )
             quality_destination = (
                 canonical_observations / "quality" / "queue"
             )
@@ -2321,7 +2376,18 @@ class QueueRunner:
                     "schema_version": 5,
                     "layout_version": 2,
                     "selection_mode": configs[0].selection.mode,
+                    "evaluation_anchor_selection_mode": (
+                        configs[0].evaluation.anchor_selection_mode
+                    ),
                     "reviewed_once": bool(review_jobs),
+                    "evaluation_anchor_warning_confirmed": any(
+                        bool(
+                            values.get(
+                                "evaluation_anchor_warning_confirmed"
+                            )
+                        )
+                        for values in overrides_by_job.values()
+                    ),
                     "jobs": [
                         {
                             "job_id": entry.id,
