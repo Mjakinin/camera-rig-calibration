@@ -18,6 +18,7 @@
   "camera_extrinsics_anchor_json": "camera_extrinsics_anchor.json",
   "camera_extrinsics_anchor_yaml": "camera_extrinsics_anchor.yaml",
   "camera_extrinsics_available": true,
+  "comparison_visibility": "hidden_when_scale_variants_available",
   "config_summary": {
     "aruco_detection_mode": "baseline",
     "evaluation_anchor_marker_id": 14,
@@ -39,6 +40,10 @@
     "scale_reprojection_threshold_px": 5.0,
     "single_scale_marker_id": 0
   },
+  "derived_results": [
+    "../../ap03_single/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+    "../../ap03_multi/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0"
+  ],
   "detail_artifacts": [
     "diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json"
   ],
@@ -184,6 +189,7 @@
   "reference_frame": "COLMAP gauge with metric marker scale",
   "runtime_seconds": 265.9200361490002,
   "schema_version": 5,
+  "scientific_role": "shared_colmap_reconstruction_container",
   "static_camera_count": 4,
   "status": "available",
   "success": true,

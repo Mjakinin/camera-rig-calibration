@@ -387,10 +387,11 @@ observation_quality:
     [payload] = refresh_method_reports(experiment)
 
     assert payload["artifact_status"] == "available"
-    assert payload["quality_status"] == "optimizer_limit_reached"
+    assert payload["quality_status"] == "warning_reprojection_unavailable"
+    assert payload["solver_status"] == "limit_reached"
     assert payload["static_camera_count"] == 4
     assert payload["pairwise_camera_count"] == 6
-    assert "60 evaluations" in payload["warnings"][0]
+    assert any("60 evaluations" in item for item in payload["warnings"])
     assert (method / "pairwise_camera_extrinsics.csv").is_file()
     assert "FINAL STATIC-CAMERA POSES" in (
         method / "RESULT.txt"

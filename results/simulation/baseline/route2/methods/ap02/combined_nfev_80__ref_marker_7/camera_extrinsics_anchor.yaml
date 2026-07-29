@@ -1,38 +1,46 @@
+schema_version: 1
+layout_version: 2
+contract: rigcal_anchor_export_v1
+fingerprint: d9fe76a5db93947382213c123be48dd8118d8e4bae0001e954ad3b162f777d44
+method: ap02
+label: combined_nfev_80__ref_marker_7
+anchor_marker_id: 14
+anchor_selection:
+  mode: explicit
+  reason: manual post-preflight selection from every raw detected marker ID
+  warning_confirmed: false
+parent_frame: evaluation_anchor_marker_14
+transform_convention: T_parent_child; p_parent = T_parent_child @ p_child
+camera_optical_convention: x right, y down, z forward
+rpy_convention: radians; R = Rz(yaw) @ Ry(pitch) @ Rx(roll)
+quaternion_order: qx,qy,qz,qw
+calibration_status: available
+evaluation_status: available
+anchor_export_status:
+  code: OK
+  available: true
+  camera_count: 4
+  expected_camera_count: 4
+  missing_cameras: []
+  warnings: []
+  manual_warning_confirmed: false
 anchor_alignment:
+  method: ap02
   alignment: combined_ba_marker_pose
+  reference_marker_id: 7
   marker_pose_file: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous
     Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap02/combined_nfev_80__ref_marker_7/diagnostics/method/graph_ba/with_moving/optimized_marker_poses_ref_marker.csv
-  method: ap02
-  reference_marker_id: 7
-  transform_anchor_method:
-    matrix:
-    - - 0.01179653477838094
-      - 0.385484300836268
-      - -0.922638984422399
-      - 1.9944969124639038
-    - - -0.9998617811031985
-      - 0.01535836064871976
-      - -0.006367059550786758
-      - 0.4528212849427602
-    - - 0.011715820772009777
-      - 0.922586567519253
-      - 0.3856121950570037
-      - 1.0074608892191996
-    - - 0.0
-      - 0.0
-      - 0.0
-      - 1.0
-    pitch_rad: -0.011716088808383604
-    qw: 0.5942993964501615
-    qx: 0.39077678381419284
-    qy: -0.39304886172501985
-    qz: -0.5827643819825263
-    roll_rad: 1.1748963997608821
-    x_m: 1.9944969124639038
-    y_m: 0.4528212849427602
-    yaw_rad: -1.5589987086633181
-    z_m: 1.0074608892191996
   transform_method_anchor:
+    x_m: 0.41742731307815156
+    y_m: -1.705271724119447
+    z_m: 1.4545945409105052
+    roll_rad: -0.016510061420088464
+    pitch_rad: 1.1748681179143343
+    yaw_rad: 1.540204018782428
+    qx: -0.39077678381419284
+    qy: 0.39304886172501985
+    qz: 0.5827643819825263
+    qw: 0.5942993964501615
     matrix:
     - - 0.01179653477838094
       - -0.9998617811031985
@@ -50,36 +58,58 @@ anchor_alignment:
       - 0.0
       - 0.0
       - 1.0
-    pitch_rad: 1.1748681179143343
+  transform_anchor_method:
+    x_m: 1.9944969124639038
+    y_m: 0.4528212849427602
+    z_m: 1.0074608892191996
+    roll_rad: 1.1748963997608821
+    pitch_rad: -0.011716088808383604
+    yaw_rad: -1.5589987086633181
+    qx: 0.39077678381419284
+    qy: -0.39304886172501985
+    qz: -0.5827643819825263
     qw: 0.5942993964501615
-    qx: -0.39077678381419284
-    qy: 0.39304886172501985
-    qz: 0.5827643819825263
-    roll_rad: -0.016510061420088464
-    x_m: 0.41742731307815156
-    y_m: -1.705271724119447
-    yaw_rad: 1.540204018782428
-    z_m: 1.4545945409105052
-anchor_export_status:
-  available: true
-  camera_count: 4
-  code: OK
-  expected_camera_count: 4
-  manual_warning_confirmed: false
-  missing_cameras: []
-  warnings: []
-anchor_marker_id: 14
-anchor_selection:
-  mode: explicit
-  reason: manual post-preflight selection from every raw detected marker ID
-  warning_confirmed: false
-calibration_status: available
-camera_optical_convention: x right, y down, z forward
+    matrix:
+    - - 0.01179653477838094
+      - 0.385484300836268
+      - -0.922638984422399
+      - 1.9944969124639038
+    - - -0.9998617811031985
+      - 0.01535836064871976
+      - -0.006367059550786758
+      - 0.4528212849427602
+    - - 0.011715820772009777
+      - 0.922586567519253
+      - 0.3856121950570037
+      - 1.0074608892191996
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+pairwise_invariance:
+  passed: true
+  maximum_translation_difference_m: 5.443490401604861e-15
+  maximum_rotation_difference_deg: 1.7075472925031877e-06
+  camera_pair_count: 6
 cameras:
-- anchor_marker_id: 14
-  camera_id: cam_edge_0
-  child_frame: cam_edge_0_optical_frame
+- method: ap02
   label: combined_nfev_80__ref_marker_7
+  anchor_marker_id: 14
+  parent_frame: evaluation_anchor_marker_14
+  child_frame: cam_edge_0_optical_frame
+  camera_id: cam_edge_0
+  status: available
+  source: method_primary_result
+  x_m: 0.7453203871341036
+  y_m: -1.6305372833188496
+  z_m: 2.266621413298111
+  roll_rad: -2.0333077713067356
+  pitch_rad: -0.00029014307333108163
+  yaw_rad: 0.016040764638595304
+  qx: -0.8503240414394665
+  qy: -0.006896411312828812
+  qz: 0.0040970364052504375
+  qw: 0.5261983260651358
   matrix:
   - - 0.9998713076073967
     - 0.007416661281365811
@@ -97,24 +127,24 @@ cameras:
     - 0.0
     - 0.0
     - 1.0
-  method: ap02
-  parent_frame: evaluation_anchor_marker_14
-  pitch_rad: -0.00029014307333108163
-  qw: 0.5261983260651358
-  qx: -0.8503240414394665
-  qy: -0.006896411312828812
-  qz: 0.0040970364052504375
-  roll_rad: -2.0333077713067356
-  source: method_primary_result
-  status: available
-  x_m: 0.7453203871341036
-  y_m: -1.6305372833188496
-  yaw_rad: 0.016040764638595304
-  z_m: 2.266621413298111
-- anchor_marker_id: 14
-  camera_id: cam_edge_1
-  child_frame: cam_edge_1_optical_frame
+- method: ap02
   label: combined_nfev_80__ref_marker_7
+  anchor_marker_id: 14
+  parent_frame: evaluation_anchor_marker_14
+  child_frame: cam_edge_1_optical_frame
+  camera_id: cam_edge_1
+  status: available
+  source: method_primary_result
+  x_m: -3.9518998649065096
+  y_m: 0.2792834996744037
+  z_m: 1.92787114417985
+  roll_rad: -1.828897311607108
+  pitch_rad: 0.04470314771712584
+  yaw_rad: -1.964629586220111
+  qx: -0.4283096458739387
+  qy: 0.6663676163031754
+  qz: -0.4976223843263285
+  qw: 0.35337941339464757
   matrix:
   - - -0.3833476748803921
     - -0.21912434299077976
@@ -132,24 +162,24 @@ cameras:
     - 0.0
     - 0.0
     - 1.0
-  method: ap02
-  parent_frame: evaluation_anchor_marker_14
-  pitch_rad: 0.04470314771712584
-  qw: 0.35337941339464757
-  qx: -0.4283096458739387
-  qy: 0.6663676163031754
-  qz: -0.4976223843263285
-  roll_rad: -1.828897311607108
-  source: method_primary_result
-  status: available
-  x_m: -3.9518998649065096
-  y_m: 0.2792834996744037
-  yaw_rad: -1.964629586220111
-  z_m: 1.92787114417985
-- anchor_marker_id: 14
-  camera_id: cam_edge_3
-  child_frame: cam_edge_3_optical_frame
+- method: ap02
   label: combined_nfev_80__ref_marker_7
+  anchor_marker_id: 14
+  parent_frame: evaluation_anchor_marker_14
+  child_frame: cam_edge_3_optical_frame
+  camera_id: cam_edge_3
+  status: available
+  source: method_primary_result
+  x_m: -3.325245318041485
+  y_m: -1.7234561498584786
+  z_m: 2.0258904529400463
+  roll_rad: -1.890260731272094
+  pitch_rad: 0.036523360112075895
+  yaw_rad: -1.0254853484687727
+  qx: -0.7009714587406078
+  qy: 0.4068947596151791
+  qz: -0.2743494396040516
+  qw: 0.5175017426228756
   matrix:
   - - 0.5183380791732968
     - -0.28649060023730993
@@ -167,24 +197,24 @@ cameras:
     - 0.0
     - 0.0
     - 1.0
-  method: ap02
-  parent_frame: evaluation_anchor_marker_14
-  pitch_rad: 0.036523360112075895
-  qw: 0.5175017426228756
-  qx: -0.7009714587406078
-  qy: 0.4068947596151791
-  qz: -0.2743494396040516
-  roll_rad: -1.890260731272094
-  source: method_primary_result
-  status: available
-  x_m: -3.325245318041485
-  y_m: -1.7234561498584786
-  yaw_rad: -1.0254853484687727
-  z_m: 2.0258904529400463
-- anchor_marker_id: 14
-  camera_id: cam_edge_5
-  child_frame: cam_edge_5_optical_frame
+- method: ap02
   label: combined_nfev_80__ref_marker_7
+  anchor_marker_id: 14
+  parent_frame: evaluation_anchor_marker_14
+  child_frame: cam_edge_5_optical_frame
+  camera_id: cam_edge_5
+  status: available
+  source: method_primary_result
+  x_m: 6.750928660216784
+  y_m: -2.4565409369246347
+  z_m: 0.27247919854322133
+  roll_rad: -1.5809903419042097
+  pitch_rad: 0.258142770260276
+  yaw_rad: 1.630199506605537
+  qx: -0.5492430086921706
+  qy: -0.4508438245976655
+  qz: 0.5704738468753447
+  qw: 0.41186351289737655
   matrix:
   - - -0.05740112829320935
     - 0.02533091216429495
@@ -202,33 +232,3 @@ cameras:
     - 0.0
     - 0.0
     - 1.0
-  method: ap02
-  parent_frame: evaluation_anchor_marker_14
-  pitch_rad: 0.258142770260276
-  qw: 0.41186351289737655
-  qx: -0.5492430086921706
-  qy: -0.4508438245976655
-  qz: 0.5704738468753447
-  roll_rad: -1.5809903419042097
-  source: method_primary_result
-  status: available
-  x_m: 6.750928660216784
-  y_m: -2.4565409369246347
-  yaw_rad: 1.630199506605537
-  z_m: 0.27247919854322133
-contract: rigcal_anchor_export_v1
-evaluation_status: unavailable
-fingerprint: ea5ba4444bfd83379c87846efe3dc59c00afa4f70489c550e625039a0af2f478
-label: combined_nfev_80__ref_marker_7
-layout_version: 2
-method: ap02
-pairwise_invariance:
-  camera_pair_count: 6
-  maximum_rotation_difference_deg: 1.7075472925031877e-06
-  maximum_translation_difference_m: 5.443490401604861e-15
-  passed: true
-parent_frame: evaluation_anchor_marker_14
-quaternion_order: qx,qy,qz,qw
-rpy_convention: radians; R = Rz(yaw) @ Ry(pitch) @ Rx(roll)
-schema_version: 1
-transform_convention: T_parent_child; p_parent = T_parent_child @ p_child

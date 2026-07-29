@@ -1,0 +1,57 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap03_single / multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0
+Execution status: completed_shared_colmap
+Solver status: not_applicable
+Artifact status: available
+Calibration status: available
+Quality status: warning_scale_dispersion
+Evaluation status: available
+Anchor export status: OK
+RViz visualization status: OK
+Primary result: single
+Runtime: 265.9 s
+Reference frame: COLMAP gauge with metric marker scale
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, quality_sources=maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global, aruco_detection_mode=baseline, single_scale_marker_id=0, multi_marker_count=20, matcher=exhaustive, gpu_requested=true, gpu_resolved=true, maximum_image_size=2400, maximum_features=8192, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+
+WARNINGS
+----------------------------------------------------------------------------------------------------------------------
+- AP03 Single scale relative standard deviation is 5.42% (warning: >5%).
+
+COMMON EVALUATION / EXPORT ANCHOR
+----------------------------------------------------------------------------------------------------------------------
+Marker: 14; export status: OK
+Camera     | x [m]  | y [m]  | z [m] | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw
+-----------+--------+--------+-------+------------+-------------+-----------+-----------+-----------+-----------+---------
+cam_edge_0 | 0.562  | -1.670 | 1.998 | -1.967     | -0.025      | -0.015    | -0.832342 | -0.000951 | -0.014579 | 0.554069
+cam_edge_1 | -3.817 | 0.441  | 2.052 | -1.860     | 0.016       | -1.997    | -0.429851 | 0.676611  | -0.499077 | 0.329163
+cam_edge_3 | -3.093 | -1.522 | 1.968 | -1.909     | 0.039       | -1.042    | -0.702026 | 0.415770  | -0.274043 | 0.509112
+cam_edge_5 | 2.070  | -6.725 | 2.920 | -2.028     | 0.035       | 0.979     | -0.753478 | -0.390789 | 0.261694  | 0.459424
+Full exports: camera_extrinsics_anchor.csv, camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera     | Source                               | x [m]  | y [m]  | z [m]  | roll [deg] | pitch [deg] | yaw [deg]
+-----------+--------------------------------------+--------+--------+--------+------------+-------------+----------
+cam_edge_0 | ap03_single_scale_from_shared_colmap | 0.341  | -0.090 | -0.535 | -15.276    | 17.289      | 3.181
+cam_edge_1 | ap03_single_scale_from_shared_colmap | -3.241 | -0.719 | 2.693  | 151.003    | 48.383      | 172.388
+cam_edge_3 | ap03_single_scale_from_shared_colmap | -3.115 | -0.357 | 0.634  | 15.815     | 73.081      | 36.901
+cam_edge_5 | ap03_single_scale_from_shared_colmap | 0.368  | -0.314 | -5.885 | -18.105    | -39.579     | -1.235
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                  | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+----------------------+--------+--------+--------+------------+-------------+-----------+-------------
+cam_edge_0-cam_edge_1 | -4.407 | -0.943 | 1.825  | 115.501    | 57.445      | 138.134   | 4.862
+cam_edge_0-cam_edge_3 | -3.656 | -0.094 | 0.064  | 21.203     | 50.287      | 36.223    | 3.658
+cam_edge_0-cam_edge_5 | 1.604  | 1.128  | -4.983 | 9.668      | -52.329     | -27.028   | 5.355
+cam_edge_1-cam_edge_3 | 1.489  | -0.362 | 1.428  | 5.211      | -52.218     | -19.526   | 2.094
+cam_edge_1-cam_edge_5 | 4.073  | -3.270 | 7.713  | 137.354    | -9.919      | 179.861   | 9.315
+cam_edge_3-cam_edge_5 | 7.055  | -1.764 | 1.323  | 116.784    | -60.014     | -150.072  | 7.392
+
+DETAIL ARTIFACTS
+----------------------------------------------------------------------------------------------------------------------
+- ../../../methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json
+- provenance/derived_result.json

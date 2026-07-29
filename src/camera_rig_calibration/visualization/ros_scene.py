@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-import math
 import struct
 from pathlib import Path
 from typing import Any
@@ -32,7 +32,7 @@ def _ply_points(path: Path) -> list[tuple[float, float, float, int, int, int]]:
     return result
 
 
-def _color(index: int) -> tuple[float, float, float]:
+def _color(key: str) -> tuple[float, float, float]:
     palette = (
         (0.95, 0.25, 0.25),
         (0.20, 0.75, 0.30),
@@ -40,6 +40,9 @@ def _color(index: int) -> tuple[float, float, float]:
         (0.95, 0.70, 0.15),
         (0.70, 0.30, 0.90),
         (0.15, 0.80, 0.80),
+    )
+    index = int.from_bytes(
+        hashlib.sha256(key.encode("utf-8")).digest()[:4], "big"
     )
     return palette[index % len(palette)]
 
@@ -49,11 +52,10 @@ def run(visualization: Path) -> None:
     # generation do not require a sourced ROS 2 environment.
     import rclpy
     from builtin_interfaces.msg import Duration
-    from geometry_msgs.msg import Point, TransformStamped
+    from geometry_msgs.msg import Point
     from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
     from sensor_msgs.msg import PointCloud2, PointField
     from std_msgs.msg import Header
-    from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
     from visualization_msgs.msg import Marker, MarkerArray
 
     manifest = _read_json(visualization / "visualization_manifest.json")
@@ -74,7 +76,6 @@ def run(visualization: Path) -> None:
         MarkerArray, "/rigcal/scene/anchor", qos
     )
     marker_publishers = {}
-    transform_broadcaster = StaticTransformBroadcaster(node)
 
     points = _ply_points(visualization / str(manifest["point_cloud"]))
     cloud = PointCloud2()
@@ -144,34 +145,85 @@ def run(visualization: Path) -> None:
         (item["method"], item["label"]): item["frustums"]
         for item in frustums["variants"]
     }
-    transforms = []
     marker_arrays = {}
-    for variant_index, variant in enumerate(poses["variants"]):
+    ground_truth = {
+        str(item["camera_id"]): item
+        for item in poses.get("ground_truth", {}).get("cameras", [])
+        if isinstance(item, dict) and item.get("camera_id")
+    }
+    gt_topic = str(
+        poses.get("ground_truth", {}).get(
+            "topic", "/rigcal/ground_truth/cameras"
+        )
+    )
+    if ground_truth:
+        marker_publishers[gt_topic] = node.create_publisher(
+            MarkerArray, gt_topic, qos
+        )
+        gt_markers = []
+        for camera_index, (camera_id, camera) in enumerate(
+            sorted(ground_truth.items())
+        ):
+            origin = camera["matrix"]
+            position = [
+                float(origin[0][3]),
+                float(origin[1][3]),
+                float(origin[2][3]),
+            ]
+            marker = Marker()
+            marker.header.frame_id = fixed_frame
+            marker.ns = "ground_truth"
+            marker.id = camera_index * 2
+            marker.type = Marker.SPHERE
+            marker.action = Marker.ADD
+            marker.pose.position.x = position[0]
+            marker.pose.position.y = position[1]
+            marker.pose.position.z = position[2]
+            marker.pose.orientation.w = 1.0
+            marker.scale.x = marker.scale.y = marker.scale.z = 0.08
+            marker.color.r = 1.0
+            marker.color.g = 1.0
+            marker.color.b = 1.0
+            marker.color.a = 1.0
+            gt_markers.append(marker)
+            label_marker = Marker()
+            label_marker.header.frame_id = fixed_frame
+            label_marker.ns = "ground_truth_labels"
+            label_marker.id = camera_index * 2 + 1
+            label_marker.type = Marker.TEXT_VIEW_FACING
+            label_marker.action = Marker.ADD
+            label_marker.pose.position.x = position[0]
+            label_marker.pose.position.y = position[1]
+            label_marker.pose.position.z = position[2] + 0.12
+            label_marker.pose.orientation.w = 1.0
+            label_marker.scale.z = 0.10
+            label_marker.color.r = 1.0
+            label_marker.color.g = 1.0
+            label_marker.color.b = 1.0
+            label_marker.color.a = 1.0
+            label_marker.text = f"GT/{camera_id}"
+            gt_markers.append(label_marker)
+        marker_arrays[gt_topic] = MarkerArray(markers=gt_markers)
+
+    for variant in poses["variants"]:
         method = variant["method"]
         label = variant["label"]
-        topic = str(variant["topic"])
-        marker_publishers[topic] = node.create_publisher(
-            MarkerArray, topic, qos
-        )
-        red, green, blue = _color(variant_index)
-        markers = []
+        camera_topic = str(variant["camera_topic"])
+        edge_topic = str(variant["anchor_edges_topic"])
+        error_topic = str(variant["error_lines_topic"])
+        for topic in (camera_topic, edge_topic, error_topic):
+            marker_publishers[topic] = node.create_publisher(
+                MarkerArray, topic, qos
+            )
+        red, green, blue = _color(f"{method}/{label}")
+        camera_markers = []
+        edge_markers = []
+        error_markers = []
         frustum_map = {
             item["camera_id"]: item["points"]
             for item in frustum_by_variant.get((method, label), [])
         }
         for camera_index, camera in enumerate(variant["cameras"]):
-            child = f"{method}/{label}/{camera['camera_id']}_optical_frame"
-            transform = TransformStamped()
-            transform.header.frame_id = fixed_frame
-            transform.child_frame_id = child
-            transform.transform.translation.x = float(camera["x_m"])
-            transform.transform.translation.y = float(camera["y_m"])
-            transform.transform.translation.z = float(camera["z_m"])
-            transform.transform.rotation.x = float(camera["qx"])
-            transform.transform.rotation.y = float(camera["qy"])
-            transform.transform.rotation.z = float(camera["qz"])
-            transform.transform.rotation.w = float(camera["qw"])
-            transforms.append(transform)
             points_for_camera = frustum_map.get(camera["camera_id"])
             if not points_for_camera:
                 continue
@@ -196,7 +248,7 @@ def run(visualization: Path) -> None:
                 Point(x=float(point[0]), y=float(point[1]), z=float(point[2]))
                 for point in segments
             ]
-            markers.append(marker)
+            camera_markers.append(marker)
             camera_origin = points_for_camera[0]
             edge = Marker()
             edge.header.frame_id = fixed_frame
@@ -217,7 +269,7 @@ def run(visualization: Path) -> None:
                     z=float(camera_origin[2]),
                 ),
             ]
-            markers.append(edge)
+            edge_markers.append(edge)
             label_marker = Marker()
             label_marker.header.frame_id = fixed_frame
             label_marker.ns = f"{method}/{label}/labels"
@@ -236,9 +288,43 @@ def run(visualization: Path) -> None:
             label_marker.text = (
                 f"{method}/{label}/{camera['camera_id']}"
             )
-            markers.append(label_marker)
-        marker_arrays[topic] = MarkerArray(markers=markers)
-    transform_broadcaster.sendTransform(transforms)
+            camera_markers.append(label_marker)
+            gt_camera = ground_truth.get(str(camera["camera_id"]))
+            if gt_camera is not None:
+                gt_position = [
+                    float(gt_camera["matrix"][0][3]),
+                    float(gt_camera["matrix"][1][3]),
+                    float(gt_camera["matrix"][2][3]),
+                ]
+                error = Marker()
+                error.header.frame_id = fixed_frame
+                error.ns = f"{method}/{label}/error_lines"
+                error.id = camera_index
+                error.type = Marker.LINE_LIST
+                error.action = Marker.ADD
+                error.scale.x = 0.008
+                error.color.r = 1.0
+                error.color.g = 0.25
+                error.color.b = 0.10
+                error.color.a = 0.9
+                error.points = [
+                    Point(
+                        x=float(camera_origin[0]),
+                        y=float(camera_origin[1]),
+                        z=float(camera_origin[2]),
+                    ),
+                    Point(
+                        x=gt_position[0],
+                        y=gt_position[1],
+                        z=gt_position[2],
+                    ),
+                ]
+                error_markers.append(error)
+        marker_arrays[camera_topic] = MarkerArray(
+            markers=camera_markers
+        )
+        marker_arrays[edge_topic] = MarkerArray(markers=edge_markers)
+        marker_arrays[error_topic] = MarkerArray(markers=error_markers)
 
     def publish() -> None:
         stamp = node.get_clock().now().to_msg()

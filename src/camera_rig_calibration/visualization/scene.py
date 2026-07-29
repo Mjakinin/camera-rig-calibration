@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
-import math
 import re
 from pathlib import Path
 from typing import Any
@@ -10,11 +10,16 @@ from typing import Any
 import numpy as np
 
 from ..anchor_export import ensure_experiment_anchor_exports
-from ..config import load_config
-from ..anchor_export.geometry import validate_transform
+from ..anchor_export.adapters import load_camera_poses
+from ..anchor_export.geometry import (
+    invert_transform,
+    pose_payload,
+    validate_transform,
+)
 
 
-SCENE_CONTRACT = "rigcal_rviz_scene_v1"
+SCENE_CONTRACT = "rigcal_rviz_scene_v2"
+SOURCE_MISMATCH = "UNAVAILABLE_AP03_SOURCE_MISMATCH"
 
 
 def _ros_token(value: str) -> str:
@@ -30,6 +35,11 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 
 def _atomic_text(path: Path, text: str) -> None:
+    try:
+        if path.read_text(encoding="utf-8") == text:
+            return
+    except OSError:
+        pass
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(text, encoding="utf-8")
@@ -57,16 +67,26 @@ def _update_result_status(experiment_root: Path, status: str) -> None:
 def _method_variants(experiment_root: Path) -> list[dict[str, Any]]:
     variants: list[dict[str, Any]] = []
     for anchor_path in sorted(
-        (experiment_root / "methods").glob("*/*/camera_extrinsics_anchor.json")
+        (experiment_root / "methods").glob(
+            "*/*/camera_extrinsics_anchor.json"
+        )
     ):
         payload = _read_json(anchor_path)
         status = payload.get("anchor_export_status", {})
+        method = str(
+            payload.get("method") or anchor_path.parents[1].name
+        )
+        if method == "ap03":
+            # The shared container is provenance, not a third AP03 estimate.
+            continue
         if not isinstance(status, dict) or not status.get("available"):
             continue
         variants.append(
             {
-                "method": str(payload.get("method") or anchor_path.parents[1].name),
-                "label": str(payload.get("label") or anchor_path.parent.name),
+                "method": method,
+                "label": str(
+                    payload.get("label") or anchor_path.parent.name
+                ),
                 "path": anchor_path,
                 "payload": payload,
             }
@@ -74,23 +94,85 @@ def _method_variants(experiment_root: Path) -> list[dict[str, Any]]:
     return variants
 
 
-def _ap03_source(variants: list[dict[str, Any]]) -> dict[str, Any] | None:
-    candidates: list[dict[str, Any]] = []
-    for variant in variants:
-        if variant["method"] != "ap03":
-            continue
-        root = Path(variant["path"]).parent
-        metadata_path = (
-            root
-            / "diagnostics"
-            / "method"
-            / "scale_multi"
-            / "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json"
+def _within(path: Path, parent: Path) -> bool:
+    try:
+        path.resolve().relative_to(parent.resolve())
+    except ValueError:
+        return False
+    return True
+
+
+def _count_colmap_points(path: Path) -> int:
+    return sum(
+        1
+        for line in path.read_text(
+            encoding="utf-8", errors="replace"
+        ).splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    )
+
+
+def _ap03_source(
+    experiment_root: Path,
+    variants: list[dict[str, Any]],
+) -> tuple[dict[str, Any] | None, list[str]]:
+    """Resolve only the explicitly documented AP03 Multi best model."""
+    warnings: list[str] = []
+    candidates = [
+        item for item in variants if item["method"] == "ap03_multi"
+    ]
+    candidates.sort(
+        key=lambda item: (
+            item["label"] != "baseline",
+            -len(item["payload"].get("cameras", [])),
+            item["label"],
         )
+    )
+    for variant in candidates:
+        derived_root = Path(variant["path"]).parent
+        provenance_path = (
+            derived_root / "provenance" / "derived_result.json"
+        )
+        provenance = _read_json(provenance_path)
+        container_value = provenance.get("shared_colmap_container")
+        metadata_value = provenance.get("scale_metadata")
+        camera_value = provenance.get("camera_pose_source")
+        best_model_value = provenance.get("shared_colmap_best_model")
+        if not all(
+            value is not None
+            for value in (
+                container_value,
+                metadata_value,
+                camera_value,
+                best_model_value,
+            )
+        ):
+            warnings.append(
+                f"{variant['label']}: derived AP03 provenance is incomplete"
+            )
+            continue
+        container = experiment_root / str(container_value)
+        metadata_path = experiment_root / str(metadata_value)
+        camera_path = experiment_root / str(camera_value)
+        best_model = str(best_model_value)
+        if (
+            not _within(container, experiment_root / "methods" / "ap03")
+            or not _within(metadata_path, container)
+            or not _within(camera_path, container)
+        ):
+            warnings.append(
+                f"{variant['label']}: AP03 sources do not belong to the "
+                "declared shared container"
+            )
+            continue
         metadata = _read_json(metadata_path)
-        best_model = str(metadata.get("best_model", "0"))
-        points = (
-            root
+        if str(metadata.get("best_model")) != best_model:
+            warnings.append(
+                f"{variant['label']}: best-model metadata mismatch"
+            )
+            continue
+        points_path = (
+            container
             / "diagnostics"
             / "method"
             / "colmap"
@@ -99,56 +181,96 @@ def _ap03_source(variants: list[dict[str, Any]]) -> dict[str, Any] | None:
             / best_model
             / "points3D.txt"
         )
-        if not points.is_file():
-            alternatives = sorted(
-                (
-                    root
-                    / "diagnostics"
-                    / "method"
-                    / "colmap"
-                    / "reconstruction"
-                    / "sparse_txt"
-                ).glob("*/points3D.txt")
+        if not points_path.is_file():
+            warnings.append(
+                f"{variant['label']}: exact sparse_txt/{best_model}/"
+                "points3D.txt is missing"
             )
-            points = alternatives[0] if alternatives else points
-        alignment = _read_json(
-            root / "diagnostics" / "anchor_alignment.json"
-        ).get("alignment", {})
-        transform = alignment.get("transform_anchor_method", {}).get("matrix")
-        if (
-            not points.is_file()
-            or metadata.get("scale_m_per_colmap_unit") is None
-            or transform is None
-        ):
             continue
-        candidates.append(
+        try:
+            scale = float(provenance["scale_m_per_colmap_unit"])
+            metadata_scale = float(metadata["scale_m_per_colmap_unit"])
+            expected_points = int(metadata["num_sparse_points3d"])
+        except (KeyError, TypeError, ValueError):
+            warnings.append(
+                f"{variant['label']}: scale or point-count metadata is invalid"
+            )
+            continue
+        actual_points = _count_colmap_points(points_path)
+        if (
+            not np.isclose(scale, metadata_scale, rtol=0.0, atol=1e-15)
+            or actual_points != expected_points
+        ):
+            warnings.append(
+                f"{variant['label']}: scale or point-count consistency failed"
+            )
+            continue
+        alignment = _read_json(
+            derived_root / "diagnostics" / "anchor_alignment.json"
+        ).get("alignment", {})
+        transform_value = alignment.get("transform_anchor_method", {}).get(
+            "matrix"
+        )
+        try:
+            transform_anchor_method = validate_transform(
+                np.asarray(transform_value, dtype=np.float64)
+            )
+        except (TypeError, ValueError):
+            warnings.append(
+                f"{variant['label']}: AP03 Multi anchor transform is invalid"
+            )
+            continue
+        native = load_camera_poses(derived_root)
+        anchored = {
+            str(item.get("camera_id")): validate_transform(
+                np.asarray(item["matrix"], dtype=np.float64)
+            )
+            for item in variant["payload"].get("cameras", [])
+            if isinstance(item, dict)
+            and item.get("camera_id")
+            and item.get("matrix") is not None
+        }
+        if set(native) != set(anchored) or any(
+            not np.allclose(
+                transform_anchor_method @ native[camera],
+                anchored[camera],
+                rtol=0.0,
+                atol=1e-8,
+            )
+            for camera in native
+        ):
+            warnings.append(
+                f"{variant['label']}: transformed AP03 camera poses do not "
+                "match the published Multi anchor export"
+            )
+            continue
+        return (
             {
                 **variant,
-                "root": root,
+                "root": derived_root,
+                "container": container,
+                "provenance_path": provenance_path,
                 "metadata": metadata,
                 "metadata_path": metadata_path,
-                "points_path": points,
-                "transform_anchor_method": transform,
-                "camera_count": len(variant["payload"].get("cameras", [])),
-                "point_count": int(metadata.get("num_sparse_points3d") or 0),
-            }
+                "camera_path": camera_path,
+                "points_path": points_path,
+                "best_model": best_model,
+                "scale": scale,
+                "point_count": actual_points,
+                "transform_anchor_method": transform_anchor_method,
+            },
+            warnings,
         )
-    if not candidates:
-        return None
-    return min(
-        candidates,
-        key=lambda item: (
-            item["label"] != "baseline",
-            -item["camera_count"],
-            -item["point_count"],
-            item["label"],
-        ),
-    )
+    return None, warnings
 
 
-def _read_colmap_points(path: Path) -> list[tuple[np.ndarray, tuple[int, int, int]]]:
+def _read_colmap_points(
+    path: Path,
+) -> list[tuple[np.ndarray, tuple[int, int, int]]]:
     points: list[tuple[np.ndarray, tuple[int, int, int]]] = []
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+    for line in path.read_text(
+        encoding="utf-8", errors="replace"
+    ).splitlines():
         stripped = line.strip()
         if not stripped or stripped.startswith("#"):
             continue
@@ -161,7 +283,8 @@ def _read_colmap_points(path: Path) -> list[tuple[np.ndarray, tuple[int, int, in
                 dtype=np.float64,
             )
             color = tuple(
-                max(0, min(255, int(fields[index]))) for index in (4, 5, 6)
+                max(0, min(255, int(fields[index])))
+                for index in (4, 5, 6)
             )
         except ValueError:
             continue
@@ -194,13 +317,20 @@ def _write_ply(
     _atomic_text(path, "\n".join(lines) + "\n")
 
 
-def _camera_info(experiment_root: Path, camera_id: str) -> dict[str, Any]:
+def _camera_info(
+    experiment_root: Path, camera_id: str
+) -> dict[str, Any]:
     return _read_json(
-        experiment_root / "raw_images" / "camera_info" / f"{camera_id}.json"
+        experiment_root
+        / "raw_images"
+        / "camera_info"
+        / f"{camera_id}.json"
     )
 
 
-def _intrinsics(info: dict[str, Any]) -> tuple[float, float, float, float, int, int] | None:
+def _intrinsics(
+    info: dict[str, Any],
+) -> tuple[float, float, float, float, int, int] | None:
     matrix = info.get("K")
     if not isinstance(matrix, list):
         matrix = (info.get("camera_matrix") or {}).get("data")
@@ -239,45 +369,93 @@ def _frustum(
     return [
         [
             float(value)
-            for value in (
-                transform[:3, :3] @ point + transform[:3, 3]
-            )
+            for value in transform[:3, :3] @ point + transform[:3, 3]
         ]
         for point in camera_points
     ]
 
 
+def _topic(method: str, label: str, layer: str) -> str:
+    return (
+        f"/rigcal/methods/{_ros_token(method)}/"
+        f"{_ros_token(label)}/{layer}"
+    )
+
+
+def _rviz_display(
+    *,
+    name: str,
+    topic: str,
+    enabled: bool,
+    class_name: str = "rviz_default_plugins/MarkerArray",
+) -> str:
+    return (
+        f"    - Class: {class_name}\n"
+        f"      Name: {name}\n"
+        f"      Enabled: {'true' if enabled else 'false'}\n"
+        "      Topic:\n"
+        f"        Value: {topic}"
+    )
+
+
 def _rviz_config(
     fixed_frame: str,
     variants: list[dict[str, Any]],
+    *,
+    ground_truth_available: bool,
 ) -> str:
     displays = [
-        """    - Class: rviz_default_plugins/TF
-      Name: Coordinate frames
-      Enabled: true
-    - Class: rviz_default_plugins/PointCloud2
-      Name: AP03 COLMAP context
-      Enabled: true
-      Topic:
-        Value: /rigcal/scene/points
-    - Class: rviz_default_plugins/MarkerArray
-      Name: Common anchor
-      Enabled: true
-      Topic:
-        Value: /rigcal/scene/anchor"""
+        _rviz_display(
+            name="AP03 Multi COLMAP context",
+            topic="/rigcal/scene/points",
+            enabled=True,
+            class_name="rviz_default_plugins/PointCloud2",
+        ),
+        _rviz_display(
+            name="Common anchor",
+            topic="/rigcal/scene/anchor",
+            enabled=True,
+        ),
     ]
-    for variant in variants:
-        topic = (
-            f"/rigcal/methods/{_ros_token(variant['method'])}/"
-            f"{_ros_token(variant['label'])}/markers"
-        )
+    if ground_truth_available:
         displays.append(
-            "    - Class: rviz_default_plugins/MarkerArray\n"
-            f"      Name: {variant['method']}/{variant['label']}\n"
-            "      Enabled: true\n"
-            "      Topic:\n"
-            f"        Value: {topic}"
+            _rviz_display(
+                name="Ground truth cameras",
+                topic="/rigcal/ground_truth/cameras",
+                enabled=True,
+            )
         )
+    for variant in variants:
+        name = f"{variant['method']}/{variant['label']}"
+        enabled = variant["method"] == "ap03_multi"
+        displays.extend(
+            [
+                _rviz_display(
+                    name=name,
+                    topic=_topic(
+                        variant["method"], variant["label"], "cameras"
+                    ),
+                    enabled=enabled,
+                ),
+                _rviz_display(
+                    name=f"{name} anchor edges",
+                    topic=_topic(
+                        variant["method"], variant["label"], "anchor_edges"
+                    ),
+                    enabled=False,
+                ),
+            ]
+        )
+        if ground_truth_available:
+            displays.append(
+                _rviz_display(
+                    name=f"{name} estimate-to-GT errors",
+                    topic=_topic(
+                        variant["method"], variant["label"], "error_lines"
+                    ),
+                    enabled=False,
+                )
+            )
     return (
         "Panels:\n"
         "  - Class: rviz_common/Displays\n"
@@ -294,6 +472,91 @@ def _rviz_config(
     )
 
 
+def _ground_truth_cameras(
+    experiment_root: Path,
+    *,
+    anchor_marker_id: int,
+) -> tuple[list[dict[str, Any]], str | None]:
+    # Local import avoids evaluation.reporting -> visualization.scene cycles.
+    from ..evaluation.simulation_ground_truth import (
+        ensure_simulation_ground_truth,
+    )
+
+    dataset = _read_json(experiment_root / "dataset.json")
+    category = str(
+        dataset.get("category")
+        or dataset.get("dataset", {}).get("category")
+        or ""
+    )
+    snapshot = (
+        experiment_root
+        / "metadata"
+        / "simulation"
+        / "world_snapshot.sdf"
+    )
+    if category != "simulation" and not snapshot.is_file():
+        return [], None
+    gt = ensure_simulation_ground_truth(experiment_root, backfilled=True)
+    if gt.get("status") != "available":
+        return [], None
+    marker = gt.get("markers", {}).get(str(anchor_marker_id), {})
+    transform = marker.get("T_world_marker_opencv")
+    if transform is None:
+        return [], None
+    anchor_world = invert_transform(
+        validate_transform(np.asarray(transform, dtype=np.float64))
+    )
+    cameras = []
+    for camera_id, value in sorted(gt.get("static_cameras", {}).items()):
+        camera = anchor_world @ validate_transform(
+            np.asarray(value, dtype=np.float64)
+        )
+        cameras.append(
+            {
+                "camera_id": str(camera_id),
+                "parent_frame": f"evaluation_anchor_marker_{anchor_marker_id}",
+                "child_frame": f"ground_truth/{camera_id}_optical_frame",
+                **pose_payload(camera),
+            }
+        )
+    gt_path = (
+        experiment_root
+        / "metadata"
+        / "simulation"
+        / "ground_truth.json"
+    )
+    return cameras, gt_path.relative_to(experiment_root).as_posix()
+
+
+def _unavailable(
+    experiment_root: Path,
+    output: Path,
+    *,
+    status: str,
+    reason: str,
+    warnings: list[str],
+) -> dict[str, Any]:
+    for name in (
+        "scene_anchor_frame.ply",
+        "poses_anchor_frame.json",
+        "camera_frustums.json",
+        "rigcal_result.rviz",
+        "launch_rviz.py",
+    ):
+        (output / name).unlink(missing_ok=True)
+    manifest = {
+        "schema_version": 2,
+        "contract": SCENE_CONTRACT,
+        "status": status,
+        "available": False,
+        "reason": reason,
+        "warnings": warnings,
+    }
+    _write_json(output / "visualization_manifest.json", manifest)
+    _update_result_status(experiment_root, status)
+    return manifest
+
+
 def ensure_visualization_artifacts(
     experiment_root: Path,
 ) -> dict[str, Any]:
@@ -302,50 +565,44 @@ def ensure_visualization_artifacts(
     output = experiment_root / "visualization"
     output.mkdir(parents=True, exist_ok=True)
     variants = _method_variants(experiment_root)
-    source = _ap03_source(variants)
+    source, source_warnings = _ap03_source(experiment_root, variants)
     if source is None:
-        for name in (
-            "scene_anchor_frame.ply",
-            "poses_anchor_frame.json",
-            "camera_frustums.json",
-            "rigcal_result.rviz",
-            "launch_rviz.py",
-        ):
-            (output / name).unlink(missing_ok=True)
-        manifest = {
-            "schema_version": 1,
-            "contract": SCENE_CONTRACT,
-            "status": "UNAVAILABLE_NO_AP03_RECONSTRUCTION",
-            "available": False,
-            "reason": (
-                "A scaled AP03 Multi sparse reconstruction and a valid AP03 "
-                "common-anchor export are required. No new COLMAP run is started."
+        return _unavailable(
+            experiment_root,
+            output,
+            status=(
+                SOURCE_MISMATCH
+                if any("mismatch" in item or "consistency" in item for item in source_warnings)
+                else "UNAVAILABLE_NO_AP03_RECONSTRUCTION"
             ),
-        }
-        _write_json(output / "visualization_manifest.json", manifest)
-        _update_result_status(experiment_root, str(manifest["status"]))
-        return manifest
+            reason=(
+                "RViz requires the exact declared AP03 Multi best-model "
+                "points3D file, Multi scale, and matching anchor export. "
+                "No alternative model and no new COLMAP run are used."
+            ),
+            warnings=source_warnings,
+        )
     source_files = [
         Path(source["points_path"]),
         Path(source["metadata_path"]),
+        Path(source["provenance_path"]),
         *[Path(item["path"]) for item in variants],
     ]
     fingerprint_hash = hashlib.sha256(SCENE_CONTRACT.encode("utf-8"))
     for path in sorted(source_files):
         fingerprint_hash.update(path.read_bytes())
     fingerprint = fingerprint_hash.hexdigest()
-    current = _read_json(output / "visualization_manifest.json")
-    if (
-        current.get("fingerprint") == fingerprint
-        and (output / "scene_anchor_frame.ply").is_file()
-        and (output / "rigcal_result.rviz").is_file()
-    ):
-        return current
-    transform_anchor_method = validate_transform(
-        np.asarray(source["transform_anchor_method"], dtype=np.float64)
-    )
-    scale = float(source["metadata"]["scale_m_per_colmap_unit"])
+    transform_anchor_method = source["transform_anchor_method"]
+    scale = float(source["scale"])
     raw_points = _read_colmap_points(Path(source["points_path"]))
+    if len(raw_points) != int(source["point_count"]):
+        return _unavailable(
+            experiment_root,
+            output,
+            status=SOURCE_MISMATCH,
+            reason="The parsed point count changed during scene generation.",
+            warnings=source_warnings,
+        )
     transformed_points = [
         (
             transform_anchor_method[:3, :3] @ (scale * point)
@@ -355,8 +612,23 @@ def ensure_visualization_artifacts(
         for point, color in raw_points
     ]
     _write_ply(output / "scene_anchor_frame.ply", transformed_points)
-    marker_length = float(source["metadata"].get("marker_length_m") or 0.17)
+    marker_length = float(
+        source["metadata"].get("marker_length_m") or 0.17
+    )
     fixed_frame = str(source["payload"]["parent_frame"])
+    try:
+        anchor_marker_id = int(source["payload"]["anchor_marker_id"])
+    except (KeyError, TypeError, ValueError):
+        return _unavailable(
+            experiment_root,
+            output,
+            status=SOURCE_MISMATCH,
+            reason="AP03 Multi has no valid frozen anchor ID.",
+            warnings=source_warnings,
+        )
+    gt_cameras, gt_source = _ground_truth_cameras(
+        experiment_root, anchor_marker_id=anchor_marker_id
+    )
     pose_variants: list[dict[str, Any]] = []
     frustum_variants: list[dict[str, Any]] = []
     for variant in variants:
@@ -369,9 +641,14 @@ def ensure_visualization_artifacts(
             {
                 "method": variant["method"],
                 "label": variant["label"],
-                "topic": (
-                    f"/rigcal/methods/{_ros_token(variant['method'])}/"
-                    f"{_ros_token(variant['label'])}/markers"
+                "camera_topic": _topic(
+                    variant["method"], variant["label"], "cameras"
+                ),
+                "anchor_edges_topic": _topic(
+                    variant["method"], variant["label"], "anchor_edges"
+                ),
+                "error_lines_topic": _topic(
+                    variant["method"], variant["label"], "error_lines"
                 ),
                 "cameras": cameras,
             }
@@ -401,12 +678,18 @@ def ensure_visualization_artifacts(
             }
         )
     poses_payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "fixed_frame": fixed_frame,
         "variants": pose_variants,
+        "ground_truth": {
+            "namespace": "ground_truth",
+            "topic": "/rigcal/ground_truth/cameras",
+            "source": gt_source,
+            "cameras": gt_cameras,
+        },
     }
     frustum_payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "display_depth_m": 2.0 * marker_length,
         "variants": frustum_variants,
     }
@@ -414,7 +697,11 @@ def ensure_visualization_artifacts(
     _write_json(output / "camera_frustums.json", frustum_payload)
     _atomic_text(
         output / "rigcal_result.rviz",
-        _rviz_config(fixed_frame, variants),
+        _rviz_config(
+            fixed_frame,
+            variants,
+            ground_truth_available=bool(gt_cameras),
+        ),
     )
     _atomic_text(
         output / "launch_rviz.py",
@@ -426,33 +713,75 @@ def ensure_visualization_artifacts(
         ),
     )
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "contract": SCENE_CONTRACT,
         "fingerprint": fingerprint,
         "status": "OK",
         "available": True,
         "fixed_frame": fixed_frame,
         "point_cloud": "scene_anchor_frame.ply",
+        "point_cloud_publisher_count": 1,
+        "point_cloud_display_count": 1,
         "point_count": len(transformed_points),
         "poses": "poses_anchor_frame.json",
         "frustums": "camera_frustums.json",
         "rviz_config": "rigcal_result.rviz",
         "publisher": "camera_rig_calibration.visualization.ros_scene",
-        "source": {
-            "method": "ap03",
-            "label": source["label"],
-            "points3D": str(Path(source["points_path"]).relative_to(experiment_root)),
+        "point_cloud_source": {
+            "method": "ap03_multi",
+            "container_method": "ap03",
+            "container_label": source["label"],
+            "model_id": source["best_model"],
+            "points3D": str(
+                Path(source["points_path"])
+                .relative_to(experiment_root)
+                .as_posix()
+            ),
+            "point_count": source["point_count"],
             "scale_m_per_colmap_unit": scale,
+            "anchor_source": str(
+                Path(source["path"])
+                .relative_to(experiment_root)
+                .as_posix()
+            ),
+            "ground_truth_source": gt_source,
         },
         "variants": [
-            {"method": item["method"], "label": item["label"]}
+            {
+                "method": item["method"],
+                "label": item["label"],
+                "default_visible": item["method"] == "ap03_multi",
+                "anchor_edges_default_visible": False,
+                "error_lines_default_visible": False,
+            }
             for item in variants
         ],
+        "ground_truth": {
+            "available": bool(gt_cameras),
+            "camera_count": len(gt_cameras),
+            "default_visible": bool(gt_cameras),
+            "source": gt_source,
+        },
+        "consistency_checks": {
+            "strict_best_model": True,
+            "shared_container_membership": True,
+            "scale_matches_multi_metadata": True,
+            "point_count_matches_metadata": True,
+            "transformed_cameras_match_ap03_multi_export": True,
+        },
+        "warnings": [
+            *source_warnings,
+            (
+                "Visible ghosting, if present, belongs to this one unmodified "
+                "best-model reconstruction; Ground Truth is never used to "
+                "deform or align the point cloud."
+            ),
+        ],
         "note": (
-            "The point cloud is AP03/COLMAP context. Camera poses retain their "
-            "own method/variant identity."
+            "The single point cloud is AP03 Multi/COLMAP context. Camera "
+            "poses retain their own method/variant identity."
         ),
     }
     _write_json(output / "visualization_manifest.json", manifest)
-    _update_result_status(experiment_root, str(manifest["status"]))
+    _update_result_status(experiment_root, "OK")
     return manifest

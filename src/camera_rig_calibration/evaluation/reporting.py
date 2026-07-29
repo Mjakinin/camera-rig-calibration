@@ -4,8 +4,6 @@ import csv
 import hashlib
 import json
 import math
-import os
-import re
 import shutil
 import subprocess
 import sys
@@ -19,7 +17,13 @@ import numpy as np
 import yaml
 
 from ..anchor_export import ensure_experiment_anchor_exports
+from ..anchor_export.geometry import rotation_to_quaternion
 from ..visualization.scene import ensure_visualization_artifacts
+from .ap03_derived import ensure_ap03_derived_results
+from .simulation_ground_truth import (
+    ensure_simulation_ground_truth,
+    resolve_simulation_ground_truth,
+)
 
 from ..methods.common.geometry import (
     R_to_rpy_deg,
@@ -30,13 +34,6 @@ from ..methods.common.geometry import (
     rpy_to_R,
     rvec_to_R,
 )
-from ..methods.common.sdf_utils import (
-    parse_world_poses,
-    sdf_marker_model_to_opencv_frame,
-    sdf_model_pose_to_optical,
-)
-
-
 @dataclass(frozen=True)
 class PoseRecord:
     entity_id: str
@@ -59,26 +56,46 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 
 def _write_json(path: Path, payload: Any) -> None:
+    text = json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n"
+    try:
+        if path.read_text(encoding="utf-8") == text:
+            return
+    except OSError:
+        pass
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(payload, indent=2, sort_keys=True, default=str) + "\n",
-        encoding="utf-8",
-    )
+    with temporary.open("w", encoding="utf-8", newline="") as handle:
+        handle.write(text)
     temporary.replace(path)
 
 
 def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
     fields = list(dict.fromkeys(key for row in rows for key in row))
-    with path.open("w", newline="", encoding="utf-8") as handle:
+    from io import StringIO
+
+    buffer = StringIO(newline="")
+    with buffer:
         writer = csv.DictWriter(
-            handle,
+            buffer,
             fieldnames=fields or ["status"],
             extrasaction="ignore",
         )
         writer.writeheader()
         writer.writerows(rows)
+        text = buffer.getvalue()
+    _write_text(path, text)
+
+
+def _write_text(path: Path, text: str) -> None:
+    try:
+        if path.read_text(encoding="utf-8") == text:
+            return
+    except OSError:
+        pass
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(text, encoding="utf-8")
+    temporary.replace(path)
 
 
 def _sha256(path: Path) -> str:
@@ -143,13 +160,13 @@ def _text_table(headers: list[str], rows: list[list[Any]]) -> str:
         " | ".join(
             str(header).ljust(widths[index])
             for index, header in enumerate(headers)
-        ),
+        ).rstrip(),
         "-+-".join("-" * width for width in widths),
     ]
     output.extend(
         " | ".join(
             cell.ljust(widths[index]) for index, cell in enumerate(row)
-        )
+        ).rstrip()
         for row in rendered
     )
     return "\n".join(output)
@@ -283,7 +300,8 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
     evaluation = (
         config.get("evaluation", {}) if isinstance(config, dict) else {}
     )
-    method_config = methods.get(method, {})
+    config_method = "ap03" if method in {"ap03_single", "ap03_multi"} else method
+    method_config = methods.get(config_method, {})
     overrides = (
         method_config.get("observation_quality", {})
         if isinstance(method_config, dict)
@@ -420,38 +438,210 @@ def _quality_details(
 ) -> tuple[str, list[str], dict[str, Any]]:
     warnings: list[str] = []
     metrics: dict[str, Any] = {}
-    quality = "converged"
-    if method == "ap02":
-        report = _read_json(
+    quality = "good"
+    if method == "ap01":
+        diagnostics = _read_json(
             result_root
             / "diagnostics"
             / "method"
-            / "final_results"
-            / "AP02_REPORT.json"
+            / "static_extrinsics"
+            / "AP01_DIAGNOSTICS.json"
         )
-        optimizer = report.get("combined_optimizer", {})
+        per_target = diagnostics.get("per_target_diagnostics", {})
+        unstable: list[dict[str, Any]] = []
+        weak: list[str] = []
+        for camera, item in per_target.items():
+            if not isinstance(item, dict):
+                continue
+            selected = str(item.get("selected_method", ""))
+            details = (
+                item.get("direct")
+                if selected == "direct_multimarker"
+                else item.get("relay")
+            )
+            if not isinstance(details, dict):
+                continue
+            candidates = int(details.get("candidates") or 0)
+            translation = _finite(
+                details.get("translation_deviation_median_m")
+            )
+            rotation = _finite(details.get("rotation_deviation_median_deg"))
+            translation_floor, rotation_floor = (
+                (0.12, 4.0)
+                if selected == "direct_multimarker"
+                else (0.30, 7.0)
+            )
+            row = {
+                "camera": camera,
+                "selected_path": selected,
+                "candidates": candidates,
+                "inliers": details.get("inliers"),
+                "translation_dispersion_m": translation,
+                "rotation_dispersion_deg": rotation,
+                "translation_warning_floor_m": translation_floor,
+                "rotation_warning_floor_deg": rotation_floor,
+            }
+            if selected == "direct_multimarker" and candidates <= 1:
+                weak.append(str(camera))
+                row["support"] = "weak_single_candidate"
+            if (
+                (translation is not None and translation > translation_floor)
+                or (rotation is not None and rotation > rotation_floor)
+            ):
+                unstable.append(row)
+        metrics["ap01_consensus"] = {
+            "path_thresholds": {
+                "direct": {
+                    "translation_m": 0.12,
+                    "rotation_deg": 4.0,
+                },
+                "relay": {
+                    "translation_m": 0.30,
+                    "rotation_deg": 7.0,
+                },
+            },
+            "unstable_targets": unstable,
+            "weak_direct_single_support": weak,
+            "per_target": per_target,
+        }
+        if unstable:
+            quality = "warning_unstable_consensus"
+            warnings.append(
+                "AP01 selected-path consensus exceeds the documented "
+                "dispersion floor for: "
+                + ", ".join(str(item["camera"]) for item in unstable)
+                + "."
+            )
+        if weak:
+            warnings.append(
+                "AP01 direct support is weak (one candidate) for: "
+                + ", ".join(weak)
+                + "."
+            )
+    if method == "ap02":
+        optimizer = _read_json(
+            result_root
+            / "diagnostics"
+            / "method"
+            / "graph_ba"
+            / "with_moving"
+            / "ap02_optimization_summary.json"
+        )
+        if not optimizer:
+            report = _read_json(
+                result_root
+                / "diagnostics"
+                / "method"
+                / "final_results"
+                / "AP02_REPORT.json"
+            )
+            optimizer = report.get("combined_optimizer", {})
         if isinstance(optimizer, dict) and optimizer:
             metrics["optimizer"] = optimizer
-            success = bool(optimizer.get("success"))
-            message = str(optimizer.get("message", "")).strip()
+            success = bool(
+                optimizer.get("solver_success", optimizer.get("success"))
+            )
+            message = str(
+                optimizer.get("solver_message", optimizer.get("message", ""))
+            ).strip()
+            rmse = _finite(
+                optimizer.get(
+                    "final_reprojection_rmse_px",
+                    optimizer.get("final_rmse_px"),
+                )
+            )
+            metrics["combined_reprojection_rmse_px"] = rmse
+            if rmse is None:
+                quality = "warning_reprojection_unavailable"
+                warnings.append(
+                    "AP02 Combined final reprojection RMSE is unavailable; "
+                    "the solver status alone is not a quality measure."
+                )
+            elif rmse > 25.0:
+                quality = "poor_high_reprojection"
+                warnings.append(
+                    f"AP02 Combined reprojection RMSE is {rmse:.3f} px "
+                    "(poor: >25 px)."
+                )
+            elif rmse > 5.0:
+                quality = "warning_high_reprojection"
+                warnings.append(
+                    f"AP02 Combined reprojection RMSE is {rmse:.3f} px "
+                    "(warning: >5 px)."
+                )
             if not success and (
                 "maximum number" in message.lower()
                 or optimizer.get("nfev")
                 == optimizer.get("maximum_function_evaluations")
             ):
-                quality = "optimizer_limit_reached"
                 warnings.append(
                     "The AP02 combined optimizer reached its configured "
                     f"limit ({optimizer.get('nfev', '?')} evaluations). "
-                    "The complete estimate is available but did not report "
-                    "numerical convergence."
+                    "Solver completion and geometric quality are reported "
+                    "independently."
                 )
             elif not success:
-                quality = "warning"
                 warnings.append(
                     "The AP02 combined optimizer did not report convergence"
                     + (f": {message}" if message else ".")
                 )
+            metrics["solver"] = {
+                "success": success,
+                "message": message,
+                "status": optimizer.get(
+                    "solver_status", optimizer.get("status")
+                ),
+                "nfev": optimizer.get("nfev"),
+                "njev": optimizer.get("njev"),
+                "optimality": optimizer.get("optimality"),
+                "maximum_function_evaluations": optimizer.get(
+                    "maximum_function_evaluations"
+                ),
+                "limit_reached": bool(
+                    not success
+                    and (
+                        "maximum number" in message.lower()
+                        or optimizer.get("nfev")
+                        == optimizer.get("maximum_function_evaluations")
+                    )
+                ),
+            }
+    if method in {"ap03_single", "ap03_multi"}:
+        result = _read_json(result_root / "RESULT.json")
+        scale = result.get("metrics", {}).get("ap03_scale", {})
+        relative_std = _finite(scale.get("used_rel_std_scale"))
+        metrics["ap03_scale"] = scale
+        metrics["ap03_scale_relative_std"] = relative_std
+        metrics["ap03_registration"] = {
+            "registered_static_cameras": scale.get(
+                "registered_static_cameras"
+            ),
+            "registered_moving_frames": scale.get(
+                "registered_moving_frames"
+            ),
+            "registered_images": scale.get("registered_images"),
+            "sparse_points": scale.get("num_sparse_points3d"),
+            "missing_static_cameras": scale.get(
+                "missing_static_cameras", []
+            ),
+        }
+        if relative_std is None:
+            quality = "warning_scale_dispersion_unavailable"
+            warnings.append("AP03 scale dispersion is unavailable.")
+        elif relative_std > 0.10:
+            quality = "poor_scale_dispersion"
+            warnings.append(
+                f"AP03 {method.removeprefix('ap03_').title()} scale "
+                f"relative standard deviation is {100.0 * relative_std:.2f}% "
+                "(poor: >10%)."
+            )
+        elif relative_std > 0.05:
+            quality = "warning_scale_dispersion"
+            warnings.append(
+                f"AP03 {method.removeprefix('ap03_').title()} scale "
+                f"relative standard deviation is {100.0 * relative_std:.2f}% "
+                "(warning: >5%)."
+            )
     status = _read_json(
         result_root / "diagnostics" / "method" / "METHOD_STATUS.json"
     )
@@ -459,7 +649,7 @@ def _quality_details(
         value = status.get(key)
         if value and str(value) not in warnings:
             warnings.append(str(value))
-            if quality == "converged":
+            if quality == "good":
                 quality = "warning"
     override_paths = sorted(
         (
@@ -556,8 +746,15 @@ def _quality_details(
 
 
 def _config_text(summary: dict[str, Any]) -> str:
+    def render(value: Any) -> str:
+        if isinstance(value, bool):
+            return str(value).lower()
+        if isinstance(value, float) and value != 0.0 and abs(value) < 1e-4:
+            return format(value, ".15f").rstrip("0").rstrip(".")
+        return str(value)
+
     return ", ".join(
-        f"{key}={value}"
+        f"{key}={render(value)}"
         for key, value in summary.items()
         if value is not None
     ) or "baseline/default configuration"
@@ -597,7 +794,7 @@ def _method_diagnostics(
                 / "ap02_optimization_summary.json",
             ),
         )
-    else:
+    elif method == "ap03":
         candidates = (
             (
                 "ap03_scale",
@@ -606,12 +803,38 @@ def _method_diagnostics(
                 / "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
             ),
         )
+    elif method in {"ap03_single", "ap03_multi"}:
+        provenance = _read_json(
+            result_root / "provenance" / "derived_result.json"
+        )
+        experiment_root = result_root.parents[2]
+        metadata = provenance.get("scale_metadata")
+        candidates = (
+            (
+                "ap03_scale",
+                experiment_root / str(metadata)
+                if metadata
+                else Path("__missing__"),
+            ),
+        )
+        if provenance:
+            diagnostics["shared_colmap"] = provenance
+            paths.append("provenance/derived_result.json")
+    else:
+        candidates = ()
     for key, path in candidates:
         if not path.is_file():
             continue
         value = json.loads(path.read_text(encoding="utf-8"))
         diagnostics[key] = value
-        paths.append(str(path.relative_to(result_root)))
+        try:
+            relative = path.relative_to(result_root)
+        except ValueError:
+            relative = (
+                Path("../../..")
+                / path.relative_to(result_root.parents[2])
+            )
+        paths.append(relative.as_posix())
     for path in (
         method_root.rglob("*optimization_history.csv")
         if method == "ap02"
@@ -656,7 +879,7 @@ def _scale_comparison_rows(
                     "relative_std": None,
                 }
             )
-        elif method == "ap03":
+        elif method in {"ap03", "ap03_single", "ap03_multi"}:
             scale = metrics.get("ap03_scale", {})
             rows.append(
                 {
@@ -725,8 +948,12 @@ def _method_report_text(
         "=" * width,
         "",
         f"Method / variant: {payload['method']} / {payload['label']}",
+        f"Execution status: {payload.get('execution_status', '-')}",
+        f"Solver status: {payload.get('solver_status', '-')}",
         f"Artifact status: {payload['artifact_status']}",
+        f"Calibration status: {payload.get('calibration_status', '-')}",
         f"Quality status: {payload['quality_status']}",
+        f"Evaluation status: {payload.get('evaluation_status', '-')}",
         f"Anchor export status: {payload.get('anchor_export_status', 'unavailable')}",
         f"RViz visualization status: {payload.get('visualization_status', 'unavailable')}",
         f"Primary result: {payload.get('primary_result', '-')}",
@@ -1042,6 +1269,26 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
         root = result_path.parent
         payload = _read_json(result_path)
         method = str(payload.get("method") or root.parent.name)
+        if (
+            method == "ap03"
+            and payload.get("comparison_visibility")
+            == "hidden_when_scale_variants_available"
+            and (
+                experiment_root
+                / "methods"
+                / "ap03_single"
+                / root.name
+                / "RESULT.json"
+            ).is_file()
+            and (
+                experiment_root
+                / "methods"
+                / "ap03_multi"
+                / root.name
+                / "RESULT.json"
+            ).is_file()
+        ):
+            continue
         previous_label = str(payload.get("label") or root.name)
         label = root.name
         if previous_label != label:
@@ -1053,11 +1300,18 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
         poses = load_pose_records(root / "camera_extrinsics.csv")
         pairs = pairwise_rows(poses, method=method, label=label)
         _write_csv(root / "pairwise_camera_extrinsics.csv", pairs)
+        previous_evaluation_metrics = (
+            payload.get("metrics", {}).get("evaluation")
+            if isinstance(payload.get("metrics"), dict)
+            else None
+        )
         quality, warnings, metrics = _quality_details(root, method)
         method_diagnostics, detail_paths = _method_diagnostics(
             root, method
         )
         metrics.update(method_diagnostics)
+        if previous_evaluation_metrics is not None:
+            metrics["evaluation"] = previous_evaluation_metrics
         config_summary = _configuration_summary(root, method)
         anchor_payload = _read_json(root / "camera_extrinsics_anchor.json")
         anchor_cameras = [
@@ -1065,6 +1319,19 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
             for item in anchor_payload.get("cameras", [])
             if isinstance(item, dict)
         ]
+        solver_details = metrics.get("solver", {})
+        if method == "ap02":
+            solver_status = (
+                "success"
+                if solver_details.get("success")
+                else "limit_reached"
+                if solver_details.get("limit_reached")
+                else "failed"
+                if solver_details
+                else "unknown"
+            )
+        else:
+            solver_status = "not_applicable"
         payload.update(
             {
                 "schema_version": 5,
@@ -1073,6 +1340,10 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
                 "label": label,
                 "status": "available",
                 "artifact_status": "available",
+                "execution_status": payload.get(
+                    "execution_status", "completed"
+                ),
+                "solver_status": solver_status,
                 "quality_status": quality,
                 "warnings": warnings,
                 "metrics": metrics,
@@ -1095,12 +1366,15 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
                 ),
                 "anchor_export_available": bool(anchor_cameras),
                 "anchor_camera_count": len(anchor_cameras),
+                "visualization_status": payload.get(
+                    "visualization_status", "not_generated"
+                ),
             }
         )
         _write_json(result_path, payload)
-        (root / "RESULT.txt").write_text(
+        _write_text(
+            root / "RESULT.txt",
             _method_report_text(payload, poses, pairs, anchor_cameras),
-            encoding="utf-8",
         )
         results.append(payload)
     return results
@@ -1150,8 +1424,11 @@ def complete_existing_dataset(
         destination = quality / name
         if source_file.is_file() and not destination.is_file():
             shutil.copy2(source_file, destination)
+    publication_path = observations / "PUBLICATION_COMPLETE.json"
+    existing_publication = _read_json(publication_path)
+    finalized_at = existing_publication.get("finalized_at") or _now()
     _write_json(
-        observations / "PUBLICATION_COMPLETE.json",
+        publication_path,
         {
             "schema_version": 5,
             "layout_version": 2,
@@ -1163,7 +1440,7 @@ def complete_existing_dataset(
                 if (observations / "debug_images").is_dir()
                 else None
             ),
-            "finalized_at": _now(),
+            "finalized_at": finalized_at,
             "reconciled_from": str(source.relative_to(experiment_root)),
         },
     )
@@ -1333,118 +1610,6 @@ def _repository_root(path: Path) -> Path:
     return path.resolve()
 
 
-def _host_path(path_text: str, repository_root: Path) -> Path | None:
-    value = Path(path_text)
-    if value.is_file():
-        return value.resolve()
-    match = re.match(r"^/mnt/([a-zA-Z])/(.*)$", path_text)
-    if match and os.name == "nt":
-        translated = Path(f"{match.group(1).upper()}:/") / match.group(2)
-        if translated.is_file():
-            return translated.resolve()
-    candidates = [
-        repository_root
-        / "src"
-        / "calib_lab"
-        / "bus_real_data"
-        / "worlds"
-        / Path(path_text).name,
-        repository_root / path_text,
-    ]
-    return next((item.resolve() for item in candidates if item.is_file()), None)
-
-
-def _marker_id(entity_name: str) -> int | None:
-    if entity_name == "aruco_ref_floor_14":
-        return 14
-    match = re.fullmatch(r"marker_(\d{3})", entity_name)
-    return int(match.group(1)) if match else None
-
-
-def ensure_simulation_ground_truth(
-    dataset_root: Path,
-    *,
-    world_path: Path | None = None,
-    backfilled: bool = False,
-) -> dict[str, Any]:
-    """Snapshot the captured SDF and export camera/marker optical GT poses."""
-    metadata = dataset_root / "metadata" / "simulation"
-    destination = metadata / "ground_truth.json"
-    snapshot = metadata / "world_snapshot.sdf"
-    existing = _read_json(destination)
-    if existing and snapshot.is_file():
-        if existing.get("world_sha256") == _sha256(snapshot):
-            return existing
-
-    repository = _repository_root(dataset_root)
-    if world_path is None:
-        capture = _read_json(metadata / "capture_metadata.json")
-        if not capture:
-            capture = _read_json(
-                dataset_root / "metadata" / "simulation_capture.json"
-            )
-        recorded = str(capture.get("world", ""))
-        world_path = _host_path(recorded, repository) if recorded else None
-    if world_path is None or not world_path.is_file():
-        return {
-            "schema_version": 5,
-            "layout_version": 2,
-            "status": "unavailable",
-            "reason": "The exact simulation SDF could not be located.",
-        }
-
-    metadata.mkdir(parents=True, exist_ok=True)
-    if not snapshot.is_file():
-        shutil.copy2(world_path, snapshot)
-    poses = parse_world_poses(snapshot)
-    dataset = _read_json(dataset_root / "dataset.json")
-    configured_cameras = [
-        str(item.get("id"))
-        for item in dataset.get("static_cameras", [])
-        if isinstance(item, dict) and item.get("id")
-    ]
-    cameras = {
-        camera: sdf_model_pose_to_optical(poses[camera]["T_W_model"]).tolist()
-        for camera in configured_cameras
-        if camera in poses
-    }
-    markers: dict[str, Any] = {}
-    for entity_name, pose in sorted(poses.items()):
-        marker = _marker_id(entity_name)
-        if marker is None:
-            continue
-        markers[str(marker)] = {
-            "entity_name": entity_name,
-            "T_world_marker_opencv": sdf_marker_model_to_opencv_frame(
-                pose["T_W_model"]
-            ).tolist(),
-        }
-    payload = {
-        "schema_version": 5,
-        "layout_version": 2,
-        "status": "available",
-        "generated_at": _now(),
-        "snapshot_origin": (
-            "backfilled_from_recorded_capture_sdf"
-            if backfilled
-            else "captured_before_calibration"
-        ),
-        "world_source_recorded": str(world_path),
-        "world_snapshot": "world_snapshot.sdf",
-        "world_sha256": _sha256(snapshot),
-        "camera_transform_convention": (
-            "T_world_camera_optical maps OpenCV camera coordinates to world"
-        ),
-        "marker_transform_convention": (
-            "T_world_marker_opencv maps OpenCV ArUco coordinates to world"
-        ),
-        "static_cameras": cameras,
-        "markers": markers,
-    }
-    _write_json(destination, payload)
-    return payload
-
-
 def _matrix(value: Any) -> np.ndarray:
     return np.asarray(value, dtype=np.float64).reshape(4, 4)
 
@@ -1525,6 +1690,9 @@ def _anchor_camera_gt_rows(
             continue
         estimated = _matrix(camera["matrix"])
         ground_truth = anchor_world @ gt_cameras[camera_id]
+        delta = estimated[:3, 3] - ground_truth[:3, 3]
+        estimated_quaternion = rotation_to_quaternion(estimated[:3, :3])
+        gt_quaternion = rotation_to_quaternion(ground_truth[:3, :3])
         row: dict[str, Any] = {
             "method": method,
             "label": label,
@@ -1539,6 +1707,17 @@ def _anchor_camera_gt_rows(
             "rotation_error_deg": float(
                 rot_error_deg(estimated, ground_truth)
             ),
+            "delta_x_m": float(delta[0]),
+            "delta_y_m": float(delta[1]),
+            "delta_z_m": float(delta[2]),
+            "estimated_qx": estimated_quaternion[0],
+            "estimated_qy": estimated_quaternion[1],
+            "estimated_qz": estimated_quaternion[2],
+            "estimated_qw": estimated_quaternion[3],
+            "gt_qx": gt_quaternion[0],
+            "gt_qy": gt_quaternion[1],
+            "gt_qz": gt_quaternion[2],
+            "gt_qw": gt_quaternion[3],
             "evaluation": (
                 "direct_anchor_relative_posthoc_gt_no_fit_no_scale"
             ),
@@ -1547,6 +1726,48 @@ def _anchor_camera_gt_rows(
         row.update(_pose_columns("gt_", ground_truth))
         rows.append(row)
     return rows
+
+
+def _anchor_pose_records(
+    anchor_payload: dict[str, Any],
+) -> dict[str, PoseRecord]:
+    records: dict[str, PoseRecord] = {}
+    for camera in anchor_payload.get("cameras", []):
+        if not isinstance(camera, dict) or camera.get("matrix") is None:
+            continue
+        camera_id = str(camera.get("camera_id", "")).strip()
+        if not camera_id:
+            continue
+        try:
+            transform = _matrix(camera["matrix"])
+        except (TypeError, ValueError):
+            continue
+        records[camera_id] = PoseRecord(
+            entity_id=camera_id,
+            transform=transform,
+            source="camera_extrinsics_anchor.json",
+            reference_frame=str(anchor_payload.get("parent_frame", "")),
+            transform_convention=str(
+                anchor_payload.get("transform_convention", "")
+            ),
+        )
+    return records
+
+
+def _ground_truth_anchor_records(
+    *,
+    anchor_marker_id: int,
+    gt_cameras: dict[str, np.ndarray],
+    gt_markers: dict[int, np.ndarray],
+) -> dict[str, np.ndarray]:
+    anchor = gt_markers.get(anchor_marker_id)
+    if anchor is None:
+        return {}
+    anchor_world = invT(anchor)
+    return {
+        camera: anchor_world @ transform
+        for camera, transform in gt_cameras.items()
+    }
 
 
 def _pose_alignment(
@@ -1730,7 +1951,10 @@ def _simulation_primary_text(
         ]
     )
     for method, label in sorted(
-        {(row["method"], row["label"]) for row in rows}
+        {
+            (str(item["method"]), str(item["label"]))
+            for item in summaries
+        }
     ):
         selected = [
             row
@@ -1741,7 +1965,8 @@ def _simulation_primary_text(
             [
                 "",
                 f"{method} / {label}",
-                _text_table(
+                (
+                    _text_table(
                     [
                         "Pair",
                         "t err [cm]",
@@ -1763,6 +1988,12 @@ def _simulation_primary_text(
                         ]
                         for row in selected
                     ],
+                    )
+                    if selected
+                    else (
+                        "Evaluation unavailable: the exact direct "
+                        "anchor-relative camera set is incomplete."
+                    )
                 ),
             ]
         )
@@ -2300,25 +2531,70 @@ def _simulation_results(
     )
     anchor_value = selection.get("evaluation_anchor", {}).get("selected")
     anchor_marker_id = int(anchor_value) if anchor_value is not None else None
+    gt_anchor_cameras = (
+        _ground_truth_anchor_records(
+            anchor_marker_id=anchor_marker_id,
+            gt_cameras=gt_cameras,
+            gt_markers=gt_markers,
+        )
+        if anchor_marker_id is not None
+        else {}
+    )
+    expected_cameras = sorted(gt_cameras)
     anchor_gt_rows: list[dict[str, Any]] = []
     anchor_gt_summaries: list[dict[str, Any]] = []
     for payload in method_payloads:
         method = str(payload["method"])
         label = str(payload["label"])
         root = experiment_root / "methods" / method / label
-        estimated = load_pose_records(root / "camera_extrinsics.csv")
-        rows = _simulation_pairwise(
-            method, label, estimated, gt_cameras
+        anchor_payload = _read_json(
+            root / "camera_extrinsics_anchor.json"
+        )
+        estimated = _anchor_pose_records(anchor_payload)
+        complete_camera_set = set(estimated) == set(expected_cameras)
+        rows = (
+            _simulation_pairwise(
+                method, label, estimated, gt_anchor_cameras
+            )
+            if complete_camera_set
+            and set(gt_anchor_cameras) == set(expected_cameras)
+            else []
         )
         pair_rows.extend(rows)
+        evaluation_status = (
+            "available"
+            if len(rows)
+            == len(expected_cameras) * (len(expected_cameras) - 1) // 2
+            and bool(rows)
+            else "evaluation_unavailable"
+        )
         summaries.append(
-            {"method": method, "label": label, **_summary(rows)}
+            {
+                "method": method,
+                "label": label,
+                "evaluation_status": evaluation_status,
+                "expected_camera_count": len(expected_cameras),
+                "evaluated_camera_count": len(estimated),
+                "missing_cameras": sorted(
+                    set(expected_cameras) - set(estimated)
+                ),
+                "reason": (
+                    None
+                    if evaluation_status == "available"
+                    else (
+                        "The direct anchor-relative estimate does not contain "
+                        "the exact Ground-Truth camera set; no pair subset is "
+                        "published as a complete evaluation."
+                    )
+                ),
+                **_summary(rows),
+            }
         )
         if anchor_marker_id is not None:
             direct_rows = _anchor_camera_gt_rows(
                 method,
                 label,
-                _read_json(root / "camera_extrinsics_anchor.json"),
+                anchor_payload,
                 anchor_marker_id=anchor_marker_id,
                 gt_cameras=gt_cameras,
                 gt_markers=gt_markers,
@@ -2328,12 +2604,20 @@ def _simulation_results(
                 {
                     "method": method,
                     "label": label,
+                    "evaluation_status": (
+                        "available"
+                        if len(direct_rows) == len(expected_cameras)
+                        and complete_camera_set
+                        else "evaluation_unavailable"
+                    ),
                     **_summary(direct_rows),
                 }
             )
         try:
             map_rows.extend(
-                _camera_map_rows(method, label, estimated, gt_cameras)
+                _camera_map_rows(
+                    method, label, estimated, gt_anchor_cameras
+                )
             )
         except RuntimeError:
             pass
@@ -2625,8 +2909,10 @@ def write_scientific_experiment_reports(
     category: str,
 ) -> dict[str, Any]:
     """Write the canonical human and machine result front doors."""
+    ensure_ap03_derived_results(experiment_root)
+    if category == "simulation":
+        resolve_simulation_ground_truth(dataset_root, backfilled=True)
     ensure_experiment_anchor_exports(experiment_root)
-    visualization = ensure_visualization_artifacts(experiment_root)
     method_payloads = refresh_method_reports(experiment_root)
     if category == "simulation":
         text, payload = _simulation_results(
@@ -2637,19 +2923,39 @@ def write_scientific_experiment_reports(
             experiment_root, method_payloads, dataset_root
         )
     evaluation_by_method: dict[tuple[str, str], str] = {}
+    evaluation_metrics_by_method: dict[
+        tuple[str, str], dict[str, Any]
+    ] = {}
     if category == "simulation":
         summaries = payload.get(
             "anchor_camera_ground_truth", {}
         ).get("summaries", [])
+        pair_summaries = payload.get(
+            "primary_camera_pairwise", {}
+        ).get("summaries", [])
         evaluation_by_method = {
-            (str(item.get("method")), str(item.get("label"))): (
-                "available"
-                if int(item.get("count") or 0) > 0
-                else "unavailable"
+            (str(item.get("method")), str(item.get("label"))): str(
+                item.get("evaluation_status", "evaluation_unavailable")
             )
             for item in summaries
             if isinstance(item, dict)
         }
+        anchor_by_key = {
+            (str(item.get("method")), str(item.get("label"))): item
+            for item in summaries
+            if isinstance(item, dict)
+        }
+        for item in pair_summaries:
+            if not isinstance(item, dict):
+                continue
+            key = (
+                str(item.get("method")),
+                str(item.get("label")),
+            )
+            evaluation_metrics_by_method[key] = {
+                "pairwise_gt": item,
+                "anchor_camera_gt": anchor_by_key.get(key, {}),
+            }
     else:
         marker_available = bool(payload.get("marker_consistency_path"))
         evaluation_by_method = {
@@ -2671,7 +2977,23 @@ def write_scientific_experiment_reports(
             str(method_result.get("label") or result_path.parent.name),
         )
         evaluation_status = evaluation_by_method.get(key, "unavailable")
-        if method_result.get("evaluation_status") != evaluation_status:
+        current_metrics = (
+            dict(method_result.get("metrics", {}))
+            if isinstance(method_result.get("metrics"), dict)
+            else {}
+        )
+        evaluation_metrics = evaluation_metrics_by_method.get(key)
+        metrics_changed = (
+            evaluation_metrics is not None
+            and current_metrics.get("evaluation") != evaluation_metrics
+        )
+        if metrics_changed:
+            current_metrics["evaluation"] = evaluation_metrics
+            method_result["metrics"] = current_metrics
+        if (
+            method_result.get("evaluation_status") != evaluation_status
+            or metrics_changed
+        ):
             method_result["evaluation_status"] = evaluation_status
             _write_json(result_path, method_result)
             statuses_changed = True
@@ -2685,11 +3007,23 @@ def write_scientific_experiment_reports(
             text, payload = _real_results_text(
                 experiment_root, method_payloads, dataset_root
             )
+    visualization = ensure_visualization_artifacts(experiment_root)
+    method_payloads = refresh_method_reports(experiment_root)
+    if category == "simulation":
+        text, payload = _simulation_results(
+            experiment_root, dataset_root, method_payloads
+        )
+    else:
+        text, payload = _real_results_text(
+            experiment_root, method_payloads, dataset_root
+        )
+    existing_results = _read_json(experiment_root / "RESULTS.json")
+    generated_at = existing_results.get("generated_at") or _now()
     payload.update(
         {
             "schema_version": 5,
             "layout_version": 2,
-            "generated_at": _now(),
+            "generated_at": generated_at,
             "human_report": "RESULTS.txt",
             "visualization": visualization,
         }
@@ -2708,7 +3042,7 @@ def write_scientific_experiment_reports(
             else f"Reason: {visualization.get('reason', '-')}\n"
         )
     )
-    (experiment_root / "RESULTS.txt").write_text(text, encoding="utf-8")
+    _write_text(experiment_root / "RESULTS.txt", text)
     _write_json(experiment_root / "RESULTS.json", payload)
     for obsolete in ("SUMMARY.txt", "COMPARISON.txt"):
         (experiment_root / obsolete).unlink(missing_ok=True)

@@ -312,8 +312,11 @@ def test_ap03_anchor_uses_existing_scale_without_scale_fit(
 def test_rviz_scene_uses_existing_ap03_points_only(
     prepared_config: RigConfig, tmp_path: Path
 ) -> None:
-    root = _method_root(tmp_path, prepared_config, "ap03", "baseline")
-    scale_root = root / "diagnostics" / "method" / "scale_multi"
+    root = _method_root(
+        tmp_path, prepared_config, "ap03_multi", "baseline"
+    )
+    container = tmp_path / "methods" / "ap03" / "baseline"
+    scale_root = container / "diagnostics" / "method" / "scale_multi"
     scale_root.mkdir(parents=True)
     (scale_root / "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json").write_text(
         json.dumps(
@@ -333,30 +336,59 @@ def test_rviz_scene_uses_existing_ap03_points_only(
         (half, -half, 0.0),
         (-half, -half, 0.0),
     ]
-    _write_csv(
-        scale_root / "AP03_MARKER_SIZE_SCALE_ONLY_TRIANGULATED_CORNERS.csv",
-        [
-            "marker_id",
-            "corner_idx",
-            "status",
-            "x_colmap",
-            "y_colmap",
-            "z_colmap",
-        ],
-        [
+    shared_geometry = (
+        container
+        / "diagnostics"
+        / "derived"
+        / "shared_anchor_geometry"
+        / "marker_7_corners_colmap.json"
+    )
+    shared_geometry.parent.mkdir(parents=True)
+    shared_geometry.write_text(
+        json.dumps(
             {
-                "marker_id": 7,
-                "corner_idx": index,
-                "status": "OK",
-                "x_colmap": 2 * point[0],
-                "y_colmap": 2 * point[1],
-                "z_colmap": 2 * point[2],
+                "anchor_marker_id": 7,
+                "corners": [
+                    {
+                        "corner_idx": index,
+                        "x_colmap": 2 * point[0],
+                        "y_colmap": 2 * point[1],
+                        "z_colmap": 2 * point[2],
+                    }
+                    for index, point in enumerate(ideal)
+                ],
             }
-            for index, point in enumerate(ideal)
-        ],
+        ),
+        encoding="utf-8",
+    )
+    camera_source = (
+        scale_root / "AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv"
+    )
+    camera_source.write_bytes((root / "camera_extrinsics.csv").read_bytes())
+    (root / "provenance" / "derived_result.json").write_text(
+        json.dumps(
+            {
+                "shared_colmap_container": "methods/ap03/baseline",
+                "shared_colmap_best_model": "0",
+                "shared_anchor_geometry": (
+                    "methods/ap03/baseline/diagnostics/derived/"
+                    "shared_anchor_geometry/marker_7_corners_colmap.json"
+                ),
+                "scale_metadata": (
+                    "methods/ap03/baseline/diagnostics/method/scale_multi/"
+                    "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json"
+                ),
+                "camera_pose_source": (
+                    "methods/ap03/baseline/diagnostics/method/scale_multi/"
+                    "AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv"
+                ),
+                "scale_m_per_colmap_unit": 0.5,
+            }
+        ),
+        encoding="utf-8",
     )
     points = (
-        root
+        container
         / "diagnostics"
         / "method"
         / "colmap"
@@ -387,6 +419,8 @@ def test_rviz_scene_uses_existing_ap03_points_only(
 
     assert manifest["status"] == "OK"
     assert manifest["point_count"] == 1
+    assert manifest["point_cloud_display_count"] == 1
+    assert manifest["point_cloud_source"]["model_id"] == "0"
     ply = (tmp_path / "visualization" / "scene_anchor_frame.ply").read_text(
         encoding="utf-8"
     )

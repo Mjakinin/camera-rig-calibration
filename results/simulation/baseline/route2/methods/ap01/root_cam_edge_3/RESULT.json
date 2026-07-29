@@ -41,7 +41,8 @@
     "diagnostics/method/metric_scale/SCALE_DIAGNOSTICS.json"
   ],
   "diagnostics": "diagnostics",
-  "evaluation_status": "unavailable",
+  "evaluation_status": "available",
+  "execution_status": "completed",
   "input_fingerprint": "input_0ffd7d57d0b8",
   "label": "root_cam_edge_3",
   "layout_version": 2,
@@ -49,6 +50,106 @@
   "method": "ap01",
   "method_fingerprint": "dd639d7d6186f4d62e32ebbcf585a1eb5a53e5d422ba852a38d8a557d55645b1",
   "metrics": {
+    "ap01_consensus": {
+      "path_thresholds": {
+        "direct": {
+          "rotation_deg": 4.0,
+          "translation_m": 0.12
+        },
+        "relay": {
+          "rotation_deg": 7.0,
+          "translation_m": 0.3
+        }
+      },
+      "per_target": {
+        "cam_edge_0": {
+          "direct": {
+            "candidates": 1,
+            "inliers": 1,
+            "rotation_deviation_median_deg": 0.0,
+            "rotation_threshold_deg": 4.0,
+            "translation_deviation_median_m": 0.0,
+            "translation_threshold_m": 0.12
+          },
+          "relay": {
+            "candidates": 1720,
+            "inliers": 1096,
+            "rotation_deviation_median_deg": 10.649089481194311,
+            "rotation_threshold_deg": 20.835843671010814,
+            "translation_deviation_median_m": 0.24230135916329212,
+            "translation_threshold_m": 0.7588711179115426
+          },
+          "relay_candidates": 1720,
+          "selected_method": "moving_colmap_relay"
+        },
+        "cam_edge_1": {
+          "direct": {
+            "candidates": 6,
+            "inliers": 6,
+            "rotation_deviation_median_deg": 17.17500661476985,
+            "rotation_threshold_deg": 35.300953787542454,
+            "translation_deviation_median_m": 1.8660167060595794,
+            "translation_threshold_m": 6.764745203868269
+          },
+          "relay": {
+            "candidates": 3408,
+            "inliers": 2406,
+            "rotation_deviation_median_deg": 15.743972572136798,
+            "rotation_threshold_deg": 38.160110035815364,
+            "translation_deviation_median_m": 0.9121065450224471,
+            "translation_threshold_m": 3.3605082124560655
+          },
+          "relay_candidates": 3408,
+          "selected_method": "direct_multimarker"
+        },
+        "cam_edge_5": {
+          "direct": null,
+          "relay": {
+            "candidates": 4032,
+            "inliers": 2448,
+            "rotation_deviation_median_deg": 23.611202113739267,
+            "rotation_threshold_deg": 42.22207502949088,
+            "translation_deviation_median_m": 1.3550170645596362,
+            "translation_threshold_m": 3.893365299492448
+          },
+          "relay_candidates": 4032,
+          "selected_method": "moving_colmap_relay"
+        }
+      },
+      "unstable_targets": [
+        {
+          "camera": "cam_edge_0",
+          "candidates": 1720,
+          "inliers": 1096,
+          "rotation_dispersion_deg": 10.649089481194311,
+          "rotation_warning_floor_deg": 7.0,
+          "selected_path": "moving_colmap_relay",
+          "translation_dispersion_m": 0.24230135916329212,
+          "translation_warning_floor_m": 0.3
+        },
+        {
+          "camera": "cam_edge_1",
+          "candidates": 6,
+          "inliers": 6,
+          "rotation_dispersion_deg": 17.17500661476985,
+          "rotation_warning_floor_deg": 4.0,
+          "selected_path": "direct_multimarker",
+          "translation_dispersion_m": 1.8660167060595794,
+          "translation_warning_floor_m": 0.12
+        },
+        {
+          "camera": "cam_edge_5",
+          "candidates": 4032,
+          "inliers": 2448,
+          "rotation_dispersion_deg": 23.611202113739267,
+          "rotation_warning_floor_deg": 7.0,
+          "selected_path": "moving_colmap_relay",
+          "translation_dispersion_m": 1.3550170645596362,
+          "translation_warning_floor_m": 0.3
+        }
+      ],
+      "weak_direct_single_support": []
+    },
     "ap01_relay_selection": [
       {
         "frame_id": 78,
@@ -5550,6 +5651,36 @@
       "used_pairs": 3058,
       "used_relative_std": 0.06871183387993253,
       "used_std": 0.05284414168911385
+    },
+    "evaluation": {
+      "anchor_camera_gt": {
+        "count": 4,
+        "evaluation_status": "available",
+        "label": "root_cam_edge_3",
+        "max_rotation_error_deg": 51.78908483539397,
+        "max_translation_error_cm": 758.7674031281343,
+        "mean_rotation_error_deg": 18.844601302783605,
+        "mean_translation_error_cm": 237.88310238767423,
+        "median_rotation_error_deg": 8.255294307486064,
+        "median_translation_error_cm": 76.07652007296988,
+        "method": "ap01"
+      },
+      "pairwise_gt": {
+        "count": 6,
+        "evaluated_camera_count": 4,
+        "evaluation_status": "available",
+        "expected_camera_count": 4,
+        "label": "root_cam_edge_3",
+        "max_rotation_error_deg": 57.20078380539725,
+        "max_translation_error_cm": 779.2481944549361,
+        "mean_rotation_error_deg": 30.246394015309665,
+        "mean_translation_error_cm": 425.1112587447137,
+        "median_rotation_error_deg": 30.697402793211285,
+        "median_translation_error_cm": 441.31965337808515,
+        "method": "ap01",
+        "missing_cameras": [],
+        "reason": null
+      }
     }
   },
   "pairwise_camera_count": 6,
@@ -5557,16 +5688,19 @@
   "primary_result": "baseline",
   "provenance": "provenance",
   "published_at": "2026-07-29T16:44:02+00:00",
-  "quality_status": "converged",
+  "quality_status": "warning_unstable_consensus",
   "queue_id": "simulation_batch_20260729_182623__route2",
   "reference_frame": "resolved root camera",
   "runtime_seconds": 176.67072259899942,
   "schema_version": 5,
+  "solver_status": "not_applicable",
   "static_camera_count": 4,
   "status": "available",
   "success": true,
   "transform_convention": "T_reference_camera (camera pose expressed in reference frame)",
   "visualization_manifest": "../../../visualization/visualization_manifest.json",
   "visualization_status": "OK",
-  "warnings": []
+  "warnings": [
+    "AP01 selected-path consensus exceeds the documented dispersion floor for: cam_edge_0, cam_edge_1, cam_edge_5."
+  ]
 }

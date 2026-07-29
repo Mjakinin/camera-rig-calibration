@@ -105,7 +105,7 @@
   },
   "anchor_marker_id": 14,
   "contract": "rigcal_anchor_export_v1",
-  "fingerprint": "d1e22d0ff017a265de41e5168b22ba1e7645c463b6c7cee8caf46abc02b2f4d9",
+  "fingerprint": "4c09d92a1b5643e0af1939a977af44f43b8d76a44cbfb600629b20e4622c7239",
   "label": "root_cam_edge_3",
   "method": "ap01",
   "pairwise_invariance": {

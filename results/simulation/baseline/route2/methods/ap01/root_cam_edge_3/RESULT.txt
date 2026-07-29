@@ -2,20 +2,28 @@ RIGCAL CALIBRATION RESULT
 ======================================================================================================================
 
 Method / variant: ap01 / root_cam_edge_3
+Execution status: completed
+Solver status: not_applicable
 Artifact status: available
-Quality status: converged
+Calibration status: available
+Quality status: warning_unstable_consensus
+Evaluation status: available
 Anchor export status: OK
 RViz visualization status: OK
 Primary result: baseline
 Runtime: 176.7 s
 Reference frame: resolved root camera
 Transform convention: T_reference_camera (camera pose expressed in reference frame)
-Configuration: evaluation_anchor_marker_id=14, quality_area_ratio=8e-06, quality_pnp_rmse_px=25.0, quality_positive_depth=True, quality_max_distance_m=disabled, quality_sources=maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global, aruco_detection_mode=baseline, root_camera=cam_edge_3, top_moving_per_marker=8, scale_top_per_marker=30, matcher=exhaustive, gpu_requested=auto, gpu_resolved=true, maximum_image_size=2400, maximum_features=8192, mapper_minimum_matches=8
+Configuration: evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, quality_sources=maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global, aruco_detection_mode=baseline, root_camera=cam_edge_3, top_moving_per_marker=8, scale_top_per_marker=30, matcher=exhaustive, gpu_requested=auto, gpu_resolved=true, maximum_image_size=2400, maximum_features=8192, mapper_minimum_matches=8
+
+WARNINGS
+----------------------------------------------------------------------------------------------------------------------
+- AP01 selected-path consensus exceeds the documented dispersion floor for: cam_edge_0, cam_edge_1, cam_edge_5.
 
 COMMON EVALUATION / EXPORT ANCHOR
 ----------------------------------------------------------------------------------------------------------------------
 Marker: 14; export status: OK
-Camera     | x [m]  | y [m]  | z [m] | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw      
+Camera     | x [m]  | y [m]  | z [m] | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw
 -----------+--------+--------+-------+------------+-------------+-----------+-----------+-----------+-----------+---------
 cam_edge_0 | 0.355  | -1.510 | 2.333 | -2.035     | 0.023       | -0.155    | -0.847648 | 0.071922  | -0.031102 | 0.524741
 cam_edge_1 | -4.040 | -0.227 | 1.797 | -1.817     | 0.068       | -1.893    | -0.443618 | 0.651676  | -0.482944 | 0.381165
@@ -32,21 +40,21 @@ FINAL STATIC-CAMERA POSES
 ----------------------------------------------------------------------------------------------------------------------
 Camera     | Source              | x [m]  | y [m]  | z [m]  | roll [deg] | pitch [deg] | yaw [deg]
 -----------+---------------------+--------+--------+--------+------------+-------------+----------
-cam_edge_0 | moving_colmap_relay | 2.071  | -1.209 | 3.006  | 9.328      | -51.735     | -29.047  
-cam_edge_1 | direct_multimarker  | -0.880 | 0.629  | -0.021 | 17.674     | 36.595      | 23.267   
-cam_edge_3 | gauge_identity      | 0.000  | 0.000  | 0.000  | 0.000      | -0.000      | 0.000    
-cam_edge_5 | moving_colmap_relay | 7.507  | -2.119 | 2.749  | 119.821    | -47.659     | -157.436 
+cam_edge_0 | moving_colmap_relay | 2.071  | -1.209 | 3.006  | 9.328      | -51.735     | -29.047
+cam_edge_1 | direct_multimarker  | -0.880 | 0.629  | -0.021 | 17.674     | 36.595      | 23.267
+cam_edge_3 | gauge_identity      | 0.000  | 0.000  | 0.000  | 0.000      | -0.000      | 0.000
+cam_edge_5 | moving_colmap_relay | 7.507  | -2.119 | 2.749  | 119.821    | -47.659     | -157.436
 
 PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
 ----------------------------------------------------------------------------------------------------------------------
 Pair                  | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
 ----------------------+--------+--------+--------+------------+-------------+-----------+-------------
-cam_edge_0-cam_edge_1 | -4.527 | 0.309  | 0.812  | 93.293     | 57.948      | 108.015   | 4.610       
-cam_edge_0-cam_edge_3 | -3.845 | 0.054  | 0.012  | 20.992     | 49.114      | 34.194    | 3.846       
-cam_edge_0-cam_edge_5 | 3.015  | 1.133  | -4.481 | 25.540     | -59.466     | -50.768   | 5.518       
-cam_edge_1-cam_edge_3 | 0.437  | -0.775 | 0.615  | -4.077     | -39.923     | -15.900   | 1.082       
-cam_edge_1-cam_edge_5 | 3.664  | -3.688 | 7.651  | 137.372    | -10.391     | 176.144   | 9.250       
-cam_edge_3-cam_edge_5 | 7.507  | -2.119 | 2.749  | 119.821    | -47.659     | -157.436  | 8.271       
+cam_edge_0-cam_edge_1 | -4.527 | 0.309  | 0.812  | 93.293     | 57.948      | 108.015   | 4.610
+cam_edge_0-cam_edge_3 | -3.845 | 0.054  | 0.012  | 20.992     | 49.114      | 34.194    | 3.846
+cam_edge_0-cam_edge_5 | 3.015  | 1.133  | -4.481 | 25.540     | -59.466     | -50.768   | 5.518
+cam_edge_1-cam_edge_3 | 0.437  | -0.775 | 0.615  | -4.077     | -39.923     | -15.900   | 1.082
+cam_edge_1-cam_edge_5 | 3.664  | -3.688 | 7.651  | 137.372    | -10.391     | 176.144   | 9.250
+cam_edge_3-cam_edge_5 | 7.507  | -2.119 | 2.749  | 119.821    | -47.659     | -157.436  | 8.271
 
 DETAIL ARTIFACTS
 ----------------------------------------------------------------------------------------------------------------------

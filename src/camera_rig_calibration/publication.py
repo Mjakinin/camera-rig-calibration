@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import csv
 import hashlib
 import json
@@ -745,6 +746,26 @@ def _comparison_rows(root: Path) -> list[dict[str, Any]]:
             method = str(
                 payload.get("method", result_path.parents[1].name)
             )
+            if (
+                method == "ap03"
+                and payload.get("comparison_visibility")
+                == "hidden_when_scale_variants_available"
+                and (
+                    root
+                    / "methods"
+                    / "ap03_single"
+                    / result_path.parent.name
+                    / "RESULT.json"
+                ).is_file()
+                and (
+                    root
+                    / "methods"
+                    / "ap03_multi"
+                    / result_path.parent.name
+                    / "RESULT.json"
+                ).is_file()
+            ):
+                continue
             label = str(payload.get("label", result_path.parent.name))
             current[(method, label)] = {
                 "method": method,
@@ -764,6 +785,12 @@ def _comparison_rows(root: Path) -> list[dict[str, Any]]:
                 or "",
                 "artifact_status": payload.get(
                     "artifact_status", payload.get("status", "available")
+                ),
+                "execution_status": payload.get(
+                    "execution_status", "completed"
+                ),
+                "solver_status": payload.get(
+                    "solver_status", "not_applicable"
                 ),
                 "quality_status": payload.get("quality_status", "unknown"),
                 "calibration_status": payload.get(
@@ -805,7 +832,8 @@ def _write_inventory_reports(
     )
     failed = sum(row.get("artifact_status") == "failed" for row in rows)
     warning_count = sum(
-        row.get("quality_status") not in {"converged", "not_available"}
+        row.get("quality_status")
+        not in {"good", "converged", "not_available"}
         for row in rows
         if row.get("artifact_status") == "available"
     )
@@ -830,7 +858,10 @@ def _write_inventory_reports(
         "visualization": _read_json(
             root / "visualization" / "visualization_manifest.json"
         ),
-        "generated_at": _now(),
+        "generated_at": (
+            _read_json(root / "COMPARISON.json").get("generated_at")
+            or _now()
+        ),
     }
     _write_json(root / "COMPARISON.json", comparison)
     fields = [
@@ -843,6 +874,8 @@ def _write_inventory_reports(
         "result_path",
         "warning",
         "artifact_status",
+        "execution_status",
+        "solver_status",
         "quality_status",
         "calibration_status",
         "evaluation_status",
@@ -883,7 +916,10 @@ def _write_inventory_reports(
             root / "visualization" / "visualization_manifest.json"
         ),
         "methods": rows,
-        "updated_at": _now(),
+        "updated_at": (
+            _read_json(root / "SUMMARY.json").get("updated_at")
+            or _now()
+        ),
     }
     _write_json(root / "SUMMARY.json", summary)
     (root / "SUMMARY.txt").unlink(missing_ok=True)
@@ -927,6 +963,34 @@ def write_experiment_reports(
     )
 
 
+def _native_calibration_hashes(root: Path) -> dict[str, str]:
+    """Hash authoritative method outputs that reconcile must never mutate."""
+    hashes: dict[str, str] = {}
+    methods_root = root / "methods"
+    for method in ("ap01", "ap02", "ap03"):
+        method_root = methods_root / method
+        if not method_root.is_dir():
+            continue
+        files = [
+            *method_root.glob("*/camera_extrinsics.csv"),
+            *method_root.glob("*/provenance/resolved_config.yaml"),
+            *method_root.glob("*/diagnostics/method/**/*"),
+        ]
+        for path in sorted(
+            (item for item in files if item.is_file()),
+            key=lambda item: item.as_posix(),
+        ):
+            relative = path.relative_to(root).as_posix()
+            digest = hashlib.sha256()
+            with path.open("rb") as handle:
+                for chunk in iter(
+                    lambda: handle.read(8 * 1024 * 1024), b""
+                ):
+                    digest.update(chunk)
+            hashes[relative] = digest.hexdigest()
+    return hashes
+
+
 def reconcile_existing_experiment(
     root: Path,
     *,
@@ -938,8 +1002,17 @@ def reconcile_existing_experiment(
         complete_existing_dataset,
         run_real_marker_consistency,
     )
+    from .evaluation.simulation_ground_truth import (
+        resolve_simulation_ground_truth,
+    )
 
+    native_before = _native_calibration_hashes(root)
     complete_existing_dataset(dataset_root, root)
+    ground_truth_regenerated = False
+    if category == "simulation":
+        ground_truth_regenerated = resolve_simulation_ground_truth(
+            dataset_root, backfilled=True
+        ).regenerated
     if category == "real_vehicle":
         run_real_marker_consistency(root, dataset_root, force=False)
     payload = write_scientific_experiment_reports(
@@ -958,6 +1031,24 @@ def reconcile_existing_experiment(
         queue_id=str(previous.get("queue_id") or "reconciled"),
         queue_complete=True,
     )
+    native_after = _native_calibration_hashes(root)
+    if native_after != native_before:
+        changed = sorted(
+            key
+            for key in set(native_before) | set(native_after)
+            if native_before.get(key) != native_after.get(key)
+        )
+        raise RuntimeError(
+            "Reconcile modified native calibration artifacts, which is "
+            "forbidden: " + ", ".join(changed)
+        )
+    payload["reconcile"] = {
+        "ground_truth_regenerated": ground_truth_regenerated,
+        "method_rerun": False,
+        "colmap_rerun": False,
+        "native_artifacts_unchanged": True,
+        "native_artifact_count": len(native_before),
+    }
     return payload
 
 

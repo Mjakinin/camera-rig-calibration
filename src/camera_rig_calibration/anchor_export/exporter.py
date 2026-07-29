@@ -26,6 +26,11 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 
 def _atomic_text(path: Path, text: str) -> None:
+    try:
+        if path.read_text(encoding="utf-8") == text:
+            return
+    except OSError:
+        pass
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(text, encoding="utf-8")
@@ -193,7 +198,20 @@ def export_method_anchor_poses(method_root: Path) -> dict[str, Any]:
         method_root.parents[2]
         / "observations"
         / "SELECTION_CANDIDATES.json",
+        method_root / "provenance" / "derived_result.json",
     ]
+    provenance = _read_json(
+        method_root / "provenance" / "derived_result.json"
+    )
+    experiment_root = method_root.parents[2]
+    for key in (
+        "shared_anchor_geometry",
+        "scale_metadata",
+        "camera_pose_source",
+    ):
+        value = provenance.get(key)
+        if value:
+            source_files.append(experiment_root / str(value))
     fingerprint = _hash_files(
         source_files,
         {
@@ -222,7 +240,41 @@ def export_method_anchor_poses(method_root: Path) -> dict[str, Any]:
                     existing, sort_keys=False, allow_unicode=True
                 ),
             )
-        return dict(existing.get("anchor_export_status") or {})
+        existing_status = dict(
+            existing.get("anchor_export_status") or {}
+        )
+        result.update(
+            {
+                "calibration_status": result.get(
+                    "artifact_status", "available"
+                ),
+                "evaluation_status": result.get(
+                    "evaluation_status", "not_run"
+                ),
+                "anchor_export_status": existing_status.get(
+                    "code", "ANCHOR_NOT_AVAILABLE"
+                ),
+                "anchor_export_available": bool(
+                    existing_status.get("available")
+                ),
+                "anchor_marker_id": anchor,
+                "camera_extrinsics_anchor": (
+                    "camera_extrinsics_anchor.csv"
+                ),
+                "camera_extrinsics_anchor_json": (
+                    "camera_extrinsics_anchor.json"
+                ),
+                "camera_extrinsics_anchor_yaml": (
+                    "camera_extrinsics_anchor.yaml"
+                ),
+                "anchor_alignment": "diagnostics/anchor_alignment.json",
+                "anchor_export_warnings": existing_status.get(
+                    "warnings", []
+                ),
+            }
+        )
+        _write_json(result_path, result)
+        return existing_status
 
     native = load_camera_poses(method_root)
     resolution = resolve_method_anchor(

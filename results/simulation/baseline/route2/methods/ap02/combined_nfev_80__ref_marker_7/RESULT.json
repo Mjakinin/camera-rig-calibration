@@ -46,7 +46,8 @@
   ],
   "diagnostic_partial": false,
   "diagnostics": "diagnostics",
-  "evaluation_status": "unavailable",
+  "evaluation_status": "available",
+  "execution_status": "completed",
   "full_rig_result_available": true,
   "graph_component_count": 1,
   "input_fingerprint": "input_0ffd7d57d0b8",
@@ -4316,18 +4317,68 @@
         "cam_edge_5"
       ]
     },
+    "combined_reprojection_rmse_px": 170.0713701479,
+    "evaluation": {
+      "anchor_camera_gt": {
+        "count": 4,
+        "evaluation_status": "available",
+        "label": "combined_nfev_80__ref_marker_7",
+        "max_rotation_error_deg": 31.66857620599532,
+        "max_translation_error_cm": 348.5197504224046,
+        "mean_rotation_error_deg": 10.166323079398278,
+        "mean_translation_error_cm": 105.47093315150433,
+        "median_rotation_error_deg": 3.7210709612617845,
+        "median_translation_error_cm": 27.187010778203952,
+        "method": "ap02"
+      },
+      "pairwise_gt": {
+        "count": 6,
+        "evaluated_camera_count": 4,
+        "evaluation_status": "available",
+        "expected_camera_count": 4,
+        "label": "combined_nfev_80__ref_marker_7",
+        "max_rotation_error_deg": 34.64568190407957,
+        "max_translation_error_cm": 368.1472067540553,
+        "mean_rotation_error_deg": 18.53005524113085,
+        "mean_translation_error_cm": 199.96890323817192,
+        "median_rotation_error_deg": 18.35781871501967,
+        "median_translation_error_cm": 201.22892345980654,
+        "method": "ap02",
+        "missing_cameras": [],
+        "reason": null
+      }
+    },
     "optimizer": {
+      "absolute_cost_improvement": 932160.8203881178,
+      "corner_residual_count": 1628,
       "final_cost": 263607.35252483125,
       "final_reprojection_rmse_px": 170.0713701479,
       "initial_cost": 1195768.172912949,
+      "initial_reprojection_rmse_px": 547.7464022983855,
       "loss": "soft_l1",
       "loss_scale_px": 3.0,
       "maximum_function_evaluations": 80,
-      "message": "`xtol` termination condition is satisfied.",
       "mode": "with_moving",
       "nfev": 72,
+      "njev": 50,
       "optimality": 18599.987497315982,
+      "relative_cost_improvement": 0.7795497835649272,
+      "residual_evaluation_calls_recorded": 39673,
       "runtime_seconds": 1372.8627524990006,
+      "scalar_residual_count": 3256,
+      "schema_version": 5,
+      "solver_message": "`xtol` termination condition is satisfied.",
+      "solver_status": 3,
+      "solver_success": true,
+      "variable_count": 792
+    },
+    "solver": {
+      "limit_reached": false,
+      "maximum_function_evaluations": 80,
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 72,
+      "njev": 50,
+      "optimality": 18599.987497315982,
       "status": 3,
       "success": true
     }
@@ -4339,17 +4390,20 @@
   "primary_result": "combined",
   "provenance": "provenance",
   "published_at": "2026-07-29T17:28:32+00:00",
-  "quality_status": "converged",
+  "quality_status": "poor_high_reprojection",
   "queue_id": "simulation_batch_20260729_182623__route2",
   "reference_frame": "ArUco marker 7",
   "reference_marker_id": 7,
   "runtime_seconds": 1381.2263060990008,
   "schema_version": 5,
+  "solver_status": "success",
   "static_camera_count": 4,
   "status": "available",
   "success": true,
   "transform_convention": "T_reference_camera (camera pose expressed in reference frame)",
   "visualization_manifest": "../../../visualization/visualization_manifest.json",
   "visualization_status": "OK",
-  "warnings": []
+  "warnings": [
+    "AP02 Combined reprojection RMSE is 170.071 px (poor: >25 px)."
+  ]
 }

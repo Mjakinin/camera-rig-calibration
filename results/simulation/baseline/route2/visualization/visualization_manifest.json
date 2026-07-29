@@ -1,39 +1,81 @@
 {
   "available": true,
-  "contract": "rigcal_rviz_scene_v1",
-  "fingerprint": "d315de8d8ab6170288878c16d5a7a07d62266ed985f9d7859b6a6516b29a2515",
+  "consistency_checks": {
+    "point_count_matches_metadata": true,
+    "scale_matches_multi_metadata": true,
+    "shared_container_membership": true,
+    "strict_best_model": true,
+    "transformed_cameras_match_ap03_multi_export": true
+  },
+  "contract": "rigcal_rviz_scene_v2",
+  "fingerprint": "487feb7addec2eaa6d820b6f922a7ca1f7d7fd5e6ad9ba208f7b94523bfdde55",
   "fixed_frame": "evaluation_anchor_marker_14",
   "frustums": "camera_frustums.json",
-  "note": "The point cloud is AP03/COLMAP context. Camera poses retain their own method/variant identity.",
+  "ground_truth": {
+    "available": true,
+    "camera_count": 4,
+    "default_visible": true,
+    "source": "metadata/simulation/ground_truth.json"
+  },
+  "note": "The single point cloud is AP03 Multi/COLMAP context. Camera poses retain their own method/variant identity.",
   "point_cloud": "scene_anchor_frame.ply",
+  "point_cloud_display_count": 1,
+  "point_cloud_publisher_count": 1,
+  "point_cloud_source": {
+    "anchor_source": "methods/ap03_multi/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/camera_extrinsics_anchor.json",
+    "container_label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+    "container_method": "ap03",
+    "ground_truth_source": "metadata/simulation/ground_truth.json",
+    "method": "ap03_multi",
+    "model_id": "0",
+    "point_count": 7316,
+    "points3D": "methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/diagnostics/method/colmap/reconstruction/sparse_txt/0/points3D.txt",
+    "scale_m_per_colmap_unit": 0.7897140991367362
+  },
   "point_count": 7316,
   "poses": "poses_anchor_frame.json",
   "publisher": "camera_rig_calibration.visualization.ros_scene",
   "rviz_config": "rigcal_result.rviz",
-  "schema_version": 1,
-  "source": {
-    "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
-    "method": "ap03",
-    "points3D": "methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/diagnostics/method/colmap/reconstruction/sparse_txt/0/points3D.txt",
-    "scale_m_per_colmap_unit": 0.7897140991367362
-  },
+  "schema_version": 2,
   "status": "OK",
   "variants": [
     {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
       "label": "root_cam_edge_3",
       "method": "ap01"
     },
     {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
       "label": "combined_nfev_60__ref_marker_7",
       "method": "ap02"
     },
     {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
       "label": "combined_nfev_80__ref_marker_7",
       "method": "ap02"
     },
     {
+      "anchor_edges_default_visible": false,
+      "default_visible": true,
+      "error_lines_default_visible": false,
       "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
-      "method": "ap03"
+      "method": "ap03_multi"
+    },
+    {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
+      "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+      "method": "ap03_single"
     }
+  ],
+  "warnings": [
+    "Visible ghosting, if present, belongs to this one unmodified best-model reconstruction; Ground Truth is never used to deform or align the point cloud."
   ]
 }

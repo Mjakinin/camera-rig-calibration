@@ -46,7 +46,8 @@
   ],
   "diagnostic_partial": false,
   "diagnostics": "diagnostics",
-  "evaluation_status": "unavailable",
+  "evaluation_status": "available",
+  "execution_status": "completed",
   "full_rig_result_available": true,
   "graph_component_count": 1,
   "input_fingerprint": "input_0ffd7d57d0b8",
@@ -4316,18 +4317,68 @@
         "cam_edge_5"
       ]
     },
+    "combined_reprojection_rmse_px": 170.07175859702272,
+    "evaluation": {
+      "anchor_camera_gt": {
+        "count": 4,
+        "evaluation_status": "available",
+        "label": "combined_nfev_60__ref_marker_7",
+        "max_rotation_error_deg": 31.668513899741626,
+        "max_translation_error_cm": 348.52008103249887,
+        "mean_rotation_error_deg": 10.16630946083097,
+        "mean_translation_error_cm": 105.4710517454503,
+        "median_rotation_error_deg": 3.7210745881583005,
+        "median_translation_error_cm": 27.187072949755034,
+        "method": "ap02"
+      },
+      "pairwise_gt": {
+        "count": 6,
+        "evaluated_camera_count": 4,
+        "evaluation_status": "available",
+        "expected_camera_count": 4,
+        "label": "combined_nfev_60__ref_marker_7",
+        "max_rotation_error_deg": 34.64562341728183,
+        "max_translation_error_cm": 368.1475428813547,
+        "mean_rotation_error_deg": 18.530028954651115,
+        "mean_translation_error_cm": 199.9691159850911,
+        "median_rotation_error_deg": 18.357794657667903,
+        "median_translation_error_cm": 201.2291150839346,
+        "method": "ap02",
+        "missing_cameras": [],
+        "reason": null
+      }
+    },
     "optimizer": {
+      "absolute_cost_improvement": 932158.9398596804,
+      "corner_residual_count": 1628,
       "final_cost": 263609.2330532686,
       "final_reprojection_rmse_px": 170.07175859702272,
       "initial_cost": 1195768.172912949,
+      "initial_reprojection_rmse_px": 547.7464022983855,
       "loss": "soft_l1",
       "loss_scale_px": 3.0,
       "maximum_function_evaluations": 60,
-      "message": "The maximum number of function evaluations is exceeded.",
       "mode": "with_moving",
       "nfev": 60,
+      "njev": 45,
       "optimality": 18599.97099062438,
+      "relative_cost_improvement": 0.7795482109118996,
+      "residual_evaluation_calls_recorded": 35701,
       "runtime_seconds": 1207.460674389,
+      "scalar_residual_count": 3256,
+      "schema_version": 5,
+      "solver_message": "The maximum number of function evaluations is exceeded.",
+      "solver_status": 0,
+      "solver_success": false,
+      "variable_count": 792
+    },
+    "solver": {
+      "limit_reached": true,
+      "maximum_function_evaluations": 60,
+      "message": "The maximum number of function evaluations is exceeded.",
+      "nfev": 60,
+      "njev": 45,
+      "optimality": 18599.97099062438,
       "status": 0,
       "success": false
     }
@@ -4339,12 +4390,13 @@
   "primary_result": "combined",
   "provenance": "provenance",
   "published_at": "2026-07-29T17:04:51+00:00",
-  "quality_status": "optimizer_limit_reached",
+  "quality_status": "poor_high_reprojection",
   "queue_id": "simulation_batch_20260729_182623__route2",
   "reference_frame": "ArUco marker 7",
   "reference_marker_id": 7,
   "runtime_seconds": 1217.0716817440007,
   "schema_version": 5,
+  "solver_status": "limit_reached",
   "static_camera_count": 4,
   "status": "available",
   "success": true,
@@ -4352,6 +4404,7 @@
   "visualization_manifest": "../../../visualization/visualization_manifest.json",
   "visualization_status": "OK",
   "warnings": [
-    "The AP02 combined optimizer reached its configured limit (60 evaluations). The complete estimate is available but did not report numerical convergence."
+    "AP02 Combined reprojection RMSE is 170.072 px (poor: >25 px).",
+    "The AP02 combined optimizer reached its configured limit (60 evaluations). Solver completion and geometric quality are reported independently."
   ]
 }

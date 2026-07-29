@@ -353,6 +353,141 @@ def _ap03(
     )
 
 
+def _ap03_derived(
+    method_root: Path,
+    config: RigConfig,
+    anchor_marker_id: int,
+    *,
+    mode: str,
+) -> AnchorResolution:
+    """Resolve an AP03 scale-specific anchor from the shared COLMAP geometry."""
+    provenance_path = method_root / "provenance" / "derived_result.json"
+    try:
+        provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+        scale = float(provenance["scale_m_per_colmap_unit"])
+        experiment_root = method_root.parents[2]
+        corner_path = experiment_root / str(
+            provenance["shared_anchor_geometry"]
+        )
+        corner_payload = json.loads(corner_path.read_text(encoding="utf-8"))
+    except (
+        OSError,
+        KeyError,
+        TypeError,
+        ValueError,
+        json.JSONDecodeError,
+    ):
+        return AnchorResolution(
+            None,
+            "ANCHOR_NOT_RECONSTRUCTED",
+            False,
+            (f"AP03 {mode.title()} shared anchor geometry is unavailable.",),
+            {
+                "method": f"ap03_{mode}",
+                "provenance_file": str(provenance_path),
+            },
+        )
+    try:
+        payload_anchor = int(corner_payload["anchor_marker_id"])
+    except (KeyError, TypeError, ValueError):
+        payload_anchor = -1
+    if payload_anchor != anchor_marker_id:
+        return AnchorResolution(
+            None,
+            "ANCHOR_SOURCE_MISMATCH",
+            False,
+            (
+                "The shared AP03 anchor geometry belongs to marker "
+                f"{payload_anchor}, not marker {anchor_marker_id}.",
+            ),
+            {
+                "method": f"ap03_{mode}",
+                "corner_file": str(corner_path),
+            },
+        )
+    selected: dict[int, np.ndarray] = {}
+    for row in corner_payload.get("corners", []):
+        try:
+            index = int(row["corner_idx"])
+            point = scale * np.asarray(
+                (
+                    float(row["x_colmap"]),
+                    float(row["y_colmap"]),
+                    float(row["z_colmap"]),
+                ),
+                dtype=np.float64,
+            )
+        except (KeyError, TypeError, ValueError):
+            continue
+        if index in {0, 1, 2, 3} and np.all(np.isfinite(point)):
+            selected[index] = point
+    if set(selected) != {0, 1, 2, 3}:
+        return AnchorResolution(
+            None,
+            "ANCHOR_NOT_RECONSTRUCTED",
+            False,
+            (
+                f"AP03 {mode.title()} has fewer than four valid common-anchor "
+                "corners.",
+            ),
+            {
+                "method": f"ap03_{mode}",
+                "available_corner_indices": sorted(selected),
+                "corner_file": str(corner_path),
+            },
+        )
+    half = config.markers.length_m / 2.0
+    ideal = np.asarray(
+        [
+            [-half, half, 0.0],
+            [half, half, 0.0],
+            [half, -half, 0.0],
+            [-half, -half, 0.0],
+        ],
+        dtype=np.float64,
+    )
+    observed = np.vstack([selected[index] for index in range(4)])
+    try:
+        transform, rmse = rigid_fit(ideal, observed)
+    except ValueError as exc:
+        return AnchorResolution(
+            None,
+            "ANCHOR_POSE_DEGENERATE",
+            False,
+            (str(exc),),
+            {"method": f"ap03_{mode}", "corner_file": str(corner_path)},
+        )
+    return AnchorResolution(
+        transform,
+        "OK",
+        True,
+        (),
+        {
+            "method": f"ap03_{mode}",
+            "alignment": "rigid_kabsch_no_scale_fit",
+            "scale_mode": mode,
+            "scale_m_per_colmap_unit": scale,
+            "square_fit_rmse_m": rmse,
+            "side_lengths_m": [
+                float(
+                    np.linalg.norm(
+                        observed[(index + 1) % 4] - observed[index]
+                    )
+                )
+                for index in range(4)
+            ],
+            "corner_file": str(corner_path),
+            "provenance_file": str(provenance_path),
+            "shared_colmap_container": provenance.get(
+                "shared_colmap_container"
+            ),
+            "shared_colmap_best_model": provenance.get(
+                "shared_colmap_best_model"
+            ),
+        },
+    )
+
+
 def resolve_method_anchor(
     method_root: Path,
     config: RigConfig,
@@ -366,6 +501,13 @@ def resolve_method_anchor(
         return _ap02(method_root, config, anchor_marker_id)
     if method_id == "ap03":
         return _ap03(method_root, config, anchor_marker_id)
+    if method_id in {"ap03_single", "ap03_multi"}:
+        return _ap03_derived(
+            method_root,
+            config,
+            anchor_marker_id,
+            mode=method_id.removeprefix("ap03_"),
+        )
     return AnchorResolution(
         None,
         "UNSUPPORTED_METHOD",

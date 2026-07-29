@@ -1,0 +1,315 @@
+{
+  "anchor_alignment": {
+    "alignment": "rigid_kabsch_no_scale_fit",
+    "corner_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/diagnostics/derived/shared_anchor_geometry/marker_14_corners_colmap.json",
+    "method": "ap03_single",
+    "provenance_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03_single/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0/provenance/derived_result.json",
+    "scale_m_per_colmap_unit": 0.7560440614972472,
+    "scale_mode": "single",
+    "shared_colmap_best_model": "0",
+    "shared_colmap_container": "methods/ap03/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+    "side_lengths_m": [
+      0.16254301238228944,
+      0.16247013881526212,
+      0.1632003860256955,
+      0.16225136178962968
+    ],
+    "square_fit_rmse_m": 0.0052538480982435316,
+    "transform_anchor_method": {
+      "matrix": [
+        [
+          0.9569078260871704,
+          0.07644083704754766,
+          -0.28015033607796386,
+          0.09316260759981898
+        ],
+        [
+          0.2875001137146648,
+          -0.11357449123928126,
+          0.9510228806678592,
+          -1.2698327118256092
+        ],
+        [
+          0.04087905315905287,
+          -0.990584490778656,
+          -0.1306570688543509,
+          1.8245138406243278
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": -0.040890447206480884,
+      "qw": 0.6543462894357884,
+      "qx": -0.7418118673526332,
+      "qy": -0.12265271249334395,
+      "qz": 0.08063745453844609,
+      "roll_rad": -1.7019382810659978,
+      "x_m": 0.09316260759981898,
+      "y_m": -1.2698327118256092,
+      "yaw_rad": 0.2918668626764175,
+      "z_m": 1.8245138406243278
+    },
+    "transform_method_anchor": {
+      "matrix": [
+        [
+          0.9569078260871704,
+          0.2875001137146648,
+          0.04087905315905287,
+          0.20134462245719947
+        ],
+        [
+          0.07644083704754766,
+          -0.11357449123928126,
+          -0.990584490778656,
+          1.6559930818224062
+        ],
+        [
+          -0.28015033607796386,
+          0.9510228806678592,
+          -0.1306570688543509,
+          1.4721251298958287
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": 0.2839507128666999,
+      "qw": 0.6543462894357884,
+      "qx": 0.7418118673526332,
+      "qy": 0.12265271249334395,
+      "qz": -0.08063745453844609,
+      "roll_rad": 1.70732743711246,
+      "x_m": 0.20134462245719947,
+      "y_m": 1.6559930818224062,
+      "yaw_rad": 0.07971390434333712,
+      "z_m": 1.4721251298958287
+    }
+  },
+  "anchor_export_status": {
+    "available": true,
+    "camera_count": 4,
+    "code": "OK",
+    "expected_camera_count": 4,
+    "manual_warning_confirmed": false,
+    "missing_cameras": [],
+    "warnings": []
+  },
+  "anchor_marker_id": 14,
+  "anchor_selection": {
+    "mode": "explicit",
+    "reason": "manual post-preflight selection from every raw detected marker ID",
+    "warning_confirmed": false
+  },
+  "calibration_status": "available",
+  "camera_optical_convention": "x right, y down, z forward",
+  "cameras": [
+    {
+      "anchor_marker_id": 14,
+      "camera_id": "cam_edge_0",
+      "child_frame": "cam_edge_0_optical_frame",
+      "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+      "matrix": [
+        [
+          0.9995731019230003,
+          0.017738652042713757,
+          0.023215385754689843,
+          0.5620399824240769
+        ],
+        [
+          -0.014572233313777938,
+          -0.38601314057654457,
+          0.9223781791209513,
+          -1.67043697424982
+        ],
+        [
+          0.025323189536082265,
+          -0.9223227176677049,
+          -0.38558986053289723,
+          1.997831668498221
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "method": "ap03_single",
+      "parent_frame": "evaluation_anchor_marker_14",
+      "pitch_rad": -0.02532589679205098,
+      "qw": 0.5540690617634138,
+      "qx": -0.8323424930628681,
+      "qy": -0.0009510564326963128,
+      "qz": -0.01457890702905208,
+      "roll_rad": -1.9667774236163964,
+      "source": "method_primary_result",
+      "status": "available",
+      "x_m": 0.5620399824240769,
+      "y_m": -1.67043697424982,
+      "yaw_rad": -0.014577424167347485,
+      "z_m": 1.997831668498221
+    },
+    {
+      "anchor_marker_id": 14,
+      "camera_id": "cam_edge_1",
+      "child_frame": "cam_edge_1_optical_frame",
+      "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+      "matrix": [
+        [
+          -0.4137594773883062,
+          -0.25312876665135786,
+          0.8744878057268257,
+          -3.817452658010166
+        ],
+        [
+          -0.9102389848086418,
+          0.13230117231160676,
+          -0.39237914106066785,
+          0.4413009558441101
+        ],
+        [
+          -0.01637331383345783,
+          -0.958343480855657,
+          -0.28514853549610636,
+          2.0521733013038768
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "method": "ap03_single",
+      "parent_frame": "evaluation_anchor_marker_14",
+      "pitch_rad": 0.016374045496142037,
+      "qw": 0.32916301410820553,
+      "qx": -0.42985110381276015,
+      "qy": 0.6766108898761568,
+      "qz": -0.49907658970858193,
+      "roll_rad": -1.8599976066253672,
+      "source": "method_primary_result",
+      "status": "available",
+      "x_m": -3.817452658010166,
+      "y_m": 0.4413009558441101,
+      "yaw_rad": -1.9974370077048416,
+      "z_m": 2.0521733013038768
+    },
+    {
+      "anchor_marker_id": 14,
+      "camera_id": "cam_edge_3",
+      "child_frame": "cam_edge_3_optical_frame",
+      "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+      "matrix": [
+        [
+          0.5040713597312281,
+          -0.30472686429754114,
+          0.8081173197463961,
+          -3.0929516061657
+        ],
+        [
+          -0.8628000310333893,
+          -0.1358806496190721,
+          0.4869420453276563,
+          -1.5218228861641272
+        ],
+        [
+          -0.03857681619176434,
+          -0.9426971874544271,
+          -0.33141189178727415,
+          1.967642847928298
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "method": "ap03_single",
+      "parent_frame": "evaluation_anchor_marker_14",
+      "pitch_rad": 0.0385863907532446,
+      "qw": 0.5091116818353518,
+      "qx": -0.7020263351786694,
+      "qy": 0.4157703339696612,
+      "qz": -0.27404260531009117,
+      "roll_rad": -1.9088576458807107,
+      "source": "method_primary_result",
+      "status": "available",
+      "x_m": -3.0929516061657,
+      "y_m": -1.5218228861641272,
+      "yaw_rad": -1.0420551133803628,
+      "z_m": 1.967642847928298
+    },
+    {
+      "anchor_marker_id": 14,
+      "camera_id": "cam_edge_5",
+      "child_frame": "cam_edge_5_optical_frame",
+      "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+      "matrix": [
+        [
+          0.557601287170089,
+          0.34844464641776673,
+          -0.7534368805208951,
+          2.06995675272306
+        ],
+        [
+          0.8293586313346265,
+          -0.27242684776001225,
+          0.48779900907063994,
+          -6.725231952093644
+        ],
+        [
+          -0.035285481107888046,
+          -0.896866735363923,
+          -0.4408911360195895,
+          2.9197014208777894
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "method": "ap03_single",
+      "parent_frame": "evaluation_anchor_marker_14",
+      "pitch_rad": 0.03529280733399409,
+      "qw": 0.4594244506419112,
+      "qx": -0.7534784786159606,
+      "qy": -0.3907886260785645,
+      "qz": 0.26169372583725314,
+      "roll_rad": -2.027693703936859,
+      "source": "method_primary_result",
+      "status": "available",
+      "x_m": 2.06995675272306,
+      "y_m": -6.725231952093644,
+      "yaw_rad": 0.9788843592605403,
+      "z_m": 2.9197014208777894
+    }
+  ],
+  "contract": "rigcal_anchor_export_v1",
+  "evaluation_status": "available",
+  "fingerprint": "5c22e9957412b3bd86aeb99441e2baa5d7c70af83d236f9197492981e94e7ddb",
+  "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+  "layout_version": 2,
+  "method": "ap03_single",
+  "pairwise_invariance": {
+    "camera_pair_count": 6,
+    "maximum_rotation_difference_deg": 0.0,
+    "maximum_translation_difference_m": 3.2023728339893768e-15,
+    "passed": true
+  },
+  "parent_frame": "evaluation_anchor_marker_14",
+  "quaternion_order": "qx,qy,qz,qw",
+  "rpy_convention": "radians; R = Rz(yaw) @ Ry(pitch) @ Rx(roll)",
+  "schema_version": 1,
+  "transform_convention": "T_parent_child; p_parent = T_parent_child @ p_child"
+}
