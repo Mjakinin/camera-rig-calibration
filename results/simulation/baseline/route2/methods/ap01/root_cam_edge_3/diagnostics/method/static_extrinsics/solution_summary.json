@@ -1,0 +1,71 @@
+{
+  "root_camera": "cam_edge_3",
+  "camera_methods": {
+    "cam_edge_3": "gauge_identity",
+    "cam_edge_0": "moving_colmap_relay",
+    "cam_edge_1": "direct_multimarker",
+    "cam_edge_5": "moving_colmap_relay"
+  },
+  "per_target_diagnostics": {
+    "cam_edge_0": {
+      "selected_method": "moving_colmap_relay",
+      "direct": {
+        "candidates": 1,
+        "inliers": 1,
+        "translation_deviation_median_m": 0.0,
+        "rotation_deviation_median_deg": 0.0,
+        "translation_threshold_m": 0.12,
+        "rotation_threshold_deg": 4.0
+      },
+      "relay": {
+        "candidates": 18290,
+        "inliers": 14412,
+        "translation_deviation_median_m": 0.7155922394321297,
+        "rotation_deviation_median_deg": 16.11553708872224,
+        "translation_threshold_m": 1.81931971800849,
+        "rotation_threshold_deg": 56.711899986454085
+      },
+      "relay_candidates": 18290
+    },
+    "cam_edge_1": {
+      "selected_method": "direct_multimarker",
+      "direct": {
+        "candidates": 6,
+        "inliers": 6,
+        "translation_deviation_median_m": 1.8660167060595794,
+        "rotation_deviation_median_deg": 16.00313832843298,
+        "translation_threshold_m": 6.764745203868269,
+        "rotation_threshold_deg": 55.819295774062255
+      },
+      "relay": {
+        "candidates": 33744,
+        "inliers": 32317,
+        "translation_deviation_median_m": 1.9993270155239236,
+        "rotation_deviation_median_deg": 17.949788378319035,
+        "translation_threshold_m": 6.9296759262756735,
+        "rotation_threshold_deg": 53.7285394410523
+      },
+      "relay_candidates": 33744
+    },
+    "cam_edge_5": {
+      "selected_method": "moving_colmap_relay",
+      "direct": null,
+      "relay": {
+        "candidates": 43281,
+        "inliers": 42859,
+        "translation_deviation_median_m": 3.366355672916835,
+        "rotation_deviation_median_deg": 26.69425895972702,
+        "translation_threshold_m": 11.091854566701931,
+        "rotation_threshold_deg": 64.1547674366939
+      },
+      "relay_candidates": 43281
+    }
+  },
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "missing_static_cameras": []
+}

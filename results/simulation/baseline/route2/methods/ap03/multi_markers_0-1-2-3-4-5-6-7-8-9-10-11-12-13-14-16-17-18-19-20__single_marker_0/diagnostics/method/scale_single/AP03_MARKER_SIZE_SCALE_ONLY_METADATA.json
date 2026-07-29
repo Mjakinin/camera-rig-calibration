@@ -1,0 +1,35 @@
+{
+  "approach": "AP03_targetless_colmap_marker_size_scale_only",
+  "status": "OK_FULL",
+  "failure_reason": "",
+  "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
+  "best_model": "0",
+  "model_dir": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap03__baseline__03/20260729_020350_baseline_424df539/04_AP03/colmap/reconstruction/sparse_txt/0",
+  "registered_images": 180,
+  "registered_static_cameras": 4,
+  "registered_moving_frames": 176,
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "missing_static_cameras": [],
+  "num_sparse_points3d": 7254,
+  "marker_ids_requested": [
+    0
+  ],
+  "marker_length_m": 0.17,
+  "detection_mode": "baseline",
+  "detected_corner_observations": 276,
+  "triangulated_marker_corners": 4,
+  "scale_m_per_colmap_unit": 0.7239368293099024,
+  "num_scale_observations_total": 6,
+  "num_scale_observations_used": 6,
+  "raw_median_scale": 0.7239368293099024,
+  "raw_mad_scale": 0.010011886543544735,
+  "raw_rel_mad_scale": 0.013829779254480852,
+  "used_mean_scale": 0.7224648865121889,
+  "used_std_scale": 0.010461229455354881,
+  "used_rel_std_scale": 0.014450472792394217
+}

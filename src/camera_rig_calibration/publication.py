@@ -855,15 +855,24 @@ def write_experiment_reports(
     queue_complete: bool,
 ) -> None:
     paths = experiment_paths(config)
+    category = config.dataset.category.value
+    if category == "real_vehicle" and queue_complete:
+        from .evaluation.reporting import run_real_marker_consistency
+
+        run_real_marker_consistency(
+            root,
+            paths.dataset_root,
+            force=True,
+        )
     write_scientific_experiment_reports(
         root,
         dataset_root=paths.dataset_root,
-        category=config.dataset.category.value,
+        category=category,
     )
     _write_inventory_reports(
         root,
         dataset_root=paths.dataset_root,
-        category=config.dataset.category.value,
+        category=category,
         experiment=config.project.experiment_id or config.dataset.id,
         sampling_rate=(
             f"{config.sampling.target_hz:g}Hz"
@@ -889,7 +898,7 @@ def reconcile_existing_experiment(
 
     complete_existing_dataset(dataset_root, root)
     if category == "real_vehicle":
-        run_real_marker_consistency(root, dataset_root)
+        run_real_marker_consistency(root, dataset_root, force=True)
     payload = write_scientific_experiment_reports(
         root,
         dataset_root=dataset_root,

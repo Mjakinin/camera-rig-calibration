@@ -1,0 +1,45 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap02 / combined_nfev_60__ref_marker_7
+Artifact status: available
+Quality status: optimizer_limit_reached
+Primary result: combined
+Runtime: 3658.9 s
+Reference frame: ArUco marker 7
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: reference_marker_id=7, static_max_nfev=100, combined_max_nfev=60, loss=soft_l1, loss_scale_px=3.0, maximum_pnp_reprojection_error_px=25.0, aruco_detection_mode=baseline
+
+WARNINGS
+----------------------------------------------------------------------------------------------------------------------
+- The AP02 combined optimizer reached its configured limit (60 evaluations). The complete estimate is available but did not report numerical convergence.
+
+AP02 COMBINED GRAPH
+----------------------------------------------------------------------------------------------------------------------
+Primary coverage: 4/4 cameras
+Cause: complete
+All expected static cameras share one AP02 combined component.
+Component    | Cameras                                     | Markers                                           | Moving frames | Bridging frames | Runnable
+-------------+---------------------------------------------+---------------------------------------------------+---------------+-----------------+---------
+component_01 | cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 | 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,19,20 | 170           | 126             | yes     
+Relationships between different components: not observable
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera     | Source         | x [m] | y [m]  | z [m]  | roll [deg] | pitch [deg] | yaw [deg]
+-----------+----------------+-------+--------+--------+------------+-------------+----------
+cam_edge_0 | ba_with_moving | 2.061 | 0.607  | 1.690  | -117.329   | 66.308      | 88.355   
+cam_edge_1 | ba_with_moving | 0.142 | -1.511 | 5.807  | -168.974   | -19.422     | -13.368  
+cam_edge_3 | ba_with_moving | 2.077 | -1.195 | 5.335  | -173.208   | 28.477      | 9.598    
+cam_edge_5 | ba_with_moving | 3.395 | 0.936  | -4.091 | -24.196    | 12.035      | -169.572 
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                  | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+----------------------+--------+--------+--------+------------+-------------+-----------+-------------
+cam_edge_0-cam_edge_1 | -4.642 | -0.555 | 1.804  | 109.372    | 53.239      | 129.602   | 5.011       
+cam_edge_0-cam_edge_3 | -4.061 | 0.195  | 0.025  | 27.987     | 48.590      | 40.163    | 4.066       
+cam_edge_0-cam_edge_5 | 5.442  | 2.374  | -0.264 | 60.969     | -76.932     | -61.252   | 5.943       
+cam_edge_1-cam_edge_3 | 1.549  | -0.541 | 1.172  | 2.400      | -50.455     | -18.228   | 2.016       
+cam_edge_1-cam_edge_5 | -0.840 | -1.124 | 10.610 | 158.325    | 10.051      | 158.053   | 10.702      
+cam_edge_3-cam_edge_5 | 5.949  | -0.982 | 7.666  | 165.209    | -40.041     | 173.182   | 9.753       

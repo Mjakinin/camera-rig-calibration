@@ -1,0 +1,12 @@
+{
+  "anchor_marker_id": 0,
+  "success_for_every_method": false,
+  "evaluation_job_fingerprint": "93c8b1f06201025f1ec6b887be3ee925a7f9f1440e2ac8731e67a6d900a85f82",
+  "runtime_seconds": 87.19706560799386,
+  "method_statuses": {
+    "AP01__root_cam_edge_3": "NOT_AVAILABLE",
+    "AP02__combined_nfev_60__ref_marker_7": "OK",
+    "AP03_MULTI__multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0": "OK"
+  },
+  "output": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/results/evaluations/anchor_marker_0_ac0990b3"
+}

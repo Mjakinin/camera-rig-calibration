@@ -1,0 +1,39 @@
+{
+  "single.scale_marker_id": {
+    "baseline": "auto",
+    "value": 0
+  },
+  "multi.marker_ids": {
+    "baseline": "auto",
+    "value": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ]
+  },
+  "colmap.executable": {
+    "baseline": "auto",
+    "value": "/usr/bin/colmap"
+  },
+  "colmap.gpu_mode": {
+    "baseline": "auto",
+    "value": "true"
+  }
+}

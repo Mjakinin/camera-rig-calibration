@@ -1,0 +1,110 @@
+{
+  "ap02_combined_graph": null,
+  "camera_coverage": [
+    {
+      "accepted_observation_count": 3,
+      "camera_id": "cam_edge_0",
+      "marker_ids": [
+        3,
+        4,
+        7
+      ],
+      "raw_detection_count": 3,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 6,
+      "camera_id": "cam_edge_1",
+      "marker_ids": [
+        2,
+        5,
+        6,
+        7,
+        8,
+        14
+      ],
+      "raw_detection_count": 6,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 9,
+      "camera_id": "cam_edge_3",
+      "marker_ids": [
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        14,
+        19,
+        20
+      ],
+      "raw_detection_count": 9,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 7,
+      "camera_id": "cam_edge_5",
+      "marker_ids": [
+        0,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16
+      ],
+      "raw_detection_count": 7,
+      "required": true
+    }
+  ],
+  "details": [
+    "Observation quality: 512 accepted, 0 rejected; configured limits were not altered",
+    "Accepted static-camera observation coverage: 4/4",
+    "Static cameras without accepted observations: none",
+    "Moving-camera accepted observations: 487",
+    "ArUco detection mode: baseline",
+    "AP01 observation graph coverage: 4/4 cameras",
+    "AP01 unreachable cameras: none"
+  ],
+  "detection_mode": "baseline",
+  "errors": [],
+  "job_id": "route2__ap01__baseline__01",
+  "method_id": "ap01",
+  "observation_quality": {
+    "maximum_marker_distance_m": "disabled",
+    "maximum_pnp_reprojection_error_px": 25.0,
+    "minimum_marker_area_px2": 0.0
+  },
+  "resolved_selections": {
+    "ap02_reference_marker_id": 7,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "ap03_single_scale_marker_id": 0,
+    "root_camera": "cam_edge_3"
+  },
+  "schema_version": 5,
+  "status": "READY",
+  "warnings": []
+}

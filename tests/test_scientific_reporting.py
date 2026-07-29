@@ -152,23 +152,58 @@ def test_real_report_starts_with_marker_metric_and_has_no_how_to_text(
                 "available_static_camera_count": 4,
                 "registered_moving_frames": 20,
                 "evaluated_non_anchor_markers": 2,
+                "anchor_marker_id": 3,
+                "marker_length_rmse_cm": 0.3,
+                "marker_length_rmse_percent": 1.8,
                 "median_absolute_size_error_cm": 0.2,
-                "p90_absolute_size_error_cm": 0.4,
+                "moving_fit_reprojection_rmse_px": 0.8,
                 "moving_to_static_reprojection_rmse_px": 1.1,
                 "moving_to_static_reprojection_observations": 96,
             }
         ],
-        [],
+        [
+            {
+                "method": "AP02__combined_nfev_60",
+                "marker_id": 3,
+                "is_scale_anchor": True,
+                "estimated_marker_size_cm": 17.0,
+                "expected_marker_size_cm": 17.0,
+                "absolute_size_error_cm": 0.0,
+                "relative_size_error_percent": 0.0,
+                "moving_fit_reprojection_rmse_px": 0.7,
+                "moving_to_static_reprojection_rmse_px": 1.0,
+                "static_validation_camera_count": 4,
+                "moving_to_static_reprojection_observations": 16,
+            },
+            {
+                "method": "AP02__combined_nfev_60",
+                "marker_id": 8,
+                "is_scale_anchor": False,
+                "estimated_marker_size_cm": 17.3,
+                "expected_marker_size_cm": 17.0,
+                "absolute_size_error_cm": 0.3,
+                "relative_size_error_percent": 1.8,
+                "moving_fit_reprojection_rmse_px": 0.8,
+                "moving_to_static_reprojection_rmse_px": 1.1,
+                "static_validation_camera_count": 3,
+                "moving_to_static_reprojection_observations": 12,
+            },
+        ],
     )
 
     marker_text = marker_report.read_text(encoding="utf-8")
     combined, _ = _real_results_text(experiment, [])
 
-    assert "Cross P90" not in marker_text
+    assert "P90" not in marker_text
+    assert "Marker RMSE [cm]" in marker_text
+    assert "Moving RMSE [px]" in marker_text
+    assert "Cross-camera RMSE [px]" in marker_text
+    assert "Estimated length [cm]" in marker_text
+    assert "17.3000" in marker_text
     assert "HOW TO READ" not in marker_text
     assert "COMMON CALCULATION" not in marker_text
     assert "INTERPRETATION" not in marker_text
-    assert combined.index("REAL-DATA SINGLE-ANCHOR") < combined.index(
+    assert combined.index("REAL-DATA MARKER LENGTH") < combined.index(
         "METHOD / VARIANT OVERVIEW"
     )
 

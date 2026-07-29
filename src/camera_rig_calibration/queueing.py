@@ -2524,7 +2524,7 @@ class QueueRunner:
         directory_by_method = {
             "ap01": "diagnostics/method",
             "ap02": "diagnostics/method",
-            "ap03": "diagnostics/method/scale_multi",
+            "ap03": "diagnostics/method",
         }
         for (experiment_text, input_id), group in groups.items():
             experiment = Path(experiment_text)

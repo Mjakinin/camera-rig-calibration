@@ -1,0 +1,16 @@
+SIMULATION CALIBRATION RESULTS — CAMERA-TO-CAMERA VS GROUND TRUTH
+==========================================================================================================================================
+
+Experiment: route2
+Simulation parameters: frame_timeout_seconds=3.0, lighting=baseline, lighting_scale=1.0, motion_blur_angle_deg=0.0, motion_blur_kernel=0, moving_height=720, moving_hfov_deg=69.1, moving_width=1280, post_pose_skip=5, route=route2, route_sampling_strategy=original_route_poses, settle_seconds=0.35, startup_timeout_seconds=60.0, target_route_frames=189
+
+METHOD / VARIANT SUMMARY
+------------------------------------------------------------------------------------------------------------------------------------------
+Method | Variant                                                                          | Artifact  | Quality                 | Pairs | mean t [cm] | mean r [deg] | max t [cm] | max r [deg]
+-------+----------------------------------------------------------------------------------+-----------+-------------------------+-------+-------------+--------------+------------+------------
+ap01   | root_cam_edge_3                                                                  | available | converged               | 0     | -           | -            | -          | -          
+ap02   | combined_nfev_60__ref_marker_7                                                   | available | optimizer_limit_reached | 0     | -           | -            | -          | -          
+ap03   | multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 | available | converged               | 0     | -           | -            | -          | -          
+
+DETAILED CAMERA-PAIR RESULTS
+------------------------------------------------------------------------------------------------------------------------------------------

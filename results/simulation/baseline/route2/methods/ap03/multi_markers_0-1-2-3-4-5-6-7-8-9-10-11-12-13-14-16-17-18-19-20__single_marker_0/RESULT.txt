@@ -1,0 +1,31 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap03 / multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0
+Artifact status: available
+Quality status: converged
+Primary result: multi
+Runtime: 411.3 s
+Reference frame: COLMAP gauge with metric marker scale
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: single_scale_marker_id=0, multi_marker_count=20, matcher=exhaustive, gpu_mode=true, aruco_detection_mode=baseline
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera     | Source                             | x [m]  | y [m]  | z [m]  | roll [deg] | pitch [deg] | yaw [deg]
+-----------+------------------------------------+--------+--------+--------+------------+-------------+----------
+cam_edge_0 | ap03_colmap_marker_size_scale_only | -0.139 | 0.456  | -0.630 | -2.811     | 24.668      | 20.372   
+cam_edge_1 | ap03_colmap_marker_size_scale_only | -2.979 | -1.543 | 3.049  | 138.802    | 37.995      | 176.711  
+cam_edge_3 | ap03_colmap_marker_size_scale_only | -3.319 | -0.829 | 1.017  | 55.906     | 68.455      | 87.687   
+cam_edge_5 | ap03_colmap_marker_size_scale_only | 1.290  | -0.984 | -5.419 | -19.722    | -46.343     | -0.241   
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                  | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+----------------------+--------+--------+--------+------------+-------------+-----------+-------------
+cam_edge_0-cam_edge_1 | -4.587 | -0.980 | 1.896  | 115.485    | 57.578      | 138.093   | 5.059       
+cam_edge_0-cam_edge_3 | -3.803 | -0.101 | 0.061  | 21.044     | 50.226      | 36.103    | 3.805       
+cam_edge_0-cam_edge_5 | 2.760  | -1.649 | -4.088 | 8.646      | -66.078     | -45.299   | 5.201       
+cam_edge_1-cam_edge_3 | 1.551  | -0.378 | 1.485  | 5.149      | -52.231     | -19.454   | 2.181       
+cam_edge_1-cam_edge_5 | 1.880  | -5.506 | 7.509  | 120.826    | 4.906       | 172.871   | 9.499       
+cam_edge_3-cam_edge_5 | 5.998  | -4.518 | 2.510  | 114.038    | -47.160     | -167.475  | 7.918       

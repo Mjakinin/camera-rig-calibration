@@ -1,0 +1,38 @@
+{
+  "rows": [],
+  "summaries": [
+    {
+      "count": 0,
+      "label": "root_cam_edge_3",
+      "max_rotation_error_deg": null,
+      "max_translation_error_cm": null,
+      "mean_rotation_error_deg": null,
+      "mean_translation_error_cm": null,
+      "median_rotation_error_deg": null,
+      "median_translation_error_cm": null,
+      "method": "ap01"
+    },
+    {
+      "count": 0,
+      "label": "combined_nfev_60__ref_marker_7",
+      "max_rotation_error_deg": null,
+      "max_translation_error_cm": null,
+      "mean_rotation_error_deg": null,
+      "mean_translation_error_cm": null,
+      "median_rotation_error_deg": null,
+      "median_translation_error_cm": null,
+      "method": "ap02"
+    },
+    {
+      "count": 0,
+      "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+      "max_rotation_error_deg": null,
+      "max_translation_error_cm": null,
+      "mean_rotation_error_deg": null,
+      "mean_translation_error_cm": null,
+      "median_rotation_error_deg": null,
+      "median_translation_error_cm": null,
+      "method": "ap03"
+    }
+  ]
+}

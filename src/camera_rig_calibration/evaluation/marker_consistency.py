@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Common single-anchor real-data evaluation for AP01/AP02/AP03.
+"""Real-data marker-length and reprojection evaluation for AP01/AP02/AP03.
 
-Marker corners are triangulated only from moving-camera observations. One marker
-(read from REFERENCE_MARKER_ID.txt by default) fixes scale to 17 cm. All other
-marker sizes and their moving-to-static reprojection errors are then reported.
-The methods are not re-run or re-optimized.
+Marker corners are triangulated only from moving-camera observations. A metric
+anchor fixes the scale for each method; all other reconstructed markers validate
+the estimated scale and the moving-to-static camera relationship. Calibration
+methods are never re-run or re-optimized by this evaluator.
 """
 
 from __future__ import annotations
@@ -49,6 +49,16 @@ def args_parse():
         help="Method label and directory relative to --results-root; repeatable.",
     )
     p.add_argument(
+        "--method-anchor",
+        action="append",
+        default=[],
+        metavar="NAME=MARKER_ID",
+        help=(
+            "Optional metric anchor for one --method entry. When omitted, "
+            "--anchor-marker-id is used."
+        ),
+    )
+    p.add_argument(
         "--output-root",
         default="",
         help=(
@@ -87,11 +97,6 @@ def vals(values):
 def med(values):
     values = vals(values)
     return float(np.median(values)) if values else None
-
-
-def pctl(values, q):
-    values = vals(values)
-    return float(np.percentile(values, q)) if values else None
 
 
 def rmse(values):
@@ -463,29 +468,151 @@ def evaluate(method,sposes,mposes,spfile,meta,srows,mrows,anchor,length,args):
         if not is_anchor:
             size_cm.append(err_cm);size_pct.append(err_pct);cross+=data["cross"];fit+=data["fit"];validated+=int(bool(data["cross"]))
         marker_rows.append({"method":method,"marker_id":marker,"is_scale_anchor":is_anchor,"moving_inlier_frame_count":len(data["frames"]),"moving_inlier_frames":";".join(map(str,sorted(data["frames"]))),"max_triangulation_angle_deg":data["angle"],"static_validation_cameras":";".join(data["cams"]),"static_validation_camera_count":len(data["cams"]),"raw_reconstructed_size_units":data["raw"],"anchor_scale_m_per_unit":scale,"estimated_marker_size_cm":100*estimated,"expected_marker_size_cm":100*length,"absolute_size_error_cm":0 if is_anchor else err_cm,"relative_size_error_percent":0 if is_anchor else err_pct,"moving_fit_reprojection_rmse_px":rmse(data["fit"]),"moving_to_static_reprojection_rmse_px":rmse(data["cross"]),"moving_to_static_reprojection_median_px":med(data["cross"]),"moving_to_static_reprojection_observations":len(data["cross"])})
-    expected=len(CAMERAS);summary={"method":method,"status":"OK" if len(sposes)==expected else f"PARTIAL_{len(sposes)}_OF_{expected}","available_static_cameras":sorted(sposes),"available_static_camera_count":len(sposes),"registered_moving_frames":len(mposes),"static_pose_file":str(spfile),"trajectory":meta,"anchor_marker_id":anchor,"anchor_expected_size_cm":100*length,"anchor_raw_reconstructed_size_units":reconstructed[anchor]["raw"],"anchor_scale_m_per_unit":scale,"reconstructed_markers_total":len(reconstructed),"evaluated_non_anchor_markers":len(size_cm),"markers_with_moving_to_static_validation":validated,"median_absolute_size_error_cm":med(size_cm),"p90_absolute_size_error_cm":pctl(size_cm,90),"median_relative_size_error_percent":med(size_pct),"p90_relative_size_error_percent":pctl(size_pct,90),"moving_fit_reprojection_rmse_px":rmse(fit),"moving_fit_reprojection_median_px":med(fit),"moving_to_static_reprojection_rmse_px":rmse(cross),"moving_to_static_reprojection_median_px":med(cross),"moving_to_static_reprojection_observations":len(cross),**frame_support}
+    expected=len(CAMERAS);summary={"method":method,"status":"OK" if len(sposes)==expected else f"PARTIAL_{len(sposes)}_OF_{expected}","available_static_cameras":sorted(sposes),"available_static_camera_count":len(sposes),"registered_moving_frames":len(mposes),"static_pose_file":str(spfile),"trajectory":meta,"anchor_marker_id":anchor,"anchor_expected_size_cm":100*length,"anchor_raw_reconstructed_size_units":reconstructed[anchor]["raw"],"anchor_scale_m_per_unit":scale,"reconstructed_markers_total":len(reconstructed),"evaluated_non_anchor_markers":len(size_cm),"markers_with_moving_to_static_validation":validated,"marker_length_rmse_cm":rmse(size_cm),"marker_length_rmse_percent":rmse(size_pct),"median_absolute_size_error_cm":med(size_cm),"median_relative_size_error_percent":med(size_pct),"moving_fit_reprojection_rmse_px":rmse(fit),"moving_fit_reprojection_median_px":med(fit),"moving_to_static_reprojection_rmse_px":rmse(cross),"moving_to_static_reprojection_median_px":med(cross),"moving_to_static_reprojection_observations":len(cross),**frame_support}
     return summary,marker_rows,reproj_rows
 
 
 def fmt(x): return "NA" if x is None or (isinstance(x,float) and not math.isfinite(x)) else (f"{x:.4f}" if isinstance(x,float) else str(x))
 
 
-def report(path,dataset,anchor,length,summaries,marker_rows):
-    width=150
-    lines=["REAL-DATA SINGLE-ANCHOR MARKER EDGE-LENGTH AND CROSS-CAMERA EVALUATION","="*width,"",f"Dataset: {dataset}",f"Metric anchor: marker {anchor} = {100*length:.2f} cm","","METHOD / VARIANT COMPARISON (NON-ANCHOR MARKERS)","-"*width,f"{'Method / variant':<34}{'Status':<26}{'Cams':>6}{'Move':>7}{'Markers':>9}{'Median abs [cm]':>17}{'P90 abs [cm]':>15}{'Cross RMSE [px]':>18}{'Cross corners':>15}"]
-    for s in summaries:lines.append(f"{s.get('method','-'):<34}{s.get('status','-'):<26}{s.get('available_static_camera_count',0):>6}{s.get('registered_moving_frames',0):>7}{s.get('evaluated_non_anchor_markers',0):>9}{fmt(s.get('median_absolute_size_error_cm')):>17}{fmt(s.get('p90_absolute_size_error_cm')):>15}{fmt(s.get('moving_to_static_reprojection_rmse_px')):>18}{s.get('moving_to_static_reprojection_observations',0):>15}")
+def text_table(headers, rows):
+    rendered = [[str(value) for value in row] for row in rows]
+    widths = [
+        max(len(str(header)), *(len(row[index]) for row in rendered))
+        for index, header in enumerate(headers)
+    ]
+    line = " | ".join(
+        str(header).ljust(widths[index])
+        for index, header in enumerate(headers)
+    )
+    separator = "-+-".join("-" * width for width in widths)
+    body = [
+        " | ".join(
+            value.ljust(widths[index])
+            for index, value in enumerate(row)
+        )
+        for row in rendered
+    ]
+    return "\n".join([line, separator, *body])
+
+
+def report(path, dataset, anchor, length, summaries, marker_rows):
+    del dataset, anchor
+    width = 138
+    lines = [
+        "REAL-DATA MARKER LENGTH AND REPROJECTION RESULTS",
+        "=" * width,
+        "",
+        f"Expected marker edge length: {100 * length:.2f} cm",
+        "",
+        "METHOD / VARIANT RESULTS",
+        "-" * width,
+        text_table(
+            [
+                "Method / variant",
+                "Status",
+                "Anchor",
+                "Cams",
+                "Moving",
+                "Markers",
+                "Marker RMSE [cm]",
+                "Marker RMSE [%]",
+                "Moving RMSE [px]",
+                "Cross-camera RMSE [px]",
+                "Cross corners",
+            ],
+            [
+                [
+                    summary.get("method", "-"),
+                    summary.get("status", "-"),
+                    summary.get("anchor_marker_id", "-"),
+                    summary.get("available_static_camera_count", 0),
+                    summary.get("registered_moving_frames", 0),
+                    summary.get("evaluated_non_anchor_markers", 0),
+                    fmt(summary.get("marker_length_rmse_cm")),
+                    fmt(summary.get("marker_length_rmse_percent")),
+                    fmt(summary.get("moving_fit_reprojection_rmse_px")),
+                    fmt(
+                        summary.get(
+                            "moving_to_static_reprojection_rmse_px"
+                        )
+                    ),
+                    summary.get(
+                        "moving_to_static_reprojection_observations", 0
+                    ),
+                ]
+                for summary in summaries
+            ],
+        ),
+    ]
     for summary in summaries:
-        method=summary.get("method","-")
-        rows=sorted((row for row in marker_rows if row.get("method")==method),key=lambda row:int(row.get("marker_id",0)))
-        lines+=["",f"{method}: RECONSTRUCTED MARKER EDGE LENGTHS","-"*width,f"{'Marker':>8}{'Mean edge [cm]':>18}{'Abs error [cm]':>18}{'Rel error [%]':>16}{'Cross RMSE [px]':>19}{'Static cameras':>34}{'Cross corners':>16}"]
+        method = summary.get("method", "-")
+        rows = sorted(
+            (
+                row
+                for row in marker_rows
+                if row.get("method") == method
+            ),
+            key=lambda row: int(row.get("marker_id", 0)),
+        )
+        lines.extend(
+            [
+                "",
+                f"{method}: MARKER RESULTS",
+                "-" * width,
+            ]
+        )
         if not rows:
-            lines.append("No marker evaluation is available for this method / variant.")
+            error = summary.get("error")
+            lines.append(
+                f"Unavailable: {error}"
+                if error
+                else "Unavailable: no marker could be evaluated."
+            )
             continue
-        for row in rows:
-            marker=str(row.get("marker_id","-"))+("*" if row.get("is_scale_anchor") else "")
-            lines.append(f"{marker:>8}{fmt(row.get('estimated_marker_size_cm')):>18}{fmt(row.get('absolute_size_error_cm')):>18}{fmt(row.get('relative_size_error_percent')):>16}{fmt(row.get('moving_to_static_reprojection_rmse_px')):>19}{str(row.get('static_validation_cameras') or '-'):>34}{str(row.get('moving_to_static_reprojection_observations',0)):>16}")
+        lines.append(
+            text_table(
+                [
+                    "Marker",
+                    "Role",
+                    "Estimated length [cm]",
+                    "Expected length [cm]",
+                    "Abs error [cm]",
+                    "Rel error [%]",
+                    "Moving RMSE [px]",
+                    "Cross-camera RMSE [px]",
+                    "Static cams",
+                    "Cross corners",
+                ],
+                [
+                    [
+                        row.get("marker_id", "-"),
+                        (
+                            "scale anchor"
+                            if row.get("is_scale_anchor")
+                            else "validation"
+                        ),
+                        fmt(row.get("estimated_marker_size_cm")),
+                        fmt(row.get("expected_marker_size_cm")),
+                        fmt(row.get("absolute_size_error_cm")),
+                        fmt(row.get("relative_size_error_percent")),
+                        fmt(row.get("moving_fit_reprojection_rmse_px")),
+                        fmt(
+                            row.get(
+                                "moving_to_static_reprojection_rmse_px"
+                            )
+                        ),
+                        row.get("static_validation_camera_count", 0),
+                        row.get(
+                            "moving_to_static_reprojection_observations", 0
+                        ),
+                    ]
+                    for row in rows
+                ],
+            )
+        )
     lines.append("")
-    Path(path).write_text("\n".join(lines),encoding="utf-8")
+    Path(path).write_text("\n".join(lines), encoding="utf-8")
 
 
 def main():
@@ -501,6 +628,17 @@ def main():
             if not name or not directory: raise RuntimeError(f"Invalid --method value: {value!r}")
             parsed[name]=directory
         METHOD_DIRS=parsed
+    method_anchors = {}
+    for value in args.method_anchor:
+        if "=" not in value:
+            raise RuntimeError(f"Invalid --method-anchor value: {value!r}")
+        name, marker_id = value.split("=", 1)
+        name = name.strip()
+        if name not in METHOD_DIRS:
+            raise RuntimeError(
+                f"--method-anchor references unknown method {name!r}"
+            )
+        method_anchors[name] = int(marker_id)
     ref=obsroot/"REFERENCE_MARKER_ID.txt";anchor=args.anchor_marker_id if args.anchor_marker_id is not None else int(ref.read_text().strip())
     srows=best_static(read_csv(obsroot/"shared_static_aruco_observations.csv"));mrows=moving_rows(read_csv(obsroot/"shared_moving_aruco_observations.csv"))
     final_root=(
@@ -511,9 +649,10 @@ def main():
     out=final_root/"marker_consistency";out.mkdir(parents=True,exist_ok=True);summaries=[];markers=[];reproj=[]
     for method,directory in METHOD_DIRS.items():
         root=results/directory;s=status(root)
+        method_anchor = method_anchors.get(method, anchor)
         try:
-            sp,mp,spfile,meta=load_poses(method,root,srows,mrows,anchor)
-            summary,mr,rr=evaluate(method,sp,mp,spfile,meta,srows,mrows,anchor,args.marker_length_m,args)
+            sp,mp,spfile,meta=load_poses(method,root,srows,mrows,method_anchor)
+            summary,mr,rr=evaluate(method,sp,mp,spfile,meta,srows,mrows,method_anchor,args.marker_length_m,args)
             summary["original_method_status"]=s.get("status","UNKNOWN");summary["original_method_success"]=s.get("success",False)
         except Exception as exc:
             summary={"method":method,"status":"NOT_AVAILABLE","original_method_status":s.get("status","MISSING"),"original_method_success":s.get("success",False),"error":f"{type(exc).__name__}: {exc}","available_static_cameras":s.get("available_static_cameras",[]),"available_static_camera_count":len(s.get("available_static_cameras",[])),"registered_moving_frames":0,"evaluated_non_anchor_markers":0,"pose_frame_ids":[],"pose_frame_count":0,"marker_frame_ids":[],"marker_frame_count":0,"candidate_frame_ids":[],"candidate_frame_count":0,"inlier_frame_ids":[],"inlier_frame_count":0,"rejected_frame_ids":{}};mr=[];rr=[]
@@ -527,7 +666,7 @@ def main():
         inlier_support.intersection_update(s.get("inlier_frame_ids",[]))
     common_support={"schema_version":4,"methods":[s.get("method") for s in summaries],"successful_methods":[s.get("method") for s in successful],"all_methods_available":len(successful)==len(summaries),"common_pose_frame_ids":sorted(pose_support),"common_pose_frame_count":len(pose_support),"common_evaluation_inlier_frame_ids":sorted(inlier_support),"common_evaluation_inlier_frame_count":len(inlier_support),"per_method":{s.get("method"):{"pose_frame_ids":s.get("pose_frame_ids",[]),"marker_frame_ids":s.get("marker_frame_ids",[]),"candidate_frame_ids":s.get("candidate_frame_ids",[]),"inlier_frame_ids":s.get("inlier_frame_ids",[]),"rejected_frame_ids":s.get("rejected_frame_ids",{})} for s in summaries}}
     (out/"COMMON_SUPPORT_REPORT.json").write_text(json.dumps(common_support,indent=2)+"\n")
-    summary_fields=["method","status","original_method_status","original_method_success","available_static_camera_count","available_static_cameras","registered_moving_frames","pose_frame_count","pose_frame_ids","marker_frame_count","marker_frame_ids","candidate_frame_count","candidate_frame_ids","inlier_frame_count","inlier_frame_ids","rejected_frame_ids","static_pose_file","anchor_marker_id","anchor_expected_size_cm","anchor_raw_reconstructed_size_units","anchor_scale_m_per_unit","reconstructed_markers_total","evaluated_non_anchor_markers","markers_with_moving_to_static_validation","median_absolute_size_error_cm","p90_absolute_size_error_cm","median_relative_size_error_percent","p90_relative_size_error_percent","moving_fit_reprojection_rmse_px","moving_fit_reprojection_median_px","moving_to_static_reprojection_rmse_px","moving_to_static_reprojection_median_px","moving_to_static_reprojection_observations","error"]
+    summary_fields=["method","status","original_method_status","original_method_success","available_static_camera_count","available_static_cameras","registered_moving_frames","pose_frame_count","pose_frame_ids","marker_frame_count","marker_frame_ids","candidate_frame_count","candidate_frame_ids","inlier_frame_count","inlier_frame_ids","rejected_frame_ids","static_pose_file","anchor_marker_id","anchor_expected_size_cm","anchor_raw_reconstructed_size_units","anchor_scale_m_per_unit","reconstructed_markers_total","evaluated_non_anchor_markers","markers_with_moving_to_static_validation","marker_length_rmse_cm","marker_length_rmse_percent","median_absolute_size_error_cm","median_relative_size_error_percent","moving_fit_reprojection_rmse_px","moving_fit_reprojection_median_px","moving_to_static_reprojection_rmse_px","moving_to_static_reprojection_median_px","moving_to_static_reprojection_observations","error"]
     rows=[]
     for s in summaries:
         r=dict(s);r["available_static_cameras"]=";".join(s.get("available_static_cameras",[]))

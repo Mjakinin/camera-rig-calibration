@@ -1,0 +1,26 @@
+{
+  "completed_at": "2026-07-29T00:03:44.967+00:00",
+  "inputs": {
+    "initialization": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/05_graph_initialization/with_moving",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv"
+  },
+  "outputs": {
+    "marker_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/with_moving/optimized_marker_poses_ref_marker.csv",
+    "moving_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/with_moving/optimized_moving_frame_poses_ref_marker.csv",
+    "optimizer_report": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/with_moving/optimizer_report.json",
+    "static_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/07_graph_ba/with_moving/optimized_static_camera_poses_ref_marker.csv"
+  },
+  "parameters": {
+    "maximum_function_evaluations": 60,
+    "mode": "with_moving",
+    "reference_marker_id": 7,
+    "robust_loss": "soft_l1",
+    "robust_loss_scale_px": 3.0,
+    "uses_all_quality_accepted_observations": true
+  },
+  "runtime_seconds": 3644.0586474969896,
+  "schema_version": 5,
+  "stage_id": "ap02.optimize.with_moving",
+  "started_at": "2026-07-28T23:01:42.556+00:00",
+  "status": "COMPLETED"
+}

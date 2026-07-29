@@ -739,7 +739,7 @@ def run_real_marker_consistency(
     *,
     force: bool = False,
 ) -> Path | None:
-    """Evaluate every available real-data method variant without rerunning it."""
+    """Evaluate every published real-data method without rerunning it."""
     reference_path = (
         dataset_root / "observations" / "REFERENCE_MARKER_ID.txt"
     )
@@ -749,12 +749,12 @@ def run_real_marker_consistency(
     output = (
         experiment_root
         / "evaluations"
-        / f"anchor_marker_{anchor}_reconciled"
+        / "method_anchors_reconciled"
     )
     report = output / "REAL_DATA_MARKER_CONSISTENCY.txt"
     if report.is_file() and not force:
         return report
-    methods: list[tuple[str, Path]] = []
+    methods: list[tuple[str, Path, int]] = []
     for result_path in sorted(
         (experiment_root / "methods").glob("*/*/RESULT.json")
     ):
@@ -762,7 +762,72 @@ def run_real_marker_consistency(
         label = result_path.parent.name
         method_root = result_path.parent / "diagnostics" / "method"
         if method_root.is_dir():
-            methods.append((f"{method.upper()}__{label}", method_root))
+            payload = _read_json(result_path)
+            config_summary = payload.get("config_summary", {})
+            method_anchor = anchor
+            if method == "ap02":
+                method_anchor = int(
+                    payload.get("reference_marker_id")
+                    or payload.get("config_summary", {}).get(
+                        "reference_marker_id", anchor
+                    )
+                )
+            elif method == "ap03":
+                scale_observations = (
+                    method_root
+                    / "scale_multi"
+                    / "AP03_MARKER_SIZE_SCALE_ONLY_SCALE_OBSERVATIONS.csv"
+                )
+                support: dict[int, int] = {}
+                if scale_observations.is_file():
+                    with scale_observations.open(
+                        newline="", encoding="utf-8"
+                    ) as handle:
+                        for row in csv.DictReader(handle):
+                            if str(row.get("used_for_scale", "")).lower() not in {
+                                "yes",
+                                "true",
+                                "1",
+                            }:
+                                continue
+                            marker_id = int(row["marker_id"])
+                            support[marker_id] = support.get(marker_id, 0) + 1
+                if support:
+                    method_anchor = min(
+                        support,
+                        key=lambda marker_id: (
+                            -support[marker_id],
+                            marker_id,
+                        ),
+                    )
+            if method == "ap01":
+                display_name = (
+                    "AP01 "
+                    f"(root {config_summary.get('root_camera', 'auto')}, "
+                    f"aruco {config_summary.get('aruco_detection_mode', 'baseline')})"
+                )
+            elif method == "ap02":
+                display_name = (
+                    "AP02 "
+                    f"(ref {method_anchor}, "
+                    f"nfev {config_summary.get('combined_max_nfev', '-')}, "
+                    f"aruco {config_summary.get('aruco_detection_mode', 'baseline')})"
+                )
+            elif method == "ap03":
+                display_name = (
+                    "AP03 "
+                    f"(multi {config_summary.get('multi_marker_count', '-')} markers, "
+                    f"aruco {config_summary.get('aruco_detection_mode', 'baseline')})"
+                )
+            else:
+                display_name = f"{method.upper()} ({label})"
+            methods.append(
+                (
+                    display_name,
+                    method_root,
+                    method_anchor,
+                )
+            )
     if not methods:
         return None
     dataset = _read_json(dataset_root / "dataset.json")
@@ -816,8 +881,11 @@ def run_real_marker_consistency(
         "--cameras",
         ",".join(cameras),
     ]
-    for name, method_root in methods:
+    for name, method_root, method_anchor in methods:
         command.extend(["--method", f"{name}={method_root.resolve()}"])
+        command.extend(
+            ["--method-anchor", f"{name}={method_anchor}"]
+        )
     completed = subprocess.run(
         command,
         cwd=_repository_root(experiment_root),
@@ -849,12 +917,16 @@ def run_real_marker_consistency(
         {
             "schema_version": 5,
             "layout_version": 2,
-            "status": "available",
-            "anchor_marker_id": anchor,
-            "methods": [name for name, _ in methods],
-            "reconciled_without_method_rerun": True,
-        },
-    )
+                "status": "available",
+                "evaluation_scope": "per_method_metric_anchor",
+                "method_anchors": {
+                    name: method_anchor
+                    for name, _, method_anchor in methods
+                },
+                "methods": [name for name, _, _ in methods],
+                "reconciled_without_method_rerun": True,
+            },
+        )
     return report
 
 
@@ -1458,6 +1530,14 @@ def _ap02_marker_map(
 
 
 def _latest_marker_report(experiment_root: Path) -> tuple[str, Path | None]:
+    reconciled = (
+        experiment_root
+        / "evaluations"
+        / "method_anchors_reconciled"
+        / "REAL_DATA_MARKER_CONSISTENCY.txt"
+    )
+    if reconciled.is_file():
+        return reconciled.read_text(encoding="utf-8"), reconciled
     candidates = sorted(
         (experiment_root / "evaluations").rglob(
             "REAL_DATA_MARKER_CONSISTENCY.txt"

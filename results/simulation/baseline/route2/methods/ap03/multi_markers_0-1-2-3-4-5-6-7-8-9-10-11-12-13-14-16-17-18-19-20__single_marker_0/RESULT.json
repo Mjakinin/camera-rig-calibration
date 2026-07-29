@@ -1,0 +1,41 @@
+{
+  "artifact_status": "available",
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "camera_extrinsics": "camera_extrinsics.csv",
+  "camera_extrinsics_available": true,
+  "config_summary": {
+    "aruco_detection_mode": "baseline",
+    "gpu_mode": "true",
+    "matcher": "exhaustive",
+    "multi_marker_count": 20,
+    "single_scale_marker_id": 0
+  },
+  "diagnostics": "diagnostics",
+  "input_fingerprint": "input_0ffd7d57d0b8",
+  "label": "multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0",
+  "layout_version": 2,
+  "logs": "logs",
+  "method": "ap03",
+  "method_fingerprint": "330c74319dae09e05498bf081ffbbf1c95672d3331515a57974b2ed9e25abfd9",
+  "metrics": {},
+  "pairwise_camera_count": 6,
+  "pairwise_camera_extrinsics": "pairwise_camera_extrinsics.csv",
+  "primary_result": "multi",
+  "provenance": "provenance",
+  "published_at": "2026-07-29T00:11:28+00:00",
+  "quality_status": "converged",
+  "queue_id": "simulation_batch_20260729_004254__route2",
+  "reference_frame": "COLMAP gauge with metric marker scale",
+  "runtime_seconds": 411.2750225780037,
+  "schema_version": 5,
+  "static_camera_count": 4,
+  "status": "available",
+  "success": true,
+  "transform_convention": "T_reference_camera (camera pose expressed in reference frame)",
+  "warnings": []
+}

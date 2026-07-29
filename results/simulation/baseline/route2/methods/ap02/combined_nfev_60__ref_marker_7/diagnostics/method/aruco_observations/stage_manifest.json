@@ -1,0 +1,21 @@
+{
+  "completed_at": "2026-07-28T23:01:29.648+00:00",
+  "inputs": {
+    "quality_accepted_observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/preflight/observations"
+  },
+  "outputs": {
+    "accepted_observations": 512,
+    "component_manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/02_aruco_observations/component_manifest.json",
+    "graph_summary": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/02_aruco_observations/graph_summary.json",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap02__combined_nfev_60__02/20260729_010116_combined_nfev_60_2bb6e7c2/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv"
+  },
+  "parameters": {
+    "reference_marker_id": 7,
+    "weighted_graph": false
+  },
+  "runtime_seconds": 0.5101554419961758,
+  "schema_version": 5,
+  "stage_id": "ap02.build_graph",
+  "started_at": "2026-07-28T23:01:29.138+00:00",
+  "status": "COMPLETED"
+}

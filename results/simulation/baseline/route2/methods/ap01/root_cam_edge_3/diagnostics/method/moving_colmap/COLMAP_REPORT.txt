@@ -1,0 +1,15 @@
+AP01 MOVING-CAMERA COLMAP
+========================================================================
+
+Image directory: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/dataset/raw_images/moving
+Matcher: exhaustive
+Camera model: PINHOLE
+Camera parameters: 929.4671630859375,929.46713447570801,640,360
+Feature max image size: 2400
+Maximum features: 8192
+Sequential overlap: 20
+Loop detection: 1
+Mapper minimum matches: 8
+Registered images in best model: 176
+Best model: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_004254__route2/jobs/route2__ap01__baseline__01/20260729_005326_baseline_1430a227/02_AP01/01_moving_colmap/sparse_txt/0
+
