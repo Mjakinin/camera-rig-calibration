@@ -48,13 +48,14 @@ selection:
 methods:
   enabled: [ap02]
   ap02:
+    reference_marker_selection_mode: auto
     reference_marker_id: auto
     reference_marker_maximum_frames: null
     top_per_marker: 8
     top_per_marker_pair: 4
     maximum_total_frames: null
-    static_only_ba_max_function_evaluations: 100
-    combined_ba_max_function_evaluations: 120
+    static_only_ba_max_function_evaluations: 50
+    combined_ba_max_function_evaluations: 50
     ba_robust_loss: soft_l1
     ba_robust_loss_scale_px: 3.0
 observation_quality:
@@ -88,7 +89,7 @@ methods:
 colmap:
   executable: auto
   matcher: exhaustive
-  gpu_mode: auto
+  compute_mode: cpu_baseline
   maximum_image_size: 2400
   maximum_features: 8192
   mapper_minimum_matches: 8
@@ -239,6 +240,7 @@ methods:
     top_moving_per_marker: 8
     scale_top_per_marker: 30
   ap02:
+    reference_marker_selection_mode: auto
     reference_marker_id: auto
     reference_marker_maximum_frames: null
     top_per_marker: 8
@@ -283,20 +285,36 @@ this disables only the shared evaluation, not calibration.
 
 ## AP02
 
-Supported losses are `soft_l1`, `huber`, and `linear`. Compatibility defaults:
+Supported losses are `soft_l1`, `huber`, and `linear`. Baseline defaults:
 
 ```yaml
-static_only_ba_max_function_evaluations: 100
-combined_ba_max_function_evaluations: 120
+reference_marker_selection_mode: auto
+reference_marker_id: auto
+static_only_ba_max_function_evaluations: 50
+combined_ba_max_function_evaluations: 50
 ba_robust_loss: soft_l1
 ba_robust_loss_scale_px: 3.0
 ```
+
+Reference-marker modes are:
+
+- `baseline`: simulation only; fixes marker 14 and is part of the Route-2
+  baseline contract.
+- `auto`: freezes the deterministic preflight recommendation.
+- `manual`: pauses after preflight, lists every detected marker and requires
+  warning confirmation for a weak candidate.
+- `explicit`: schema-v5 compatibility mode for an already stored integer ID.
 
 Static-only BA is diagnostic; Combined static/moving BA is primary. No
 static-only result is promoted to the main comparison. AP02 selects
 quality-ranked reference, per-marker and per-marker-pair frames, deduplicates
 them, and preserves the accepted graph. If `maximum_total_frames` is below the
 minimum graph-preserving set, preflight fails and reports the required count.
+Initialization uses a deterministic maximum-bottleneck path tree rooted at the
+resolved reference marker. An unweighted first-hit BFS is written only as an
+independent diagnostic and never supplies production initial poses. Static-only
+and Combined use exactly their configured function-evaluation budgets; rigcal
+does not retry with a larger budget.
 
 `ap02_optimization_summary.json` records SciPy status, `nfev`/`njev`, cost,
 RMSE, optimality, runtime, variables and residual counts.
@@ -312,7 +330,7 @@ AP01 and AP03 snapshots independently configure:
 colmap:
   executable: auto
   matcher: exhaustive        # exhaustive | sequential
-  gpu_mode: auto             # auto | true | false
+  compute_mode: cpu_baseline # cpu_baseline | gpu | auto
   maximum_image_size: 2400
   maximum_features: 8192
   mapper_minimum_matches: 8
@@ -322,8 +340,18 @@ colmap:
 
 Sequential settings apply only to the sequential matcher. Requested config
 keeps `executable: auto`; resolved config and the run manifest record the
-absolute executable, version, and resolved GPU mode. `gpu_mode: true` fails
-preflight without a compatible GPU, while `auto` falls back to CPU.
+absolute executable, version, configured compute mode and resolved compute
+mode. `gpu` fails preflight without a compatible GPU, while `auto` resolves
+explicitly to GPU or CPU before method execution. Within schema v5, deprecated
+values migrate as `gpu_mode: false -> cpu_baseline`, `true -> gpu`, and
+`auto -> auto`.
+
+The reproducible Route-2 baseline uses AP01 on CPU with exhaustive matching,
+4096 features and a 1600-pixel maximum image dimension. AP03 uses the same CPU
+and matcher contract with 8192 features, a 2400-pixel maximum image dimension,
+eight mapper matches, one physical COLMAP camera ID per real camera and fixed
+intrinsics. Configured and effective values are retained separately in
+provenance.
 
 ## Real input and sampling
 

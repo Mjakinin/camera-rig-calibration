@@ -1,0 +1,30 @@
+{
+  "completed_at": "2026-07-29T22:59:41.752+00:00",
+  "inputs": {
+    "accepted_observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/preflight/observations",
+    "reconstruction": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/reconstruction/sparse_txt"
+  },
+  "outputs": {
+    "metadata": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+    "static_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+    "status": "OK_FULL"
+  },
+  "parameters": {
+    "detection_mode": "baseline",
+    "marker_ids": [
+      0
+    ],
+    "marker_length_m": 0.17,
+    "maximum_observations_per_marker": null,
+    "minimum_inliers": 4,
+    "mode": "single",
+    "ransac_iterations": 1000,
+    "reprojection_threshold_px": 5.0,
+    "selection": "quality_ranked_per_marker_before_triangulation"
+  },
+  "runtime_seconds": 8.67401717499888,
+  "schema_version": 5,
+  "stage_id": "ap03.estimate_scale.single",
+  "started_at": "2026-07-29T22:59:33.078+00:00",
+  "status": "COMPLETED"
+}

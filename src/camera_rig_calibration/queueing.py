@@ -792,8 +792,30 @@ def _load_queue_unpartitioned(path: Path) -> QueueConfig:
             f"Only schema_version 5 queues are supported: {source}"
         )
     queue = QueueConfig.model_validate(payload)
+    common = queue.common
+    if common is not None:
+        dataset_updates: dict[str, Path] = {}
+        for field_name in ("prepared_root", "input_root"):
+            configured = getattr(common.dataset, field_name)
+            if configured is None:
+                continue
+            dataset_updates[field_name] = (
+                configured.resolve()
+                if configured.is_absolute()
+                else (source.parent / configured).resolve()
+            )
+        if dataset_updates:
+            common = common.model_copy(
+                update={
+                    "dataset": common.dataset.model_copy(
+                        update=dataset_updates
+                    )
+                },
+                deep=True,
+            )
     resolved_queue = queue.model_copy(
         update={
+            "common": common,
             "entries": [
                 entry.model_copy(
                     update={

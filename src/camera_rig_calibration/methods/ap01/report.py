@@ -46,6 +46,12 @@ def run(
             "missing_static_cameras": solution[
                 "missing_static_cameras"
             ],
+            "quality_gates": solution.get("quality_gates", {}),
+            "quality_warnings": solution.get("quality_warnings", []),
+            "quality_status": solution.get(
+                "quality_status",
+                "good" if len(available) == expected else "partial_coverage",
+            ),
             "ground_truth_used": False,
         }
         diagnostics_path = (
@@ -61,8 +67,19 @@ def run(
                 {
                     "method": "AP01",
                     "status": status,
-                    "success": len(available) == expected,
+                    "success": bool(available),
+                    "execution_status": "completed",
+                    "solver_status": "not_applicable",
+                    "quality_status": diagnostics["quality_status"],
+                    "calibration_status": (
+                        "available"
+                        if len(available) == expected
+                        else "partial_coverage"
+                    ),
                     "available_static_cameras": available,
+                    "missing_static_cameras": solution[
+                        "missing_static_cameras"
+                    ],
                     "pose_file": str(
                         output_root
                         / "03_static_extrinsics"
@@ -75,11 +92,6 @@ def run(
             + "\n",
             encoding="utf-8",
         )
-        if len(available) != expected:
-            raise RuntimeError(
-                f"AP01 produced only {len(available)}/{expected} "
-                "static camera poses"
-            )
         return {
             "method_status": status_path,
             "diagnostics": diagnostics_path,

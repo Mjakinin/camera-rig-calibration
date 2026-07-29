@@ -68,6 +68,31 @@ class AP01Method:
                     str(config.methods.ap01.scale_top_per_marker),
                 ]
             )
+        direct_gate = config.methods.ap01.direct_quality_gate
+        relay_gate = config.methods.ap01.relay_quality_gate
+        consistency = config.methods.ap01.direct_relay_consistency
+        arguments.extend(
+            [
+                "--direct-minimum-independent-markers",
+                str(direct_gate.minimum_independent_markers),
+                "--direct-minimum-inlier-ratio",
+                str(direct_gate.minimum_inlier_ratio),
+                "--direct-maximum-translation-dispersion-m",
+                str(direct_gate.maximum_translation_dispersion_m),
+                "--direct-maximum-rotation-dispersion-deg",
+                str(direct_gate.maximum_rotation_dispersion_deg),
+                "--relay-minimum-inlier-ratio",
+                str(relay_gate.minimum_inlier_ratio),
+                "--relay-maximum-translation-dispersion-m",
+                str(relay_gate.maximum_translation_dispersion_m),
+                "--relay-maximum-rotation-dispersion-deg",
+                str(relay_gate.maximum_rotation_dispersion_deg),
+                "--maximum-path-translation-disagreement-m",
+                str(consistency.maximum_translation_disagreement_m),
+                "--maximum-path-rotation-disagreement-deg",
+                str(consistency.maximum_rotation_disagreement_deg),
+            ]
+        )
         reconstruct = [
             *python_module,
             "camera_rig_calibration.methods.ap01.reconstruct_moving",

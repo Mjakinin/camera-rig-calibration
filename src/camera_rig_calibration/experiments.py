@@ -63,6 +63,7 @@ PARAMETER_INVALIDATION: dict[str, str] = {
     "markers.length_m": "method_estimation",
     "methods.ap01.root_camera": "method_estimation",
     "methods.ap02.reference_marker_id": "method_estimation",
+    "methods.ap02.reference_marker_selection_mode": "method_estimation",
     "methods.ap03.single.scale_marker_id": "method_estimation",
     "methods.ap03.multi.marker_ids": "method_estimation",
     "colmap": "colmap",
@@ -412,6 +413,16 @@ _LABEL_FIELDS = {
     "root_camera": "root",
     "top_moving_per_marker": "moving_top_per_marker",
     "scale_top_per_marker": "scale_top_per_marker",
+    "direct_quality_gate.minimum_independent_markers": "direct_markers",
+    "direct_quality_gate.minimum_inlier_ratio": "direct_inlier_ratio",
+    "direct_quality_gate.maximum_translation_dispersion_m": "direct_t_disp",
+    "direct_quality_gate.maximum_rotation_dispersion_deg": "direct_r_disp",
+    "relay_quality_gate.minimum_inlier_ratio": "relay_inlier_ratio",
+    "relay_quality_gate.maximum_translation_dispersion_m": "relay_t_disp",
+    "relay_quality_gate.maximum_rotation_dispersion_deg": "relay_r_disp",
+    "direct_relay_consistency.maximum_translation_disagreement_m": "path_t_disagree",
+    "direct_relay_consistency.maximum_rotation_disagreement_deg": "path_r_disagree",
+    "reference_marker_selection_mode": "ref_mode",
     "reference_marker_id": "ref_marker",
     "reference_marker_maximum_frames": "ref_frames",
     "top_per_marker": "frame_top_per_marker",
@@ -428,7 +439,7 @@ _LABEL_FIELDS = {
     "scale.minimum_inliers": "scale_inliers",
     "scale.maximum_observations_per_marker": "scale_obs_per_marker",
     "colmap.matcher": "matcher",
-    "colmap.gpu_mode": "gpu",
+    "colmap.compute_mode": "compute",
     "colmap.maximum_image_size": "image_size",
     "colmap.maximum_features": "features",
     "colmap.sequential_overlap": "overlap",
@@ -581,18 +592,62 @@ def method_variant_name(
 
 def method_result_label(config: RigConfig, method_id: str) -> str:
     """Return the deterministic public label for the effective configuration."""
-    if (
-        method_id in {"ap01", "ap03"}
-        and config.colmap.executable != "auto"
-        and Path(config.colmap.executable).is_absolute()
-    ):
-        return safe_id(config.project.run_label or "baseline")
-    return automatic_method_label(
+    is_simulation = result_category(config) == "simulation"
+    anchor_is_14 = config.evaluation.anchor_marker_id == 14
+    colmap_cpu_baseline = (
+        config.colmap.compute_mode == "cpu_baseline"
+        and config.colmap.matcher == "exhaustive"
+        and config.colmap.mapper_minimum_matches == 8
+    )
+    baseline_contract = False
+    if method_id == "ap01":
+        baseline_contract = (
+            is_simulation
+            and anchor_is_14
+            and config.methods.ap01.root_camera == "cam_edge_3"
+            and colmap_cpu_baseline
+            and config.colmap.maximum_image_size == 1600
+            and config.colmap.maximum_features == 4096
+        )
+    elif method_id == "ap02":
+        ap02 = config.methods.ap02
+        baseline_contract = (
+            is_simulation
+            and anchor_is_14
+            and ap02.reference_marker_selection_mode == "baseline"
+            and ap02.reference_marker_id == 14
+            and ap02.static_only_ba_max_function_evaluations == 50
+            and ap02.combined_ba_max_function_evaluations == 50
+        )
+    elif method_id == "ap03":
+        baseline_contract = (
+            is_simulation
+            and anchor_is_14
+            and colmap_cpu_baseline
+            and (
+                config.colmap.ap03_maximum_image_size
+                or config.colmap.maximum_image_size
+            )
+            == 2400
+            and (
+                config.colmap.ap03_maximum_features
+                or config.colmap.maximum_features
+            )
+            == 8192
+        )
+    if baseline_contract:
+        return "baseline"
+    label = automatic_method_label(
         method_id,
         methods=config.methods,
         markers=config.markers,
         observation_quality=config.observation_quality,
         colmap=config.colmap,
+    )
+    return (
+        label
+        if label != "baseline"
+        else safe_id(f"{method_id}_configured_defaults_nonbaseline")
     )
 
 

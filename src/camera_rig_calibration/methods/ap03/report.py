@@ -33,6 +33,35 @@ def run(*, output_root: Path) -> StageResult:
             raise RuntimeError("AP03 multi-marker primary scale is unavailable")
         single_success = single.get("scale_m_per_colmap_unit") is not None
         status = "OK" if single_success else "PARTIAL"
+        reconstruction = _read_optional(
+            output_root
+            / "colmap"
+            / "inspection"
+            / "AP03_RECONSTRUCTION_DIAGNOSTICS.json"
+        )
+        scale_relative_std = multi.get("used_rel_std_scale")
+        scale_quality = (
+            "unavailable"
+            if scale_relative_std is None
+            else "good"
+            if float(scale_relative_std) <= 0.05
+            else "warning_scale_dispersion"
+            if float(scale_relative_std) <= 0.10
+            else "poor_scale_dispersion"
+        )
+        reconstruction_quality = reconstruction.get(
+            "quality_status", "unavailable"
+        )
+        quality_status = (
+            "poor_scale_dispersion"
+            if scale_quality == "poor_scale_dispersion"
+            else "warning_reconstruction_or_scale"
+            if (
+                scale_quality != "good"
+                or reconstruction_quality != "good"
+            )
+            else "good"
+        )
         report = {
             "schema_version": 5,
             "method": "AP03",
@@ -42,6 +71,22 @@ def run(*, output_root: Path) -> StageResult:
             "single": single,
             "multi": multi,
             "shared_scale_configuration": True,
+            "execution_status": "completed",
+            "solver_status": "not_applicable",
+            "calibration_status": "available",
+            "quality_status": quality_status,
+            "scale_quality_status": scale_quality,
+            "scale_relative_std": scale_relative_std,
+            "reconstruction_quality_status": reconstruction_quality,
+            "reconstruction_diagnostics": reconstruction,
+            "aruco_consistency_gate": {
+                "maximum_translation_deviation_m": 0.30,
+                "maximum_rotation_deviation_deg": 7.0,
+                "status": (
+                    "deferred_to_post_method_anchor_evaluation"
+                ),
+                "ground_truth_used": False,
+            },
         }
         report_json = output_root / "AP03_REPORT.json"
         report_json.write_text(
@@ -58,6 +103,15 @@ def run(*, output_root: Path) -> StageResult:
                     "Diagnostic result: single-marker scale",
                     "COLMAP reconstructions: 1",
                     "Single and multi use one shared RANSAC configuration.",
+                    f"Quality: {quality_status}",
+                    (
+                        "Multi-scale relative standard deviation: "
+                        f"{scale_relative_std if scale_relative_std is not None else 'unavailable'}"
+                    ),
+                    (
+                        "Reconstruction support: "
+                        f"{reconstruction_quality}"
+                    ),
                     "",
                 ]
             ),
@@ -72,8 +126,25 @@ def run(*, output_root: Path) -> StageResult:
                     "method": "AP03",
                     "status": status,
                     "success": True,
+                    "execution_status": "completed",
+                    "solver_status": "not_applicable",
+                    "calibration_status": "available",
+                    "quality_status": quality_status,
                     "primary_result": "multi",
                     "single_diagnostic_success": single_success,
+                    "registered_static_cameras": (
+                        reconstruction.get(
+                            "registered_static_camera_count"
+                        )
+                    ),
+                    "registered_moving_frames": (
+                        reconstruction.get(
+                            "registered_moving_frame_count"
+                        )
+                    ),
+                    "sparse_point_count": reconstruction.get(
+                        "sparse_point_count"
+                    ),
                 },
                 indent=2,
             )

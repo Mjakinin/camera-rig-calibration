@@ -17,6 +17,45 @@ def parser(description: str) -> argparse.ArgumentParser:
     result.add_argument("--moving-camera-id", required=True)
     result.add_argument("--top-moving-per-marker", type=int, default=None)
     result.add_argument("--scale-top-per-marker", type=int, default=None)
+    result.add_argument(
+        "--direct-minimum-independent-markers", type=int, default=3
+    )
+    result.add_argument(
+        "--direct-minimum-inlier-ratio", type=float, default=0.70
+    )
+    result.add_argument(
+        "--direct-maximum-translation-dispersion-m",
+        type=float,
+        default=0.12,
+    )
+    result.add_argument(
+        "--direct-maximum-rotation-dispersion-deg",
+        type=float,
+        default=4.0,
+    )
+    result.add_argument(
+        "--relay-minimum-inlier-ratio", type=float, default=0.70
+    )
+    result.add_argument(
+        "--relay-maximum-translation-dispersion-m",
+        type=float,
+        default=0.30,
+    )
+    result.add_argument(
+        "--relay-maximum-rotation-dispersion-deg",
+        type=float,
+        default=7.0,
+    )
+    result.add_argument(
+        "--maximum-path-translation-disagreement-m",
+        type=float,
+        default=0.12,
+    )
+    result.add_argument(
+        "--maximum-path-rotation-disagreement-deg",
+        type=float,
+        default=4.0,
+    )
     return result
 
 

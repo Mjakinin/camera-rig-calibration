@@ -261,21 +261,46 @@ class SelectionSettings(StrictModel):
 class ColmapSettings(StrictModel):
     executable: str = "auto"
     matcher: Literal["exhaustive", "sequential"] = "exhaustive"
-    gpu_mode: Literal["auto", "true", "false"] = "auto"
-    maximum_image_size: int = Field(default=2400, ge=256)
-    maximum_features: int = Field(default=8192, ge=128)
+    compute_mode: Literal["cpu_baseline", "gpu", "auto"] = "cpu_baseline"
+    maximum_image_size: int = Field(default=1600, ge=256)
+    maximum_features: int = Field(default=4096, ge=128)
     sequential_overlap: int = Field(default=20, ge=1)
     loop_detection: bool = True
     mapper_minimum_matches: int = Field(default=8, ge=1)
     reuse: bool = False
-    ap03_maximum_image_size: int | None = Field(default=None, ge=256)
-    ap03_maximum_features: int | None = Field(default=None, ge=128)
+    ap03_maximum_image_size: int | None = Field(default=2400, ge=256)
+    ap03_maximum_features: int | None = Field(default=8192, ge=128)
     ap03_loop_detection: bool | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_legacy_gpu_mode(cls, value: Any) -> Any:
+        """Accept direct construction with the former schema-v5 GPU field."""
+        if not isinstance(value, dict) or "gpu_mode" not in value:
+            return value
+        migrated = dict(value)
+        legacy = str(migrated.pop("gpu_mode")).strip().lower()
+        translated = {
+            "false": "cpu_baseline",
+            "true": "gpu",
+            "auto": "auto",
+        }.get(legacy)
+        if translated is None:
+            raise ValueError(
+                "gpu_mode must be one of false, true or auto"
+            )
+        configured = migrated.get("compute_mode")
+        if configured is not None and configured != translated:
+            raise ValueError(
+                "compute_mode conflicts with the deprecated gpu_mode value"
+            )
+        migrated["compute_mode"] = translated
+        return migrated
 
     @property
     def use_gpu(self) -> bool:
         """Resolved boolean consumed by the command adapters."""
-        return self.gpu_mode == "true"
+        return self.compute_mode == "gpu"
 
 
 class ObservationQualitySettings(StrictModel):
@@ -332,16 +357,48 @@ class ObservationQualityOverrides(StrictModel):
         return number
 
 
+class AP01PathQualityGate(StrictModel):
+    minimum_inlier_ratio: float = Field(default=0.70, ge=0.0, le=1.0)
+    maximum_translation_dispersion_m: float = Field(default=0.12, gt=0)
+    maximum_rotation_dispersion_deg: float = Field(default=4.0, gt=0)
+
+
+class AP01DirectQualityGate(AP01PathQualityGate):
+    minimum_independent_markers: int = Field(default=3, ge=1)
+
+
+class AP01RelayQualityGate(AP01PathQualityGate):
+    maximum_translation_dispersion_m: float = Field(default=0.30, gt=0)
+    maximum_rotation_dispersion_deg: float = Field(default=7.0, gt=0)
+
+
+class AP01PathConsistency(StrictModel):
+    maximum_translation_disagreement_m: float = Field(default=0.12, gt=0)
+    maximum_rotation_disagreement_deg: float = Field(default=4.0, gt=0)
+
+
 class AP01Settings(StrictModel):
     root_camera: str = "auto"
     top_moving_per_marker: int | None = Field(default=8, ge=1)
     scale_top_per_marker: int | None = Field(default=30, ge=1)
+    direct_quality_gate: AP01DirectQualityGate = Field(
+        default_factory=AP01DirectQualityGate
+    )
+    relay_quality_gate: AP01RelayQualityGate = Field(
+        default_factory=AP01RelayQualityGate
+    )
+    direct_relay_consistency: AP01PathConsistency = Field(
+        default_factory=AP01PathConsistency
+    )
     observation_quality: ObservationQualityOverrides = Field(
         default_factory=ObservationQualityOverrides
     )
 
 
 class AP02Settings(StrictModel):
+    reference_marker_selection_mode: Literal[
+        "baseline", "auto", "manual", "explicit"
+    ] = "auto"
     reference_marker_id: int | Literal["auto"] = "auto"
     reference_marker_maximum_frames: int | None = Field(
         default=None, ge=1
@@ -349,13 +406,51 @@ class AP02Settings(StrictModel):
     top_per_marker: int | None = Field(default=8, ge=1)
     top_per_marker_pair: int | None = Field(default=4, ge=1)
     maximum_total_frames: int | None = Field(default=None, ge=1)
-    static_only_ba_max_function_evaluations: int = Field(default=100, ge=1)
-    combined_ba_max_function_evaluations: int = Field(default=120, ge=1)
+    static_only_ba_max_function_evaluations: int = Field(default=50, ge=1)
+    combined_ba_max_function_evaluations: int = Field(default=50, ge=1)
     ba_robust_loss: Literal["soft_l1", "huber", "linear"] = "soft_l1"
     ba_robust_loss_scale_px: float = Field(default=3.0, gt=0)
     observation_quality: ObservationQualityOverrides = Field(
         default_factory=ObservationQualityOverrides
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def infer_legacy_reference_mode(cls, value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        migrated = dict(value)
+        if "reference_marker_selection_mode" not in migrated:
+            configured = migrated.get("reference_marker_id", "auto")
+            migrated["reference_marker_selection_mode"] = (
+                "auto" if configured == "auto" else "explicit"
+            )
+        if migrated.get("reference_marker_selection_mode") == "baseline":
+            migrated["reference_marker_id"] = 14
+        elif (
+            migrated.get("reference_marker_selection_mode") == "manual"
+            and "reference_marker_id" not in migrated
+        ):
+            migrated["reference_marker_id"] = "auto"
+        return migrated
+
+    @model_validator(mode="after")
+    def validate_reference_selection(self) -> "AP02Settings":
+        if (
+            self.reference_marker_selection_mode == "baseline"
+            and self.reference_marker_id != 14
+        ):
+            raise ValueError(
+                "baseline reference-marker selection requires marker 14"
+            )
+        if (
+            self.reference_marker_selection_mode == "explicit"
+            and self.reference_marker_id == "auto"
+        ):
+            raise ValueError(
+                "explicit reference-marker selection requires a marker ID"
+            )
+        return self
 
     @property
     def max_nfev_static(self) -> int:
@@ -547,6 +642,14 @@ class RigConfig(StrictModel):
                 )
             if not self.static_cameras and self.mcap.path is None:
                 raise ValueError("provide static cameras or an MCAP source")
+        if (
+            self.methods.ap02.reference_marker_selection_mode == "baseline"
+            and self.dataset.category != DatasetCategory.SIMULATION
+        ):
+            raise ValueError(
+                "AP02 reference_marker_selection_mode=baseline is available "
+                "only for simulation datasets"
+            )
         if self.moving_camera.video is not None and self.sampling.target_hz is None:
             raise ValueError("sampling.target_hz is required for moving-video input")
         return self

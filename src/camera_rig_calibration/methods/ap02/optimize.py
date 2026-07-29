@@ -131,7 +131,7 @@ def main() -> None:
     parser.add_argument(
         "--ref-marker-id", type=int, default=core.DEFAULT_REF_MARKER_ID
     )
-    parser.add_argument("--max-nfev", type=int, default=80)
+    parser.add_argument("--max-nfev", type=int, default=50)
     parser.add_argument("--ap02-root", type=Path, required=True)
     parser.add_argument("--observations", type=Path, required=True)
     parser.add_argument("--initialization-root", type=Path, required=True)

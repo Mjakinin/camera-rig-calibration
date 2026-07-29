@@ -2974,7 +2974,7 @@ def _method_job_summary(job: MethodQueueJob) -> str:
 
     if job.method_id == "ap01":
         return (
-            f"matcher={job.colmap.matcher}, GPU={job.colmap.gpu_mode}, "
+            f"matcher={job.colmap.matcher}, compute={job.colmap.compute_mode}, "
             f"root={selection_text('root_camera', job.methods.ap01.root_camera)}, "
             f"relay_top={job.methods.ap01.top_moving_per_marker}, "
             f"scale_top={job.methods.ap01.scale_top_per_marker}, "
@@ -2986,6 +2986,7 @@ def _method_job_summary(job: MethodQueueJob) -> str:
         return (
             f"nfev={value.max_nfev_static}/{value.max_nfev_moving}, "
             f"loss={value.ba_robust_loss}@{value.ba_robust_loss_scale_px:g}px, "
+            f"ref_mode={value.reference_marker_selection_mode}, "
             f"ref={selection_text('ap02_reference', value.reference_marker_id)}, "
             f"frames=marker:{value.top_per_marker}/pair:"
             f"{value.top_per_marker_pair}/total:{value.maximum_total_frames}, "
@@ -3079,7 +3080,15 @@ def _methods_with_automatic_selections(methods: MethodSettings) -> MethodSetting
                 update={"root_camera": "auto"}
             ),
             "ap02": methods.ap02.model_copy(
-                update={"reference_marker_id": "auto"}
+                update=(
+                    {}
+                    if methods.ap02.reference_marker_selection_mode
+                    == "baseline"
+                    else {
+                        "reference_marker_id": "auto",
+                        "reference_marker_selection_mode": "auto",
+                    }
+                )
             ),
             "ap03": ap03,
         },
@@ -3150,7 +3159,14 @@ def _selection_mode_for_methods(
         method_id == "ap01"
         and methods.ap01.root_camera != "auto"
         or method_id == "ap02"
-        and methods.ap02.reference_marker_id != "auto"
+        and (
+            methods.ap02.reference_marker_selection_mode
+            in {"baseline", "explicit"}
+            or (
+                methods.ap02.reference_marker_selection_mode == "manual"
+                and methods.ap02.reference_marker_id != "auto"
+            )
+        )
         or method_id == "ap03"
         and methods.ap03.single.scale_marker_id != "auto"
         and methods.ap03.multi.marker_ids != "auto"
@@ -3276,7 +3292,15 @@ def _validate_prepared_job_selections(
             configured = (
                 methods.ap01.root_camera != "auto"
                 if job.method_id == "ap01"
-                else methods.ap02.reference_marker_id != "auto"
+                else (
+                    methods.ap02.reference_marker_selection_mode
+                    in {"baseline", "explicit"}
+                    or (
+                        methods.ap02.reference_marker_selection_mode
+                        == "manual"
+                        and methods.ap02.reference_marker_id != "auto"
+                    )
+                )
                 if job.method_id == "ap02"
                 else (
                     methods.ap03.single.scale_marker_id != "auto"
@@ -3391,7 +3415,15 @@ def _prompt_guided_candidate(
         for index, item in enumerate(candidates, 1)
         if _candidate_compatible(item, key)
     }
-    if not compatible:
+    selectable = (
+        {
+            index: item
+            for index, item in enumerate(candidates, 1)
+        }
+        if key == "ap02_reference"
+        else compatible
+    )
+    if not selectable:
         raise ValueError("No compatible selection candidate is available")
     if key == "multi_markers":
         default = ",".join(map(str, compatible))
@@ -3425,21 +3457,37 @@ def _prompt_guided_candidate(
     recommended = next(
         (
             index
-            for index, item in compatible.items()
+            for index, item in selectable.items()
             if item.get("recommended")
         ),
-        next(iter(compatible)),
+        next(iter(selectable)),
     )
     while True:
         selected = _prompt_index(
-            "Compatible table number (0/b = back)",
+            (
+                "Detected marker table number (0/b = back)"
+                if key == "ap02_reference"
+                else "Compatible table number (0/b = back)"
+            ),
             default=recommended,
             maximum=len(candidates),
         )
         if selected is None:
             raise WizardBack()
-        if selected in compatible:
-            return compatible[selected]["id"]
+        if selected in selectable:
+            candidate = selectable[selected]
+            if (
+                key == "ap02_reference"
+                and not _candidate_compatible(candidate, key)
+                and not typer.confirm(
+                    "This detected marker is not compatible with a complete "
+                    "AP02 graph under the current filters. Continue with the "
+                    "documented partial/diagnostic selection?",
+                    default=False,
+                )
+            ):
+                continue
+            return candidate["id"]
         _show_input_error(
             "That row is not compatible with this method configuration."
         )
@@ -3452,6 +3500,7 @@ def _configure_guided_selection(
     key: str,
     label: str,
     contexts: tuple[SelectionDatasetContext, ...],
+    requested_mode: str | None = None,
 ) -> None:
     configured_values = [
         _selection_value(job.methods, key),
@@ -3475,7 +3524,7 @@ def _configure_guided_selection(
         )
         else "auto"
     )
-    mode = _prompt_enum_choice(
+    mode = requested_mode or _prompt_enum_choice(
         label,
         current_mode,
         (
@@ -3489,6 +3538,8 @@ def _configure_guided_selection(
             ),
         ),
     )
+    if mode not in {"auto", "manual"}:
+        raise ValueError(f"Unsupported guided selection mode: {mode}")
     if mode == "auto":
         job.methods = _methods_with_selection(job.methods, key, "auto")
         job.deferred_selection_keys.discard(key)
@@ -3662,11 +3713,33 @@ def _setting_rows(
             ("root_camera", "METHOD-SPECIFIC SETTINGS", "Root camera", guided_current("root_camera", value.root_camera), base.root_camera, "Coordinate origin; auto is resolved from filtered graph coverage."),
             ("ap01_top_moving", "METHOD-SPECIFIC SETTINGS", "Relay observations per marker", value.top_moving_per_marker, base.top_moving_per_marker, "Quality-ranked moving observations kept per marker; null keeps all."),
             ("ap01_scale_top", "METHOD-SPECIFIC SETTINGS", "Scale observations per marker", value.scale_top_per_marker, base.scale_top_per_marker, "Quality-ranked observations kept before scale-pair construction; null keeps all."),
+            ("ap01_direct_markers", "METHOD-SPECIFIC SETTINGS", "Direct minimum independent inlier markers", value.direct_quality_gate.minimum_independent_markers, base.direct_quality_gate.minimum_independent_markers, "Higher requires more independent marker evidence; the baseline requires three marker IDs."),
+            ("ap01_direct_inlier_ratio", "METHOD-SPECIFIC SETTINGS", "Direct minimum inlier ratio", value.direct_quality_gate.minimum_inlier_ratio, base.direct_quality_gate.minimum_inlier_ratio, "Fraction in [0,1]; higher rejects less-consistent direct candidate sets."),
+            ("ap01_direct_translation", "METHOD-SPECIFIC SETTINGS", "Direct maximum translation dispersion [m]", value.direct_quality_gate.maximum_translation_dispersion_m, base.direct_quality_gate.maximum_translation_dispersion_m, "Lower requires tighter direct-pose consensus; baseline is 0.12 m."),
+            ("ap01_direct_rotation", "METHOD-SPECIFIC SETTINGS", "Direct maximum rotation dispersion [deg]", value.direct_quality_gate.maximum_rotation_dispersion_deg, base.direct_quality_gate.maximum_rotation_dispersion_deg, "Lower requires tighter direct orientation consensus; baseline is 4 degrees."),
+            ("ap01_relay_inlier_ratio", "METHOD-SPECIFIC SETTINGS", "Relay minimum inlier ratio", value.relay_quality_gate.minimum_inlier_ratio, base.relay_quality_gate.minimum_inlier_ratio, "Fraction in [0,1]; higher rejects less-consistent relay candidates."),
+            ("ap01_relay_translation", "METHOD-SPECIFIC SETTINGS", "Relay maximum translation dispersion [m]", value.relay_quality_gate.maximum_translation_dispersion_m, base.relay_quality_gate.maximum_translation_dispersion_m, "Lower requires tighter moving-COLMAP relay consensus; baseline is 0.30 m."),
+            ("ap01_relay_rotation", "METHOD-SPECIFIC SETTINGS", "Relay maximum rotation dispersion [deg]", value.relay_quality_gate.maximum_rotation_dispersion_deg, base.relay_quality_gate.maximum_rotation_dispersion_deg, "Lower requires tighter relay orientation consensus; baseline is 7 degrees."),
+            ("ap01_consistency_translation", "METHOD-SPECIFIC SETTINGS", "Direct/relay maximum translation disagreement [m]", value.direct_relay_consistency.maximum_translation_disagreement_m, base.direct_relay_consistency.maximum_translation_disagreement_m, "If both paths are stable, larger disagreement publishes Direct with a visible warning."),
+            ("ap01_consistency_rotation", "METHOD-SPECIFIC SETTINGS", "Direct/relay maximum rotation disagreement [deg]", value.direct_relay_consistency.maximum_rotation_disagreement_deg, base.direct_relay_consistency.maximum_rotation_disagreement_deg, "If both paths are stable, larger disagreement publishes Direct with a visible warning."),
         ])
     elif job.method_id == "ap02":
         value, base = job.methods.ap02, defaults.methods.ap02
+        reference_current = (
+            "marker 14"
+            if value.reference_marker_selection_mode == "baseline"
+            else "manual after preflight"
+            if (
+                value.reference_marker_selection_mode == "manual"
+                and value.reference_marker_id == "auto"
+            )
+            else guided_current(
+                "ap02_reference", value.reference_marker_id
+            )
+        )
         rows.extend([
-            ("ap02_reference", "METHOD-SPECIFIC SETTINGS", "Reference marker", guided_current("ap02_reference", value.reference_marker_id), base.reference_marker_id, "Pose-graph anchor selected after filtered observations."),
+            ("ap02_reference_mode", "METHOD-SPECIFIC SETTINGS", "Reference-marker selection mode", value.reference_marker_selection_mode, base.reference_marker_selection_mode, "Baseline is simulation-only marker 14; auto uses the deterministic recommendation; manual pauses once after preflight; explicit is retained for compatible schema-v5 files."),
+            ("ap02_reference_display", "METHOD-SPECIFIC SETTINGS", "Resolved/reference marker", reference_current, "auto", "Read-only preview. Auto and manual choices are resolved from the detected marker inventory during preflight."),
             ("ap02_reference_frames", "METHOD-SPECIFIC SETTINGS", "Reference-marker frame limit", value.reference_marker_maximum_frames, base.reference_marker_maximum_frames, "Quality-ranked reference-marker frames; null is unlimited."),
             ("ap02_top_marker", "METHOD-SPECIFIC SETTINGS", "Top frames per marker", value.top_per_marker, base.top_per_marker, "Quality-ranked frames retained for each marker; null keeps all."),
             ("ap02_top_pair", "METHOD-SPECIFIC SETTINGS", "Top frames per marker pair", value.top_per_marker_pair, base.top_per_marker_pair, "Prioritizes cross-marker bridge frames; null keeps all."),
@@ -3715,7 +3788,7 @@ def _setting_rows(
     if job.method_id in {"ap01", "ap03"}:
         rows.extend([
             ("matcher", "COLMAP SETTINGS", "Matcher", job.colmap.matcher, "exhaustive", "Exhaustive compares all image pairs; sequential limits temporal pairs."),
-            ("gpu_mode", "COLMAP SETTINGS", "GPU mode", job.colmap.gpu_mode, "auto", "auto probes capability; true fails preflight without a compatible GPU."),
+            ("compute_mode", "COLMAP SETTINGS", "COLMAP compute mode", job.colmap.compute_mode, "cpu_baseline", "CPU baseline is reproducible; GPU is explicit; auto probes capability and records the resolved device."),
             ("mapper_matches", "COLMAP SETTINGS", "Mapper minimum matches", job.colmap.mapper_minimum_matches, 8, "Higher requires stronger image pairs; lower may add weak registrations."),
             ("maximum_image_size", "COLMAP SETTINGS", "Maximum feature image size", job.colmap.maximum_image_size, 2400, "Larger preserves detail but increases memory/runtime."),
             ("maximum_features", "COLMAP SETTINGS", "Maximum features per image", job.colmap.maximum_features, 8192, "Larger improves difficult matching but increases runtime."),
@@ -3853,6 +3926,12 @@ def _edit_method_job(
                         contexts=selection_contexts,
                     )
                     continue
+                if key == "ap02_reference_display":
+                    typer.echo(
+                        "Change the reference-marker selection mode in the "
+                        "preceding row; marker IDs are never entered freely."
+                    )
+                    continue
                 if key == "evaluation_anchor":
                     value = _prompt_enum_choice(
                         label,
@@ -3873,6 +3952,25 @@ def _edit_method_job(
                             ),
                         ),
                     )
+                elif key == "ap02_reference_mode":
+                    value = _prompt_enum_choice(
+                        label,
+                        str(current),
+                        (
+                            (
+                                "baseline",
+                                "simulation baseline contract; force marker 14",
+                            ),
+                            (
+                                "auto",
+                                "use the deterministic preflight recommendation",
+                            ),
+                            (
+                                "manual",
+                                "show all detected marker IDs once after preflight",
+                            ),
+                        ),
+                    )
                 elif key == "matcher":
                     value = _prompt_enum_choice(
                         label,
@@ -3888,14 +3986,14 @@ def _edit_method_job(
                             ),
                         ),
                     )
-                elif key == "gpu_mode":
+                elif key == "compute_mode":
                     value = _prompt_enum_choice(
                         label,
                         str(current),
                         (
-                            ("auto", "use GPU only when the capability probe succeeds"),
-                            ("true", "require a compatible GPU or fail preflight"),
-                            ("false", "always run COLMAP on CPU"),
+                            ("cpu_baseline", "reproducible CPU baseline"),
+                            ("gpu", "require a compatible GPU or fail preflight"),
+                            ("auto", "resolve from available hardware"),
                         ),
                     )
                 elif key == "ba_loss":
@@ -3985,6 +4083,49 @@ def _edit_method_job(
                         ),
                     }
                 )
+            elif key == "ap02_reference_mode":
+                ap02_update: dict[str, object] = {
+                    "reference_marker_selection_mode": value,
+                    "reference_marker_id": (
+                        14 if value == "baseline" else "auto"
+                    ),
+                }
+                ap02 = job.methods.ap02.model_copy(update=ap02_update)
+                job.methods = job.methods.model_copy(
+                    update={"ap02": ap02}, deep=True
+                )
+                if value == "manual":
+                    job.deferred_selection_keys.add("ap02_reference")
+                else:
+                    job.deferred_selection_keys.discard("ap02_reference")
+                _refresh_job_selection_mode(job)
+                for context in selection_contexts:
+                    contextual = _job_methods(job, context.key)
+                    contextual_ap02 = contextual.ap02.model_copy(
+                        update=ap02_update
+                    )
+                    job.context_methods[context.key] = (
+                        contextual.model_copy(
+                            update={"ap02": contextual_ap02}, deep=True
+                        )
+                    )
+                    pending = job.context_deferred_selection_keys.setdefault(
+                        context.key, set()
+                    )
+                    if value == "manual":
+                        pending.add("ap02_reference")
+                    else:
+                        pending.discard("ap02_reference")
+                    _refresh_job_selection_mode(job, context.key)
+                if value == "manual":
+                    _configure_guided_selection(
+                        console,
+                        job,
+                        key="ap02_reference",
+                        label="Reference marker",
+                        contexts=selection_contexts,
+                        requested_mode="manual",
+                    )
             elif key in {
                 "evaluation_reprojection",
                 "evaluation_inliers",
@@ -4110,6 +4251,70 @@ def _edit_method_job(
                 job.methods = job.methods.model_copy(
                     update={"ap01": ap01}, deep=True
                 )
+            elif key.startswith("ap01_direct_"):
+                field = {
+                    "ap01_direct_markers": "minimum_independent_markers",
+                    "ap01_direct_inlier_ratio": "minimum_inlier_ratio",
+                    "ap01_direct_translation": (
+                        "maximum_translation_dispersion_m"
+                    ),
+                    "ap01_direct_rotation": (
+                        "maximum_rotation_dispersion_deg"
+                    ),
+                }[key]
+                typed_gate_value: int | float = (
+                    int(value)
+                    if key == "ap01_direct_markers"
+                    else float(value)
+                )
+                gate = job.methods.ap01.direct_quality_gate.model_copy(
+                    update={field: typed_gate_value}
+                )
+                ap01 = job.methods.ap01.model_copy(
+                    update={"direct_quality_gate": gate}
+                )
+                job.methods = job.methods.model_copy(
+                    update={"ap01": ap01}, deep=True
+                )
+            elif key.startswith("ap01_relay_"):
+                field = {
+                    "ap01_relay_inlier_ratio": "minimum_inlier_ratio",
+                    "ap01_relay_translation": (
+                        "maximum_translation_dispersion_m"
+                    ),
+                    "ap01_relay_rotation": (
+                        "maximum_rotation_dispersion_deg"
+                    ),
+                }[key]
+                gate = job.methods.ap01.relay_quality_gate.model_copy(
+                    update={field: float(value)}
+                )
+                ap01 = job.methods.ap01.model_copy(
+                    update={"relay_quality_gate": gate}
+                )
+                job.methods = job.methods.model_copy(
+                    update={"ap01": ap01}, deep=True
+                )
+            elif key.startswith("ap01_consistency_"):
+                field = {
+                    "ap01_consistency_translation": (
+                        "maximum_translation_disagreement_m"
+                    ),
+                    "ap01_consistency_rotation": (
+                        "maximum_rotation_disagreement_deg"
+                    ),
+                }[key]
+                consistency = (
+                    job.methods.ap01.direct_relay_consistency.model_copy(
+                        update={field: float(value)}
+                    )
+                )
+                ap01 = job.methods.ap01.model_copy(
+                    update={"direct_relay_consistency": consistency}
+                )
+                job.methods = job.methods.model_copy(
+                    update={"ap01": ap01}, deep=True
+                )
             elif key in {
                 "ap02_reference_frames",
                 "ap02_top_marker",
@@ -4186,8 +4391,10 @@ def _edit_method_job(
             elif key in {"colmap_executable", "matcher"}:
                 field = "executable" if key == "colmap_executable" else key
                 job.colmap = job.colmap.model_copy(update={field: value})
-            elif key == "gpu_mode":
-                job.colmap = job.colmap.model_copy(update={"gpu_mode": value.lower()})
+            elif key == "compute_mode":
+                job.colmap = job.colmap.model_copy(
+                    update={"compute_mode": value.lower()}
+                )
             elif key == "loop_detection":
                 job.colmap = job.colmap.model_copy(update={key: _bool_value(value)})
             elif key in {"mapper_matches", "maximum_image_size", "maximum_features", "sequential_overlap"}:
@@ -6099,11 +6306,26 @@ def review_selection_candidates(
                         ),
                         selected,
                     )
-                    if ap02_candidate.get("compatible"):
+                    if (
+                        ap02_candidate.get("compatible")
+                        or config.methods.ap02.reference_marker_selection_mode
+                        == "manual"
+                    ):
+                        if (
+                            not ap02_candidate.get("compatible")
+                            and not typer.confirm(
+                                "This marker is detected but does not connect "
+                                "a complete AP02 graph under the current "
+                                "filters. Freeze it as a documented partial/"
+                                "diagnostic reference?",
+                                default=False,
+                            )
+                        ):
+                            continue
                         ap02 = int(selected["id"])
                         break
                 typer.echo(
-                    "Choose the table number of an AP02-compatible marker."
+                    "Choose a detected marker table number."
                 )
             if raw.lower() in {"b", "back"}:
                 continue

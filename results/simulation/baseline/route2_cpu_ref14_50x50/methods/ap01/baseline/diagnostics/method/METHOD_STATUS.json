@@ -1,0 +1,19 @@
+{
+  "method": "AP01",
+  "status": "PARTIAL_1_OF_4",
+  "success": true,
+  "execution_status": "completed",
+  "solver_status": "not_applicable",
+  "quality_status": "warning_unstable_consensus",
+  "calibration_status": "partial_coverage",
+  "available_static_cameras": [
+    "cam_edge_3"
+  ],
+  "missing_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_5"
+  ],
+  "pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap01__baseline__01/20260730_004919_baseline_3f5dc2a2/02_AP01/03_static_extrinsics/AP01_STATIC_CAMERA_POSES_ROOT_REFERENCE.csv",
+  "diagnostics_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap01__baseline__01/20260730_004919_baseline_3f5dc2a2/02_AP01/03_static_extrinsics/AP01_DIAGNOSTICS.json"
+}

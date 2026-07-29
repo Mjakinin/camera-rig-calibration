@@ -1,0 +1,99 @@
+{
+  "schema_version": 5,
+  "algorithm": "ap03_colmap_support_diagnostics_v1",
+  "ground_truth_used": false,
+  "best_model": "0",
+  "sparse_point_count": 11454,
+  "registered_image_count": 179,
+  "registered_static_camera_count": 4,
+  "registered_moving_frame_count": 175,
+  "static_track_median": 465.0,
+  "static_median_reprojection_error_px": 0.6041407787916921,
+  "thresholds": {
+    "minimum_track_support": 116.25,
+    "minimum_shared_moving_tracks": "max(10, 10% of that camera track support)",
+    "maximum_median_reprojection_error_px": 3.0
+  },
+  "camera_groups": {
+    "assignment": {
+      "cam_edge_0": [
+        1
+      ],
+      "cam_edge_1": [
+        2
+      ],
+      "cam_edge_3": [
+        3
+      ],
+      "cam_edge_5": [
+        4
+      ],
+      "moving_calib_camera": [
+        5
+      ]
+    },
+    "one_camera_id_per_physical_camera": true,
+    "physical_camera_ids_are_distinct": true,
+    "intrinsics_refinement": false
+  },
+  "static_cameras": [
+    {
+      "camera_id": "cam_edge_0",
+      "image_name": "static_cam_edge_0.png",
+      "registered": true,
+      "colmap_camera_id": 1,
+      "track_support": 451,
+      "shared_tracks_with_moving": 451,
+      "median_reprojection_error_px": 0.37362511962592143,
+      "reprojection_rmse_px": 0.6267736167226312,
+      "warnings": [],
+      "track_support_threshold": 116.25,
+      "shared_moving_track_threshold": 45.1,
+      "median_reprojection_threshold_px": 3.0
+    },
+    {
+      "camera_id": "cam_edge_1",
+      "image_name": "static_cam_edge_1.png",
+      "registered": true,
+      "colmap_camera_id": 2,
+      "track_support": 351,
+      "shared_tracks_with_moving": 348,
+      "median_reprojection_error_px": 0.6472705513542207,
+      "reprojection_rmse_px": 0.8783203298557687,
+      "warnings": [],
+      "track_support_threshold": 116.25,
+      "shared_moving_track_threshold": 35.1,
+      "median_reprojection_threshold_px": 3.0
+    },
+    {
+      "camera_id": "cam_edge_3",
+      "image_name": "static_cam_edge_3.png",
+      "registered": true,
+      "colmap_camera_id": 3,
+      "track_support": 729,
+      "shared_tracks_with_moving": 726,
+      "median_reprojection_error_px": 0.5610110062291634,
+      "reprojection_rmse_px": 0.8584554922357814,
+      "warnings": [],
+      "track_support_threshold": 116.25,
+      "shared_moving_track_threshold": 72.9,
+      "median_reprojection_threshold_px": 3.0
+    },
+    {
+      "camera_id": "cam_edge_5",
+      "image_name": "static_cam_edge_5.png",
+      "registered": true,
+      "colmap_camera_id": 4,
+      "track_support": 479,
+      "shared_tracks_with_moving": 479,
+      "median_reprojection_error_px": 0.7948345423793668,
+      "reprojection_rmse_px": 1.0317308548120232,
+      "warnings": [],
+      "track_support_threshold": 116.25,
+      "shared_moving_track_threshold": 47.900000000000006,
+      "median_reprojection_threshold_px": 3.0
+    }
+  ],
+  "warnings": [],
+  "quality_status": "good"
+}

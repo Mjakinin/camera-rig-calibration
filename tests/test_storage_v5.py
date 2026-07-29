@@ -261,7 +261,10 @@ def test_transaction_publishes_flat_dataset_and_method_result_atomically(
         results={"baseline": {"status": "completed", "result": str(execution)}},
     )
 
-    target = paths.methods / "ap02/baseline"
+    target = (
+        paths.methods
+        / "ap02/ap02_configured_defaults_nonbaseline"
+    )
     assert results["baseline"]["result"] == str(target.resolve())
     assert (paths.dataset_root / "raw_images/moving/frame.png").read_bytes() == b"moving"
     assert (paths.dataset_root / "observations/shared_all_aruco_observations.csv").is_file()
@@ -424,15 +427,16 @@ def test_completed_staging_directory_is_reused_after_failed_rename(
     )
     transaction = config.project.workspace_root / "temporary_runs/staged"
     execution = _successful_ap02_execution(transaction, config)
-    target = experiment_paths(config).methods / "ap02/baseline"
-    staged = target.with_name(".incoming_baseline_interrupted")
+    label = "ap02_configured_defaults_nonbaseline"
+    target = experiment_paths(config).methods / "ap02" / label
+    staged = target.with_name(f".incoming_{label}_interrupted")
     (staged / "provenance").mkdir(parents=True)
     (staged / "RESULT.json").write_text(
         json.dumps(
             {
                 "status": "available",
                 "method": "ap02",
-                    "label": "baseline",
+                    "label": label,
                 "method_fingerprint": "method_fixture",
             }
         ),

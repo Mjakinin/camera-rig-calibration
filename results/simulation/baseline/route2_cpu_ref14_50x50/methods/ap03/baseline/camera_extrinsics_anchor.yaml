@@ -1,0 +1,259 @@
+anchor_alignment:
+  alignment: rigid_kabsch_no_scale_fit
+  corner_file: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2_cpu_ref14_50x50/methods/ap03/baseline/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_TRIANGULATED_CORNERS.csv
+  corner_support:
+  - corner_idx: 0
+    inlier_count: '29'
+    median_reprojection_px: '0.45439111562813106'
+    observation_count: '29'
+  - corner_idx: 1
+    inlier_count: '29'
+    median_reprojection_px: '0.5618889668664002'
+    observation_count: '29'
+  - corner_idx: 2
+    inlier_count: '29'
+    median_reprojection_px: '0.7215717712688061'
+    observation_count: '29'
+  - corner_idx: 3
+    inlier_count: '29'
+    median_reprojection_px: '0.45949868097961183'
+    observation_count: '29'
+  metadata_file: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous
+    Systems/camera-rig-calibration/results/simulation/baseline/route2_cpu_ref14_50x50/methods/ap03/baseline/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json
+  method: ap03
+  scale_m_per_colmap_unit: 0.6844465415652877
+  side_lengths_m:
+  - 0.1701617063224044
+  - 0.16926449059990298
+  - 0.1707731297577736
+  - 0.16887518675324448
+  square_fit_rmse_m: 0.0005909187588627816
+  transform_anchor_method:
+    matrix:
+    - - 0.0007539149298526615
+      - -0.38066426286384475
+      - 0.9247130098525728
+      - 0.8569782005845659
+    - - -0.9999987912946326
+      - 0.0009704254516680055
+      - 0.0012147772290931613
+      - -0.4038165442198879
+    - - -0.0013597873187060103
+      - -0.924712807985684
+      - -0.3806630711346708
+      - 1.819242235454424
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    pitch_rad: 0.0013597877377523688
+    qw: 0.39403720295387396
+    qx: -0.5874620329461419
+    qy: 0.5875541638131089
+    qz: -0.3929416586733356
+    roll_rad: -1.9613099536257341
+    x_m: 0.8569782005845659
+    y_m: -0.4038165442198879
+    yaw_rad: -1.570042411096621
+    z_m: 1.819242235454424
+  transform_method_anchor:
+    matrix:
+    - - 0.0007539149298526615
+      - -0.9999987912946326
+      - -0.0013597873187060103
+      - -0.40198836226321716
+    - - -0.38066426286384475
+      - 0.0009704254516680055
+      - -0.924712807985684
+      - 2.0088894448214365
+    - - 0.9247130098525728
+      - 0.0012147772290931613
+      - -0.3806630711346708
+      - -0.09945000761196138
+    - - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    pitch_rad: -1.180280984433088
+    qw: 0.39403720295387396
+    qx: 0.5874620329461419
+    qy: -0.5875541638131089
+    qz: 0.3929416586733356
+    roll_rad: 3.138401450666441
+    x_m: -0.40198836226321716
+    y_m: 2.0088894448214365
+    yaw_rad: -1.5688158048030372
+    z_m: -0.09945000761196138
+anchor_export_status:
+  available: true
+  camera_count: 4
+  code: OK
+  expected_camera_count: 4
+  manual_warning_confirmed: false
+  missing_cameras: []
+  warnings: []
+anchor_marker_id: 14
+anchor_selection:
+  mode: explicit
+  reason: one deterministic anchor frozen across all runnable queue methods before
+    calibration
+  warning_confirmed: false
+calibration_status: available
+camera_optical_convention: x right, y down, z forward
+cameras:
+- anchor_marker_id: 14
+  camera_id: cam_edge_0
+  child_frame: cam_edge_0_optical_frame
+  label: baseline
+  matrix:
+  - - 0.9995443167956307
+    - 0.0182307885591243
+    - 0.024058202552733
+    - 0.5876715211092158
+  - - -0.015156301060355013
+    - -0.38614797849122656
+    - 0.9223123252159795
+    - -1.746261258589921
+  - - 0.026104507268357113
+    - -0.9222566763410561
+    - -0.38569570602305725
+    - 2.087814438847083
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  method: ap03
+  parent_frame: evaluation_anchor_marker_14
+  pitch_rad: -0.026107472976846072
+  qw: 0.5540082653447842
+  qx: -0.8323743150334942
+  qy: -0.0009234089289040696
+  qz: -0.015066151404212821
+  roll_rad: -1.9669005936418664
+  source: method_primary_result
+  status: available
+  x_m: 0.5876715211092158
+  y_m: -1.746261258589921
+  yaw_rad: -0.015162048717661289
+  z_m: 2.087814438847083
+- anchor_marker_id: 14
+  camera_id: cam_edge_1
+  child_frame: cam_edge_1_optical_frame
+  label: baseline
+  matrix:
+  - - -0.4155915681843079
+    - -0.2515673296939416
+    - 0.8740695207389213
+    - -3.990514779783587
+  - - -0.909447967209161
+    - 0.12942130989294123
+    - -0.39516391470467016
+    - 0.4757091780938767
+  - - -0.013712891497868224
+    - -0.9591475398374616
+    - -0.28257380174126673
+    - 2.1373485762371853
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  method: ap03
+  parent_frame: evaluation_anchor_marker_14
+  pitch_rad: 0.013713321304013926
+  qw: 0.3283503997132358
+  qx: -0.4294068361309638
+  qy: 0.6759413213842079
+  qz: -0.5008983071817323
+  roll_rad: -1.8573002326280312
+  source: method_primary_result
+  status: available
+  x_m: -3.990514779783587
+  y_m: 0.4757091780938767
+  yaw_rad: -1.9994323956020068
+  z_m: 2.1373485762371853
+- anchor_marker_id: 14
+  camera_id: cam_edge_3
+  child_frame: cam_edge_3_optical_frame
+  label: baseline
+  matrix:
+  - - 0.5020595406616687
+    - -0.30415408761591206
+    - 0.8095841578348274
+    - -3.2377698913816992
+  - - -0.864096009539199
+    - -0.13777967259760174
+    - 0.4841021050536032
+    - -1.576755762457545
+  - - -0.03569739386883353
+    - -0.9426065206677863
+    - -0.3319919325308126
+    - 2.057782283458276
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  method: ap03
+  parent_frame: evaluation_anchor_marker_14
+  pitch_rad: 0.03570497977455357
+  qw: 0.5080078580920905
+  qx: -0.7021095259626668
+  qy: 0.41597858096046925
+  qz: -0.2755577069350086
+  roll_rad: -1.909435294614924
+  source: method_primary_result
+  status: available
+  x_m: -3.2377698913816992
+  y_m: -1.576755762457545
+  yaw_rad: -1.044447483306927
+  z_m: 2.057782283458276
+- anchor_marker_id: 14
+  camera_id: cam_edge_5
+  child_frame: cam_edge_5_optical_frame
+  label: baseline
+  matrix:
+  - - -0.40481290915685614
+    - 0.32854660599518043
+    - -0.8533367660361362
+    - 5.889962125205646
+  - - 0.9118160407088529
+    - 0.07493795129264604
+    - -0.4037026273906237
+    - 0.3533680070384315
+  - - -0.06868781905108629
+    - -0.9415101864266306
+    - -0.3299099155358874
+    - 2.1423646637223714
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  method: ap03
+  parent_frame: evaluation_anchor_marker_14
+  pitch_rad: 0.06874194575727224
+  qw: 0.2916398149258357
+  qx: -0.46102035071306396
+  qy: -0.6726181635938383
+  qz: 0.49999126050570186
+  roll_rad: -1.9078319389635245
+  source: method_primary_result
+  status: available
+  x_m: 5.889962125205646
+  y_m: 0.3533680070384315
+  yaw_rad: 1.9886188507014688
+  z_m: 2.1423646637223714
+contract: rigcal_anchor_export_v1
+evaluation_status: unavailable
+fingerprint: 609677a804ec6d7569b1c27e93e7d4403769b43a767f15a78a3e999ecaf0faa9
+label: baseline
+layout_version: 2
+method: ap03
+pairwise_invariance:
+  camera_pair_count: 6
+  maximum_rotation_difference_deg: 1.7075472925031877e-06
+  maximum_translation_difference_m: 2.5121479338940403e-15
+  passed: true
+parent_frame: evaluation_anchor_marker_14
+quaternion_order: qx,qy,qz,qw
+rpy_convention: radians; R = Rz(yaw) @ Ry(pitch) @ Rx(roll)
+schema_version: 1
+transform_convention: T_parent_child; p_parent = T_parent_child @ p_child

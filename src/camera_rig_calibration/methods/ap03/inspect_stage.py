@@ -38,6 +38,8 @@ def run(
             "model_summary": stage_root / "colmap_model_summary.csv",
             "registered_images": stage_root
             / "registered_images_by_model.csv",
+            "reconstruction_diagnostics": stage_root
+            / "AP03_RECONSTRUCTION_DIAGNOSTICS.json",
         }
 
     return run_stage(

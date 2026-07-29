@@ -421,7 +421,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--mode", choices=["static_only", "with_moving"], required=True)
     ap.add_argument("--ref-marker-id", type=int, default=DEFAULT_REF_MARKER_ID)
-    ap.add_argument("--max-nfev", type=int, default=80)
+    ap.add_argument("--max-nfev", type=int, default=50)
     ap.add_argument("--ap02-root", type=Path, default=AP02_ROOT)
     ap.add_argument("--observations", type=Path)
     ap.add_argument("--initialization-root", type=Path)

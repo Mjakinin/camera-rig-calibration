@@ -101,6 +101,38 @@ def run(
             else {}
         )
         complete = not missing
+        combined_optimizer_payload = json.loads(
+            combined_optimizer.read_text(encoding="utf-8")
+        )
+        final_rmse = combined_optimizer_payload.get(
+            "final_reprojection_rmse_px"
+        )
+        quality_status = (
+            "unavailable"
+            if final_rmse is None
+            else "good"
+            if float(final_rmse) <= 5.0
+            else "warning_high_reprojection"
+            if float(final_rmse) <= 25.0
+            else "poor_high_reprojection"
+        )
+        solver_success = bool(
+            combined_optimizer_payload.get("success", False)
+        )
+        nfev = int(combined_optimizer_payload.get("nfev", 0) or 0)
+        maximum_nfev = int(
+            combined_optimizer_payload.get(
+                "maximum_function_evaluations", 0
+            )
+            or 0
+        )
+        solver_status = (
+            "converged"
+            if solver_success
+            else "maximum_function_evaluations_reached"
+            if maximum_nfev > 0 and nfev >= maximum_nfev
+            else "stopped_without_convergence"
+        )
         status = (
             "OK"
             if complete and static_status == "COMPLETED"
@@ -117,14 +149,29 @@ def run(
             "full_rig_result_available": complete,
             "comparison_eligible": complete,
             "diagnostic_partial": not complete,
-            "quality_status": (
-                "converged" if complete else "partial_coverage"
+            "execution_status": "completed",
+            "solver_status": solver_status,
+            "quality_status": quality_status,
+            "calibration_status": (
+                "available" if complete else "partial_coverage"
             ),
             "reference_marker_id": reference_marker_id,
+            "initialization": {
+                "productive_algorithm": "maximum_bottleneck",
+                "diagnostic_algorithm": "unweighted_first_hit_bfs",
+                "ground_truth_used": False,
+                "retry_count": 0,
+                "static_only_diagnostics": (
+                    "05_graph_initialization/static_only/"
+                    "initialization_diagnostics.json"
+                ),
+                "combined_diagnostics": (
+                    "05_graph_initialization/with_moving/"
+                    "initialization_diagnostics.json"
+                ),
+            },
             "static_only_diagnostic_status": static_status,
-            "combined_optimizer": json.loads(
-                combined_optimizer.read_text(encoding="utf-8")
-            ),
+            "combined_optimizer": combined_optimizer_payload,
             "combined_static_camera_coverage": {
                 "available": sorted(combined),
                 "expected": list(camera_ids),
@@ -158,6 +205,11 @@ def run(
                     "method": "AP02",
                     "status": report["status"],
                     "success": True,
+                    "execution_status": report["execution_status"],
+                    "solver_status": report["solver_status"],
+                    "calibration_status": report[
+                        "calibration_status"
+                    ],
                     "primary_result": report["primary_result"],
                     "primary_result_available": bool(combined),
                     "full_rig_result_available": complete,

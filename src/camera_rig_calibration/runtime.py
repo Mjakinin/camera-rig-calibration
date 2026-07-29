@@ -353,11 +353,12 @@ class PipelineOrchestrator:
                     f"COLMAP executable '{executable}' (needed by AP01/AP03)"
                 )
             if (
-                config.colmap.gpu_mode == "true"
+                config.colmap.compute_mode == "gpu"
                 and not self._compatible_gpu_available()
             ):
                 missing.append(
-                    "a compatible NVIDIA GPU/driver (COLMAP gpu_mode=true)"
+                    "a compatible NVIDIA GPU/driver "
+                    "(COLMAP compute_mode=gpu)"
                 )
         if config.simulation.enabled:
             for command in ("ign", "ros2"):
@@ -436,16 +437,16 @@ class PipelineOrchestrator:
                 f"COLMAP executable could not be resolved: {requested.executable}"
             )
         gpu_available = self._compatible_gpu_available()
-        if requested.gpu_mode == "true" and not gpu_available:
+        if requested.compute_mode == "gpu" and not gpu_available:
             raise RuntimeError(
-                "COLMAP gpu_mode=true but the lightweight NVIDIA capability "
+                "COLMAP compute_mode=gpu but the lightweight NVIDIA capability "
                 "probe found no compatible GPU"
             )
-        resolved_gpu = (
-            "true"
-            if requested.gpu_mode == "true"
-            or (requested.gpu_mode == "auto" and gpu_available)
-            else "false"
+        resolved_compute_mode = (
+            "gpu"
+            if requested.compute_mode == "gpu"
+            or (requested.compute_mode == "auto" and gpu_available)
+            else "cpu_baseline"
         )
         version_probe = subprocess.run(
             [str(executable), "--version"],
@@ -469,7 +470,7 @@ class PipelineOrchestrator:
                 "colmap": requested.model_copy(
                     update={
                         "executable": str(executable),
-                        "gpu_mode": resolved_gpu,
+                        "compute_mode": resolved_compute_mode,
                     }
                 )
             },
@@ -479,16 +480,53 @@ class PipelineOrchestrator:
             "requested_executable": requested.executable,
             "resolved_executable": str(executable),
             "version": version,
-            "requested_gpu_mode": requested.gpu_mode,
-            "resolved_gpu_mode": resolved_gpu,
+            "configured_compute_mode": requested.compute_mode,
+            "resolved_compute_mode": resolved_compute_mode,
+            # Retain the former report keys for published-schema consumers.
+            "requested_gpu_mode": (
+                "true"
+                if requested.compute_mode == "gpu"
+                else (
+                    "auto"
+                    if requested.compute_mode == "auto"
+                    else "false"
+                )
+            ),
+            "resolved_gpu_mode": (
+                "true" if resolved_compute_mode == "gpu" else "false"
+            ),
             "gpu_probe_available": gpu_available,
+            "matcher": requested.matcher,
+            "maximum_image_size": (
+                (
+                    requested.ap03_maximum_image_size
+                    or requested.maximum_image_size
+                )
+                if method_id == "ap03"
+                else requested.maximum_image_size
+            ),
+            "maximum_features": (
+                (
+                    requested.ap03_maximum_features
+                    or requested.maximum_features
+                )
+                if method_id == "ap03"
+                else requested.maximum_features
+            ),
+            "mapper_minimum_matches": requested.mapper_minimum_matches,
+            "intrinsics_refinement": {
+                "focal_length": False,
+                "principal_point": False,
+                "extra_parameters": False,
+            },
         }
         self._save_state()
         self.console.print(
             "[dim]COLMAP resolved: "
-            f"matcher={requested.matcher}, GPU={requested.gpu_mode}"
-            f" -> {resolved_gpu}, image_size={requested.maximum_image_size}, "
-            f"features={requested.maximum_features}, "
+            f"matcher={requested.matcher}, compute={requested.compute_mode}"
+            f" -> {resolved_compute_mode}, "
+            f"image_size={self.manifest['colmap_resolution']['maximum_image_size']}, "
+            f"features={self.manifest['colmap_resolution']['maximum_features']}, "
             f"mapper_matches={requested.mapper_minimum_matches}[/dim]"
         )
         return RigConfig.model_validate(resolved.model_dump(mode="python"))
@@ -1920,6 +1958,7 @@ class PipelineOrchestrator:
         else:
             config = freeze_selections(config, resolved)
         resolved = resolve_selections(config, observations_root)
+        selection_payload = resolved.payload
         config = self._resolve_colmap_environment(config)
 
         self.manifest["resolution_update_pending"] = True
@@ -1930,6 +1969,15 @@ class PipelineOrchestrator:
         self.manifest["resolved_selections"] = {
             "ap01_root_camera": resolved.root_camera,
             "ap02_reference_marker_id": resolved.ap02_reference_marker_id,
+            "ap02_reference_marker_selection_mode": (
+                config.methods.ap02.reference_marker_selection_mode
+            ),
+            "ap02_reference_marker_reason": selection_payload[
+                "ap02_reference_marker"
+            ].get("reason"),
+            "ap02_reference_marker_evidence": selection_payload[
+                "ap02_reference_marker"
+            ].get("evidence"),
             "ap03_single_scale_marker_id": resolved.ap03_single_scale_marker_id,
             "ap03_multi_marker_ids": list(
                 resolved.ap03_multi_marker_ids

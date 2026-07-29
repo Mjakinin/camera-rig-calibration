@@ -319,6 +319,13 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
         result_root / "provenance" / "run_manifest.json"
     )
     colmap_resolution = manifest.get("colmap_resolution", {})
+    selection_paths = sorted(
+        (result_root / "diagnostics" / "preflight").rglob(
+            "SELECTION_CANDIDATES.json"
+        )
+    )
+    selection = _read_json(selection_paths[0]) if selection_paths else {}
+    ap02_selection = selection.get("ap02_reference_marker", {})
     common = {
         "evaluation_anchor_marker_id": evaluation.get(
             "anchor_marker_id"
@@ -344,6 +351,9 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
         ),
     }
     if method == "ap01":
+        direct_gate = method_config.get("direct_quality_gate", {})
+        relay_gate = method_config.get("relay_quality_gate", {})
+        consistency = method_config.get("direct_relay_consistency", {})
         return {
             **common,
             "root_camera": method_config.get("root_camera"),
@@ -354,6 +364,13 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
                 "scale_top_per_marker"
             ),
             "matcher": colmap.get("matcher"),
+            "compute_configured": colmap_resolution.get(
+                "configured_compute_mode", colmap.get("compute_mode")
+            ),
+            "compute_resolved": colmap_resolution.get(
+                "resolved_compute_mode", colmap.get("compute_mode")
+            ),
+            "colmap_version": colmap_resolution.get("version"),
             "gpu_requested": colmap_resolution.get(
                 "requested_gpu_mode", colmap.get("gpu_mode")
             ),
@@ -365,11 +382,55 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
             "mapper_minimum_matches": colmap.get(
                 "mapper_minimum_matches"
             ),
+            "intrinsics_refinement": colmap_resolution.get(
+                "intrinsics_refinement"
+            ),
+            "direct_minimum_independent_markers": direct_gate.get(
+                "minimum_independent_markers"
+            ),
+            "direct_minimum_inlier_ratio": direct_gate.get(
+                "minimum_inlier_ratio"
+            ),
+            "direct_maximum_translation_dispersion_m": direct_gate.get(
+                "maximum_translation_dispersion_m"
+            ),
+            "direct_maximum_rotation_dispersion_deg": direct_gate.get(
+                "maximum_rotation_dispersion_deg"
+            ),
+            "relay_minimum_inlier_ratio": relay_gate.get(
+                "minimum_inlier_ratio"
+            ),
+            "relay_maximum_translation_dispersion_m": relay_gate.get(
+                "maximum_translation_dispersion_m"
+            ),
+            "relay_maximum_rotation_dispersion_deg": relay_gate.get(
+                "maximum_rotation_dispersion_deg"
+            ),
+            "path_maximum_translation_disagreement_m": consistency.get(
+                "maximum_translation_disagreement_m"
+            ),
+            "path_maximum_rotation_disagreement_deg": consistency.get(
+                "maximum_rotation_disagreement_deg"
+            ),
         }
     if method == "ap02":
         return {
             **common,
+            "reference_marker_selection_mode": method_config.get(
+                "reference_marker_selection_mode",
+                ap02_selection.get("selection_mode"),
+            ),
             "reference_marker_id": method_config.get("reference_marker_id"),
+            "resolved_reference_marker_id": ap02_selection.get(
+                "selected",
+                manifest.get("resolved_selections", {}).get(
+                    "ap02_reference_marker_id"
+                ),
+            ),
+            "reference_marker_reason": ap02_selection.get("reason"),
+            "reference_marker_evidence": ap02_selection.get("evidence"),
+            "initialization_algorithm": "maximum_bottleneck",
+            "initialization_diagnostic": "unweighted_first_hit_bfs",
             "reference_marker_maximum_frames": method_config.get(
                 "reference_marker_maximum_frames"
             ),
@@ -399,6 +460,13 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
             len(marker_ids) if isinstance(marker_ids, list) else marker_ids
         ),
         "matcher": colmap.get("matcher"),
+        "compute_configured": colmap_resolution.get(
+            "configured_compute_mode", colmap.get("compute_mode")
+        ),
+        "compute_resolved": colmap_resolution.get(
+            "resolved_compute_mode", colmap.get("compute_mode")
+        ),
+        "colmap_version": colmap_resolution.get("version"),
         "gpu_requested": colmap_resolution.get(
             "requested_gpu_mode", colmap.get("gpu_mode")
         ),
@@ -414,6 +482,9 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
             or colmap.get("maximum_features")
         ),
         "mapper_minimum_matches": colmap.get("mapper_minimum_matches"),
+        "intrinsics_refinement": colmap_resolution.get(
+            "intrinsics_refinement"
+        ),
         "scale_reprojection_threshold_px": (
             method_config.get("scale", {}).get(
                 "reprojection_threshold_px"
@@ -450,6 +521,7 @@ def _quality_details(
         per_target = diagnostics.get("per_target_diagnostics", {})
         unstable: list[dict[str, Any]] = []
         weak: list[str] = []
+        disagreements: list[str] = []
         for camera, item in per_target.items():
             if not isinstance(item, dict):
                 continue
@@ -463,9 +535,17 @@ def _quality_details(
                 continue
             candidates = int(details.get("candidates") or 0)
             translation = _finite(
-                details.get("translation_deviation_median_m")
+                details.get(
+                    "maximum_inlier_translation_dispersion_m",
+                    details.get("translation_deviation_median_m"),
+                )
             )
-            rotation = _finite(details.get("rotation_deviation_median_deg"))
+            rotation = _finite(
+                details.get(
+                    "maximum_inlier_rotation_dispersion_deg",
+                    details.get("rotation_deviation_median_deg"),
+                )
+            )
             translation_floor, rotation_floor = (
                 (0.12, 4.0)
                 if selected == "direct_multimarker"
@@ -476,19 +556,43 @@ def _quality_details(
                 "selected_path": selected,
                 "candidates": candidates,
                 "inliers": details.get("inliers"),
+                "inlier_ratio": details.get("inlier_ratio"),
+                "inlier_marker_ids": details.get("inlier_marker_ids", []),
+                "pose_fallback_used": details.get("pose_fallback_used"),
                 "translation_dispersion_m": translation,
                 "rotation_dispersion_deg": rotation,
                 "translation_warning_floor_m": translation_floor,
                 "rotation_warning_floor_deg": rotation_floor,
             }
-            if selected == "direct_multimarker" and candidates <= 1:
-                weak.append(str(camera))
-                row["support"] = "weak_single_candidate"
             if (
-                (translation is not None and translation > translation_floor)
-                or (rotation is not None and rotation > rotation_floor)
+                selected == "direct_multimarker"
+                and int(details.get("independent_inlier_marker_count") or 0)
+                < 3
+            ):
+                weak.append(str(camera))
+                row["support"] = "fewer_than_three_independent_inlier_markers"
+            if (
+                selected == "quality_rejected"
+                or details.get("stable") is False
+                or (
+                    "stable" not in details
+                    and (
+                        (
+                            translation is not None
+                            and translation > translation_floor
+                        )
+                        or (
+                            rotation is not None
+                            and rotation > rotation_floor
+                        )
+                    )
+                )
             ):
                 unstable.append(row)
+            if item.get("quality_warning") == (
+                "warning_direct_relay_disagreement"
+            ):
+                disagreements.append(str(camera))
         metrics["ap01_consensus"] = {
             "path_thresholds": {
                 "direct": {
@@ -502,6 +606,7 @@ def _quality_details(
             },
             "unstable_targets": unstable,
             "weak_direct_single_support": weak,
+            "direct_relay_disagreements": disagreements,
             "per_target": per_target,
         }
         if unstable:
@@ -517,6 +622,15 @@ def _quality_details(
                 "AP01 direct support is weak (one candidate) for: "
                 + ", ".join(weak)
                 + "."
+            )
+        if disagreements:
+            if quality == "good":
+                quality = "warning_direct_relay_disagreement"
+            warnings.append(
+                "AP01 Direct and Relay are individually stable but disagree "
+                "beyond 0.12 m / 4 deg for: "
+                + ", ".join(disagreements)
+                + "; Direct remains the published path."
             )
     if method == "ap02":
         optimizer = _read_json(
@@ -625,6 +739,38 @@ def _quality_details(
                 "missing_static_cameras", []
             ),
         }
+        provenance = _read_json(
+            result_root / "provenance" / "derived_result.json"
+        )
+        shared_container = provenance.get("shared_colmap_container")
+        reconstruction = {}
+        if shared_container:
+            experiment_root = result_root.parents[2]
+            reconstruction = _read_json(
+                experiment_root
+                / str(shared_container)
+                / "diagnostics"
+                / "method"
+                / "colmap"
+                / "inspection"
+                / "AP03_RECONSTRUCTION_DIAGNOSTICS.json"
+            )
+        if reconstruction:
+            metrics["ap03_reconstruction"] = reconstruction
+            reconstruction_warnings = reconstruction.get("warnings", [])
+            if reconstruction_warnings:
+                if quality == "good":
+                    quality = "warning_weak_reconstruction_support"
+                warnings.append(
+                    "AP03 reconstruction support warnings: "
+                    + ", ".join(
+                        f"{item.get('camera_id') or 'groups'}:"
+                        f"{item.get('code')}"
+                        for item in reconstruction_warnings
+                        if isinstance(item, dict)
+                    )
+                    + "."
+                )
         if relative_std is None:
             quality = "warning_scale_dispersion_unavailable"
             warnings.append("AP03 scale dispersion is unavailable.")
@@ -757,7 +903,176 @@ def _config_text(summary: dict[str, Any]) -> str:
         f"{key}={render(value)}"
         for key, value in summary.items()
         if value is not None
+        and key not in {
+            "reference_marker_evidence",
+            "reference_marker_reason",
+            "intrinsics_refinement",
+            "quality_sources",
+            "colmap_version",
+        }
     ) or "baseline/default configuration"
+
+
+def _baseline_contract(
+    *,
+    category: str,
+    method_payloads: list[dict[str, Any]],
+    evaluation_anchor: dict[str, Any],
+) -> dict[str, Any]:
+    """Evaluate the auditable Route-2 CPU baseline contract."""
+
+    anchor = evaluation_anchor.get("selected")
+    def integer(value: Any) -> int:
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return -1
+
+    common_checks = {
+        "simulation_category": category == "simulation",
+        "evaluation_anchor_marker_14": str(anchor) == "14",
+    }
+    variants: list[dict[str, Any]] = []
+    for payload in method_payloads:
+        method = str(payload.get("method", ""))
+        config = payload.get("config_summary", {})
+        checks: dict[str, bool] = dict(common_checks)
+        if method == "ap01":
+            checks.update(
+                {
+                    "root_cam_edge_3": config.get("root_camera")
+                    == "cam_edge_3",
+                    "configured_cpu_baseline": config.get(
+                        "compute_configured"
+                    )
+                    == "cpu_baseline",
+                    "resolved_cpu_baseline": config.get(
+                        "compute_resolved"
+                    )
+                    == "cpu_baseline",
+                    "exhaustive_matcher": config.get("matcher")
+                    == "exhaustive",
+                    "maximum_image_size_1600": int(
+                        config.get("maximum_image_size") or 0
+                    )
+                    == 1600,
+                    "maximum_features_4096": int(
+                        config.get("maximum_features") or 0
+                    )
+                    == 4096,
+                    "mapper_minimum_matches_8": int(
+                        config.get("mapper_minimum_matches") or 0
+                    )
+                    == 8,
+                }
+            )
+        elif method == "ap02":
+            checks.update(
+                {
+                    "reference_mode_baseline": config.get(
+                        "reference_marker_selection_mode"
+                    )
+                    == "baseline",
+                    "reference_marker_14": integer(
+                        config.get("resolved_reference_marker_id")
+                        or config.get("reference_marker_id")
+                    )
+                    == 14,
+                    "static_nfev_50": integer(
+                        config.get("static_max_nfev") or 0
+                    )
+                    == 50,
+                    "combined_nfev_50": integer(
+                        config.get("combined_max_nfev") or 0
+                    )
+                    == 50,
+                    "maximum_bottleneck_initialization": config.get(
+                        "initialization_algorithm"
+                    )
+                    == "maximum_bottleneck",
+                }
+            )
+        elif method in {"ap03", "ap03_single", "ap03_multi"}:
+            checks.update(
+                {
+                    "configured_cpu_baseline": config.get(
+                        "compute_configured"
+                    )
+                    == "cpu_baseline",
+                    "resolved_cpu_baseline": config.get(
+                        "compute_resolved"
+                    )
+                    == "cpu_baseline",
+                    "exhaustive_matcher": config.get("matcher")
+                    == "exhaustive",
+                    "maximum_image_size_2400": int(
+                        config.get("maximum_image_size") or 0
+                    )
+                    == 2400,
+                    "maximum_features_8192": int(
+                        config.get("maximum_features") or 0
+                    )
+                    == 8192,
+                    "mapper_minimum_matches_8": int(
+                        config.get("mapper_minimum_matches") or 0
+                    )
+                    == 8,
+                }
+            )
+        else:
+            continue
+        variants.append(
+            {
+                "method": method,
+                "label": payload.get("label"),
+                "checks": checks,
+                "passes": all(checks.values()),
+            }
+        )
+    return {
+        "contract": "route2_cpu_ref14_50x50_v1",
+        "category": category,
+        "evaluation_anchor_marker_id": anchor,
+        "variants": variants,
+        "passes": bool(variants) and all(
+            item["passes"] for item in variants
+        ),
+    }
+
+
+def _baseline_contract_text(contract: dict[str, Any]) -> str:
+    rows: list[list[str]] = []
+    for variant in contract.get("variants", []):
+        failed = [
+            key
+            for key, value in variant.get("checks", {}).items()
+            if not value
+        ]
+        rows.append(
+            [
+                str(variant.get("method", "-")),
+                str(variant.get("label", "-")),
+                "PASS" if variant.get("passes") else "NOT BASELINE",
+                ", ".join(failed) if failed else "all checks satisfied",
+            ]
+        )
+    return "\n".join(
+        [
+            "BASELINE CONTRACT",
+            "-" * 138,
+            f"Contract: {contract.get('contract')}",
+            (
+                "Overall: PASS"
+                if contract.get("passes")
+                else "Overall: NOT A COMPLETE BASELINE CONTRACT"
+            ),
+            _text_table(
+                ["Method", "Variant", "Status", "Failed checks / evidence"],
+                rows,
+            ),
+            "",
+        ]
+    )
 
 
 def _method_diagnostics(
@@ -820,6 +1135,26 @@ def _method_diagnostics(
         if provenance:
             diagnostics["shared_colmap"] = provenance
             paths.append("provenance/derived_result.json")
+            shared = provenance.get("shared_colmap_container")
+            if shared:
+                reconstruction = (
+                    experiment_root
+                    / str(shared)
+                    / "diagnostics"
+                    / "method"
+                    / "colmap"
+                    / "inspection"
+                    / "AP03_RECONSTRUCTION_DIAGNOSTICS.json"
+                )
+                if reconstruction.is_file():
+                    diagnostics["ap03_reconstruction"] = _read_json(
+                        reconstruction
+                    )
+                    paths.append(
+                        str(
+                            reconstruction.relative_to(experiment_root)
+                        )
+                    )
     else:
         candidates = ()
     for key, path in candidates:
@@ -1151,17 +1486,38 @@ def _method_report_text(
                     "",
                 ]
             )
-    elif payload.get("method") == "ap03":
+    elif payload.get("method") in {
+        "ap03",
+        "ap03_single",
+        "ap03_multi",
+    }:
         scale = diagnostics.get("ap03_scale", {})
-        if scale:
+        reconstruction = diagnostics.get("ap03_reconstruction", {})
+        if scale or reconstruction:
+            reconstruction_rows = [
+                [
+                    str(camera.get("camera_id", "-")),
+                    str(camera.get("registered", False)).lower(),
+                    str(camera.get("colmap_camera_id", "-")),
+                    str(camera.get("track_support", "-")),
+                    str(camera.get("shared_tracks_with_moving", "-")),
+                    _fmt(camera.get("reprojection_rmse_px")),
+                    ",".join(camera.get("warnings", [])) or "none",
+                ]
+                for camera in reconstruction.get("static_cameras", [])
+                if isinstance(camera, dict)
+            ]
             lines.extend(
                 [
                     "AP03 COLMAP / RANSAC / SCALE DIAGNOSTICS",
                     "-" * width,
                     (
                         "Registered images/static cameras: "
-                        f"{scale.get('registered_images', '-')}/"
-                        f"{scale.get('registered_static_cameras', '-')}; "
+                        f"{scale.get('registered_images', reconstruction.get('registered_image_count', '-'))}/"
+                        f"{scale.get('registered_static_cameras', reconstruction.get('registered_static_camera_count', '-'))}; "
+                        f"moving frames={reconstruction.get('registered_moving_frame_count', '-')}; "
+                        f"best model={reconstruction.get('best_model', '-')}; "
+                        f"sparse points={reconstruction.get('sparse_point_count', '-')}; "
                         "triangulated corners="
                         f"{scale.get('triangulated_marker_corners', '-')}"
                     ),
@@ -1173,6 +1529,30 @@ def _method_report_text(
                         "m/COLMAP-unit; relative std="
                         f"{_fmt(scale.get('used_rel_std_scale'), 6)}"
                     ),
+                    (
+                        _text_table(
+                            [
+                                "Camera",
+                                "Registered",
+                                "Group",
+                                "Tracks",
+                                "Moving tracks",
+                                "Reproj RMSE [px]",
+                                "Warnings",
+                            ],
+                            reconstruction_rows,
+                        )
+                        if reconstruction_rows
+                        else "Per-camera reconstruction support unavailable."
+                    ),
+                    (
+                        "Camera groups: "
+                        + json.dumps(
+                            reconstruction.get("camera_groups", {}),
+                            sort_keys=True,
+                        )
+                    ),
+                    "Ground truth used by these diagnostics: no",
                     "",
                 ]
             )
@@ -1883,6 +2263,11 @@ def _simulation_primary_text(
     evaluation_anchor: dict[str, Any],
 ) -> str:
     width = 138
+    baseline_contract = _baseline_contract(
+        category="simulation",
+        method_payloads=method_payloads,
+        evaluation_anchor=evaluation_anchor,
+    )
     lines = [
         "SIMULATION CALIBRATION RESULTS — CAMERA-TO-CAMERA VS GROUND TRUTH",
         "=" * width,
@@ -1898,6 +2283,7 @@ def _simulation_primary_text(
         ),
         f"Anchor reason: {evaluation_anchor.get('reason', '-')}",
         "",
+        _baseline_contract_text(baseline_contract),
         "METHOD / VARIANT SUMMARY",
         "-" * width,
     ]
@@ -2737,6 +3123,11 @@ def _simulation_results(
             )
         },
         "methods": method_payloads,
+        "baseline_contract": _baseline_contract(
+            category="simulation",
+            method_payloads=method_payloads,
+            evaluation_anchor=selection.get("evaluation_anchor", {}),
+        ),
         "scale_comparison": _scale_comparison_rows(method_payloads),
         "primary_camera_pairwise": {
             "summaries": summaries,
@@ -2902,6 +3293,186 @@ def _refresh_factor_reports(experiment_root: Path, payload: dict[str, Any]) -> N
                 _factor_report(simulation_root / candidate, candidate)
 
 
+def _write_route2_baseline_comparison(
+    experiment_root: Path,
+    current: dict[str, Any],
+) -> dict[str, Any] | None:
+    """Compare the controlled CPU repair with the immutable Route-2 run."""
+
+    if experiment_root.name != "route2_cpu_ref14_50x50":
+        return None
+    previous_root = experiment_root.parent / "route2"
+    previous = _read_json(previous_root / "RESULTS.json")
+    if previous.get("category") != "simulation":
+        return None
+
+    rows: list[dict[str, Any]] = []
+    for experiment_name, payload in (
+        ("route2", previous),
+        (experiment_root.name, current),
+    ):
+        methods = {
+            (str(item.get("method")), str(item.get("label"))): item
+            for item in payload.get("methods", [])
+            if isinstance(item, dict)
+        }
+        summaries = payload.get("primary_camera_pairwise", {}).get(
+            "summaries", []
+        )
+        anchor_summaries = {
+            (str(item.get("method")), str(item.get("label"))): item
+            for item in payload.get(
+                "anchor_camera_ground_truth", {}
+            ).get("summaries", [])
+            if isinstance(item, dict)
+        }
+        pair_rows = payload.get("primary_camera_pairwise", {}).get(
+            "rows", []
+        )
+        for summary in summaries:
+            if not isinstance(summary, dict):
+                continue
+            key = (
+                str(summary.get("method")),
+                str(summary.get("label")),
+            )
+            method = methods.get(key, {})
+            anchor = anchor_summaries.get(key, {})
+            edge5 = [
+                item
+                for item in pair_rows
+                if isinstance(item, dict)
+                and str(item.get("method")) == key[0]
+                and str(item.get("label")) == key[1]
+                and "cam_edge_5" in str(item.get("pair", ""))
+            ]
+            registration = method.get("metrics", {}).get(
+                "ap03_registration", {}
+            )
+            rows.append(
+                {
+                    "experiment": experiment_name,
+                    "method": key[0],
+                    "label": key[1],
+                    "runtime_seconds": method.get("runtime_seconds"),
+                    "execution_status": method.get("execution_status"),
+                    "solver_status": method.get("solver_status"),
+                    "quality_status": method.get("quality_status"),
+                    "pair_count": summary.get("count"),
+                    "anchor_camera_count": anchor.get("count"),
+                    "mean_pair_translation_error_cm": summary.get(
+                        "mean_translation_error_cm"
+                    ),
+                    "mean_pair_rotation_error_deg": summary.get(
+                        "mean_rotation_error_deg"
+                    ),
+                    "maximum_pair_translation_error_cm": summary.get(
+                        "max_translation_error_cm"
+                    ),
+                    "maximum_pair_rotation_error_deg": summary.get(
+                        "max_rotation_error_deg"
+                    ),
+                    "cam_edge_5_pair_count": len(edge5),
+                    "cam_edge_5_maximum_translation_error_cm": _maximum(
+                        item.get("translation_error_cm") for item in edge5
+                    ),
+                    "cam_edge_5_maximum_rotation_error_deg": _maximum(
+                        item.get("rotation_error_deg") for item in edge5
+                    ),
+                    "registered_static_cameras": registration.get(
+                        "registered_static_cameras"
+                    ),
+                    "registered_moving_frames": registration.get(
+                        "registered_moving_frames"
+                    ),
+                    "sparse_points": registration.get("sparse_points"),
+                    "configuration": method.get("config_summary", {}),
+                }
+            )
+    if not rows:
+        return None
+    comparison_payload = {
+        "schema_version": 5,
+        "comparison": (
+            "same_published_route2_input_no_alignment_no_best_fit"
+        ),
+        "old_experiment": "route2",
+        "new_experiment": experiment_root.name,
+        "method_rerun_of_old_experiment": False,
+        "rows": rows,
+    }
+    _write_json(
+        experiment_root / "BASELINE_COMPARISON.json",
+        comparison_payload,
+    )
+    _write_csv(experiment_root / "BASELINE_COMPARISON.csv", rows)
+    text = "\n".join(
+        [
+            "ROUTE-2 BASELINE REPAIR COMPARISON",
+            "=" * 138,
+            "",
+            "Input: the same published Route-2 images and observations.",
+            "Evaluation: direct common-anchor and camera-pair Ground Truth; "
+            "no global alignment and no best-fit.",
+            "",
+            _text_table(
+                [
+                    "Experiment",
+                    "Method",
+                    "Variant",
+                    "Runtime [s]",
+                    "Quality",
+                    "Pairs",
+                    "Anchors",
+                    "mean t [cm]",
+                    "mean r [deg]",
+                    "cam_edge_5 max t [cm]",
+                    "cam_edge_5 max r [deg]",
+                    "Static reg.",
+                    "Moving reg.",
+                    "Sparse points",
+                ],
+                [
+                    [
+                        row["experiment"],
+                        row["method"],
+                        row["label"],
+                        _fmt(row["runtime_seconds"], 1),
+                        row["quality_status"],
+                        row["pair_count"],
+                        row["anchor_camera_count"],
+                        _fmt(row["mean_pair_translation_error_cm"]),
+                        _fmt(row["mean_pair_rotation_error_deg"]),
+                        _fmt(
+                            row[
+                                "cam_edge_5_maximum_translation_error_cm"
+                            ]
+                        ),
+                        _fmt(
+                            row[
+                                "cam_edge_5_maximum_rotation_error_deg"
+                            ]
+                        ),
+                        row["registered_static_cameras"],
+                        row["registered_moving_frames"],
+                        row["sparse_points"],
+                    ]
+                    for row in rows
+                ],
+            ),
+            "",
+        ]
+    )
+    _write_text(experiment_root / "BASELINE_COMPARISON.txt", text)
+    return {
+        "status": "available",
+        "text": "BASELINE_COMPARISON.txt",
+        "json": "BASELINE_COMPARISON.json",
+        "csv": "BASELINE_COMPARISON.csv",
+        "rows": len(rows),
+    }
+
+
 def write_scientific_experiment_reports(
     experiment_root: Path,
     *,
@@ -3016,6 +3587,20 @@ def write_scientific_experiment_reports(
     else:
         text, payload = _real_results_text(
             experiment_root, method_payloads, dataset_root
+        )
+    baseline_comparison = (
+        _write_route2_baseline_comparison(experiment_root, payload)
+        if category == "simulation"
+        else None
+    )
+    if baseline_comparison is not None:
+        payload["baseline_comparison"] = baseline_comparison
+        text = (
+            text.rstrip()
+            + "\n\n"
+            + (
+                experiment_root / "BASELINE_COMPARISON.txt"
+            ).read_text(encoding="utf-8")
         )
     existing_results = _read_json(experiment_root / "RESULTS.json")
     generated_at = existing_results.get("generated_at") or _now()

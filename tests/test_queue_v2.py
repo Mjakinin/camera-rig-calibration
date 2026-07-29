@@ -28,11 +28,72 @@ from camera_rig_calibration.queueing import (
     _method_selection_summary,
     _method_result_summary,
     load_batch,
+    load_queue,
     load_queue_partitions,
     save_batch,
     save_queue,
 )
 from camera_rig_calibration.input.preparation import build_preparation_plan
+
+
+def test_queue_common_dataset_paths_resolve_relative_to_manifest(
+    prepared_config: RigConfig,
+    tmp_path: Path,
+) -> None:
+    dataset = tmp_path / "dataset"
+    dataset.mkdir()
+    config = prepared_config.model_copy(
+        update={
+            "dataset": prepared_config.dataset.model_copy(
+                update={"prepared_root": dataset},
+                deep=True,
+            )
+        },
+        deep=True,
+    )
+    config_path = save_config(config, tmp_path / "ap02.yaml")
+    common_dataset = config.dataset.model_dump(
+        mode="json", exclude_none=True
+    )
+    common_dataset["prepared_root"] = "dataset"
+    queue_path = tmp_path / "queue.yaml"
+    queue_path.write_text(
+        yaml.safe_dump(
+            {
+                "kind": "rigcal_queue",
+                "schema_version": 5,
+                "id": "portable_queue",
+                "common": {
+                    "dataset": common_dataset,
+                    "aruco": config.markers.model_dump(
+                        mode="json", exclude_none=True
+                    ),
+                    "observation_quality": (
+                        config.observation_quality.model_dump(
+                            mode="json", exclude_none=True
+                        )
+                    ),
+                    "evaluation": config.evaluation.model_dump(
+                        mode="json", exclude_none=True
+                    ),
+                },
+                "entries": [
+                    {
+                        "id": "ap02",
+                        "config": config_path.name,
+                        "depends_on": [],
+                    }
+                ],
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+
+    queue = load_queue(queue_path)
+
+    assert queue.common is not None
+    assert queue.common.dataset.prepared_root == dataset.resolve()
 
 
 def test_method_result_summary_reports_runtime_metrics_and_logs(

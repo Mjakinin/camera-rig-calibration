@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .config.models import RigConfig
+from .config.models import DatasetCategory, RigConfig
 
 
 def _success(row: dict[str, str]) -> bool:
@@ -644,27 +644,45 @@ def resolve_selections(
         if "ap02" in enabled:
             raise
         recommended_ap02_reference = None
-    configured_ap02_reference = (
-        int(
-            _best_candidate(
-                markers,
-                _ap02_rank,
-                compatibility_key="_all",
+    ap02_selection_mode = (
+        config.methods.ap02.reference_marker_selection_mode
+    )
+    if (
+        ap02_selection_mode == "baseline"
+        and config.dataset.category != DatasetCategory.SIMULATION
+    ):
+        raise RuntimeError(
+            "AP02 baseline reference-marker selection is available only "
+            "for simulation datasets"
+        )
+    configured_ap02_reference: int | str
+    if ap02_selection_mode == "baseline":
+        configured_ap02_reference = 14
+    elif config.methods.ap02.reference_marker_id == "auto":
+        configured_ap02_reference = (
+            recommended_ap02_reference
+            if recommended_ap02_reference is not None
+            else int(
+                _best_candidate(
+                    markers,
+                    _ap02_rank,
+                    compatibility_key="_all",
+                )
             )
         )
-        if (
-            config.methods.ap02.reference_marker_id == "auto"
-            and recommended_ap02_reference is None
+    else:
+        configured_ap02_reference = (
+            config.methods.ap02.reference_marker_id
         )
-        else config.methods.ap02.reference_marker_id
-    )
     ap02_reference = _marker_choice(
         configured_ap02_reference,
         markers,
         compatibility_key="ap02_compatible",
         purpose="AP02 reference",
         rank=_ap02_rank,
-        require_compatibility="ap02" in enabled,
+        require_compatibility=(
+            "ap02" in enabled and ap02_selection_mode != "manual"
+        ),
         expected_camera_ids=camera_ids,
     )
     try:
@@ -807,6 +825,7 @@ def resolve_selections(
             unresolved.append("methods.ap01.root_camera")
         if (
             "ap02" in enabled
+            and ap02_selection_mode in {"auto", "manual"}
             and config.methods.ap02.reference_marker_id == "auto"
         ):
             unresolved.append("methods.ap02.reference_marker_id")
@@ -869,15 +888,30 @@ def resolve_selections(
         },
         "ap02_reference_marker": {
             "configured": config.methods.ap02.reference_marker_id,
+            "selection_mode": ap02_selection_mode,
             "selected": ap02_reference,
             "candidates": ap02_payload,
             "reason": (
-                "explicit user configuration"
-                if config.methods.ap02.reference_marker_id != "auto"
+                "Route-2 simulation baseline contract: marker 14"
+                if ap02_selection_mode == "baseline"
+                else "manual post-preflight selection"
+                if ap02_selection_mode == "manual"
+                else "explicit compatibility configuration"
+                if ap02_selection_mode == "explicit"
                 else (
                     "deterministic recommendation from static-only reachability, "
                     "direct static coverage, moving-frame coverage, observation "
                     "count, median PnP RMSE and median marker area"
+                )
+            ),
+            "evidence": (
+                next(
+                    (
+                        item
+                        for item in ap02_payload
+                        if int(item["id"]) == int(ap02_reference)
+                    ),
+                    None,
                 )
             ),
         },
@@ -1016,6 +1050,11 @@ def freeze_selections(
                 or marker_details[ap02_marker].get(
                     "ap02_partial_compatible", False
                 )
+                or (
+                    config.methods.ap02.reference_marker_selection_mode
+                    == "manual"
+                    and ap02_marker in marker_details
+                )
             )
         )
     ):
@@ -1072,7 +1111,12 @@ def freeze_selections(
                 update={"root_camera": root}
             ),
             "ap02": config.methods.ap02.model_copy(
-                update={"reference_marker_id": ap02_marker}
+                update={
+                    "reference_marker_id": ap02_marker,
+                    "reference_marker_selection_mode": (
+                        config.methods.ap02.reference_marker_selection_mode
+                    ),
+                }
             ),
             "ap03": ap03,
         },

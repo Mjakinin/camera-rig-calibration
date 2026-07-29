@@ -30,13 +30,14 @@ from camera_rig_calibration.config.models import (
 
 def test_ap02_recommended_defaults_are_explicit() -> None:
     assert AP02Settings().model_dump() == {
+        "reference_marker_selection_mode": "auto",
         "reference_marker_id": "auto",
         "reference_marker_maximum_frames": None,
         "top_per_marker": 8,
         "top_per_marker_pair": 4,
         "maximum_total_frames": None,
-        "static_only_ba_max_function_evaluations": 100,
-        "combined_ba_max_function_evaluations": 120,
+        "static_only_ba_max_function_evaluations": 50,
+        "combined_ba_max_function_evaluations": 50,
         "ba_robust_loss": "soft_l1",
         "ba_robust_loss_scale_px": 3.0,
         "observation_quality": {
@@ -166,6 +167,8 @@ def test_schema_v5_unambiguous_migrations(
     payload["observation_quality"].pop("minimum_marker_area_ratio", None)
     payload["evaluation"]["anchor_marker_id"] = "auto_common"
     payload["methods"]["ap02"]["maximum_total_frames"] = 0
+    payload["colmap"].pop("compute_mode", None)
+    payload["colmap"]["gpu_mode"] = "false"
     source = tmp_path / "old_v5.yaml"
     source.write_text(yaml.safe_dump(payload), encoding="utf-8")
 
@@ -174,6 +177,38 @@ def test_schema_v5_unambiguous_migrations(
     assert loaded.observation_quality.minimum_marker_area_ratio == 0.000008
     assert loaded.evaluation.anchor_marker_id == "auto"
     assert loaded.methods.ap02.maximum_total_frames is None
+    assert loaded.colmap.compute_mode == "cpu_baseline"
+
+
+def test_ap02_reference_selection_modes_preserve_schema_v5_compatibility(
+    prepared_config: RigConfig,
+) -> None:
+    legacy = prepared_config.model_dump(mode="python")
+    legacy["methods"]["ap02"].pop("reference_marker_selection_mode")
+    legacy["methods"]["ap02"]["reference_marker_id"] = 7
+    loaded = RigConfig.model_validate(legacy)
+    assert (
+        loaded.methods.ap02.reference_marker_selection_mode == "explicit"
+    )
+
+    auto = prepared_config.model_dump(mode="python")
+    auto["methods"]["ap02"].pop("reference_marker_selection_mode")
+    auto["methods"]["ap02"]["reference_marker_id"] = "auto"
+    assert (
+        RigConfig.model_validate(auto)
+        .methods.ap02.reference_marker_selection_mode
+        == "auto"
+    )
+
+    real_baseline = prepared_config.model_dump(mode="python")
+    real_baseline["methods"]["ap02"].update(
+        {
+            "reference_marker_selection_mode": "baseline",
+            "reference_marker_id": 14,
+        }
+    )
+    with pytest.raises(ValidationError, match="only for simulation"):
+        RigConfig.model_validate(real_baseline)
 
 
 def test_positive_pixel_area_threshold_requires_manual_migration(

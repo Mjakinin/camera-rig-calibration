@@ -1,0 +1,50 @@
+AP03 COLMAP Reconstruction Inspection
+=====================================
+
+AP03 Phase:
+- targetless COLMAP/SfM feasibility
+- no ArUco scale/registration yet
+- reconstruction scale is arbitrary
+
+Input dataset:
+- total images: 193
+- static images: 4
+- moving images: 189
+
+Number of COLMAP models: 1
+
+Models:
+- model 0: 179 images, 4/4 static cameras, 175 moving frames, 11454 3D points
+  static registered: static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png
+  static missing: none
+
+Best model by static-camera coverage:
+- model: 0
+- registered images: 179
+- registered static cameras: 4/4
+- registered moving frames: 175
+- 3D points: 11454
+
+Interpretation:
+- COLMAP registered all static cameras.
+- AP03 can proceed to scale/registration with a known metric reference.
+
+Important:
+- COLMAP poses are currently in arbitrary scale and arbitrary coordinate frame.
+- Metric scale and Ref-ArUco alignment are planned for AP03 Phase 2.
+
+GT-free static-camera support diagnostics:
+- cam_edge_0: tracks=451, shared-moving=451, reprojection RMSE=0.6267736167226312 px, warnings=none
+- cam_edge_1: tracks=351, shared-moving=348, reprojection RMSE=0.8783203298557687 px, warnings=none
+- cam_edge_3: tracks=729, shared-moving=726, reprojection RMSE=0.8584554922357814 px, warnings=none
+- cam_edge_5: tracks=479, shared-moving=479, reprojection RMSE=1.0317308548120232 px, warnings=none
+- quality status: good
+- Ground truth was not read by this inspection.
+
+Output files:
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/inspection/colmap_model_summary.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/inspection/registered_images_by_model.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/inspection/AP03_RECONSTRUCTION_DIAGNOSTICS.json
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/inspection/AP03_RECONSTRUCTION_DIAGNOSTICS.csv
+- /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/inspection/ap03_colmap_inspection_report.txt
+

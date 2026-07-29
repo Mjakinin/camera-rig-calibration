@@ -1,0 +1,94 @@
+{
+  "schema_version": 5,
+  "run_id": "20260730_005416_baseline_33da0a77",
+  "execution_id": "20260730_005416_baseline_33da0a77",
+  "experiment_id": "route2_cpu_ref14_50x50",
+  "canonical_experiment_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2_cpu_ref14_50x50",
+  "transaction_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue",
+  "result_category": "simulation",
+  "dataset_id": "route2",
+  "scene_type": "simulation",
+  "status": "running",
+  "created_at": "2026-07-29T22:54:16+00:00",
+  "updated_at": "2026-07-29T22:54:18+00:00",
+  "config_sha256": "33da0a779c9bdb789f6299c44c5d599e40ff3a598432f640568a8607f6c6df19",
+  "requested_config_sha256": "33da0a779c9bdb789f6299c44c5d599e40ff3a598432f640568a8607f6c6df19",
+  "enabled_methods": [
+    "ap02"
+  ],
+  "observation_input_contract": "observation_quality_v2",
+  "execution_mode": "complete",
+  "selection_mode": "explicit",
+  "evaluation_deferred_to_queue": true,
+  "runner_pid": 18101,
+  "simulation_parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 0,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses",
+    "settle_seconds": 0.35,
+    "post_pose_skip": 5,
+    "frame_timeout_seconds": 3.0,
+    "startup_timeout_seconds": 60.0
+  },
+  "stages": [
+    {
+      "id": "prepare_inputs",
+      "display_name": "Prepare canonical inputs and provenance",
+      "status": "completed",
+      "started_at": "2026-07-29T22:54:16+00:00",
+      "finished_at": "2026-07-29T22:54:18+00:00",
+      "runtime_seconds": 2.1371652699963306
+    },
+    {
+      "id": "validate_dataset",
+      "display_name": "Validate the canonical dataset",
+      "status": "pending"
+    },
+    {
+      "id": "detect_markers",
+      "display_name": "Detect shared ArUco observations and debug images",
+      "status": "pending"
+    },
+    {
+      "id": "observation_quality",
+      "display_name": "Apply immutable checks and job-specific observation quality",
+      "status": "pending"
+    },
+    {
+      "id": "analyze_selections",
+      "display_name": "Analyze root-camera and method-marker candidates",
+      "status": "pending"
+    },
+    {
+      "id": "method_ap02",
+      "display_name": "AP02 Baseline",
+      "status": "pending"
+    },
+    {
+      "id": "comparison",
+      "display_name": "Normalize and compare method results",
+      "status": "pending"
+    },
+    {
+      "id": "finalize",
+      "display_name": "Write final report",
+      "status": "pending"
+    }
+  ],
+  "resolved_config_sha256": "5c9708c7e2b246420659f64b164ed9b2d48dfe75aab81d8f148817ee9b2c1bb0",
+  "moving_intrinsics": {
+    "profile": null,
+    "path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/dataset/raw_images/camera_info/moving_calib_camera.json",
+    "sha256": "0b7e48c1466153b417ee4e654569bfd03c04b3abd3207bdc0961e948d47f6c93",
+    "width": 1280,
+    "height": 720,
+    "distortion_model": "plumb_bob"
+  }
+}

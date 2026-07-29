@@ -1,0 +1,49 @@
+{
+  "completed_at": "2026-07-29T23:00:24.080+00:00",
+  "inputs": {
+    "accepted_observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/preflight/observations",
+    "reconstruction": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/reconstruction/sparse_txt"
+  },
+  "outputs": {
+    "metadata": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+    "static_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+    "status": "OK_FULL"
+  },
+  "parameters": {
+    "detection_mode": "baseline",
+    "marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "marker_length_m": 0.17,
+    "maximum_observations_per_marker": null,
+    "minimum_inliers": 4,
+    "mode": "multi",
+    "ransac_iterations": 1000,
+    "reprojection_threshold_px": 5.0,
+    "selection": "quality_ranked_per_marker_before_triangulation"
+  },
+  "runtime_seconds": 40.061897883999336,
+  "schema_version": 5,
+  "stage_id": "ap03.estimate_scale.multi",
+  "started_at": "2026-07-29T22:59:42.063+00:00",
+  "status": "COMPLETED"
+}

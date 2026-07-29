@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from camera_rig_calibration.config.models import MethodSettings
+from camera_rig_calibration.config.models import DatasetCategory, MethodSettings
 from camera_rig_calibration.experiments import (
     automatic_method_label,
     colmap_artifact_fingerprint,
@@ -85,7 +85,10 @@ def test_public_labels_are_automatic_configuration_diffs(prepared_config) -> Non
         deep=True,
     )
 
-    assert method_result_label(baseline, "ap02") == "baseline"
+    assert (
+        method_result_label(baseline, "ap02")
+        == "ap02_configured_defaults_nonbaseline"
+    )
     label = method_result_label(changed, "ap02")
     assert "variant" not in label
     assert "combined_nfev_60" in label
@@ -122,6 +125,20 @@ def test_public_labels_are_automatic_configuration_diffs(prepared_config) -> Non
     assert method_fingerprint(
         explicit_same_value, "ap02", _resolved()
     ) != method_fingerprint(inherited, "ap02", _resolved())
+
+
+def test_baseline_label_requires_complete_simulation_contract(
+    prepared_config,
+) -> None:
+    config = prepared_config.model_copy(deep=True)
+    config.dataset.category = DatasetCategory.SIMULATION
+    config.evaluation.anchor_marker_id = 14
+    config.methods.ap02.reference_marker_selection_mode = "baseline"
+    config.methods.ap02.reference_marker_id = 14
+    assert method_result_label(config, "ap02") == "baseline"
+
+    config.methods.ap02.combined_ba_max_function_evaluations = 51
+    assert method_result_label(config, "ap02") != "baseline"
 
 
 def test_stage_invalidation_keeps_evaluation_changes_cheap() -> None:

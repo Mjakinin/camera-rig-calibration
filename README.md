@@ -100,6 +100,13 @@ editable queue rows. Public names are generated from deviations to baseline,
 for example `baseline`, `combined_nfev_60` or
 `matcher_sequential__overlap_13`. An exact duplicate is identified and skipped.
 
+The auditable Route-2 baseline is stricter than a default-looking label:
+AP01 uses root `cam_edge_3`, CPU exhaustive COLMAP at 4096/1600; AP02 uses
+simulation marker 14 and exactly 50/50 function evaluations; AP03 uses CPU
+exhaustive COLMAP at 8192/2400 with eight mapper matches; common evaluation
+uses anchor marker 14. A run is named `baseline` only when its complete
+method-specific contract matches.
+
 AP02 Combined and AP03 Multi are primary results. AP02 Static-only and AP03
 Single remain visible diagnostics and are not counted as separate methods in
 the scientific comparison.
@@ -117,6 +124,12 @@ for unlimited and reject `0`.
 
 AP01, AP02 and AP03 make deterministic quality-ranked selections and write
 their candidates, score components and tie-breakers to CSV/JSON diagnostics.
+AP02 initializes production poses with a maximum-bottleneck path tree; its
+first-hit BFS is retained only for comparison. AP01 applies explicit Direct
+and Relay support/dispersion gates and publishes no silent pose fallback when
+both paths are unstable. AP03 reports per-camera COLMAP tracks, shared moving
+tracks, reprojection support and physical camera-group assignments without
+using ground truth.
 The common evaluation anchor is selected and frozen once during preflight—no
 method may silently substitute another anchor afterward. PnP observation
 RMSE, AP03 scale-RANSAC reprojection and common evaluation reprojection are

@@ -1,0 +1,8 @@
+INCOMPLETE / NON-AUTHORITATIVE CALIBRATION ATTEMPT
+================================================================
+
+Method: ap02
+Variant: baseline
+Cause: internal_dataset_publication_conflict
+Explanation: An internal prepare/publication step attempted to bind the run to a different immutable dataset identity. The calibration method did not start.
+Evidence: failed: RuntimeError: Experiment ID 'route2_cpu_ref14_50x50' already belongs to a different rig/capture parameter contract. Choose a new dataset/experiment ID instead of mixing inputs.

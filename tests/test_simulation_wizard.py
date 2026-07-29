@@ -247,9 +247,9 @@ def test_new_input_manual_reference_is_deferred_without_free_id_prompt(
         for index, row in enumerate(
             _setting_rows(job, METHOD_JOB_GROUPS), 1
         )
-        if row[0] == "ap02_reference"
+        if row[0] == "ap02_reference_mode"
     )
-    responses = iter([str(reference_row), "2"])
+    responses = iter([str(reference_row), "3"])
     prompts: list[str] = []
 
     def prompt(label, *args, **kwargs):
@@ -360,7 +360,7 @@ def test_prepared_reference_marker_uses_filtered_numbered_candidates(
         for index, row in enumerate(
             _setting_rows(job, METHOD_JOB_GROUPS), 1
         )
-        if row[0] == "ap02_reference"
+        if row[0] == "ap02_reference_mode"
     )
     context = SelectionDatasetContext(
         key="prepared",
@@ -411,7 +411,7 @@ def test_prepared_reference_marker_uses_filtered_numbered_candidates(
     responses = iter(
         [
             str(reference_row),
-            "2",  # manual
+            "3",  # manual
             "1",  # incompatible row; must be rejected locally
             "2",  # compatible marker 7
         ]

@@ -1,0 +1,21 @@
+{
+  "prepare_inputs": 2.1371652699963306,
+  "_structured": {
+    "prepare_inputs": {
+      "event": "stage_completed",
+      "job_id": "route2_cpu_ref14_50x50__ap02__baseline__02",
+      "job_index": 2,
+      "job_count": 3,
+      "stage_id": "prepare_inputs",
+      "stage_name": "Prepare canonical inputs and provenance",
+      "stage_index": 1,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 2.1371915170020657,
+      "job_elapsed_seconds": 2.357554579000862,
+      "queue_elapsed_seconds": 323.7318393520036,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    }
+  }
+}

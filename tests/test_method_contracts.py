@@ -40,8 +40,8 @@ def test_ap02_command_uses_generic_cameras_and_recommended_defaults(
     assert graph[graph.index("--cameras") + 1] == "front-left,roof.camera"
     static_ba = commands[3].argv
     combined_ba = commands[5].argv
-    assert static_ba[static_ba.index("--max-nfev") + 1] == "100"
-    assert combined_ba[combined_ba.index("--max-nfev") + 1] == "120"
+    assert static_ba[static_ba.index("--max-nfev") + 1] == "50"
+    assert combined_ba[combined_ba.index("--max-nfev") + 1] == "50"
     flattened = " ".join(
         token for command in commands for token in command.argv
     )
@@ -136,6 +136,15 @@ def test_ap01_uses_configured_quality_ranked_caps(
     )
     assert "--top-moving-per-marker 8" in flattened
     assert "--scale-top-per-marker 30" in flattened
+    assert "--direct-minimum-independent-markers 3" in flattened
+    assert "--direct-minimum-inlier-ratio 0.7" in flattened
+    assert "--direct-maximum-translation-dispersion-m 0.12" in flattened
+    assert "--direct-maximum-rotation-dispersion-deg 4.0" in flattened
+    assert "--relay-minimum-inlier-ratio 0.7" in flattened
+    assert "--relay-maximum-translation-dispersion-m 0.3" in flattened
+    assert "--relay-maximum-rotation-dispersion-deg 7.0" in flattened
+    assert "--maximum-path-translation-disagreement-m 0.12" in flattened
+    assert "--maximum-path-rotation-disagreement-deg 4.0" in flattened
     assert commands[-1].depends_on == ("ap01_solve_extrinsics",)
 
 

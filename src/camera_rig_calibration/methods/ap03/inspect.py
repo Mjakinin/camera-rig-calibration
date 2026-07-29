@@ -2,6 +2,9 @@
 
 import argparse
 import csv
+import json
+import math
+import statistics
 from pathlib import Path
 
 
@@ -75,9 +78,16 @@ def parse_images_txt(path: Path):
                 "tx": tx,
                 "ty": ty,
                 "tz": tz,
+                "point3d_ids": [],
             })
 
-            # Skip points2D line.
+            if i + 1 < len(lines):
+                points = lines[i + 1].strip().split()
+                images[-1]["point3d_ids"] = [
+                    int(points[index])
+                    for index in range(2, len(points), 3)
+                    if int(points[index]) >= 0
+                ]
             i += 2
         else:
             i += 1
@@ -86,16 +96,27 @@ def parse_images_txt(path: Path):
 
 
 def parse_points3D_txt(path: Path):
-    count = 0
+    points = {}
     if not path.exists():
-        return 0
+        return points
 
     for line in path.read_text().splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
-        count += 1
-    return count
+        parts = line.split()
+        if len(parts) < 8:
+            continue
+        point_id = int(parts[0])
+        track = [
+            (int(parts[index]), int(parts[index + 1]))
+            for index in range(8, len(parts) - 1, 2)
+        ]
+        points[point_id] = {
+            "error_px": float(parts[7]),
+            "track": track,
+        }
+    return points
 
 
 def parse_cameras_txt(path: Path):
@@ -137,7 +158,8 @@ def inspect_models(
 
         images = parse_images_txt(model_dir / "images.txt")
         cameras = parse_cameras_txt(model_dir / "cameras.txt")
-        num_points = parse_points3D_txt(model_dir / "points3D.txt")
+        points = parse_points3D_txt(model_dir / "points3D.txt")
+        num_points = len(points)
 
         image_names = {r["image_name"] for r in images}
         static_registered = [
@@ -174,6 +196,191 @@ def inspect_models(
             })
 
     return rows, image_rows
+
+
+def reconstruction_diagnostics(
+    model_dir: Path,
+    manifest: list[dict[str, str]],
+    static_expected: tuple[str, ...],
+) -> dict:
+    """Create GT-free per-camera COLMAP support diagnostics."""
+
+    images = parse_images_txt(model_dir / "images.txt")
+    points = parse_points3D_txt(model_dir / "points3D.txt")
+    by_name = {str(item["image_name"]): item for item in images}
+    source_by_name = {
+        str(row["image_name"]): {
+            "source_type": str(row.get("source_type", "")),
+            "source_id": str(row.get("source_id", "")),
+        }
+        for row in manifest
+    }
+    moving_point_ids: set[int] = set()
+    for image in images:
+        source = source_by_name.get(str(image["image_name"]), {})
+        if source.get("source_type") == "moving":
+            moving_point_ids.update(int(value) for value in image["point3d_ids"])
+
+    camera_rows: list[dict] = []
+    for expected_name in static_expected:
+        camera_id = expected_name.removeprefix("static_").removesuffix(
+            ".png"
+        )
+        image = by_name.get(expected_name)
+        if image is None:
+            camera_rows.append(
+                {
+                    "camera_id": camera_id,
+                    "image_name": expected_name,
+                    "registered": False,
+                    "colmap_camera_id": None,
+                    "track_support": 0,
+                    "shared_tracks_with_moving": 0,
+                    "median_reprojection_error_px": None,
+                    "reprojection_rmse_px": None,
+                    "warnings": ["unregistered_static_camera"],
+                }
+            )
+            continue
+        point_ids = [
+            int(value)
+            for value in image["point3d_ids"]
+            if int(value) in points
+        ]
+        errors = [float(points[value]["error_px"]) for value in point_ids]
+        camera_rows.append(
+            {
+                "camera_id": camera_id,
+                "image_name": expected_name,
+                "registered": True,
+                "colmap_camera_id": int(image["camera_id"]),
+                "track_support": len(set(point_ids)),
+                "shared_tracks_with_moving": len(
+                    set(point_ids) & moving_point_ids
+                ),
+                "median_reprojection_error_px": (
+                    float(statistics.median(errors)) if errors else None
+                ),
+                "reprojection_rmse_px": (
+                    math.sqrt(
+                        sum(error * error for error in errors) / len(errors)
+                    )
+                    if errors
+                    else None
+                ),
+                "warnings": [],
+            }
+        )
+
+    registered = [row for row in camera_rows if row["registered"]]
+    track_median = (
+        float(statistics.median(row["track_support"] for row in registered))
+        if registered
+        else 0.0
+    )
+    reprojection_values = [
+        float(row["median_reprojection_error_px"])
+        for row in registered
+        if row["median_reprojection_error_px"] is not None
+    ]
+    reprojection_median = (
+        float(statistics.median(reprojection_values))
+        if reprojection_values
+        else 0.0
+    )
+    track_threshold = max(20.0, 0.25 * track_median)
+    reprojection_threshold = max(3.0, 2.5 * reprojection_median)
+    warnings: list[dict[str, object]] = []
+    for row in camera_rows:
+        if not row["registered"]:
+            warnings.append(
+                {
+                    "camera_id": row["camera_id"],
+                    "code": "unregistered_static_camera",
+                }
+            )
+            continue
+        moving_threshold = max(10.0, 0.10 * float(row["track_support"]))
+        if float(row["track_support"]) < track_threshold:
+            row["warnings"].append("weak_track_support")
+        if float(row["shared_tracks_with_moving"]) < moving_threshold:
+            row["warnings"].append("weak_shared_moving_tracks")
+        median_error = row["median_reprojection_error_px"]
+        if (
+            median_error is None
+            or float(median_error) > reprojection_threshold
+        ):
+            row["warnings"].append("high_median_reprojection")
+        for code in row["warnings"]:
+            warnings.append({"camera_id": row["camera_id"], "code": code})
+        row["track_support_threshold"] = track_threshold
+        row["shared_moving_track_threshold"] = moving_threshold
+        row["median_reprojection_threshold_px"] = reprojection_threshold
+
+    assignments: dict[str, set[int]] = {}
+    for image in images:
+        source = source_by_name.get(str(image["image_name"]), {})
+        source_id = str(source.get("source_id", ""))
+        if source_id:
+            assignments.setdefault(source_id, set()).add(
+                int(image["camera_id"])
+            )
+    stable_groups = bool(assignments) and all(
+        len(values) == 1 for values in assignments.values()
+    )
+    distinct_groups = (
+        stable_groups
+        and len({next(iter(values)) for values in assignments.values()})
+        == len(assignments)
+    )
+    if not stable_groups or not distinct_groups:
+        warnings.append(
+            {
+                "camera_id": None,
+                "code": "unstable_physical_camera_group_assignment",
+            }
+        )
+    return {
+        "schema_version": 5,
+        "algorithm": "ap03_colmap_support_diagnostics_v1",
+        "ground_truth_used": False,
+        "best_model": model_dir.name,
+        "sparse_point_count": len(points),
+        "registered_image_count": len(images),
+        "registered_static_camera_count": len(registered),
+        "registered_moving_frame_count": sum(
+            source_by_name.get(str(image["image_name"]), {}).get(
+                "source_type"
+            )
+            == "moving"
+            for image in images
+        ),
+        "static_track_median": track_median,
+        "static_median_reprojection_error_px": reprojection_median,
+        "thresholds": {
+            "minimum_track_support": track_threshold,
+            "minimum_shared_moving_tracks": (
+                "max(10, 10% of that camera track support)"
+            ),
+            "maximum_median_reprojection_error_px": (
+                reprojection_threshold
+            ),
+        },
+        "camera_groups": {
+            "assignment": {
+                key: sorted(values)
+                for key, values in sorted(assignments.items())
+            },
+            "one_camera_id_per_physical_camera": stable_groups,
+            "physical_camera_ids_are_distinct": distinct_groups,
+            "intrinsics_refinement": False,
+        },
+        "static_cameras": camera_rows,
+        "warnings": warnings,
+        "quality_status": (
+            "good" if not warnings else "warning_weak_reconstruction_support"
+        ),
+    }
 
 
 def main():
@@ -245,6 +452,35 @@ def main():
         )[0]
     else:
         best = None
+    diagnostics = None
+    if best is not None:
+        diagnostics = reconstruction_diagnostics(
+            txt_root / str(best["model"]),
+            manifest,
+            static_expected,
+        )
+        (output_root / "AP03_RECONSTRUCTION_DIAGNOSTICS.json").write_text(
+            json.dumps(diagnostics, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        write_csv(
+            output_root / "AP03_RECONSTRUCTION_DIAGNOSTICS.csv",
+            diagnostics["static_cameras"],
+            [
+                "camera_id",
+                "image_name",
+                "registered",
+                "colmap_camera_id",
+                "track_support",
+                "track_support_threshold",
+                "shared_tracks_with_moving",
+                "shared_moving_track_threshold",
+                "median_reprojection_error_px",
+                "median_reprojection_threshold_px",
+                "reprojection_rmse_px",
+                "warnings",
+            ],
+        )
 
     lines = [
         "AP03 COLMAP Reconstruction Inspection",
@@ -325,10 +561,31 @@ def main():
             "",
         ]
 
+    if diagnostics is not None:
+        lines += [
+            "GT-free static-camera support diagnostics:",
+        ]
+        for camera in diagnostics["static_cameras"]:
+            lines.append(
+                f"- {camera['camera_id']}: "
+                f"tracks={camera['track_support']}, "
+                f"shared-moving={camera['shared_tracks_with_moving']}, "
+                f"reprojection RMSE="
+                f"{camera['reprojection_rmse_px'] if camera['reprojection_rmse_px'] is not None else 'unavailable'} px, "
+                f"warnings={','.join(camera['warnings']) or 'none'}"
+            )
+        lines += [
+            f"- quality status: {diagnostics['quality_status']}",
+            "- Ground truth was not read by this inspection.",
+            "",
+        ]
+
     lines += [
         "Output files:",
         f"- {output_root / 'colmap_model_summary.csv'}",
         f"- {output_root / 'registered_images_by_model.csv'}",
+        f"- {output_root / 'AP03_RECONSTRUCTION_DIAGNOSTICS.json'}",
+        f"- {output_root / 'AP03_RECONSTRUCTION_DIAGNOSTICS.csv'}",
         f"- {output_root / 'ap03_colmap_inspection_report.txt'}",
         "",
     ]

@@ -220,6 +220,7 @@ def _simulation_storage_key(config: RigConfig) -> StorageKey:
     relative = classify_simulation_parameters(
         parameters,
         experiment_id=config.project.experiment_id or config.dataset.id,
+        baseline_experiment_id=config.project.experiment_id,
         world_id=world_id,
         baseline=baseline,
     )
@@ -242,6 +243,7 @@ def classify_simulation_parameters(
     parameters: dict[str, Any],
     *,
     experiment_id: str,
+    baseline_experiment_id: str | None = None,
     world_id: str = "bus",
     baseline: dict[str, Any] | None = None,
 ) -> Path:
@@ -265,10 +267,14 @@ def classify_simulation_parameters(
     changed = _changed_groups(normalized, normalized_baseline)
     prefix = Path()
     if not changed:
+        baseline_id = safe_id(
+            baseline_experiment_id
+            or str(normalized_baseline["route_name"])
+        )
         return (
             prefix
             / "baseline"
-            / safe_id(str(normalized_baseline["route_name"]))
+            / baseline_id
         )
     if len(changed) == 1:
         factor = next(iter(changed))

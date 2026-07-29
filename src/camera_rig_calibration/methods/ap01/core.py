@@ -598,12 +598,15 @@ def aggregate_candidates(candidates: list[dict], translation_floor: float = 0.20
     t_threshold = max(translation_floor, t_median + 3.0 * t_mad)
     r_threshold = max(rotation_floor, r_median + 3.0 * r_mad)
 
-    inlier_indices = [
+    robust_inlier_indices = [
         index
         for index, (t_dev, r_dev) in enumerate(zip(translation_deviation, rotation_deviation))
         if t_dev <= t_threshold and r_dev <= r_threshold
     ]
+    inlier_indices = list(robust_inlier_indices)
+    pose_fallback_used = False
     if len(inlier_indices) < min(3, len(candidates)):
+        pose_fallback_used = True
         inlier_indices = list(np.argsort(weights)[::-1][:max(1, min(3, len(candidates)))])
 
     inlier_weights = weights[inlier_indices]
@@ -615,14 +618,81 @@ def aggregate_candidates(candidates: list[dict], translation_floor: float = 0.20
     )
     transform = make_T(rotation, translation)
 
+    robust_inlier_set = set(robust_inlier_indices)
+    pose_support_set = set(inlier_indices)
+    final_translation_deviation = np.linalg.norm(
+        translations - translation[None, :], axis=1
+    )
+    final_rotation_deviation = np.asarray(
+        [
+            rotation_difference_deg(rotation, row["T"][:3, :3])
+            for row in candidates
+        ],
+        dtype=np.float64,
+    )
+    robust_translation_deviation = np.asarray([], dtype=np.float64)
+    robust_rotation_deviation = np.asarray([], dtype=np.float64)
+    if robust_inlier_indices:
+        robust_weights = weights[robust_inlier_indices]
+        robust_weights /= robust_weights.sum()
+        robust_translation = np.sum(
+            translations[robust_inlier_indices]
+            * robust_weights[:, None],
+            axis=0,
+        )
+        robust_rotation = weighted_rotation_mean(
+            [
+                candidates[index]["T"][:3, :3]
+                for index in robust_inlier_indices
+            ],
+            robust_weights,
+        )
+        robust_translation_deviation = np.linalg.norm(
+            translations[robust_inlier_indices]
+            - robust_translation[None, :],
+            axis=1,
+        )
+        robust_rotation_deviation = np.asarray(
+            [
+                rotation_difference_deg(
+                    robust_rotation,
+                    candidates[index]["T"][:3, :3],
+                )
+                for index in robust_inlier_indices
+            ],
+            dtype=np.float64,
+        )
     for index, row in enumerate(candidates):
-        row["translation_deviation_m"] = float(translation_deviation[index])
-        row["rotation_deviation_deg"] = float(rotation_deviation[index])
-        row["inlier"] = index in set(inlier_indices)
+        row["translation_deviation_m"] = float(
+            final_translation_deviation[index]
+        )
+        row["rotation_deviation_deg"] = float(
+            final_rotation_deviation[index]
+        )
+        row["inlier"] = index in robust_inlier_set
+        row["pose_support"] = index in pose_support_set
 
     stats = {
         "candidates": len(candidates),
-        "inliers": len(inlier_indices),
+        "inliers": len(robust_inlier_indices),
+        "robust_inliers": len(robust_inlier_indices),
+        "pose_support_count": len(inlier_indices),
+        "pose_fallback_used": pose_fallback_used,
+        "inlier_ratio": (
+            len(robust_inlier_indices) / len(candidates)
+            if candidates
+            else 0.0
+        ),
+        "maximum_inlier_translation_dispersion_m": (
+            float(np.max(robust_translation_deviation))
+            if robust_inlier_indices
+            else None
+        ),
+        "maximum_inlier_rotation_dispersion_deg": (
+            float(np.max(robust_rotation_deviation))
+            if robust_inlier_indices
+            else None
+        ),
         "translation_deviation_median_m": t_median,
         "rotation_deviation_median_deg": r_median,
         "translation_threshold_m": t_threshold,

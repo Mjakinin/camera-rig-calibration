@@ -1,0 +1,73 @@
+Panels:
+  - Class: rviz_common/Displays
+Visualization Manager:
+  Global Options:
+    Fixed Frame: evaluation_anchor_marker_14
+    Background Color: 35; 35; 35
+  Displays:
+    - Class: rviz_default_plugins/PointCloud2
+      Name: AP03 Multi COLMAP context
+      Enabled: true
+      Topic:
+        Value: /rigcal/scene/points
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Common anchor
+      Enabled: true
+      Topic:
+        Value: /rigcal/scene/anchor
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Ground truth cameras
+      Enabled: true
+      Topic:
+        Value: /rigcal/ground_truth/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/baseline
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/baseline/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/baseline anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/baseline/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/baseline estimate-to-GT errors
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/baseline/error_lines
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03_multi/baseline
+      Enabled: true
+      Topic:
+        Value: /rigcal/methods/ap03_multi/baseline/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03_multi/baseline anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap03_multi/baseline/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03_multi/baseline estimate-to-GT errors
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap03_multi/baseline/error_lines
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03_single/baseline
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap03_single/baseline/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03_single/baseline anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap03_single/baseline/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03_single/baseline estimate-to-GT errors
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap03_single/baseline/error_lines
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+Window Geometry:
+  Width: 1400
+  Height: 900

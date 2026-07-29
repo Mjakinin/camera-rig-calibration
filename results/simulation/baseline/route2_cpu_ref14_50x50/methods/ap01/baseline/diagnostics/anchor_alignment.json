@@ -1,0 +1,124 @@
+{
+  "alignment": {
+    "aggregation": "weighted_markley_rotation_and_translation_with_mad_outlier_rejection",
+    "candidate_count": 1,
+    "candidates": [
+      {
+        "camera_id": "cam_edge_3",
+        "frame_id": "static",
+        "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_3.png",
+        "inlier": true,
+        "rotation_residual_deg": 0.0,
+        "selection_score": 0.49693020722356035,
+        "translation_residual_m": 0.0
+      }
+    ],
+    "inlier_count": 1,
+    "method": "ap01",
+    "rotation_threshold_deg": 5.0,
+    "transform_anchor_method": {
+      "matrix": [
+        [
+          0.49995069874111664,
+          -0.29860239539045025,
+          0.8129488964844928,
+          -3.282937891706726
+        ],
+        [
+          -0.8657995377505301,
+          -0.1495777746909126,
+          0.4775119367612535,
+          -1.5559081872312668
+        ],
+        [
+          -0.02098712127086011,
+          -0.9425832052320899,
+          -0.333311328873116,
+          2.076393806662917
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": 0.020988662238291083,
+      "qw": 0.5042473587380224,
+      "qx": -0.7040667230996552,
+      "qy": 0.4134558185106018,
+      "qz": -0.2812097736017901,
+      "roll_rad": -1.9106877810420246,
+      "x_m": -3.282937891706726,
+      "y_m": -1.5559081872312668,
+      "yaw_rad": -1.0471272988488647,
+      "z_m": 2.076393806662917
+    },
+    "transform_method_anchor": {
+      "matrix": [
+        [
+          0.49995069874111664,
+          -0.8657995377505301,
+          -0.02098712127086011,
+          0.3377800322218678
+        ],
+        [
+          -0.29860239539045025,
+          -0.1495777746909126,
+          -0.9425832052320899,
+          0.7441515269572644
+        ],
+        [
+          0.8129488964844928,
+          0.4775119367612535,
+          -0.333311328873116,
+          4.103911047160326
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": -0.9491982800430279,
+      "qw": 0.5042473587380224,
+      "qx": 0.7040667230996552,
+      "qy": -0.4134558185106018,
+      "qz": 0.2812097736017901,
+      "roll_rad": 2.180190008533296,
+      "x_m": 0.3377800322218678,
+      "y_m": 0.7441515269572644,
+      "yaw_rad": -0.5384050730040004,
+      "z_m": 4.103911047160326
+    },
+    "translation_threshold_m": 0.2
+  },
+  "anchor_marker_id": 14,
+  "contract": "rigcal_anchor_export_v1",
+  "fingerprint": "b4662585293b8af6c9ba7577af8fa25f3ba875ceef17a4bc1dea89de46d3fbbc",
+  "label": "baseline",
+  "method": "ap01",
+  "pairwise_invariance": {
+    "camera_pair_count": 0,
+    "maximum_rotation_difference_deg": 0.0,
+    "maximum_translation_difference_m": 0.0,
+    "passed": true
+  },
+  "schema_version": 1,
+  "status": {
+    "available": true,
+    "camera_count": 1,
+    "code": "WEAK_SINGLE_ANCHOR_OBSERVATION",
+    "expected_camera_count": 4,
+    "manual_warning_confirmed": false,
+    "missing_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_5"
+    ],
+    "warnings": [
+      "Only one accepted static observation supports the anchor pose."
+    ]
+  }
+}

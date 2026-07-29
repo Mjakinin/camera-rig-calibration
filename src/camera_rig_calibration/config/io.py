@@ -76,6 +76,32 @@ def _migrate_schema_v5(payload: dict[str, Any], source: Path) -> dict[str, Any]:
     """Apply only unambiguous migrations within the supported v5 contract."""
 
     migrated = deepcopy(payload)
+    colmap = migrated.get("colmap")
+    if isinstance(colmap, dict) and "gpu_mode" in colmap:
+        legacy_gpu_mode = str(colmap.pop("gpu_mode")).strip().lower()
+        compute_mode = {
+            "false": "cpu_baseline",
+            "true": "gpu",
+            "auto": "auto",
+        }.get(legacy_gpu_mode)
+        if compute_mode is None:
+            raise ValueError(
+                f"colmap.gpu_mode has an unsupported value in {source}: "
+                f"{legacy_gpu_mode!r}"
+            )
+        configured = colmap.get("compute_mode")
+        if configured is not None and configured != compute_mode:
+            raise ValueError(
+                "colmap.compute_mode conflicts with the deprecated "
+                f"colmap.gpu_mode in {source}"
+            )
+        colmap["compute_mode"] = compute_mode
+        warnings.warn(
+            "Migrated colmap.gpu_mode to colmap.compute_mode.",
+            DeprecationWarning,
+            stacklevel=3,
+        )
+
     quality = migrated.setdefault("observation_quality", {})
     if not isinstance(quality, dict):
         return migrated

@@ -1,0 +1,139 @@
+{
+  "alignment": {
+    "alignment": "rigid_kabsch_no_scale_fit",
+    "corner_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2_cpu_ref14_50x50/methods/ap03/baseline/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_TRIANGULATED_CORNERS.csv",
+    "corner_support": [
+      {
+        "corner_idx": 0,
+        "inlier_count": "29",
+        "median_reprojection_px": "0.45439111562813106",
+        "observation_count": "29"
+      },
+      {
+        "corner_idx": 1,
+        "inlier_count": "29",
+        "median_reprojection_px": "0.5618889668664002",
+        "observation_count": "29"
+      },
+      {
+        "corner_idx": 2,
+        "inlier_count": "29",
+        "median_reprojection_px": "0.7215717712688061",
+        "observation_count": "29"
+      },
+      {
+        "corner_idx": 3,
+        "inlier_count": "29",
+        "median_reprojection_px": "0.45949868097961183",
+        "observation_count": "29"
+      }
+    ],
+    "metadata_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2_cpu_ref14_50x50/methods/ap03/baseline/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+    "method": "ap03",
+    "scale_m_per_colmap_unit": 0.6844465415652877,
+    "side_lengths_m": [
+      0.1701617063224044,
+      0.16926449059990298,
+      0.1707731297577736,
+      0.16887518675324448
+    ],
+    "square_fit_rmse_m": 0.0005909187588627816,
+    "transform_anchor_method": {
+      "matrix": [
+        [
+          0.0007539149298526615,
+          -0.38066426286384475,
+          0.9247130098525728,
+          0.8569782005845659
+        ],
+        [
+          -0.9999987912946326,
+          0.0009704254516680055,
+          0.0012147772290931613,
+          -0.4038165442198879
+        ],
+        [
+          -0.0013597873187060103,
+          -0.924712807985684,
+          -0.3806630711346708,
+          1.819242235454424
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": 0.0013597877377523688,
+      "qw": 0.39403720295387396,
+      "qx": -0.5874620329461419,
+      "qy": 0.5875541638131089,
+      "qz": -0.3929416586733356,
+      "roll_rad": -1.9613099536257341,
+      "x_m": 0.8569782005845659,
+      "y_m": -0.4038165442198879,
+      "yaw_rad": -1.570042411096621,
+      "z_m": 1.819242235454424
+    },
+    "transform_method_anchor": {
+      "matrix": [
+        [
+          0.0007539149298526615,
+          -0.9999987912946326,
+          -0.0013597873187060103,
+          -0.40198836226321716
+        ],
+        [
+          -0.38066426286384475,
+          0.0009704254516680055,
+          -0.924712807985684,
+          2.0088894448214365
+        ],
+        [
+          0.9247130098525728,
+          0.0012147772290931613,
+          -0.3806630711346708,
+          -0.09945000761196138
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": -1.180280984433088,
+      "qw": 0.39403720295387396,
+      "qx": 0.5874620329461419,
+      "qy": -0.5875541638131089,
+      "qz": 0.3929416586733356,
+      "roll_rad": 3.138401450666441,
+      "x_m": -0.40198836226321716,
+      "y_m": 2.0088894448214365,
+      "yaw_rad": -1.5688158048030372,
+      "z_m": -0.09945000761196138
+    }
+  },
+  "anchor_marker_id": 14,
+  "contract": "rigcal_anchor_export_v1",
+  "fingerprint": "609677a804ec6d7569b1c27e93e7d4403769b43a767f15a78a3e999ecaf0faa9",
+  "label": "baseline",
+  "method": "ap03",
+  "pairwise_invariance": {
+    "camera_pair_count": 6,
+    "maximum_rotation_difference_deg": 1.7075472925031877e-06,
+    "maximum_translation_difference_m": 2.5121479338940403e-15,
+    "passed": true
+  },
+  "schema_version": 1,
+  "status": {
+    "available": true,
+    "camera_count": 4,
+    "code": "OK",
+    "expected_camera_count": 4,
+    "manual_warning_confirmed": false,
+    "missing_cameras": [],
+    "warnings": []
+  }
+}
