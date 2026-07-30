@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import argparse
 import sys
 import time
 from datetime import datetime, timezone
@@ -735,6 +736,79 @@ def entry(
 
 
 def main() -> None:
+    if len(sys.argv) > 1 and sys.argv[1] in {
+        "rerun-method",
+        "reconcile",
+    }:
+        command = sys.argv[1]
+        parser = argparse.ArgumentParser(prog=f"rigcal {command}")
+        parser.add_argument(
+            "--experiment", type=Path, required=True
+        )
+        if command == "rerun-method":
+            parser.add_argument(
+                "--method",
+                required=True,
+                choices=("ap01", "ap02", "ap03"),
+            )
+            parser.add_argument("--variant", required=True)
+            parser.add_argument(
+                "--reuse-prepared-input", action="store_true"
+            )
+            parser.add_argument(
+                "--reuse-matching-intermediates", action="store_true"
+            )
+            parser.add_argument(
+                "--reconcile-after", action="store_true"
+            )
+        arguments = parser.parse_args(sys.argv[2:])
+        try:
+            from .rerun import (
+                reconcile_experiment,
+                run_single_method_rerun,
+            )
+
+            experiment = arguments.experiment.resolve()
+            if command == "reconcile":
+                payload = reconcile_experiment(experiment)
+                console.print(
+                    "[green]Derived reports reconciled without running a "
+                    f"calibration method:[/green] {experiment}"
+                )
+                console.print_json(data=payload)
+                return
+            results = run_single_method_rerun(
+                repository_root=repository_root(),
+                experiment=experiment,
+                method=arguments.method,
+                variant=arguments.variant,
+                reuse_prepared_input=arguments.reuse_prepared_input,
+                reuse_matching_intermediates=(
+                    arguments.reuse_matching_intermediates
+                ),
+                reconcile_after=arguments.reconcile_after,
+                console=console,
+            )
+            failed = [
+                key
+                for key, value in results.items()
+                if value.get("status")
+                not in {"completed", "duplicate_skipped"}
+            ]
+            if failed:
+                raise RuntimeError(
+                    "Single-method rerun did not complete: "
+                    + ", ".join(failed)
+                )
+            return
+        except (
+            ValidationError,
+            FileNotFoundError,
+            RuntimeError,
+            ValueError,
+        ) as exc:
+            console.print(f"[bold red]Error:[/bold red] {exc}")
+            raise SystemExit(1) from exc
     typer.run(entry)
 
 

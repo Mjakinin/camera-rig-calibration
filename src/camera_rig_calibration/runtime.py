@@ -220,6 +220,8 @@ class PipelineOrchestrator:
         queue_started_monotonic: float | None = None,
         batch_started_monotonic: float | None = None,
         transaction_root: Path | None = None,
+        reuse_intermediates_from: Path | None = None,
+        rerun_metadata: dict[str, Any] | None = None,
     ) -> None:
         self.repository_root = repository_root.resolve()
         self.console = console or Console()
@@ -230,6 +232,13 @@ class PipelineOrchestrator:
             if transaction_root is not None
             else None
         )
+        self.reuse_intermediates_from = (
+            reuse_intermediates_from.resolve()
+            if reuse_intermediates_from is not None
+            else None
+        )
+        self.reused_method_stages: tuple[str, ...] = ()
+        self.rerun_metadata = dict(rerun_metadata or {})
         self.progress = ProgressClock(
             job_id=job_id or "rigcal",
             job_index=job_index,
@@ -636,7 +645,50 @@ class PipelineOrchestrator:
             ),
             "stages": stages,
         }
+        if self.rerun_metadata:
+            self.manifest.update(self.rerun_metadata)
+            self.manifest["single_method_rerun"] = True
         self.run_directory = run
+        if (
+            self.reuse_intermediates_from is not None
+            and config.methods.enabled == ["ap01"]
+        ):
+            source = self.reuse_intermediates_from
+            destination = run / "02_AP01"
+            reused: list[str] = []
+            for stage, public_name in (
+                ("01_moving_colmap", "moving_colmap"),
+                ("02_metric_scale", "metric_scale"),
+            ):
+                stage_source = (
+                    source / stage
+                    if (source / stage).is_dir()
+                    else source / public_name
+                )
+                stage_target = destination / stage
+                if not stage_source.is_dir():
+                    raise RuntimeError(
+                        "Requested AP01 intermediate reuse is incomplete: "
+                        f"{stage_source}"
+                    )
+                _materialize_tree(stage_source, stage_target)
+                reused.append(stage)
+            self.reused_method_stages = tuple(reused)
+            self.manifest["reused_stages"] = reused
+            self.manifest["reuse_source"] = str(source)
+            self.manifest["reuse_validation"] = (
+                "method/input/COLMAP fingerprint validated by rerun-method"
+            )
+            self.manifest["rerun_stages"] = [
+                "03_candidates",
+                "03_static_extrinsics",
+                "05_report",
+                "publication",
+                "anchor_export",
+                "gt_evaluation",
+                "reporting",
+                "rviz_derivation",
+            ]
         self._save_state()
         _write_json(run / "environment.json", self._environment())
         (run / "commands.txt").write_text("", encoding="utf-8")
@@ -755,6 +807,61 @@ class PipelineOrchestrator:
     def _observation_id(self, config: RigConfig) -> str:
         return observation_id(config)
 
+    def _frozen_observation_id(
+        self,
+        config: RigConfig,
+        *,
+        shared: Path,
+        input_id: str,
+    ) -> str | None:
+        if not self.rerun_metadata.get("reuse_frozen_observations"):
+            return None
+        declared = self.rerun_metadata.get("frozen_observation_contract")
+        if not isinstance(declared, dict):
+            raise RuntimeError(
+                "Prepared rerun is missing its frozen observation contract"
+            )
+        stored = _read_json(shared / "detection_config.json")
+        stored_id = str(stored.get("observation_id", "")).strip()
+        declared_id = str(declared.get("observation_id", "")).strip()
+        if not stored_id or stored_id != declared_id:
+            raise RuntimeError(
+                "Prepared observations no longer match the observation "
+                "contract frozen for this rerun."
+            )
+        if stored.get("input_id") != input_id:
+            raise RuntimeError(
+                "Prepared observations belong to a different immutable input"
+            )
+        stored_markers = stored.get("markers")
+        if not isinstance(stored_markers, dict):
+            raise RuntimeError(
+                "Prepared observations do not declare their marker contract"
+            )
+        markers_match = (
+            stored_markers.get("dictionary")
+            == config.markers.dictionary
+            and stored_markers.get("detection_mode")
+            == config.markers.detection_mode
+        )
+        try:
+            markers_match = markers_match and abs(
+                float(stored_markers.get("length_m"))
+                - float(config.markers.length_m)
+            ) <= 1e-12
+        except (TypeError, ValueError):
+            markers_match = False
+        if not markers_match:
+            raise RuntimeError(
+                "Prepared observations use a different marker dictionary, "
+                "marker length, or detection mode."
+            )
+        if not self._observation_contract_ready(shared, stored_id):
+            raise RuntimeError(
+                "Prepared observations are incomplete and cannot be reused"
+            )
+        return stored_id
+
     def detect_observations_only(
         self,
         config: RigConfig,
@@ -786,6 +893,13 @@ class PipelineOrchestrator:
         existing_config = _read_json(shared / "detection_config.json")
         existing_observation_id = existing_config.get("observation_id")
         existing_csv = shared / "shared_all_aruco_observations.csv"
+        frozen_observation_id = self._frozen_observation_id(
+            config,
+            shared=shared,
+            input_id=input_id,
+        )
+        if frozen_observation_id is not None:
+            observation_id = frozen_observation_id
         if (
             existing_csv.is_file()
             and existing_observation_id
@@ -797,24 +911,25 @@ class PipelineOrchestrator:
                 f"ID (recommended suffix: __aruco_{config.markers.detection_mode}) "
                 "instead of overwriting scientific evidence."
             )
-        _write_json(
-            shared / "detection_config.json",
-            {
-                "schema_version": 5,
-                "layout_version": 2,
-                "input_id": input_id,
-                "observation_id": observation_id,
-                "markers": config.markers.model_dump(mode="json"),
-                "effective_detector": effective_detector_config(
-                    config.markers.detection_mode,
-                    config.markers.dictionary,
-                ),
-                "detector_contract": DETECTOR_CONTRACT,
-                "observation_input_contract": (
-                    "raw_detection_with_dimensions_and_area_ratio_v2"
-                ),
-            },
-        )
+        if frozen_observation_id is None:
+            _write_json(
+                shared / "detection_config.json",
+                {
+                    "schema_version": 5,
+                    "layout_version": 2,
+                    "input_id": input_id,
+                    "observation_id": observation_id,
+                    "markers": config.markers.model_dump(mode="json"),
+                    "effective_detector": effective_detector_config(
+                        config.markers.detection_mode,
+                        config.markers.dictionary,
+                    ),
+                    "detector_contract": DETECTOR_CONTRACT,
+                    "observation_input_contract": (
+                        "raw_detection_with_dimensions_and_area_ratio_v2"
+                    ),
+                },
+            )
         view = self.run_directory / "01_OBSERVATIONS"
         if view.is_symlink():
             if view.resolve() != shared.resolve():
@@ -830,6 +945,13 @@ class PipelineOrchestrator:
             view.symlink_to(shared.resolve(), target_is_directory=True)
         self.manifest["observation_id"] = observation_id
         self.manifest["observations_root"] = str(shared)
+        self.manifest["frozen_observations_reused"] = (
+            frozen_observation_id is not None
+        )
+        if frozen_observation_id is not None:
+            self.manifest["observation_runtime_detector_id"] = (
+                self._observation_id(config)
+            )
         self._save_state()
         return shared
 
@@ -1712,6 +1834,17 @@ class PipelineOrchestrator:
         authoritative_dataset_root = self._working_paths(
             config
         ).datasets.resolve()
+        from .dataset_identity import build_dataset_identity
+
+        self.manifest["dataset_identity"] = build_dataset_identity(
+            authoritative_dataset_root
+        )
+        self.manifest["algorithm_version"] = {
+            "ap01": "ap01_main_compat_hierarchical_v1",
+            "ap02": "ap02_main_compat_widest_path_v1",
+            "ap03": "ap03_shared_colmap_single_multi_v1",
+        }.get(next(iter(config.methods.enabled), ""), "extension_v1")
+        self._save_state()
         _write_json(
             pointer_path,
             {
@@ -1746,12 +1879,17 @@ class PipelineOrchestrator:
         self._execute_stage("validate_dataset", validate)
 
         def detect_markers() -> None:
+            expected_observation_id = str(
+                self.manifest.get("observation_id")
+                or self._observation_id(config)
+            )
             if self._observation_contract_ready(
                 observations_root,
-                self._observation_id(config),
+                expected_observation_id,
             ):
                 self.console.print(
-                    f"[dim]Reusing compatible observations: {observations_root}[/dim]"
+                    "[dim]Reusing frozen compatible observations: "
+                    f"{observations_root}[/dim]"
                 )
                 return
             self._run_command(self._detector_command(config, dataset_root))
@@ -2061,6 +2199,7 @@ class PipelineOrchestrator:
             reuse_colmap_artifact=self._seed_colmap_artifact(
                 config, input_id, method_id
             ),
+            reused_method_stages=self.reused_method_stages,
         )
         method_results: dict[str, dict[str, Any]] = {}
         for method_id in config.methods.enabled:

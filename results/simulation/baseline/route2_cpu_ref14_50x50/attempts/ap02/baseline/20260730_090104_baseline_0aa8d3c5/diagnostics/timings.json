@@ -1,0 +1,21 @@
+{
+  "prepare_inputs": 2.030340602999786,
+  "_structured": {
+    "prepare_inputs": {
+      "event": "stage_completed",
+      "job_id": "ap02_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "prepare_inputs",
+      "stage_name": "Prepare canonical inputs and provenance",
+      "stage_index": 1,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 2.0303681200020947,
+      "job_elapsed_seconds": 2.298844425007701,
+      "queue_elapsed_seconds": 13.173085216010804,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    }
+  }
+}

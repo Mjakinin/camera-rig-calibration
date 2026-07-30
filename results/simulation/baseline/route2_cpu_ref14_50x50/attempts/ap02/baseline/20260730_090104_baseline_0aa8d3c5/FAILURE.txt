@@ -1,0 +1,8 @@
+INCOMPLETE / NON-AUTHORITATIVE CALIBRATION ATTEMPT
+================================================================
+
+Method: ap02
+Variant: baseline
+Cause: method_failed
+Explanation: The method failed; complete evidence is retained in this attempt.
+Evidence: failed: RuntimeError: This experiment already contains observations generated with a different ArUco detector contract. Use a distinct experiment ID (recommended suffix: __aruco_baseline) instead of overwriting scientific evidence.

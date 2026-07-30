@@ -1,0 +1,28 @@
+{
+  "completed_at": "2026-07-30T07:30:56.944+00:00",
+  "inputs": {
+    "initialization": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/05_graph_initialization/with_moving",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv"
+  },
+  "outputs": {
+    "marker_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/07_graph_ba/with_moving/optimized_marker_poses_ref_marker.csv",
+    "moving_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/07_graph_ba/with_moving/optimized_moving_frame_poses_ref_marker.csv",
+    "optimization_history": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/07_graph_ba/with_moving/ap02_optimization_history.csv",
+    "optimization_summary": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/07_graph_ba/with_moving/ap02_optimization_summary.json",
+    "optimizer_report": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/07_graph_ba/with_moving/optimizer_report.json",
+    "static_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_ap02_baseline_rerun_20260730_091432_683388/jobs/ap02_baseline/20260730_091456_baseline_39868199/03_AP02/07_graph_ba/with_moving/optimized_static_camera_poses_ref_marker.csv"
+  },
+  "parameters": {
+    "maximum_function_evaluations": 50,
+    "mode": "with_moving",
+    "observation_input": "quality-ranked, graph-preserving AP02 frame selection",
+    "reference_marker_id": 14,
+    "robust_loss": "soft_l1",
+    "robust_loss_scale_px": 3.0
+  },
+  "runtime_seconds": 907.800241681005,
+  "schema_version": 5,
+  "stage_id": "ap02.optimize.with_moving",
+  "started_at": "2026-07-30T07:15:08.493+00:00",
+  "status": "COMPLETED"
+}

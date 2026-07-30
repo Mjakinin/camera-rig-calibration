@@ -25,6 +25,7 @@ from .config.models import (
     ObservationQualitySettings,
 )
 from .dataset.discovery import safe_id
+from .dataset_identity import build_dataset_identity
 from .experiments import (
     automatic_method_label,
     evaluation_fingerprint,
@@ -913,11 +914,17 @@ class QueueRunner:
         console: Console | None = None,
         selection_reviewer: QueueSelectionReviewer | None = None,
         observation_reviewer: QueueObservationReviewer | None = None,
+        reuse_method_intermediates: dict[str, Path] | None = None,
+        rerun_metadata: dict[str, dict[str, Any]] | None = None,
     ) -> None:
         self.repository_root = repository_root.resolve()
         self.console = console or Console()
         self.selection_reviewer = selection_reviewer
         self.observation_reviewer = observation_reviewer
+        self.reuse_method_intermediates = dict(
+            reuse_method_intermediates or {}
+        )
+        self.rerun_metadata = dict(rerun_metadata or {})
 
     def show(self, queue: QueueConfig) -> None:
         table = Table(title=f"Experiment queue: {queue.id}")
@@ -1283,6 +1290,10 @@ class QueueRunner:
                 job_count=1,
                 batch_started_monotonic=batch_started_monotonic,
                 transaction_root=transaction_root,
+                reuse_intermediates_from=(
+                    self.reuse_method_intermediates.get(entry.id)
+                ),
+                rerun_metadata=self.rerun_metadata.get(entry.id),
             )
             if dry_run:
                 orchestrator.show_dry_run(config)
@@ -1725,6 +1736,24 @@ class QueueRunner:
                 raise RuntimeError(
                     "Queue preflight preparation has no reusable dataset pointer"
                 )
+            # Freeze the immutable acquisition identity once for the whole
+            # queue.  Method-resolved configs may differ, but every row inherits
+            # this exact content contract.
+            queue_dataset_identity = build_dataset_identity(prepared_root)
+            if not queue_dataset_identity.get("content_files"):
+                raise RuntimeError(
+                    "The prepared dataset has no hashable raw images or "
+                    "camera-info files; its queue identity cannot be frozen."
+                )
+            _write_json(
+                transaction_root / "queue_dataset_identity.json",
+                {
+                    **queue_dataset_identity,
+                    "queue_id": queue.id,
+                    "prepared_root": str(prepared_root.resolve()),
+                    "scope": "queue_shared_immutable_dataset",
+                },
+            )
             recovered_retry = self._recover_interrupted_detector_retry(
                 transaction_root=transaction_root,
                 resolved_root=resolved_root,
@@ -2585,6 +2614,10 @@ class QueueRunner:
                 queue_started_monotonic=queue_started,
                 batch_started_monotonic=batch_started_monotonic,
                 transaction_root=transaction_root,
+                reuse_intermediates_from=(
+                    self.reuse_method_intermediates.get(entry.id)
+                ),
+                rerun_metadata=self.rerun_metadata.get(entry.id),
             )
             try:
                 resume = (

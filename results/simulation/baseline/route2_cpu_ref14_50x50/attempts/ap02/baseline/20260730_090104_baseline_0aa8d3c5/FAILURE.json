@@ -1,0 +1,18 @@
+{
+  "attempt": "attempts/ap02/baseline/20260730_090104_baseline_0aa8d3c5",
+  "cause_code": "method_failed",
+  "current_in_comparison": false,
+  "evidence": "failed: RuntimeError: This experiment already contains observations generated with a different ArUco detector contract. Use a distinct experiment ID (recommended suffix: __aruco_baseline) instead of overwriting scientific evidence.",
+  "explanation": "The method failed; complete evidence is retained in this attempt.",
+  "label": "baseline",
+  "layout_version": 2,
+  "method": "ap02",
+  "original_error": "failed: RuntimeError: This experiment already contains observations generated with a different ArUco detector contract. Use a distinct experiment ID (recommended suffix: __aruco_baseline) instead of overwriting scientific evidence.",
+  "schema_version": 5,
+  "scientific_validity": "incomplete/non-authoritative",
+  "stage": "method_estimation",
+  "status": "failed",
+  "superseded": true,
+  "superseded_at": "2026-07-30T07:31:08+00:00",
+  "superseded_by": "methods/ap02/baseline"
+}

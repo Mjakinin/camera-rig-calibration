@@ -1,0 +1,8 @@
+AP02 DISCONNECTED COMPONENT RESULTS
+========================================================================
+
+Primary component: component_01
+Detected components: 1
+Cross-component camera relationships: not observable; components are not artificially aligned
+
+component_01: primary_component | cameras=cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 | markers=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,19,20

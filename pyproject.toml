@@ -17,8 +17,8 @@ dependencies = [
 
 [project.optional-dependencies]
 scientific = [
-  "numpy>=1.21,<3",
-  "scipy>=1.8,<2",
+  "numpy>=1.26,<2.3",
+  "scipy>=1.14,<2",
 ]
 standalone = [
   "opencv-contrib-python-headless>=4.5,<5",

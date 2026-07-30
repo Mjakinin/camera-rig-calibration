@@ -117,7 +117,7 @@ class AP01Method:
         if config.colmap.reuse or context.reuse_colmap_artifact:
             reconstruct.append("--reuse-colmap")
 
-        stages = (
+        stages = [
             (
                 "ap01_reconstruct_moving",
                 "AP01: reconstruct moving camera",
@@ -169,7 +169,33 @@ class AP01Method:
                 output / "05_report",
                 ("ap01_solve_extrinsics",),
             ),
-        )
+        ]
+        if {
+            "01_moving_colmap",
+            "02_metric_scale",
+        }.issubset(set(context.reused_method_stages)):
+            stages = [
+                (
+                    stage_id,
+                    display_name,
+                    argv,
+                    directory,
+                    (
+                        ()
+                        if stage_id == "ap01_build_candidates"
+                        else dependencies
+                    ),
+                )
+                for (
+                    stage_id,
+                    display_name,
+                    argv,
+                    directory,
+                    dependencies,
+                ) in stages
+                if stage_id
+                not in {"ap01_reconstruct_moving", "ap01_estimate_scale"}
+            ]
         return tuple(
             CommandSpec(
                 stage_id,

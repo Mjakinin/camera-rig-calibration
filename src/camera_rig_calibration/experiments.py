@@ -239,14 +239,7 @@ def colmap_artifact_fingerprint(
 
 def experiment_fingerprint(config: RigConfig) -> str:
     simulation = {
-        "world": str(config.simulation.world)
-        if config.simulation.world is not None
-        else None,
-        "route": str(config.simulation.route)
-        if config.simulation.route is not None
-        else None,
         "route_name": config.simulation.route_name,
-        "moving_model_name": config.simulation.moving_model_name,
         "moving_width": config.simulation.moving_width,
         "moving_height": config.simulation.moving_height,
         "moving_hfov_deg": config.simulation.moving_hfov_deg,
@@ -293,6 +286,11 @@ def _method_payload(
     )
     payload: dict[str, Any] = {
         "method_id": method_id,
+        "algorithm_version": {
+            "ap01": "ap01_main_compat_hierarchical_v1",
+            "ap02": "ap02_main_compat_widest_path_v1",
+            "ap03": "ap03_shared_colmap_single_multi_v1",
+        }.get(method_id, "extension_v1"),
         "settings": method_settings,
         "marker_detection": {
             "settings": config.markers.model_dump(mode="json"),
@@ -729,11 +727,40 @@ def write_experiment_manifest(
             and previous_fingerprint
             != payload["experiment_fingerprint"]
         ):
-            raise RuntimeError(
-                f"Experiment ID '{paths.experiment_id}' already belongs to a "
-                "different rig/capture parameter contract. Choose a new "
-                "dataset/experiment ID instead of mixing inputs."
+            # Schema-v5 datasets published before the queue-level content
+            # contract included method-resolved World/route paths in this
+            # legacy fingerprint.  For an unchanged immutable input, migrate
+            # the descriptor instead of rejecting the next method row.
+            from .dataset_identity import build_dataset_identity
+
+            previous_input = existing.get("input_fingerprint")
+            if previous_input != input_id:
+                raise RuntimeError(
+                    f"Experiment ID '{paths.experiment_id}' already belongs "
+                    "to a different rig or immutable dataset. Choose a new "
+                    "dataset/experiment ID instead of mixing inputs."
+                )
+            identity = build_dataset_identity(paths.dataset_root)
+            if not identity.get("fingerprint") or not identity.get(
+                "content_files"
+            ):
+                raise RuntimeError(
+                    f"Experiment ID '{paths.experiment_id}' has no verifiable "
+                    "immutable dataset content contract."
+                )
+            payload["dataset_identity"] = identity
+            payload["legacy_experiment_fingerprint"] = previous_fingerprint
+            payload["identity_migrated_from_method_resolved_config"] = True
+            payload["created_at"] = existing.get(
+                "created_at", payload["created_at"]
             )
+            temporary = destination.with_suffix(".json.tmp")
+            temporary.write_text(
+                json.dumps(payload, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            temporary.replace(destination)
+            return destination
         previous_input = existing.get("input_fingerprint")
         if previous_input and previous_input != input_id:
             raise RuntimeError(

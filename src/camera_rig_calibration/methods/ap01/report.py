@@ -27,6 +27,9 @@ def run(
             output_root / "02_metric_scale/SCALE_DIAGNOSTICS.json"
         )
         available = list(solution["available_static_cameras"])
+        deployment = list(
+            solution.get("deployment_eligible_cameras", available)
+        )
         expected = len(camera_ids)
         status = (
             "OK_FULL"
@@ -39,6 +42,7 @@ def run(
             "root_camera": root_camera,
             "metric_scale": scale,
             "static_camera_methods": solution["camera_methods"],
+            "camera_statuses": solution.get("camera_statuses", {}),
             "per_target_diagnostics": solution[
                 "per_target_diagnostics"
             ],
@@ -53,6 +57,9 @@ def run(
                 "good" if len(available) == expected else "partial_coverage",
             ),
             "ground_truth_used": False,
+            "deployment_eligible_cameras": deployment,
+            "scientific_estimate_count": len(available),
+            "deployment_estimate_count": len(deployment),
         }
         diagnostics_path = (
             output_root / "03_static_extrinsics/AP01_DIAGNOSTICS.json"
@@ -76,7 +83,24 @@ def run(
                         if len(available) == expected
                         else "partial_coverage"
                     ),
+                    "estimate_status": (
+                        "available"
+                        if available
+                        else "unavailable"
+                    ),
+                    "deployment_eligible": (
+                        len(deployment) == expected
+                    ),
+                    "evaluation_status": (
+                        "available"
+                        if available
+                        else "unavailable"
+                    ),
+                    "camera_statuses": solution.get(
+                        "camera_statuses", {}
+                    ),
                     "available_static_cameras": available,
+                    "deployment_eligible_cameras": deployment,
                     "missing_static_cameras": solution[
                         "missing_static_cameras"
                     ],

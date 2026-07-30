@@ -21,7 +21,7 @@ setup(
         "typer>=0.12,<1",
     ],
     extras_require={
-        "scientific": ["numpy>=1.21,<3", "scipy>=1.8,<2"],
+        "scientific": ["numpy>=1.26,<2.3", "scipy>=1.14,<2"],
         "standalone": ["opencv-contrib-python-headless>=4.5,<5"],
         "dev": ["build>=1.2,<2", "pytest>=7,<9", "pytest-cov>=5,<7"],
     },

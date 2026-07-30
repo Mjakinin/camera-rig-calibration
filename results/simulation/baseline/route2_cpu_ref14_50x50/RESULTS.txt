@@ -13,6 +13,7 @@ Overall: PASS
 Method      | Variant  | Status | Failed checks / evidence
 ------------+----------+--------+-------------------------
 ap01        | baseline | PASS   | all checks satisfied
+ap02        | baseline | PASS   | all checks satisfied
 ap03_multi  | baseline | PASS   | all checks satisfied
 ap03_single | baseline | PASS   | all checks satisfied
 
@@ -21,6 +22,7 @@ METHOD / VARIANT SUMMARY
 Method      | Variant  | Artifact  | Quality                    | Pairs | mean t [cm] | mean r [deg] | max t [cm] | max r [deg] | Key configuration
 ------------+----------+-----------+----------------------------+-------+-------------+--------------+------------+-------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ap01        | baseline | available | warning_unstable_consensus | 0     | -           | -            | -          | -           | evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, root_camera=cam_edge_3, top_moving_per_marker=8, scale_top_per_marker=30, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, gpu_requested=false, gpu_resolved=false, maximum_image_size=1600, maximum_features=4096, mapper_minimum_matches=8, direct_minimum_independent_markers=3, direct_minimum_inlier_ratio=0.7, direct_maximum_translation_dispersion_m=0.12, direct_maximum_rotation_dispersion_deg=4.0, relay_minimum_inlier_ratio=0.7, relay_maximum_translation_dispersion_m=0.3, relay_maximum_rotation_dispersion_deg=7.0, path_maximum_translation_disagreement_m=0.12, path_maximum_rotation_disagreement_deg=4.0
+ap02        | baseline | available | poor_high_reprojection     | 6     | 87.693      | 11.006       | 118.649    | 18.603      | evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, reference_marker_selection_mode=baseline, reference_marker_id=14, resolved_reference_marker_id=14, initialization_algorithm=maximum_bottleneck, initialization_diagnostic=unweighted_first_hit_bfs, top_per_marker=8, top_per_marker_pair=4, static_max_nfev=50, combined_max_nfev=50, loss=soft_l1, loss_scale_px=3.0
 ap03_multi  | baseline | available | good                       | 6     | 2.934       | 0.095        | 4.785      | 0.127       | evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, single_scale_marker_id=0, multi_marker_count=20, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, maximum_image_size=2400, maximum_features=8192, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
 ap03_single | baseline | available | good                       | 6     | 10.829      | 0.095        | 17.818     | 0.127       | evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, single_scale_marker_id=0, multi_marker_count=20, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, maximum_image_size=2400, maximum_features=8192, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
 
@@ -29,6 +31,7 @@ SCALE COMPARISON
 Method      | Variant  | Scale mechanism            | Scale [m/COLMAP unit] | Used/total | Relative std
 ------------+----------+----------------------------+-----------------------+------------+-------------
 ap01        | baseline | marker-motion pair scale   | 0.681889              | 3266/4032  | 0.052962
+ap02        | baseline | metric marker-graph BA     | n/a (already metric)  | -          | -
 ap03_multi  | baseline | marker-corner RANSAC scale | 0.684447              | 120/120    | 0.011711
 ap03_single | baseline | marker-corner RANSAC scale | 0.693497              | 6/6        | 0.003821
 
@@ -37,6 +40,16 @@ DETAILED CAMERA-PAIR RESULTS
 
 ap01 / baseline
 Evaluation unavailable: the exact direct anchor-relative camera set is incomplete.
+
+ap02 / baseline
+Pair                  | t err [cm] | r err [deg] | GT base [m] | Est base [m] | base err [cm] | dir err [deg]
+----------------------+------------+-------------+-------------+--------------+---------------+--------------
+cam_edge_0-cam_edge_1 | 46.092     | 13.430      | 5.069       | 5.074        | 0.513         | 5.209
+cam_edge_0-cam_edge_3 | 101.052    | 13.078      | 3.819       | 3.810        | 0.912         | 15.222
+cam_edge_0-cam_edge_5 | 118.649    | 18.603      | 5.668       | 6.225        | 55.669        | 10.120
+cam_edge_1-cam_edge_3 | 26.167     | 2.211       | 2.172       | 2.358        | 18.538        | 4.677
+cam_edge_1-cam_edge_5 | 115.753    | 8.280       | 9.834       | 10.427       | 59.313        | 5.627
+cam_edge_3-cam_edge_5 | 118.446    | 10.437      | 9.286       | 9.671        | 38.531        | 6.776
 
 ap03_multi / baseline
 Pair                  | t err [cm] | r err [deg] | GT base [m] | Est base [m] | base err [cm] | dir err [deg]
@@ -63,6 +76,11 @@ METHOD REPORTS AND DETAIL ARTIFACTS
 - methods/ap01/baseline/RESULT.txt
   - methods/ap01/baseline/diagnostics/method/candidates/AP01_RELAY_SELECTION.json
   - methods/ap01/baseline/diagnostics/method/metric_scale/SCALE_DIAGNOSTICS.json
+- methods/ap02/baseline/RESULT.txt
+  - methods/ap02/baseline/diagnostics/method/aruco_observations/ap02_frame_selection.json
+  - methods/ap02/baseline/diagnostics/method/graph_ba/static_only/ap02_optimization_history.csv
+  - methods/ap02/baseline/diagnostics/method/graph_ba/with_moving/ap02_optimization_history.csv
+  - methods/ap02/baseline/diagnostics/method/graph_ba/with_moving/ap02_optimization_summary.json
 - methods/ap03_multi/baseline/RESULT.txt
   - methods/ap03_multi/baseline/../../../methods/ap03/baseline/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json
   - methods/ap03_multi/baseline/methods/ap03/baseline/diagnostics/method/colmap/inspection/AP03_RECONSTRUCTION_DIAGNOSTICS.json
@@ -78,6 +96,7 @@ DIRECT COMMON-ANCHOR CAMERA POSES VS GROUND TRUTH
 Method      | Variant  | Cameras | mean translation [cm] | max translation [cm] | mean rotation [deg] | max rotation [deg]
 ------------+----------+---------+-----------------------+----------------------+---------------------+-------------------
 ap01        | baseline | 1       | 6.029                 | 6.029                | 0.775               | 0.775
+ap02        | baseline | 4       | 79.244                | 145.517              | 15.398              | 23.890
 ap03_multi  | baseline | 4       | 1.956                 | 3.170                | 0.097               | 0.155
 ap03_single | baseline | 4       | 7.679                 | 11.398               | 0.097               | 0.155
 Detailed values: evaluations/anchor_camera_gt.csv
@@ -96,6 +115,7 @@ route2                 | ap02        | combined_nfev_80__ref_marker_7           
 route2                 | ap03_multi  | multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 | 265.9       | good                       | 6     | 4       | 415.541     | 29.063       | 829.872               | 58.034                 | 4           | 176         | 7316
 route2                 | ap03_single | multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 | 265.9       | warning_scale_dispersion   | 6     | 4       | 414.897     | 29.063       | 819.564               | 58.034                 | 4           | 176         | 7316
 route2_cpu_ref14_50x50 | ap01        | baseline                                                                         | 270.3       | warning_unstable_consensus | 0     | 1       | -           | -            | -                     | -                      | None        | None        | None
+route2_cpu_ref14_50x50 | ap02        | baseline                                                                         | 914.0       | poor_high_reprojection     | 6     | 4       | 87.693      | 11.006       | 118.649               | 18.603                 | None        | None        | None
 route2_cpu_ref14_50x50 | ap03_multi  | baseline                                                                         | 334.3       | good                       | 6     | 4       | 2.934       | 0.095        | 4.785                 | 0.127                  | 4           | 175         | 11454
 route2_cpu_ref14_50x50 | ap03_single | baseline                                                                         | 334.3       | good                       | 6     | 4       | 10.829      | 0.095        | 17.818                | 0.127                  | 4           | 175         | 11454
 

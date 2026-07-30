@@ -53,6 +53,7 @@ class RunContext:
     resolved_ap03_multi_marker_ids: tuple[int, ...] = ()
     resolved_evaluation_anchor_marker_id: int | None = None
     reuse_colmap_artifact: bool = False
+    reused_method_stages: tuple[str, ...] = ()
     resolved_marker_ids: tuple[int, ...] = ()
 
     def __post_init__(self) -> None:

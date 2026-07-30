@@ -8,7 +8,7 @@
     "transformed_cameras_match_ap03_multi_export": true
   },
   "contract": "rigcal_rviz_scene_v2",
-  "fingerprint": "2c578868175e9e6458297fd772d931d37d17a1da7479c30a0bd2dfd47848f799",
+  "fingerprint": "244b25fa9fbc157efd916f251787768c588fc0fa443ec0f885ccd6d5966afdac",
   "fixed_frame": "evaluation_anchor_marker_14",
   "frustums": "camera_frustums.json",
   "ground_truth": {
@@ -45,6 +45,13 @@
       "error_lines_default_visible": false,
       "label": "baseline",
       "method": "ap01"
+    },
+    {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
+      "label": "baseline",
+      "method": "ap02"
     },
     {
       "anchor_edges_default_visible": false,

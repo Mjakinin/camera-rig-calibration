@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import heapq
+import itertools
 import json
 import math
 from collections import defaultdict, deque
@@ -322,6 +323,141 @@ def maximum_bottleneck_tree(adjacency, start: Node):
     return parent, best
 
 
+def main_compat_widest_path_tree(adjacency, start: Node):
+    """Reproduce the validated ``main`` maximum-frontier initialization.
+
+    This is Prim's rooted maximum-spanning-tree construction used by the
+    former ``05_initialize_ref_marker_pose_graph_v2.py`` workflow.  It is kept
+    separate from :func:`maximum_bottleneck_tree`, whose richer path-level
+    tie-breakers remain useful as an independent diagnostic.
+    """
+
+    visited = {start}
+    parent: dict[Node, tuple[Node, dict[str, str]]] = {}
+    metrics: dict[Node, dict[str, object]] = {
+        start: {
+            "bottleneck_score": float("inf"),
+            "path_length": 0,
+            "mean_score": float("inf"),
+        }
+    }
+    frontier: list[tuple[object, ...]] = []
+    counter = itertools.count()
+
+    def push(node: Node) -> None:
+        for neighbor, row in adjacency.get(node, []):
+            if neighbor in visited:
+                continue
+            score = edge_quality(row)
+            if not math.isfinite(score) or score <= 0.0:
+                continue
+            # The first item is exactly the main edge priority.  Remaining
+            # fields make equal-score behavior stable across Python/platforms.
+            heapq.heappush(
+                frontier,
+                (
+                    -score,
+                    _node_text(node),
+                    _node_text(neighbor),
+                    str(row.get("observer_id", "")),
+                    str(row.get("frame_id", "")),
+                    str(row.get("image_path", "")),
+                    next(counter),
+                    node,
+                    neighbor,
+                    row,
+                ),
+            )
+
+    push(start)
+    while frontier:
+        (
+            _negative_score,
+            _from_text,
+            _to_text,
+            _observer,
+            _frame,
+            _image,
+            _counter,
+            source,
+            target,
+            row,
+        ) = heapq.heappop(frontier)
+        if target in visited:
+            continue
+        if source not in visited:
+            raise RuntimeError(
+                "Main-compatible frontier contains an uninitialized parent: "
+                f"{source}"
+            )
+        score = edge_quality(row)
+        visited.add(target)
+        parent[target] = (source, row)
+        source_metrics = metrics[source]
+        length = int(source_metrics["path_length"]) + 1
+        previous_mean = float(source_metrics["mean_score"])
+        score_sum = (
+            0.0
+            if not math.isfinite(previous_mean)
+            else previous_mean * int(source_metrics["path_length"])
+        )
+        metrics[target] = {
+            "bottleneck_score": min(
+                float(source_metrics["bottleneck_score"]), score
+            ),
+            "path_length": length,
+            "mean_score": (score_sum + score) / length,
+        }
+        push(target)
+    return parent, metrics
+
+
+def main_observation_score(row: dict[str, str]) -> float:
+    """Legacy-main GT-free observation score for parity evidence only."""
+
+    if not is_success(row):
+        return 0.0
+    area = _finite_float(row, "area_px2", 0.0)
+    distance = _finite_float(row, "distance_m", 99.0)
+    depth = _finite_float(row, "tvec_z_m", -1.0)
+    rmse = observation_pnp_rmse(row)
+    if (
+        area < 64.0
+        or distance <= 0.0
+        or depth <= 0.0
+        or not math.isfinite(rmse)
+        or rmse > 25.0
+    ):
+        return 0.0
+    corners: list[tuple[float, float]] = []
+    for index in range(4):
+        u = _finite_float(row, f"corner{index}_u", float("nan"))
+        v = _finite_float(row, f"corner{index}_v", float("nan"))
+        if not math.isfinite(u) or not math.isfinite(v):
+            return 0.0
+        corners.append((u, v))
+    width = _finite_float(
+        row, "image_width", 2.0 * _finite_float(row, "cx", 0.0)
+    )
+    height = _finite_float(
+        row, "image_height", 2.0 * _finite_float(row, "cy", 0.0)
+    )
+    margin = max(
+        0.0,
+        min(
+            value
+            for u, v in corners
+            for value in (u, width - 1.0 - u, v, height - 1.0 - v)
+        ),
+    )
+    return float(
+        math.sqrt(area)
+        * (1.0 / math.sqrt(max(distance, 0.25)))
+        * (1.0 / ((1.0 + rmse) ** 2))
+        * min(1.0, max(0.20, margin / 40.0))
+    )
+
+
 def initialize_from_tree(
     parent,
     ref_marker_id: int,
@@ -601,11 +737,9 @@ def main() -> None:
 
     start = marker_node(args.ref_marker_id)
 
-    bfs_parent = deterministic_breadth_first_tree(
-        adjacency,
-        start,
-    )
-    parent, path_metrics = maximum_bottleneck_tree(adjacency, start)
+    bfs_parent = deterministic_breadth_first_tree(adjacency, start)
+    parent, path_metrics = main_compat_widest_path_tree(adjacency, start)
+    v2_parent, v2_metrics = maximum_bottleneck_tree(adjacency, start)
 
     (
         marker_poses,
@@ -616,7 +750,18 @@ def main() -> None:
         parent,
         args.ref_marker_id,
         path_metrics=path_metrics,
-        algorithm="maximum_bottleneck",
+        algorithm="main_compat_widest_path_v1",
+    )
+    (
+        _v2_marker_poses,
+        v2_observer_poses,
+        v2_init_log,
+        _v2_used_edges,
+    ) = initialize_from_tree(
+        v2_parent,
+        args.ref_marker_id,
+        path_metrics=v2_metrics,
+        algorithm="maximum_bottleneck_v2",
     )
     (
         _bfs_marker_poses,
@@ -627,7 +772,7 @@ def main() -> None:
         bfs_parent,
         args.ref_marker_id,
         path_metrics=_tree_path_metrics(bfs_parent, start),
-        algorithm="unweighted_first_hit_bfs",
+        algorithm="unweighted_first_hit_bfs_diagnostic",
     )
 
     static_pose_rows = []
@@ -647,7 +792,7 @@ def main() -> None:
                     "static_camera",
                     observer_id,
                     transform,
-                    source=f"{args.mode}_maximum_bottleneck",
+                    source=f"{args.mode}_main_compat_widest_path_v1",
                 )
             )
 
@@ -657,7 +802,7 @@ def main() -> None:
                     "moving_frame",
                     observer_id,
                     transform,
-                    source=f"{args.mode}_maximum_bottleneck",
+                    source=f"{args.mode}_main_compat_widest_path_v1",
                 )
             )
 
@@ -666,7 +811,7 @@ def main() -> None:
             "marker",
             str(marker_id),
             transform,
-            source=f"{args.mode}_maximum_bottleneck",
+            source=f"{args.mode}_main_compat_widest_path_v1",
         )
         for marker_id, transform
         in sorted(marker_poses.items())
@@ -741,35 +886,51 @@ def main() -> None:
         for camera_id, transform in bfs_observer_poses.items()
         if camera_id in static_observer_ids
     }
+    v2_static_poses = {
+        camera_id: transform
+        for camera_id, transform in v2_observer_poses.items()
+        if camera_id in static_observer_ids
+    }
     productive_paths = _camera_path_diagnostics(
         parent,
         path_metrics,
         productive_static_poses,
-        algorithm="maximum_bottleneck",
+        algorithm="main_compat_widest_path_v1",
+    )
+    v2_paths = _camera_path_diagnostics(
+        v2_parent,
+        v2_metrics,
+        v2_static_poses,
+        algorithm="maximum_bottleneck_v2",
     )
     bfs_metrics = _tree_path_metrics(bfs_parent, start)
     bfs_paths = _camera_path_diagnostics(
         bfs_parent,
         bfs_metrics,
         bfs_static_poses,
-        algorithm="unweighted_first_hit_bfs",
+        algorithm="unweighted_first_hit_bfs_diagnostic",
     )
     productive_by_camera = {
         str(row["camera_id"]): row for row in productive_paths
     }
+    v2_by_camera = {str(row["camera_id"]): row for row in v2_paths}
     bfs_by_camera = {str(row["camera_id"]): row for row in bfs_paths}
     comparison_rows: list[dict[str, object]] = []
     for camera_id in sorted(
-        set(productive_static_poses) | set(bfs_static_poses)
+        set(productive_static_poses)
+        | set(v2_static_poses)
+        | set(bfs_static_poses)
     ):
         productive_pose = productive_static_poses.get(camera_id)
         bfs_pose = bfs_static_poses.get(camera_id)
+        v2_pose = v2_static_poses.get(camera_id)
         productive_path = productive_by_camera.get(camera_id, {})
+        v2_path = v2_by_camera.get(camera_id, {})
         bfs_path = bfs_by_camera.get(camera_id, {})
         comparison_rows.append(
             {
                 "camera_id": camera_id,
-                "productive_algorithm": "maximum_bottleneck",
+                "productive_algorithm": "main_compat_widest_path_v1",
                 "productive_path": " -> ".join(
                     str(edge["to"])
                     for edge in productive_path.get(
@@ -779,7 +940,17 @@ def main() -> None:
                 "productive_bottleneck_score": productive_path.get(
                     "path_bottleneck_score"
                 ),
-                "diagnostic_algorithm": "unweighted_first_hit_bfs",
+                "v2_algorithm": "maximum_bottleneck_v2",
+                "v2_path": " -> ".join(
+                    str(edge["to"])
+                    for edge in v2_path.get("selected_graph_path", [])
+                ),
+                "v2_bottleneck_score": v2_path.get(
+                    "path_bottleneck_score"
+                ),
+                "diagnostic_algorithm": (
+                    "unweighted_first_hit_bfs_diagnostic"
+                ),
                 "diagnostic_path": " -> ".join(
                     str(edge["to"])
                     for edge in bfs_path.get("selected_graph_path", [])
@@ -801,6 +972,20 @@ def main() -> None:
                     if productive_pose is not None and bfs_pose is not None
                     else ""
                 ),
+                "productive_v2_translation_difference_m": (
+                    float(
+                        np.linalg.norm(
+                            productive_pose[:3, 3] - v2_pose[:3, 3]
+                        )
+                    )
+                    if productive_pose is not None and v2_pose is not None
+                    else ""
+                ),
+                "productive_v2_rotation_difference_deg": (
+                    _rotation_difference_deg(productive_pose, v2_pose)
+                    if productive_pose is not None and v2_pose is not None
+                    else ""
+                ),
             }
         )
     write_csv(
@@ -818,8 +1003,11 @@ def main() -> None:
         "schema_version": 5,
         "mode": args.mode,
         "reference_marker_id": args.ref_marker_id,
-        "productive_algorithm": "maximum_bottleneck",
-        "diagnostic_algorithm": "unweighted_first_hit_bfs",
+        "productive_algorithm": "main_compat_widest_path_v1",
+        "diagnostic_algorithms": [
+            "maximum_bottleneck_v2",
+            "unweighted_first_hit_bfs_diagnostic",
+        ],
         "path_tie_breakers": [
             "maximum bottleneck selection score",
             "minimum path length",
@@ -829,6 +1017,7 @@ def main() -> None:
             "lexicographic node/frame/image path",
         ],
         "productive_camera_paths": productive_paths,
+        "maximum_bottleneck_v2_camera_paths": v2_paths,
         "diagnostic_camera_paths": bfs_paths,
         "comparison": comparison_rows,
     }
@@ -846,6 +1035,102 @@ def main() -> None:
     )
     (bfs_root / "camera_paths.json").write_text(
         json.dumps(bfs_paths, indent=2, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    v2_root = ensure_dir(out / "diagnostics" / "maximum_bottleneck_v2")
+    write_csv(v2_root / "initialization_log.csv", v2_init_log, init_fields)
+    (v2_root / "camera_paths.json").write_text(
+        json.dumps(v2_paths, indent=2, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+
+    parity_rows: list[dict[str, object]] = []
+    for key, rows in itertools.groupby(
+        sorted(
+            mode_rows,
+            key=lambda row: (
+                str(row.get("observer_id", "")),
+                int(float(row.get("marker_id", -1))),
+            ),
+        ),
+        key=lambda row: (
+            str(row.get("observer_id", "")),
+            int(float(row.get("marker_id", -1))),
+        ),
+    ):
+        group = list(rows)
+        current_order = sorted(
+            group,
+            key=lambda row: (
+                -edge_quality(row),
+                observation_pnp_rmse(row),
+                str(row.get("frame_id", "")),
+                str(row.get("image_path", "")),
+            ),
+        )
+        main_order = sorted(
+            group,
+            key=lambda row: (
+                -main_observation_score(row),
+                observation_pnp_rmse(row),
+                str(row.get("frame_id", "")),
+                str(row.get("image_path", "")),
+            ),
+        )
+        parity_rows.append(
+            {
+                "observer_id": key[0],
+                "marker_id": key[1],
+                "same_top_observation": bool(
+                    current_order
+                    and main_order
+                    and current_order[0] is main_order[0]
+                ),
+                "selection_score_top_frame": (
+                    current_order[0].get("frame_id") if current_order else None
+                ),
+                "main_score_top_frame": (
+                    main_order[0].get("frame_id") if main_order else None
+                ),
+                "selection_score": (
+                    edge_quality(current_order[0]) if current_order else None
+                ),
+                "main_observation_score": (
+                    main_observation_score(main_order[0])
+                    if main_order
+                    else None
+                ),
+            }
+        )
+    parity = {
+        "schema_version": 5,
+        "algorithm_version": "main_compat_widest_path_v1",
+        "reference_marker_id": args.ref_marker_id,
+        "mode": args.mode,
+        "productive_uses_ground_truth": False,
+        "observation_score_parity": {
+            "pair_count": len(parity_rows),
+            "same_top_count": sum(
+                bool(row["same_top_observation"]) for row in parity_rows
+            ),
+            "pairs": parity_rows,
+        },
+        "camera_paths": {
+            camera_id: {
+                "main_compatible": productive_by_camera.get(camera_id),
+                "maximum_bottleneck_v2": v2_by_camera.get(camera_id),
+                "unweighted_first_hit_bfs_diagnostic": bfs_by_camera.get(
+                    camera_id
+                ),
+                "explicit_cam_edge_5_evidence": camera_id == "cam_edge_5",
+            }
+            for camera_id in sorted(
+                set(productive_by_camera) | set(v2_by_camera) | set(bfs_by_camera)
+            )
+        },
+    }
+    (out / "AP02_MAIN_COMPAT_INITIALIZATION_PARITY.json").write_text(
+        json.dumps(parity, indent=2, allow_nan=False) + "\n",
         encoding="utf-8",
     )
 
@@ -900,13 +1185,14 @@ def main() -> None:
     )
 
     report = [
-        "AP02 maximum-bottleneck pose graph initialization",
-        "=================================================",
+        "AP02 main-compatible widest-path pose graph initialization",
+        "==========================================================",
         "",
         f"Mode: {args.mode}",
         f"Reference marker id: {args.ref_marker_id}",
-        "Productive algorithm: maximum_bottleneck",
-        "Diagnostic algorithm: unweighted_first_hit_bfs",
+        "Productive algorithm: main_compat_widest_path_v1",
+        "Diagnostics: maximum_bottleneck_v2, "
+        "unweighted_first_hit_bfs_diagnostic",
         "",
         f"Raw observations in mode: {len(mode_rows)}",
         f"Observer-marker initialization edges: {len(selected_rows)}",
@@ -935,8 +1221,8 @@ def main() -> None:
         "",
         "Interpretation:",
         (
-            "- Productive BA poses use the deterministic maximum-bottleneck "
-            "paths from the configured reference marker."
+            "- Productive BA poses use the validated main-compatible maximum "
+            "frontier tree from the configured reference marker."
         ),
         (
             "- First-hit BFS is retained only in diagnostics and never "

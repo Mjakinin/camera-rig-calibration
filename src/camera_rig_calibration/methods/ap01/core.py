@@ -695,10 +695,146 @@ def aggregate_candidates(candidates: list[dict], translation_floor: float = 0.20
         ),
         "translation_deviation_median_m": t_median,
         "rotation_deviation_median_deg": r_median,
+        "translation_deviation_p90_m": (
+            float(np.percentile(robust_translation_deviation, 90))
+            if robust_inlier_indices
+            else None
+        ),
+        "rotation_deviation_p90_deg": (
+            float(np.percentile(robust_rotation_deviation, 90))
+            if robust_inlier_indices
+            else None
+        ),
+        "translation_robust_rms_m": (
+            float(np.sqrt(np.mean(robust_translation_deviation**2)))
+            if robust_inlier_indices
+            else None
+        ),
+        "rotation_robust_rms_deg": (
+            float(np.sqrt(np.mean(robust_rotation_deviation**2)))
+            if robust_inlier_indices
+            else None
+        ),
         "translation_threshold_m": t_threshold,
         "rotation_threshold_deg": r_threshold,
     }
     return transform, stats
+
+
+def aggregate_direct_marker_estimates(
+    candidates: list[dict],
+) -> tuple[np.ndarray, dict]:
+    """Aggregate one GT-free relation per independent shared marker."""
+
+    transform, stats = aggregate_candidates(
+        candidates, translation_floor=0.12, rotation_floor=4.0
+    )
+    return transform, {
+        **stats,
+        "aggregate_type": (
+            "quality_filtered_weighted_mean_of_mad_inliers_"
+            "no_gt_selection"
+        ),
+        "raw_candidate_count": len(candidates),
+        "independent_marker_count": len(
+            {
+                int(item["root_marker"])
+                for item in candidates
+                if item.get("root_marker") is not None
+            }
+        ),
+        "ground_truth_used": False,
+    }
+
+
+def aggregate_relay_marker_chains(
+    candidates: list[dict],
+) -> tuple[np.ndarray, dict, list[dict]]:
+    """Aggregate correlated relay samples in two GT-free hierarchy levels.
+
+    Samples sharing a root/target marker pair form one correlated chain.
+    Stage one estimates each chain.  Stage two robustly combines only those
+    independent chain estimates, so thousands of Cartesian frame pairs can no
+    longer masquerade as thousands of independent observations.
+    """
+
+    grouped: dict[tuple[int, int], list[dict]] = defaultdict(list)
+    for item in candidates:
+        grouped[
+            (int(item["root_marker"]), int(item["target_marker"]))
+        ].append(item)
+    chain_candidates: list[dict] = []
+    chain_reports: list[dict] = []
+    for (root_marker, target_marker), group in sorted(grouped.items()):
+        pose, stats = aggregate_candidates(
+            group, translation_floor=0.30, rotation_floor=7.0
+        )
+        inlier_quality = [
+            max(float(item.get("quality", 0.0)), 1e-12)
+            for item in group
+            if item.get("inlier")
+        ]
+        quality = (
+            float(np.mean(inlier_quality))
+            if inlier_quality
+            else max(float(item.get("quality", 0.0)) for item in group)
+        )
+        chain_id = f"{root_marker}->{target_marker}"
+        chain_candidate = {
+            "mode": "relay_chain",
+            "chain_id": chain_id,
+            "root_marker": root_marker,
+            "target_marker": target_marker,
+            "quality": quality,
+            "T": pose,
+            "raw_candidate_count": len(group),
+        }
+        chain_candidates.append(chain_candidate)
+        chain_reports.append(
+            {
+                "chain_id": chain_id,
+                "root_marker": root_marker,
+                "target_marker": target_marker,
+                "raw_candidate_count": len(group),
+                "robust_inlier_count": stats.get("robust_inliers", 0),
+                "quality_weight": quality,
+                "translation_dispersion_m": stats.get(
+                    "maximum_inlier_translation_dispersion_m"
+                ),
+                "rotation_dispersion_deg": stats.get(
+                    "maximum_inlier_rotation_dispersion_deg"
+                ),
+                "translation_robust_rms_m": stats.get(
+                    "translation_robust_rms_m"
+                ),
+                "rotation_robust_rms_deg": stats.get(
+                    "rotation_robust_rms_deg"
+                ),
+                "estimate": pose.tolist(),
+            }
+        )
+    if not chain_candidates:
+        raise RuntimeError("No AP01 relay marker-chain estimate")
+    transform, final_stats = aggregate_candidates(
+        chain_candidates, translation_floor=0.30, rotation_floor=7.0
+    )
+    final_stats.update(
+        {
+            "aggregate_type": (
+                "hierarchical_weighted_mean_of_mad_inliers_"
+                "no_gt_selection"
+            ),
+            "raw_candidate_count": len(candidates),
+            "chain_count": len(chain_candidates),
+            "independent_marker_chain_count": len(chain_candidates),
+            "effective_support": int(
+                final_stats.get("robust_inliers", 0)
+            ),
+            "chain_reports": chain_reports,
+            "ground_truth_used": False,
+        }
+    )
+    return transform, final_stats, chain_candidates
 
 
 def best_static_by_camera_marker(rows: list[dict]) -> dict[tuple[str, int], dict]:
@@ -848,9 +984,9 @@ def pose_row(camera: str, T: np.ndarray, source: str) -> dict:
         "roll_deg": roll,
         "pitch_deg": pitch,
         "yaw_deg": yaw,
-        "rvec_x": float(rvec[0]),
-        "rvec_y": float(rvec[1]),
-        "rvec_z": float(rvec[2]),
+        "rvec_x": float(rvec[0, 0]),
+        "rvec_y": float(rvec[1, 0]),
+        "rvec_z": float(rvec[2, 0]),
     }
 
 

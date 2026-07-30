@@ -1,0 +1,14 @@
+initialization_algorithm,initialized_type,initialized_id,from_type,from_id,observed_marker_id,observer_id,frame_id,edge_quality,path_length,path_bottleneck_score,pnp_reprojection_rmse_px,area_px2,distance_m
+unweighted_first_hit_bfs_diagnostic,observer,cam_edge_1,marker,14,14,cam_edge_1,static,0.4681452516093435,1,0.4681452516093435,0.14203376265054027,652.0,4.570408053475575
+unweighted_first_hit_bfs_diagnostic,observer,cam_edge_3,marker,14,14,cam_edge_3,static,0.49693020722356035,1,0.49693020722356035,0.1652401214177915,735.0,4.184488347246913
+unweighted_first_hit_bfs_diagnostic,marker,2,observer,cam_edge_1,2,cam_edge_1,static,0.5824511942135953,2,0.4681452516093435,0.20013423151238488,1824.0,3.5976855054744283
+unweighted_first_hit_bfs_diagnostic,marker,5,observer,cam_edge_1,5,cam_edge_1,static,0.5708010319381972,2,0.4681452516093435,0.04261170803064659,564.0,6.532448233857888
+unweighted_first_hit_bfs_diagnostic,marker,6,observer,cam_edge_1,6,cam_edge_1,static,0.5465550186238226,2,0.4681452516093435,0.16113974441877105,752.0,6.252480782573799
+unweighted_first_hit_bfs_diagnostic,marker,7,observer,cam_edge_1,7,cam_edge_1,static,0.5074401900179588,2,0.4681452516093435,0.23353963795061633,834.0,6.118902976384111
+unweighted_first_hit_bfs_diagnostic,marker,8,observer,cam_edge_1,8,cam_edge_1,static,0.48446512322522134,2,0.4681452516093435,0.25285244297284654,502.0,7.189036486181634
+unweighted_first_hit_bfs_diagnostic,marker,1,observer,cam_edge_3,1,cam_edge_3,static,0.6962155792123522,2,0.49693020722356035,0.3643846771493961,8775.0,1.3811741570838951
+unweighted_first_hit_bfs_diagnostic,marker,19,observer,cam_edge_3,19,cam_edge_3,static,0.7076973087720394,2,0.49693020722356035,0.016647152282941655,2079.0,3.069909646884428
+unweighted_first_hit_bfs_diagnostic,marker,20,observer,cam_edge_3,20,cam_edge_3,static,0.40912772248236495,2,0.40912772248236495,0.2051228820864619,472.5,9.103943480185158
+unweighted_first_hit_bfs_diagnostic,observer,cam_edge_0,marker,7,7,cam_edge_0,static,0.5614239834482522,3,0.4681452516093435,0.27642109079268934,2813.0,2.852544085963125
+unweighted_first_hit_bfs_diagnostic,marker,3,observer,cam_edge_0,3,cam_edge_0,static,0.5654646987489472,4,0.4681452516093435,0.2501329859149684,2478.0,3.0191078343462854
+unweighted_first_hit_bfs_diagnostic,marker,4,observer,cam_edge_0,4,cam_edge_0,static,0.6474585704314967,4,0.4681452516093435,0.17216158635105214,4132.5,2.5050713755995706

@@ -1,0 +1,322 @@
+[
+  {
+    "camera_id": "cam_edge_0",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:cam_edge_1",
+        "observation": {
+          "selection_score": 0.4681452516093435,
+          "pnp_reprojection_rmse_px": 0.14203376265054027,
+          "marker_area_ratio": 0.0007074652777777778,
+          "area_px2": 652.0,
+          "distance_m": 4.570408053475575,
+          "observer_id": "cam_edge_1",
+          "marker_id": 14,
+          "frame_id": "static",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_1.png"
+        }
+      },
+      {
+        "from": "observer:cam_edge_1",
+        "to": "marker:7",
+        "observation": {
+          "selection_score": 0.5074401900179588,
+          "pnp_reprojection_rmse_px": 0.23353963795061633,
+          "marker_area_ratio": 0.0009049479166666666,
+          "area_px2": 834.0,
+          "distance_m": 6.118902976384111,
+          "observer_id": "cam_edge_1",
+          "marker_id": 7,
+          "frame_id": "static",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_1.png"
+        }
+      },
+      {
+        "from": "marker:7",
+        "to": "observer:cam_edge_0",
+        "observation": {
+          "selection_score": 0.5614239834482522,
+          "pnp_reprojection_rmse_px": 0.27642109079268934,
+          "marker_area_ratio": 0.0030523003472222223,
+          "area_px2": 2813.0,
+          "distance_m": 2.852544085963125,
+          "observer_id": "cam_edge_0",
+          "marker_id": 7,
+          "frame_id": "static",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_0.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 0.4681452516093435,
+    "path_mean_score": 0.5123364750251849,
+    "weakest_edge": {
+      "from": "marker:14",
+      "to": "observer:cam_edge_1",
+      "observation": {
+        "selection_score": 0.4681452516093435,
+        "pnp_reprojection_rmse_px": 0.14203376265054027,
+        "marker_area_ratio": 0.0007074652777777778,
+        "area_px2": 652.0,
+        "distance_m": 4.570408053475575,
+        "observer_id": "cam_edge_1",
+        "marker_id": 14,
+        "frame_id": "static",
+        "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_1.png"
+      }
+    },
+    "initial_pose": [
+      [
+        0.9946651849906979,
+        -0.08722549818882488,
+        0.055071610046666136,
+        0.5314945778800075
+      ],
+      [
+        -0.0879030749448171,
+        -0.43731345107288827,
+        0.8950027904570838,
+        -1.6027799961248466
+      ],
+      [
+        -0.0539835084323598,
+        -0.8950690800024497,
+        -0.44264785421472586,
+        2.3829041624508775
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "cam_edge_1",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:cam_edge_1",
+        "observation": {
+          "selection_score": 0.4681452516093435,
+          "pnp_reprojection_rmse_px": 0.14203376265054027,
+          "marker_area_ratio": 0.0007074652777777778,
+          "area_px2": 652.0,
+          "distance_m": 4.570408053475575,
+          "observer_id": "cam_edge_1",
+          "marker_id": 14,
+          "frame_id": "static",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_1.png"
+        }
+      }
+    ],
+    "path_length": 1,
+    "path_bottleneck_score": 0.4681452516093435,
+    "path_mean_score": 0.4681452516093435,
+    "weakest_edge": {
+      "from": "marker:14",
+      "to": "observer:cam_edge_1",
+      "observation": {
+        "selection_score": 0.4681452516093435,
+        "pnp_reprojection_rmse_px": 0.14203376265054027,
+        "marker_area_ratio": 0.0007074652777777778,
+        "area_px2": 652.0,
+        "distance_m": 4.570408053475575,
+        "observer_id": "cam_edge_1",
+        "marker_id": 14,
+        "frame_id": "static",
+        "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_1.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.4219673516667213,
+        -0.23342158082431363,
+        0.8760467565905669,
+        -4.041222742934984
+      ],
+      [
+        -0.906485147299462,
+        0.12472895501076553,
+        -0.4033948010416038,
+        0.52001539759204
+      ],
+      [
+        -0.015107344334671424,
+        -0.9643428090608654,
+        -0.26422474289845166,
+        2.0704425863874194
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "cam_edge_3",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:cam_edge_3",
+        "observation": {
+          "selection_score": 0.49693020722356035,
+          "pnp_reprojection_rmse_px": 0.1652401214177915,
+          "marker_area_ratio": 0.0007975260416666667,
+          "area_px2": 735.0,
+          "distance_m": 4.184488347246913,
+          "observer_id": "cam_edge_3",
+          "marker_id": 14,
+          "frame_id": "static",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_3.png"
+        }
+      }
+    ],
+    "path_length": 1,
+    "path_bottleneck_score": 0.49693020722356035,
+    "path_mean_score": 0.49693020722356035,
+    "weakest_edge": {
+      "from": "marker:14",
+      "to": "observer:cam_edge_3",
+      "observation": {
+        "selection_score": 0.49693020722356035,
+        "pnp_reprojection_rmse_px": 0.1652401214177915,
+        "marker_area_ratio": 0.0007975260416666667,
+        "area_px2": 735.0,
+        "distance_m": 4.184488347246913,
+        "observer_id": "cam_edge_3",
+        "marker_id": 14,
+        "frame_id": "static",
+        "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_3.png"
+      }
+    },
+    "initial_pose": [
+      [
+        0.4999506987411173,
+        -0.29860239539044975,
+        0.8129488964844926,
+        -3.282937891706726
+      ],
+      [
+        -0.8657995377505299,
+        -0.1495777746909121,
+        0.477511936761254,
+        -1.5559081872312692
+      ],
+      [
+        -0.020987121270860276,
+        -0.9425832052320902,
+        -0.3333113288731151,
+        2.0763938066629137
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "cam_edge_5",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:moving_frame_000028",
+        "observation": {
+          "selection_score": 0.46820057956466393,
+          "pnp_reprojection_rmse_px": 0.13784898280398122,
+          "marker_area_ratio": 0.0009982638888888888,
+          "area_px2": 920.0,
+          "distance_m": 3.807036822830311,
+          "observer_id": "moving_frame_000028",
+          "marker_id": 14,
+          "frame_id": "28",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/moving/frame_0028.png"
+        }
+      },
+      {
+        "from": "observer:moving_frame_000028",
+        "to": "marker:0",
+        "observation": {
+          "selection_score": 0.5437401768779412,
+          "pnp_reprojection_rmse_px": 0.2114938077334276,
+          "marker_area_ratio": 0.0007503255208333333,
+          "area_px2": 691.5,
+          "distance_m": 6.050888532465241,
+          "observer_id": "moving_frame_000028",
+          "marker_id": 0,
+          "frame_id": "28",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/moving/frame_0028.png"
+        }
+      },
+      {
+        "from": "marker:0",
+        "to": "observer:cam_edge_5",
+        "observation": {
+          "selection_score": 0.4886067250171795,
+          "pnp_reprojection_rmse_px": 0.022206815739071,
+          "marker_area_ratio": 0.0004557291666666667,
+          "area_px2": 420.0,
+          "distance_m": 8.719740914268723,
+          "observer_id": "cam_edge_5",
+          "marker_id": 0,
+          "frame_id": "static",
+          "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/static/cam_edge_5.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 0.46820057956466393,
+    "path_mean_score": 0.5001824938199282,
+    "weakest_edge": {
+      "from": "marker:14",
+      "to": "observer:moving_frame_000028",
+      "observation": {
+        "selection_score": 0.46820057956466393,
+        "pnp_reprojection_rmse_px": 0.13784898280398122,
+        "marker_area_ratio": 0.0009982638888888888,
+        "area_px2": 920.0,
+        "distance_m": 3.807036822830311,
+        "observer_id": "moving_frame_000028",
+        "marker_id": 14,
+        "frame_id": "28",
+        "image_path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/raw_images/moving/frame_0028.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.15093315061105553,
+        0.4845191627756883,
+        -0.8616613980849822,
+        5.464974511256409
+      ],
+      [
+        0.987732939485195,
+        0.038615749451523206,
+        -0.15130255830696232,
+        -1.946632219306275
+      ],
+      [
+        -0.04003528821621023,
+        -0.8739279173921858,
+        -0.48440393361326217,
+        3.4092539605565815
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  }
+]

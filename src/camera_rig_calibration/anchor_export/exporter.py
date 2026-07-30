@@ -88,6 +88,10 @@ def _camera_row(
     label: str,
     anchor_marker_id: int,
     status: str,
+    estimate_status: str = "available",
+    quality_status: str = "accepted",
+    deployment_eligible: bool = True,
+    evaluation_status: str = "available",
 ) -> dict[str, Any]:
     parent = f"evaluation_anchor_marker_{anchor_marker_id}"
     child = f"{camera_id}_optical_frame"
@@ -99,6 +103,10 @@ def _camera_row(
         "child_frame": child,
         "camera_id": camera_id,
         "status": status,
+        "estimate_status": estimate_status,
+        "quality_status": quality_status,
+        "deployment_eligible": deployment_eligible,
+        "evaluation_status": evaluation_status,
         "source": "method_primary_result",
         **pose_payload(transform),
     }
@@ -113,6 +121,10 @@ def _write_csv(path: Path, cameras: list[dict[str, Any]]) -> None:
         "child_frame",
         "camera_id",
         "status",
+        "estimate_status",
+        "quality_status",
+        "deployment_eligible",
+        "evaluation_status",
         "source",
         "x_m",
         "y_m",
@@ -307,17 +319,39 @@ def export_method_anchor_poses(method_root: Path) -> dict[str, Any]:
         warnings.append(
             "No anchor-relative pose is available for: " + ", ".join(missing)
         )
-    camera_rows = [
-        _camera_row(
-            camera_id=camera,
-            transform=anchored[camera],
-            method=method,
-            label=label,
-            anchor_marker_id=anchor,
-            status="available",
+    camera_statuses = result.get("camera_statuses", {})
+    camera_rows = []
+    for camera in sorted(anchored):
+        own_status = (
+            camera_statuses.get(camera, {})
+            if isinstance(camera_statuses, dict)
+            else {}
         )
-        for camera in sorted(anchored)
-    ]
+        deployment = bool(own_status.get("deployment_eligible", True))
+        camera_rows.append(
+            _camera_row(
+                camera_id=camera,
+                transform=anchored[camera],
+                method=method,
+                label=label,
+                anchor_marker_id=anchor,
+                status=(
+                    "available"
+                    if deployment
+                    else "available_diagnostic_only"
+                ),
+                estimate_status=str(
+                    own_status.get("estimate_status", "available")
+                ),
+                quality_status=str(
+                    own_status.get("quality_status", "accepted")
+                ),
+                deployment_eligible=deployment,
+                evaluation_status=str(
+                    own_status.get("evaluation_status", "available")
+                ),
+            )
+        )
     selection = _read_json(
         method_root.parents[2]
         / "observations"

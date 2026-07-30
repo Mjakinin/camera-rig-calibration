@@ -155,10 +155,21 @@ def run(
             )
 
         poses = {root_camera: np.eye(4, dtype=np.float64)}
+        accepted_poses = {root_camera: np.eye(4, dtype=np.float64)}
         methods = {root_camera: "gauge_identity"}
+        camera_statuses: dict[str, dict] = {
+            root_camera: {
+                "estimate_status": "available",
+                "quality_status": "gauge_identity",
+                "deployment_eligible": True,
+                "evaluation_status": "available",
+                "selected_method": "gauge_identity",
+            }
+        }
         diagnostics: dict[str, dict] = {}
         quality_warnings: list[str] = []
         flattened: list[dict] = []
+        relay_chain_reports: dict[str, list[dict]] = {}
         for target in camera_ids:
             if target == root_camera:
                 continue
@@ -166,13 +177,14 @@ def run(
             relay = grouped[target]["relay"]
             direct_pose = direct_stats = None
             relay_pose = relay_stats = None
+            relay_chains: list[dict] = []
             if direct:
-                direct_pose, direct_stats = core.aggregate_candidates(
-                    direct, translation_floor=0.12, rotation_floor=4.0
+                direct_pose, direct_stats = (
+                    core.aggregate_direct_marker_estimates(direct)
                 )
             if relay:
-                relay_pose, relay_stats = core.aggregate_candidates(
-                    relay, translation_floor=0.30, rotation_floor=7.0
+                relay_pose, relay_stats, relay_chains = (
+                    core.aggregate_relay_marker_chains(relay)
                 )
             direct_stats = evaluate_path_gate(
                 direct,
@@ -189,7 +201,7 @@ def run(
                 ),
             )
             relay_stats = evaluate_path_gate(
-                relay,
+                relay_chains,
                 relay_stats,
                 minimum_inlier_ratio=relay_minimum_inlier_ratio,
                 maximum_translation_dispersion_m=(
@@ -212,31 +224,78 @@ def run(
             direct_stable = bool(direct_stats["stable"])
             relay_stable = bool(relay_stats["stable"])
             warning = None
-            if direct_stable:
+            deployment_eligible = False
+            quality_status = "unavailable"
+            if (
+                direct_stable
+                and relay_stable
+                and path_comparison["consistent"] is False
+            ):
                 selected, source_name = direct_pose, "direct_multimarker"
-                if (
-                    relay_stable
-                    and path_comparison["consistent"] is False
-                ):
-                    warning = "warning_direct_relay_disagreement"
-                    quality_warnings.append(f"{target}:{warning}")
+                quality_status = "rejected_direct_relay_disagreement"
+                warning = quality_status
+                quality_warnings.append(f"{target}:{warning}")
+            elif direct_stable:
+                selected, source_name = direct_pose, "direct_multimarker"
+                deployment_eligible = True
+                quality_status = "accepted"
             elif relay_stable:
                 selected, source_name = relay_pose, "moving_colmap_relay"
+                deployment_eligible = True
+                quality_status = "accepted"
             else:
-                selected, source_name = None, "quality_rejected"
-                warning = "warning_unstable_consensus"
+                # Preserve the strongest finite GT-free estimate for scientific
+                # evaluation while explicitly blocking deployment.
+                selected = direct_pose if direct_pose is not None else relay_pose
+                source_name = (
+                    "direct_multimarker_diagnostic"
+                    if direct_pose is not None
+                    else "moving_colmap_relay_diagnostic"
+                    if relay_pose is not None
+                    else "unavailable"
+                )
+                quality_status = (
+                    "rejected_unstable_consensus"
+                    if selected is not None
+                    else "unavailable_no_finite_estimate"
+                )
+                warning = quality_status
                 quality_warnings.append(f"{target}:{warning}")
             if selected is not None:
-                poses[target] = selected
-                methods[target] = source_name
+                if not np.all(np.isfinite(selected)):
+                    selected = None
+                    source_name = "unavailable"
+                    quality_status = "unavailable_non_finite_estimate"
+                    deployment_eligible = False
+                else:
+                    poses[target] = selected
+                    methods[target] = source_name
+                    if deployment_eligible:
+                        accepted_poses[target] = selected
+            camera_statuses[target] = {
+                "estimate_status": (
+                    "available" if selected is not None else "unavailable"
+                ),
+                "quality_status": quality_status,
+                "deployment_eligible": deployment_eligible,
+                "evaluation_status": (
+                    "available" if selected is not None else "unavailable"
+                ),
+                "selected_method": source_name,
+            }
             diagnostics[target] = {
                 "selected_method": source_name,
                 "quality_warning": warning,
+                **camera_statuses[target],
                 "direct": direct_stats,
                 "relay": relay_stats,
-                "relay_candidates": len(relay),
+                "relay_raw_candidate_count": len(relay),
+                "relay_independent_chain_count": len(relay_chains),
                 "direct_relay_consistency": path_comparison,
             }
+            relay_chain_reports[target] = list(
+                relay_stats.get("chain_reports", [])
+            )
             flattened.extend(core.serializable_candidate(item) for item in direct)
             flattened.extend(core.serializable_candidate(item) for item in relay)
 
@@ -254,15 +313,35 @@ def run(
             "rvec_x",
             "rvec_y",
             "rvec_z",
+            "estimate_status",
+            "quality_status",
+            "deployment_eligible",
+            "evaluation_status",
         ]
-        pose_rows = [
-            core.pose_row(camera, pose, methods[camera])
-            for camera, pose in sorted(poses.items())
-        ]
+        pose_rows = []
+        for camera, pose in sorted(poses.items()):
+            row = core.pose_row(camera, pose, methods[camera])
+            row.update(camera_statuses[camera])
+            row.pop("selected_method", None)
+            pose_rows.append(row)
         pose_file = (
             stage_root / "AP01_STATIC_CAMERA_POSES_ROOT_REFERENCE.csv"
         )
         core.write_csv(pose_file, pose_rows, pose_fields)
+        accepted_pose_file = (
+            stage_root / "AP01_STATIC_CAMERA_POSES_ACCEPTED.csv"
+        )
+        core.write_csv(
+            accepted_pose_file,
+            [
+                row
+                for row in pose_rows
+                if bool(camera_statuses[row["entity_id"]][
+                    "deployment_eligible"
+                ])
+            ],
+            pose_fields,
+        )
         if root_camera == "cam_edge_3":
             core.write_csv(
                 stage_root / "AP01_STATIC_CAMERA_POSES_CAM3_REFERENCE.csv",
@@ -279,25 +358,45 @@ def run(
         core.write_csv(
             stage_root / "AP01_TRANSFORM_CANDIDATES.csv", flattened
         )
+        (
+            stage_root / "AP01_RELAY_CHAIN_DIAGNOSTICS.json"
+        ).write_text(
+            json.dumps(
+                {
+                    "schema_version": 5,
+                    "algorithm": (
+                        "hierarchical_weighted_mean_of_mad_inliers_"
+                        "no_gt_selection"
+                    ),
+                    "ground_truth_used": False,
+                    "targets": relay_chain_reports,
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
         solution = stage_root / "solution_summary.json"
         solution.write_text(
             json.dumps(
                 {
                     "root_camera": root_camera,
                     "camera_methods": methods,
+                    "camera_statuses": camera_statuses,
                     "per_target_diagnostics": diagnostics,
                     "available_static_cameras": sorted(poses),
+                    "deployment_eligible_cameras": sorted(accepted_poses),
                     "missing_static_cameras": sorted(
                         set(camera_ids) - set(poses)
                     ),
                     "quality_warnings": quality_warnings,
                     "quality_status": (
-                        "warning_unstable_consensus"
+                        "rejected_unstable_consensus"
                         if any(
-                            "warning_unstable_consensus" in item
+                            "rejected_unstable_consensus" in item
                             for item in quality_warnings
                         )
-                        else "warning_direct_relay_disagreement"
+                        else "rejected_direct_relay_disagreement"
                         if quality_warnings
                         else "good"
                     ),
@@ -344,6 +443,7 @@ def run(
         )
         return {
             "poses": pose_file,
+            "accepted_poses": accepted_pose_file,
             "pairwise": pairwise,
             "solution_summary": solution,
             "solved_cameras": len(poses),

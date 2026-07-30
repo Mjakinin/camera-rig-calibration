@@ -15,6 +15,11 @@ from typing import Any
 from .config import load_config
 from .anchor_export import export_method_anchor_poses
 from .dataset.discovery import safe_id
+from .dataset_identity import (
+    build_dataset_identity,
+    identities_match,
+    write_dataset_identity,
+)
 from .evaluation.reporting import write_scientific_experiment_reports
 from .experiments import (
     experiment_manifest_payload,
@@ -284,6 +289,14 @@ def _publish_dataset(
                 f"Experiment '{canonical.name}' already contains a different "
                 "dataset. Choose a new experiment ID."
             )
+        incoming_identity = build_dataset_identity(source)
+        existing_identity = build_dataset_identity(canonical)
+        if not identities_match(incoming_identity, existing_identity):
+            raise RuntimeError(
+                f"Experiment '{canonical.name}' contains different immutable "
+                "image, camera-info, World-snapshot, route or capture content. "
+                "Choose a new experiment ID."
+            )
         # A complete canonical dataset is immutable and immediately reusable.
         # Queue retries may regenerate equivalent quality reports containing
         # different transient job paths or timestamps; those are not allowed
@@ -294,6 +307,7 @@ def _publish_dataset(
             pass
         else:
             _finalize_dataset_front_door(canonical, config)
+            write_dataset_identity(canonical)
             return canonical
         # Complete an older layout-v2 front door only with missing or
         # byte-identical late-preflight evidence. Conflicts remain fatal.
@@ -308,6 +322,7 @@ def _publish_dataset(
         )
         _validate_dataset(canonical)
         _finalize_dataset_front_door(canonical, config)
+        write_dataset_identity(canonical)
         return canonical
 
     incoming = canonical.with_name(
@@ -320,6 +335,7 @@ def _publish_dataset(
     (incoming / "README.txt").unlink(missing_ok=True)
     _atomic_replace(incoming, canonical)
     _finalize_dataset_front_door(canonical, config)
+    write_dataset_identity(canonical)
     return canonical
 
 
@@ -404,6 +420,39 @@ def _export_extrinsics(
     return True
 
 
+def _export_accepted_extrinsics(source: Path, destination: Path) -> bool:
+    """Export only AP01 poses explicitly approved for deployment."""
+
+    pose_source = (
+        source
+        / "02_AP01/03_static_extrinsics/"
+        "AP01_STATIC_CAMERA_POSES_ACCEPTED.csv"
+    )
+    if not pose_source.is_file():
+        return False
+    reference = "resolved root camera"
+    convention = "T_reference_camera (camera pose expressed in reference frame)"
+    with pose_source.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        rows = list(reader)
+        fields = list(reader.fieldnames or [])
+    with destination.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["reference_frame", "transform_convention", *fields],
+        )
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(
+                {
+                    "reference_frame": reference,
+                    "transform_convention": convention,
+                    **row,
+                }
+            )
+    return True
+
+
 def _relative(path: Path, root: Path) -> str:
     try:
         return path.resolve().relative_to(root.resolve()).as_posix()
@@ -421,17 +470,20 @@ def _publish_success(
     method_id, label, manifest = _method_and_label(source, config)
     target = canonical_root / "methods" / method_id / label
     method_fingerprint = str(manifest.get("method_fingerprint", ""))
+    force_replacement = config.project.duplicate_policy == "force"
     if target.is_dir():
         existing = _read_json(target / "RESULT.json")
         if (
             existing.get("method_fingerprint") == method_fingerprint
             and method_fingerprint
+            and not force_replacement
         ):
             return target, "duplicate_skipped"
-        raise RuntimeError(
-            f"Result label conflict at {target}: label '{label}' already "
-            "belongs to a different configuration. Choose a new run label."
-        )
+        if not force_replacement:
+            raise RuntimeError(
+                f"Result label conflict at {target}: label '{label}' already "
+                "belongs to a different configuration. Choose a new run label."
+            )
 
     # A prior method may have completed fully but encountered a transient
     # Windows/WSL directory lock during the final rename. Reuse that validated
@@ -505,6 +557,12 @@ def _publish_success(
     has_extrinsics = _export_extrinsics(
         source, extrinsics, method_id, status
     )
+    accepted_extrinsics = incoming / "camera_extrinsics_accepted.csv"
+    has_accepted_extrinsics = (
+        _export_accepted_extrinsics(source, accepted_extrinsics)
+        if method_id == "ap01"
+        else False
+    )
     reference, convention = _reference_metadata(method_id, status)
     if not has_extrinsics:
         extrinsics.write_text(
@@ -541,6 +599,32 @@ def _publish_success(
         "queue_id": queue_id,
         "published_at": _now(),
     }
+    if method_id == "ap01":
+        if not has_accepted_extrinsics:
+            accepted_extrinsics.write_text(
+                "reference_frame,transform_convention\n",
+                encoding="utf-8",
+            )
+        result_payload.update(
+            {
+                "camera_extrinsics_accepted": (
+                    "camera_extrinsics_accepted.csv"
+                ),
+                "estimate_status": status.get(
+                    "estimate_status", "available"
+                ),
+                "deployment_eligible": status.get(
+                    "deployment_eligible", False
+                ),
+                "evaluation_status": status.get(
+                    "evaluation_status", "pending"
+                ),
+                "camera_statuses": status.get("camera_statuses", {}),
+                "deployment_eligible_cameras": status.get(
+                    "deployment_eligible_cameras", []
+                ),
+            }
+        )
     for key in (
         "reference_marker_id",
         "root_camera",
@@ -584,7 +668,75 @@ def _publish_success(
     # method artifacts. This never invokes or modifies a calibration method.
     export_method_anchor_poses(incoming)
     target.parent.mkdir(parents=True, exist_ok=True)
-    _atomic_replace(incoming, target)
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    attempts_root = canonical_root / "attempts" / method_id / label
+    superseded_result: Path | None = None
+    if target.is_dir():
+        superseded_result = attempts_root / f"{stamp}_superseded_result"
+        superseded_result.parent.mkdir(parents=True, exist_ok=True)
+        _rename_with_retry(target, superseded_result)
+        _write_json(
+            superseded_result / "ATTEMPT.json",
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "status": "superseded_success",
+                "superseded": True,
+                "current_in_comparison": False,
+                "method": method_id,
+                "label": label,
+                "superseded_by": f"methods/{method_id}/{label}",
+                "archived_at": _now(),
+            },
+        )
+    try:
+        _rename_with_retry(incoming, target)
+    except Exception:
+        if (
+            superseded_result is not None
+            and superseded_result.exists()
+            and not target.exists()
+        ):
+            _rename_with_retry(superseded_result, target)
+        raise
+    for failure_path in sorted(
+        attempts_root.glob("*/FAILURE.json")
+    ):
+        failure = _read_json(failure_path)
+        if not failure or failure.get("superseded"):
+            continue
+        failure.update(
+            {
+                "superseded": True,
+                "current_in_comparison": False,
+                "superseded_by": f"methods/{method_id}/{label}",
+                "superseded_at": _now(),
+            }
+        )
+        _write_json(failure_path, failure)
+    success_attempt = attempts_root / f"{stamp}_successful"
+    success_attempt.mkdir(parents=True, exist_ok=False)
+    attempt_payload = {
+        "schema_version": 5,
+        "layout_version": 2,
+        "status": "successful",
+        "method": method_id,
+        "label": label,
+        "current_in_comparison": True,
+        "current_result": f"methods/{method_id}/{label}",
+        "method_fingerprint": method_fingerprint,
+        "dataset_identity": manifest.get("dataset_identity"),
+        "supersedes_attempt": manifest.get("supersedes_attempt"),
+        "reused_stages": manifest.get("reused_stages", []),
+        "rerun_stages": manifest.get("rerun_stages", []),
+        "algorithm_version": manifest.get("algorithm_version"),
+        "completed_at": _now(),
+    }
+    _write_json(success_attempt / "ATTEMPT.json", attempt_payload)
+    for name in ("run_manifest.json", "resolved_config.yaml", "timings.json"):
+        source_file = target / "provenance" / name
+        if source_file.is_file():
+            shutil.copy2(source_file, success_attempt / name)
     return target, "completed"
 
 
