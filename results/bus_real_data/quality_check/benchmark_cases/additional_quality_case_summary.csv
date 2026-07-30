@@ -1,0 +1,8 @@
+case_id,test_type,test_level,input_observations,accepted_observations,retention_fraction,accepted_observers
+border_5px,min_border_distance_px,5.0,513,507,0.9883040935672515,
+border_10px,min_border_distance_px,10.0,513,502,0.9785575048732943,
+border_20px,min_border_distance_px,20.0,513,490,0.9551656920077972,
+border_40px,min_border_distance_px,40.0,513,456,0.8888888888888888,
+min_markers_2,min_markers_per_observer,2,513,469,0.9142300194931774,130
+min_markers_3,min_markers_per_observer,3,513,391,0.7621832358674464,91
+min_markers_4,min_markers_per_observer,4,513,253,0.49317738791423,45
