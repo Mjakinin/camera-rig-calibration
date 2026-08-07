@@ -74,15 +74,9 @@ def set_pose(world, name, pose, retries=8):
             )
 
             last_returncode = proc.returncode
-            last_output = (
-                (proc.stdout or "")
-                + (proc.stderr or "")
-            )
+            last_output = (proc.stdout or "") + (proc.stderr or "")
 
-            if (
-                proc.returncode == 0
-                and "data: true" in last_output
-            ):
+            if proc.returncode == 0 and "data: true" in last_output:
                 return True
 
         except subprocess.TimeoutExpired as exc:
@@ -114,6 +108,7 @@ def set_pose(world, name, pose, retries=8):
         )
     )
 
+
 def image_msg_to_bgr(msg):
     h = msg.height
     w = msg.width
@@ -121,13 +116,13 @@ def image_msg_to_bgr(msg):
     data = np.frombuffer(msg.data, dtype=np.uint8)
 
     if enc in ["rgb8", "bgr8"]:
-        arr = data.reshape(h, msg.step)[:, :w * 3].reshape(h, w, 3).copy()
+        arr = data.reshape(h, msg.step)[:, : w * 3].reshape(h, w, 3).copy()
         if enc == "rgb8":
             return cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
         return arr
 
     if enc in ["rgba8", "bgra8"]:
-        arr = data.reshape(h, msg.step)[:, :w * 4].reshape(h, w, 4).copy()
+        arr = data.reshape(h, msg.step)[:, : w * 4].reshape(h, w, 4).copy()
         if enc == "rgba8":
             return cv2.cvtColor(arr, cv2.COLOR_RGBA2BGR)
         return cv2.cvtColor(arr, cv2.COLOR_BGRA2BGR)
@@ -191,6 +186,65 @@ def wait_for_distinct_image(node, min_counter, timeout, seen_hashes):
     return None, counter, None
 
 
+def capture_frame_at_pose(
+    node,
+    *,
+    world,
+    name,
+    pose,
+    settle,
+    post_pose_skip,
+    timeout,
+    captured_hashes,
+    frame_idx,
+    retries,
+):
+    """Capture one distinct frame, retrying the same commanded pose if needed."""
+    last_counter = node.counter
+
+    for attempt in range(1, retries + 1):
+        ok = set_pose(world, name, pose)
+
+        # Keep consuming the subscription during settling. Otherwise DDS
+        # backlog from the previous pose can be mistaken for the new pose.
+        spin_for(node, settle)
+        counter = node.counter
+        fresh = True
+
+        for _skip in range(post_pose_skip):
+            msg, counter = wait_for_image(node, counter, timeout)
+            if msg is None:
+                fresh = False
+                break
+
+        msg = None
+        image_sha256 = None
+        if fresh:
+            msg, counter, image_sha256 = wait_for_distinct_image(
+                node,
+                counter,
+                timeout,
+                captured_hashes,
+            )
+
+        last_counter = counter
+        if msg is not None:
+            return msg, counter, image_sha256, ok, attempt
+
+        if attempt < retries:
+            print(
+                f"[WARN] frame {frame_idx:04d}: no fresh image after pose "
+                f"(capture attempt {attempt}/{retries}); retrying the same pose",
+                flush=True,
+            )
+
+    raise RuntimeError(
+        f"frame {frame_idx:04d}: no fresh image after {retries} capture attempts "
+        f"at the same commanded pose (last message counter={last_counter}). "
+        "Stale data was not written."
+    )
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -214,8 +268,20 @@ def main():
     ap.add_argument("--settle", type=float, default=0.80)
     ap.add_argument("--post-pose-skip", type=int, default=5)
     ap.add_argument("--timeout", type=float, default=2.0)
+    ap.add_argument(
+        "--frame-retries",
+        type=int,
+        default=4,
+        help=(
+            "Number of full same-pose capture attempts before failing a route frame. "
+            "Stale images are never accepted."
+        ),
+    )
     ap.add_argument("--clean", action="store_true")
     args = ap.parse_args()
+
+    if args.frame_retries < 1:
+        raise ValueError("--frame-retries must be at least 1")
 
     out_dir = Path(args.out)
     img_dir = out_dir / "images"
@@ -271,81 +337,76 @@ def main():
     captured_hashes = set()
     progress_interval = max(1, len(frames) // 20)
 
-    for route_index, r in enumerate(frames, 1):
-        frame_idx = int(r["frame"])
-        pose = [r["x"], r["y"], r["z"], r["roll"], r["pitch"], r["yaw"]]
+    try:
+        for r in frames:
+            frame_idx = int(r["frame"])
+            pose = [
+                r["x"],
+                r["y"],
+                r["z"],
+                r["roll"],
+                r["pitch"],
+                r["yaw"],
+            ]
 
-        ok = set_pose(args.world, args.name, pose)
-        # Keep consuming the subscription during settling. Otherwise DDS
-        # backlog from the previous pose can be mistaken for the new pose.
-        spin_for(node, args.settle)
-        before = node.counter
-
-        msg = None
-        cnt = before
-        fresh = True
-
-        for _skip in range(args.post_pose_skip):
-            msg, cnt = wait_for_image(node, cnt, args.timeout)
-            if msg is None:
-                fresh = False
-                break
-
-        image_sha256 = None
-        if fresh:
-            msg, cnt, image_sha256 = wait_for_distinct_image(
+            msg, cnt, image_sha256, ok, capture_attempt = capture_frame_at_pose(
                 node,
-                cnt,
-                args.timeout,
-                captured_hashes,
+                world=args.world,
+                name=args.name,
+                pose=pose,
+                settle=args.settle,
+                post_pose_skip=args.post_pose_skip,
+                timeout=args.timeout,
+                captured_hashes=captured_hashes,
+                frame_idx=frame_idx,
+                retries=args.frame_retries,
             )
 
-        if msg is None:
+            bgr = image_msg_to_bgr(msg)
+            captured_hashes.add(image_sha256)
+            img_path = img_dir / f"frame_{frame_idx:04d}.png"
+            if not cv2.imwrite(str(img_path), bgr):
+                raise RuntimeError(f"Could not write captured frame: {img_path}")
+
+            rows.append(
+                {
+                    "frame": frame_idx,
+                    "segment": r["segment"],
+                    "x": r["x"],
+                    "y": r["y"],
+                    "z": r["z"],
+                    "roll": r["roll"],
+                    "pitch": r["pitch"],
+                    "yaw": r["yaw"],
+                    "image": str(img_path),
+                    "set_pose_ok": ok,
+                    "message_counter": cnt,
+                    "image_sha256": image_sha256,
+                    "capture_attempt": capture_attempt,
+                }
+            )
+
             print(
-                f"[WARN] frame {frame_idx:04d}: no fresh image after pose; "
-                "stale data was not written",
-                flush=True,
-            )
-            continue
-
-        bgr = image_msg_to_bgr(msg)
-        captured_hashes.add(image_sha256)
-        img_path = img_dir / f"frame_{frame_idx:04d}.png"
-        cv2.imwrite(str(img_path), bgr)
-
-        rows.append({
-            "frame": frame_idx,
-            "segment": r["segment"],
-            "x": r["x"],
-            "y": r["y"],
-            "z": r["z"],
-            "roll": r["roll"],
-            "pitch": r["pitch"],
-            "yaw": r["yaw"],
-            "image": str(img_path),
-            "set_pose_ok": ok,
-            "message_counter": cnt,
-            "image_sha256": image_sha256,
-        })
-
-        print(
-            f"[CAPTURED] frame_{frame_idx:04d}.png "
-            f"x={r['x']:.2f} y={r['y']:.2f} z={r['z']:.2f} yaw={r['yaw']:.2f}"
-        )
-        if (
-            route_index == 1
-            or route_index % progress_interval == 0
-            or route_index == len(frames)
-        ):
-            print(
-                "RIGCAL_PROGRESS "
-                f"current={route_index} total={len(frames)} "
-                "unit=frames label=Gazebo capture",
-                flush=True,
+                f"[CAPTURED] frame_{frame_idx:04d}.png "
+                f"x={r['x']:.2f} y={r['y']:.2f} z={r['z']:.2f} "
+                f"yaw={r['yaw']:.2f} attempt={capture_attempt}/{args.frame_retries}"
             )
 
-    node.destroy_node()
-    rclpy.shutdown()
+            captured_count = len(rows)
+            if (
+                captured_count == 1
+                or captured_count % progress_interval == 0
+                or captured_count == len(frames)
+            ):
+                print(
+                    "RIGCAL_PROGRESS "
+                    f"current={captured_count} total={len(frames)} "
+                    "unit=frames label=Gazebo capture",
+                    flush=True,
+                )
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
     csv_path = out_dir / "route_commanded.csv"
     with csv_path.open("w", newline="") as f:
@@ -362,6 +423,7 @@ def main():
             "set_pose_ok",
             "message_counter",
             "image_sha256",
+            "capture_attempt",
         ]
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
@@ -373,7 +435,8 @@ def main():
         "===========================\n\n"
         f"Route: {args.route}\n"
         f"Topic: {args.topic}\n"
-        f"Frames captured: {len(rows)}\n\n"
+        f"Frames captured: {len(rows)}\n"
+        f"Same-pose capture retries: {args.frame_retries}\n\n"
         "Files:\n"
         "- images/: captured moving camera frames\n"
         "- route_commanded.csv: commanded pose per frame\n"
