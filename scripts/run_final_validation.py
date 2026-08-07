@@ -150,7 +150,7 @@ def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
             # With sparse overlap, a small high-quality consensus must not be
             # rejected solely because additional weak common markers became
             # outliers. Two agreeing inliers among six historical candidates
-            # corresponds to 1/3 support, so 0.30 is the conservative floor.
+            # corresponds to 1/3 support, so 0.30 is the validation floor.
             "minimum_inlier_ratio": 0.30,
         },
         deep=True,
