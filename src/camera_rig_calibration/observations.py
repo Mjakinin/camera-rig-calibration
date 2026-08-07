@@ -54,6 +54,32 @@ def _median_value(
     return float(statistics.median(values)) if values else None
 
 
+def _is_simulation_dataset(config: RigConfig) -> bool:
+    """Resolve simulation identity from config or canonical prepared metadata.
+
+    Selection previews may intentionally rebuild a lightweight prepared-data
+    config.  The canonical dataset manifest remains authoritative when that
+    preview omits the original category/scene metadata.
+    """
+
+    if config.dataset.category == DatasetCategory.SIMULATION:
+        return True
+    root = config.dataset.prepared_root
+    if root is None:
+        return False
+    metadata = Path(root) / "dataset.json"
+    try:
+        payload = json.loads(metadata.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not isinstance(payload, dict):
+        return False
+    return (
+        str(payload.get("category", "")).strip().lower() == "simulation"
+        or str(payload.get("scene_type", "")).strip().lower() == "simulation"
+    )
+
+
 @dataclass(frozen=True)
 class ResolvedSelections:
     root_camera: str
@@ -79,8 +105,7 @@ def write_selection_candidates_csv(
         int(value) for value in evaluation["observation_candidates"]
     }
     automatic_evaluation_ids = {
-        int(value)
-        for value in evaluation["automatic_observation_candidates"]
+        int(value) for value in evaluation["automatic_observation_candidates"]
     }
     evaluation_candidates = [
         {
@@ -649,7 +674,7 @@ def resolve_selections(
     )
     if (
         ap02_selection_mode == "baseline"
-        and config.dataset.category != DatasetCategory.SIMULATION
+        and not _is_simulation_dataset(config)
     ):
         raise RuntimeError(
             "AP02 baseline reference-marker selection is available only "
