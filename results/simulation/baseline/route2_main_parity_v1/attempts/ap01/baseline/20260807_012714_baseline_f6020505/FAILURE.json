@@ -1,0 +1,18 @@
+{
+  "attempt": "attempts/ap01/baseline/20260807_012714_baseline_f6020505",
+  "cause_code": "method_failed",
+  "current_in_comparison": false,
+  "evidence": "TypeError: Object of type ndarray is not JSON serializable",
+  "explanation": "The method failed; complete evidence is retained in this attempt.",
+  "label": "baseline",
+  "layout_version": 2,
+  "method": "ap01",
+  "original_error": "failed: RuntimeError: AP01: solve static extrinsics exited with code 1; log: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_baseline_queue/jobs/baseline/20260807_012714_baseline_f6020505/logs/ap01_solve_extrinsics.log",
+  "schema_version": 5,
+  "scientific_validity": "incomplete/non-authoritative",
+  "stage": "method_estimation",
+  "status": "failed",
+  "superseded": true,
+  "superseded_at": "2026-08-07T08:59:40+00:00",
+  "superseded_by": "methods/ap01/baseline"
+}

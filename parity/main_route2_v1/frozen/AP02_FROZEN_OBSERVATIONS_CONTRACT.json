@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "reproduction_mode": "historical_ap02_observations_v1",
+  "ground_truth_used": false,
+  "ground_truth_values_included": false,
+  "legacy_commit": "8f9dcea1e8b3189b3c195db2cafe65d5b0e5756b",
+  "source_path": "results/bus_real_data/02_ref_marker_graph_ba/02_aruco_observations/ap02_all_aruco_observations.csv",
+  "acquisition_input": {
+    "dataset_identity_fingerprint": "1536228671cf800e5b569a63b6a60e073aeb5ad2fe50dd04cfe067fd34966d97",
+    "input_fingerprint": "input_cb386b17f71c",
+    "experiment_fingerprint": "1b1ad3b97cfd95dbd7236875e154dbc6689d2efaa0e9a0ff189a9c3cc7171e1a"
+  },
+  "intrinsics": {
+    "aggregate_sha256": "47935bd24bb29cd0853ede324c38d2bc773c25565252f143e20e9915effa0250",
+    "files": {
+      "cam_edge_0": "a43787153e9a59e9da663e6c279c4af493fe2df03e7c3fd6fe008eb4bfe7d364",
+      "cam_edge_1": "716dd687d89a38dead1a2da15f6e7d25b2476df111c084926f20be079e08cdea",
+      "cam_edge_3": "46a142e4d3e423f29f67ca7ce917c04dfbec4a7db8447405d9e4a25abb5b4fc3",
+      "cam_edge_5": "ffb12bfef4d29f86229da433a400dfe8ede5b59e56e876cb7f6fbed6d72e8b12",
+      "moving_calib_camera": "d12b5f4a90d6020af5583673eabccdc10a636269fe0b4ab48a73be5ab0b870a1"
+    }
+  },
+  "method_contract": {
+    "name": "baseline_v1",
+    "scientific_sha256": "7f01fb25fb4a26fbee870636cefd44f2cafa6df6c295a7f711feb84430564f84"
+  },
+  "artifact": {
+    "relative_path": "parity/main_route2_v1/frozen/ap02_all_aruco_observations.csv",
+    "sha256": "d358b584ef10ecbf3d2c971719718d414a3e80228a15abf10e909620cbbe1071",
+    "size_bytes": 239703,
+    "row_count": 513,
+    "ordering_schema_algorithm": "sha256_canonical_json_columns_and_ordered_observer_keys_v1",
+    "ordering_schema_sha256": "74fbbb68dbcfbb5d1644f1ae8d7a36e1ce07b4f0a6f62e5067056070f2a30f8c",
+    "columns": [
+      "observer_type",
+      "observer_id",
+      "camera_name",
+      "frame_id",
+      "image_path",
+      "marker_id",
+      "marker_length_m",
+      "fx",
+      "fy",
+      "cx",
+      "cy",
+      "pnp_success",
+      "rvec_x",
+      "rvec_y",
+      "rvec_z",
+      "tvec_x_m",
+      "tvec_y_m",
+      "tvec_z_m",
+      "distance_m",
+      "center_u",
+      "center_v",
+      "area_px2",
+      "corner0_u",
+      "corner0_v",
+      "corner1_u",
+      "corner1_v",
+      "corner2_u",
+      "corner2_v",
+      "corner3_u",
+      "corner3_v",
+      "distortion_model",
+      "image_width",
+      "image_height",
+      "d0",
+      "d1",
+      "d2",
+      "d3",
+      "d4",
+      "d5",
+      "d6",
+      "d7"
+    ]
+  },
+  "reference_marker_semantics": {
+    "selection_policy": "baseline",
+    "reference_marker_id": 14,
+    "root_pose_policy": "reference_marker_identity_v1"
+  }
+}

@@ -222,6 +222,7 @@ class PipelineOrchestrator:
         transaction_root: Path | None = None,
         reuse_intermediates_from: Path | None = None,
         rerun_metadata: dict[str, Any] | None = None,
+        explicit_method_rerun: bool = False,
     ) -> None:
         self.repository_root = repository_root.resolve()
         self.console = console or Console()
@@ -239,6 +240,7 @@ class PipelineOrchestrator:
         )
         self.reused_method_stages: tuple[str, ...] = ()
         self.rerun_metadata = dict(rerun_metadata or {})
+        self.explicit_method_rerun = explicit_method_rerun
         self.progress = ProgressClock(
             job_id=job_id or "rigcal",
             job_index=job_index,
@@ -464,12 +466,23 @@ class PipelineOrchestrator:
             check=False,
             timeout=10,
         )
-        version = (
-            version_probe.stdout.strip()
-            or version_probe.stderr.strip()
-            or "unknown"
-        ).splitlines()[0]
+        version_text = version_probe.stdout.strip()
+        if version_probe.returncode != 0 or not version_text.startswith("COLMAP"):
+            help_probe = subprocess.run(
+                [str(executable), "-h"],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=10,
+            )
+            version_text = help_probe.stdout.strip() or help_probe.stderr.strip()
+        version = (version_text or "unknown").splitlines()[0]
         method_id = next(iter(config.methods.enabled), "")
+        ap03_explicit_limits = (
+            method_id == "ap03"
+            and config.methods.ap03.feature_limit_policy
+            == "wizard_explicit_limits_v1"
+        )
         requested_label = method_result_label(config, method_id)
         resolved = config.model_copy(
             update={
@@ -511,6 +524,8 @@ class PipelineOrchestrator:
                     requested.ap03_maximum_image_size
                     or requested.maximum_image_size
                 )
+                if ap03_explicit_limits
+                else None
                 if method_id == "ap03"
                 else requested.maximum_image_size
             ),
@@ -519,8 +534,19 @@ class PipelineOrchestrator:
                     requested.ap03_maximum_features
                     or requested.maximum_features
                 )
+                if ap03_explicit_limits
+                else None
                 if method_id == "ap03"
                 else requested.maximum_features
+            ),
+            "configured_ap03_maximum_image_size": (
+                requested.ap03_maximum_image_size
+            ),
+            "configured_ap03_maximum_features": requested.ap03_maximum_features,
+            "ap03_feature_limit_policy": (
+                config.methods.ap03.feature_limit_policy
+                if method_id == "ap03"
+                else None
             ),
             "mapper_minimum_matches": requested.mapper_minimum_matches,
             "intrinsics_refinement": {
@@ -534,8 +560,8 @@ class PipelineOrchestrator:
             "[dim]COLMAP resolved: "
             f"matcher={requested.matcher}, compute={requested.compute_mode}"
             f" -> {resolved_compute_mode}, "
-            f"image_size={self.manifest['colmap_resolution']['maximum_image_size']}, "
-            f"features={self.manifest['colmap_resolution']['maximum_features']}, "
+            f"image_size={self.manifest['colmap_resolution']['maximum_image_size'] or 'COLMAP-default'}, "
+            f"features={self.manifest['colmap_resolution']['maximum_features'] or 'COLMAP-default'}, "
             f"mapper_matches={requested.mapper_minimum_matches}[/dim]"
         )
         return RigConfig.model_validate(resolved.model_dump(mode="python"))
@@ -648,6 +674,7 @@ class PipelineOrchestrator:
         if self.rerun_metadata:
             self.manifest.update(self.rerun_metadata)
             self.manifest["single_method_rerun"] = True
+        self.manifest["explicit_method_rerun"] = self.explicit_method_rerun
         self.run_directory = run
         if (
             self.reuse_intermediates_from is not None
@@ -1204,6 +1231,44 @@ class PipelineOrchestrator:
                 and stored_input == input_id
             )
         return False
+
+    def _validate_conflicting_existing_target(
+        self, target: Path, *, input_id: str
+    ) -> None:
+        """Allow only an explicit same-dataset rerun past a public target."""
+
+        if not self.explicit_method_rerun:
+            raise RuntimeError(
+                "Variant target exists but does not match this method/input "
+                f"fingerprint: {target}"
+            )
+        existing_result = _read_json(target / "RESULT.json")
+        if existing_result.get("input_fingerprint") != input_id:
+            raise RuntimeError(
+                "Explicit method rerun refused: the existing public result "
+                "belongs to a different immutable dataset: "
+                f"{target}"
+            )
+
+    def _validate_explicit_rerun_dataset_identity(
+        self, actual_dataset_identity: dict[str, Any]
+    ) -> None:
+        if not self.explicit_method_rerun:
+            return
+        from .dataset_identity import identities_match
+
+        declared_dataset_identity = self.rerun_metadata.get(
+            "dataset_identity"
+        )
+        if not isinstance(declared_dataset_identity, dict) or not (
+            identities_match(
+                declared_dataset_identity, actual_dataset_identity
+            )
+        ):
+            raise RuntimeError(
+                "Explicit method rerun refused: the prepared input no "
+                "longer matches the exact immutable dataset identity."
+            )
 
     @staticmethod
     def _archive_compact_history(current: Path, history: Path) -> None:
@@ -1836,8 +1901,12 @@ class PipelineOrchestrator:
         ).datasets.resolve()
         from .dataset_identity import build_dataset_identity
 
-        self.manifest["dataset_identity"] = build_dataset_identity(
+        actual_dataset_identity = build_dataset_identity(
             authoritative_dataset_root
+        )
+        self.manifest["dataset_identity"] = actual_dataset_identity
+        self._validate_explicit_rerun_dataset_identity(
+            actual_dataset_identity
         )
         self.manifest["algorithm_version"] = {
             "ap01": "ap01_main_compat_hierarchical_v1",
@@ -2174,10 +2243,13 @@ class PipelineOrchestrator:
                     f"Exact completed result already exists: {target}"
                 )
         elif target.exists():
-            raise RuntimeError(
-                "Variant target exists but does not match this method/input "
-                f"fingerprint: {target}"
+            self._validate_conflicting_existing_target(
+                target, input_id=input_id
             )
+            self.manifest["superseding_public_target_after_validation"] = str(
+                target
+            )
+            self._save_state()
 
         context = RunContext(
             repository_root=self.repository_root,

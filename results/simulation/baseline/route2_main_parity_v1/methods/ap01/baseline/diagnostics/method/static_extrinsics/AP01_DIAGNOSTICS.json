@@ -1,0 +1,463 @@
+{
+  "schema_version": 5,
+  "approach": "AP01_marker_direct_and_moving_colmap_relay",
+  "root_camera": "cam_edge_3",
+  "metric_scale": {
+    "scale_m_per_colmap_unit": 0.676879570208,
+    "raw_pairs": 1869,
+    "used_pairs": 1617,
+    "sfm_mode": "frozen_historical_reproduction",
+    "scale_mode": "frozen_historical_sfm_gauge_scale",
+    "ground_truth_used": false,
+    "source_manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/parity/main_route2_v1/frozen/AP01_FROZEN_SFM_CONTRACT.json",
+    "source_metric_scale_sha256": "f08016b37bbc9fbc45176591fb9c2485c3fb9b43ceb2ecab4c9200f84c031fb8",
+    "method_contract": {
+      "name": "main_route2_parity_v1",
+      "contract_schema_version": 3,
+      "sfm_execution_policy": "frozen_historical_reproduction",
+      "sfm_frozen_intermediate_manifest": "parity/main_route2_v1/frozen/AP01_FROZEN_SFM_CONTRACT.json",
+      "sfm_frozen_intermediate_schema_version": 1,
+      "sfm_frozen_input_fingerprint": "1536228671cf800e5b569a63b6a60e073aeb5ad2fe50dd04cfe067fd34966d97",
+      "sfm_frozen_intrinsics_sha256": "d12b5f4a90d6020af5583673eabccdc10a636269fe0b4ab48a73be5ab0b870a1",
+      "sfm_frozen_images_sha256": "eba9622608b5ea5b955c7031026512e8a9db2ee1db0ed453fa90c3388aa064ff",
+      "colmap_camera_model_policy": "legacy_shared_pinhole_v1",
+      "colmap_single_shared_camera": true,
+      "colmap_intrinsics_serialization": "fixed_decimal_places",
+      "colmap_intrinsics_precision": 8,
+      "colmap_sift_max_features": 4096,
+      "colmap_sift_maximum_image_size": 1600,
+      "colmap_sift_extraction_threads": 1,
+      "colmap_matching_mode": "exhaustive",
+      "colmap_matcher_use_gpu": false,
+      "colmap_sequential_overlap": 20,
+      "colmap_loop_detection": true,
+      "colmap_mapper_minimum_matches": 15,
+      "colmap_refine_focal_length": false,
+      "colmap_refine_principal_point": false,
+      "colmap_refine_extra_parameters": false,
+      "colmap_sparse_model_selection_policy": "maximum_registered_images_first_lexicographic_tie",
+      "scale_execution_policy": "frozen_historical_sfm_gauge_scale",
+      "scale_frozen_metric_sha256": "f08016b37bbc9fbc45176591fb9c2485c3fb9b43ceb2ecab4c9200f84c031fb8",
+      "scale_observation_construction_policy": "legacy_registered_quality_filters_then_all_pairs_v1",
+      "scale_registered_frames_only": true,
+      "scale_pnp_success_only": true,
+      "scale_pnp_quantity_policy": "relative_camera_translation_norm_from_T_cam_marker_v1",
+      "scale_minimum_marker_area_px2": 1200.0,
+      "scale_maximum_marker_distance_m": 4.0,
+      "scale_maximum_center_norm": 0.95,
+      "scale_frame_gap_minimum": 3,
+      "scale_frame_gap_maximum": 45,
+      "scale_metric_translation_minimum_m": 0.12,
+      "scale_metric_translation_maximum_m": 5.0,
+      "scale_colmap_translation_minimum_units": 1e-09,
+      "scale_colmap_translation_rejection_policy": "less_than",
+      "scale_observation_limit_per_marker": null,
+      "scale_sample_multiplicity_policy": "all_within_marker_unordered_frame_pairs",
+      "scale_pair_quality_policy": "sqrt_marker_area_product",
+      "scale_aggregation_policy": "legacy_median_three_sigma_mad_v1",
+      "scale_mad_sigma_factor": 1.4826,
+      "scale_mad_multiplier": 3.0,
+      "scale_relative_deviation_floor_fraction": null,
+      "scale_fallback_minimum_count": 10,
+      "scale_fallback_fraction": 0.3,
+      "scale_final_statistic": "median",
+      "scale_minimum_pair_count": 10,
+      "quality_model": "legacy_area_over_distance_squared_center_v1",
+      "quality_image_width_px": 1280,
+      "quality_image_height_px": 720,
+      "static_support_policy": "best_quality_per_camera_marker_first_tie",
+      "moving_support_policy": "best_quality_per_frame_marker_first_tie_registered_only_frame_ascending",
+      "direct_target_policy": "single_configured_target",
+      "direct_target_camera": "cam_edge_1",
+      "relay_target_policy": "all_non_root",
+      "candidate_construction_order": "all_direct_then_all_relay",
+      "relay_input_limit": null,
+      "direct_aggregation_policy": "legacy_quality_filter_preferred_marker_then_medoid_v1",
+      "relay_aggregation_policy": "legacy_flat_weighted_mad_v1",
+      "candidate_priority_policy": "configured_direct_target_else_relay",
+      "eligibility_policy": "available_aggregate_is_eligible",
+      "consensus_policy": "none",
+      "missing_direct_policy": "omit_without_relay_fallback",
+      "omission_policy": "omit_missing_fixed_aggregate_and_continue",
+      "tie_break_policy": [
+        "first_observation_on_equal_quality",
+        "marker_id_ascending",
+        "moving_frame_ascending",
+        "first_medoid_on_equal_score",
+        "stable_quality_sort",
+        "first_preferred_aggregate_row"
+      ],
+      "preferred_direct_marker_id": 14,
+      "direct_minimum_area_px2": 500.0,
+      "direct_maximum_distance_m": 5.5,
+      "direct_minimum_combined_quality": 20.0,
+      "direct_quality_fallback_count": 2,
+      "direct_translation_mad_floor_m": 0.08,
+      "direct_rotation_mad_floor_deg": 2.0,
+      "relay_translation_mad_floor_m": 0.3,
+      "relay_rotation_mad_floor_deg": 7.0,
+      "relay_fallback_minimum_count": 3,
+      "relay_fallback_fraction": 0.5,
+      "final_pose_serialization_policy": "legacy_aggregate_csv_rpy_roundtrip_v1",
+      "final_pose_serialization_decimal_places": 9,
+      "reproduction_validation_policy": "locked_main_route2_v1",
+      "reproduction_expected_registered_images": 175,
+      "reproduction_expected_total_moving_images": 189,
+      "reproduction_expected_scale_m_per_colmap_unit": 0.676879570208235,
+      "reproduction_scale_absolute_tolerance": 1e-09,
+      "reproduction_expected_candidate_counts": [
+        [
+          "cam_edge_3",
+          "root",
+          1
+        ],
+        [
+          "cam_edge_0",
+          "relay",
+          25230
+        ],
+        [
+          "cam_edge_1",
+          "direct",
+          6
+        ],
+        [
+          "cam_edge_1",
+          "relay",
+          57468
+        ],
+        [
+          "cam_edge_5",
+          "relay",
+          63438
+        ]
+      ],
+      "reproduction_expected_selections": [
+        [
+          "cam_edge_3",
+          "root"
+        ],
+        [
+          "cam_edge_0",
+          "relay"
+        ],
+        [
+          "cam_edge_1",
+          "direct"
+        ],
+        [
+          "cam_edge_5",
+          "relay"
+        ]
+      ],
+      "reproduction_expected_camera_inventory": [
+        "cam_edge_3",
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_5"
+      ],
+      "reproduction_locked_final_pose_path": "parity/main_route2_v1/ap01/final_pose/wizard/AP01_FINAL_CAMERA_POSES.json",
+      "reproduction_locked_final_pose_sha256": "71c56afbaad6b44e907eade31190bec0bf73dfa9f8099a78af4d7c5b459d9024",
+      "reproduction_translation_tolerance_m": 1e-09,
+      "reproduction_rotation_matrix_tolerance": 1e-10
+    },
+    "method_contract_sha256": "5051e69eb9acf4e75539b66da3a333b2510760e8cc888bc24e1c99533a003d51"
+  },
+  "static_camera_methods": {
+    "cam_edge_3": "gauge_identity",
+    "cam_edge_0": "moving_relay_multichain_colmap_motion_aruco_metric_scale",
+    "cam_edge_1": "direct_static_aruco_multimarker",
+    "cam_edge_5": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+  },
+  "camera_statuses": {
+    "cam_edge_3": {
+      "estimate_status": "available",
+      "quality_status": "gauge_identity",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "gauge_identity"
+    },
+    "cam_edge_0": {
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    },
+    "cam_edge_1": {
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "direct_static_aruco_multimarker"
+    },
+    "cam_edge_5": {
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    }
+  },
+  "per_target_diagnostics": {
+    "cam_edge_0": {
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale",
+      "selected_candidate_type": "relay",
+      "quality_warning": null,
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_aggregate": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "num_candidates": 25230,
+        "num_inliers": 16751,
+        "num_outliers": 8479,
+        "translation_deviation_median_m": 0.27259337321735566,
+        "translation_deviation_mad_scaled_m": 0.21796463020041845,
+        "translation_inlier_threshold_m": 0.926487263818611,
+        "rotation_deviation_median_deg": 6.887311793647895,
+        "rotation_deviation_mad_scaled_deg": 4.070049413595539,
+        "rotation_inlier_threshold_deg": 19.097460034434512,
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false
+      },
+      "direct": null,
+      "relay": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "num_candidates": 25230,
+        "num_inliers": 16751,
+        "num_outliers": 8479,
+        "translation_deviation_median_m": 0.27259337321735566,
+        "translation_deviation_mad_scaled_m": 0.21796463020041845,
+        "translation_inlier_threshold_m": 0.926487263818611,
+        "rotation_deviation_median_deg": 6.887311793647895,
+        "rotation_deviation_mad_scaled_deg": 4.070049413595539,
+        "rotation_inlier_threshold_deg": 19.097460034434512,
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false
+      },
+      "relay_raw_candidate_count": 25230,
+      "relay_independent_chain_count": null,
+      "direct_relay_consistency": {
+        "available": false,
+        "consistent": null,
+        "gate_applied": false
+      }
+    },
+    "cam_edge_1": {
+      "selected_method": "direct_static_aruco_multimarker",
+      "selected_candidate_type": "direct",
+      "quality_warning": null,
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_aggregate": {
+        "selected_aggregate_type": "quality_filtered_preferred_marker_no_gt_selection",
+        "aggregate_priority": [
+          "quality_filtered_preferred_marker_no_gt_selection",
+          "quality_filtered_weighted_mean_no_gt_selection",
+          "weighted_mean_of_mad_inliers_no_gt_selection",
+          "se3_medoid_no_gt_selection"
+        ],
+        "selected_marker_id": 14,
+        "selected_candidate_index": 5,
+        "selection_note": "marker14_visible_and_passed_no_gt_quality_filter",
+        "quality_filter_fallback_used": false,
+        "num_candidates": 6,
+        "num_quality_candidates": 2,
+        "num_quality_mad_inliers": 2,
+        "quality_subset_medoid_score": 0.13069371538732208,
+        "quality_subset_mad": {
+          "translation_deviation_median_m": 0.0468265865445616,
+          "translation_deviation_mad_scaled_m": 0.06942509721096703,
+          "translation_inlier_threshold_m": 0.2551018781774627,
+          "rotation_deviation_median_deg": 0.9260135574549722,
+          "rotation_deviation_mad_scaled_deg": 1.3729077002827417,
+          "rotation_inlier_threshold_deg": 5.044736658303197
+        },
+        "quality_filtered_weighted_mean_diagnostic": [
+          [
+            0.5789044297302868,
+            -0.2026662059671991,
+            0.7898076159404341,
+            -2.18077157684791
+          ],
+          [
+            0.25233020148411384,
+            0.9655995762495817,
+            0.06282457931108479,
+            -0.15781387425845966
+          ],
+          [
+            -0.7753703184012386,
+            0.1629228876048086,
+            0.6101286766222949,
+            0.35036016196904957
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "ground_truth_used": false
+      },
+      "direct": {
+        "selected_aggregate_type": "quality_filtered_preferred_marker_no_gt_selection",
+        "aggregate_priority": [
+          "quality_filtered_preferred_marker_no_gt_selection",
+          "quality_filtered_weighted_mean_no_gt_selection",
+          "weighted_mean_of_mad_inliers_no_gt_selection",
+          "se3_medoid_no_gt_selection"
+        ],
+        "selected_marker_id": 14,
+        "selected_candidate_index": 5,
+        "selection_note": "marker14_visible_and_passed_no_gt_quality_filter",
+        "quality_filter_fallback_used": false,
+        "num_candidates": 6,
+        "num_quality_candidates": 2,
+        "num_quality_mad_inliers": 2,
+        "quality_subset_medoid_score": 0.13069371538732208,
+        "quality_subset_mad": {
+          "translation_deviation_median_m": 0.0468265865445616,
+          "translation_deviation_mad_scaled_m": 0.06942509721096703,
+          "translation_inlier_threshold_m": 0.2551018781774627,
+          "rotation_deviation_median_deg": 0.9260135574549722,
+          "rotation_deviation_mad_scaled_deg": 1.3729077002827417,
+          "rotation_inlier_threshold_deg": 5.044736658303197
+        },
+        "quality_filtered_weighted_mean_diagnostic": [
+          [
+            0.5789044297302868,
+            -0.2026662059671991,
+            0.7898076159404341,
+            -2.18077157684791
+          ],
+          [
+            0.25233020148411384,
+            0.9655995762495817,
+            0.06282457931108479,
+            -0.15781387425845966
+          ],
+          [
+            -0.7753703184012386,
+            0.1629228876048086,
+            0.6101286766222949,
+            0.35036016196904957
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "ground_truth_used": false
+      },
+      "relay": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "num_candidates": 57468,
+        "num_inliers": 48253,
+        "num_outliers": 9215,
+        "translation_deviation_median_m": 2.3284188687903056,
+        "translation_deviation_mad_scaled_m": 2.0150085042964387,
+        "translation_inlier_threshold_m": 8.373444381679622,
+        "rotation_deviation_median_deg": 15.88729271974081,
+        "rotation_deviation_mad_scaled_deg": 18.3610438988792,
+        "rotation_inlier_threshold_deg": 70.9704244163784,
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false
+      },
+      "relay_raw_candidate_count": 57468,
+      "relay_independent_chain_count": null,
+      "direct_relay_consistency": {
+        "available": true,
+        "consistent": null,
+        "gate_applied": false
+      }
+    },
+    "cam_edge_5": {
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale",
+      "selected_candidate_type": "relay",
+      "quality_warning": null,
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_aggregate": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "num_candidates": 63438,
+        "num_inliers": 62848,
+        "num_outliers": 590,
+        "translation_deviation_median_m": 1.716429315553376,
+        "translation_deviation_mad_scaled_m": 1.6312337128706709,
+        "translation_inlier_threshold_m": 6.610130454165389,
+        "rotation_deviation_median_deg": 15.691193362170878,
+        "rotation_deviation_mad_scaled_deg": 17.74972909178756,
+        "rotation_inlier_threshold_deg": 68.94038063753356,
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false
+      },
+      "direct": null,
+      "relay": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "num_candidates": 63438,
+        "num_inliers": 62848,
+        "num_outliers": 590,
+        "translation_deviation_median_m": 1.716429315553376,
+        "translation_deviation_mad_scaled_m": 1.6312337128706709,
+        "translation_inlier_threshold_m": 6.610130454165389,
+        "rotation_deviation_median_deg": 15.691193362170878,
+        "rotation_deviation_mad_scaled_deg": 17.74972909178756,
+        "rotation_inlier_threshold_deg": 68.94038063753356,
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false
+      },
+      "relay_raw_candidate_count": 63438,
+      "relay_independent_chain_count": null,
+      "direct_relay_consistency": {
+        "available": false,
+        "consistent": null,
+        "gate_applied": false
+      }
+    }
+  },
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "missing_static_cameras": [],
+  "quality_gates": {
+    "direct": {
+      "minimum_independent_markers": 3,
+      "minimum_inlier_ratio": 0.7,
+      "maximum_translation_dispersion_m": 0.12,
+      "maximum_rotation_dispersion_deg": 4.0
+    },
+    "relay": {
+      "minimum_inlier_ratio": 0.7,
+      "maximum_translation_dispersion_m": 0.3,
+      "maximum_rotation_dispersion_deg": 7.0
+    },
+    "direct_relay_consistency": {
+      "maximum_translation_disagreement_m": 0.12,
+      "maximum_rotation_disagreement_deg": 4.0
+    }
+  },
+  "quality_warnings": [],
+  "quality_status": "good",
+  "ground_truth_used": false,
+  "deployment_eligible_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "scientific_estimate_count": 4,
+  "deployment_estimate_count": 4
+}

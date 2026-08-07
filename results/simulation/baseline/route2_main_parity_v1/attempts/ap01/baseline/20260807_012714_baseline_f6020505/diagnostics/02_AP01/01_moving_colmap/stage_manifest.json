@@ -1,0 +1,25 @@
+{
+  "completed_at": "2026-08-06T23:31:28.066+00:00",
+  "inputs": {
+    "camera_info": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_baseline_queue/dataset/raw_images/camera_info/moving_calib_camera.json",
+    "moving_images": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_baseline_queue/dataset/raw_images/moving"
+  },
+  "outputs": {
+    "images_txt": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_baseline_queue/jobs/baseline/20260807_012714_baseline_f6020505/02_AP01/01_moving_colmap/sparse_txt_best/images.txt",
+    "registered_images": 189
+  },
+  "parameters": {
+    "gpu": false,
+    "loop_detection": true,
+    "mapper_minimum_matches": 8,
+    "matcher": "exhaustive",
+    "maximum_features": 4096,
+    "maximum_image_size": 1600,
+    "sequential_overlap": 20
+  },
+  "runtime_seconds": 238.611132769,
+  "schema_version": 5,
+  "stage_id": "ap01.reconstruct_moving",
+  "started_at": "2026-08-06T23:27:22.831+00:00",
+  "status": "COMPLETED"
+}

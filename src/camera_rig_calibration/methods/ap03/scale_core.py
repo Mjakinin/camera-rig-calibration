@@ -122,6 +122,7 @@ def detect_marker_observations(
     dictionary: str,
     image_dir: Path,
     detection_mode: str = "baseline",
+    minimum_marker_area_px2: float = 0.0,
 ) -> list[dict]:
     detect = make_aruco_detector(dictionary, detection_mode)
     obs = []
@@ -145,6 +146,8 @@ def detect_marker_observations(
 
             pts = np.asarray(corners[idx], dtype=np.float64).reshape(4, 2)
             area = float(cv2.contourArea(pts.astype(np.float32)))
+            if area < minimum_marker_area_px2:
+                continue
 
             for corner_idx in range(4):
                 obs.append({
@@ -393,6 +396,15 @@ def main() -> None:
     ap.add_argument("--inspect-summary", type=Path)
     ap.add_argument("--accepted-observations", type=Path)
     ap.add_argument("--maximum-observations-per-marker", type=int)
+    ap.add_argument("--min-area-px2", type=float, default=100.0)
+    ap.add_argument(
+        "--scale-input-policy",
+        choices=(
+            "legacy_registered_image_redetection_v1",
+            "wizard_filtered_observations_v1",
+        ),
+        default="legacy_registered_image_redetection_v1",
+    )
     ap.add_argument("--static-cameras", default=",".join(STATIC_CAMERAS))
     args = ap.parse_args()
     static_cameras = [
@@ -471,6 +483,7 @@ def main() -> None:
                 args.dictionary,
                 image_dir,
                 args.detection_mode,
+                args.min_area_px2,
             )
             if args.accepted_observations is not None:
                 allowed: dict[tuple[str, int], dict[str, str]] = {}
@@ -512,11 +525,12 @@ def main() -> None:
                     in allowed
                 ]
             detected_corner_observation_count = len(obs)
-            obs, observation_selection_rows = (
-                select_observations_per_marker(
-                    obs, args.maximum_observations_per_marker
+            if args.scale_input_policy == "wizard_filtered_observations_v1":
+                obs, observation_selection_rows = (
+                    select_observations_per_marker(
+                        obs, args.maximum_observations_per_marker
+                    )
                 )
-            )
             corners_3d, tri_rows = triangulate_marker_corners(
                 obs, images, cameras, args
             )
@@ -637,6 +651,8 @@ def main() -> None:
         "num_sparse_points3d": len(points3d),
         "marker_ids_requested": sorted(marker_ids),
         "marker_length_m": args.marker_length_m,
+        "minimum_marker_area_px2": args.min_area_px2,
+        "scale_input_policy": args.scale_input_policy,
         "detection_mode": args.detection_mode,
         "maximum_observations_per_marker": (
             args.maximum_observations_per_marker

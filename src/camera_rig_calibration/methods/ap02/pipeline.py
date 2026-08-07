@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from ...components.common import calibration_requirements, read_method_status
 from ...config.models import AP02Settings
 from ...contracts import CommandSpec, RequirementResult, RunContext
+from .contracts import resolve_ap02_method_contract
 
 
 @dataclass(frozen=True)
@@ -18,7 +19,7 @@ class AP02Method:
     """Connect the AP02 graph/BA stages to the generic rigcal runtime."""
 
     id: str = "ap02"
-    display_name: str = "AP02 Baseline"
+    display_name: str = "AP02"
     config_model: type[BaseModel] = AP02Settings
 
     def requirements(self, context: RunContext) -> RequirementResult:
@@ -33,6 +34,33 @@ class AP02Method:
         settings = context.config.methods.ap02
         output = context.run_directory / "03_AP02"
         reference = str(context.resolved_ap02_reference_marker_id)
+        contract = resolve_ap02_method_contract(
+            settings.method_contract,
+            reference_marker_selection_mode=(
+                settings.reference_marker_selection_mode
+            ),
+            reference_marker_id=context.resolved_ap02_reference_marker_id,
+            frame_selection_strategy=settings.frame_selection_strategy,
+            initialization_strategy=settings.initialization_strategy,
+            graph_edge_weight_strategy=(
+                settings.graph_edge_weight_strategy
+            ),
+            reprojection_model=settings.reprojection_model,
+            reference_marker_maximum_frames=(
+                settings.reference_marker_maximum_frames
+            ),
+            top_per_marker=settings.top_per_marker,
+            top_per_marker_pair=settings.top_per_marker_pair,
+            maximum_total_frames=settings.maximum_total_frames,
+            static_maximum_function_evaluations=(
+                settings.static_only_ba_max_function_evaluations
+            ),
+            combined_maximum_function_evaluations=(
+                settings.combined_ba_max_function_evaluations
+            ),
+            robust_loss=settings.ba_robust_loss,
+            robust_loss_scale_px=settings.ba_robust_loss_scale_px,
+        )
         cameras = ",".join(
             camera.id for camera in context.config.static_cameras
         )
@@ -49,6 +77,11 @@ class AP02Method:
         ):
             if value is not None:
                 selection_arguments.extend([option, str(value)])
+        historical_arguments = (
+            ["--historical-reproduction"]
+            if settings.historical_reproduction
+            else []
+        )
         stages = [
             (
                 "ap02_build_graph",
@@ -58,12 +91,19 @@ class AP02Method:
                     "camera_rig_calibration.methods.ap02.build_graph",
                     "--observations-root",
                     str(context.observations_root),
+                    "--dataset",
+                    str(context.dataset_root),
                     "--out",
                     str(output),
                     "--cameras",
                     cameras,
                     "--ref-marker-id",
                     reference,
+                    "--graph-observation-policy",
+                    contract.graph_observation_policy,
+                    "--method-contract-sha256",
+                    contract.scientific_fingerprint(),
+                    *historical_arguments,
                     *selection_arguments,
                 ],
                 output / "02_aruco_observations",
@@ -78,11 +118,11 @@ class AP02Method:
                     "--out",
                     str(output),
                     "--max-nfev",
-                    str(settings.combined_ba_max_function_evaluations),
+                    str(contract.combined_maximum_function_evaluations),
                     "--robust-loss",
-                    settings.ba_robust_loss,
+                    contract.robust_loss,
                     "--robust-loss-scale-px",
-                    str(settings.ba_robust_loss_scale_px),
+                    str(contract.robust_loss_scale_px),
                 ],
                 output / "09_component_diagnostics",
                 ("ap02_build_graph",),
@@ -99,6 +139,10 @@ class AP02Method:
                     reference,
                     "--mode",
                     "static_only",
+                    "--initialization-algorithm",
+                    contract.initialization_algorithm,
+                    "--edge-weight-policy",
+                    contract.graph_edge_weight_policy,
                 ],
                 output / "05_graph_initialization/static_only",
                 ("ap02_build_graph",),
@@ -116,11 +160,17 @@ class AP02Method:
                     "--mode",
                     "static_only",
                     "--max-nfev",
-                    str(settings.static_only_ba_max_function_evaluations),
+                    str(contract.static_maximum_function_evaluations),
                     "--robust-loss",
-                    settings.ba_robust_loss,
+                    contract.robust_loss,
                     "--robust-loss-scale-px",
-                    str(settings.ba_robust_loss_scale_px),
+                    str(contract.robust_loss_scale_px),
+                    "--reprojection-model",
+                    contract.reprojection_model,
+                    "--moving-frame-selection-policy",
+                    contract.moving_frame_selection_policy,
+                    *historical_arguments,
+                    *selection_arguments,
                 ],
                 output / "07_graph_ba/static_only",
                 ("ap02_static_initialization",),
@@ -137,6 +187,10 @@ class AP02Method:
                     reference,
                     "--mode",
                     "with_moving",
+                    "--initialization-algorithm",
+                    contract.initialization_algorithm,
+                    "--edge-weight-policy",
+                    contract.graph_edge_weight_policy,
                 ],
                 output / "05_graph_initialization/with_moving",
                 ("ap02_build_graph",),
@@ -154,11 +208,17 @@ class AP02Method:
                     "--mode",
                     "with_moving",
                     "--max-nfev",
-                    str(settings.combined_ba_max_function_evaluations),
+                    str(contract.combined_maximum_function_evaluations),
                     "--robust-loss",
-                    settings.ba_robust_loss,
+                    contract.robust_loss,
                     "--robust-loss-scale-px",
-                    str(settings.ba_robust_loss_scale_px),
+                    str(contract.robust_loss_scale_px),
+                    "--reprojection-model",
+                    contract.reprojection_model,
+                    "--moving-frame-selection-policy",
+                    contract.moving_frame_selection_policy,
+                    *historical_arguments,
+                    *selection_arguments,
                 ],
                 output / "07_graph_ba/with_moving",
                 ("ap02_combined_initialization",),

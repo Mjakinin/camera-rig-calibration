@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "status": "CLOSED",
+  "historical_main_commit": "8f9dcea1e8b3189b3c195db2cafe65d5b0e5756b",
+  "experiment": "results/simulation/baseline/route2_main_parity_v1",
+  "production_command": "wsl.exe --cd $PWD -e env PYTHONPATH=src workspace/.venv-wsl/bin/python -m camera_rig_calibration.cli rerun-method --experiment results/simulation/baseline/route2_main_parity_v1 --method ap03 --variant baseline --reuse-prepared-input --reconcile-after --ap03-method-contract baseline_v1",
+  "queue_id": "route2_main_parity_v1_ap03_baseline_rerun_20260807_124517_101615",
+  "run_id": "20260807_124540_baseline_7954c456",
+  "method_fingerprint": "08e20b57c9826cfe217421a93600c0ee5dfee427176e0c8081ee496d052f2647",
+  "method_contract_sha256": "95cb5f2c60518a098e4f501a6c0f9ac321c7c0c10dfadb179daee8774cdcb7c8",
+  "dataset_identity_fingerprint": "1536228671cf800e5b569a63b6a60e073aeb5ad2fe50dd04cfe067fd34966d97",
+  "input": {
+    "static_images": 4,
+    "moving_images": 189,
+    "total_images": 193,
+    "camera_info_files": 5
+  },
+  "environment": {
+    "executable": "/usr/bin/colmap",
+    "version": "COLMAP 3.9.1 -- Structure-from-Motion and Multi-View Stereo",
+    "build": "Commit Unknown on Unknown without CUDA",
+    "os": "WSL2 Linux 6.18.33.2-microsoft-standard-WSL2 x86_64",
+    "python": "3.12.3",
+    "compute": "cpu_baseline"
+  },
+  "resolved_contract": {
+    "name": "baseline_v1",
+    "feature_limit_policy": "legacy_colmap_defaults_v1",
+    "effective_maximum_image_size": null,
+    "effective_maximum_features": null,
+    "matcher": "exhaustive",
+    "mapper_minimum_matches": 8,
+    "fixed_intrinsics": true,
+    "primary_marker_ids": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+    "scale_input_policy": "legacy_registered_image_redetection_v1",
+    "minimum_marker_area_px2": 100.0,
+    "reference_frame": "native COLMAP gauge; translations scaled only",
+    "ground_truth_used": false,
+    "single_role": "diagnostic",
+    "multi_role": "primary"
+  },
+  "result": {
+    "selected_model": "0",
+    "registered_static_images": 4,
+    "registered_moving_images": 175,
+    "registered_total_images": 179,
+    "sparse_points": 11294,
+    "scale_m_per_colmap_unit": 0.6877194974999671,
+    "scale_observations_used": 90,
+    "scale_observations_total": 90,
+    "scale_relative_std": 0.010816982620476258,
+    "static_camera_count": 4,
+    "unordered_pair_count": 6,
+    "publication": "published_transactionally",
+    "reconciliation": "completed",
+    "evaluation": "unavailable_missing_published_world_snapshot"
+  },
+  "historical_comparison": {
+    "classification": "DIFFERENT_REGISTERED_IMAGES_BUT_EQUIVALENT_FINAL_EXTRINSICS",
+    "alignment_applied": false,
+    "historical_registered_static": 4,
+    "historical_registered_moving": 189,
+    "historical_registered_total": 193,
+    "inventory_equal": true,
+    "reference_convention_equal": true,
+    "absolute_pose_maximum_translation_delta_m": 1.0617164744360874,
+    "absolute_pose_maximum_rotation_delta_deg": 12.041894448167898,
+    "pairwise_maximum_translation_delta_m": 0.016673360665425206,
+    "pairwise_maximum_rotation_delta_deg": 0.06921668152317029,
+    "pairwise": {
+      "cam_edge_0-cam_edge_1": {"translation_delta_m": 0.01238049603482289, "rotation_delta_deg": 0.06921668152317029},
+      "cam_edge_0-cam_edge_3": {"translation_delta_m": 0.008923005842606085, "rotation_delta_deg": 0.059718634125624864},
+      "cam_edge_0-cam_edge_5": {"translation_delta_m": 0.008411584008038231, "rotation_delta_deg": 0.06449573003391575},
+      "cam_edge_1-cam_edge_3": {"translation_delta_m": 0.004724025483231904, "rotation_delta_deg": 0.012986126991252536},
+      "cam_edge_1-cam_edge_5": {"translation_delta_m": 0.016673360665425206, "rotation_delta_deg": 0.022696423451147068},
+      "cam_edge_3-cam_edge_5": {"translation_delta_m": 0.014880503338648746, "rotation_delta_deg": 0.02218918181762753}
+    },
+    "registration_difference_cause": "same immutable pixels and Main-compatible command; modern COLMAP 3.9.1 environment/numerics",
+    "historical_artifact_note": "The committed historical metadata lists markers 16-20 in addition to 0-14, but the committed canonical run script explicitly invokes --marker-ids 0-14. baseline_v1 follows the executable Main source contract."
+  },
+  "protected_methods": {
+    "ap01": {
+      "pre_run_complete_tree_sha256": "c2295ffa5d49fd9cc46308a8d3e4612b53ca5b7147b30f7904dcf715e0df12aa",
+      "post_reconcile_complete_tree_sha256": "e56a6ca2876e486ca013448beb43495569a9c176c19a098c3795b49ec0e23e16",
+      "only_regenerated_file": "baseline/pairwise_camera_extrinsics.csv",
+      "authoritative_native_artifacts_unchanged": true,
+      "post_run_authoritative_sha256": "57ed0bce1837586a9b09eccdd2aea0eb9bea47165dd6d0cded89d8f6f0dfe94b"
+    },
+    "ap02": {
+      "pre_run_complete_tree_sha256": "0c1a492690ab720cc19a5b1a216c90575015eef9c280843758b3dc9d7fffa69e",
+      "post_reconcile_complete_tree_sha256": "98f9d8aa5f1ebbe8fbf034802fe8bca253ca5d55747ffae60fee200ce071ae81",
+      "only_regenerated_file": "baseline/pairwise_camera_extrinsics.csv",
+      "authoritative_native_artifacts_unchanged": true,
+      "post_run_authoritative_sha256": "a121928e01ca3dcbd331bea92616bfdd5b893d7b9c319eecdb7f33d489b854a7"
+    },
+    "reconciliation_native_artifact_check": {
+      "passed": true,
+      "artifact_count_all_methods": 332
+    }
+  },
+  "verification": {
+    "focused_tests": "50 passed",
+    "diff_check": "passed",
+    "production_ap03_runs": 1,
+    "ap01_reruns": 0,
+    "ap02_reruns": 0
+  }
+}

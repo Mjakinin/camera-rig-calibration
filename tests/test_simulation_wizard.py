@@ -202,6 +202,7 @@ def test_sequential_only_settings_are_contextual() -> None:
     assert "sequential_overlap" not in exhaustive_keys
     assert "loop_detection" not in exhaustive_keys
 
+    job.methods.ap01.advanced_strategy = "wizard_robustness_v1"
     job.colmap = job.colmap.model_copy(update={"matcher": "sequential"})
     sequential_keys = {row[0] for row in _setting_rows(job)}
     assert "sequential_overlap" in sequential_keys
@@ -758,7 +759,7 @@ def test_method_job_duplicate_is_a_deep_snapshot() -> None:
         deep=True,
     )
 
-    assert original.methods.ap03.multi.marker_ids == "auto"
+    assert original.methods.ap03.multi.marker_ids == list(range(15))
     assert duplicate.methods.ap03.multi.marker_ids == [7, 9]
 
 

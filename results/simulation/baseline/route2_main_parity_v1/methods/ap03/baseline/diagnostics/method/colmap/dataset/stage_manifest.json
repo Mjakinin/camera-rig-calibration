@@ -1,0 +1,26 @@
+{
+  "completed_at": "2026-08-07T10:45:51.175+00:00",
+  "inputs": {
+    "canonical_dataset": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap03_baseline_rerun_20260807_124517_101615/dataset"
+  },
+  "outputs": {
+    "images": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap03_baseline_rerun_20260807_124517_101615/jobs/ap03_baseline/20260807_124540_baseline_7954c456/04_AP03/colmap/dataset/images",
+    "manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap03_baseline_rerun_20260807_124517_101615/jobs/ap03_baseline/20260807_124540_baseline_7954c456/04_AP03/colmap/dataset/image_manifest.csv",
+    "moving_images": 189,
+    "static_images": 4
+  },
+  "parameters": {
+    "camera_ids": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "moving_camera_id": "moving_calib_camera"
+  },
+  "runtime_seconds": 1.7381005630000033,
+  "schema_version": 5,
+  "stage_id": "ap03.prepare_colmap",
+  "started_at": "2026-08-07T10:45:49.437+00:00",
+  "status": "COMPLETED"
+}

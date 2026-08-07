@@ -1,0 +1,40 @@
+{
+  "classification": "EXACT",
+  "colmap_invoked": false,
+  "compared_fields": "camera/frame/marker keys, original order, corners and corner order, PnP rotation/translation, reprojection, camera model, geometry, quality/filter decisions, detector metadata, and duplicate occurrences",
+  "difference_count": 0,
+  "duplicate_base_key_count_locked": 0,
+  "duplicate_base_key_count_prepared": 0,
+  "expected_counts": {
+    "moving": 524,
+    "static": 30,
+    "total": 554
+  },
+  "first_causal_divergence": null,
+  "ground_truth_used": false,
+  "image_filename_parity": true,
+  "image_path_policy": "absolute source roots are provenance-only; semantic comparison requires the same filename and excludes the absolute prefix",
+  "locked_counts": {
+    "moving": 524,
+    "static": 30,
+    "total": 554
+  },
+  "original_order_exact": true,
+  "prepared_counts": {
+    "moving": 524,
+    "static": 30,
+    "total": 554
+  },
+  "row_key_fields": [
+    "source_kind",
+    "camera_id",
+    "frame_id",
+    "marker_id",
+    "occurrence_index"
+  ],
+  "row_keys_exact": true,
+  "schema_version": 1,
+  "semantic_fields_exact": true,
+  "solver_invoked": false,
+  "status": "equal"
+}

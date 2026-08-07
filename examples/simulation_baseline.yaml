@@ -60,10 +60,12 @@ colmap:
 methods:
   enabled: [ap03]
   ap03:
+    method_contract: baseline_v1
+    minimum_marker_area_px2: 100.0
     single:
-      scale_marker_id: auto
+      scale_marker_id: 14
     multi:
-      marker_ids: auto
+      marker_ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
     scale:
       reprojection_threshold_px: 5.0
       ransac_iterations: 1000

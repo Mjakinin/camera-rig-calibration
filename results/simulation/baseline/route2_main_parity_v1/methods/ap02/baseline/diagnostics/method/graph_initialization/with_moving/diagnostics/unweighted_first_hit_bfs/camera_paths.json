@@ -1,0 +1,322 @@
+[
+  {
+    "camera_id": "cam_edge_0",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:cam_edge_1",
+        "observation": {
+          "selection_score": 9.1577423972267,
+          "pnp_reprojection_rmse_px": 0.14203376265054027,
+          "marker_area_ratio": 0.0,
+          "area_px2": 652.0,
+          "distance_m": 4.570408053475575,
+          "observer_id": "cam_edge_1",
+          "marker_id": 14,
+          "frame_id": "static",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_1.png"
+        }
+      },
+      {
+        "from": "observer:cam_edge_1",
+        "to": "marker:7",
+        "observation": {
+          "selection_score": 7.67255522330154,
+          "pnp_reprojection_rmse_px": 0.23353963795061633,
+          "marker_area_ratio": 0.0,
+          "area_px2": 834.0,
+          "distance_m": 6.118902976384111,
+          "observer_id": "cam_edge_1",
+          "marker_id": 7,
+          "frame_id": "static",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_1.png"
+        }
+      },
+      {
+        "from": "marker:7",
+        "to": "observer:cam_edge_0",
+        "observation": {
+          "selection_score": 19.274394350413303,
+          "pnp_reprojection_rmse_px": 0.27642109079268934,
+          "marker_area_ratio": 0.0,
+          "area_px2": 2813.0,
+          "distance_m": 2.852544085963125,
+          "observer_id": "cam_edge_0",
+          "marker_id": 7,
+          "frame_id": "static",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_0.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 7.67255522330154,
+    "path_mean_score": 12.034897323647181,
+    "weakest_edge": {
+      "from": "observer:cam_edge_1",
+      "to": "marker:7",
+      "observation": {
+        "selection_score": 7.67255522330154,
+        "pnp_reprojection_rmse_px": 0.23353963795061633,
+        "marker_area_ratio": 0.0,
+        "area_px2": 834.0,
+        "distance_m": 6.118902976384111,
+        "observer_id": "cam_edge_1",
+        "marker_id": 7,
+        "frame_id": "static",
+        "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_1.png"
+      }
+    },
+    "initial_pose": [
+      [
+        0.9946651849906979,
+        -0.08722549818882488,
+        0.055071610046666136,
+        0.5314945778800075
+      ],
+      [
+        -0.0879030749448171,
+        -0.43731345107288827,
+        0.8950027904570838,
+        -1.6027799961248466
+      ],
+      [
+        -0.0539835084323598,
+        -0.8950690800024497,
+        -0.44264785421472586,
+        2.3829041624508775
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "cam_edge_1",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:cam_edge_1",
+        "observation": {
+          "selection_score": 9.1577423972267,
+          "pnp_reprojection_rmse_px": 0.14203376265054027,
+          "marker_area_ratio": 0.0,
+          "area_px2": 652.0,
+          "distance_m": 4.570408053475575,
+          "observer_id": "cam_edge_1",
+          "marker_id": 14,
+          "frame_id": "static",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_1.png"
+        }
+      }
+    ],
+    "path_length": 1,
+    "path_bottleneck_score": 9.1577423972267,
+    "path_mean_score": 9.1577423972267,
+    "weakest_edge": {
+      "from": "marker:14",
+      "to": "observer:cam_edge_1",
+      "observation": {
+        "selection_score": 9.1577423972267,
+        "pnp_reprojection_rmse_px": 0.14203376265054027,
+        "marker_area_ratio": 0.0,
+        "area_px2": 652.0,
+        "distance_m": 4.570408053475575,
+        "observer_id": "cam_edge_1",
+        "marker_id": 14,
+        "frame_id": "static",
+        "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_1.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.4219673516667213,
+        -0.23342158082431363,
+        0.8760467565905669,
+        -4.041222742934984
+      ],
+      [
+        -0.906485147299462,
+        0.12472895501076553,
+        -0.4033948010416038,
+        0.52001539759204
+      ],
+      [
+        -0.015107344334671424,
+        -0.9643428090608654,
+        -0.26422474289845166,
+        2.0704425863874194
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "cam_edge_3",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:cam_edge_3",
+        "observation": {
+          "selection_score": 9.760939671081772,
+          "pnp_reprojection_rmse_px": 0.1652401214177915,
+          "marker_area_ratio": 0.0,
+          "area_px2": 735.0,
+          "distance_m": 4.184488347246913,
+          "observer_id": "cam_edge_3",
+          "marker_id": 14,
+          "frame_id": "static",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_3.png"
+        }
+      }
+    ],
+    "path_length": 1,
+    "path_bottleneck_score": 9.760939671081772,
+    "path_mean_score": 9.760939671081772,
+    "weakest_edge": {
+      "from": "marker:14",
+      "to": "observer:cam_edge_3",
+      "observation": {
+        "selection_score": 9.760939671081772,
+        "pnp_reprojection_rmse_px": 0.1652401214177915,
+        "marker_area_ratio": 0.0,
+        "area_px2": 735.0,
+        "distance_m": 4.184488347246913,
+        "observer_id": "cam_edge_3",
+        "marker_id": 14,
+        "frame_id": "static",
+        "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_3.png"
+      }
+    },
+    "initial_pose": [
+      [
+        0.4999506987411173,
+        -0.29860239539044975,
+        0.8129488964844926,
+        -3.282937891706726
+      ],
+      [
+        -0.8657995377505299,
+        -0.1495777746909121,
+        0.477511936761254,
+        -1.5559081872312692
+      ],
+      [
+        -0.020987121270860276,
+        -0.9425832052320902,
+        -0.3333113288731151,
+        2.0763938066629137
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "cam_edge_5",
+    "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+    "selected_graph_path": [
+      {
+        "from": "marker:14",
+        "to": "observer:moving_frame_000028",
+        "observation": {
+          "selection_score": 12.006906362295311,
+          "pnp_reprojection_rmse_px": 0.13784898280398122,
+          "marker_area_ratio": 0.0,
+          "area_px2": 920.0,
+          "distance_m": 3.807036822830311,
+          "observer_id": "moving_frame_000028",
+          "marker_id": 14,
+          "frame_id": "28",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/moving/frame_0028.png"
+        }
+      },
+      {
+        "from": "observer:moving_frame_000028",
+        "to": "marker:16",
+        "observation": {
+          "selection_score": 15.445225381193605,
+          "pnp_reprojection_rmse_px": 0.09818126622707495,
+          "marker_area_ratio": 0.0,
+          "area_px2": 1545.0,
+          "distance_m": 4.452909413803334,
+          "observer_id": "moving_frame_000028",
+          "marker_id": 16,
+          "frame_id": "28",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/moving/frame_0028.png"
+        }
+      },
+      {
+        "from": "marker:16",
+        "to": "observer:cam_edge_5",
+        "observation": {
+          "selection_score": 8.013494082925641,
+          "pnp_reprojection_rmse_px": 0.02047042461576483,
+          "marker_area_ratio": 0.0,
+          "area_px2": 506.0,
+          "distance_m": 7.266160486236213,
+          "observer_id": "cam_edge_5",
+          "marker_id": 16,
+          "frame_id": "static",
+          "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_5.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 8.013494082925641,
+    "path_mean_score": 11.82187527547152,
+    "weakest_edge": {
+      "from": "marker:16",
+      "to": "observer:cam_edge_5",
+      "observation": {
+        "selection_score": 8.013494082925641,
+        "pnp_reprojection_rmse_px": 0.02047042461576483,
+        "marker_area_ratio": 0.0,
+        "area_px2": 506.0,
+        "distance_m": 7.266160486236213,
+        "observer_id": "cam_edge_5",
+        "marker_id": 16,
+        "frame_id": "static",
+        "image_path": "results/bus_real_data/00_shared_baseline/bus_real_data_ref_marker_v1/raw_images/static/cam_edge_5.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.254974987052178,
+        0.26276039322942774,
+        -0.930561514209382,
+        6.2198484699917325
+      ],
+      [
+        0.9663835018094409,
+        0.03637786293448879,
+        -0.25451832648915745,
+        -0.7982465352421302
+      ],
+      [
+        -0.0330254963363676,
+        -0.9641751017518736,
+        -0.2632027540765874,
+        1.615487682702193
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  }
+]

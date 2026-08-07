@@ -118,6 +118,7 @@ def test_result_catalogue_renders_variants_paths_and_scope_legend(
     assert "ap02/variant2" in rendered
     assert "RESULTS.txt" in rendered
     assert "COMPARISON.json" in rendered
+    assert "Failed attempts:" not in rendered
     assert "moving camera" in rendered
     assert "whole world" in rendered
     assert "pct = percent" in rendered

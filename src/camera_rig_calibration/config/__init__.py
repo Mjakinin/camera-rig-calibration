@@ -1,4 +1,4 @@
-from .io import config_fingerprint, load_config, save_config
+from .io import config_fingerprint, load_config, save_config, save_user_config
 from .models import RigConfig, effective_observation_quality
 
 __all__ = [
@@ -7,4 +7,5 @@ __all__ = [
     "effective_observation_quality",
     "load_config",
     "save_config",
+    "save_user_config",
 ]

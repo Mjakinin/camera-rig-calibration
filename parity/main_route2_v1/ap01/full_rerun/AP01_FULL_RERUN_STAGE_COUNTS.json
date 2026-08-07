@@ -1,0 +1,49 @@
+{
+  "ap02_invoked": false,
+  "ap03_invoked": false,
+  "candidates": {
+    "actual_breakdown": null,
+    "actual_total": null,
+    "reason": "method execution was not started"
+  },
+  "colmap_invoked": false,
+  "final_pose": {
+    "actual_inventory": null,
+    "actual_order": null,
+    "reason": "method execution was not started"
+  },
+  "ground_truth_used": false,
+  "method_execution_invoked": false,
+  "observations": {
+    "actual": {
+      "accepted_total": 512,
+      "moving": 487,
+      "static": 25
+    },
+    "expected_accepted_total": 554,
+    "matches": false
+  },
+  "publication_invoked": false,
+  "reconciliation_invoked": false,
+  "rejection_reasons": [
+    "target experiment input is not byte-identical to locked historical Main Route-2 input",
+    "published frozen observations contain 512 accepted rows; locked parity requires 554"
+  ],
+  "schema_version": 1,
+  "selection": {
+    "actual_per_camera": null,
+    "actual_root": null,
+    "reason": "method execution was not started"
+  },
+  "stage_execution": {
+    "aggregate_selection": "not_started",
+    "candidate_construction": "not_started",
+    "final_pose": "not_started",
+    "observation_stage": "not_started",
+    "publication": "not_started",
+    "queue_preflight": "rejected_before_queue_creation",
+    "reconciliation": "not_started",
+    "scientific_validation": "pre_run_failed"
+  },
+  "status": "PRE_RUN_REJECTED"
+}

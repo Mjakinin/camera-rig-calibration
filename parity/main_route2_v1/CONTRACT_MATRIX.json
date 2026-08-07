@@ -1,0 +1,123 @@
+{
+  "ground_truth_role": "evaluation_only_after_estimator_outputs",
+  "legacy_entrypoint_note": "origin/main's AP01 full shell calls the primary-only wrapper around the requested legacy exporter; its AP02 full shell calls the 100/160 distortion-aware fast script, while the requested phase3 reference script locks 80/80.",
+  "methods": {
+    "ap01": {
+      "candidate_parity_evidence": {
+        "candidate_classification": "EXACT",
+        "common_candidate_transforms": "exact: maximum rotation-matrix and translation delta 0.0",
+        "first_causal_divergence": null,
+        "selection_classification": "EXACT"
+      },
+      "final_pose_parity_evidence": {
+        "classification": "EXACT",
+        "first_causal_divergence": null,
+        "maximum_relative_rotation_angle_deg": 0.0,
+        "maximum_rotation_matrix_element_abs_delta": 0.0,
+        "maximum_translation_vector_norm_delta_m": 0.0,
+        "pre_fix_classification": "DIFFERENT_EXPORT_SEMANTICS",
+        "selected_input_sha256": "c447e4784d3bd7b6d250ea5affe464221725c542c10a8479e1fab4b306b0ce75"
+      },
+      "production_rerun_evidence": {
+        "accepted_observation_count": 512,
+        "classification": "UNAVAILABLE",
+        "command_execution_count": 0,
+        "expected_accepted_observation_count": 554,
+        "historical_input_exact_match": false,
+        "method_execution_invoked": false,
+        "publication_status": "NOT_ATTEMPTED",
+        "reconciliation_status": "NOT_ATTEMPTED",
+        "requested_contract": "main_route2_parity_v1",
+        "resolved_method_fingerprint": "692e93b2baf8dd277761044f78ba71a1814a161061dc4baf7bec816ab6c31588",
+        "status": "PRE_RUN_REJECTED"
+      },
+      "known_current_mismatch": "The default recommended_wizard_v1 remains scientifically different from Legacy Main. The explicit main_route2_parity_v1 contract is exact for candidate construction, aggregate selection, and final poses on the frozen input; its final-pose adapter is isolated from the recommended default.",
+      "legacy": {
+        "candidate_scope": "direct only for cam_edge_1; relay for cam_edge_0/cam_edge_1/cam_edge_5",
+        "deterministic_ordering": "direct shared markers ascending; relay root marker, target marker, root frame and target frame ascending; exporter priority list then first matching aggregate row",
+        "initialization_contract": "frozen preserved moving-camera COLMAP poses and frozen no-GT ArUco metric scale",
+        "input_contract": "554 immutable accepted observations in original order plus common hashed relay dependencies",
+        "observation_contract": "derive quality as marker area / (distance^2 * (1 + normalized image-center distance))",
+        "relay_support_contract": "all registered moving observations; no per-marker cap; flat MAD aggregate over raw relay candidates",
+        "result_selection": "first available preferred direct aggregate and fixed relay aggregate type",
+        "selection_contract": "direct aggregate priority list; relay weighted mean of MAD inliers; no GT selection",
+        "final_pose_export_contract": "selected target transforms are serialized to nine-decimal x/y/z and RPY degrees, reconstructed as Rz @ Ry @ Rx, then emitted in cam0/cam1/cam5 loader order with cam3 as an implicit top-level identity anchor",
+        "solver_contract": "direct marker transforms plus moving relay chains; no joint rig BA; final export performs no solver operation",
+        "transform_convention": "T_root_target maps target optical-camera coordinates into cam_edge_3 coordinates"
+      },
+      "main_route2_parity_v1": {
+        "candidate_scope": "one configured direct target plus relay for every non-root camera",
+        "deterministic_ordering": "all direct candidates first, then relay targets in configured camera order; markers and frames ascending with stable first-on-equal tie breaks",
+        "initialization_contract": "the exact frozen preserved moving poses and no-GT metric scale used by the Legacy adapter",
+        "input_contract": "the exact same 554 immutable accepted observations in original order",
+        "observation_contract": "Legacy area/(distance^2*(1+center_norm_1280x720)) quality",
+        "relay_support_contract": "best row per frame/marker, all registered rows, no cap, flat MAD aggregate",
+        "result_selection": "configured direct target uses Legacy direct aggregate; other cameras use Legacy relay aggregate; missing fixed aggregate is omitted without cross-path fallback",
+        "selection_contract": "availability eligibility with no Wizard consensus/stability gate",
+        "final_pose_export_contract": "parity-only adapter reproduces Legacy's nine-decimal translation/RPY round trip, implicit cam3 identity anchor, and target-only loader ordering",
+        "solver_contract": "pure candidate/aggregate-selection and post-selection final-pose boundaries; no complete AP01 stage or solver run",
+        "transform_convention": "T_reference_camera maps target optical-camera coordinates into the root reference frame"
+      },
+      "recommended_wizard_v1": {
+        "candidate_scope": "direct and relay for every non-root camera where supports exist",
+        "deterministic_ordering": "camera order, direct before relay, sorted markers, quality-ranked top-8 moving supports then ascending selected frame traversal",
+        "initialization_contract": "the exact same frozen preserved moving poses and no-GT metric scale used by the Legacy adapter",
+        "input_contract": "the exact same 554 immutable accepted observations in original order",
+        "observation_contract": "consume observation_quality_v2 selection_score serialized in the frozen accepted rows",
+        "relay_support_contract": "top 8 registered moving observations per marker; hierarchical within-chain then independent-chain MAD aggregation",
+        "result_selection": "rejects unstable candidates instead of always exporting legacy aggregate",
+        "selection_contract": "hierarchical direct/relay robust aggregation plus deployment quality gates",
+        "final_pose_export_contract": "unchanged native Wizard pose CSV: sorted pose rows with an explicit root identity row and no pre-export aggregate round trip",
+        "solver_contract": "direct and hierarchical relay candidates followed by path quality/consistency gates",
+        "transform_convention": "T_reference_camera maps camera coordinates into the root reference frame"
+      }
+    },
+    "ap02": {
+      "known_current_mismatch": "frame scoring/selection occurs at a different stage and uses different scores; published nfev is 50/50 instead of the parity lock 80/80.",
+      "legacy": {
+        "deterministic_ordering": "sorted observer IDs, marker IDs, frame-number tie breaks; residuals preserve selected CSV row and corner order",
+        "initialization_contract": "best observer-marker edge plus Ref14-rooted widest/maximum-bottleneck tree",
+        "input_contract": "shared accepted AP02 observation CSV and Ref14 gauge",
+        "observation_contract": "PnP-success rows; smart-score validity includes area>=64 px2, positive depth, distance and <=25 px recomputed RMSE",
+        "result_selection": "with_moving BA is primary; static_only is separate",
+        "selection_contract": "after initialization retain every Ref14 frame, top 8 per marker and top 4 per marker pair by legacy observation_score",
+        "solver_contract": "SciPy least_squares, soft_l1, f_scale=3, ordered observers then non-reference markers; requested reference entrypoint uses max_nfev=80/80",
+        "transform_convention": "T_ref_marker_observer maps optical-camera coordinates into the reference-marker frame"
+      },
+      "wizard": {
+        "deterministic_ordering": "explicit stable frame key, sorted entities and preserved observation/corner order",
+        "initialization_contract": "main_compat_widest_path_v1 productive tree with two diagnostic algorithms",
+        "input_contract": "method-filtered frozen observations and explicit marker 14",
+        "observation_contract": "global observation_quality_v2 accepted rows",
+        "result_selection": "combined primary; static-only and disconnected components diagnostic",
+        "selection_contract": "pre-graph union of Ref14/top-marker/top-pair frames plus graph-preserving frames, ranked by normalized selection_score",
+        "solver_contract": "same parameter layout/residual equations and soft_l1 loss, but published baseline max_nfev=50/50",
+        "transform_convention": "T_ref_marker_observer maps optical-camera coordinates into the reference-marker frame"
+      }
+    },
+    "ap03": {
+      "known_current_mismatch": "four moving pixels differ, legacy feature limits are implicit COLMAP defaults, and legacy/Wizard scale-marker sets and derived-result semantics differ.",
+      "legacy": {
+        "deterministic_ordering": "sorted image group files and sparse model directories",
+        "initialization_contract": "COLMAP mapper",
+        "input_contract": "four static images plus all 189 moving images from shared Main Route-2 pixels",
+        "observation_contract": "targetless COLMAP first; later marker-size observations only for metric scale",
+        "result_selection": "one marker-size multi-marker scale output",
+        "selection_contract": "all images, one COLMAP camera per physical camera, largest/inspected sparse model, marker IDs 0-14 in full script",
+        "solver_contract": "CPU default, exhaustive matcher, min matches 8, fixed focal/principal/extra parameters; feature limits left to installed COLMAP defaults",
+        "transform_convention": "COLMAP world-to-camera internally; exported camera poses in scaled COLMAP frame"
+      },
+      "wizard": {
+        "deterministic_ordering": "sorted manifests/groups/models/images/markers",
+        "initialization_contract": "COLMAP mapper",
+        "input_contract": "four static plus all 189 current immutable moving images",
+        "observation_contract": "shared COLMAP then separately derived single-marker and multi-marker scales",
+        "result_selection": "multi primary and single separately derived from the same reconstruction",
+        "selection_contract": "one camera per physical camera; inspected best model; single marker 0 and 20-marker multi set",
+        "solver_contract": "CPU, exhaustive, min matches 8, fixed intrinsics, explicit maximum image size 2400 and maximum features 8192",
+        "transform_convention": "COLMAP world-to-camera internally; scaled static poses exported consistently"
+      }
+    }
+  },
+  "schema_version": 1
+}

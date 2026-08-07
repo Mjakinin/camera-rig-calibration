@@ -1,0 +1,127 @@
+AP01 MOVING-CAMERA COLMAP / SCALE PARITY REPORT
+================================================
+
+Scope: preserved historical Main AP01 artifacts versus failed Wizard attempt
+20260807_012714_baseline_f6020505. Evidence-only; no Ground Truth.
+
+1. Historical COLMAP configuration recovered
+   Main used all 189 moving PNGs, one shared 1280x720 PINHOLE camera with
+   929.46716309,929.46713448,640.00000000,360.00000000; CPU SIFT, maximum
+   image size 1600, maximum 4096 features, SiftExtraction.num_threads=1,
+   exhaustive CPU matching, no masks, no intrinsic refinement, mapper saved
+   minimum matches 15/random seed 0, and selected the largest sparse model
+   (lexicographically first on ties). Exact historical executable version is UNKNOWN;
+   the preserved database reports user_version 3700.
+
+2. Fresh Wizard COLMAP configuration
+   Wizard used the same images/shared PINHOLE semantics/feature limits and CPU
+   exhaustive matcher through /usr/bin/colmap 3.9.1 without CUDA. It passed full-
+   precision intrinsics, omitted SiftExtraction.num_threads, explicitly passed
+   Mapper.min_num_matches=8, and produced database user_version 3900. Fresh WSL,
+   Python, CPU, OpenCV, NumPy, and SciPy details are in COLMAP_CONFIGURATION_PARITY.json.
+
+3. Configuration parity classification
+   DIFFERENT_CONFIGURATION. Historical unknowns remain explicitly UNKNOWN.
+
+4. Legacy registered-image inventory
+   175/189 registered in selected model 0. Frames frame_0175.png through
+   frame_0188.png are unregistered. The legacy report's text count of 176 is a
+   counter defect; the model header, 175 parsed pose records, and scale consumer agree.
+
+5. Fresh registered-image inventory
+   189/189 registered in selected model 0. No unregistered images. Image IDs differ
+   for 73/189 semantic names due to extraction insertion order.
+
+6. Raw trajectory parity classification
+   DIFFERENT_REGISTERED_IMAGES. The common segment is close under a Sim(3), but it
+   is not exact and the lower-level descriptor/match stream differs.
+
+7. Diagnostic Sim(3) results
+   Mapping Legacy raw centers to Wizard raw centers: scale
+   0.936244415587, rotation
+   [[0.9751421493608123, 0.1001010000380385, -0.1976804955764727], [-0.08500580477347972, 0.9928800849019345, 0.0834454921487088], [0.20462600444417678, -0.06456722695386434, 0.976708386115682]], translation [-0.03838398596246214, 0.15975212725430374, -0.4530795625495936].
+   On 175 common images, translation RMSE is
+   0.00647628673854 Wizard units
+   (0.101218102035% of trajectory radius),
+   median 0.0016394354247, max
+   0.0531821668573; relative-rotation residual
+   mean/median/max is 0.135896033758/
+   0.0982272970197/
+   2.32775186697 degrees. Robust diagnostic
+   inliers: 166/175. This transform was not applied
+   to calibration output.
+
+8. Legacy scale
+   0.676879570208235 m per Legacy COLMAP unit (locked text: 0.676879570208).
+
+9. Fresh scale
+   0.7357593316733281 m per Wizard COLMAP unit.
+
+10. Scale-sample inventory comparison
+   Legacy raw/used: 1869/1617.
+   Wizard raw/used: 4425/3666.
+   Pair keys common/Legacy-only/Wizard-only: 1718/
+   151/2707.
+   The two implementations also consume different marker-frame endpoint inventories
+   and common-pair metric/PnP quantities are not all numerically equal.
+
+11. Scale-stage parity classification
+   DIFFERENT_TRAJECTORY_AND_SCALE_SAMPLE_CONSTRUCTION. The ratio formula is the
+   same, but raw trajectory geometry, observation/pair inventory, quality filters,
+   frame-gap bounds, per-marker cap, and written robust rule differ. The gauge-only
+   prediction is 0.722973145622;
+   actual Fresh is higher by 1.76855615296%,
+   so arbitrary gauge alone is insufficient.
+
+12. Exact first causal divergence
+   Same 189 input images lead to a DIFFERENT feature-extraction configuration/
+   environment before numeric output: Main explicitly used one SIFT extraction
+   thread and eight-decimal camera parameters with database generation 3700;
+   Wizard omitted the thread option, used full precision, and generated schema 3900.
+   All 151125 keypoint rows/blobs are exact, then descriptor bytes first differ at
+   frame_0003.png. Match differences follow.
+   Existing evidence cannot assign the descriptor delta to only one simultaneous
+   option/version difference without a controlled rerun.
+
+13. Relevant functions/files/lines
+   Historical invocation: run/bus_real_data/approach1_marker_direct_relay/
+   06_run_colmap_moving_sequence.py:122-164 (camera/SIFT/matcher/mapper options)
+   and :172-190 (best-model selection).
+   Historical scale: 12_estimate_colmap_scale_from_aruco.py (quality filtering,
+   :141-175, pair construction :214-264, MAD aggregation :181-203). Wizard COLMAP:
+   src/camera_rig_calibration/
+   methods/ap01/core.py:170 (run_colmap_pipeline), especially 195-229. Wizard scale:
+   core.py:476 (robust_scale), 497-545; estimate_scale.py:14-39; pipeline.py:57-72,
+   118-119. Machine-readable evidence supplies artifact paths and hashes.
+
+14. Whether any code change was made
+   No production/scientific code change. Only this read-only audit utility, evidence
+   outputs, and focused audit tests were added. The earlier NumPy serialization fix
+   was pre-existing and is not treated as this scientific divergence.
+
+15. Recommended path
+   PATH A — FIX WIZARD CONFIGURATION. Recoverable parity settings are demonstrably
+   different, and the parity contract does not reproduce historical scale rules.
+   Minimal contract-scoped fix: eight-decimal intrinsics, one SIFT extraction thread,
+   mapper minimum matches 15, method-contract propagation into scale, and historical
+   scale filters/pair bounds/no top-30 cap. Do not alter recommended_wizard_v1.
+   PATH C is premature until configuration parity is actually tested.
+
+16. Tests and results
+   83 focused AP01 parity/rerun-guard/audit tests passed. The validator checks
+   configuration classification, registration inventory, Sim(3) recomputation,
+   feature/match first divergence, scale inventory, gauge-only check, fingerprint
+   sensitivity, and the required output set. git diff --check passed.
+
+17. Confirmation that no second full AP01 run occurred
+   Confirmed. This audit opened preserved artifacts read-only. It did not invoke
+   COLMAP/AP01, publish, reconcile, run AP02/AP03, use Ground Truth, modify the Main
+   recovery worktree, or modify route2_cpu_ref14_50x50 scientific artifacts. The
+   protected experiment remains 1256 files at tree SHA-256
+   c40adcde29c7177a2e7fa4fd6c49b45a268b102f13fb18d3ca2fa2d23a886ea3.
+
+18. Exact next action
+   Implement the PATH-A changes only in main_route2_parity_v1 resolution, add option/
+   scale-contract regression tests, re-run focused tests and the protected-artifact
+   guard, then authorize exactly one controlled AP01 production rerun using the same
+   prepared experiment and queue workflow. Do not reuse or force the historical scale.

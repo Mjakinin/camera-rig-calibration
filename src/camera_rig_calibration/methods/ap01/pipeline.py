@@ -11,6 +11,10 @@ from pydantic import BaseModel
 from ...components.common import calibration_requirements, read_method_status
 from ...config.models import AP01Settings
 from ...contracts import CommandSpec, RequirementResult, RunContext
+from .contracts import (
+    ap01_execution_contract_name,
+    resolve_ap01_method_contract,
+)
 
 
 @dataclass(frozen=True)
@@ -18,7 +22,7 @@ class AP01Method:
     """Connect the AP01 stage modules to the generic rigcal runtime."""
 
     id: str = "ap01"
-    display_name: str = "AP01 Baseline"
+    display_name: str = "AP01"
     config_model: type[BaseModel] = AP01Settings
 
     def requirements(self, context: RunContext) -> RequirementResult:
@@ -39,6 +43,30 @@ class AP01Method:
 
         output = context.run_directory / "02_AP01"
         config = context.config
+        execution_contract_name = ap01_execution_contract_name(
+            config.methods.ap01.method_contract,
+            historical_reproduction=(
+                config.methods.ap01.historical_reproduction
+            ),
+            advanced_strategy=config.methods.ap01.advanced_strategy,
+        )
+        contract = resolve_ap01_method_contract(
+            execution_contract_name,
+            direct_target_camera=config.methods.ap01.direct_target_camera,
+            top_moving_per_marker=(
+                config.methods.ap01.top_moving_per_marker
+            ),
+            scale_top_per_marker=config.methods.ap01.scale_top_per_marker,
+            colmap_matcher=config.colmap.matcher,
+            colmap_use_gpu=config.colmap.use_gpu,
+            colmap_maximum_image_size=config.colmap.maximum_image_size,
+            colmap_maximum_features=config.colmap.maximum_features,
+            colmap_sequential_overlap=config.colmap.sequential_overlap,
+            colmap_loop_detection=config.colmap.loop_detection,
+            colmap_mapper_minimum_matches=(
+                config.colmap.mapper_minimum_matches
+            ),
+        )
         python_module = [sys.executable, "-m"]
         arguments = [
             "--dataset",
@@ -53,6 +81,10 @@ class AP01Method:
             root,
             "--moving-camera-id",
             config.moving_camera.id,
+            "--method-contract",
+            execution_contract_name,
+            "--direct-target-camera",
+            config.methods.ap01.direct_target_camera,
         ]
         if config.methods.ap01.top_moving_per_marker is not None:
             arguments.extend(
@@ -98,21 +130,21 @@ class AP01Method:
             "camera_rig_calibration.methods.ap01.reconstruct_moving",
             *arguments,
             "--matcher",
-            config.colmap.matcher,
+            contract.colmap_matching_mode,
             "--use-gpu",
-            "1" if config.colmap.use_gpu else "0",
+            "1" if contract.colmap_matcher_use_gpu else "0",
             "--max-image-size",
-            str(config.colmap.maximum_image_size),
+            str(contract.colmap_sift_maximum_image_size),
             "--colmap-executable",
             config.colmap.executable,
             "--max-features",
-            str(config.colmap.maximum_features),
+            str(contract.colmap_sift_max_features),
             "--sequential-overlap",
-            str(config.colmap.sequential_overlap),
+            str(contract.colmap_sequential_overlap),
             "--loop-detection",
-            "1" if config.colmap.loop_detection else "0",
+            "1" if contract.colmap_loop_detection else "0",
             "--mapper-min-matches",
-            str(config.colmap.mapper_minimum_matches),
+            str(contract.colmap_mapper_minimum_matches),
         ]
         if config.colmap.reuse or context.reuse_colmap_artifact:
             reconstruct.append("--reuse-colmap")
@@ -170,6 +202,20 @@ class AP01Method:
                 ("ap01_solve_extrinsics",),
             ),
         ]
+        if contract.reproduction_validation_policy != "none":
+            stages.append(
+                (
+                    "ap01_validate_reproduction",
+                    "AP01: validate locked historical reproduction",
+                    [
+                        *python_module,
+                        "camera_rig_calibration.methods.ap01.validate_reproduction",
+                        *arguments,
+                    ],
+                    output / "06_reproduction_validation",
+                    ("ap01_report",),
+                )
+            )
         if {
             "01_moving_colmap",
             "02_metric_scale",

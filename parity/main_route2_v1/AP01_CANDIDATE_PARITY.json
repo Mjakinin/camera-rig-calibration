@@ -1,0 +1,356 @@
+{
+  "aggregate_acceptance_rejection": {
+    "parity": false
+  },
+  "candidate_counts": {
+    "legacy": {
+      "cam_edge_0": {
+        "relay": 25230
+      },
+      "cam_edge_1": {
+        "direct": 6,
+        "relay": 57468
+      },
+      "cam_edge_3": {
+        "root": 1
+      },
+      "cam_edge_5": {
+        "relay": 63438
+      }
+    },
+    "wizard": {
+      "cam_edge_0": {
+        "direct": 3,
+        "relay": 2088
+      },
+      "cam_edge_1": {
+        "direct": 6,
+        "relay": 5584
+      },
+      "cam_edge_3": {
+        "root": 1
+      },
+      "cam_edge_5": {
+        "relay": 5632
+      }
+    }
+  },
+  "candidate_multiplicity": {
+    "legacy_count": 146143,
+    "parity": false,
+    "semantic_keys_are_unique_with_support_observation_occurrences": true,
+    "wizard_count": 13314
+  },
+  "candidate_set": {
+    "common_count": 13311,
+    "first_missing_wizard_candidate_context": {
+      "acceptance_decision": "accepted_into_flat_weighted_relay_aggregate",
+      "aggregate_decisions": {
+        "flat_mad_inlier": true,
+        "selected_aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection"
+      },
+      "aggregate_score": 574.2150748951977,
+      "candidate_type": "relay",
+      "deterministic_tie_break_fields": [
+        "root_marker_asc",
+        "target_marker_asc",
+        "root_frame_asc",
+        "target_frame_asc"
+      ],
+      "implementation": "legacy",
+      "native_candidate": true,
+      "original_construction_index": 6,
+      "original_selection_ranking_index": {},
+      "quality_values": {
+        "root_moving": 2176.8224508587223,
+        "root_static": 3320.1241812403287,
+        "target_moving": 75.31953728828029,
+        "target_static": 199.71623968241633
+      },
+      "rejection_reason": null,
+      "relay_path": {
+        "camera": "moving_calib_camera",
+        "frames": [
+          85,
+          33
+        ]
+      },
+      "reprojection_values_px": {
+        "root_moving": 0.24390191435998632,
+        "root_static": 0.36438467714937073,
+        "target_moving": 0.2309762692118373,
+        "target_static": 0.2501329859149684
+      },
+      "root_camera": "cam_edge_3",
+      "root_frame": 85,
+      "root_marker": 1,
+      "rotation": [
+        [
+          0.5101881383092675,
+          0.3702814091445088,
+          -0.7762729813477222
+        ],
+        [
+          -0.3084357405601327,
+          0.9213119610022062,
+          0.23675232725232437
+        ],
+        [
+          0.8028545680717315,
+          0.11864210279755676,
+          0.5842504548309121
+        ]
+      ],
+      "schema_version": 1,
+      "score_components": {
+        "formula": "fourth_root(root_static * target_static * root_moving * target_moving)",
+        "input_fields": [
+          "root_static",
+          "target_static",
+          "root_moving",
+          "target_moving"
+        ],
+        "quality_contract": "legacy"
+      },
+      "semantic_candidate_key": "sha256:9d8e2846e8f3ebbca9f3d75252b441aeba4ae0b4e1d030ae167da51be76ff7ea",
+      "support_count": 4,
+      "support_observation_keys": [
+        "ap01obs:000011",
+        "ap01obs:000001",
+        "ap01obs:000290",
+        "ap01obs:000178"
+      ],
+      "target_camera": "cam_edge_0",
+      "target_frame": 33,
+      "target_marker": 3,
+      "transform_chain": {
+        "direction": "target->root",
+        "expression": "T_rm@inv(T_imr)@T_ij@inv(T_tm@inv(T_jmt))",
+        "id": "relay:m1@f85->m3@f33",
+        "terms": [
+          "s0:root_marker->root",
+          "inv(s2):moving_i->root_marker",
+          "scaled(Tcw_i@inv(Tcw_j)):moving_j->moving_i",
+          "inv(s1@inv(s3)):target->moving_j"
+        ]
+      },
+      "translation_m": [
+        2.010545643314257,
+        -1.1377203439124626,
+        3.0110860069512
+      ]
+    },
+    "first_missing_wizard_key": "sha256:9d8e2846e8f3ebbca9f3d75252b441aeba4ae0b4e1d030ae167da51be76ff7ea",
+    "first_unexpected_wizard_candidate_context": {
+      "acceptance_decision": "accepted_into_diagnostic_direct_aggregate_only",
+      "aggregate_decisions": {
+        "path_deployment_eligible": false,
+        "path_selected_for_diagnostic_estimate": true,
+        "path_stable": false,
+        "pose_support": true,
+        "robust_inlier": true
+      },
+      "aggregate_score": 0.5478196995755479,
+      "candidate_type": "direct",
+      "deterministic_tie_break_fields": [
+        "shared_marker_asc"
+      ],
+      "implementation": "wizard",
+      "native_candidate": true,
+      "original_construction_index": 0,
+      "original_selection_ranking_index": 3,
+      "quality_values": {
+        "root_static": 0.5307253024052763,
+        "target_static": 0.5654646987489472
+      },
+      "rejection_reason": "direct_path_failed_quality_gate",
+      "relay_path": null,
+      "reprojection_values_px": {
+        "root_static": 0.25927038089372595,
+        "target_static": 0.2501329859149684
+      },
+      "root_camera": "cam_edge_3",
+      "root_frame": null,
+      "root_marker": 3,
+      "rotation": [
+        [
+          0.5087378826767885,
+          0.3973019714687839,
+          -0.7637649574290217
+        ],
+        [
+          -0.32649996165022915,
+          0.9099121280983233,
+          0.25584701323638526
+        ],
+        [
+          0.7966075205343824,
+          0.11921016150730554,
+          0.5926258479187904
+        ]
+      ],
+      "schema_version": 1,
+      "score_components": {
+        "formula": "sqrt(root_static_quality * target_static_quality)",
+        "input_fields": [
+          "root_static",
+          "target_static"
+        ],
+        "quality_contract": "wizard"
+      },
+      "semantic_candidate_key": "sha256:c032a66a958e3a6810bdca6c0da5de271b103f0a041d2f71d3f4d9b4c39ac2a2",
+      "support_count": 2,
+      "support_observation_keys": [
+        "ap01obs:000014",
+        "ap01obs:000001"
+      ],
+      "target_camera": "cam_edge_0",
+      "target_frame": null,
+      "target_marker": 3,
+      "transform_chain": {
+        "direction": "target->root",
+        "expression": "T_rm@inv(T_tm)",
+        "id": "d:m3",
+        "terms": [
+          "s0:marker->root",
+          "inv(s1):target->marker"
+        ]
+      },
+      "translation_m": [
+        2.009913799975818,
+        -1.2258547410983838,
+        3.3200893327327696
+      ]
+    },
+    "first_unexpected_wizard_key": "sha256:c032a66a958e3a6810bdca6c0da5de271b103f0a041d2f71d3f4d9b4c39ac2a2",
+    "legacy_unique_count": 146143,
+    "missing_wizard_count": 132832,
+    "unexpected_wizard_count": 3,
+    "wizard_unique_count": 13314
+  },
+  "classification": "DIFFERENT_CANDIDATE_SET",
+  "colmap_invoked": false,
+  "composed_transforms": {
+    "common_candidate_parity_within_tolerance": true,
+    "maximum_absolute_deltas": {
+      "rotation_matrix": 2.6645352591003757e-15,
+      "translation_m": 1.021405182655144e-14
+    }
+  },
+  "final_pose_published": false,
+  "first_causal_divergence": {
+    "effect": "the first common native candidate already has different quality components and aggregate score",
+    "first_common_candidate_score_difference": {
+      "absolute_delta": 226.1198675169184,
+      "candidate_type": "direct",
+      "field": "aggregate_score",
+      "legacy_value": 226.7136439322166,
+      "phase": "score",
+      "reason": "different_observation_quality_contract",
+      "root_frame": null,
+      "root_marker": 2,
+      "semantic_candidate_key": "sha256:e9f1baafdbde234117e26393020891d939ba6c31929322dc000102d468954974",
+      "target_camera": "cam_edge_1",
+      "target_frame": null,
+      "target_marker": 2,
+      "tolerance": 1e-12,
+      "wizard_value": 0.5937764152981969
+    },
+    "legacy_decision": "derive area / (distance^2 * (1 + center_norm_1280x720))",
+    "phase": "observation_quality_preparation",
+    "source_locations": {
+      "legacy_direct": "13_eval_direct_static_cam3_cam1_multimarker.py:198-210,291,490",
+      "legacy_relay": "14_eval_moving_relay_chains.py:241-253,300,324,698-704",
+      "wizard": "core.py:359-395 (selection_score), 875-964"
+    },
+    "wizard_decision": "consume frozen observation_quality_v2 selection_score"
+  },
+  "first_list_or_set_difference": {
+    "absolute_delta": "",
+    "candidate_type": "relay",
+    "field": "semantic_candidate_key",
+    "legacy_value": "present",
+    "phase": "candidate_set",
+    "reason": "missing_wizard_candidate",
+    "root_frame": 85,
+    "root_marker": 1,
+    "semantic_candidate_key": "sha256:9d8e2846e8f3ebbca9f3d75252b441aeba4ae0b4e1d030ae167da51be76ff7ea",
+    "target_camera": "cam_edge_0",
+    "target_frame": 33,
+    "target_marker": 3,
+    "tolerance": "",
+    "wizard_value": "unavailable"
+  },
+  "ground_truth_used": false,
+  "numeric_tolerances": {
+    "quality_absolute": 1e-12,
+    "reprojection_px_absolute": 1e-12,
+    "rotation_matrix_absolute": 1e-12,
+    "score_absolute": 1e-12,
+    "translation_m_absolute": 1e-12
+  },
+  "original_construction_order": {
+    "legacy_first_keys": [
+      "sha256:6af7914448b07bdff40ba09271a76ba86b70326de4ba6f0c2adfcac720fd4161",
+      "sha256:e9f1baafdbde234117e26393020891d939ba6c31929322dc000102d468954974",
+      "sha256:41c41b138e441e9db92752e38c9ffa1ba8fef5943fc68d1d4627e0f3ee1373cf",
+      "sha256:a71baf1357f7d7503fc996f4a75315485e52d5069ec6f4ac812ed8f494edf73f",
+      "sha256:d9e599e9e81fe64af4bfb625645272ebc5ddc87a6b47c67794b966f2a696ff8e"
+    ],
+    "parity": false,
+    "wizard_first_keys": [
+      "sha256:6af7914448b07bdff40ba09271a76ba86b70326de4ba6f0c2adfcac720fd4161",
+      "sha256:c032a66a958e3a6810bdca6c0da5de271b103f0a041d2f71d3f4d9b4c39ac2a2",
+      "sha256:60e2ffebcc764cc7f1f23749517a4535e680bf6fcd53a257d9036dad878de23d",
+      "sha256:9221be84d54829f7bd4344efab5d1c10eae681892f8daa867c7c260c4691ec7f",
+      "sha256:7214e23f89eefa850a5a583fc12f4e633ceffffa2a40687a58bead764b75842a"
+    ]
+  },
+  "quality_and_scoring": {
+    "maximum_absolute_deltas": {
+      "aggregate_score": 3161.858754254434,
+      "quality": 13798.62113390251,
+      "reprojection_px": 0.0
+    },
+    "parity": false
+  },
+  "schema_version": 1,
+  "secondary_contract_differences": [
+    {
+      "contract": "direct_target_scope",
+      "first_effect": "sha256:c032a66a958e3a6810bdca6c0da5de271b103f0a041d2f71d3f4d9b4c39ac2a2",
+      "legacy": "direct candidates only for cam_edge_1",
+      "source_locations": {
+        "legacy": "13_eval_direct_static_cam3_cam1_multimarker.py:12-13,449-508",
+        "wizard": "build_candidates.py:102-119"
+      },
+      "wizard": "direct candidates for every non-root camera"
+    },
+    {
+      "contract": "moving_observation_cap",
+      "legacy": "all registered moving observations, ascending frame",
+      "source_locations": {
+        "legacy": "14_eval_moving_relay_chains.py:307-336,630-730",
+        "wizard": "core.py:849-872; build_candidates.py:41-91"
+      },
+      "wizard": "top 8 per marker by quality, then ascending frame"
+    },
+    {
+      "contract": "relay_support_aggregation",
+      "legacy": "one flat robust aggregate over every relay candidate",
+      "source_locations": {
+        "legacy": "14_eval_moving_relay_chains.py:550-627",
+        "wizard": "core.py:750-837"
+      },
+      "wizard": "within-marker-chain aggregates then robust aggregate across independent chains"
+    }
+  ],
+  "solver_invoked": false,
+  "status": "mismatch",
+  "support_rows": {
+    "common_candidate_parity": true
+  },
+  "transform_chain_directions": {
+    "common_candidate_parity": true
+  }
+}

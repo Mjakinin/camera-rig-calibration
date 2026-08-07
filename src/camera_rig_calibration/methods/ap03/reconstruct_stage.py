@@ -16,10 +16,10 @@ def run(
     moving_camera_id: str,
     matcher: str,
     use_gpu: bool,
-    maximum_image_size: int,
-    maximum_features: int,
+    maximum_image_size: int | None,
+    maximum_features: int | None,
     sequential_overlap: int,
-    loop_detection: bool,
+    loop_detection: bool | None,
     mapper_minimum_matches: int,
     colmap_executable: str,
     reuse: bool,
@@ -48,17 +48,19 @@ def run(
             "1" if use_gpu else "0",
             "--matcher",
             matcher,
-            "--max-image-size",
-            str(maximum_image_size),
-            "--max-features",
-            str(maximum_features),
             "--sequential-overlap",
             str(sequential_overlap),
-            "--loop-detection",
-            "1" if loop_detection else "0",
             "--mapper-min-matches",
             str(mapper_minimum_matches),
         ]
+        if maximum_image_size is not None:
+            command.extend(["--max-image-size", str(maximum_image_size)])
+        if maximum_features is not None:
+            command.extend(["--max-features", str(maximum_features)])
+        if loop_detection is not None:
+            command.extend(
+                ["--loop-detection", "1" if loop_detection else "0"]
+            )
         if reuse:
             command.append("--reuse")
         subprocess.run(command, check=True)
@@ -94,10 +96,10 @@ def main() -> None:
         "--matcher", choices=["exhaustive", "sequential"], required=True
     )
     parser.add_argument("--use-gpu", type=int, choices=[0, 1], required=True)
-    parser.add_argument("--max-image-size", type=int, required=True)
-    parser.add_argument("--max-features", type=int, required=True)
+    parser.add_argument("--max-image-size", type=int)
+    parser.add_argument("--max-features", type=int)
     parser.add_argument("--sequential-overlap", type=int, required=True)
-    parser.add_argument("--loop-detection", type=int, choices=[0, 1], required=True)
+    parser.add_argument("--loop-detection", type=int, choices=[0, 1])
     parser.add_argument("--mapper-min-matches", type=int, required=True)
     parser.add_argument("--colmap-executable", required=True)
     parser.add_argument("--reuse-colmap", action="store_true")
@@ -114,7 +116,9 @@ def main() -> None:
         maximum_image_size=args.max_image_size,
         maximum_features=args.max_features,
         sequential_overlap=args.sequential_overlap,
-        loop_detection=bool(args.loop_detection),
+        loop_detection=(
+            bool(args.loop_detection) if args.loop_detection is not None else None
+        ),
         mapper_minimum_matches=args.mapper_min_matches,
         colmap_executable=args.colmap_executable,
         reuse=args.reuse_colmap,

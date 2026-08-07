@@ -1,0 +1,16 @@
+AP01 WIZARD MAIN-ROUTE2-PARITY CANDIDATE/SELECTION TRACE
+boundary: candidate construction and aggregate selection only
+method contract: main_route2_parity_v1
+method contract sha256: 6c8e5a69249e723f94ecdbe9a72eebece1ad3d30b6d71408b975e818b6f303eb
+frozen observations: C:\Users\maxim\Desktop\Application of Robotics and Autonomous Systems\camera-rig-calibration\parity\main_route2_v1\frozen\ap01_accepted_observations.jsonl
+frozen moving poses: C:\Users\maxim\Desktop\Application of Robotics and Autonomous Systems\camera-rig-calibration\parity\main_route2_v1\frozen\ap01_colmap_images.txt
+frozen no-GT scale: C:\Users\maxim\Desktop\Application of Robotics and Autonomous Systems\camera-rig-calibration\parity\main_route2_v1\frozen\ap01_metric_scale.txt
+execution: construct_candidates and select_candidate_aggregates pure boundaries.
+source sha256 contracts: cc379826a2b06d80696f345f2272093e693249de87b8b3fbf05f219b3e28e499
+source sha256 build_candidates: 5f9dcada2de72cf920ed305119974aa40e078786a91849e83a5d402a11057b85
+source sha256 core: 7d95e4910da89ddcfd3ad9b87dac21619a892a59bc64e828fb49cc1af5778e54
+source sha256 solve_extrinsics: 7602a9c59941319b95a898f389c710d1b5847d2c8a3cf0cdab4edb7e2a10c4b2
+build_candidates.run and solve_extrinsics.run were not invoked.
+COLMAP was not invoked; only the frozen images.txt was parsed.
+No final pose file, evaluator, result publisher, AP02, or AP03 was invoked.
+ground_truth_used=false

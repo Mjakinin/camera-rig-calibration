@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from camera_rig_calibration.config import save_config
+from camera_rig_calibration.config import load_config, save_config
 from camera_rig_calibration.config.models import DatasetCategory, SceneType
 from camera_rig_calibration.dataset_identity import (
     build_dataset_identity,
@@ -24,6 +24,7 @@ from camera_rig_calibration.methods.ap02.initialize import (
     marker_node,
     maximum_bottleneck_tree,
 )
+from camera_rig_calibration import rerun as rerun_module
 from camera_rig_calibration.rerun import prepare_single_method_rerun
 from camera_rig_calibration.runtime import PipelineOrchestrator, observation_id
 
@@ -261,6 +262,7 @@ def test_ap01_keeps_finite_rejected_estimate_for_evaluation(
         camera_ids=("root", "target"),
         root_camera="root",
         moving_camera_id="moving",
+        method_contract="recommended_wizard_v1",
     )
     solution = json.loads(
         (
@@ -365,6 +367,84 @@ def test_prepare_single_method_rerun_reuses_dataset_without_capture(
         prepared.observation_contract["observation_id"]
         == "detection_legacy_opencv"
     )
+
+
+def test_ap01_single_method_rerun_accepts_explicit_contract(
+    prepared_config,
+    tmp_path: Path,
+) -> None:
+    repository = tmp_path / "repository"
+    experiment = tmp_path / "experiment"
+    repository.mkdir()
+    experiment.mkdir()
+    _identity_dataset(experiment)
+    (experiment / "dataset.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 5,
+                "layout_version": 2,
+                "id": experiment.name,
+                "category": "simulation",
+                "input_fingerprint": "input_fixture",
+            }
+        ),
+        encoding="utf-8",
+    )
+    _write_frozen_observations(
+        experiment,
+        dictionary=prepared_config.markers.dictionary,
+        length_m=prepared_config.markers.length_m,
+        detection_mode=prepared_config.markers.detection_mode,
+    )
+    config = prepared_config.model_copy(
+        update={
+            "project": prepared_config.project.model_copy(
+                update={
+                    "experiment_id": experiment.name,
+                    "run_label": "baseline",
+                }
+            ),
+            "methods": prepared_config.methods.model_copy(
+                update={"enabled": ["ap01"]}, deep=True
+            ),
+        },
+        deep=True,
+    )
+    attempt = (
+        experiment
+        / "attempts/ap01/baseline/20260101_000000/diagnostics"
+    )
+    save_config(config, attempt / "resolved_config.yaml")
+
+    prepared = prepare_single_method_rerun(
+        repository_root=repository,
+        experiment=experiment,
+        method="ap01",
+        variant="baseline",
+        reuse_prepared_input=True,
+        reuse_matching_intermediates=False,
+        ap01_method_contract="main_route2_parity_v1",
+    )
+
+    assert prepared.config.methods.ap01.method_contract == (
+        "main_route2_parity_v1"
+    )
+    saved = load_config(prepared.queue.entries[0].config)
+    assert saved.methods.ap01.method_contract == "main_route2_parity_v1"
+
+
+def test_ap01_contract_override_rejects_other_methods(
+    prepared_config,
+    tmp_path: Path,
+) -> None:
+    with pytest.raises(ValueError, match="valid only"):
+        rerun_module._resolved_rerun_config(
+            tmp_path,
+            tmp_path,
+            "ap02",
+            "baseline",
+            ap01_method_contract="main_route2_parity_v1",
+        )
 
 
 def test_method_rerun_reuses_frozen_detector_provenance(

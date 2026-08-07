@@ -1,0 +1,14 @@
+{
+  "canonical_dataset_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2_main_parity_v1",
+  "content_addressing": "normalized input SHA-256",
+  "file_counts": {
+    "copied": 0,
+    "existing": 0,
+    "hardlinked": 202
+  },
+  "input_id": "input_cb386b17f71c",
+  "layout_version": 2,
+  "published_at": "2026-08-06T23:22:57+00:00",
+  "status": "ready",
+  "storage": "hardlinks where supported, byte copies otherwise; deleting the source does not remove files from this dataset"
+}

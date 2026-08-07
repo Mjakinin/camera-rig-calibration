@@ -154,6 +154,101 @@ def _serialized_config_payload(config: RigConfig) -> dict[str, Any]:
     return payload
 
 
+def _user_config_payload(config: RigConfig) -> dict[str, Any]:
+    """Omit dormant compatibility defaults from Wizard-generated YAML.
+
+    Loading the compact file restores the same model defaults. Internal
+    provenance continues to use :func:`save_config` and therefore retains the
+    complete schema payload.
+    """
+
+    payload = deepcopy(_serialized_config_payload(config))
+    methods = payload.get("methods", {})
+    enabled = methods.get("enabled", []) if isinstance(methods, dict) else []
+    if isinstance(methods, dict):
+        ap01 = methods.get("ap01")
+        if (
+            isinstance(ap01, dict)
+            and ap01.get("method_contract") == "baseline_v1"
+            and not ap01.get("historical_reproduction", False)
+        ):
+            ap01.pop("historical_reproduction", None)
+            if ap01.get("advanced_strategy") == "legacy_main_v1":
+                ap01.pop("advanced_strategy", None)
+                for key in (
+                    "top_moving_per_marker",
+                    "scale_top_per_marker",
+                    "direct_quality_gate",
+                    "relay_quality_gate",
+                    "direct_relay_consistency",
+                ):
+                    ap01.pop(key, None)
+        ap02 = methods.get("ap02")
+        if (
+            isinstance(ap02, dict)
+            and ap02.get("method_contract") == "baseline_v1"
+            and not ap02.get("historical_reproduction", False)
+        ):
+            ap02.pop("historical_reproduction", None)
+            for key, default in (
+                ("frame_selection_strategy", "legacy_smart_v1"),
+                ("initialization_strategy", "legacy_maximum_bottleneck_v1"),
+                ("graph_edge_weight_strategy", "legacy_observation_quality_v1"),
+                ("reprojection_model", "legacy_pinhole_v1"),
+            ):
+                if ap02.get(key) == default:
+                    ap02.pop(key, None)
+        ap03 = methods.get("ap03")
+        if isinstance(ap03, dict) and ap03.get("method_contract") == "baseline_v1":
+            baseline_scale_input = (
+                ap03.get(
+                    "scale_input_policy",
+                    "legacy_registered_image_redetection_v1",
+                )
+                == "legacy_registered_image_redetection_v1"
+            )
+            for key, default in (
+                ("feature_limit_policy", "legacy_colmap_defaults_v1"),
+                (
+                    "scale_input_policy",
+                    "legacy_registered_image_redetection_v1",
+                ),
+            ):
+                if ap03.get(key) == default:
+                    ap03.pop(key, None)
+            if baseline_scale_input and isinstance(ap03.get("scale"), dict):
+                ap03["scale"].pop(
+                    "maximum_observations_per_marker", None
+                )
+
+    colmap = payload.get("colmap")
+    if isinstance(colmap, dict) and len(enabled) == 1:
+        method_id = enabled[0]
+        if method_id == "ap02":
+            payload.pop("colmap", None)
+        elif method_id == "ap01":
+            ap01 = methods.get("ap01", {})
+            if ap01.get("advanced_strategy", "legacy_main_v1") == "legacy_main_v1":
+                for key in tuple(colmap):
+                    if key not in {"executable", "reuse"}:
+                        colmap.pop(key, None)
+        elif method_id == "ap03":
+            ap03 = methods.get("ap03", {})
+            if ap03.get(
+                "feature_limit_policy", "legacy_colmap_defaults_v1"
+            ) == "legacy_colmap_defaults_v1":
+                for key in (
+                    "maximum_image_size",
+                    "maximum_features",
+                    "loop_detection",
+                    "ap03_maximum_image_size",
+                    "ap03_maximum_features",
+                    "ap03_loop_detection",
+                ):
+                    colmap.pop(key, None)
+    return payload
+
+
 def _resolve_path(path: Path, base: Path) -> Path:
     return path.resolve() if path.is_absolute() else (base / path).resolve()
 
@@ -204,6 +299,24 @@ def save_config(config: RigConfig, path: str | Path) -> Path:
     temporary = destination.with_name(destination.name + ".tmp")
     temporary.write_text(
         yaml.safe_dump(payload, sort_keys=False, allow_unicode=True),
+        encoding="utf-8",
+    )
+    temporary.replace(destination)
+    return destination
+
+
+def save_user_config(config: RigConfig, path: str | Path) -> Path:
+    """Save a concise user-facing config with canonical defaults implicit."""
+
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_name(destination.name + ".tmp")
+    temporary.write_text(
+        yaml.safe_dump(
+            _user_config_payload(config),
+            sort_keys=False,
+            allow_unicode=True,
+        ),
         encoding="utf-8",
     )
     temporary.replace(destination)

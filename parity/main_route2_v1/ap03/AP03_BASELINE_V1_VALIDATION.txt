@@ -1,0 +1,35 @@
+AP03 BASELINE_V1 VALIDATION
+===========================
+
+Status: CLOSED
+Production runs: exactly one AP03 run; no AP01/AP02 reruns
+Dataset: 4 static + 189 moving images (fingerprint 1536228671cf800e5b569a63b6a60e073aeb5ad2fe50dd04cfe067fd34966d97)
+Contract: baseline_v1 (fingerprint 08e20b57c9826cfe217421a93600c0ee5dfee427176e0c8081ee496d052f2647)
+Environment: /usr/bin/colmap 3.9.1, CPU, WSL2, no CUDA
+
+Result:
+- selected sparse model: 0
+- registrations: 4 static + 175 moving = 179 total
+- primary scale: 0.6877194974999671 m/COLMAP unit
+- reference: native COLMAP gauge, translation scaled only
+- final inventory: 4 cameras, 6 unordered pairs
+- publication: completed transactionally
+- reconciliation: completed; 332 authoritative native artifacts unchanged
+- GT evaluation: unavailable because the published experiment has no immutable world_snapshot.sdf
+
+Historical direct comparison (no GT or best-fit alignment):
+- classification: DIFFERENT_REGISTERED_IMAGES_BUT_EQUIVALENT_FINAL_EXTRINSICS
+- native absolute maximum: 1.0617164744 m / 12.0418944482 deg (different arbitrary COLMAP gauge)
+- gauge-invariant pair maximum: 0.0166733607 m / 0.0692166815 deg
+- all four cameras and all six pairs are present in deterministic order
+
+The 193-versus-179 registration difference persists with identical prepared
+pixels and the recovered Main command (including unset SIFT limits), locating
+the difference in the COLMAP environment/numerical reconstruction rather than
+input acquisition or the removed Wizard limits.
+
+AP01 and AP02 authoritative native artifacts passed reconciliation's internal
+before/after SHA-256 equality guard. Their only complete-tree byte changes are
+the expected regenerated pairwise_camera_extrinsics.csv derived reports.
+
+Verification: 50 focused tests passed; git diff --check passed.

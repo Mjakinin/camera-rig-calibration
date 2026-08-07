@@ -1,0 +1,33 @@
+{
+  "ap01_contract_name": "main_route2_parity_v1",
+  "ap01_contract_sha256": "6c8e5a69249e723f94ecdbe9a72eebece1ad3d30b6d71408b975e818b6f303eb",
+  "ap01_method_fingerprint": "692e93b2baf8dd277761044f78ba71a1814a161061dc4baf7bec816ab6c31588",
+  "ap02_invoked": false,
+  "ap03_invoked": false,
+  "colmap_invoked": false,
+  "command_executed": null,
+  "command_execution_count": 0,
+  "existing_attempts_preserved": true,
+  "ground_truth_used": false,
+  "immutable_dataset_fingerprint": "ded8f7c86636b5694855eb45286a320ac39f1f29f0ee49cfc3c4e1745e67c441",
+  "input_id": "input_0ffd7d57d0b8",
+  "intended_command": "rigcal rerun-method --experiment results/simulation/baseline/route2_cpu_ref14_50x50 --method ap01 --variant baseline --reuse-prepared-input --reuse-matching-intermediates --reconcile-after --ap01-method-contract main_route2_parity_v1",
+  "locked_historical_dataset_fingerprint": "sha256:a7c6583bbeddf407284307d32ede0cb5531e3c37f4e0d3972deceb4c1e225e33",
+  "method_execution_invoked": false,
+  "old_public_ap01_survived_unchanged": true,
+  "pre_run_snapshot": {
+    "path": "AP01_FULL_RERUN_PRE_RUN.json",
+    "sha256": "4a7d635f042ba7953c355b41b85b937bcd62f79318502ea9095bf45a4f293c7b"
+  },
+  "publication_invoked": false,
+  "queue_id": null,
+  "reconciliation_invoked": false,
+  "rejection_reasons": [
+    "target experiment input is not byte-identical to locked historical Main Route-2 input",
+    "published frozen observations contain 512 accepted rows; locked parity requires 554"
+  ],
+  "requested_operation": "exactly one complete AP01 explicit method rerun",
+  "run_id": null,
+  "schema_version": 1,
+  "status": "PRE_RUN_REJECTED"
+}

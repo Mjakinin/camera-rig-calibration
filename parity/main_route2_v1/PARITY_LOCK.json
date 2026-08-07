@@ -1,0 +1,220 @@
+{
+  "dataset": {
+    "fingerprint": "sha256:a7c6583bbeddf407284307d32ede0cb5531e3c37f4e0d3972deceb4c1e225e33",
+    "goal": "historical reproduction",
+    "reason": "Main pixels are safely recoverable and four moving frames differ from the current Wizard dataset.",
+    "source": "origin/main@8f9dcea1e8b3189b3c195db2cafe65d5b0e5756b:results/bus_real_data/ablation/world/route/route2/raw_images"
+  },
+  "goal": "historical reproduction",
+  "ground_truth_used": false,
+  "historical_materialization": {
+    "commit_sha": "8f9dcea1e8b3189b3c195db2cafe65d5b0e5756b",
+    "file_count": 199,
+    "hash_status": "all_match",
+    "status": "EXACT_HASH_MATCH",
+    "worktree_path": "C:\\Users\\maxim\\Desktop\\Application of Robotics and Autonomous Systems\\camera-rig-calibration-main-route2-recovery"
+  },
+  "locks": {
+    "ap01_aggregate_selection": "legacy priority and weighted_mean_of_mad_inliers_no_gt_selection",
+    "ap01_default_method_contract": "recommended_wizard_v1",
+    "ap01_main_route2_parity_v1_contract_sha256": "5051e69eb9acf4e75539b66da3a333b2510760e8cc888bc24e1c99533a003d51",
+    "ap01_recommended_wizard_v1_contract_sha256": "598338b3ed4c9784e795dccaddbd779f124ea642d598d2995ea88552dab4e8c6",
+    "ap01_frozen_sfm_contract_sha256": "0ae8e2c3c9bbdaae2468d3d6282e0303f6ce8c9f7a57cb9c6c6aa3d0a5d54fe9",
+    "ap01_pre_fix_manifest_sha256": "b16272e20c75e18e3fe34789b4c6debf053f4879c0f5f54e39e5ff1689c9fa2e",
+    "ap01_post_fix_candidate_parity_sha256": "9d98d5321f72431cf67f72bcad5588f5c654bd45341a7f5e33ff4b8b33d63522",
+    "ap01_post_fix_legacy_candidates_sha256": "ef340b03a7f4b48020a6e931d5589322d325d91fa17efc9e3c624d60eb26411e",
+    "ap01_post_fix_selection_parity_sha256": "cf1cc028ccdc60cab8ca983d60450f68461adc9fca6e70ea6971bf38632b7b6c",
+    "ap01_post_fix_wizard_candidates_sha256": "5eb54b8496bfea69fdc64a386d4ab4353cba1418e94cb4a1d222c68296aced88",
+    "ap01_final_pose_diff_sha256": "41773a8d27a7b527438f35480446934ade9b3336d4b2e3dbb036e7533048d8be",
+    "ap01_final_pose_input_manifest_sha256": "3b5490dca1e3db17017391cddf60c909d3bcef0b6d5cd877959a7dc7c77089f5",
+    "ap01_final_pose_legacy_camera_poses_sha256": "5b8fb3ebea1035aeba50feda4c3e7c7b8eefbcdca818d658822f7b6e727f6ae2",
+    "ap01_final_pose_parity_sha256": "6216b6b6392ff4a020f7c198dc0d27361a319728dd010cb36b491a3f4e2d6158",
+    "ap01_final_pose_pre_fix_manifest_sha256": "cd4f2848423b5217639f4254085c6ec1da9899cede46b8c31903be313034a7b5",
+    "ap01_final_pose_selected_candidates_sha256": "c447e4784d3bd7b6d250ea5affe464221725c542c10a8479e1fab4b306b0ce75",
+    "ap01_final_pose_wizard_camera_poses_sha256": "71c56afbaad6b44e907eade31190bec0bf73dfa9f8099a78af4d7c5b459d9024",
+    "ap01_full_rerun_manifest_sha256": "877d5c5efa34631f290aa59aaced3b6072c318b10f5df56b9788cd9421ff3e55",
+    "ap01_full_rerun_pre_run_sha256": "4a7d635f042ba7953c355b41b85b937bcd62f79318502ea9095bf45a4f293c7b",
+    "ap01_full_rerun_publication_sha256": "a991d26c187d89a4bee8777dd23a58557cba881a0d3371db1d8c56ca913f0e41",
+    "ap01_full_rerun_stage_counts_sha256": "6f7fe498dd04346e591b701896690b83bcfc92b322706da28d6569ae02ca377e",
+    "ap01_full_rerun_validation_sha256": "a29fc0cff3dd77dbccd5a4f32f25966ac04f96cb52875be4a50f218dec3bb0be",
+    "ap01_production_diff_sha256": "a23cfef7bf7d8322e310232aaca0fe05174e0db95c75f4b99f43878617c4c305",
+    "ap01_production_parity_sha256": "21a3d9a41f3b92152d3583d0ff917919e8147400306cf199a97b7d98a2cec675",
+    "ap01_frozen_accepted_observations_sha256": "0f231f4d036432954c4306d24880800b40ce3060b463057e0a0531ead878c690",
+    "ap01_frozen_colmap_images_sha256": "eba9622608b5ea5b955c7031026512e8a9db2ee1db0ed453fa90c3388aa064ff",
+    "ap01_frozen_metric_scale": 0.676879570208,
+    "ap01_frozen_metric_scale_sha256": "f08016b37bbc9fbc45176591fb9c2485c3fb9b43ceb2ecab4c9200f84c031fb8",
+    "ap02_combined_max_nfev": 80,
+    "ap02_frame_selection": "legacy smart all-ref14 plus top8-marker plus top4-pair",
+    "ap02_graph_initialization": "legacy Ref14-rooted widest/maximum-bottleneck contract",
+    "ap02_reference_marker_id": 14,
+    "ap02_static_max_nfev": 80,
+    "colmap_compute": "cpu",
+    "dataset_fingerprint": "sha256:a7c6583bbeddf407284307d32ede0cb5531e3c37f4e0d3972deceb4c1e225e33",
+    "evaluation_anchor_marker_id": 14,
+    "implementation_versions": {
+      "legacy_commit": "8f9dcea1e8b3189b3c195db2cafe65d5b0e5756b",
+      "legacy_git_blobs": {
+        "ap01_direct": "daf66443c1966ecb7635fb128f5aae060c44b533",
+        "ap01_export": "8b7010303ec36bd378f6d52a5b6482ce71ad70fa",
+        "ap01_relay": "df3ca539185f4c7548cecf706b8d40208d75207a",
+        "ap02_ba": "20883b3b43a41c953723de867d95cf2ea029b3b4",
+        "ap03_colmap": "124b76765e3f4b5e93f22f388115b39cace8ddeb"
+      },
+      "wizard_commit": "b5d5bc529533586e78bbbaa6d23780f0226da58c",
+      "wizard_sha256": {
+        "ap01_build_candidates": "5f9dcada2de72cf920ed305119974aa40e078786a91849e83a5d402a11057b85",
+        "ap01_contracts": "dd884bf895e5fd572edaab7df17bdeac177946a5281dbad0ff0f0903a86130bb",
+        "ap01_core": "3b330dcd579bb46a7e458921c9a41ec16533fe45bf8492b54fa3ce881a4f8892",
+        "ap01_frozen_intermediate": "5084da9f37ce0cadc8178b6f20e1475e1ded6c2b2c4cca35f50f5f80a545803f",
+        "ap01_solve_extrinsics": "1923c96568c0f0c9960c2fd47eac5c17856bbf76d80594e68c6c630bcea7abdb",
+        "ap01_validate_reproduction": "606ed66427b2257d16ed789ba50b29c9f939d48c343ed63b60e30484d00e03f2",
+        "ap02_frame_selection": "827ee7c63626c1e3a57598d768c9b75c250b6d6877598d102e21cd4f72915b8c",
+        "ap02_initialization": "34b682436d976ad7f38eaa6eb6748fb979f8d51ed3c19ff62097f611f6d7e7a5",
+        "ap02_solver": "9713ace330170b31a0e5568347b7a8e75886d85cf41c14b607610a4578d3007e",
+        "ap03_colmap": "eaa150122fcb263a83534da7effa41d9d68f4bc87a5fd26b22726d9d01c2e06d"
+      }
+    },
+    "intrinsics_refinement": {
+      "extra_parameters": false,
+      "focal_length": false,
+      "principal_point": false
+    },
+    "observation_semantics": "legacy Main detector/filter contracts",
+    "root_camera": "cam_edge_3"
+  },
+  "method_core_parity": {
+    "ap01_candidate_construction": {
+      "classification": "EXACT",
+      "common_candidate_count": 146143,
+      "first_causal_divergence": null,
+      "legacy_candidate_count": 146143,
+      "maximum_common_rotation_matrix_delta": 0.0,
+      "maximum_common_translation_m_delta": 0.0,
+      "missing_wizard_count": 0,
+      "status": "equal",
+      "unexpected_wizard_count": 0,
+      "wizard_candidate_count": 146143
+    },
+    "ap01_final_pose": {
+      "classification": "EXACT",
+      "first_causal_divergence": null,
+      "legacy_camera_inventory": [
+        "cam_edge_3",
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_5"
+      ],
+      "maximum_relative_rotation_angle_deg": 0.0,
+      "maximum_rotation_matrix_element_abs_delta": 0.0,
+      "maximum_translation_component_abs_delta_m": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "maximum_translation_vector_norm_delta_m": 0.0,
+      "pre_fix_classification": "DIFFERENT_EXPORT_SEMANTICS",
+      "status": "equal",
+      "wizard_camera_inventory": [
+        "cam_edge_3",
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_5"
+      ]
+    },
+    "ap01_selection": {
+      "classification": "EXACT",
+      "first_causal_divergence": null,
+      "legacy_deployment_cameras": [
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_3",
+        "cam_edge_5"
+      ],
+      "status": "equal",
+      "wizard_deployment_cameras": [
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_3",
+        "cam_edge_5"
+      ]
+    },
+    "ap01_end_to_end_production_rerun": {
+      "accepted_observation_count": 554,
+      "classification": "END_TO_END_EXACT_WITH_FROZEN_HISTORICAL_SFM",
+      "fresh_colmap_classification": "FRESH_COLMAP_EXACT_REPRODUCTION_NOT_PORTABLE",
+      "fresh_registered_images": 189,
+      "frozen_registered_images": 175,
+      "candidate_count": 146143,
+      "final_pose_equivalent": true,
+      "ground_truth_used": false,
+      "historical_input_exact_match": true,
+      "method_execution_invoked": true,
+      "publication_status": "PUBLISHED",
+      "published_camera_count": 4,
+      "published_pairwise_count": 6,
+      "reconciliation_status": "COMPLETED",
+      "requested_contract": "main_route2_parity_v1",
+      "resolved_method_fingerprint": "fca129b750d5fc77f872084c5b40f272db273dfd87ad449b3ba975be4c1d8c18",
+      "sfm_mode": "frozen_historical_reproduction",
+      "status": "END_TO_END_EQUIVALENT"
+    },
+    "later_phases": {
+      "reason": "AP02 graph/parameter/residual/pose and AP03 reconstruction comparisons remain outside this phase.",
+      "status": "unavailable"
+    }
+  },
+  "next_phase": "implement AP02 Legacy Main parity contract, beginning with graph / initialization and proceeding directly toward pre-solver parity",
+  "observation_parity": {
+    "classification": "EXACT",
+    "first_mismatch": null,
+    "ground_truth_used": false,
+    "main_counts": {
+      "accepted": {
+        "moving": 524,
+        "static": 30,
+        "total": 554
+      },
+      "raw": {
+        "moving": 524,
+        "static": 30,
+        "total": 554
+      },
+      "rejected": {
+        "moving": 0,
+        "static": 0,
+        "total": 0
+      },
+      "rejected_evidence": "legacy detector emits no separate rejection table"
+    },
+    "mode": "end_to_end",
+    "solver_invoked": false,
+    "tolerances": {
+      "corners_px": 1e-09,
+      "other_numeric": 1e-12,
+      "pnp_rotation_vector": 1e-12,
+      "pnp_translation_m": 1e-12,
+      "reprojection_px": 1e-12
+    },
+    "wizard_counts": {
+      "accepted": {
+        "moving": 524,
+        "static": 30,
+        "total": 554
+      },
+      "raw": {
+        "moving": 524,
+        "static": 30,
+        "total": 554
+      },
+      "rejected": {
+        "moving": 0,
+        "static": 0,
+        "total": 0
+      }
+    }
+  },
+  "parity_result": "ap01_end_to_end_exact_with_frozen_historical_sfm",
+  "preset": "main_route2_parity_v1",
+  "schema_version": 1,
+  "status": "ap01_end_to_end_exact_with_frozen_historical_sfm"
+}

@@ -1,0 +1,20 @@
+AP01 WIZARD CANDIDATE/SELECTION TRACE
+boundary: candidate construction and aggregate selection only
+frozen observations: C:\Users\maxim\Desktop\Application of Robotics and Autonomous Systems\camera-rig-calibration\parity\main_route2_v1\frozen\ap01_accepted_observations.jsonl
+frozen moving poses: C:\Users\maxim\Desktop\Application of Robotics and Autonomous Systems\camera-rig-calibration\parity\main_route2_v1\frozen\ap01_colmap_images.txt
+frozen no-GT scale: C:\Users\maxim\Desktop\Application of Robotics and Autonomous Systems\camera-rig-calibration\parity\main_route2_v1\frozen\ap01_metric_scale.txt
+observation preparation: core.py:309-395
+moving ranking/cap: core.py:849-872; build_candidates.py:41-119
+direct candidate math: core.py:875-898
+relay candidate math: core.py:901-964
+direct/relay aggregation: core.py:576-837
+eligibility and path selection: solve_extrinsics.py:15-122,173-295
+source sha256 build_candidates: 32d63480f82213c6f0eaa45b568b64d5d1a53a72545f7cf35095c90a0cd4e603
+source sha256 core: ba23ba1db3ff20ce318799e4df9ac5462a5fbaad6f6f846c448526f89c5637ec
+source sha256 solve_extrinsics: 726a925ac306537b328f07fbd9f7ca73991ad6e83c97068c60ca126fee3ad8f9
+execution: core candidate and aggregate helpers plus pure gate helpers only.
+build_candidates.run and solve_extrinsics.run were not invoked.
+candidate JSONL: first line is the decoding schema; each later positional row is one candidate in original construction order.
+COLMAP was not invoked; parse_colmap_poses read the frozen pre-existing images.txt.
+No AP01 stage runner, solver, evaluator, or result publisher was invoked.
+ground_truth_used=false

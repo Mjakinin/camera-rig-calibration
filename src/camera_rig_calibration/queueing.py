@@ -916,6 +916,7 @@ class QueueRunner:
         observation_reviewer: QueueObservationReviewer | None = None,
         reuse_method_intermediates: dict[str, Path] | None = None,
         rerun_metadata: dict[str, dict[str, Any]] | None = None,
+        explicit_method_rerun: bool = False,
     ) -> None:
         self.repository_root = repository_root.resolve()
         self.console = console or Console()
@@ -925,6 +926,7 @@ class QueueRunner:
             reuse_method_intermediates or {}
         )
         self.rerun_metadata = dict(rerun_metadata or {})
+        self.explicit_method_rerun = explicit_method_rerun
 
     def show(self, queue: QueueConfig) -> None:
         table = Table(title=f"Experiment queue: {queue.id}")
@@ -1294,6 +1296,7 @@ class QueueRunner:
                     self.reuse_method_intermediates.get(entry.id)
                 ),
                 rerun_metadata=self.rerun_metadata.get(entry.id),
+                explicit_method_rerun=self.explicit_method_rerun,
             )
             if dry_run:
                 orchestrator.show_dry_run(config)
@@ -2618,6 +2621,7 @@ class QueueRunner:
                     self.reuse_method_intermediates.get(entry.id)
                 ),
                 rerun_metadata=self.rerun_metadata.get(entry.id),
+                explicit_method_rerun=self.explicit_method_rerun,
             )
             try:
                 resume = (

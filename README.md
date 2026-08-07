@@ -90,22 +90,15 @@ once per experiment.
 The default choices are:
 
 ```text
-1. AP01 — experimental marker-direct / moving-COLMAP baseline
-2. AP02 — static-only diagnostic plus combined bundle adjustment
-3. AP03 — one COLMAP reconstruction with single and multi scale
+1. AP01 — Direct / Relay marker-based calibration (baseline_v1)
+2. AP02 — Graph initialization + bundle adjustment (baseline_v1)
+3. AP03 — SfM / multi-camera calibration (baseline_v1)
 ```
 
 Repeated selections are preserved. For example `1,2,3,3` produces four
 editable queue rows. Public names are generated from deviations to baseline,
 for example `baseline`, `combined_nfev_60` or
 `matcher_sequential__overlap_13`. An exact duplicate is identified and skipped.
-
-The auditable Route-2 baseline is stricter than a default-looking label:
-AP01 uses root `cam_edge_3`, CPU exhaustive COLMAP at 4096/1600; AP02 uses
-simulation marker 14 and exactly 50/50 function evaluations; AP03 uses CPU
-exhaustive COLMAP at 8192/2400 with eight mapper matches; common evaluation
-uses anchor marker 14. A run is named `baseline` only when its complete
-method-specific contract matches.
 
 AP02 Combined and AP03 Multi are primary results. AP02 Static-only and AP03
 Single remain visible diagnostics and are not counted as separate methods in
@@ -122,18 +115,49 @@ filters. In the editor, `inherit` uses the queue baseline and an explicit
 value affects only that method variant. Optional selection limits use `null`
 for unlimited and reject `0`.
 
-AP01, AP02 and AP03 make deterministic quality-ranked selections and write
-their candidates, score components and tie-breakers to CSV/JSON diagnostics.
-AP02 initializes production poses with a maximum-bottleneck path tree; its
-first-hit BFS is retained only for comparison. AP01 applies explicit Direct
-and Relay support/dispersion gates and publishes no silent pose fallback when
-both paths are unstable. AP03 reports per-camera COLMAP tracks, shared moving
-tracks, reprojection support and physical camera-group assignments without
-using ground truth.
-The common evaluation anchor is selected and frozen once during preflight—no
-method may silently substitute another anchor afterward. PnP observation
-RMSE, AP03 scale-RANSAC reprojection and common evaluation reprojection are
-independent settings and are labeled separately in the wizard.
+All three approaches make deterministic selections and write their candidates,
+quality metrics and tie-breakers to CSV/JSON diagnostics.
+
+### AP01 — Direct / Relay marker-based calibration
+
+AP01 uses synchronized static-camera marker observations plus the moving-camera
+sequence. It estimates a Direct transform where a static camera shares marker
+support with the root camera and uses the moving-camera trajectory as a Relay
+for the remaining cameras. Useful controls include the root camera, Direct
+target, observation quality, and the optional robust-consensus strategy. It
+publishes static-camera poses, all available unordered camera pairs, quality
+diagnostics and runtime provenance.
+
+### AP02 — Graph initialization + bundle adjustment
+
+AP02 builds a marker/camera observation graph, initializes poses from a
+reference marker, and refines the joint problem with bundle adjustment. Useful
+controls include the reference marker, frame budgets, graph initialization,
+reprojection model, solver budget, robust loss and loss scale. Combined BA is
+the primary result; static-only BA remains a diagnostic.
+
+### AP03 — SfM / multi-camera calibration
+
+AP03 jointly registers one image per static camera and the moving-camera frames
+in COLMAP, estimates metric scale from the configured marker set, and exports
+the registered static-camera poses. Useful controls include matching, compute
+mode, mapper support, feature-limit policy, scale inputs, marker area, scale
+RANSAC and marker selection. Multi-marker scale is primary; Single is a shared
+diagnostic.
+
+The common evaluation anchor is selected and frozen once during preflight. No
+method may silently substitute another anchor, and ground truth is never used
+to calibrate the rig.
+
+From the Wizard, choose **Start a new calibration**, select prepared or
+simulation input, add AP01/AP02/AP03 to the method queue, edit advanced options
+if needed, and review the final queue. From the CLI, validate or run the saved
+configuration without changing it:
+
+```bash
+rigcal --config workspace/<dataset>/queue/queue.yaml --dry-run
+rigcal --config workspace/<dataset>/queue/queue.yaml --yes
+```
 
 ## Pipeline
 

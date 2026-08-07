@@ -1,0 +1,70 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap02 / baseline
+Execution status: completed
+Solver status: success
+Artifact status: available
+Calibration status: available
+Quality status: good
+Evaluation status: unavailable
+Anchor export status: OK
+RViz visualization status: UNAVAILABLE_NO_AP03_RECONSTRUCTION
+Primary result: combined
+Runtime: 983.3 s
+Reference frame: ArUco marker 14
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, reference_marker_selection_mode=baseline, reference_marker_id=14, resolved_reference_marker_id=14, initialization_algorithm=maximum_bottleneck, initialization_diagnostic=unweighted_first_hit_bfs, top_per_marker=8, top_per_marker_pair=4, static_max_nfev=80, combined_max_nfev=80, loss=soft_l1, loss_scale_px=3.0
+
+COMMON EVALUATION / EXPORT ANCHOR
+----------------------------------------------------------------------------------------------------------------------
+Marker: 14; export status: OK
+Camera     | x [m]  | y [m]  | z [m] | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw
+-----------+--------+--------+-------+------------+-------------+-----------+-----------+-----------+-----------+---------
+cam_edge_0 | 0.593  | -1.744 | 2.112 | -1.974     | -0.026      | -0.016    | -0.834437 | -0.000473 | -0.015059 | 0.550898
+cam_edge_1 | -4.001 | 0.460  | 2.144 | -1.859     | 0.017       | -1.997    | -0.429686 | 0.676339  | -0.499331 | 0.329552
+cam_edge_3 | -3.239 | -1.578 | 2.051 | -1.908     | 0.036       | -1.045    | -0.701486 | 0.416113  | -0.275901 | 0.508573
+cam_edge_5 | 5.925  | 0.364  | 2.144 | -1.907     | 0.069       | 1.988     | -0.461227 | -0.672262 | 0.500244  | 0.291701
+Full exports: camera_extrinsics_anchor.csv, camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml
+
+AP02 COMBINED GRAPH
+----------------------------------------------------------------------------------------------------------------------
+Primary coverage: 4/4 cameras
+Cause: complete
+All expected static cameras share one AP02 combined component.
+Component    | Cameras                                     | Markers                                           | Moving frames | Bridging frames | Runnable
+-------------+---------------------------------------------+---------------------------------------------------+---------------+-----------------+---------
+component_01 | cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 | 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,19,20 | 170           | 126             | yes
+Relationships between different components: not observable
+
+AP02 FRAME SELECTION AND COMBINED BA
+----------------------------------------------------------------------------------------------------------------------
+Moving frames selected/input/minimum graph set: 170/-/-
+Combined BA: status=2, nfev=57/80, RMSE initial/final=18.684/0.464 px, cost=57254.862 -> 194.999
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera     | Source         | x [m]  | y [m]  | z [m] | roll [deg] | pitch [deg] | yaw [deg]
+-----------+----------------+--------+--------+-------+------------+-------------+----------
+cam_edge_0 | ba_with_moving | 0.593  | -1.744 | 2.112 | -113.123   | -1.470      | -0.906
+cam_edge_1 | ba_with_moving | -4.001 | 0.460  | 2.144 | -106.509   | 0.955       | -114.430
+cam_edge_3 | ba_with_moving | -3.239 | -1.578 | 2.051 | -109.310   | 2.073       | -59.882
+cam_edge_5 | ba_with_moving | 5.925  | 0.364  | 2.144 | -109.276   | 3.971       | 113.912
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                  | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+----------------------+--------+--------+--------+------------+-------------+-----------+-------------
+cam_edge_0-cam_edge_1 | -4.625 | -0.975 | 1.901  | 114.839    | 57.203      | 137.504   | 5.095
+cam_edge_0-cam_edge_3 | -3.835 | -0.076 | 0.082  | 21.763     | 50.193      | 36.600    | 3.836
+cam_edge_0-cam_edge_5 | 5.298  | -0.765 | 2.057  | 120.509    | -58.837     | -144.325  | 5.734
+cam_edge_1-cam_edge_3 | 1.542  | -0.372 | 1.492  | 5.241      | -52.003     | -19.542   | 2.178
+cam_edge_1-cam_edge_5 | -4.017 | -2.515 | 8.722  | 133.276    | 43.772      | 156.426   | 9.926
+cam_edge_3-cam_edge_5 | 2.914  | -3.131 | 8.335  | 141.769    | -7.847      | 176.325   | 9.369
+
+DETAIL ARTIFACTS
+----------------------------------------------------------------------------------------------------------------------
+- diagnostics/method/aruco_observations/ap02_frame_selection.json
+- diagnostics/method/graph_ba/static_only/ap02_optimization_history.csv
+- diagnostics/method/graph_ba/with_moving/ap02_optimization_history.csv
+- diagnostics/method/graph_ba/with_moving/ap02_optimization_summary.json

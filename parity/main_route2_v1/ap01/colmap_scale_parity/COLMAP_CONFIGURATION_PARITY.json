@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "scope": "AP01 moving-camera COLMAP only; no Ground Truth",
+  "overall_classification": "DIFFERENT_CONFIGURATION",
+  "comparison": [
+    {
+      "field": "input_image_inventory",
+      "legacy": "189 moving PNG files",
+      "wizard": "189 moving PNG files",
+      "classification": "EXACT"
+    },
+    {
+      "field": "colmap_executable",
+      "legacy": "colmap resolved from PATH",
+      "wizard": "/usr/bin/colmap",
+      "classification": "HISTORICAL_VALUE_UNAVAILABLE"
+    },
+    {
+      "field": "colmap_executable_version",
+      "legacy": "UNKNOWN",
+      "wizard": "3.9.1 (no CUDA)",
+      "classification": "HISTORICAL_VALUE_UNAVAILABLE"
+    },
+    {
+      "field": "database_user_version",
+      "legacy": 3700,
+      "wizard": 3900,
+      "classification": "DIFFERENT_CONFIGURATION"
+    },
+    {
+      "field": "camera_model",
+      "legacy": "PINHOLE",
+      "wizard": "PINHOLE",
+      "classification": "EXACT"
+    },
+    {
+      "field": "camera_dimensions",
+      "legacy": "1280x720",
+      "wizard": "1280x720",
+      "classification": "EXACT"
+    },
+    {
+      "field": "camera_parameters_text",
+      "legacy": "929.46716309,929.46713448,640.00000000,360.00000000",
+      "wizard": "929.4671630859375,929.46713447570801,640,360",
+      "classification": "DIFFERENT_CONFIGURATION"
+    },
+    {
+      "field": "single_shared_camera",
+      "legacy": true,
+      "wizard": true,
+      "classification": "EXACT"
+    },
+    {
+      "field": "refine_focal_length",
+      "legacy": false,
+      "wizard": false,
+      "classification": "EXACT"
+    },
+    {
+      "field": "refine_principal_point",
+      "legacy": false,
+      "wizard": false,
+      "classification": "EXACT"
+    },
+    {
+      "field": "refine_extra_parameters",
+      "legacy": false,
+      "wizard": false,
+      "classification": "EXACT"
+    },
+    {
+      "field": "feature_type",
+      "legacy": "COLMAP SIFT",
+      "wizard": "COLMAP SIFT",
+      "classification": "SEMANTICALLY_EQUIVALENT"
+    },
+    {
+      "field": "sift_use_gpu",
+      "legacy": false,
+      "wizard": false,
+      "classification": "EXACT"
+    },
+    {
+      "field": "sift_max_image_size",
+      "legacy": 1600,
+      "wizard": 1600,
+      "classification": "EXACT"
+    },
+    {
+      "field": "sift_max_num_features",
+      "legacy": 4096,
+      "wizard": 4096,
+      "classification": "EXACT"
+    },
+    {
+      "field": "sift_num_threads",
+      "legacy": 1,
+      "wizard": "omitted; COLMAP default/all available threads",
+      "classification": "DIFFERENT_CONFIGURATION"
+    },
+    {
+      "field": "matcher",
+      "legacy": "exhaustive",
+      "wizard": "exhaustive",
+      "classification": "EXACT"
+    },
+    {
+      "field": "matcher_use_gpu",
+      "legacy": false,
+      "wizard": false,
+      "classification": "EXACT"
+    },
+    {
+      "field": "matcher_other_options",
+      "legacy": "COLMAP defaults for historical executable",
+      "wizard": "COLMAP 3.9.1 defaults",
+      "classification": "HISTORICAL_VALUE_UNAVAILABLE"
+    },
+    {
+      "field": "mapper_min_num_matches",
+      "legacy": 15,
+      "wizard": 8,
+      "classification": "DIFFERENT_CONFIGURATION"
+    },
+    {
+      "field": "mapper_threads",
+      "legacy": -1,
+      "wizard": -1,
+      "classification": "EXACT"
+    },
+    {
+      "field": "mapper_random_seed",
+      "legacy": 0,
+      "wizard": 0,
+      "classification": "EXACT"
+    },
+    {
+      "field": "mapper_multiple_models",
+      "legacy": true,
+      "wizard": true,
+      "classification": "EXACT"
+    },
+    {
+      "field": "mapper_min_model_size",
+      "legacy": 10,
+      "wizard": 10,
+      "classification": "EXACT"
+    },
+    {
+      "field": "triangulation_min_max_options",
+      "legacy": "init_min_tri_angle=16; filter_min_tri_angle=1.5; local_ba_min_tri_angle=6; tri_min_angle=1.5; tri_create/continue_max_angle_error=2; tri_re_max_angle_error=5; tri_re_min_ratio=0.2; tri_max_transitivity=1; tri_complete_max_transitivity=5; tri_re_max_trials=1",
+      "wizard": "same saved values",
+      "classification": "EXACT"
+    },
+    {
+      "field": "masks",
+      "legacy": "none",
+      "wizard": "none",
+      "classification": "EXACT"
+    },
+    {
+      "field": "input_filtering",
+      "legacy": "none; all moving images",
+      "wizard": "none; all moving images",
+      "classification": "EXACT"
+    },
+    {
+      "field": "database_construction",
+      "legacy": "new DB by feature_extractor",
+      "wizard": "new DB by feature_extractor",
+      "classification": "SEMANTICALLY_EQUIVALENT"
+    },
+    {
+      "field": "image_id_order",
+      "legacy": "numeric filename order",
+      "wizard": "parallel completion order; 73/189 IDs differ",
+      "classification": "DIFFERENT_CONFIGURATION"
+    },
+    {
+      "field": "model_selection",
+      "legacy": "largest registered-image count; lexicographically first tie",
+      "wizard": "largest registered-image count; lexicographically first tie",
+      "classification": "EXACT"
+    },
+    {
+      "field": "post_colmap_filter",
+      "legacy": "none before selecting best model",
+      "wizard": "none before selecting best model",
+      "classification": "EXACT"
+    }
+  ],
+  "environment_audit": {
+    "legacy": {
+      "os": "UNKNOWN",
+      "python": "UNKNOWN",
+      "pycolmap": "not used by recovered invocation",
+      "colmap_executable": "colmap from PATH; resolved path UNKNOWN",
+      "colmap_version": "UNKNOWN",
+      "database_user_version": 3700,
+      "cuda": "disabled by explicit SIFT extraction/matching flags; build capability UNKNOWN",
+      "gpu_model": "NOT_APPLICABLE",
+      "cpu_architecture": "UNKNOWN",
+      "available_threads": "UNKNOWN",
+      "feature_extraction_threads": 1,
+      "opencv": "UNKNOWN",
+      "numpy": "UNKNOWN",
+      "scipy": "UNKNOWN"
+    },
+    "wizard": {
+      "os": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+      "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+      "python_executable": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/.venv-wsl/bin/python",
+      "pycolmap": "not installed/not used",
+      "colmap_executable": "/usr/bin/colmap",
+      "colmap_version": "3.9.1",
+      "colmap_build_cuda": false,
+      "requested_gpu": false,
+      "gpu_model": "NOT_APPLICABLE",
+      "cpu_architecture": "x86_64; Intel Core i5-12400F",
+      "logical_cpu_threads": 12,
+      "feature_extraction_threads": "COLMAP default; option omitted",
+      "opencv": "4.13.0",
+      "numpy": "2.2.6",
+      "scipy": "1.17.0"
+    }
+  },
+  "recovered_commands": {
+    "legacy": {
+      "feature_extractor": [
+        "colmap",
+        "feature_extractor",
+        "--database_path",
+        "<legacy database.db>",
+        "--image_path",
+        "<189-image moving directory>",
+        "--ImageReader.single_camera",
+        "1",
+        "--ImageReader.camera_model",
+        "PINHOLE",
+        "--ImageReader.camera_params",
+        "929.46716309,929.46713448,640.00000000,360.00000000",
+        "--SiftExtraction.use_gpu",
+        "0",
+        "--SiftExtraction.num_threads",
+        "1",
+        "--SiftExtraction.max_num_features",
+        "4096",
+        "--SiftExtraction.max_image_size",
+        "1600"
+      ],
+      "matcher": [
+        "colmap",
+        "exhaustive_matcher",
+        "--database_path",
+        "<legacy database.db>",
+        "--SiftMatching.use_gpu",
+        "0"
+      ],
+      "mapper": [
+        "colmap",
+        "mapper",
+        "--database_path",
+        "<legacy database.db>",
+        "--image_path",
+        "<189-image moving directory>",
+        "--output_path",
+        "<legacy sparse>",
+        "--Mapper.ba_refine_focal_length",
+        "0",
+        "--Mapper.ba_refine_principal_point",
+        "0",
+        "--Mapper.ba_refine_extra_params",
+        "0"
+      ],
+      "mapper_effective_min_num_matches_from_saved_project": 15
+    },
+    "wizard": {
+      "feature_extractor": [
+        "/usr/bin/colmap",
+        "feature_extractor",
+        "--database_path",
+        "<fresh database.db>",
+        "--image_path",
+        "<same 189-image moving directory>",
+        "--ImageReader.single_camera",
+        "1",
+        "--ImageReader.camera_model",
+        "PINHOLE",
+        "--ImageReader.camera_params",
+        "929.4671630859375,929.46713447570801,640,360",
+        "--SiftExtraction.use_gpu",
+        "0",
+        "--SiftExtraction.max_image_size",
+        "1600",
+        "--SiftExtraction.max_num_features",
+        "4096"
+      ],
+      "matcher": [
+        "/usr/bin/colmap",
+        "exhaustive_matcher",
+        "--database_path",
+        "<fresh database.db>",
+        "--SiftMatching.use_gpu",
+        "0"
+      ],
+      "mapper": [
+        "/usr/bin/colmap",
+        "mapper",
+        "--database_path",
+        "<fresh database.db>",
+        "--image_path",
+        "<same 189-image moving directory>",
+        "--output_path",
+        "<fresh sparse>",
+        "--Mapper.ba_refine_focal_length",
+        "0",
+        "--Mapper.ba_refine_principal_point",
+        "0",
+        "--Mapper.ba_refine_extra_params",
+        "0",
+        "--Mapper.min_num_matches",
+        "8"
+      ]
+    }
+  },
+  "saved_project_ini_audit": {
+    "scientific_difference": {
+      "Mapper.min_num_matches": {
+        "legacy": 15,
+        "wizard": 8
+      }
+    },
+    "same_triangulation_and_bundle_adjustment_values": true,
+    "non_scientific_differences": {
+      "log_to_stderr": {
+        "legacy": false,
+        "wizard": true
+      },
+      "log_level": {
+        "legacy": 2,
+        "wizard": 0
+      },
+      "database_path": "different output locations",
+      "image_path": "different path spelling to hash-identical input"
+    },
+    "version_signature_fields": {
+      "legacy_only": {
+        "Mapper.ba_global_use_pba": false,
+        "Mapper.ba_global_pba_gpu_index": -1
+      },
+      "wizard_only": []
+    }
+  },
+  "evidence": {
+    "legacy_invocation": "C:\\Users\\maxim\\Desktop\\Application of Robotics and Autonomous Systems\\camera-rig-calibration-main-route2-recovery\\run\\bus_real_data\\approach1_marker_direct_relay\\06_run_colmap_moving_sequence.py",
+    "legacy_project_ini": "C:\\Users\\maxim\\Desktop\\Application of Robotics and Autonomous Systems\\camera-rig-calibration-main-route2-recovery\\results\\bus_real_data\\01_marker_direct_relay_multimarker_multichain\\04_moving_camera_colmap_trajectory\\sparse\\0\\project.ini",
+    "legacy_database_sha256": "dc190d95b7641f0038fdcbc8919058c89f2bfc33685617824b34eda9798512e6",
+    "wizard_core": "C:\\Users\\maxim\\Desktop\\Application of Robotics and Autonomous Systems\\camera-rig-calibration\\src\\camera_rig_calibration\\methods\\ap01\\core.py",
+    "wizard_stage_manifest": "C:\\Users\\maxim\\Desktop\\Application of Robotics and Autonomous Systems\\camera-rig-calibration\\results\\simulation\\baseline\\route2_main_parity_v1\\attempts\\ap01\\baseline\\20260807_012714_baseline_f6020505\\diagnostics\\02_AP01\\01_moving_colmap\\stage_manifest.json",
+    "wizard_project_ini": "C:\\Users\\maxim\\Desktop\\Application of Robotics and Autonomous Systems\\camera-rig-calibration\\results\\simulation\\baseline\\route2_main_parity_v1\\attempts\\ap01\\baseline\\20260807_012714_baseline_f6020505\\diagnostics\\02_AP01\\01_moving_colmap\\sparse\\0\\project.ini",
+    "wizard_environment": "C:\\Users\\maxim\\Desktop\\Application of Robotics and Autonomous Systems\\camera-rig-calibration\\results\\simulation\\baseline\\route2_main_parity_v1\\attempts\\ap01\\baseline\\20260807_012714_baseline_f6020505\\diagnostics\\environment.json",
+    "wizard_database_sha256": "082ef98aa11c52013c6d1b52b1d5528adfc78ce462378dce077901309b5ac866"
+  },
+  "limitations": [
+    "Database user_version proves different stored COLMAP schema generations (3700 vs 3900), but does not identify the exact historical executable version.",
+    "Historical runtime OS, CPU, package versions, and executable resolution are not present in repository artifacts and remain UNKNOWN."
+  ]
+}

@@ -1,0 +1,27 @@
+AP01 FINAL-POSE TRACE
+
+implementation: wizard
+frozen selected-input SHA-256: c447e4784d3bd7b6d250ea5affe464221725c542c10a8479e1fab4b306b0ce75
+scope: pure post-selection final-pose/final-extrinsics computation only
+Ground Truth read: no
+candidate rebuild: no
+solver/COLMAP/publication/reconciliation: not invoked
+
+Transform convention
+- T_cam_edge_3_camera maps a homogeneous column vector from the target optical-camera frame into the cam_edge_3 optical-camera frame.
+- p_cam_edge_3 = T_cam_edge_3_camera @ p_camera.
+- R is the active coordinate-map rotation; t is the target-camera origin expressed in cam_edge_3 coordinates, in metres.
+- cam_edge_3 is the identity gauge. No alignment, inversion, or global transform is applied after selection.
+
+Selected transform provenance
+- root: I_4x4.
+- Direct: T_root_marker @ inverse(T_target_marker).
+- Relay: T_root_marker @ inverse(T_moving_i_marker) @ scaled(Tcw_i @ inverse(Tcw_j)) @ inverse(T_target_marker @ inverse(T_moving_j_marker)).
+- Relay final input is the already-selected quality-weighted mean of flat MAD inliers; aggregation is not repeated here.
+
+Wizard main_route2_parity_v1 post-selection operations
+1. The parity-only adapter reproduces Legacy's nine-decimal x/y/z and RPY-degree boundary and reconstructs R as Rz @ Ry @ Rx.
+2. It projects cam_edge_3 as the implicit top-level anchor and targets in Legacy loader order cam_edge_0, cam_edge_1, cam_edge_5.
+3. No candidate, aggregate, gate, solver, or recommended_wizard_v1 behavior is changed.
+4. No quaternion is exported; the evidence JSON includes a canonical wxyz quaternion only for sign-equivalence diagnostics.
+5. Missing target aggregates use the already-frozen Legacy-compatible omission decision. No normalization or further composition occurs.

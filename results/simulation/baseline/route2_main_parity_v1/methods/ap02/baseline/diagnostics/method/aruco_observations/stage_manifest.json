@@ -1,0 +1,38 @@
+{
+  "completed_at": "2026-08-07T09:58:08.695+00:00",
+  "inputs": {
+    "quality_accepted_observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/parity/main_route2_v1/frozen/ap02_all_aruco_observations.csv"
+  },
+  "outputs": {
+    "accepted_observations": 513,
+    "component_manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap02_baseline_rerun_20260807_115738_386511/jobs/ap02_baseline/20260807_115759_baseline_e0d4c68c/03_AP02/02_aruco_observations/component_manifest.json",
+    "graph_summary": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap02_baseline_rerun_20260807_115738_386511/jobs/ap02_baseline/20260807_115759_baseline_e0d4c68c/03_AP02/02_aruco_observations/graph_summary.json",
+    "historical_reproduction_provenance": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap02_baseline_rerun_20260807_115738_386511/jobs/ap02_baseline/20260807_115759_baseline_e0d4c68c/03_AP02/02_aruco_observations/HISTORICAL_REPRODUCTION_PROVENANCE.json",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap02_baseline_rerun_20260807_115738_386511/jobs/ap02_baseline/20260807_115759_baseline_e0d4c68c/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv",
+    "selected_moving_frames": 170
+  },
+  "parameters": {
+    "frame_selection": {
+      "maximum_total_frames": null,
+      "reference_marker_maximum_frames": null,
+      "top_per_marker": 8,
+      "top_per_marker_pair": 4
+    },
+    "graph_observation_policy": "legacy_quality_valid_all_observations_v1",
+    "historical_reproduction": true,
+    "method_contract": {
+      "name": "baseline_v1",
+      "reference_marker_policy": "baseline",
+      "root_pose_policy": "reference_marker_identity_v1"
+    },
+    "method_contract_sha256": "7f01fb25fb4a26fbee870636cefd44f2cafa6df6c295a7f711feb84430564f84",
+    "observation_input_mode": "frozen_historical_ap02_reproduction",
+    "reference_marker_id": 14,
+    "weighted_graph": false
+  },
+  "runtime_seconds": 0.22290460599998596,
+  "schema_version": 5,
+  "stage_id": "ap02.build_graph",
+  "started_at": "2026-08-07T09:58:08.473+00:00",
+  "status": "COMPLETED"
+}

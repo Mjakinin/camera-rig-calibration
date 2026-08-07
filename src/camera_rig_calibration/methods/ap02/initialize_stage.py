@@ -13,6 +13,8 @@ def run(
     output_root: Path,
     reference_marker_id: int,
     mode: str,
+    initialization_algorithm: str = "legacy_maximum_bottleneck_v1",
+    edge_weight_policy: str = "legacy_observation_quality_v1",
     log_path: Path | None = None,
 ) -> StageResult:
     stage_root = output_root / "05_graph_initialization" / mode
@@ -35,6 +37,10 @@ def run(
             str(output_root / "05_graph_initialization"),
             "--observations",
             str(observations),
+            "--initialization-algorithm",
+            initialization_algorithm,
+            "--edge-weight-policy",
+            edge_weight_policy,
         ]
         if log_path is None:
             subprocess.run(command, check=True)
@@ -62,7 +68,12 @@ def run(
         stage_root,
         action,
         inputs={"observations": observations},
-        parameters={"reference_marker_id": reference_marker_id, "mode": mode},
+        parameters={
+            "reference_marker_id": reference_marker_id,
+            "mode": mode,
+            "initialization_algorithm": initialization_algorithm,
+            "edge_weight_policy": edge_weight_policy,
+        },
         failure_is_diagnostic=mode == "static_only",
     )
 
@@ -74,11 +85,21 @@ def main() -> None:
     parser.add_argument(
         "--mode", choices=["static_only", "with_moving"], required=True
     )
+    parser.add_argument(
+        "--initialization-algorithm",
+        default="legacy_maximum_bottleneck_v1",
+    )
+    parser.add_argument(
+        "--edge-weight-policy",
+        default="legacy_observation_quality_v1",
+    )
     args = parser.parse_args()
     run(
         output_root=args.out.resolve(),
         reference_marker_id=args.ref_marker_id,
         mode=args.mode,
+        initialization_algorithm=args.initialization_algorithm,
+        edge_weight_policy=args.edge_weight_policy,
     )
 
 

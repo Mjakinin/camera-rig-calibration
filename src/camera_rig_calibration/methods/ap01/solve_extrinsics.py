@@ -10,6 +10,7 @@ from camera_rig_calibration.pipeline import StageResult, run_stage
 
 from . import core
 from ._shared import cameras, decode_candidate, parser
+from .contracts import AP01MethodContract, resolve_ap01_method_contract
 
 
 def evaluate_path_gate(
@@ -122,6 +123,238 @@ def compare_paths(
     }
 
 
+def select_candidate_aggregates(
+    records: list[dict],
+    *,
+    camera_ids: tuple[str, ...],
+    root_camera: str,
+    contract: AP01MethodContract,
+    direct_minimum_independent_markers: int = 3,
+    direct_minimum_inlier_ratio: float = 0.70,
+    direct_maximum_translation_dispersion_m: float = 0.12,
+    direct_maximum_rotation_dispersion_deg: float = 4.0,
+    relay_minimum_inlier_ratio: float = 0.70,
+    relay_maximum_translation_dispersion_m: float = 0.30,
+    relay_maximum_rotation_dispersion_deg: float = 7.0,
+    maximum_path_translation_disagreement_m: float = 0.12,
+    maximum_path_rotation_disagreement_deg: float = 4.0,
+    include_flattened: bool = True,
+) -> dict:
+    """Pure AP01 aggregate/eligibility selection; writes and solvers are absent."""
+
+    grouped: dict[str, dict[str, list[dict]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    for item in records:
+        grouped[str(item["target_camera"])][str(item["mode"])].append(item)
+
+    poses = {root_camera: np.eye(4, dtype=np.float64)}
+    accepted_poses = {root_camera: np.eye(4, dtype=np.float64)}
+    methods = {root_camera: "gauge_identity"}
+    camera_statuses: dict[str, dict] = {
+        root_camera: {
+            "estimate_status": "available",
+            "quality_status": "gauge_identity",
+            "deployment_eligible": True,
+            "evaluation_status": "available",
+            "selected_method": "gauge_identity",
+        }
+    }
+    diagnostics: dict[str, dict] = {}
+    quality_warnings: list[str] = []
+    relay_chain_reports: dict[str, list[dict]] = {}
+
+    direct_targets = set(contract.direct_targets(camera_ids, root_camera))
+    for target in camera_ids:
+        if target == root_camera:
+            continue
+        direct = grouped[target]["direct"]
+        relay = grouped[target]["relay"]
+        if contract.eligibility_policy == "available_aggregate_is_eligible":
+            direct_pose = direct_stats = None
+            relay_pose = relay_stats = None
+            if direct:
+                direct_pose, direct_stats = core.aggregate_legacy_direct_candidates(
+                    direct, contract
+                )
+            if relay:
+                relay_pose, relay_stats = core.aggregate_legacy_relay_candidates(
+                    relay, contract
+                )
+            fixed_type = "direct" if target in direct_targets else "relay"
+            selected = direct_pose if fixed_type == "direct" else relay_pose
+            selected_stats = direct_stats if fixed_type == "direct" else relay_stats
+            if selected is None:
+                source_name = "unavailable"
+                quality_status = (
+                    "unavailable_missing_direct_aggregate"
+                    if fixed_type == "direct"
+                    else "unavailable_missing_relay_aggregate"
+                )
+                deployment_eligible = False
+                quality_warnings.append(f"{target}:{quality_status}")
+            else:
+                source_name = (
+                    "direct_static_aruco_multimarker"
+                    if fixed_type == "direct"
+                    else "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+                )
+                quality_status = "accepted_legacy_available_aggregate"
+                deployment_eligible = bool(np.all(np.isfinite(selected)))
+                if not deployment_eligible:
+                    selected = None
+                    source_name = "unavailable"
+                    quality_status = "unavailable_non_finite_estimate"
+                    quality_warnings.append(f"{target}:{quality_status}")
+            if selected is not None:
+                poses[target] = selected
+                methods[target] = source_name
+                if deployment_eligible:
+                    accepted_poses[target] = selected
+            camera_statuses[target] = {
+                "estimate_status": "available" if selected is not None else "unavailable",
+                "quality_status": quality_status,
+                "deployment_eligible": deployment_eligible,
+                "evaluation_status": "available" if selected is not None else "unavailable",
+                "selected_method": source_name,
+            }
+            diagnostics[target] = {
+                "selected_method": source_name,
+                "selected_candidate_type": fixed_type if selected is not None else None,
+                "quality_warning": None if deployment_eligible else quality_status,
+                **camera_statuses[target],
+                "selected_aggregate": selected_stats,
+                "direct": direct_stats,
+                "relay": relay_stats,
+                "relay_raw_candidate_count": len(relay),
+                "relay_independent_chain_count": None,
+                "direct_relay_consistency": {
+                    "available": direct_pose is not None and relay_pose is not None,
+                    "consistent": None,
+                    "gate_applied": False,
+                },
+            }
+            relay_chain_reports[target] = []
+            continue
+
+        if contract.eligibility_policy != "configured_consensus_gates":
+            raise ValueError(
+                f"Unknown AP01 eligibility policy: {contract.eligibility_policy}"
+            )
+        direct_pose = direct_stats = None
+        relay_pose = relay_stats = None
+        relay_chains: list[dict] = []
+        if direct:
+            direct_pose, direct_stats = core.aggregate_direct_marker_estimates(direct)
+        if relay:
+            relay_pose, relay_stats, relay_chains = (
+                core.aggregate_relay_marker_chains(relay)
+            )
+        direct_stats = evaluate_path_gate(
+            direct,
+            direct_stats,
+            minimum_inlier_ratio=direct_minimum_inlier_ratio,
+            maximum_translation_dispersion_m=direct_maximum_translation_dispersion_m,
+            maximum_rotation_dispersion_deg=direct_maximum_rotation_dispersion_deg,
+            minimum_independent_markers=direct_minimum_independent_markers,
+        )
+        relay_stats = evaluate_path_gate(
+            relay_chains,
+            relay_stats,
+            minimum_inlier_ratio=relay_minimum_inlier_ratio,
+            maximum_translation_dispersion_m=relay_maximum_translation_dispersion_m,
+            maximum_rotation_dispersion_deg=relay_maximum_rotation_dispersion_deg,
+        )
+        path_comparison = compare_paths(
+            direct_pose,
+            relay_pose,
+            maximum_translation_disagreement_m=maximum_path_translation_disagreement_m,
+            maximum_rotation_disagreement_deg=maximum_path_rotation_disagreement_deg,
+        )
+        direct_stable = bool(direct_stats["stable"])
+        relay_stable = bool(relay_stats["stable"])
+        warning = None
+        deployment_eligible = False
+        if direct_stable and relay_stable and path_comparison["consistent"] is False:
+            selected, source_name = direct_pose, "direct_multimarker"
+            quality_status = "rejected_direct_relay_disagreement"
+            warning = quality_status
+        elif direct_stable:
+            selected, source_name = direct_pose, "direct_multimarker"
+            deployment_eligible = True
+            quality_status = "accepted"
+        elif relay_stable:
+            selected, source_name = relay_pose, "moving_colmap_relay"
+            deployment_eligible = True
+            quality_status = "accepted"
+        else:
+            selected = direct_pose if direct_pose is not None else relay_pose
+            source_name = (
+                "direct_multimarker_diagnostic"
+                if direct_pose is not None
+                else "moving_colmap_relay_diagnostic"
+                if relay_pose is not None
+                else "unavailable"
+            )
+            quality_status = (
+                "rejected_unstable_consensus"
+                if selected is not None
+                else "unavailable_no_finite_estimate"
+            )
+            warning = quality_status
+        if warning:
+            quality_warnings.append(f"{target}:{warning}")
+        if selected is not None:
+            if not np.all(np.isfinite(selected)):
+                selected = None
+                source_name = "unavailable"
+                quality_status = "unavailable_non_finite_estimate"
+                deployment_eligible = False
+            else:
+                poses[target] = selected
+                methods[target] = source_name
+                if deployment_eligible:
+                    accepted_poses[target] = selected
+        camera_statuses[target] = {
+            "estimate_status": "available" if selected is not None else "unavailable",
+            "quality_status": quality_status,
+            "deployment_eligible": deployment_eligible,
+            "evaluation_status": "available" if selected is not None else "unavailable",
+            "selected_method": source_name,
+        }
+        diagnostics[target] = {
+            "selected_method": source_name,
+            "selected_candidate_type": (
+                "direct" if selected is direct_pose and selected is not None
+                else "relay" if selected is relay_pose and selected is not None
+                else None
+            ),
+            "quality_warning": warning,
+            **camera_statuses[target],
+            "direct": direct_stats,
+            "relay": relay_stats,
+            "relay_raw_candidate_count": len(relay),
+            "relay_independent_chain_count": len(relay_chains),
+            "direct_relay_consistency": path_comparison,
+        }
+        relay_chain_reports[target] = list(relay_stats.get("chain_reports", []))
+
+    return {
+        "poses": poses,
+        "accepted_poses": accepted_poses,
+        "methods": methods,
+        "camera_statuses": camera_statuses,
+        "diagnostics": diagnostics,
+        "quality_warnings": quality_warnings,
+        "flattened": (
+            [core.serializable_candidate(item) for item in records]
+            if include_flattened
+            else []
+        ),
+        "relay_chain_reports": relay_chain_reports,
+    }
+
+
 def run(
     *,
     dataset: Path,
@@ -139,165 +372,55 @@ def run(
     relay_maximum_rotation_dispersion_deg: float = 7.0,
     maximum_path_translation_disagreement_m: float = 0.12,
     maximum_path_rotation_disagreement_deg: float = 4.0,
+    method_contract: str = "baseline_v1",
+    direct_target_camera: str = "cam_edge_1",
+    top_moving_per_marker: int | None = 8,
 ) -> StageResult:
     stage_root = output_root / "03_static_extrinsics"
+    contract = resolve_ap01_method_contract(
+        method_contract,
+        direct_target_camera=direct_target_camera,
+        top_moving_per_marker=top_moving_per_marker,
+    )
 
     def action() -> dict[str, Path | int]:
         source = output_root / "03_candidates/transform_candidates.json"
         records = json.loads(source.read_text(encoding="utf-8"))
-        grouped: dict[str, dict[str, list[dict]]] = defaultdict(
-            lambda: defaultdict(list)
+        selected_result = select_candidate_aggregates(
+            [decode_candidate(encoded) for encoded in records],
+            camera_ids=camera_ids,
+            root_camera=root_camera,
+            contract=contract,
+            direct_minimum_independent_markers=direct_minimum_independent_markers,
+            direct_minimum_inlier_ratio=direct_minimum_inlier_ratio,
+            direct_maximum_translation_dispersion_m=direct_maximum_translation_dispersion_m,
+            direct_maximum_rotation_dispersion_deg=direct_maximum_rotation_dispersion_deg,
+            relay_minimum_inlier_ratio=relay_minimum_inlier_ratio,
+            relay_maximum_translation_dispersion_m=relay_maximum_translation_dispersion_m,
+            relay_maximum_rotation_dispersion_deg=relay_maximum_rotation_dispersion_deg,
+            maximum_path_translation_disagreement_m=maximum_path_translation_disagreement_m,
+            maximum_path_rotation_disagreement_deg=maximum_path_rotation_disagreement_deg,
         )
-        for encoded in records:
-            item = decode_candidate(encoded)
-            grouped[str(item["target_camera"])][str(item["mode"])].append(
-                item
-            )
+        poses = selected_result["poses"]
+        accepted_poses = selected_result["accepted_poses"]
+        methods = selected_result["methods"]
+        camera_statuses = selected_result["camera_statuses"]
+        diagnostics = selected_result["diagnostics"]
+        quality_warnings = selected_result["quality_warnings"]
+        flattened = selected_result["flattened"]
+        relay_chain_reports = selected_result["relay_chain_reports"]
 
-        poses = {root_camera: np.eye(4, dtype=np.float64)}
-        accepted_poses = {root_camera: np.eye(4, dtype=np.float64)}
-        methods = {root_camera: "gauge_identity"}
-        camera_statuses: dict[str, dict] = {
-            root_camera: {
-                "estimate_status": "available",
-                "quality_status": "gauge_identity",
-                "deployment_eligible": True,
-                "evaluation_status": "available",
-                "selected_method": "gauge_identity",
-            }
+        poses = {
+            camera: (
+                transform
+                if camera == root_camera
+                else core.serialize_final_pose(transform, contract)
+            )
+            for camera, transform in poses.items()
         }
-        diagnostics: dict[str, dict] = {}
-        quality_warnings: list[str] = []
-        flattened: list[dict] = []
-        relay_chain_reports: dict[str, list[dict]] = {}
-        for target in camera_ids:
-            if target == root_camera:
-                continue
-            direct = grouped[target]["direct"]
-            relay = grouped[target]["relay"]
-            direct_pose = direct_stats = None
-            relay_pose = relay_stats = None
-            relay_chains: list[dict] = []
-            if direct:
-                direct_pose, direct_stats = (
-                    core.aggregate_direct_marker_estimates(direct)
-                )
-            if relay:
-                relay_pose, relay_stats, relay_chains = (
-                    core.aggregate_relay_marker_chains(relay)
-                )
-            direct_stats = evaluate_path_gate(
-                direct,
-                direct_stats,
-                minimum_inlier_ratio=direct_minimum_inlier_ratio,
-                maximum_translation_dispersion_m=(
-                    direct_maximum_translation_dispersion_m
-                ),
-                maximum_rotation_dispersion_deg=(
-                    direct_maximum_rotation_dispersion_deg
-                ),
-                minimum_independent_markers=(
-                    direct_minimum_independent_markers
-                ),
-            )
-            relay_stats = evaluate_path_gate(
-                relay_chains,
-                relay_stats,
-                minimum_inlier_ratio=relay_minimum_inlier_ratio,
-                maximum_translation_dispersion_m=(
-                    relay_maximum_translation_dispersion_m
-                ),
-                maximum_rotation_dispersion_deg=(
-                    relay_maximum_rotation_dispersion_deg
-                ),
-            )
-            path_comparison = compare_paths(
-                direct_pose,
-                relay_pose,
-                maximum_translation_disagreement_m=(
-                    maximum_path_translation_disagreement_m
-                ),
-                maximum_rotation_disagreement_deg=(
-                    maximum_path_rotation_disagreement_deg
-                ),
-            )
-            direct_stable = bool(direct_stats["stable"])
-            relay_stable = bool(relay_stats["stable"])
-            warning = None
-            deployment_eligible = False
-            quality_status = "unavailable"
-            if (
-                direct_stable
-                and relay_stable
-                and path_comparison["consistent"] is False
-            ):
-                selected, source_name = direct_pose, "direct_multimarker"
-                quality_status = "rejected_direct_relay_disagreement"
-                warning = quality_status
-                quality_warnings.append(f"{target}:{warning}")
-            elif direct_stable:
-                selected, source_name = direct_pose, "direct_multimarker"
-                deployment_eligible = True
-                quality_status = "accepted"
-            elif relay_stable:
-                selected, source_name = relay_pose, "moving_colmap_relay"
-                deployment_eligible = True
-                quality_status = "accepted"
-            else:
-                # Preserve the strongest finite GT-free estimate for scientific
-                # evaluation while explicitly blocking deployment.
-                selected = direct_pose if direct_pose is not None else relay_pose
-                source_name = (
-                    "direct_multimarker_diagnostic"
-                    if direct_pose is not None
-                    else "moving_colmap_relay_diagnostic"
-                    if relay_pose is not None
-                    else "unavailable"
-                )
-                quality_status = (
-                    "rejected_unstable_consensus"
-                    if selected is not None
-                    else "unavailable_no_finite_estimate"
-                )
-                warning = quality_status
-                quality_warnings.append(f"{target}:{warning}")
-            if selected is not None:
-                if not np.all(np.isfinite(selected)):
-                    selected = None
-                    source_name = "unavailable"
-                    quality_status = "unavailable_non_finite_estimate"
-                    deployment_eligible = False
-                else:
-                    poses[target] = selected
-                    methods[target] = source_name
-                    if deployment_eligible:
-                        accepted_poses[target] = selected
-            camera_statuses[target] = {
-                "estimate_status": (
-                    "available" if selected is not None else "unavailable"
-                ),
-                "quality_status": quality_status,
-                "deployment_eligible": deployment_eligible,
-                "evaluation_status": (
-                    "available" if selected is not None else "unavailable"
-                ),
-                "selected_method": source_name,
-            }
-            diagnostics[target] = {
-                "selected_method": source_name,
-                "quality_warning": warning,
-                **camera_statuses[target],
-                "direct": direct_stats,
-                "relay": relay_stats,
-                "relay_raw_candidate_count": len(relay),
-                "relay_independent_chain_count": len(relay_chains),
-                "direct_relay_consistency": path_comparison,
-            }
-            relay_chain_reports[target] = list(
-                relay_stats.get("chain_reports", [])
-            )
-            flattened.extend(core.serializable_candidate(item) for item in direct)
-            flattened.extend(core.serializable_candidate(item) for item in relay)
+        accepted_poses = {
+            camera: poses[camera] for camera in accepted_poses
+        }
 
         stage_root.mkdir(parents=True, exist_ok=True)
         pose_fields = [
@@ -364,10 +487,7 @@ def run(
             json.dumps(
                 {
                     "schema_version": 5,
-                    "algorithm": (
-                        "hierarchical_weighted_mean_of_mad_inliers_"
-                        "no_gt_selection"
-                    ),
+                    "algorithm": contract.relay_aggregation_policy,
                     "ground_truth_used": False,
                     "targets": relay_chain_reports,
                 },
@@ -381,6 +501,8 @@ def run(
             json.dumps(
                 {
                     "root_camera": root_camera,
+                    "method_contract": contract.fingerprint_payload(),
+                    "method_contract_sha256": contract.scientific_fingerprint(),
                     "camera_methods": methods,
                     "camera_statuses": camera_statuses,
                     "per_target_diagnostics": diagnostics,
@@ -458,7 +580,26 @@ def run(
                 output_root / "03_candidates/transform_candidates.json"
             )
         },
-        parameters={"root_camera": root_camera},
+        parameters={
+            "root_camera": root_camera,
+            "method_contract": contract.fingerprint_payload(),
+            "method_contract_sha256": contract.scientific_fingerprint(),
+            "direct_quality_gate": {
+                "minimum_independent_markers": direct_minimum_independent_markers,
+                "minimum_inlier_ratio": direct_minimum_inlier_ratio,
+                "maximum_translation_dispersion_m": direct_maximum_translation_dispersion_m,
+                "maximum_rotation_dispersion_deg": direct_maximum_rotation_dispersion_deg,
+            },
+            "relay_quality_gate": {
+                "minimum_inlier_ratio": relay_minimum_inlier_ratio,
+                "maximum_translation_dispersion_m": relay_maximum_translation_dispersion_m,
+                "maximum_rotation_dispersion_deg": relay_maximum_rotation_dispersion_deg,
+            },
+            "direct_relay_consistency": {
+                "maximum_translation_disagreement_m": maximum_path_translation_disagreement_m,
+                "maximum_rotation_disagreement_deg": maximum_path_rotation_disagreement_deg,
+            },
+        },
     )
 
 
@@ -494,6 +635,9 @@ def main() -> None:
         maximum_path_rotation_disagreement_deg=(
             args.maximum_path_rotation_disagreement_deg
         ),
+        method_contract=args.method_contract,
+        direct_target_camera=args.direct_target_camera,
+        top_moving_per_marker=args.top_moving_per_marker,
     )
 
 

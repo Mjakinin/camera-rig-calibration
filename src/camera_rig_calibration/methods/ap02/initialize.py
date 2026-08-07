@@ -69,6 +69,8 @@ def filter_mode(
 
 def best_observations(
     rows: list[dict[str, str]],
+    *,
+    edge_weight_policy: str = "legacy_observation_quality_v1",
 ) -> list[dict[str, str]]:
     """Choose one deterministic initialization edge per observer/marker.
 
@@ -81,8 +83,26 @@ def best_observations(
         dict[str, str],
     ] = {}
 
+    if edge_weight_policy == "legacy_observation_quality_v1":
+        for row in rows:
+            if not is_success(row):
+                continue
+            try:
+                marker_id = int(float(row["marker_id"]))
+            except (KeyError, ValueError):
+                continue
+            score = edge_quality(row, edge_weight_policy)
+            if score <= 0.0:
+                continue
+            key = (row["observer_id"], marker_id)
+            if key not in best or score > edge_quality(
+                best[key], edge_weight_policy
+            ):
+                best[key] = row
+        return list(best.values())
+
     def rank(row: dict[str, str]) -> tuple[float, float, float, str]:
-        score = edge_quality(row)
+        score = edge_quality(row, edge_weight_policy)
         rmse = observation_pnp_rmse(row)
         try:
             area = float(
@@ -145,8 +165,15 @@ def observation_pnp_rmse(row: dict[str, str]) -> float:
     return pnp_reprojection_rmse(row)
 
 
-def edge_quality(row: dict[str, str]) -> float:
-    """Return the accepted, GT-free observation selection score."""
+def edge_quality(
+    row: dict[str, str],
+    policy: str = "legacy_observation_quality_v1",
+) -> float:
+    """Return the configured, GT-free AP02 graph-edge score."""
+    if policy == "legacy_observation_quality_v1":
+        return main_observation_score(row)
+    if policy != "wizard_selection_score_v2":
+        raise ValueError(f"Unknown AP02 graph-edge weight policy: {policy}")
     score = _finite_float(row, "selection_score", float("nan"))
     if math.isfinite(score) and score > 0.0:
         return score
@@ -186,6 +213,8 @@ def edge_metadata(row: dict[str, str]) -> dict[str, object]:
 
 def build_graph(
     rows: list[dict[str, str]],
+    *,
+    preserve_input_order: bool = True,
 ):
     adjacency = defaultdict(list)
 
@@ -203,15 +232,16 @@ def build_graph(
             (marker, row)
         )
 
-    for node in adjacency:
-        adjacency[node].sort(
-            key=lambda item: (
-                item[0][0],
-                str(item[0][1]),
-                str(item[1].get("frame_id", "")),
-                str(item[1].get("image_path", "")),
+    if not preserve_input_order:
+        for node in adjacency:
+            adjacency[node].sort(
+                key=lambda item: (
+                    item[0][0],
+                    str(item[0][1]),
+                    str(item[1].get("frame_id", "")),
+                    str(item[1].get("image_path", "")),
+                )
             )
-        )
     return adjacency
 
 
@@ -238,7 +268,12 @@ def _node_text(node: Node) -> str:
     return f"{node[0]}:{node[1]}"
 
 
-def maximum_bottleneck_tree(adjacency, start: Node):
+def maximum_bottleneck_tree(
+    adjacency,
+    start: Node,
+    *,
+    edge_weight_policy: str = "wizard_selection_score_v2",
+):
     """Choose one deterministic maximum-bottleneck path per graph node.
 
     The comparison order is: larger bottleneck, fewer hops, larger mean
@@ -278,7 +313,7 @@ def maximum_bottleneck_tree(adjacency, start: Node):
         if current_metrics is None or queued_rank != rank(current_metrics):
             continue
         for neighbor, row in adjacency.get(current, []):
-            quality = edge_quality(row)
+            quality = edge_quality(row, edge_weight_policy)
             if not math.isfinite(quality) or quality <= 0.0:
                 continue
             rmse = observation_pnp_rmse(row)
@@ -323,7 +358,12 @@ def maximum_bottleneck_tree(adjacency, start: Node):
     return parent, best
 
 
-def main_compat_widest_path_tree(adjacency, start: Node):
+def main_compat_widest_path_tree(
+    adjacency,
+    start: Node,
+    *,
+    edge_weight_policy: str = "wizard_selection_score_v2",
+):
     """Reproduce the validated ``main`` maximum-frontier initialization.
 
     This is Prim's rooted maximum-spanning-tree construction used by the
@@ -348,20 +388,13 @@ def main_compat_widest_path_tree(adjacency, start: Node):
         for neighbor, row in adjacency.get(node, []):
             if neighbor in visited:
                 continue
-            score = edge_quality(row)
+            score = edge_quality(row, edge_weight_policy)
             if not math.isfinite(score) or score <= 0.0:
                 continue
-            # The first item is exactly the main edge priority.  Remaining
-            # fields make equal-score behavior stable across Python/platforms.
             heapq.heappush(
                 frontier,
                 (
                     -score,
-                    _node_text(node),
-                    _node_text(neighbor),
-                    str(row.get("observer_id", "")),
-                    str(row.get("frame_id", "")),
-                    str(row.get("image_path", "")),
                     next(counter),
                     node,
                     neighbor,
@@ -373,11 +406,6 @@ def main_compat_widest_path_tree(adjacency, start: Node):
     while frontier:
         (
             _negative_score,
-            _from_text,
-            _to_text,
-            _observer,
-            _frame,
-            _image,
             _counter,
             source,
             target,
@@ -390,7 +418,7 @@ def main_compat_widest_path_tree(adjacency, start: Node):
                 "Main-compatible frontier contains an uninitialized parent: "
                 f"{source}"
             )
-        score = edge_quality(row)
+        score = edge_quality(row, edge_weight_policy)
         visited.add(target)
         parent[target] = (source, row)
         source_metrics = metrics[source]
@@ -464,6 +492,7 @@ def initialize_from_tree(
     *,
     path_metrics: dict[Node, dict[str, object]] | None = None,
     algorithm: str = "unweighted_first_hit_bfs",
+    edge_weight_policy: str = "legacy_observation_quality_v1",
 ):
     start = marker_node(ref_marker_id)
 
@@ -554,7 +583,7 @@ def initialize_from_tree(
                     ),
                     "observer_id": row["observer_id"],
                     "frame_id": row.get("frame_id", ""),
-                    "edge_quality": edge_quality(row),
+                    "edge_quality": edge_quality(row, edge_weight_policy),
                     "path_length": (
                         path_metrics.get(child, {}).get("path_length", "")
                         if path_metrics is not None
@@ -722,6 +751,23 @@ def main() -> None:
         type=Path,
         default=OBS_CSV,
     )
+    parser.add_argument(
+        "--initialization-algorithm",
+        choices=(
+            "legacy_maximum_bottleneck_v1",
+            "wizard_maximum_bottleneck_v2",
+            "unweighted_bfs_diagnostic",
+        ),
+        default="legacy_maximum_bottleneck_v1",
+    )
+    parser.add_argument(
+        "--edge-weight-policy",
+        choices=(
+            "legacy_observation_quality_v1",
+            "wizard_selection_score_v2",
+        ),
+        default="legacy_observation_quality_v1",
+    )
 
     args = parser.parse_args()
 
@@ -731,15 +777,37 @@ def main() -> None:
 
     all_rows = read_csv(args.observations)
     mode_rows = filter_mode(all_rows, args.mode)
-    selected_rows = best_observations(mode_rows)
+    selected_rows = best_observations(
+        mode_rows, edge_weight_policy=args.edge_weight_policy
+    )
 
-    adjacency = build_graph(selected_rows)
+    adjacency = build_graph(
+        selected_rows,
+        preserve_input_order=(
+            args.initialization_algorithm
+            == "legacy_maximum_bottleneck_v1"
+        ),
+    )
 
     start = marker_node(args.ref_marker_id)
 
     bfs_parent = deterministic_breadth_first_tree(adjacency, start)
-    parent, path_metrics = main_compat_widest_path_tree(adjacency, start)
-    v2_parent, v2_metrics = maximum_bottleneck_tree(adjacency, start)
+    legacy_parent, legacy_metrics = main_compat_widest_path_tree(
+        adjacency, start, edge_weight_policy=args.edge_weight_policy
+    )
+    v2_parent, v2_metrics = maximum_bottleneck_tree(
+        adjacency, start, edge_weight_policy=args.edge_weight_policy
+    )
+    if args.initialization_algorithm == "legacy_maximum_bottleneck_v1":
+        parent, path_metrics = legacy_parent, legacy_metrics
+        productive_algorithm = "legacy_maximum_bottleneck_v1"
+    elif args.initialization_algorithm == "wizard_maximum_bottleneck_v2":
+        parent, path_metrics = v2_parent, v2_metrics
+        productive_algorithm = "wizard_maximum_bottleneck_v2"
+    else:
+        parent = bfs_parent
+        path_metrics = _tree_path_metrics(bfs_parent, start)
+        productive_algorithm = "unweighted_bfs_diagnostic"
 
     (
         marker_poses,
@@ -750,7 +818,8 @@ def main() -> None:
         parent,
         args.ref_marker_id,
         path_metrics=path_metrics,
-        algorithm="main_compat_widest_path_v1",
+        algorithm=productive_algorithm,
+        edge_weight_policy=args.edge_weight_policy,
     )
     (
         _v2_marker_poses,
@@ -762,6 +831,7 @@ def main() -> None:
         args.ref_marker_id,
         path_metrics=v2_metrics,
         algorithm="maximum_bottleneck_v2",
+        edge_weight_policy=args.edge_weight_policy,
     )
     (
         _bfs_marker_poses,
@@ -773,6 +843,7 @@ def main() -> None:
         args.ref_marker_id,
         path_metrics=_tree_path_metrics(bfs_parent, start),
         algorithm="unweighted_first_hit_bfs_diagnostic",
+        edge_weight_policy=args.edge_weight_policy,
     )
 
     static_pose_rows = []
@@ -792,7 +863,7 @@ def main() -> None:
                     "static_camera",
                     observer_id,
                     transform,
-                    source=f"{args.mode}_main_compat_widest_path_v1",
+                    source=f"{args.mode}_{productive_algorithm}",
                 )
             )
 
@@ -802,7 +873,7 @@ def main() -> None:
                     "moving_frame",
                     observer_id,
                     transform,
-                    source=f"{args.mode}_main_compat_widest_path_v1",
+                    source=f"{args.mode}_{productive_algorithm}",
                 )
             )
 
@@ -811,7 +882,7 @@ def main() -> None:
             "marker",
             str(marker_id),
             transform,
-            source=f"{args.mode}_main_compat_widest_path_v1",
+            source=f"{args.mode}_{productive_algorithm}",
         )
         for marker_id, transform
         in sorted(marker_poses.items())
@@ -895,7 +966,7 @@ def main() -> None:
         parent,
         path_metrics,
         productive_static_poses,
-        algorithm="main_compat_widest_path_v1",
+        algorithm=productive_algorithm,
     )
     v2_paths = _camera_path_diagnostics(
         v2_parent,
@@ -930,7 +1001,7 @@ def main() -> None:
         comparison_rows.append(
             {
                 "camera_id": camera_id,
-                "productive_algorithm": "main_compat_widest_path_v1",
+                "productive_algorithm": productive_algorithm,
                 "productive_path": " -> ".join(
                     str(edge["to"])
                     for edge in productive_path.get(
@@ -1003,7 +1074,7 @@ def main() -> None:
         "schema_version": 5,
         "mode": args.mode,
         "reference_marker_id": args.ref_marker_id,
-        "productive_algorithm": "main_compat_widest_path_v1",
+        "productive_algorithm": productive_algorithm,
         "diagnostic_algorithms": [
             "maximum_bottleneck_v2",
             "unweighted_first_hit_bfs_diagnostic",
@@ -1093,7 +1164,11 @@ def main() -> None:
                     main_order[0].get("frame_id") if main_order else None
                 ),
                 "selection_score": (
-                    edge_quality(current_order[0]) if current_order else None
+                    edge_quality(
+                        current_order[0], "wizard_selection_score_v2"
+                    )
+                    if current_order
+                    else None
                 ),
                 "main_observation_score": (
                     main_observation_score(main_order[0])
@@ -1104,7 +1179,7 @@ def main() -> None:
         )
     parity = {
         "schema_version": 5,
-        "algorithm_version": "main_compat_widest_path_v1",
+        "algorithm_version": productive_algorithm,
         "reference_marker_id": args.ref_marker_id,
         "mode": args.mode,
         "productive_uses_ground_truth": False,
@@ -1190,7 +1265,7 @@ def main() -> None:
         "",
         f"Mode: {args.mode}",
         f"Reference marker id: {args.ref_marker_id}",
-        "Productive algorithm: main_compat_widest_path_v1",
+        f"Productive algorithm: {productive_algorithm}",
         "Diagnostics: maximum_bottleneck_v2, "
         "unweighted_first_hit_bfs_diagnostic",
         "",

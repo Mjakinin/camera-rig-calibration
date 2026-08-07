@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "classification": "SAME_KEYPOINTS_DIFFERENT_DESCRIPTORS_AND_MATCHES",
+  "byte_parity": {
+    "keypoint_blobs_equal": 189,
+    "descriptor_blobs_equal": 140,
+    "descriptor_blobs_different": 49
+  },
+  "count_parity": {
+    "images": 189,
+    "all_per_image_feature_counts_equal": true,
+    "legacy_total_features": 151125,
+    "wizard_total_features": 151125
+  },
+  "semantic_graph_parity": {
+    "matches": {
+      "legacy_pair_records": 17766,
+      "wizard_pair_records": 17766,
+      "same_pair_inventory": true,
+      "legacy_total_rows": 666230,
+      "wizard_total_rows": 666211,
+      "legacy_connected_edges": 11988,
+      "wizard_connected_edges": 11977,
+      "different_records": 5887,
+      "first_count_difference": [
+        "frame_0000.png",
+        "frame_0002.png"
+      ],
+      "first_blob_difference": [
+        "frame_0000.png",
+        "frame_0002.png"
+      ]
+    },
+    "two_view_geometries": {
+      "legacy_pair_records": 17766,
+      "wizard_pair_records": 17766,
+      "same_pair_inventory": true,
+      "legacy_total_rows": 460074,
+      "wizard_total_rows": 459796,
+      "legacy_connected_edges": 7756,
+      "wizard_connected_edges": 7741,
+      "different_records": 6792,
+      "first_count_difference": [
+        "frame_0000.png",
+        "frame_0002.png"
+      ],
+      "first_blob_difference": [
+        "frame_0000.png",
+        "frame_0001.png"
+      ]
+    }
+  },
+  "first_observed_numeric_divergence": {
+    "stage": "SIFT descriptor generation",
+    "image": "frame_0003.png",
+    "legacy_descriptor_sha256": "8e79fe34a5baf1afbfe42599f2ff5772e402904d49510de1b83f5cf0b10933e9",
+    "wizard_descriptor_sha256": "505456ddfcb2a6b03b26354786e3dd4a53e91c33bdf9f5c43416c847aa941f78",
+    "feature_count_both": 964,
+    "interpretation": "Counts and keypoint blobs remain exact, but descriptor bytes first differ here. Byte identity across different COLMAP schema/version generations is diagnostic evidence, not a portability requirement; downstream semantic match counts also differ."
+  },
+  "database_schema_sql_equal": true,
+  "database_user_versions": {
+    "legacy": 3700,
+    "wizard": 3900
+  }
+}

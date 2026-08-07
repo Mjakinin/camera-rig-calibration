@@ -9,12 +9,23 @@ import numpy as np
 from camera_rig_calibration.pipeline.stage_cli import camera_ids, method_parser
 
 from . import core
+from .contracts import (
+    AP01_CONTRACT_NAMES,
+    DEFAULT_AP01_CONTRACT,
+    resolve_ap01_method_contract,
+)
 
 
 def parser(description: str) -> argparse.ArgumentParser:
     result = method_parser(description)
     result.add_argument("--root-camera", required=True)
     result.add_argument("--moving-camera-id", required=True)
+    result.add_argument(
+        "--method-contract",
+        choices=AP01_CONTRACT_NAMES,
+        default=DEFAULT_AP01_CONTRACT,
+    )
+    result.add_argument("--direct-target-camera", default="cam_edge_1")
     result.add_argument("--top-moving-per-marker", type=int, default=None)
     result.add_argument("--scale-top-per-marker", type=int, default=None)
     result.add_argument(
@@ -83,6 +94,16 @@ def colmap_images(output: Path) -> Path:
 def prepared_observations(
     arguments: argparse.Namespace,
 ) -> tuple[list[dict], list[dict], dict[int, np.ndarray]]:
+    contract = resolve_ap01_method_contract(
+        getattr(arguments, "method_contract", DEFAULT_AP01_CONTRACT),
+        direct_target_camera=getattr(
+            arguments, "direct_target_camera", "cam_edge_1"
+        ),
+        top_moving_per_marker=getattr(arguments, "top_moving_per_marker", None),
+        scale_top_per_marker=getattr(
+            arguments, "scale_top_per_marker", None
+        ),
+    )
     moving_info = core.load_camera_info(
         arguments.dataset
         / "raw_images"
@@ -106,6 +127,7 @@ def prepared_observations(
         ),
         (static_info["width"], static_info["height"]),
         (moving_info["width"], moving_info["height"]),
+        contract=contract,
     )
     return (
         static_rows,

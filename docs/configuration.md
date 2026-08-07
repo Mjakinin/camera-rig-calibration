@@ -77,25 +77,27 @@ One job snapshot enables exactly one method. Variants belong in a queue.
 methods:
   enabled: [ap03]
   ap03:
+    method_contract: baseline_v1
+    minimum_marker_area_px2: 100.0
     single:
-      scale_marker_id: auto
+      scale_marker_id: 14
     multi:
-      marker_ids: auto
+      marker_ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
     scale:
       reprojection_threshold_px: 5.0
       ransac_iterations: 1000
       minimum_inliers: 4
-      maximum_observations_per_marker: null
 colmap:
   executable: auto
   matcher: exhaustive
   compute_mode: cpu_baseline
-  maximum_image_size: 2400
-  maximum_features: 8192
   mapper_minimum_matches: 8
 ```
 
-AP03 runs COLMAP once. Single and Multi consume the same reconstruction.
+AP03 runs COLMAP once. Single and Multi consume the same reconstruction. To
+apply explicit SIFT limits, select **explicit feature limits** in the Wizard or
+set `feature_limit_policy: wizard_explicit_limits_v1` together with
+`colmap.ap03_maximum_image_size` and `colmap.ap03_maximum_features`.
 
 ## Queue contract
 
@@ -236,25 +238,47 @@ selection:
   mode: auto
 methods:
   ap01:
+    method_contract: baseline_v1
+    direct_target_camera: cam_edge_1
     root_camera: auto
-    top_moving_per_marker: 8
-    scale_top_per_marker: 30
   ap02:
-    reference_marker_selection_mode: auto
-    reference_marker_id: auto
+    method_contract: baseline_v1
+    reference_marker_selection_mode: baseline
+    reference_marker_id: 14
     reference_marker_maximum_frames: null
     top_per_marker: 8
     top_per_marker_pair: 4
     maximum_total_frames: null
   ap03:
+    method_contract: baseline_v1
+    minimum_marker_area_px2: 100.0
     single:
-      scale_marker_id: auto
+      scale_marker_id: 14
     multi:
-      marker_ids: auto
+      marker_ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 evaluation:
   enabled: true
   anchor_marker_id: auto
 ```
+
+AP01 `baseline_v1` performs Direct / Relay marker-based calibration with fresh
+inputs. Configure the root camera and Direct target in the standard editor.
+Selecting the optional **robust consensus** strategy exposes quality-ranked
+relay/scale caps, Direct and Relay consensus gates, path-consistency thresholds
+and configurable COLMAP settings.
+
+AP02 `baseline_v1` builds a reference-marker observation graph, initializes
+camera and marker poses deterministically, and refines them with bundle
+adjustment. The reference marker is fixed at identity. Frame budgets,
+initialization, graph weights, reprojection model, solver budgets, robust loss
+and loss scale are available in the method editor. Combined BA is primary and
+static-only BA is diagnostic.
+
+AP03 `baseline_v1` jointly registers the static and moving images with fixed
+intrinsics, estimates marker-edge metric scale, and exports poses in the scaled
+SfM gauge. Multi markers 0–14 are the default primary scale set. Explicit SIFT
+limits and filtered registered-image observations remain opt-in advanced
+policies. Ground truth is not consumed by any calibration method.
 
 `auto` is the default: it deterministically freezes the computed candidates and
 continues without a pause. `review_once` always pauses exactly once after the
@@ -347,11 +371,11 @@ values migrate as `gpu_mode: false -> cpu_baseline`, `true -> gpu`, and
 `auto -> auto`.
 
 The reproducible Route-2 baseline uses AP01 on CPU with exhaustive matching,
-4096 features and a 1600-pixel maximum image dimension. AP03 uses the same CPU
-and matcher contract with 8192 features, a 2400-pixel maximum image dimension,
-eight mapper matches, one physical COLMAP camera ID per real camera and fixed
-intrinsics. Configured and effective values are retained separately in
-provenance.
+4096 features and a 1600-pixel maximum image dimension. AP03 uses CPU
+exhaustive matching but deliberately leaves SIFT limits at the installed
+COLMAP defaults, with eight mapper matches, one physical COLMAP camera ID per
+real camera and fixed intrinsics. Configured and effective values are retained
+separately in provenance.
 
 ## Real input and sampling
 

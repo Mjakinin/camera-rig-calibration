@@ -8,7 +8,7 @@ from camera_rig_calibration.contracts import RunContext
 from camera_rig_calibration.registry import calibration_methods, evaluators
 
 
-def test_ap02_command_uses_generic_cameras_and_recommended_defaults(
+def test_ap02_command_uses_generic_cameras_and_canonical_defaults(
     prepared_config, tmp_path: Path
 ) -> None:
     register_builtin_components()
@@ -40,12 +40,16 @@ def test_ap02_command_uses_generic_cameras_and_recommended_defaults(
     assert graph[graph.index("--cameras") + 1] == "front-left,roof.camera"
     static_ba = commands[3].argv
     combined_ba = commands[5].argv
-    assert static_ba[static_ba.index("--max-nfev") + 1] == "50"
-    assert combined_ba[combined_ba.index("--max-nfev") + 1] == "50"
+    assert static_ba[static_ba.index("--max-nfev") + 1] == "80"
+    assert combined_ba[combined_ba.index("--max-nfev") + 1] == "80"
     flattened = " ".join(
         token for command in commands for token in command.argv
     )
-    assert "moving-selection" not in flattened
+    assert "--moving-frame-selection-policy " \
+        "legacy_smart_at_ba_boundary_v1" in flattened
+    assert "--initialization-algorithm " \
+        "legacy_maximum_bottleneck_v1" in flattened
+    assert "--edge-weight-policy legacy_observation_quality_v1" in flattened
     assert "max-moving-frames" not in flattened
     assert "--top-per-marker 8" in flattened
     assert "--top-per-marker-pair 4" in flattened
@@ -82,13 +86,15 @@ def test_ap03_combines_single_and_multi_with_one_colmap_run(
         "ap03_report",
     ]
     reconstruct = commands[1].argv
-    assert reconstruct[reconstruct.index("--max-image-size") + 1] == "2400"
-    assert reconstruct[reconstruct.index("--max-features") + 1] == "8192"
-    assert reconstruct[reconstruct.index("--loop-detection") + 1] == "1"
+    assert "--max-image-size" not in reconstruct
+    assert "--max-features" not in reconstruct
+    assert "--loop-detection" not in reconstruct
     single = commands[3].argv
     multi = commands[4].argv
-    assert single[single.index("--marker-ids") + 1] == "9"
-    assert multi[multi.index("--marker-ids") + 1] == "7,9"
+    assert single[single.index("--marker-ids") + 1] == "14"
+    assert multi[multi.index("--marker-ids") + 1] == ",".join(
+        str(value) for value in range(15)
+    )
     for flag in (
         "--reprojection-threshold-px",
         "--ransac-iterations",
@@ -98,7 +104,8 @@ def test_ap03_combines_single_and_multi_with_one_colmap_run(
     flattened = " ".join(
         token for command in commands for token in command.argv
     )
-    assert "min-area" not in flattened
+    assert "--minimum-marker-area-px2 100.0" in flattened
+    assert "--scale-input-policy legacy_registered_image_redetection_v1" in flattened
     assert "single-ransac" not in flattened
     assert "multi-ransac" not in flattened
     assert commands[3].diagnostic is True
@@ -156,7 +163,10 @@ def test_nondefault_gui_parameters_reach_ap01_ap02_ap03_commands(
         update={
             "enabled": ["ap01", "ap02", "ap03"],
             "ap01": prepared_config.methods.ap01.model_copy(
-                update={"root_camera": "roof.camera"}
+                update={
+                    "root_camera": "roof.camera",
+                    "advanced_strategy": "wizard_robustness_v1",
+                }
             ),
             "ap02": prepared_config.methods.ap02.model_copy(
                 update={

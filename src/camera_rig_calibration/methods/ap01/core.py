@@ -23,6 +23,8 @@ from pathlib import Path
 import cv2
 import numpy as np
 
+from .contracts import AP01MethodContract, resolve_ap01_method_contract
+
 
 CAMERAS = [
     "cam_edge_0",
@@ -128,27 +130,126 @@ def load_camera_info(path: Path) -> dict:
     }
 
 
-def colmap_camera_model(info: dict) -> tuple[str, str]:
+def colmap_camera_model(
+    info: dict,
+    contract: AP01MethodContract | None = None,
+) -> tuple[str, str]:
+    contract = contract or resolve_ap01_method_contract()
     K = info["K"]
     fx, fy, cx, cy = float(K[0, 0]), float(K[1, 1]), float(K[0, 2]), float(K[1, 2])
     model = info["distortion_model"].strip().lower()
     d = list(float(v) for v in info["D"])
+    if contract.colmap_camera_model_policy == "legacy_shared_pinhole_v1":
+        values = [fx, fy, cx, cy]
+        return "PINHOLE", ",".join(
+            f"{value:.{contract.colmap_intrinsics_precision}f}"
+            for value in values
+        )
+    if contract.colmap_camera_model_policy != "camera_info_distortion_model_v1":
+        raise ValueError(
+            "Unknown AP01 COLMAP camera-model policy: "
+            f"{contract.colmap_camera_model_policy}"
+        )
+
+    def serialize(values: list[float]) -> str:
+        if contract.colmap_intrinsics_serialization == "significant_digits":
+            return ",".join(
+                f"{value:.{contract.colmap_intrinsics_precision}g}"
+                for value in values
+            )
+        if contract.colmap_intrinsics_serialization == "fixed_decimal_places":
+            return ",".join(
+                f"{value:.{contract.colmap_intrinsics_precision}f}"
+                for value in values
+            )
+        raise ValueError(
+            "Unknown AP01 intrinsics serialization: "
+            f"{contract.colmap_intrinsics_serialization}"
+        )
+
     if model in {"equidistant", "fisheye"}:
         d = (d + [0.0] * 4)[:4]
         params = [fx, fy, cx, cy, *d]
-        return "OPENCV_FISHEYE", ",".join(f"{v:.17g}" for v in params)
+        return "OPENCV_FISHEYE", serialize(params)
     if model not in {"", "none", "plumb_bob", "rational_polynomial"}:
         raise RuntimeError(f"Unsupported distortion model: {info['distortion_model']}")
     if not d or max(abs(v) for v in d) <= 1e-15:
-        return "PINHOLE", ",".join(f"{v:.17g}" for v in [fx, fy, cx, cy])
+        return "PINHOLE", serialize([fx, fy, cx, cy])
     d = (d + [0.0] * 8)[:8]
     params = [fx, fy, cx, cy, *d]
-    return "FULL_OPENCV", ",".join(f"{v:.17g}" for v in params)
+    return "FULL_OPENCV", serialize(params)
 
 
 def run_command(command: list[str]) -> None:
     print("\n[CMD]", " ".join(command), flush=True)
     subprocess.run(command, check=True)
+
+
+def colmap_feature_extractor_command(
+    *,
+    executable: str,
+    database: Path,
+    image_dir: Path,
+    camera_model: str,
+    camera_parameters: str,
+    contract: AP01MethodContract,
+) -> list[str]:
+    command = [
+        executable,
+        "feature_extractor",
+        "--database_path",
+        str(database),
+        "--image_path",
+        str(image_dir),
+        "--ImageReader.single_camera",
+        "1" if contract.colmap_single_shared_camera else "0",
+        "--ImageReader.camera_model",
+        camera_model,
+        "--ImageReader.camera_params",
+        camera_parameters,
+        "--SiftExtraction.use_gpu",
+        "1" if contract.colmap_matcher_use_gpu else "0",
+        "--SiftExtraction.max_image_size",
+        str(contract.colmap_sift_maximum_image_size),
+        "--SiftExtraction.max_num_features",
+        str(contract.colmap_sift_max_features),
+    ]
+    if contract.colmap_sift_extraction_threads is not None:
+        command.extend(
+            [
+                "--SiftExtraction.num_threads",
+                str(contract.colmap_sift_extraction_threads),
+            ]
+        )
+    return command
+
+
+def colmap_mapper_command(
+    *,
+    executable: str,
+    database: Path,
+    image_dir: Path,
+    sparse: Path,
+    contract: AP01MethodContract,
+) -> list[str]:
+    return [
+        executable,
+        "mapper",
+        "--database_path",
+        str(database),
+        "--image_path",
+        str(image_dir),
+        "--output_path",
+        str(sparse),
+        "--Mapper.ba_refine_focal_length",
+        "1" if contract.colmap_refine_focal_length else "0",
+        "--Mapper.ba_refine_principal_point",
+        "1" if contract.colmap_refine_principal_point else "0",
+        "--Mapper.ba_refine_extra_params",
+        "1" if contract.colmap_refine_extra_parameters else "0",
+        "--Mapper.min_num_matches",
+        str(contract.colmap_mapper_minimum_matches),
+    ]
 
 
 def count_colmap_images(images_txt: Path) -> int:
@@ -168,7 +269,24 @@ def run_colmap(
     mapper_min_matches: int,
     colmap_executable: str,
     reuse: bool,
+    contract: AP01MethodContract | None = None,
 ) -> Path:
+    contract = contract or resolve_ap01_method_contract(
+        colmap_matcher=matcher,
+        colmap_use_gpu=bool(use_gpu),
+        colmap_maximum_image_size=max_image_size,
+        colmap_maximum_features=max_features,
+        colmap_sequential_overlap=sequential_overlap,
+        colmap_loop_detection=bool(loop_detection),
+        colmap_mapper_minimum_matches=mapper_min_matches,
+    )
+    matcher = contract.colmap_matching_mode
+    use_gpu = int(contract.colmap_matcher_use_gpu)
+    max_image_size = contract.colmap_sift_maximum_image_size
+    max_features = contract.colmap_sift_max_features
+    sequential_overlap = contract.colmap_sequential_overlap
+    loop_detection = int(contract.colmap_loop_detection)
+    mapper_min_matches = contract.colmap_mapper_minimum_matches
     best = out_dir / "sparse_txt_best" / "images.txt"
     if reuse and best.is_file():
         print("[REUSE] AP01 moving COLMAP reconstruction:", best)
@@ -187,19 +305,18 @@ def run_colmap(
     sparse.mkdir()
     sparse_txt.mkdir()
 
-    model, params = colmap_camera_model(camera_info)
+    model, params = colmap_camera_model(camera_info, contract)
 
-    run_command([
-        executable, "feature_extractor",
-        "--database_path", str(database),
-        "--image_path", str(image_dir),
-        "--ImageReader.single_camera", "1",
-        "--ImageReader.camera_model", model,
-        "--ImageReader.camera_params", params,
-        "--SiftExtraction.use_gpu", str(use_gpu),
-        "--SiftExtraction.max_image_size", str(max_image_size),
-        "--SiftExtraction.max_num_features", str(max_features),
-    ])
+    run_command(
+        colmap_feature_extractor_command(
+            executable=executable,
+            database=database,
+            image_dir=image_dir,
+            camera_model=model,
+            camera_parameters=params,
+            contract=contract,
+        )
+    )
 
     if matcher == "exhaustive":
         run_command([
@@ -216,17 +333,23 @@ def run_colmap(
             "--SequentialMatching.loop_detection", str(loop_detection),
         ])
 
-    run_command([
-        executable, "mapper",
-        "--database_path", str(database),
-        "--image_path", str(image_dir),
-        "--output_path", str(sparse),
-        "--Mapper.ba_refine_focal_length", "0",
-        "--Mapper.ba_refine_principal_point", "0",
-        "--Mapper.ba_refine_extra_params", "0",
-        "--Mapper.min_num_matches", str(mapper_min_matches),
-    ])
+    run_command(
+        colmap_mapper_command(
+            executable=executable,
+            database=database,
+            image_dir=image_dir,
+            sparse=sparse,
+            contract=contract,
+        )
+    )
 
+    if contract.colmap_sparse_model_selection_policy != (
+        "maximum_registered_images_first_lexicographic_tie"
+    ):
+        raise ValueError(
+            "Unknown AP01 sparse-model selection policy: "
+            f"{contract.colmap_sparse_model_selection_policy}"
+        )
     model_dirs = sorted(path for path in sparse.iterdir() if path.is_dir())
     if not model_dirs:
         raise RuntimeError("AP01 COLMAP mapper produced no sparse model")
@@ -268,11 +391,15 @@ def run_colmap(
             f"Camera parameters: {params}",
             f"Feature max image size: {max_image_size}",
             f"Maximum features: {max_features}",
+            "SIFT extraction threads: "
+            f"{contract.colmap_sift_extraction_threads}",
             f"Sequential overlap: {sequential_overlap}",
             f"Loop detection: {loop_detection}",
             f"Mapper minimum matches: {mapper_min_matches}",
             f"Registered images in best model: {best_count}",
             f"Best model: {best_dir}",
+            f"Method contract: {contract.name}",
+            f"Method contract SHA-256: {contract.scientific_fingerprint()}",
             "",
         ]) + "\n",
         encoding="utf-8",
@@ -356,12 +483,88 @@ def observation_quality(row: dict[str, str], width: float, height: float) -> flo
     return math.sqrt(area) / (distance * (1.0 + center_norm))
 
 
+def marker_area_from_corners(row: dict[str, str]) -> float:
+    points = np.asarray(
+        [
+            [
+                safe_float(row, f"corner{index}_u"),
+                safe_float(row, f"corner{index}_v"),
+            ]
+            for index in range(4)
+        ],
+        dtype=np.float64,
+    )
+    if not np.all(np.isfinite(points)):
+        return float("nan")
+    x = points[:, 0]
+    y = points[:, 1]
+    return float(
+        0.5
+        * abs(np.dot(x, np.roll(y, -1)) - np.dot(y, np.roll(x, -1)))
+    )
+
+
+def legacy_detection_quality(
+    row: dict[str, str], width: float = 1280.0, height: float = 720.0
+) -> tuple[float, dict[str, float]]:
+    """Legacy Main's exact area/(distance^2*(1+center_norm)) score."""
+
+    distance = safe_float(row, "distance_m", 99.0)
+    area = marker_area_from_corners(row)
+    center_u = safe_float(row, "center_u")
+    center_v = safe_float(row, "center_v")
+    if math.isfinite(center_u) and math.isfinite(center_v):
+        center_norm = math.hypot(
+            center_u - width / 2.0, center_v - height / 2.0
+        ) / max(math.hypot(width / 2.0, height / 2.0), 1.0)
+    else:
+        center_norm = 1.0
+    if not math.isfinite(distance) or distance <= 0.0:
+        distance = 99.0
+    if not math.isfinite(area) or area <= 0.0:
+        area = 1.0
+    if not math.isfinite(center_norm):
+        center_norm = 1.0
+    return area / (distance * distance * (1.0 + center_norm)), {
+        "area_px2_from_corners": area,
+        "distance_m": distance,
+        "center_norm": center_norm,
+        "quality_image_width_px": float(width),
+        "quality_image_height_px": float(height),
+    }
+
+
 def prepare_observations(
     static_rows: list[dict[str, str]],
     moving_rows: list[dict[str, str]],
     static_size: tuple[int, int],
     moving_size: tuple[int, int],
+    *,
+    contract: AP01MethodContract | None = None,
 ) -> tuple[list[dict], list[dict]]:
+    contract = contract or resolve_ap01_method_contract()
+
+    def prepare_quality(
+        row: dict[str, str], image_size: tuple[int, int]
+    ) -> tuple[float, dict[str, float | str]]:
+        if contract.quality_model == "legacy_area_over_distance_squared_center_v1":
+            return legacy_detection_quality(
+                row,
+                float(contract.quality_image_width_px or 1280),
+                float(contract.quality_image_height_px or 720),
+            )
+        if contract.quality_model == "observation_quality_v2_selection_score":
+            score = safe_float(
+                row,
+                "selection_score",
+                observation_quality(row, *image_size),
+            )
+            return score, {
+                "quality_model": contract.quality_model,
+                "selection_score": score,
+            }
+        raise ValueError(f"Unknown AP01 quality model: {contract.quality_model}")
+
     prepared_static = []
     for row in static_rows:
         if not is_success(row):
@@ -369,11 +572,11 @@ def prepare_observations(
         item = dict(row)
         item["_marker"] = int(float(row["marker_id"]))
         item["_camera"] = row["camera_name"]
-        item["_quality"] = safe_float(
-            row,
-            "selection_score",
-            observation_quality(row, *static_size),
+        item["_quality"], item["_quality_components"] = prepare_quality(
+            row, static_size
         )
+        item["_area_px2"] = marker_area_from_corners(row)
+        item["_distance_m"] = safe_float(row, "distance_m", 99.0)
         item["_T_cam_marker"] = T_from_observation(row)
         prepared_static.append(item)
 
@@ -384,11 +587,11 @@ def prepare_observations(
         item = dict(row)
         item["_marker"] = int(float(row["marker_id"]))
         item["_frame"] = frame_number(row)
-        item["_quality"] = safe_float(
-            row,
-            "selection_score",
-            observation_quality(row, *moving_size),
+        item["_quality"], item["_quality_components"] = prepare_quality(
+            row, moving_size
         )
+        item["_area_px2"] = marker_area_from_corners(row)
+        item["_distance_m"] = safe_float(row, "distance_m", 99.0)
         item["_T_cam_marker"] = T_from_observation(row)
         prepared_moving.append(item)
 
@@ -399,52 +602,158 @@ def robust_scale(
     moving_rows: list[dict],
     colmap_poses: dict[int, np.ndarray],
     maximum_observations_per_marker: int | None = None,
+    contract: AP01MethodContract | None = None,
 ) -> tuple[float, dict, list[dict]]:
+    contract = contract or resolve_ap01_method_contract(
+        scale_top_per_marker=maximum_observations_per_marker,
+    )
     by_marker = defaultdict(list)
+    rejected_observations: Counter[str] = Counter()
     for row in moving_rows:
-        if row["_frame"] in colmap_poses:
-            by_marker[row["_marker"]].append(row)
+        if contract.scale_pnp_success_only and not is_success(row):
+            rejected_observations["pnp_unsuccessful"] += 1
+            continue
+        if contract.scale_registered_frames_only and row["_frame"] not in colmap_poses:
+            rejected_observations["unregistered_frame"] += 1
+            continue
+        if (
+            contract.scale_minimum_marker_area_px2 is not None
+            and float(row["_area_px2"])
+            < contract.scale_minimum_marker_area_px2
+        ):
+            rejected_observations["marker_area_below_minimum"] += 1
+            continue
+        if (
+            contract.scale_maximum_marker_distance_m is not None
+            and float(row["_distance_m"])
+            > contract.scale_maximum_marker_distance_m
+        ):
+            rejected_observations["marker_distance_above_maximum"] += 1
+            continue
+        if contract.scale_maximum_center_norm is not None:
+            width = float(contract.quality_image_width_px or 1280)
+            height = float(contract.quality_image_height_px or 720)
+            center_u = safe_float(row, "center_u")
+            center_v = safe_float(row, "center_v")
+            center_norm = math.hypot(
+                center_u - width / 2.0,
+                center_v - height / 2.0,
+            ) / math.hypot(width / 2.0, height / 2.0)
+            if center_norm > contract.scale_maximum_center_norm:
+                rejected_observations["marker_center_norm_above_maximum"] += 1
+                continue
+        by_marker[row["_marker"]].append(row)
 
     registered_counts = {
         int(marker): len(rows) for marker, rows in sorted(by_marker.items())
     }
     for marker, rows in by_marker.items():
-        ranked = sorted(
-            rows,
-            key=lambda row: (
-                -float(row["_quality"]),
-                int(row["_frame"]),
-            ),
-        )
-        if maximum_observations_per_marker is not None:
-            ranked = ranked[:maximum_observations_per_marker]
-        by_marker[marker] = ranked
+        if contract.scale_observation_construction_policy == (
+            "quality_ranked_per_marker_before_pairing_v1"
+        ):
+            selected = sorted(
+                rows,
+                key=lambda row: (
+                    -float(row["_quality"]),
+                    int(row["_frame"]),
+                ),
+            )
+        elif contract.scale_observation_construction_policy == (
+            "legacy_registered_quality_filters_then_all_pairs_v1"
+        ):
+            selected = list(rows)
+        else:
+            raise ValueError(
+                "Unknown AP01 scale observation policy: "
+                f"{contract.scale_observation_construction_policy}"
+            )
+        if contract.scale_observation_limit_per_marker is not None:
+            truncated = max(
+                0,
+                len(selected) - contract.scale_observation_limit_per_marker,
+            )
+            rejected_observations["per_marker_limit"] += truncated
+            selected = selected[: contract.scale_observation_limit_per_marker]
+        by_marker[marker] = selected
     selected_counts = {
         int(marker): len(rows) for marker, rows in sorted(by_marker.items())
     }
 
     pairs = []
+    if contract.scale_sample_multiplicity_policy != (
+        "all_within_marker_unordered_frame_pairs"
+    ):
+        raise ValueError(
+            "Unknown AP01 scale sample multiplicity policy: "
+            f"{contract.scale_sample_multiplicity_policy}"
+        )
     for marker, rows in by_marker.items():
         rows = sorted(rows, key=lambda r: r["_frame"])
         for first, second in combinations(rows, 2):
             gap = abs(first["_frame"] - second["_frame"])
-            if gap < 2 or gap > 80:
+            if (
+                gap < contract.scale_frame_gap_minimum
+                or gap > contract.scale_frame_gap_maximum
+            ):
                 continue
 
+            if contract.scale_pnp_quantity_policy != (
+                "relative_camera_translation_norm_from_T_cam_marker_v1"
+            ):
+                raise ValueError(
+                    "Unknown AP01 scale PnP quantity policy: "
+                    f"{contract.scale_pnp_quantity_policy}"
+                )
             T_metric = first["_T_cam_marker"] @ invT(second["_T_cam_marker"])
             metric_distance = float(np.linalg.norm(T_metric[:3, 3]))
-            if not (0.05 <= metric_distance <= 6.0):
+            if not (
+                contract.scale_metric_translation_minimum_m
+                <= metric_distance
+                <= contract.scale_metric_translation_maximum_m
+            ):
                 continue
 
             T_colmap = colmap_poses[first["_frame"]] @ invT(colmap_poses[second["_frame"]])
             colmap_distance = float(np.linalg.norm(T_colmap[:3, 3]))
-            if colmap_distance <= 1e-10:
+            if contract.scale_colmap_translation_rejection_policy == "less_than":
+                colmap_rejected = (
+                    colmap_distance
+                    < contract.scale_colmap_translation_minimum_units
+                )
+            elif contract.scale_colmap_translation_rejection_policy == (
+                "less_than_or_equal"
+            ):
+                colmap_rejected = (
+                    colmap_distance
+                    <= contract.scale_colmap_translation_minimum_units
+                )
+            else:
+                raise ValueError(
+                    "Unknown COLMAP scale displacement rejection policy: "
+                    f"{contract.scale_colmap_translation_rejection_policy}"
+                )
+            if colmap_rejected:
                 continue
 
             ratio = metric_distance / colmap_distance
             if not math.isfinite(ratio) or ratio <= 0:
                 continue
 
+            if contract.scale_pair_quality_policy == "sqrt_marker_area_product":
+                pair_quality = math.sqrt(
+                    float(first["_area_px2"]) * float(second["_area_px2"])
+                )
+            elif contract.scale_pair_quality_policy == (
+                "sqrt_observation_quality_product"
+            ):
+                pair_quality = math.sqrt(
+                    float(first["_quality"]) * float(second["_quality"])
+                )
+            else:
+                raise ValueError(
+                    "Unknown AP01 scale pair-quality policy: "
+                    f"{contract.scale_pair_quality_policy}"
+                )
             pairs.append({
                 "marker_id": marker,
                 "frame_i": first["_frame"],
@@ -453,21 +762,62 @@ def robust_scale(
                 "metric_translation_m": metric_distance,
                 "colmap_translation_units": colmap_distance,
                 "scale_m_per_colmap_unit": ratio,
-                "quality": math.sqrt(first["_quality"] * second["_quality"]),
+                "quality": pair_quality,
             })
 
-    if len(pairs) < 10:
+    if len(pairs) < contract.scale_minimum_pair_count:
         raise RuntimeError(f"Too few AP01 metric-scale pairs: {len(pairs)}")
 
     values = np.asarray([row["scale_m_per_colmap_unit"] for row in pairs], dtype=np.float64)
     median = float(np.median(values))
     mad = float(np.median(np.abs(values - median)))
-    sigma = 1.4826 * mad
-    threshold = max(3.0 * sigma, 0.10 * median)
-    kept = [row for row in pairs if abs(row["scale_m_per_colmap_unit"] - median) <= threshold]
-    if len(kept) < max(10, int(0.25 * len(pairs))):
+    sigma = contract.scale_mad_sigma_factor * mad
+    threshold = contract.scale_mad_multiplier * sigma
+    if contract.scale_relative_deviation_floor_fraction is not None:
+        threshold = max(
+            threshold,
+            contract.scale_relative_deviation_floor_fraction * median,
+        )
+    if (
+        contract.scale_aggregation_policy
+        == "legacy_median_three_sigma_mad_v1"
+        and mad <= 1e-12
+    ):
+        kept = pairs
+    elif contract.scale_aggregation_policy in {
+        "legacy_median_three_sigma_mad_v1",
+        "wizard_median_mad_relative_floor_v1",
+    }:
+        kept = [
+            row
+            for row in pairs
+            if abs(row["scale_m_per_colmap_unit"] - median) <= threshold
+        ]
+    else:
+        raise ValueError(
+            "Unknown AP01 scale aggregation policy: "
+            f"{contract.scale_aggregation_policy}"
+        )
+    fallback_threshold: float | int
+    if contract.scale_aggregation_policy == "legacy_median_three_sigma_mad_v1":
+        fallback_threshold = max(
+            contract.scale_fallback_minimum_count,
+            contract.scale_fallback_fraction * len(pairs),
+        )
+    else:
+        fallback_threshold = max(
+            contract.scale_fallback_minimum_count,
+            int(contract.scale_fallback_fraction * len(pairs)),
+        )
+    fallback_used = len(kept) < fallback_threshold
+    if fallback_used:
         kept = pairs
     kept_values = np.asarray([row["scale_m_per_colmap_unit"] for row in kept], dtype=np.float64)
+    if contract.scale_final_statistic != "median":
+        raise ValueError(
+            "Unknown AP01 final scale statistic: "
+            f"{contract.scale_final_statistic}"
+        )
     scale = float(np.median(kept_values))
     kept_ids = {id(row) for row in kept}
     for row in pairs:
@@ -489,7 +839,17 @@ def robust_scale(
         "used_std": float(np.std(kept_values)),
         "used_relative_std": float(np.std(kept_values) / scale),
         "markers_with_registered_observations": sorted(by_marker),
-        "maximum_observations_per_marker": maximum_observations_per_marker,
+        "maximum_observations_per_marker": (
+            contract.scale_observation_limit_per_marker
+        ),
+        "rejected_observations_by_reason": dict(
+            sorted(rejected_observations.items())
+        ),
+        "scale_contract": contract.fingerprint_payload(),
+        "scale_contract_sha256": contract.scientific_fingerprint(),
+        "aggregation_threshold": threshold,
+        "aggregation_fallback_threshold": fallback_threshold,
+        "aggregation_fallback_used": fallback_used,
         "registered_observations_per_marker": registered_counts,
         "selected_observations_per_marker": selected_counts,
         "candidate_pairs_per_marker": dict(sorted(marker_pair_counts.items())),
@@ -872,6 +1232,46 @@ def moving_by_marker(
     return grouped
 
 
+def moving_by_contract(
+    rows: list[dict],
+    registered_frames: set[int],
+    contract: AP01MethodContract,
+) -> dict[int, list[dict]]:
+    """Select moving supports using the resolved AP01 scientific contract."""
+
+    if contract.moving_support_policy == (
+        "quality_ranked_registered_then_frame_ascending"
+    ):
+        return moving_by_marker(
+            rows,
+            registered_frames,
+            top_per_marker=contract.relay_input_limit,
+        )
+    if contract.moving_support_policy == (
+        "best_quality_per_frame_marker_first_tie_registered_only_frame_ascending"
+    ):
+        best: dict[tuple[int, int], dict] = {}
+        for row in rows:
+            frame = int(row["_frame"])
+            marker = int(row["_marker"])
+            if frame not in registered_frames:
+                continue
+            key = (frame, marker)
+            if key not in best or float(row["_quality"]) > float(
+                best[key]["_quality"]
+            ):
+                best[key] = row
+        grouped: defaultdict[int, list[dict]] = defaultdict(list)
+        for (_, marker), row in best.items():
+            grouped[marker].append(row)
+        for marker in grouped:
+            grouped[marker].sort(key=lambda row: int(row["_frame"]))
+        return dict(grouped)
+    raise ValueError(
+        f"Unknown AP01 moving-support policy: {contract.moving_support_policy}"
+    )
+
+
 def direct_candidates(
     root: str,
     target: str,
@@ -893,6 +1293,12 @@ def direct_candidates(
             "root_frame": "",
             "target_frame": "",
             "quality": math.sqrt(root_row["_quality"] * target_row["_quality"]),
+            "root_area_px2": float(root_row.get("_area_px2", float("nan"))),
+            "target_area_px2": float(target_row.get("_area_px2", float("nan"))),
+            "root_distance_m": float(root_row.get("_distance_m", float("nan"))),
+            "target_distance_m": float(target_row.get("_distance_m", float("nan"))),
+            "root_support_key": root_row.get("observation_key"),
+            "target_support_key": target_row.get("observation_key"),
             "T": transform,
         })
     return result
@@ -959,9 +1365,290 @@ def relay_candidates(
                         "root_frame": frame_i,
                         "target_frame": frame_j,
                         "quality": quality,
+                        "support_keys": [
+                            root_static.get("observation_key"),
+                            target_static.get("observation_key"),
+                            root_moving.get("observation_key"),
+                            target_moving.get("observation_key"),
+                        ],
                         "T": transform,
                     })
     return result
+
+
+def weighted_transform_mean(
+    candidates: list[dict], indices: list[int]
+) -> np.ndarray:
+    if not indices:
+        raise RuntimeError("No AP01 transforms to average")
+    weights = np.asarray(
+        [max(1e-12, float(candidates[index]["quality"])) for index in indices],
+        dtype=np.float64,
+    )
+    weights /= weights.sum()
+    translation = np.sum(
+        np.asarray(
+            [candidates[index]["T"][:3, 3] for index in indices],
+            dtype=np.float64,
+        )
+        * weights[:, None],
+        axis=0,
+    )
+    rotation = weighted_rotation_mean(
+        [candidates[index]["T"][:3, :3] for index in indices], weights
+    )
+    return make_T(rotation, translation)
+
+
+def legacy_se3_medoid(candidates: list[dict]) -> tuple[int, float]:
+    """Legacy first-on-equal SE(3) medoid with t + 0.02*r distance."""
+
+    if not candidates:
+        raise RuntimeError("No AP01 direct candidates")
+    best_index = 0
+    best_score: float | None = None
+    for index, candidate in enumerate(candidates):
+        distances = []
+        for other_index, other in enumerate(candidates):
+            if index == other_index:
+                continue
+            translation = float(
+                np.linalg.norm(candidate["T"][:3, 3] - other["T"][:3, 3])
+            )
+            rotation = rotation_difference_deg(
+                candidate["T"][:3, :3], other["T"][:3, :3]
+            )
+            distances.append(translation + 0.02 * rotation)
+        score = float(np.median(distances)) if distances else 0.0
+        if best_score is None or score < best_score:
+            best_index = index
+            best_score = score
+    return best_index, float(best_score or 0.0)
+
+
+def legacy_medoid_inliers(
+    candidates: list[dict],
+    medoid_index: int,
+    *,
+    translation_floor: float,
+    rotation_floor: float,
+) -> tuple[list[int], dict]:
+    center = candidates[medoid_index]["T"]
+    translation = np.asarray(
+        [
+            np.linalg.norm(candidate["T"][:3, 3] - center[:3, 3])
+            for candidate in candidates
+        ],
+        dtype=np.float64,
+    )
+    rotation = np.asarray(
+        [
+            rotation_difference_deg(
+                candidate["T"][:3, :3], center[:3, :3]
+            )
+            for candidate in candidates
+        ],
+        dtype=np.float64,
+    )
+    t_median = float(np.median(translation))
+    r_median = float(np.median(rotation))
+    t_mad = 1.4826 * float(np.median(np.abs(translation - t_median)))
+    r_mad = 1.4826 * float(np.median(np.abs(rotation - r_median)))
+    t_threshold = max(translation_floor, t_median + 3.0 * t_mad)
+    r_threshold = max(rotation_floor, r_median + 3.0 * r_mad)
+    indices = [
+        index
+        for index, (t_value, r_value) in enumerate(zip(translation, rotation))
+        if t_value <= t_threshold and r_value <= r_threshold
+    ]
+    return indices, {
+        "translation_deviation_median_m": t_median,
+        "translation_deviation_mad_scaled_m": t_mad,
+        "translation_inlier_threshold_m": t_threshold,
+        "rotation_deviation_median_deg": r_median,
+        "rotation_deviation_mad_scaled_deg": r_mad,
+        "rotation_inlier_threshold_deg": r_threshold,
+    }
+
+
+def aggregate_legacy_direct_candidates(
+    candidates: list[dict], contract: AP01MethodContract
+) -> tuple[np.ndarray, dict]:
+    """Reproduce Main's quality-filtered direct aggregate and priority."""
+
+    if not candidates:
+        raise RuntimeError("No AP01 direct candidates")
+    quality_indices = [
+        index
+        for index, candidate in enumerate(candidates)
+        if float(candidate.get("root_area_px2", float("nan")))
+        >= float(contract.direct_minimum_area_px2 or 0.0)
+        and float(candidate.get("target_area_px2", float("nan")))
+        >= float(contract.direct_minimum_area_px2 or 0.0)
+        and float(candidate.get("root_distance_m", float("inf")))
+        <= float(contract.direct_maximum_distance_m or float("inf"))
+        and float(candidate.get("target_distance_m", float("inf")))
+        <= float(contract.direct_maximum_distance_m or float("inf"))
+        and float(candidate["quality"])
+        >= float(contract.direct_minimum_combined_quality or 0.0)
+    ]
+    fallback = False
+    if not quality_indices:
+        fallback = True
+        ranked = sorted(
+            range(len(candidates)),
+            key=lambda index: float(candidates[index]["quality"]),
+            reverse=True,
+        )
+        fallback_count = int(contract.direct_quality_fallback_count or 1)
+        quality_indices = ranked[: max(1, min(fallback_count, len(ranked)))]
+    quality_candidates = [candidates[index] for index in quality_indices]
+    medoid_index, medoid_score = legacy_se3_medoid(quality_candidates)
+    inlier_local, inlier_stats = legacy_medoid_inliers(
+        quality_candidates,
+        medoid_index,
+        translation_floor=contract.direct_translation_mad_floor_m,
+        rotation_floor=contract.direct_rotation_mad_floor_deg,
+    )
+    if not inlier_local:
+        inlier_local = list(range(len(quality_candidates)))
+    inlier_indices = {quality_indices[index] for index in inlier_local}
+    quality_set = set(quality_indices)
+    preferred_index = next(
+        (
+            index
+            for index in quality_indices
+            if int(candidates[index]["root_marker"])
+            == contract.preferred_direct_marker_id
+        ),
+        None,
+    )
+    if preferred_index is None:
+        selected_index = quality_indices[medoid_index]
+        selection_note = "quality_filtered_se3_medoid_fallback"
+    else:
+        selected_index = preferred_index
+        selection_note = "marker14_visible_and_passed_no_gt_quality_filter"
+    weighted_diagnostic = weighted_transform_mean(
+        candidates, sorted(inlier_indices)
+    )
+    for index, candidate in enumerate(candidates):
+        candidate["quality_filter_eligible"] = index in quality_set
+        candidate["quality_filter_fallback_used"] = fallback
+        candidate["inlier"] = index in inlier_indices
+        candidate["pose_support"] = index in inlier_indices
+        candidate["preferred_marker_selected"] = index == selected_index
+    return candidates[selected_index]["T"], {
+        "selected_aggregate_type": (
+            "quality_filtered_preferred_marker_no_gt_selection"
+        ),
+        "aggregate_priority": [
+            "quality_filtered_preferred_marker_no_gt_selection",
+            "quality_filtered_weighted_mean_no_gt_selection",
+            "weighted_mean_of_mad_inliers_no_gt_selection",
+            "se3_medoid_no_gt_selection",
+        ],
+        "selected_marker_id": candidates[selected_index]["root_marker"],
+        "selected_candidate_index": selected_index,
+        "selection_note": selection_note,
+        "quality_filter_fallback_used": fallback,
+        "num_candidates": len(candidates),
+        "num_quality_candidates": len(quality_indices),
+        "num_quality_mad_inliers": len(inlier_indices),
+        "quality_subset_medoid_score": medoid_score,
+        "quality_subset_mad": inlier_stats,
+        "quality_filtered_weighted_mean_diagnostic": (
+            weighted_diagnostic.tolist()
+        ),
+        "ground_truth_used": False,
+    }
+
+
+def aggregate_legacy_relay_candidates(
+    candidates: list[dict], contract: AP01MethodContract
+) -> tuple[np.ndarray, dict]:
+    """Reproduce Main's one-level flat MAD aggregate over every relay row."""
+
+    if not candidates:
+        raise RuntimeError("No AP01 relay candidates")
+    translations = np.asarray(
+        [candidate["T"][:3, 3] for candidate in candidates], dtype=np.float64
+    )
+    all_indices = list(range(len(candidates)))
+    weighted = weighted_transform_mean(candidates, all_indices)
+    initial = make_T(weighted[:3, :3], np.median(translations, axis=0))
+    translation_deviation = np.asarray(
+        [
+            np.linalg.norm(candidate["T"][:3, 3] - initial[:3, 3])
+            for candidate in candidates
+        ],
+        dtype=np.float64,
+    )
+    rotation_deviation = np.asarray(
+        [
+            rotation_difference_deg(
+                candidate["T"][:3, :3], initial[:3, :3]
+            )
+            for candidate in candidates
+        ],
+        dtype=np.float64,
+    )
+    t_median = float(np.median(translation_deviation))
+    r_median = float(np.median(rotation_deviation))
+    t_mad = 1.4826 * float(
+        np.median(np.abs(translation_deviation - t_median))
+    )
+    r_mad = 1.4826 * float(
+        np.median(np.abs(rotation_deviation - r_median))
+    )
+    t_threshold = max(
+        contract.relay_translation_mad_floor_m, t_median + 3.0 * t_mad
+    )
+    r_threshold = max(
+        contract.relay_rotation_mad_floor_deg, r_median + 3.0 * r_mad
+    )
+    inlier_indices = [
+        index
+        for index, (t_value, r_value) in enumerate(
+            zip(translation_deviation, rotation_deviation)
+        )
+        if t_value <= t_threshold and r_value <= r_threshold
+    ]
+    fallback = False
+    minimum = int(contract.relay_fallback_minimum_count or 0)
+    if len(inlier_indices) < minimum:
+        fallback = True
+        ranked = sorted(
+            all_indices,
+            key=lambda index: float(candidates[index]["quality"]),
+            reverse=True,
+        )
+        fraction = float(contract.relay_fallback_fraction or 0.5)
+        keep = max(minimum, int(len(ranked) * fraction))
+        inlier_indices = ranked[:keep]
+    inlier_set = set(inlier_indices)
+    for index, candidate in enumerate(candidates):
+        candidate["inlier"] = index in inlier_set
+        candidate["pose_support"] = index in inlier_set
+        candidate["translation_deviation_m"] = float(
+            translation_deviation[index]
+        )
+        candidate["rotation_deviation_deg"] = float(rotation_deviation[index])
+    transform = weighted_transform_mean(candidates, inlier_indices)
+    return transform, {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "num_candidates": len(candidates),
+        "num_inliers": len(inlier_indices),
+        "num_outliers": len(candidates) - len(inlier_indices),
+        "translation_deviation_median_m": t_median,
+        "translation_deviation_mad_scaled_m": t_mad,
+        "translation_inlier_threshold_m": t_threshold,
+        "rotation_deviation_median_deg": r_median,
+        "rotation_deviation_mad_scaled_deg": r_mad,
+        "rotation_inlier_threshold_deg": r_threshold,
+        "fallback_top_half_by_quality": fallback,
+        "ground_truth_used": False,
+    }
 
 
 def R_to_rpy_deg(R: np.ndarray) -> tuple[float, float, float]:
@@ -969,6 +1656,57 @@ def R_to_rpy_deg(R: np.ndarray) -> tuple[float, float, float]:
     roll = math.atan2(R[2, 1], R[2, 2])
     yaw = math.atan2(R[1, 0], R[0, 0])
     return tuple(math.degrees(value) for value in (roll, pitch, yaw))
+
+
+def rpy_deg_to_R(
+    roll_deg: float, pitch_deg: float, yaw_deg: float
+) -> np.ndarray:
+    """Reconstruct the ZYX rotation used by the Legacy aggregate CSV."""
+
+    roll, pitch, yaw = (
+        math.radians(float(value))
+        for value in (roll_deg, pitch_deg, yaw_deg)
+    )
+    cr, sr = math.cos(roll), math.sin(roll)
+    cp, sp = math.cos(pitch), math.sin(pitch)
+    cy, sy = math.cos(yaw), math.sin(yaw)
+    return np.asarray(
+        [
+            [cy * cp, cy * sp * sr - sy * cr, cy * sp * cr + sy * sr],
+            [sy * cp, sy * sp * sr + cy * cr, sy * sp * cr - cy * sr],
+            [-sp, cp * sr, cp * cr],
+        ],
+        dtype=np.float64,
+    )
+
+
+def serialize_final_pose(
+    transform: np.ndarray, contract: AP01MethodContract
+) -> np.ndarray:
+    """Apply the contract-scoped final numeric serialization adapter."""
+
+    if contract.final_pose_serialization_policy == "native_full_precision_v1":
+        return np.asarray(transform, dtype=np.float64).copy()
+    if (
+        contract.final_pose_serialization_policy
+        != "legacy_aggregate_csv_rpy_roundtrip_v1"
+    ):
+        raise ValueError(
+            "Unknown AP01 final-pose serialization policy: "
+            f"{contract.final_pose_serialization_policy}"
+        )
+    places = contract.final_pose_serialization_decimal_places
+    if places is None:
+        raise ValueError("Legacy AP01 final-pose serialization needs precision")
+    result = np.eye(4, dtype=np.float64)
+    rpy = R_to_rpy_deg(np.asarray(transform, dtype=np.float64)[:3, :3])
+    serialized_rpy = tuple(float(f"{value:.{places}f}") for value in rpy)
+    result[:3, :3] = rpy_deg_to_R(*serialized_rpy)
+    result[:3, 3] = [
+        float(f"{float(value):.{places}f}")
+        for value in np.asarray(transform, dtype=np.float64)[:3, 3]
+    ]
+    return result
 
 
 def pose_row(camera: str, T: np.ndarray, source: str) -> dict:

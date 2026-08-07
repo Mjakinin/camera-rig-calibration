@@ -1,0 +1,18 @@
+{
+  "dataset_identity_fingerprint": "1536228671cf800e5b569a63b6a60e073aeb5ad2fe50dd04cfe067fd34966d97",
+  "ground_truth_used": false,
+  "historical_reproduction": true,
+  "input_fingerprint": "input_cb386b17f71c",
+  "intrinsics_sha256": "47935bd24bb29cd0853ede324c38d2bc773c25565252f143e20e9915effa0250",
+  "method_contract": "baseline_v1",
+  "method_contract_sha256": "7f01fb25fb4a26fbee870636cefd44f2cafa6df6c295a7f711feb84430564f84",
+  "observation_input_mode": "frozen_historical_ap02_reproduction",
+  "ordering_schema_sha256": "74fbbb68dbcfbb5d1644f1ae8d7a36e1ce07b4f0a6f62e5067056070f2a30f8c",
+  "reference_marker_id": 14,
+  "schema_version": 1,
+  "source_artifact": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/parity/main_route2_v1/frozen/ap02_all_aruco_observations.csv",
+  "source_artifact_sha256": "d358b584ef10ecbf3d2c971719718d414a3e80228a15abf10e909620cbbe1071",
+  "source_manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/parity/main_route2_v1/frozen/AP02_FROZEN_OBSERVATIONS_CONTRACT.json",
+  "source_observation_count": 513,
+  "validation_status": "passed"
+}

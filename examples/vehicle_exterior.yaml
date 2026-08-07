@@ -38,6 +38,7 @@ selection:
 methods:
   enabled: [ap02]
   ap02:
+    method_contract: baseline_v1
     reference_marker_id: auto
     reference_marker_maximum_frames: null
     top_per_marker: 8

@@ -22,6 +22,8 @@ def run(
     ransac_iterations: int,
     minimum_inliers: int,
     maximum_observations_per_marker: int | None,
+    scale_input_policy: str,
+    minimum_marker_area_px2: float,
     dictionary: str,
     detection_mode: str = "baseline",
 ) -> StageResult:
@@ -55,11 +57,22 @@ def run(
                 str(output_root / "colmap/dataset/images"),
                 "--inspect-summary",
                 str(output_root / "colmap/inspection/colmap_model_summary.csv"),
-                "--accepted-observations",
-                str(observations_root / "shared_all_aruco_observations.csv"),
                 "--static-cameras",
                 ",".join(camera_ids),
+                "--min-area-px2",
+                str(minimum_marker_area_px2),
+                "--scale-input-policy",
+                scale_input_policy,
             ]
+        if scale_input_policy == "wizard_filtered_observations_v1":
+            command.extend(
+                [
+                    "--accepted-observations",
+                    str(observations_root / "shared_all_aruco_observations.csv"),
+                ]
+            )
+        elif scale_input_policy != "legacy_registered_image_redetection_v1":
+            raise ValueError(f"Unknown AP03 scale-input policy: {scale_input_policy}")
         if maximum_observations_per_marker is not None:
             command.extend(
                 [
@@ -107,7 +120,8 @@ def run(
             "maximum_observations_per_marker": (
                 maximum_observations_per_marker
             ),
-            "selection": "quality_ranked_per_marker_before_triangulation",
+            "scale_input_policy": scale_input_policy,
+            "minimum_marker_area_px2": minimum_marker_area_px2,
             "detection_mode": detection_mode,
         },
         failure_is_diagnostic=mode == "single",
@@ -127,6 +141,8 @@ def main() -> None:
     parser.add_argument("--ransac-iterations", type=int, required=True)
     parser.add_argument("--minimum-inliers", type=int, required=True)
     parser.add_argument("--maximum-observations-per-marker", type=int)
+    parser.add_argument("--scale-input-policy", required=True)
+    parser.add_argument("--minimum-marker-area-px2", type=float, required=True)
     parser.add_argument("--dictionary", required=True)
     parser.add_argument(
         "--detection-mode",
@@ -154,6 +170,8 @@ def main() -> None:
         maximum_observations_per_marker=(
             args.maximum_observations_per_marker
         ),
+        scale_input_policy=args.scale_input_policy,
+        minimum_marker_area_px2=args.minimum_marker_area_px2,
         dictionary=args.dictionary,
         detection_mode=args.detection_mode,
     )

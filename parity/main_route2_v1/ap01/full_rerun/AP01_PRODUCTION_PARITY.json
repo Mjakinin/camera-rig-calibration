@@ -1,0 +1,22 @@
+{
+  "alignment_used": false,
+  "ap02_invoked": false,
+  "ap03_invoked": false,
+  "best_fit_alignment_used": false,
+  "classification": "UNAVAILABLE",
+  "colmap_invoked": false,
+  "comparison_method": "direct_transform_comparison_without_alignment",
+  "ground_truth_used": false,
+  "locked_final_pose_sha256": "71c56afbaad6b44e907eade31190bec0bf73dfa9f8099a78af4d7c5b459d9024",
+  "method_execution_invoked": false,
+  "production_result": null,
+  "publication_invoked": false,
+  "reason": "production AP01 was not started because mandatory input/observation preflight failed",
+  "reconciliation_invoked": false,
+  "rejection_reasons": [
+    "target experiment input is not byte-identical to locked historical Main Route-2 input",
+    "published frozen observations contain 512 accepted rows; locked parity requires 554"
+  ],
+  "schema_version": 1,
+  "status": "unavailable"
+}

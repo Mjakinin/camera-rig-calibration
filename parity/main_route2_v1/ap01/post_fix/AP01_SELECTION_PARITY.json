@@ -1,0 +1,448 @@
+{
+  "candidate_eligibility_before_ranking": {
+    "legacy": "aggregate row exists; no deployment stability gate",
+    "wizard": "aggregate row exists; no deployment stability gate"
+  },
+  "candidate_sorting": {
+    "legacy": "none across direct/relay paths",
+    "wizard": "none across direct/relay paths"
+  },
+  "classification": "EXACT",
+  "colmap_invoked": false,
+  "final_pose_published": false,
+  "first_causal_divergence": null,
+  "first_difference": null,
+  "ground_truth_used": false,
+  "legacy_per_camera": {
+    "cam_edge_0": {
+      "aggregate_statistics": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false,
+        "num_candidates": 25230,
+        "num_inliers": 16751,
+        "num_outliers": 8479,
+        "rotation_deviation_mad_scaled_deg": 4.070049413596219,
+        "rotation_deviation_median_deg": 6.887311793648002,
+        "rotation_inlier_threshold_deg": 19.097460034436658,
+        "translation_deviation_mad_scaled_m": 0.21796463020041937,
+        "translation_deviation_median_m": 0.27259337321735644,
+        "translation_inlier_threshold_m": 0.9264872638186146
+      },
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            0.5376250763550372,
+            0.36718437543553223,
+            -0.7590355141297795
+          ],
+          [
+            -0.31010374715139005,
+            0.9232144988611849,
+            0.22695958912361
+          ],
+          [
+            0.784088606776624,
+            0.11336059072053775,
+            0.6102085161603232
+          ]
+        ],
+        "translation_m": [
+          2.0445664749336516,
+          -1.1795410847813794,
+          3.0265273368832912
+        ]
+      },
+      "deployment_eligible": true,
+      "omission_reason": null,
+      "omitted": false,
+      "selected_aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+      "selected_candidate_type": "relay",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    },
+    "cam_edge_1": {
+      "aggregate_statistics": {
+        "aggregate_priority": [
+          "quality_filtered_preferred_marker_no_gt_selection",
+          "quality_filtered_weighted_mean_no_gt_selection",
+          "weighted_mean_of_mad_inliers_no_gt_selection",
+          "se3_medoid_no_gt_selection"
+        ],
+        "ground_truth_used": false,
+        "num_candidates": 6,
+        "num_quality_candidates": 2,
+        "num_quality_mad_inliers": 2,
+        "quality_filter_fallback_used": false,
+        "quality_filtered_weighted_mean_diagnostic": {
+          "direction": "target_camera_to_cam_edge_3",
+          "rotation": [
+            [
+              0.5789044297302869,
+              -0.20266620596719906,
+              0.7898076159404341
+            ],
+            [
+              0.2523302014841138,
+              0.9655995762495817,
+              0.06282457931108475
+            ],
+            [
+              -0.7753703184012386,
+              0.1629228876048086,
+              0.610128676622295
+            ]
+          ],
+          "translation_m": [
+            -2.180771576847909,
+            -0.15781387425845939,
+            0.35036016196905
+          ]
+        },
+        "quality_subset_mad": {
+          "rotation_deviation_mad_scaled_deg": 1.372906805224162,
+          "rotation_deviation_median_deg": 0.9260141611645007,
+          "rotation_inlier_threshold_deg": 5.044734576836987,
+          "translation_deviation_mad_scaled_m": 0.0694250972109683,
+          "translation_deviation_median_m": 0.04682658654456246,
+          "translation_inlier_threshold_m": 0.2551018781774674
+        },
+        "quality_subset_medoid_score": 0.13069371538733957,
+        "selected_aggregate_type": "quality_filtered_preferred_marker_no_gt_selection",
+        "selected_candidate_key": "sha256:1328d85be17e2ce5410f998ae8d7df0045e533889cc9f0ef2c97a9041b3f6f74",
+        "selected_marker_id": 14,
+        "selection_note": "marker14_visible_and_passed_no_gt_quality_filter"
+      },
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            0.5741886088655117,
+            -0.20445077454635702,
+            0.7927845370821024
+          ],
+          [
+            0.2758304221531841,
+            0.9600168995470403,
+            0.047803041732556
+          ],
+          [
+            -0.7708599222062883,
+            0.1912261315079165,
+            0.6076245114909634
+          ]
+        ],
+        "translation_m": [
+          -2.1763138223801834,
+          -0.07847683699888341,
+          0.3768150676688653
+        ]
+      },
+      "deployment_eligible": true,
+      "omission_reason": null,
+      "omitted": false,
+      "selected_candidate_type": "direct",
+      "selected_method": "direct_static_aruco_multimarker"
+    },
+    "cam_edge_3": {
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "translation_m": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "deployment_eligible": true,
+      "omitted": false,
+      "selected_candidate_type": "root",
+      "selected_method": "gauge_identity"
+    },
+    "cam_edge_5": {
+      "aggregate_statistics": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false,
+        "num_candidates": 63438,
+        "num_inliers": 62848,
+        "num_outliers": 590,
+        "rotation_deviation_mad_scaled_deg": 17.749729091787447,
+        "rotation_deviation_median_deg": 15.691193362170903,
+        "rotation_inlier_threshold_deg": 68.94038063753325,
+        "translation_deviation_mad_scaled_m": 1.6312337128706604,
+        "translation_deviation_median_m": 1.716429315553372,
+        "translation_inlier_threshold_m": 6.610130454165354
+      },
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            -0.9894848430937293,
+            0.11545660881366034,
+            -0.08711783266947826
+          ],
+          [
+            0.035030716148712296,
+            0.7756916044885038,
+            0.6301391780013038
+          ],
+          [
+            0.14033030397560659,
+            0.6204613656040961,
+            -0.7715796132472745
+          ]
+        ],
+        "translation_m": [
+          3.231356408610428,
+          -2.8632752991550237,
+          8.12485715176965
+        ]
+      },
+      "deployment_eligible": true,
+      "omission_reason": null,
+      "omitted": false,
+      "selected_aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+      "selected_candidate_type": "relay",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    }
+  },
+  "root_selection": {
+    "legacy": "cam_edge_3",
+    "parity": true,
+    "wizard": "cam_edge_3"
+  },
+  "schema_version": 1,
+  "solver_invoked": false,
+  "status": "equal",
+  "tie_breaking": {
+    "legacy": "direct aggregate priority list then first matching row; relay exact aggregate type",
+    "wizard": "direct aggregate priority list then first matching row; relay exact aggregate type"
+  },
+  "wizard_per_camera": {
+    "cam_edge_0": {
+      "aggregate_statistics": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false,
+        "num_candidates": 25230,
+        "num_inliers": 16751,
+        "num_outliers": 8479,
+        "rotation_deviation_mad_scaled_deg": 4.070049413596219,
+        "rotation_deviation_median_deg": 6.887311793648002,
+        "rotation_inlier_threshold_deg": 19.097460034436658,
+        "translation_deviation_mad_scaled_m": 0.21796463020041937,
+        "translation_deviation_median_m": 0.27259337321735644,
+        "translation_inlier_threshold_m": 0.9264872638186146
+      },
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            0.5376250763550372,
+            0.36718437543553223,
+            -0.7590355141297795
+          ],
+          [
+            -0.31010374715139005,
+            0.9232144988611849,
+            0.22695958912361
+          ],
+          [
+            0.784088606776624,
+            0.11336059072053775,
+            0.6102085161603232
+          ]
+        ],
+        "translation_m": [
+          2.0445664749336516,
+          -1.1795410847813794,
+          3.0265273368832912
+        ]
+      },
+      "deployment_eligible": true,
+      "omission_reason": null,
+      "omitted": false,
+      "selected_aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+      "selected_candidate_type": "relay",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    },
+    "cam_edge_1": {
+      "aggregate_statistics": {
+        "aggregate_priority": [
+          "quality_filtered_preferred_marker_no_gt_selection",
+          "quality_filtered_weighted_mean_no_gt_selection",
+          "weighted_mean_of_mad_inliers_no_gt_selection",
+          "se3_medoid_no_gt_selection"
+        ],
+        "ground_truth_used": false,
+        "num_candidates": 6,
+        "num_quality_candidates": 2,
+        "num_quality_mad_inliers": 2,
+        "quality_filter_fallback_used": false,
+        "quality_filtered_weighted_mean_diagnostic": {
+          "direction": "target_camera_to_cam_edge_3",
+          "rotation": [
+            [
+              0.5789044297302869,
+              -0.20266620596719906,
+              0.7898076159404341
+            ],
+            [
+              0.2523302014841138,
+              0.9655995762495817,
+              0.06282457931108475
+            ],
+            [
+              -0.7753703184012386,
+              0.1629228876048086,
+              0.610128676622295
+            ]
+          ],
+          "translation_m": [
+            -2.180771576847909,
+            -0.15781387425845939,
+            0.35036016196905
+          ]
+        },
+        "quality_subset_mad": {
+          "rotation_deviation_mad_scaled_deg": 1.372906805224162,
+          "rotation_deviation_median_deg": 0.9260141611645007,
+          "rotation_inlier_threshold_deg": 5.044734576836987,
+          "translation_deviation_mad_scaled_m": 0.0694250972109683,
+          "translation_deviation_median_m": 0.04682658654456246,
+          "translation_inlier_threshold_m": 0.2551018781774674
+        },
+        "quality_subset_medoid_score": 0.13069371538733957,
+        "selected_aggregate_type": "quality_filtered_preferred_marker_no_gt_selection",
+        "selected_candidate_key": "sha256:1328d85be17e2ce5410f998ae8d7df0045e533889cc9f0ef2c97a9041b3f6f74",
+        "selected_marker_id": 14,
+        "selection_note": "marker14_visible_and_passed_no_gt_quality_filter"
+      },
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            0.5741886088655117,
+            -0.20445077454635702,
+            0.7927845370821024
+          ],
+          [
+            0.2758304221531841,
+            0.9600168995470403,
+            0.047803041732556
+          ],
+          [
+            -0.7708599222062883,
+            0.1912261315079165,
+            0.6076245114909634
+          ]
+        ],
+        "translation_m": [
+          -2.1763138223801834,
+          -0.07847683699888341,
+          0.3768150676688653
+        ]
+      },
+      "deployment_eligible": true,
+      "omission_reason": null,
+      "omitted": false,
+      "selected_candidate_type": "direct",
+      "selected_method": "direct_static_aruco_multimarker"
+    },
+    "cam_edge_3": {
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "translation_m": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "deployment_eligible": true,
+      "omitted": false,
+      "selected_candidate_type": "root",
+      "selected_method": "gauge_identity"
+    },
+    "cam_edge_5": {
+      "aggregate_statistics": {
+        "aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+        "fallback_top_half_by_quality": false,
+        "ground_truth_used": false,
+        "num_candidates": 63438,
+        "num_inliers": 62848,
+        "num_outliers": 590,
+        "rotation_deviation_mad_scaled_deg": 17.749729091787447,
+        "rotation_deviation_median_deg": 15.691193362170903,
+        "rotation_inlier_threshold_deg": 68.94038063753325,
+        "translation_deviation_mad_scaled_m": 1.6312337128706604,
+        "translation_deviation_median_m": 1.716429315553372,
+        "translation_inlier_threshold_m": 6.610130454165354
+      },
+      "aggregate_transform": {
+        "direction": "target_camera_to_cam_edge_3",
+        "rotation": [
+          [
+            -0.9894848430937293,
+            0.11545660881366034,
+            -0.08711783266947826
+          ],
+          [
+            0.035030716148712296,
+            0.7756916044885038,
+            0.6301391780013038
+          ],
+          [
+            0.14033030397560659,
+            0.6204613656040961,
+            -0.7715796132472745
+          ]
+        ],
+        "translation_m": [
+          3.231356408610428,
+          -2.8632752991550237,
+          8.12485715176965
+        ]
+      },
+      "deployment_eligible": true,
+      "omission_reason": null,
+      "omitted": false,
+      "selected_aggregate_type": "weighted_mean_of_mad_inliers_no_gt_selection",
+      "selected_candidate_type": "relay",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    }
+  }
+}

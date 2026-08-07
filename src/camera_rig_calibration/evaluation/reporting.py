@@ -327,6 +327,12 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
     selection = _read_json(selection_paths[0]) if selection_paths else {}
     ap02_selection = selection.get("ap02_reference_marker", {})
     common = {
+        "baseline_version": (
+            "baseline_v1"
+            if method_config.get("method_contract", "baseline_v1")
+            == "baseline_v1"
+            else "saved compatibility"
+        ),
         "evaluation_anchor_marker_id": evaluation.get(
             "anchor_marker_id"
         ),
@@ -453,8 +459,37 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
     single = method_config.get("single", {})
     multi = method_config.get("multi", {})
     marker_ids = multi.get("marker_ids")
+    feature_limit_policy = method_config.get(
+        "feature_limit_policy", "legacy_colmap_defaults_v1"
+    )
+    explicit_limits = feature_limit_policy == "wizard_explicit_limits_v1"
+    configured_ap03_image_size = (
+        colmap.get("ap03_maximum_image_size")
+        or colmap.get("maximum_image_size")
+    )
+    configured_ap03_features = (
+        colmap.get("ap03_maximum_features")
+        or colmap.get("maximum_features")
+    )
     return {
         **common,
+        "feature_limits": (
+            "explicit limits" if explicit_limits else "COLMAP defaults"
+        ),
+        "scale_input": {
+            "legacy_registered_image_redetection_v1": (
+                "registered-image detection"
+            ),
+            "wizard_filtered_observations_v1": (
+                "filtered registered-image detection"
+            ),
+        }.get(
+            method_config.get("scale_input_policy"),
+            "registered-image detection",
+        ),
+        "minimum_marker_area_px2": method_config.get(
+            "minimum_marker_area_px2"
+        ),
         "single_scale_marker_id": single.get("scale_marker_id"),
         "multi_marker_count": (
             len(marker_ids) if isinstance(marker_ids, list) else marker_ids
@@ -474,12 +509,10 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
             "resolved_gpu_mode", colmap.get("gpu_mode")
         ),
         "maximum_image_size": (
-            colmap.get("ap03_maximum_image_size")
-            or colmap.get("maximum_image_size")
+            configured_ap03_image_size if explicit_limits else None
         ),
         "maximum_features": (
-            colmap.get("ap03_maximum_features")
-            or colmap.get("maximum_features")
+            configured_ap03_features if explicit_limits else None
         ),
         "mapper_minimum_matches": colmap.get("mapper_minimum_matches"),
         "intrinsics_refinement": colmap_resolution.get(
@@ -1005,14 +1038,11 @@ def _baseline_contract(
                     == "cpu_baseline",
                     "exhaustive_matcher": config.get("matcher")
                     == "exhaustive",
-                    "maximum_image_size_2400": int(
-                        config.get("maximum_image_size") or 0
-                    )
-                    == 2400,
-                    "maximum_features_8192": int(
-                        config.get("maximum_features") or 0
-                    )
-                    == 8192,
+                    "colmap_default_feature_limits": (
+                        config.get("feature_limits") == "COLMAP defaults"
+                        and config.get("maximum_image_size") is None
+                        and config.get("maximum_features") is None
+                    ),
                     "mapper_minimum_matches_8": int(
                         config.get("mapper_minimum_matches") or 0
                     )

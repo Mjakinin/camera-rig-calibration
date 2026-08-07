@@ -1,0 +1,14 @@
+{
+  "method_contract": {
+    "baseline": "recommended_wizard_v1",
+    "value": "main_route2_parity_v1"
+  },
+  "root_camera": {
+    "baseline": "auto",
+    "value": "cam_edge_3"
+  },
+  "colmap.executable": {
+    "baseline": "auto",
+    "value": "/usr/bin/colmap"
+  }
+}

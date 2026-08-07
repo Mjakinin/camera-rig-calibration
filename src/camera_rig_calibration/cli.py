@@ -15,7 +15,6 @@ from rich.table import Table
 
 from .assets import ensure_bus_mesh
 from .components import register_builtin_components
-from .config import load_config
 from .runtime import PipelineOrchestrator
 from .queueing import (
     BatchConfig,
@@ -30,6 +29,7 @@ from .queueing import (
     load_queue_partitions,
 )
 from .wizard import (
+    _load_saved_setup_config,
     cleanup_storage_wizard,
     find_incomplete_transaction,
     incomplete_runs,
@@ -445,7 +445,7 @@ def _execute(
             runner.show(queue)
             runner.run(queue, dry_run=dry_run)
         return
-    config = load_config(config_path)
+    config = _load_saved_setup_config(config_path)
     if config.project.execution_mode == "complete" and len(config.methods.enabled) > 1:
         raise RuntimeError(
             "This config contains multiple method jobs. Save a "
@@ -453,21 +453,9 @@ def _execute(
         )
     show_summary(config, config_path, console)
     if dry_run:
-        QueueRunner(root, console).run(
-            QueueConfig(
-                id=(
-                    f"{config.dataset.id}_"
-                    f"{config.project.run_label}_queue"
-                ),
-                entries=[
-                    QueueEntry(
-                        id=config.project.run_label,
-                        config=config_path.resolve(),
-                    )
-                ],
-            ),
-            dry_run=True,
-        )
+        orchestrator = PipelineOrchestrator(root, console)
+        orchestrator.validate_ready(config)
+        orchestrator.show_dry_run(config)
         return
     PipelineOrchestrator(root, console).validate_ready(config)
     if not assume_yes and not typer.confirm(
@@ -761,6 +749,23 @@ def main() -> None:
             parser.add_argument(
                 "--reconcile-after", action="store_true"
             )
+            parser.add_argument(
+                "--ap01-method-contract",
+                choices=(
+                    "baseline_v1",
+                    "main_route2_parity_v1",
+                    "recommended_wizard_v1",
+                ),
+                help=argparse.SUPPRESS,
+            )
+            parser.add_argument(
+                "--ap02-historical-reproduction",
+                action="store_true",
+                help=argparse.SUPPRESS,
+            )
+            parser.add_argument(
+                "--ap03-method-contract", choices=("baseline_v1",)
+            )
         arguments = parser.parse_args(sys.argv[2:])
         try:
             from .rerun import (
@@ -787,6 +792,11 @@ def main() -> None:
                     arguments.reuse_matching_intermediates
                 ),
                 reconcile_after=arguments.reconcile_after,
+                ap01_method_contract=arguments.ap01_method_contract,
+                ap02_historical_reproduction=(
+                    arguments.ap02_historical_reproduction
+                ),
+                ap03_method_contract=arguments.ap03_method_contract,
                 console=console,
             )
             failed = [

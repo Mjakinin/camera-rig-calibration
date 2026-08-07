@@ -6,6 +6,8 @@ from camera_rig_calibration.pipeline import StageResult, run_stage
 
 from . import core
 from ._shared import cameras, parser
+from .contracts import resolve_ap01_method_contract
+from .frozen_intermediate import materialize_frozen_sfm
 
 
 def run(
@@ -25,29 +27,60 @@ def run(
     mapper_minimum_matches: int,
     colmap_executable: str,
     reuse: bool,
+    method_contract: str = "baseline_v1",
+    direct_target_camera: str = "cam_edge_1",
+    top_moving_per_marker: int | None = 8,
+    scale_top_per_marker: int | None = 30,
 ) -> StageResult:
     stage_root = output_root / "01_moving_colmap"
     moving = dataset / "raw_images" / "moving"
     camera_info_path = (
         dataset / "raw_images" / "camera_info" / f"{moving_camera_id}.json"
     )
+    contract = resolve_ap01_method_contract(
+        method_contract,
+        direct_target_camera=direct_target_camera,
+        top_moving_per_marker=top_moving_per_marker,
+        scale_top_per_marker=scale_top_per_marker,
+        colmap_matcher=matcher,
+        colmap_use_gpu=use_gpu,
+        colmap_maximum_image_size=maximum_image_size,
+        colmap_maximum_features=maximum_features,
+        colmap_sequential_overlap=sequential_overlap,
+        colmap_loop_detection=loop_detection,
+        colmap_mapper_minimum_matches=mapper_minimum_matches,
+    )
 
     def action() -> dict[str, Path | int]:
-        info = core.load_camera_info(camera_info_path)
-        images = core.run_colmap(
-            image_dir=moving,
-            camera_info=info,
-            out_dir=stage_root,
-            matcher=matcher,
-            use_gpu=int(use_gpu),
-            max_image_size=maximum_image_size,
-            max_features=maximum_features,
-            sequential_overlap=sequential_overlap,
-            loop_detection=int(loop_detection),
-            mapper_min_matches=mapper_minimum_matches,
-            colmap_executable=colmap_executable,
-            reuse=reuse,
-        )
+        if contract.sfm_execution_policy == "frozen_historical_reproduction":
+            images, _ = materialize_frozen_sfm(
+                dataset=dataset,
+                moving_camera_id=moving_camera_id,
+                stage_root=stage_root,
+                contract=contract,
+            )
+        elif contract.sfm_execution_policy == "fresh_colmap":
+            info = core.load_camera_info(camera_info_path)
+            images = core.run_colmap(
+                image_dir=moving,
+                camera_info=info,
+                out_dir=stage_root,
+                matcher=matcher,
+                use_gpu=int(use_gpu),
+                max_image_size=maximum_image_size,
+                max_features=maximum_features,
+                sequential_overlap=sequential_overlap,
+                loop_detection=int(loop_detection),
+                mapper_min_matches=mapper_minimum_matches,
+                colmap_executable=colmap_executable,
+                reuse=reuse,
+                contract=contract,
+            )
+        else:
+            raise ValueError(
+                "Unknown AP01 SfM execution policy: "
+                f"{contract.sfm_execution_policy}"
+            )
         poses = core.parse_colmap_poses(images)
         return {"images_txt": images, "registered_images": len(poses)}
 
@@ -57,13 +90,19 @@ def run(
         action,
         inputs={"moving_images": moving, "camera_info": camera_info_path},
         parameters={
-            "matcher": matcher,
-            "gpu": use_gpu,
-            "maximum_image_size": maximum_image_size,
-            "maximum_features": maximum_features,
-            "sequential_overlap": sequential_overlap,
-            "loop_detection": loop_detection,
-            "mapper_minimum_matches": mapper_minimum_matches,
+            "matcher": contract.colmap_matching_mode,
+            "gpu": contract.colmap_matcher_use_gpu,
+            "maximum_image_size": contract.colmap_sift_maximum_image_size,
+            "maximum_features": contract.colmap_sift_max_features,
+            "extraction_threads": contract.colmap_sift_extraction_threads,
+            "sequential_overlap": contract.colmap_sequential_overlap,
+            "loop_detection": contract.colmap_loop_detection,
+            "mapper_minimum_matches": (
+                contract.colmap_mapper_minimum_matches
+            ),
+            "sfm_mode": contract.sfm_execution_policy,
+            "method_contract": contract.fingerprint_payload(),
+            "method_contract_sha256": contract.scientific_fingerprint(),
         },
     )
 
@@ -99,6 +138,10 @@ def main() -> None:
         mapper_minimum_matches=args.mapper_min_matches,
         colmap_executable=args.colmap_executable,
         reuse=args.reuse_colmap,
+        method_contract=args.method_contract,
+        direct_target_camera=args.direct_target_camera,
+        top_moving_per_marker=args.top_moving_per_marker,
+        scale_top_per_marker=args.scale_top_per_marker,
     )
 
 

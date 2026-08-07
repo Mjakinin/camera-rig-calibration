@@ -1,0 +1,45 @@
+{
+  "actual": {
+    "ba_observations": 458,
+    "initial_mean_reprojection_px": 10.247644639270513,
+    "initialized_moving_frames": 170,
+    "loss": "soft_l1",
+    "loss_scale_px": 3.0,
+    "maximum_function_evaluations": 80,
+    "parameter_count": 960,
+    "reference_marker_id": 14,
+    "variable_poses": 160
+  },
+  "checks": {
+    "ba_observations": true,
+    "frozen_input_provenance": true,
+    "initial_mean_reprojection_px": true,
+    "initialized_moving_frames": true,
+    "loss": true,
+    "loss_scale_px": true,
+    "maximum_function_evaluations": true,
+    "parameter_count": true,
+    "reference_marker_id": true,
+    "variable_poses": true
+  },
+  "ground_truth_used": false,
+  "historical_reproduction": true,
+  "schema_version": 1,
+  "solver_authorized": true,
+  "status": "passed",
+  "tolerances": {
+    "initial_mean_reprojection_px": 5e-06,
+    "loss_scale_px": 1e-12
+  },
+  "validation_targets": {
+    "ba_observations": 458,
+    "initial_mean_reprojection_px": 10.247645,
+    "initialized_moving_frames": 170,
+    "loss": "soft_l1",
+    "loss_scale_px": 3.0,
+    "maximum_function_evaluations": 80,
+    "parameter_count": 960,
+    "reference_marker_id": 14,
+    "variable_poses": 160
+  }
+}

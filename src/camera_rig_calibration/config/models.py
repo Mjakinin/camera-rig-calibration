@@ -378,6 +378,14 @@ class AP01PathConsistency(StrictModel):
 
 
 class AP01Settings(StrictModel):
+    method_contract: Literal[
+        "baseline_v1", "main_route2_parity_v1", "recommended_wizard_v1"
+    ] = "baseline_v1"
+    historical_reproduction: bool = False
+    advanced_strategy: Literal[
+        "legacy_main_v1", "wizard_robustness_v1"
+    ] = "legacy_main_v1"
+    direct_target_camera: str = "cam_edge_1"
     root_camera: str = "auto"
     top_moving_per_marker: int | None = Field(default=8, ge=1)
     scale_top_per_marker: int | None = Field(default=30, ge=1)
@@ -394,20 +402,44 @@ class AP01Settings(StrictModel):
         default_factory=ObservationQualityOverrides
     )
 
+    @field_validator("direct_target_camera")
+    @classmethod
+    def validate_direct_target_camera(cls, value: str) -> str:
+        value = value.strip()
+        if not ID_PATTERN.fullmatch(value):
+            raise ValueError("invalid AP01 direct target camera ID")
+        return value
+
 
 class AP02Settings(StrictModel):
+    method_contract: Literal["baseline_v1"] = "baseline_v1"
+    historical_reproduction: bool = False
     reference_marker_selection_mode: Literal[
         "baseline", "auto", "manual", "explicit"
-    ] = "auto"
-    reference_marker_id: int | Literal["auto"] = "auto"
+    ] = "baseline"
+    reference_marker_id: int | Literal["auto"] = 14
+    frame_selection_strategy: Literal[
+        "legacy_smart_v1", "wizard_graph_preserving_v1"
+    ] = "legacy_smart_v1"
+    initialization_strategy: Literal[
+        "legacy_maximum_bottleneck_v1",
+        "wizard_maximum_bottleneck_v2",
+        "unweighted_bfs_diagnostic",
+    ] = "legacy_maximum_bottleneck_v1"
+    graph_edge_weight_strategy: Literal[
+        "legacy_observation_quality_v1", "wizard_selection_score_v2"
+    ] = "legacy_observation_quality_v1"
+    reprojection_model: Literal[
+        "legacy_pinhole_v1", "distortion_aware_v1"
+    ] = "legacy_pinhole_v1"
     reference_marker_maximum_frames: int | None = Field(
         default=None, ge=1
     )
     top_per_marker: int | None = Field(default=8, ge=1)
     top_per_marker_pair: int | None = Field(default=4, ge=1)
     maximum_total_frames: int | None = Field(default=None, ge=1)
-    static_only_ba_max_function_evaluations: int = Field(default=50, ge=1)
-    combined_ba_max_function_evaluations: int = Field(default=50, ge=1)
+    static_only_ba_max_function_evaluations: int = Field(default=80, ge=1)
+    combined_ba_max_function_evaluations: int = Field(default=80, ge=1)
     ba_robust_loss: Literal["soft_l1", "huber", "linear"] = "soft_l1"
     ba_robust_loss_scale_px: float = Field(default=3.0, gt=0)
     observation_quality: ObservationQualityOverrides = Field(
@@ -421,13 +453,13 @@ class AP02Settings(StrictModel):
             return value
         migrated = dict(value)
         if "reference_marker_selection_mode" not in migrated:
+            if "reference_marker_id" not in migrated:
+                return migrated
             configured = migrated.get("reference_marker_id", "auto")
             migrated["reference_marker_selection_mode"] = (
                 "auto" if configured == "auto" else "explicit"
             )
-        if migrated.get("reference_marker_selection_mode") == "baseline":
-            migrated["reference_marker_id"] = 14
-        elif (
+        if (
             migrated.get("reference_marker_selection_mode") == "manual"
             and "reference_marker_id" not in migrated
         ):
@@ -471,14 +503,25 @@ class AP03ScaleSettings(StrictModel):
 
 
 class AP03SingleSettings(StrictModel):
-    scale_marker_id: int | Literal["auto"] = "auto"
+    scale_marker_id: int | Literal["auto"] = 14
 
 
 class AP03MultiSettings(StrictModel):
-    marker_ids: list[int] | Literal["auto"] = "auto"
+    marker_ids: list[int] | Literal["auto"] = Field(
+        default_factory=lambda: list(range(15))
+    )
 
 
 class AP03Settings(StrictModel):
+    method_contract: Literal["baseline_v1"] = "baseline_v1"
+    feature_limit_policy: Literal[
+        "legacy_colmap_defaults_v1", "wizard_explicit_limits_v1"
+    ] = "legacy_colmap_defaults_v1"
+    scale_input_policy: Literal[
+        "legacy_registered_image_redetection_v1",
+        "wizard_filtered_observations_v1",
+    ] = "legacy_registered_image_redetection_v1"
+    minimum_marker_area_px2: float = Field(default=100.0, ge=0.0)
     single: AP03SingleSettings = Field(default_factory=AP03SingleSettings)
     multi: AP03MultiSettings = Field(default_factory=AP03MultiSettings)
     scale: AP03ScaleSettings = Field(default_factory=AP03ScaleSettings)
@@ -642,14 +685,6 @@ class RigConfig(StrictModel):
                 )
             if not self.static_cameras and self.mcap.path is None:
                 raise ValueError("provide static cameras or an MCAP source")
-        if (
-            self.methods.ap02.reference_marker_selection_mode == "baseline"
-            and self.dataset.category != DatasetCategory.SIMULATION
-        ):
-            raise ValueError(
-                "AP02 reference_marker_selection_mode=baseline is available "
-                "only for simulation datasets"
-            )
         if self.moving_camera.video is not None and self.sampling.target_hz is None:
             raise ValueError("sampling.target_hz is required for moving-video input")
         return self

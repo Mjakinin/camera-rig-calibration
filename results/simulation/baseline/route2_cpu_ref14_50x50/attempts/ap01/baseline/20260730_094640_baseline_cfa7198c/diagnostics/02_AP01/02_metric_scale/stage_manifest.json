@@ -1,0 +1,22 @@
+{
+  "completed_at": "2026-07-29T22:54:08.241+00:00",
+  "inputs": {
+    "colmap": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap01__baseline__01/20260730_004919_baseline_3f5dc2a2/02_AP01/01_moving_colmap",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap01__baseline__01/20260730_004919_baseline_3f5dc2a2/preflight/observations"
+  },
+  "outputs": {
+    "diagnostics": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap01__baseline__01/20260730_004919_baseline_3f5dc2a2/02_AP01/02_metric_scale/SCALE_DIAGNOSTICS.json",
+    "metric_scale": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap01__baseline__01/20260730_004919_baseline_3f5dc2a2/02_AP01/02_metric_scale/metric_scale.txt",
+    "pairs": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap01__baseline__01/20260730_004919_baseline_3f5dc2a2/02_AP01/02_metric_scale/scale_pairs.csv",
+    "used_observation_pairs": 3266
+  },
+  "parameters": {
+    "scale_top_per_marker": 30,
+    "selection": "quality_ranked_per_marker_before_pairing"
+  },
+  "runtime_seconds": 0.18084938199899625,
+  "schema_version": 5,
+  "stage_id": "ap01.estimate_scale",
+  "started_at": "2026-07-29T22:54:08.060+00:00",
+  "status": "COMPLETED"
+}

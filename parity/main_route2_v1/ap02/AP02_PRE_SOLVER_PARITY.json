@@ -1,0 +1,25 @@
+{
+  "ba_observations": 458,
+  "classification": "NUMERICALLY_EQUIVALENT_WITHIN_TOLERANCE",
+  "f_scale": 3.0,
+  "ground_truth_used": false,
+  "historical_reported_initial_mean_reprojection_px": 10.247645,
+  "initial_mean_reprojection_px": 10.247644639270517,
+  "loss": "soft_l1",
+  "maximum_residual_delta_at_x0": 9.322320693172514e-12,
+  "maximum_x0_delta": 5.312417172831374e-14,
+  "parameter_count": 960,
+  "parameter_order_exact": true,
+  "scalar_residual_count": 3664,
+  "schema_version": 1,
+  "selected_frame_inventory_and_order_exact": true,
+  "selected_moving_frames": 137,
+  "solver_bounds_policy": "unbounded_v1",
+  "solver_method": "scipy_least_squares_default_trf_v1",
+  "tolerances": {
+    "pose_and_x0": 1e-12,
+    "reported_mean_rounding": 5e-07,
+    "residual": 1e-10
+  },
+  "variable_poses": 160
+}

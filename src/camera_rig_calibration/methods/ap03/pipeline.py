@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from ...components.common import calibration_requirements, read_method_status
 from ...config.models import AP03Settings
 from ...contracts import CommandSpec, RequirementResult, RunContext
+from .contracts import resolve_ap03_method_contract
 
 
 @dataclass(frozen=True)
@@ -18,7 +19,7 @@ class AP03Method:
     """Connect the AP03 shared-COLMAP stages to the generic rigcal runtime."""
 
     id: str = "ap03"
-    display_name: str = "AP03 — shared COLMAP with single and multi scale"
+    display_name: str = "AP03"
     config_model: type[BaseModel] = AP03Settings
 
     def requirements(self, context: RunContext) -> RequirementResult:
@@ -44,6 +45,43 @@ class AP03Method:
             list(context.resolved_ap03_multi_marker_ids)
             if multi.marker_ids == "auto"
             else list(multi.marker_ids)
+        )
+        contract = resolve_ap03_method_contract(
+            context.config.methods.ap03.method_contract,
+            feature_limit_policy=context.config.methods.ap03.feature_limit_policy,
+            scale_input_policy=context.config.methods.ap03.scale_input_policy,
+            scale_marker_ids=multi_markers,
+            marker_length_m=context.config.markers.length_m,
+            marker_dictionary=context.config.markers.dictionary,
+            marker_detection_mode=context.config.markers.detection_mode,
+            minimum_marker_area_px2=(
+                context.config.methods.ap03.minimum_marker_area_px2
+            ),
+            reprojection_threshold_px=scale.reprojection_threshold_px,
+            ransac_iterations=scale.ransac_iterations,
+            minimum_inliers=scale.minimum_inliers,
+            maximum_observations_per_marker=(
+                scale.maximum_observations_per_marker
+            ),
+            colmap_matcher=context.config.colmap.matcher,
+            colmap_use_gpu=context.config.colmap.use_gpu,
+            colmap_maximum_image_size=(
+                context.config.colmap.ap03_maximum_image_size
+                or context.config.colmap.maximum_image_size
+            ),
+            colmap_maximum_features=(
+                context.config.colmap.ap03_maximum_features
+                or context.config.colmap.maximum_features
+            ),
+            colmap_sequential_overlap=context.config.colmap.sequential_overlap,
+            colmap_loop_detection=(
+                context.config.colmap.ap03_loop_detection
+                if context.config.colmap.ap03_loop_detection is not None
+                else context.config.colmap.loop_detection
+            ),
+            colmap_mapper_minimum_matches=(
+                context.config.colmap.mapper_minimum_matches
+            ),
         )
         output = context.run_directory / "04_AP03"
         config = context.config
@@ -73,36 +111,31 @@ class AP03Method:
             "--moving-camera-id",
             config.moving_camera.id,
             "--matcher",
-            config.colmap.matcher,
+            contract.matching_strategy,
             "--use-gpu",
-            "1" if config.colmap.use_gpu else "0",
-            "--max-image-size",
-            str(
-                config.colmap.ap03_maximum_image_size
-                or config.colmap.maximum_image_size
-            ),
-            "--max-features",
-            str(
-                config.colmap.ap03_maximum_features
-                or config.colmap.maximum_features
-            ),
+            "1" if contract.sift_use_gpu else "0",
             "--sequential-overlap",
-            str(config.colmap.sequential_overlap),
-            "--loop-detection",
-            (
-                "1"
-                if (
-                    config.colmap.ap03_loop_detection
-                    if config.colmap.ap03_loop_detection is not None
-                    else config.colmap.loop_detection
-                )
-                else "0"
-            ),
+            str(contract.sequential_overlap),
             "--mapper-min-matches",
-            str(config.colmap.mapper_minimum_matches),
+            str(contract.mapper_minimum_matches),
             "--colmap-executable",
             config.colmap.executable,
         ]
+        if contract.sift_maximum_image_size is not None:
+            reconstruct.extend(
+                ["--max-image-size", str(contract.sift_maximum_image_size)]
+            )
+        if contract.sift_maximum_features is not None:
+            reconstruct.extend(
+                ["--max-features", str(contract.sift_maximum_features)]
+            )
+        if contract.sequential_loop_detection is not None:
+            reconstruct.extend(
+                [
+                    "--loop-detection",
+                    "1" if contract.sequential_loop_detection else "0",
+                ]
+            )
         if config.colmap.reuse or context.reuse_colmap_artifact:
             reconstruct.append("--reuse-colmap")
         scale_common = [
@@ -126,6 +159,10 @@ class AP03Method:
             config.markers.dictionary,
             "--detection-mode",
             config.markers.detection_mode,
+            "--scale-input-policy",
+            contract.scale_input_policy,
+            "--minimum-marker-area-px2",
+            str(config.methods.ap03.minimum_marker_area_px2),
         ]
         if scale.maximum_observations_per_marker is not None:
             scale_common.extend(

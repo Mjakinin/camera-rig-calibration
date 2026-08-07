@@ -28,16 +28,22 @@ from camera_rig_calibration.config.models import (
 )
 
 
-def test_ap02_recommended_defaults_are_explicit() -> None:
+def test_ap02_canonical_baseline_defaults_are_explicit() -> None:
     assert AP02Settings().model_dump() == {
-        "reference_marker_selection_mode": "auto",
-        "reference_marker_id": "auto",
+        "method_contract": "baseline_v1",
+        "historical_reproduction": False,
+        "reference_marker_selection_mode": "baseline",
+        "reference_marker_id": 14,
+        "frame_selection_strategy": "legacy_smart_v1",
+        "initialization_strategy": "legacy_maximum_bottleneck_v1",
+        "graph_edge_weight_strategy": "legacy_observation_quality_v1",
+        "reprojection_model": "legacy_pinhole_v1",
         "reference_marker_maximum_frames": None,
         "top_per_marker": 8,
         "top_per_marker_pair": 4,
         "maximum_total_frames": None,
-        "static_only_ba_max_function_evaluations": 50,
-        "combined_ba_max_function_evaluations": 50,
+        "static_only_ba_max_function_evaluations": 80,
+        "combined_ba_max_function_evaluations": 80,
         "ba_robust_loss": "soft_l1",
         "ba_robust_loss_scale_px": 3.0,
         "observation_quality": {
@@ -207,8 +213,8 @@ def test_ap02_reference_selection_modes_preserve_schema_v5_compatibility(
             "reference_marker_id": 14,
         }
     )
-    with pytest.raises(ValidationError, match="only for simulation"):
-        RigConfig.model_validate(real_baseline)
+    loaded_baseline = RigConfig.model_validate(real_baseline)
+    assert loaded_baseline.methods.ap02.reference_marker_id == 14
 
 
 def test_positive_pixel_area_threshold_requires_manual_migration(

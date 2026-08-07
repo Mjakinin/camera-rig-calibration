@@ -24,7 +24,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from .components import register_builtin_components
-from .config import config_fingerprint, load_config, save_config
+from .config import config_fingerprint, load_config, save_user_config
 from .config.models import (
     ColmapSettings,
     DatasetCategory,
@@ -2973,17 +2973,28 @@ def _method_job_summary(job: MethodQueueJob) -> str:
         return str(value)
 
     if job.method_id == "ap01":
-        return (
-            f"matcher={job.colmap.matcher}, compute={job.colmap.compute_mode}, "
-            f"root={selection_text('root_camera', job.methods.ap01.root_camera)}, "
-            f"relay_top={job.methods.ap01.top_moving_per_marker}, "
-            f"scale_top={job.methods.ap01.scale_top_per_marker}, "
-            f"ArUco={job.markers.detection_mode}, "
-            f"{quality_text}"
+        value = job.methods.ap01
+        summary = (
+            f"baseline={value.method_contract}, "
+            f"strategy={_public_policy_name(value.advanced_strategy)}, "
+            f"root={selection_text('root_camera', value.root_camera)}, "
+            f"direct={value.direct_target_camera}, "
+            f"ArUco={job.markers.detection_mode}, {quality_text}"
         )
+        if value.advanced_strategy == "wizard_robustness_v1":
+            summary += (
+                f", matcher={job.colmap.matcher}, "
+                f"compute={job.colmap.compute_mode}, "
+                f"relay_top={value.top_moving_per_marker}, "
+                f"scale_top={value.scale_top_per_marker}"
+            )
+        return summary
     if job.method_id == "ap02":
         value = job.methods.ap02
         return (
+            f"baseline={value.method_contract}, "
+            f"frames={_public_policy_name(value.frame_selection_strategy)}, "
+            f"init={_public_policy_name(value.initialization_strategy)}, "
             f"nfev={value.max_nfev_static}/{value.max_nfev_moving}, "
             f"loss={value.ba_robust_loss}@{value.ba_robust_loss_scale_px:g}px, "
             f"ref_mode={value.reference_marker_selection_mode}, "
@@ -2996,13 +3007,21 @@ def _method_job_summary(job: MethodQueueJob) -> str:
     if job.method_id == "ap03":
         single = job.methods.ap03.single
         multi = job.methods.ap03.multi
-        return (
+        summary = (
+            f"baseline={job.methods.ap03.method_contract}, "
+            f"features={_public_policy_name(job.methods.ap03.feature_limit_policy)}, "
+            f"scale_input={_public_policy_name(job.methods.ap03.scale_input_policy)}, "
             f"single={selection_text('single_marker', single.scale_marker_id)}, "
             f"multi={selection_text('multi_markers', multi.marker_ids)}, "
             f"matcher={job.colmap.matcher}, ArUco={job.markers.detection_mode}; "
-            f"scale_top={job.methods.ap03.scale.maximum_observations_per_marker}, "
             f"{quality_text}; one COLMAP, multi primary"
         )
+        if job.methods.ap03.scale_input_policy == "wizard_filtered_observations_v1":
+            summary += (
+                ", scale_top="
+                f"{job.methods.ap03.scale.maximum_observations_per_marker}"
+            )
+        return summary
     payload = job.methods.extensions.get(job.method_id, {})
     return (
         "options="
@@ -3710,19 +3729,24 @@ def _setting_rows(
     if job.method_id == "ap01":
         value, base = job.methods.ap01, defaults.methods.ap01
         rows.extend([
+            ("ap01_advanced_strategy", "METHOD-SPECIFIC SETTINGS", "AP01 strategy", value.advanced_strategy, base.advanced_strategy, "The baseline strategy uses Direct/Relay selection; the robustness strategy enables configurable caps and consensus gates."),
+            ("ap01_direct_target", "METHOD-SPECIFIC SETTINGS", "Direct target camera", value.direct_target_camera, base.direct_target_camera, "One configurable camera is calibrated through the Direct path; other cameras use Relay support."),
             ("root_camera", "METHOD-SPECIFIC SETTINGS", "Root camera", guided_current("root_camera", value.root_camera), base.root_camera, "Coordinate origin; auto is resolved from filtered graph coverage."),
-            ("ap01_top_moving", "METHOD-SPECIFIC SETTINGS", "Relay observations per marker", value.top_moving_per_marker, base.top_moving_per_marker, "Quality-ranked moving observations kept per marker; null keeps all."),
-            ("ap01_scale_top", "METHOD-SPECIFIC SETTINGS", "Scale observations per marker", value.scale_top_per_marker, base.scale_top_per_marker, "Quality-ranked observations kept before scale-pair construction; null keeps all."),
-            ("ap01_direct_markers", "METHOD-SPECIFIC SETTINGS", "Direct minimum independent inlier markers", value.direct_quality_gate.minimum_independent_markers, base.direct_quality_gate.minimum_independent_markers, "Higher requires more independent marker evidence; the baseline requires three marker IDs."),
-            ("ap01_direct_inlier_ratio", "METHOD-SPECIFIC SETTINGS", "Direct minimum inlier ratio", value.direct_quality_gate.minimum_inlier_ratio, base.direct_quality_gate.minimum_inlier_ratio, "Fraction in [0,1]; higher rejects less-consistent direct candidate sets."),
-            ("ap01_direct_translation", "METHOD-SPECIFIC SETTINGS", "Direct maximum translation dispersion [m]", value.direct_quality_gate.maximum_translation_dispersion_m, base.direct_quality_gate.maximum_translation_dispersion_m, "Lower requires tighter direct-pose consensus; baseline is 0.12 m."),
-            ("ap01_direct_rotation", "METHOD-SPECIFIC SETTINGS", "Direct maximum rotation dispersion [deg]", value.direct_quality_gate.maximum_rotation_dispersion_deg, base.direct_quality_gate.maximum_rotation_dispersion_deg, "Lower requires tighter direct orientation consensus; baseline is 4 degrees."),
-            ("ap01_relay_inlier_ratio", "METHOD-SPECIFIC SETTINGS", "Relay minimum inlier ratio", value.relay_quality_gate.minimum_inlier_ratio, base.relay_quality_gate.minimum_inlier_ratio, "Fraction in [0,1]; higher rejects less-consistent relay candidates."),
-            ("ap01_relay_translation", "METHOD-SPECIFIC SETTINGS", "Relay maximum translation dispersion [m]", value.relay_quality_gate.maximum_translation_dispersion_m, base.relay_quality_gate.maximum_translation_dispersion_m, "Lower requires tighter moving-COLMAP relay consensus; baseline is 0.30 m."),
-            ("ap01_relay_rotation", "METHOD-SPECIFIC SETTINGS", "Relay maximum rotation dispersion [deg]", value.relay_quality_gate.maximum_rotation_dispersion_deg, base.relay_quality_gate.maximum_rotation_dispersion_deg, "Lower requires tighter relay orientation consensus; baseline is 7 degrees."),
-            ("ap01_consistency_translation", "METHOD-SPECIFIC SETTINGS", "Direct/relay maximum translation disagreement [m]", value.direct_relay_consistency.maximum_translation_disagreement_m, base.direct_relay_consistency.maximum_translation_disagreement_m, "If both paths are stable, larger disagreement publishes Direct with a visible warning."),
-            ("ap01_consistency_rotation", "METHOD-SPECIFIC SETTINGS", "Direct/relay maximum rotation disagreement [deg]", value.direct_relay_consistency.maximum_rotation_disagreement_deg, base.direct_relay_consistency.maximum_rotation_disagreement_deg, "If both paths are stable, larger disagreement publishes Direct with a visible warning."),
         ])
+        if value.advanced_strategy == "wizard_robustness_v1":
+            rows.extend([
+                ("ap01_top_moving", "METHOD-SPECIFIC SETTINGS", "Relay observations per marker", value.top_moving_per_marker, base.top_moving_per_marker, "Quality-ranked moving observations kept per marker; null keeps all."),
+                ("ap01_scale_top", "METHOD-SPECIFIC SETTINGS", "Scale observations per marker", value.scale_top_per_marker, base.scale_top_per_marker, "Quality-ranked observations kept before scale-pair construction; null keeps all."),
+                ("ap01_direct_markers", "METHOD-SPECIFIC SETTINGS", "Direct minimum independent inlier markers", value.direct_quality_gate.minimum_independent_markers, base.direct_quality_gate.minimum_independent_markers, "Higher requires more independent marker evidence."),
+                ("ap01_direct_inlier_ratio", "METHOD-SPECIFIC SETTINGS", "Direct minimum inlier ratio", value.direct_quality_gate.minimum_inlier_ratio, base.direct_quality_gate.minimum_inlier_ratio, "Fraction in [0,1]; higher rejects less-consistent direct candidate sets."),
+                ("ap01_direct_translation", "METHOD-SPECIFIC SETTINGS", "Direct maximum translation dispersion [m]", value.direct_quality_gate.maximum_translation_dispersion_m, base.direct_quality_gate.maximum_translation_dispersion_m, "Lower requires tighter direct-pose consensus."),
+                ("ap01_direct_rotation", "METHOD-SPECIFIC SETTINGS", "Direct maximum rotation dispersion [deg]", value.direct_quality_gate.maximum_rotation_dispersion_deg, base.direct_quality_gate.maximum_rotation_dispersion_deg, "Lower requires tighter direct orientation consensus."),
+                ("ap01_relay_inlier_ratio", "METHOD-SPECIFIC SETTINGS", "Relay minimum inlier ratio", value.relay_quality_gate.minimum_inlier_ratio, base.relay_quality_gate.minimum_inlier_ratio, "Fraction in [0,1]; higher rejects less-consistent relay candidates."),
+                ("ap01_relay_translation", "METHOD-SPECIFIC SETTINGS", "Relay maximum translation dispersion [m]", value.relay_quality_gate.maximum_translation_dispersion_m, base.relay_quality_gate.maximum_translation_dispersion_m, "Lower requires tighter Relay consensus."),
+                ("ap01_relay_rotation", "METHOD-SPECIFIC SETTINGS", "Relay maximum rotation dispersion [deg]", value.relay_quality_gate.maximum_rotation_dispersion_deg, base.relay_quality_gate.maximum_rotation_dispersion_deg, "Lower requires tighter Relay orientation consensus."),
+                ("ap01_consistency_translation", "METHOD-SPECIFIC SETTINGS", "Direct/Relay maximum translation disagreement [m]", value.direct_relay_consistency.maximum_translation_disagreement_m, base.direct_relay_consistency.maximum_translation_disagreement_m, "If both paths are stable, larger disagreement publishes Direct with a visible warning."),
+                ("ap01_consistency_rotation", "METHOD-SPECIFIC SETTINGS", "Direct/Relay maximum rotation disagreement [deg]", value.direct_relay_consistency.maximum_rotation_disagreement_deg, base.direct_relay_consistency.maximum_rotation_disagreement_deg, "If both paths are stable, larger disagreement publishes Direct with a visible warning."),
+            ])
     elif job.method_id == "ap02":
         value, base = job.methods.ap02, defaults.methods.ap02
         reference_current = (
@@ -3738,7 +3762,11 @@ def _setting_rows(
             )
         )
         rows.extend([
-            ("ap02_reference_mode", "METHOD-SPECIFIC SETTINGS", "Reference-marker selection mode", value.reference_marker_selection_mode, base.reference_marker_selection_mode, "Baseline is simulation-only marker 14; auto uses the deterministic recommendation; manual pauses once after preflight; explicit is retained for compatible schema-v5 files."),
+            ("ap02_frame_strategy", "METHOD-SPECIFIC SETTINGS", "Frame-selection strategy", value.frame_selection_strategy, base.frame_selection_strategy, "Smart frame budgets are applied at the bundle-adjustment boundary; graph-preserving preselection is an advanced alternative."),
+            ("ap02_initialization_strategy", "METHOD-SPECIFIC SETTINGS", "Initialization strategy", value.initialization_strategy, base.initialization_strategy, "Selects the deterministic reference-rooted graph tree policy."),
+            ("ap02_edge_weight_strategy", "METHOD-SPECIFIC SETTINGS", "Graph edge weights", value.graph_edge_weight_strategy, base.graph_edge_weight_strategy, "Geometric observation quality is the baseline; a shared selection score is available for experiments."),
+            ("ap02_reprojection_model", "METHOD-SPECIFIC SETTINGS", "Reprojection model", value.reprojection_model, base.reprojection_model, "Pinhole projection is the baseline; distortion-aware projection is an advanced alternative."),
+            ("ap02_reference_mode", "METHOD-SPECIFIC SETTINGS", "Reference-marker selection mode", value.reference_marker_selection_mode, base.reference_marker_selection_mode, "Baseline uses canonical marker 14; auto uses the deterministic recommendation; manual pauses once after preflight; explicit is retained for compatible schema-v5 files."),
             ("ap02_reference_display", "METHOD-SPECIFIC SETTINGS", "Resolved/reference marker", reference_current, "auto", "Read-only preview. Auto and manual choices are resolved from the detected marker inventory during preflight."),
             ("ap02_reference_frames", "METHOD-SPECIFIC SETTINGS", "Reference-marker frame limit", value.reference_marker_maximum_frames, base.reference_marker_maximum_frames, "Quality-ranked reference-marker frames; null is unlimited."),
             ("ap02_top_marker", "METHOD-SPECIFIC SETTINGS", "Top frames per marker", value.top_per_marker, base.top_per_marker, "Quality-ranked frames retained for each marker; null keeps all."),
@@ -3761,13 +3789,17 @@ def _setting_rows(
             defaults.methods.ap03.scale,
         )
         rows.extend([
+            ("ap03_feature_limit_policy", "METHOD-SPECIFIC SETTINGS", "Feature-limit policy", job.methods.ap03.feature_limit_policy, defaults.methods.ap03.feature_limit_policy, "COLMAP defaults leave SIFT limits unset; explicit limits use the AP03 values shown below."),
+            ("ap03_scale_input_policy", "METHOD-SPECIFIC SETTINGS", "Scale input policy", job.methods.ap03.scale_input_policy, defaults.methods.ap03.scale_input_policy, "Registered-image detection uses all registered images; filtered detection also requires accepted observations."),
+            ("ap03_minimum_marker_area", "METHOD-SPECIFIC SETTINGS", "Scale marker minimum area [px^2]", job.methods.ap03.minimum_marker_area_px2, defaults.methods.ap03.minimum_marker_area_px2, "Reject scale detections below this image-area threshold."),
             ("single_marker", "METHOD-SPECIFIC SETTINGS", "Single diagnostic scale marker", guided_current("single_marker", single.scale_marker_id), base_single.scale_marker_id, "Diagnostic marker chosen after filtered observations."),
-            ("multi_markers", "METHOD-SPECIFIC SETTINGS", "Multi primary marker set", guided_current("multi_markers", _ids_text(multi.marker_ids)), "auto", "Auto uses every compatible filtered marker."),
+            ("multi_markers", "METHOD-SPECIFIC SETTINGS", "Multi primary marker set", guided_current("multi_markers", _ids_text(multi.marker_ids)), _ids_text(base_multi.marker_ids), "The baseline uses markers 0-14; auto uses every compatible filtered marker."),
             ("scale_reprojection", "METHOD-SPECIFIC SETTINGS", "Scale RANSAC threshold [px]", scale.reprojection_threshold_px, base_scale.reprojection_threshold_px, "Shared by Single and Multi; smaller requires tighter triangulation support."),
             ("scale_ransac", "METHOD-SPECIFIC SETTINGS", "Scale RANSAC iterations", scale.ransac_iterations, base_scale.ransac_iterations, "Shared by Single and Multi; higher explores more hypotheses but increases runtime."),
             ("scale_inliers", "METHOD-SPECIFIC SETTINGS", "Scale minimum inliers", scale.minimum_inliers, base_scale.minimum_inliers, "Shared by Single and Multi; higher requires more supporting views per marker corner."),
-            ("scale_max_observations", "METHOD-SPECIFIC SETTINGS", "Maximum observations per marker", scale.maximum_observations_per_marker, base_scale.maximum_observations_per_marker, "Quality-ranked cap before corner triangulation; null keeps all."),
         ])
+        if job.methods.ap03.scale_input_policy == "wizard_filtered_observations_v1":
+            rows.append(("scale_max_observations", "METHOD-SPECIFIC SETTINGS", "Maximum observations per marker", scale.maximum_observations_per_marker, base_scale.maximum_observations_per_marker, "Quality-ranked cap before corner triangulation; null keeps all."))
     else:
         current_extension = job.methods.extensions.get(job.method_id, {})
         default_extension = defaults.methods.extensions.get(job.method_id, {})
@@ -3785,19 +3817,32 @@ def _setting_rows(
                 "Validated against the registered method config model.",
             )
         )
-    if job.method_id in {"ap01", "ap03"}:
+    if job.method_id == "ap03" or (
+        job.method_id == "ap01"
+        and job.methods.ap01.advanced_strategy == "wizard_robustness_v1"
+    ):
         rows.extend([
             ("matcher", "COLMAP SETTINGS", "Matcher", job.colmap.matcher, "exhaustive", "Exhaustive compares all image pairs; sequential limits temporal pairs."),
             ("compute_mode", "COLMAP SETTINGS", "COLMAP compute mode", job.colmap.compute_mode, "cpu_baseline", "CPU baseline is reproducible; GPU is explicit; auto probes capability and records the resolved device."),
             ("mapper_matches", "COLMAP SETTINGS", "Mapper minimum matches", job.colmap.mapper_minimum_matches, 8, "Higher requires stronger image pairs; lower may add weak registrations."),
-            ("maximum_image_size", "COLMAP SETTINGS", "Maximum feature image size", job.colmap.maximum_image_size, 2400, "Larger preserves detail but increases memory/runtime."),
-            ("maximum_features", "COLMAP SETTINGS", "Maximum features per image", job.colmap.maximum_features, 8192, "Larger improves difficult matching but increases runtime."),
         ])
-        if job.colmap.matcher == "sequential":
+        if (
+            job.method_id == "ap03"
+            and job.methods.ap03.feature_limit_policy
+            == "wizard_explicit_limits_v1"
+        ):
             rows.extend([
-                ("sequential_overlap", "COLMAP SETTINGS", "Sequential overlap", job.colmap.sequential_overlap, 20, "Number of temporal neighbors; higher widens matching."),
-                ("loop_detection", "COLMAP SETTINGS", "Sequential loop detection", job.colmap.loop_detection, True, "Adds non-local loop candidates for sequential matching."),
+                ("ap03_image_size", "COLMAP SETTINGS", "Maximum feature image size", job.colmap.ap03_maximum_image_size, 2400, "Maximum AP03 image dimension used during SIFT extraction."),
+                ("ap03_features", "COLMAP SETTINGS", "Maximum features per image", job.colmap.ap03_maximum_features, 8192, "Maximum AP03 SIFT features extracted per image."),
             ])
+        if job.colmap.matcher == "sequential":
+            rows.append(("sequential_overlap", "COLMAP SETTINGS", "Sequential overlap", job.colmap.sequential_overlap, 20, "Number of temporal neighbors; higher widens matching."))
+            if (
+                job.method_id == "ap01"
+                or job.methods.ap03.feature_limit_policy
+                == "wizard_explicit_limits_v1"
+            ):
+                rows.append(("loop_detection", "COLMAP SETTINGS", "Sequential loop detection", job.colmap.loop_detection, True, "Adds non-local loop candidates for sequential matching."))
     return rows if groups is None else [row for row in rows if row[1] in groups]
 
 
@@ -3817,6 +3862,30 @@ def _format_setting_value(value: object) -> str:
     if isinstance(value, float):
         return format(Decimal(str(value)), "f")
     return str(value)
+
+
+_PUBLIC_POLICY_NAMES = {
+    "legacy_main_v1": "baseline Direct/Relay",
+    "wizard_robustness_v1": "robust consensus",
+    "legacy_smart_v1": "smart frame budgets",
+    "wizard_graph_preserving_v1": "graph-preserving preselection",
+    "legacy_maximum_bottleneck_v1": "maximum-bottleneck tree",
+    "wizard_maximum_bottleneck_v2": "path-aware maximum-bottleneck tree",
+    "legacy_observation_quality_v1": "geometric observation quality",
+    "wizard_selection_score_v2": "shared selection score",
+    "legacy_pinhole_v1": "pinhole",
+    "distortion_aware_v1": "distortion-aware",
+    "legacy_colmap_defaults_v1": "COLMAP defaults",
+    "wizard_explicit_limits_v1": "explicit feature limits",
+    "legacy_registered_image_redetection_v1": "registered-image detection",
+    "wizard_filtered_observations_v1": "filtered registered-image detection",
+}
+
+
+def _public_policy_name(value: object) -> object:
+    """Return a stable product label without exposing compatibility names."""
+
+    return _PUBLIC_POLICY_NAMES.get(str(value), value)
 
 
 def _optional_positive_int(value: str) -> int | None:
@@ -3840,7 +3909,9 @@ def _prompt_enum_choice(
     values = [value for value, _ in choices]
     for index, (value, meaning) in enumerate(choices, 1):
         suffix = " (current)" if value == current else ""
-        typer.echo(f"  {index}. {value}{suffix} — {meaning}")
+        typer.echo(
+            f"  {index}. {_public_policy_name(value)}{suffix} — {meaning}"
+        )
     default = values.index(current) + 1 if current in values else 1
     while True:
         raw = str(typer.prompt("Selection", default=default)).strip().lower()
@@ -3856,7 +3927,7 @@ def _prompt_enum_choice(
         if raw and len(matches) == 1:
             return matches[0]
         _show_input_error(
-            f"Choose 1-{len(values)} or enter one of: {', '.join(values)}."
+            f"Choose 1-{len(values)} or enter a displayed option name."
         )
 
 
@@ -3882,8 +3953,8 @@ def _edit_method_job(
                 str(index),
                 group,
                 label,
-                _format_setting_value(current),
-                _format_setting_value(default),
+                _format_setting_value(_public_policy_name(current)),
+                _format_setting_value(_public_policy_name(default)),
                 meaning,
             )
         console.print(table)
@@ -3959,7 +4030,7 @@ def _edit_method_job(
                         (
                             (
                                 "baseline",
-                                "simulation baseline contract; force marker 14",
+                                "canonical baseline contract; force marker 14",
                             ),
                             (
                                 "auto",
@@ -3969,6 +4040,68 @@ def _edit_method_job(
                                 "manual",
                                 "show all detected marker IDs once after preflight",
                             ),
+                        ),
+                    )
+                elif key == "ap01_advanced_strategy":
+                    value = _prompt_enum_choice(
+                        label,
+                        str(current),
+                        (
+                            ("legacy_main_v1", "standard Direct/Relay behavior"),
+                            ("wizard_robustness_v1", "configurable caps and consensus gates"),
+                        ),
+                    )
+                elif key == "ap02_frame_strategy":
+                    value = _prompt_enum_choice(
+                        label,
+                        str(current),
+                        (
+                            ("legacy_smart_v1", "smart selection at the BA boundary"),
+                            ("wizard_graph_preserving_v1", "advanced pre-initialization graph selection"),
+                        ),
+                    )
+                elif key == "ap02_initialization_strategy":
+                    value = _prompt_enum_choice(
+                        label,
+                        str(current),
+                        (
+                            ("legacy_maximum_bottleneck_v1", "deterministic maximum-frontier tree"),
+                            ("wizard_maximum_bottleneck_v2", "advanced path-level tie strategy"),
+                            ("unweighted_bfs_diagnostic", "diagnostic unweighted breadth-first tree"),
+                        ),
+                    )
+                elif key == "ap02_edge_weight_strategy":
+                    value = _prompt_enum_choice(
+                        label,
+                        str(current),
+                        (
+                            ("legacy_observation_quality_v1", "geometric observation quality"),
+                            ("wizard_selection_score_v2", "advanced shared quality score"),
+                        ),
+                    )
+                elif key == "ap02_reprojection_model":
+                    value = _prompt_enum_choice(
+                        label,
+                        str(current),
+                        (
+                            ("legacy_pinhole_v1", "zero-distortion pinhole projection"),
+                            ("distortion_aware_v1", "advanced camera-info distortion projection"),
+                        ),
+                    )
+                elif key == "ap03_feature_limit_policy":
+                    value = _prompt_enum_choice(
+                        label, str(current),
+                        (
+                            ("legacy_colmap_defaults_v1", "leave SIFT limits unset"),
+                            ("wizard_explicit_limits_v1", "apply configured AP03 SIFT limits"),
+                        ),
+                    )
+                elif key == "ap03_scale_input_policy":
+                    value = _prompt_enum_choice(
+                        label, str(current),
+                        (
+                            ("legacy_registered_image_redetection_v1", "re-detect every registered image"),
+                            ("wizard_filtered_observations_v1", "gate re-detections through filtered observations"),
                         ),
                     )
                 elif key == "matcher":
@@ -4126,6 +4259,51 @@ def _edit_method_job(
                         contexts=selection_contexts,
                         requested_mode="manual",
                     )
+            elif key == "ap01_advanced_strategy":
+                field = "advanced_strategy"
+                updated = value
+                ap01 = job.methods.ap01.model_copy(update={field: updated})
+                job.methods = job.methods.model_copy(
+                    update={"ap01": ap01}, deep=True
+                )
+            elif key in {
+                "ap03_feature_limit_policy",
+                "ap03_scale_input_policy",
+                "ap03_minimum_marker_area",
+            }:
+                field = {
+                    "ap03_feature_limit_policy": "feature_limit_policy",
+                    "ap03_scale_input_policy": "scale_input_policy",
+                    "ap03_minimum_marker_area": "minimum_marker_area_px2",
+                }[key]
+                typed = float(value) if key == "ap03_minimum_marker_area" else value
+                ap03 = job.methods.ap03.model_copy(update={field: typed})
+                job.methods = job.methods.model_copy(
+                    update={"ap03": ap03}, deep=True
+                )
+            elif key in {
+                "ap02_frame_strategy",
+                "ap02_initialization_strategy",
+                "ap02_edge_weight_strategy",
+                "ap02_reprojection_model",
+            }:
+                field = {
+                    "ap02_frame_strategy": "frame_selection_strategy",
+                    "ap02_initialization_strategy": "initialization_strategy",
+                    "ap02_edge_weight_strategy": "graph_edge_weight_strategy",
+                    "ap02_reprojection_model": "reprojection_model",
+                }[key]
+                ap02 = job.methods.ap02.model_copy(update={field: value})
+                job.methods = job.methods.model_copy(
+                    update={"ap02": ap02}, deep=True
+                )
+            elif key == "ap01_direct_target":
+                ap01 = job.methods.ap01.model_copy(
+                    update={"direct_target_camera": str(value).strip()}
+                )
+                job.methods = job.methods.model_copy(
+                    update={"ap01": ap01}, deep=True
+                )
             elif key in {
                 "evaluation_reprojection",
                 "evaluation_inliers",
@@ -5089,7 +5267,7 @@ def _build_simulation_batch_outcome(
                 **common,
             )
             path = experiment_queue_root / "01_prepare_input.yaml"
-            save_config(config, path)
+            save_user_config(config, path)
             experiment_runs.append(QueuedRun(config, path))
         else:
             for method_index, job in enumerate(method_jobs, 1):
@@ -5116,7 +5294,7 @@ def _build_simulation_batch_outcome(
                     experiment_queue_root
                     / f"{method_index:02d}_{label}.yaml"
                 )
-                save_config(config, path)
+                save_user_config(config, path)
                 experiment_runs.append(QueuedRun(config, path))
         queue_path = _save_wizard_queue(
             experiment_queue_root,
@@ -5357,7 +5535,7 @@ def new_calibration_wizard(
             **common,
         )
         path = config.project.workspace_root / dataset_id / "rigcal.yaml"
-        save_config(config, path)
+        save_user_config(config, path)
         return WizardOutcome(config, path)
 
     queued: list[QueuedRun] = []
@@ -5377,7 +5555,7 @@ def new_calibration_wizard(
             **common,
         )
         path = queue_root / f"{index:02d}_{label}.yaml"
-        save_config(config, path)
+        save_user_config(config, path)
         queued.append(QueuedRun(config, path))
     manifest = {
         "kind": "rigcal_queue",
@@ -5420,6 +5598,52 @@ def new_calibration_wizard(
     return WizardOutcome(first.config, first.path, tuple(rest))
 
 
+def _load_saved_setup_config(path: Path) -> RigConfig:
+    """Load a setup and rebind published provenance to its experiment input."""
+
+    config = load_config(path)
+    is_published_provenance = (
+        path.name == "resolved_config.yaml"
+        and len(path.parents) >= 5
+        and path.parents[3].name == "methods"
+        and (path.parents[4] / "dataset.json").is_file()
+    )
+    if not is_published_provenance:
+        return config
+    experiment = path.parents[4].resolve()
+    moving_intrinsics = (
+        experiment
+        / "raw_images"
+        / "camera_info"
+        / f"{config.moving_camera.id}.json"
+    )
+    return config.model_copy(
+        update={
+            "dataset": config.dataset.model_copy(
+                update={
+                    "source_kind": InputSourceKind.PREPARED,
+                    "prepared_root": experiment,
+                    "input_root": experiment,
+                },
+                deep=True,
+            ),
+            "moving_camera": config.moving_camera.model_copy(
+                update={
+                    "intrinsics": (
+                        moving_intrinsics
+                        if moving_intrinsics.is_file()
+                        else config.moving_camera.intrinsics
+                    ),
+                    "video": None,
+                    "frames": None,
+                },
+                deep=True,
+            ),
+        },
+        deep=True,
+    )
+
+
 def _config_candidates(repository_root: Path) -> list[Path]:
     register_builtin_components()
     candidates = list((repository_root / "workspace").glob("**/*.yaml"))
@@ -5433,7 +5657,7 @@ def _config_candidates(repository_root: Path) -> list[Path]:
     unique: dict[str, Path] = {}
     for path in sorted(set(path.resolve() for path in candidates)):
         try:
-            config = load_config(path)
+            config = _load_saved_setup_config(path)
             matching = [
                 adapter
                 for adapter in input_adapters
@@ -5529,7 +5753,7 @@ def choose_config(repository_root: Path, console: Console) -> tuple[RigConfig, P
     index = typer.prompt("Setup number", default=1, type=int)
     if index < 1 or index > len(paths):
         raise typer.BadParameter("Invalid setup number")
-    return load_config(paths[index - 1]), paths[index - 1]
+    return _load_saved_setup_config(paths[index - 1]), paths[index - 1]
 
 
 def repeat_setup_wizard(repository_root: Path, console: Console) -> WizardOutcome:
@@ -5548,7 +5772,7 @@ def repeat_setup_wizard(repository_root: Path, console: Console) -> WizardOutcom
             candidate = Path(str(definition.get("config", "")))
             if not candidate.is_absolute():
                 candidate = (queue_manifest.parent / candidate).resolve()
-            loaded.append(load_config(candidate))
+            loaded.append(_load_saved_setup_config(candidate))
         if not loaded:
             raise RuntimeError(f"Saved queue has no runnable configs: {queue_manifest}")
         stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -5563,7 +5787,7 @@ def repeat_setup_wizard(repository_root: Path, console: Console) -> WizardOutcom
             destination = repeat_root / (
                 f"{index:02d}_{queued_config.project.run_label}.yaml"
             )
-            save_config(queued_config, destination)
+            save_user_config(queued_config, destination)
             queued.append(QueuedRun(queued_config, destination))
         _save_wizard_queue(
             repeat_root,
@@ -5584,7 +5808,7 @@ def repeat_setup_wizard(repository_root: Path, console: Console) -> WizardOutcom
         / "repeats"
         / f"{label}.yaml"
     )
-    save_config(config, destination)
+    save_user_config(config, destination)
     console.print(f"Template: {source}")
     return WizardOutcome(config, destination)
 
@@ -5627,7 +5851,7 @@ def advanced_wizard(repository_root: Path, console: Console) -> WizardOutcome | 
         table.add_column("Method(s)")
         table.add_column("Run label")
         table.add_column("Configuration", overflow="fold")
-        loaded = [load_config(path) for path in candidates]
+        loaded = [_load_saved_setup_config(path) for path in candidates]
         for index, (config, path) in enumerate(
             zip(loaded, candidates, strict=True), 1
         ):
@@ -5687,7 +5911,7 @@ def advanced_wizard(repository_root: Path, console: Console) -> WizardOutcome | 
                 destination = (
                     directory / f"{len(queued) + 1:02d}_{label}.yaml"
                 )
-                save_config(config, destination)
+                save_user_config(config, destination)
                 queued.append(QueuedRun(config, destination))
         _save_wizard_queue(
             directory, f"overnight_{stamp}", queued
@@ -5712,7 +5936,7 @@ def advanced_wizard(repository_root: Path, console: Console) -> WizardOutcome | 
         queued = []
         for label, variant in variants:
             destination = directory / f"{label}.yaml"
-            save_config(variant, destination)
+            save_user_config(variant, destination)
             queued.append(QueuedRun(variant, destination))
         _save_wizard_queue(
             directory,
@@ -5789,7 +6013,7 @@ def advanced_wizard(repository_root: Path, console: Console) -> WizardOutcome | 
         / "experiments"
         / f"{job.label}.yaml"
     )
-    save_config(config, destination)
+    save_user_config(config, destination)
     console.print(f"Template: {source}")
     return WizardOutcome(config, destination)
 
@@ -5840,7 +6064,15 @@ def show_summary(config: RigConfig, config_path: Path, console: Console) -> None
             if config.project.execution_mode == "prepare_only"
             else "Methods"
         ),
-        ", ".join(config.methods.enabled),
+        ", ".join(
+            (
+                f"{method_id.upper()} "
+                f"{getattr(config.methods, method_id).method_contract}"
+                if method_id in {"ap01", "ap02", "ap03"}
+                else method_id
+            )
+            for method_id in config.methods.enabled
+        ),
     )
     table.add_row("Execution", config.project.execution_mode)
     if config.dataset.scene_type is SceneType.SIMULATION:
@@ -5876,16 +6108,22 @@ def show_summary(config: RigConfig, config_path: Path, console: Console) -> None
             "world appearance only; may change pixels but never K/D",
         )
     table.add_row("Observations", "all passing quality checks")
-    table.add_row(
-        "Scientific selections",
-        (
-            f"AP01 root={config.methods.ap01.root_camera}; "
-            f"AP02 ref={config.methods.ap02.reference_marker_id}; "
-            f"AP03 single={config.methods.ap03.single.scale_marker_id}; "
-            f"AP03 multi={config.methods.ap03.multi.marker_ids}; "
-            f"evaluation={config.evaluation.anchor_marker_id}"
-        ),
-    )
+    selections: list[str] = []
+    if "ap01" in config.methods.enabled:
+        selections.append(f"AP01 root={config.methods.ap01.root_camera}")
+    if "ap02" in config.methods.enabled:
+        selections.append(
+            f"AP02 ref={config.methods.ap02.reference_marker_id}"
+        )
+    if "ap03" in config.methods.enabled:
+        selections.extend(
+            [
+                f"AP03 single={config.methods.ap03.single.scale_marker_id}",
+                f"AP03 multi={config.methods.ap03.multi.marker_ids}",
+            ]
+        )
+    selections.append(f"evaluation={config.evaluation.anchor_marker_id}")
+    table.add_row("Scientific selections", "; ".join(selections))
     console.print(table)
 
 
@@ -6591,8 +6829,35 @@ def show_queue_summary(outcome: WizardOutcome, console: Console) -> None:
     )
 
 
+def _is_internal_evidence_result(entry: object) -> bool:
+    """Keep reproducibility experiments out of the ordinary result catalogue."""
+
+    text = " ".join(
+        str(value).lower()
+        for value in (
+            getattr(entry, "experiment_id", ""),
+            getattr(entry, "dataset_id", ""),
+            getattr(entry, "path", ""),
+        )
+    )
+    return any(
+        token in text
+        for token in (
+            "route2_main_parity_v1",
+            "main_route2_parity",
+            "main_parity",
+            "pre_fix",
+            "post_fix",
+        )
+    )
+
+
 def show_results(repository_root: Path, console: Console) -> None:
-    entries = index_results(repository_root / "results")
+    entries = [
+        entry
+        for entry in index_results(repository_root / "results")
+        if not _is_internal_evidence_result(entry)
+    ]
     if not entries:
         console.print(
             "No layout-v2 calibration result was found. Completed experiments "
@@ -6704,8 +6969,7 @@ def show_results(repository_root: Path, console: Console) -> None:
     console.print(
         f"Human-readable experiment results: {results_txt}\n"
         f"Machine comparison: {entry.path / 'COMPARISON.json'}\n"
-        f"Common evaluations: {entry.path / 'evaluations'}\n"
-        f"Failed attempts: {entry.path / 'attempts'}"
+        f"Common evaluations: {entry.path / 'evaluations'}"
     )
     report_options = {"1": results_txt}
     camera_map = entry.path / "SECONDARY_CAMERA_MAP_RESULTS.txt"

@@ -20,6 +20,8 @@ from .common import (
     pose_row,
     pose_fields,
 )
+from .frame_selection import select_legacy_smart_moving_observations
+from .initialize import main_observation_score
 
 OBS_CSV = AP02_ROOT / "02_aruco_observations" / "ap02_all_aruco_observations.csv"
 INIT_ROOT = AP02_ROOT / "05_graph_initialization"
@@ -263,6 +265,11 @@ def run_ba(
     ap02_root=AP02_ROOT,
     observations_csv=OBS_CSV,
     initialization_root=INIT_ROOT,
+    moving_frame_selection_policy="legacy_smart_at_ba_boundary_v1",
+    reference_marker_maximum_frames=None,
+    top_per_marker=8,
+    top_per_marker_pair=4,
+    maximum_total_frames=None,
 ):
     out = ensure_dir(ap02_root / "07_graph_ba" / mode)
 
@@ -278,11 +285,48 @@ def run_ba(
     observations = filter_observations(all_rows, mode, marker_init, observer_init)
 
     if mode == "with_moving":
+        static_obs = [
+            row
+            for row in observations
+            if row.get("observer_type") == "static"
+        ]
         moving_obs = [
             row
             for row in observations
             if row.get("observer_type") == "moving"
         ]
+        if moving_frame_selection_policy == (
+            "legacy_smart_at_ba_boundary_v1"
+        ):
+            selection = select_legacy_smart_moving_observations(
+                moving_obs,
+                reference_marker_id=ref_marker_id,
+                reference_marker_maximum_frames=(
+                    reference_marker_maximum_frames
+                ),
+                top_per_marker=top_per_marker,
+                top_per_marker_pair=top_per_marker_pair,
+                maximum_total_frames=maximum_total_frames,
+                observation_score=main_observation_score,
+            )
+            selected_moving = list(selection.selected_rows)
+            observations = [*static_obs, *selected_moving]
+            write_csv(
+                out / "moving_frame_selection.csv",
+                list(selection.diagnostics),
+                list(selection.diagnostics[0])
+                if selection.diagnostics
+                else ["observer_id"],
+            )
+        elif moving_frame_selection_policy == (
+            "all_graph_preselected_frames_v1"
+        ):
+            selected_moving = moving_obs
+        else:
+            raise ValueError(
+                "Unknown AP02 moving-frame selection policy: "
+                f"{moving_frame_selection_policy}"
+            )
 
         used_observers = {
             row["observer_id"]
@@ -308,12 +352,16 @@ def run_ba(
         }
 
         print(
-            "[INFO] with_moving observations:"
-            " every observation selected by AP02 after observation_quality_v2"
+            "[INFO] with_moving selection: "
+            f"{moving_frame_selection_policy}"
         )
         print(
             f"[INFO] available moving frames="
             f"{len({r['observer_id'] for r in moving_obs})}"
+        )
+        print(
+            f"[INFO] selected moving frames="
+            f"{len({r['observer_id'] for r in selected_moving})}"
         )
         print(
             f"[INFO] kept observations="

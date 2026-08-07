@@ -1,0 +1,27 @@
+AP01 FINAL-POSE TRACE
+
+implementation: legacy_main
+frozen selected-input SHA-256: c447e4784d3bd7b6d250ea5affe464221725c542c10a8479e1fab4b306b0ce75
+scope: pure post-selection final-pose/final-extrinsics computation only
+Ground Truth read: no
+candidate rebuild: no
+solver/COLMAP/publication/reconciliation: not invoked
+
+Transform convention
+- T_cam_edge_3_camera maps a homogeneous column vector from the target optical-camera frame into the cam_edge_3 optical-camera frame.
+- p_cam_edge_3 = T_cam_edge_3_camera @ p_camera.
+- R is the active coordinate-map rotation; t is the target-camera origin expressed in cam_edge_3 coordinates, in metres.
+- cam_edge_3 is the identity gauge. No alignment, inversion, or global transform is applied after selection.
+
+Selected transform provenance
+- root: I_4x4.
+- Direct: T_root_marker @ inverse(T_target_marker).
+- Relay: T_root_marker @ inverse(T_moving_i_marker) @ scaled(Tcw_i @ inverse(Tcw_j)) @ inverse(T_target_marker @ inverse(T_moving_j_marker)).
+- Relay final input is the already-selected quality-weighted mean of flat MAD inliers; aggregation is not repeated here.
+
+Legacy post-selection operations
+1. Aggregate writers serialize x/y/z and roll/pitch/yaw to exactly nine decimal places (Direct source line 416; Relay source line 742).
+2. T_from_row at final exporter line 80 parses those values, converts degrees to radians, and reconstructs R as Rz(yaw) @ Ry(pitch) @ Rx(roll).
+3. The aggregate quaternion columns are ignored. The final primary-only JSON exports translation, RPY degrees, and the reconstructed 4x4 matrix; it emits no quaternion.
+4. The primary-only wrapper stores cam_edge_3 as top-level reference_camera (implicit identity) and emits target records in loader order cam_edge_0, cam_edge_1, cam_edge_5.
+5. Missing target aggregates are omitted independently. No normalization or further composition occurs.

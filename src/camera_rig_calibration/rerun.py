@@ -14,7 +14,7 @@ from typing import Any
 from rich.console import Console
 
 from .config import config_fingerprint, load_config, save_config
-from .config.models import InputSourceKind, RigConfig
+from .config.models import AP03Settings, InputSourceKind, RigConfig
 from .dataset_identity import build_dataset_identity, identities_match
 from .experiments import colmap_artifact_fingerprint
 from .publication import reconcile_existing_experiment
@@ -182,6 +182,17 @@ def _method_config_path(
             reverse=True,
         )
     if not candidates:
+        # A prepared experiment may legitimately have no prior attempt for the
+        # requested method. Reuse another published resolved config from this
+        # same immutable experiment, then replace the enabled method/settings
+        # below. This never imports scientific outputs from the other method.
+        candidates = sorted(
+            experiment.glob(
+                "methods/*/*/provenance/resolved_config.yaml"
+            ),
+            reverse=True,
+        )
+    if not candidates:
         raise FileNotFoundError(
             f"No resolved configuration exists for {method}/{variant} "
             f"below {experiment}"
@@ -206,20 +217,92 @@ def _resolved_rerun_config(
     experiment: Path,
     method: str,
     variant: str,
+    ap01_method_contract: str | None = None,
+    ap02_historical_reproduction: bool = False,
+    ap03_method_contract: str | None = None,
 ) -> tuple[RigConfig, RigConfig]:
+    if ap01_method_contract is not None and method != "ap01":
+        raise ValueError(
+            "--ap01-method-contract is valid only with --method ap01"
+        )
+    if ap02_historical_reproduction and method != "ap02":
+        raise ValueError(
+            "--ap02-historical-reproduction is valid only with --method ap02"
+        )
+    if ap03_method_contract is not None and method != "ap03":
+        raise ValueError(
+            "--ap03-method-contract is valid only with --method ap03"
+        )
     source = load_config(_method_config_path(experiment, method, variant))
     methods = source.methods.model_copy(update={"enabled": [method]}, deep=True)
+    if method == "ap01" and variant == "baseline":
+        contract_name = ap01_method_contract or "baseline_v1"
+        methods = methods.model_copy(
+            update={
+                "ap01": methods.ap01.model_copy(
+                    update={
+                        "method_contract": contract_name,
+                        "historical_reproduction": False,
+                        "advanced_strategy": (
+                            "wizard_robustness_v1"
+                            if contract_name == "recommended_wizard_v1"
+                            else "legacy_main_v1"
+                        ),
+                    },
+                    deep=True,
+                )
+            },
+            deep=True,
+        )
+    elif ap01_method_contract is not None:
+        methods = methods.model_copy(
+            update={
+                "ap01": methods.ap01.model_copy(
+                    update={"method_contract": ap01_method_contract},
+                    deep=True,
+                )
+            },
+            deep=True,
+        )
     if method == "ap02" and variant == "baseline":
         methods = methods.model_copy(
             update={
                 "ap02": methods.ap02.model_copy(
                     update={
+                        "method_contract": "baseline_v1",
+                        "historical_reproduction": (
+                            ap02_historical_reproduction
+                        ),
                         "reference_marker_selection_mode": "baseline",
                         "reference_marker_id": 14,
-                        "static_only_ba_max_function_evaluations": 50,
-                        "combined_ba_max_function_evaluations": 50,
+                        "frame_selection_strategy": "legacy_smart_v1",
+                        "initialization_strategy": (
+                            "legacy_maximum_bottleneck_v1"
+                        ),
+                        "graph_edge_weight_strategy": (
+                            "legacy_observation_quality_v1"
+                        ),
+                        "reprojection_model": "legacy_pinhole_v1",
+                        "reference_marker_maximum_frames": None,
+                        "top_per_marker": 8,
+                        "top_per_marker_pair": 4,
+                        "maximum_total_frames": None,
+                        "static_only_ba_max_function_evaluations": 80,
+                        "combined_ba_max_function_evaluations": 80,
+                        "ba_robust_loss": "soft_l1",
+                        "ba_robust_loss_scale_px": 3.0,
                     }
                 )
+            },
+            deep=True,
+        )
+    if method == "ap03" and variant == "baseline":
+        contract_name = ap03_method_contract or "baseline_v1"
+        if contract_name != "baseline_v1":
+            raise ValueError("AP03 supports only baseline_v1")
+        methods = methods.model_copy(
+            update={
+                "ap03": AP03Settings(method_contract="baseline_v1")
             },
             deep=True,
         )
@@ -324,6 +407,9 @@ def prepare_single_method_rerun(
     variant: str,
     reuse_prepared_input: bool,
     reuse_matching_intermediates: bool,
+    ap01_method_contract: str | None = None,
+    ap02_historical_reproduction: bool = False,
+    ap03_method_contract: str | None = None,
 ) -> PreparedRerun:
     if method not in {"ap01", "ap02", "ap03"}:
         raise ValueError("method must be ap01, ap02 or ap03")
@@ -339,7 +425,13 @@ def prepare_single_method_rerun(
             f"Layout-v2 dataset descriptor is missing: {experiment_root}"
         )
     original, config = _resolved_rerun_config(
-        repository, experiment_root, method, variant
+        repository,
+        experiment_root,
+        method,
+        variant,
+        ap01_method_contract=ap01_method_contract,
+        ap02_historical_reproduction=ap02_historical_reproduction,
+        ap03_method_contract=ap03_method_contract,
     )
     observation_contract = _frozen_observation_contract(
         experiment_root, config
@@ -459,6 +551,9 @@ def run_single_method_rerun(
     reuse_prepared_input: bool,
     reuse_matching_intermediates: bool,
     reconcile_after: bool,
+    ap01_method_contract: str | None = None,
+    ap02_historical_reproduction: bool = False,
+    ap03_method_contract: str | None = None,
     console: Console | None = None,
 ) -> dict[str, dict[str, Any]]:
     prepared = prepare_single_method_rerun(
@@ -468,6 +563,9 @@ def run_single_method_rerun(
         variant=variant,
         reuse_prepared_input=reuse_prepared_input,
         reuse_matching_intermediates=reuse_matching_intermediates,
+        ap01_method_contract=ap01_method_contract,
+        ap02_historical_reproduction=ap02_historical_reproduction,
+        ap03_method_contract=ap03_method_contract,
     )
     entry_id = prepared.queue.entries[0].id
     supersedes = _latest_failed_attempt(
@@ -492,11 +590,22 @@ def run_single_method_rerun(
                 "capture_repeated": False,
                 "detection_repeated": False,
                 "rerun_requested_at": _now(),
+                "ap02_historical_reproduction": (
+                    prepared.config.methods.ap02.historical_reproduction
+                    if method == "ap02"
+                    else False
+                ),
             }
         },
+        explicit_method_rerun=True,
     )
     results = runner.run(prepared.queue)
-    if reconcile_after:
+    published_successfully = bool(results) and all(
+        result.get("status") == "completed"
+        and result.get("published") is True
+        for result in results.values()
+    )
+    if reconcile_after and published_successfully:
         reconcile_experiment(experiment.resolve())
     return results
 

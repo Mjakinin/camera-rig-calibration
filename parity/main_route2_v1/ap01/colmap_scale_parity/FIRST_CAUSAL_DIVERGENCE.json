@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "classification": "FIRST_PROVEN_DIVERGENCE_IS_COLMAP_FEATURE_EXTRACTION_CONFIGURATION",
+  "execution_order": [
+    {
+      "stage": "input image bytes/inventory",
+      "result": "EXACT by established historical prepared-input parity; 189 images"
+    },
+    {
+      "stage": "COLMAP feature-extraction command/environment",
+      "result": "DIFFERENT_CONFIGURATION",
+      "differences": [
+        "Legacy explicitly uses --SiftExtraction.num_threads 1; Wizard omits it and the fresh console shows parallel completion order.",
+        "Legacy serializes PINHOLE parameters to eight decimal places; Wizard uses full precision.",
+        "Preserved databases report PRAGMA user_version 3700 versus 3900; exact historical executable version is UNKNOWN."
+      ]
+    },
+    {
+      "stage": "keypoint extraction output",
+      "result": "EXACT_COUNTS_AND_BLOBS",
+      "total": 151125
+    },
+    {
+      "stage": "descriptor extraction output",
+      "result": "FIRST_OBSERVED_NUMERIC_DATA_DIVERGENCE",
+      "first_image": "frame_0003.png"
+    },
+    {
+      "stage": "matching/verified geometry",
+      "result": "DIFFERENT_COUNTS_AND_BLOBS_WITH_SAME_EXHAUSTIVE_PAIR_INVENTORY"
+    },
+    {
+      "stage": "mapper command",
+      "result": "DIFFERENT_CONFIGURATION",
+      "difference": "Legacy Mapper.min_num_matches=15 (saved default); Wizard explicitly passes 8."
+    },
+    {
+      "stage": "registration/model",
+      "result": "175 versus 189 registered images"
+    },
+    {
+      "stage": "metric scale",
+      "result": "DIFFERENT_TRAJECTORY_AND_SCALE_SAMPLE_CONSTRUCTION",
+      "difference": "Legacy has no top-per-marker cap and uses gaps 3..45 plus legacy quality/distance filters; Wizard caps 30 and uses gaps 2..80 plus different thresholds."
+    }
+  ],
+  "exact_first_causal_decision_supported_by_evidence": "Before descriptor generation, Wizard invokes a non-parity COLMAP feature extraction configuration/environment: it omits Legacy's deterministic single-thread SIFT option, changes camera-parameter text precision, and uses a demonstrably different COLMAP database generation. The first output divergence is descriptor bytes at frame_0003.png. Existing artifacts cannot isolate which of these simultaneous feature-extraction differences changes the descriptors; a second run was forbidden.",
+  "later_independent_proven_configuration_divergences": [
+    "Mapper minimum matches 15 (Legacy) versus 8 (Wizard).",
+    "Historical scale sample construction/filtering versus Wizard quality-ranked top-30 and wider pair thresholds.",
+    "The scale stage does not receive the AP01 method contract and falls back to recommended_wizard_v1 observation-quality semantics."
+  ],
+  "not_merely_scale_drift": true,
+  "recommended_path": "PATH A \u2014 FIX WIZARD CONFIGURATION",
+  "justification": "Parity is not yet configured: recoverable COLMAP flags and scale logic differ before any claim of irreducible version nondeterminism can be made. PATH B is insufficient because raw registration differs; PATH C prerequisites are not met; PATH D is unnecessary because the defect is configuration/contract resolution.",
+  "minimal_fix": [
+    "For main_route2_parity_v1 only, serialize camera parameters with the historical eight-decimal representation and pass SiftExtraction.num_threads=1.",
+    "Resolve Mapper.min_num_matches=15 for this contract.",
+    "Propagate method_contract into estimate_scale and encode the historical scale observation filters/pair bounds/no-cap behavior in main_route2_parity_v1. Do not change recommended_wizard_v1.",
+    "Record the COLMAP executable version/schema in future stage manifests. After focused tests, perform exactly one controlled AP01 rerun in the next task."
+  ],
+  "implementation_in_this_task": "No production code changed; diagnosis evidence and tests only.",
+  "evidence": {
+    "configuration_classification": "DIFFERENT_CONFIGURATION",
+    "first_descriptor_difference": {
+      "stage": "SIFT descriptor generation",
+      "image": "frame_0003.png",
+      "legacy_descriptor_sha256": "8e79fe34a5baf1afbfe42599f2ff5772e402904d49510de1b83f5cf0b10933e9",
+      "wizard_descriptor_sha256": "505456ddfcb2a6b03b26354786e3dd4a53e91c33bdf9f5c43416c847aa941f78",
+      "feature_count_both": 964,
+      "interpretation": "Counts and keypoint blobs remain exact, but descriptor bytes first differ here. Byte identity across different COLMAP schema/version generations is diagnostic evidence, not a portability requirement; downstream semantic match counts also differ."
+    },
+    "scale_classification": "DIFFERENT_TRAJECTORY_AND_SCALE_SAMPLE_CONSTRUCTION"
+  }
+}

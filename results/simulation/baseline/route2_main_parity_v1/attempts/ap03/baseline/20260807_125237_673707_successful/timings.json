@@ -1,0 +1,163 @@
+{
+  "prepare_inputs": 2.185167276999998,
+  "_structured": {
+    "prepare_inputs": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "prepare_inputs",
+      "stage_name": "Prepare canonical inputs and provenance",
+      "stage_index": 1,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 2.185192846999996,
+      "job_elapsed_seconds": 2.5632303979999946,
+      "queue_elapsed_seconds": 14.796912551999998,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    },
+    "validate_dataset": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "validate_dataset",
+      "stage_name": "Validate the canonical dataset",
+      "stage_index": 2,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.11993054999999941,
+      "job_elapsed_seconds": 6.816382152999999,
+      "queue_elapsed_seconds": 19.050064307000003,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    },
+    "detect_markers": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "detect_markers",
+      "stage_name": "Detect shared ArUco observations and debug images",
+      "stage_index": 3,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.035312802999996507,
+      "job_elapsed_seconds": 6.877331153999997,
+      "queue_elapsed_seconds": 19.111013308,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    },
+    "observation_quality": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "observation_quality",
+      "stage_name": "Apply immutable checks and job-specific observation quality",
+      "stage_index": 4,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.3084674909999947,
+      "job_elapsed_seconds": 7.210221653999994,
+      "queue_elapsed_seconds": 19.443903807999998,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    },
+    "analyze_selections": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "analyze_selections",
+      "stage_name": "Analyze root-camera and method-marker candidates",
+      "stage_index": 5,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.08629082699999913,
+      "job_elapsed_seconds": 7.319775417999999,
+      "queue_elapsed_seconds": 19.553457572000003,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    },
+    "method_ap03": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "method_ap03",
+      "stage_name": "AP03 \u2014 shared COLMAP with single and multi scale",
+      "stage_index": 6,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 373.37163782299996,
+      "job_elapsed_seconds": 381.175309144,
+      "queue_elapsed_seconds": 393.408991298,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {
+        "registered_images": 179,
+        "registered_static_cameras": 4
+      }
+    },
+    "comparison": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "comparison",
+      "stage_name": "Normalize and compare method results",
+      "stage_index": 7,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.05814562500000875,
+      "job_elapsed_seconds": 387.213072715,
+      "queue_elapsed_seconds": 399.446754869,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    },
+    "finalize": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "finalize",
+      "stage_name": "Write final report",
+      "stage_index": 8,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.027133076999973582,
+      "job_elapsed_seconds": 387.269285434,
+      "queue_elapsed_seconds": 399.502967588,
+      "batch_elapsed_seconds": null,
+      "log": null,
+      "counts": {}
+    }
+  },
+  "validate_dataset": 0.11990804000000566,
+  "detect_markers": 0.035289688999995406,
+  "observation_quality": 0.30843921599999646,
+  "analyze_selections": 0.0862550610000028,
+  "_sub_stages": {
+    "ap03_prepare_colmap": {
+      "ap03.prepare_colmap": 1.738
+    },
+    "ap03_reconstruct": {
+      "ap03.reconstruct": 297.347
+    },
+    "ap03_inspect": {
+      "ap03.inspect": 1.133
+    },
+    "ap03_single_scale": {
+      "ap03.estimate_scale.single": 9.614
+    },
+    "ap03_multi_scale": {
+      "ap03.estimate_scale.multi": 58.979
+    },
+    "ap03_report": {
+      "ap03.report": 0.031
+    }
+  },
+  "method_ap03": 373.371616074,
+  "comparison": 0.058111775999975634,
+  "finalize": 0.027128117000017937
+}

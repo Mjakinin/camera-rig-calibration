@@ -287,9 +287,9 @@ def _method_payload(
     payload: dict[str, Any] = {
         "method_id": method_id,
         "algorithm_version": {
-            "ap01": "ap01_main_compat_hierarchical_v1",
+            "ap01": "ap01_explicit_method_contract_v2",
             "ap02": "ap02_main_compat_widest_path_v1",
-            "ap03": "ap03_shared_colmap_single_multi_v1",
+            "ap03": "ap03_baseline_method_contract_v1",
         }.get(method_id, "extension_v1"),
         "settings": method_settings,
         "marker_detection": {
@@ -305,20 +305,116 @@ def _method_payload(
         },
     }
     if method_id in {"ap01", "ap03"}:
-        payload["colmap"] = config.colmap.model_dump(mode="json")
+        colmap = config.colmap.model_dump(mode="json")
+        colmap_defaults = ColmapSettings().model_dump(mode="json")
+        if method_id == "ap01":
+            for key in (
+                "ap03_maximum_image_size",
+                "ap03_maximum_features",
+                "ap03_loop_detection",
+            ):
+                colmap[key] = colmap_defaults[key]
+            if config.methods.ap01.advanced_strategy == "legacy_main_v1":
+                for key in (
+                    "matcher",
+                    "compute_mode",
+                    "maximum_image_size",
+                    "maximum_features",
+                    "sequential_overlap",
+                    "loop_detection",
+                    "mapper_minimum_matches",
+                ):
+                    colmap[key] = colmap_defaults[key]
+        else:
+            if config.colmap.ap03_maximum_image_size is not None:
+                colmap["maximum_image_size"] = colmap_defaults[
+                    "maximum_image_size"
+                ]
+            if config.colmap.ap03_maximum_features is not None:
+                colmap["maximum_features"] = colmap_defaults[
+                    "maximum_features"
+                ]
+            if config.colmap.ap03_loop_detection is not None:
+                colmap["loop_detection"] = colmap_defaults[
+                    "loop_detection"
+                ]
+        payload["colmap"] = colmap
     if method_id == "ap01":
+        from .methods.ap01.contracts import (
+            ap01_execution_contract_name,
+            resolve_ap01_method_contract,
+        )
+
+        ap01 = config.methods.ap01
+        execution_contract_name = ap01_execution_contract_name(
+            ap01.method_contract,
+            historical_reproduction=ap01.historical_reproduction,
+            advanced_strategy=ap01.advanced_strategy,
+        )
+        payload["resolved_method_contract"] = resolve_ap01_method_contract(
+            execution_contract_name,
+            direct_target_camera=ap01.direct_target_camera,
+            top_moving_per_marker=ap01.top_moving_per_marker,
+            scale_top_per_marker=ap01.scale_top_per_marker,
+            colmap_matcher=config.colmap.matcher,
+            colmap_use_gpu=config.colmap.use_gpu,
+            colmap_maximum_image_size=config.colmap.maximum_image_size,
+            colmap_maximum_features=config.colmap.maximum_features,
+            colmap_sequential_overlap=config.colmap.sequential_overlap,
+            colmap_loop_detection=config.colmap.loop_detection,
+            colmap_mapper_minimum_matches=(
+                config.colmap.mapper_minimum_matches
+            ),
+        ).fingerprint_payload()
         payload["resolved_root_camera"] = selections.root_camera
     elif method_id == "ap02":
         payload["resolved_ap02_reference_marker_id"] = (
             selections.ap02_reference_marker_id
         )
     elif method_id == "ap03":
+        from .methods.ap03.contracts import resolve_ap03_method_contract
+
+        ap03 = config.methods.ap03
+        resolved_multi = list(selections.ap03_multi_marker_ids)
+        payload["resolved_method_contract"] = resolve_ap03_method_contract(
+            ap03.method_contract,
+            feature_limit_policy=ap03.feature_limit_policy,
+            scale_input_policy=ap03.scale_input_policy,
+            scale_marker_ids=resolved_multi,
+            marker_length_m=config.markers.length_m,
+            marker_dictionary=config.markers.dictionary,
+            marker_detection_mode=config.markers.detection_mode,
+            minimum_marker_area_px2=ap03.minimum_marker_area_px2,
+            reprojection_threshold_px=ap03.scale.reprojection_threshold_px,
+            ransac_iterations=ap03.scale.ransac_iterations,
+            minimum_inliers=ap03.scale.minimum_inliers,
+            maximum_observations_per_marker=(
+                ap03.scale.maximum_observations_per_marker
+            ),
+            colmap_matcher=config.colmap.matcher,
+            colmap_use_gpu=config.colmap.use_gpu,
+            colmap_maximum_image_size=(
+                config.colmap.ap03_maximum_image_size
+                or config.colmap.maximum_image_size
+            ),
+            colmap_maximum_features=(
+                config.colmap.ap03_maximum_features
+                or config.colmap.maximum_features
+            ),
+            colmap_sequential_overlap=config.colmap.sequential_overlap,
+            colmap_loop_detection=(
+                config.colmap.ap03_loop_detection
+                if config.colmap.ap03_loop_detection is not None
+                else config.colmap.loop_detection
+            ),
+            colmap_mapper_minimum_matches=(
+                config.colmap.mapper_minimum_matches
+            ),
+        ).fingerprint_payload()
         payload["resolved_single_scale_marker_id"] = (
             selections.ap03_single_scale_marker_id
         )
-        payload["resolved_multi_marker_ids"] = list(
-            selections.ap03_multi_marker_ids
-        )
+        payload["resolved_multi_marker_ids"] = resolved_multi
     return payload
 
 
@@ -614,24 +710,31 @@ def method_result_label(config: RigConfig, method_id: str) -> str:
             and anchor_is_14
             and ap02.reference_marker_selection_mode == "baseline"
             and ap02.reference_marker_id == 14
-            and ap02.static_only_ba_max_function_evaluations == 50
-            and ap02.combined_ba_max_function_evaluations == 50
+            and ap02.method_contract == "baseline_v1"
+            and ap02.frame_selection_strategy == "legacy_smart_v1"
+            and ap02.initialization_strategy
+            == "legacy_maximum_bottleneck_v1"
+            and ap02.graph_edge_weight_strategy
+            == "legacy_observation_quality_v1"
+            and ap02.reprojection_model == "legacy_pinhole_v1"
+            and ap02.static_only_ba_max_function_evaluations == 80
+            and ap02.combined_ba_max_function_evaluations == 80
+            and ap02.ba_robust_loss == "soft_l1"
+            and abs(ap02.ba_robust_loss_scale_px - 3.0) <= 1e-12
         )
     elif method_id == "ap03":
+        ap03 = config.methods.ap03
         baseline_contract = (
             is_simulation
             and anchor_is_14
             and colmap_cpu_baseline
-            and (
-                config.colmap.ap03_maximum_image_size
-                or config.colmap.maximum_image_size
-            )
-            == 2400
-            and (
-                config.colmap.ap03_maximum_features
-                or config.colmap.maximum_features
-            )
-            == 8192
+            and ap03.method_contract == "baseline_v1"
+            and ap03.feature_limit_policy == "legacy_colmap_defaults_v1"
+            and ap03.scale_input_policy
+            == "legacy_registered_image_redetection_v1"
+            and abs(ap03.minimum_marker_area_px2 - 100.0) <= 1e-12
+            and ap03.single.scale_marker_id == 14
+            and ap03.multi.marker_ids == list(range(15))
         )
     if baseline_contract:
         return "baseline"

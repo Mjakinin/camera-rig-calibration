@@ -1,0 +1,162 @@
+{
+  "completed_at": "2026-08-07T08:53:27.577+00:00",
+  "error": "RuntimeError: AP01 historical reproduction validation failed: registered_images, metric_scale, final_poses",
+  "inputs": {
+    "candidates": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap01_baseline_rerun_20260807_104708_098332/jobs/ap01_baseline/20260807_104730_baseline_d0fbfe79/02_AP01/03_candidates/transform_candidates.json",
+    "colmap_images": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap01_baseline_rerun_20260807_104708_098332/jobs/ap01_baseline/20260807_104730_baseline_d0fbfe79/02_AP01/01_moving_colmap/sparse_txt_best/images.txt",
+    "poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap01_baseline_rerun_20260807_104708_098332/jobs/ap01_baseline/20260807_104730_baseline_d0fbfe79/02_AP01/03_static_extrinsics/AP01_STATIC_CAMERA_POSES_ROOT_REFERENCE.csv",
+    "scale": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap01_baseline_rerun_20260807_104708_098332/jobs/ap01_baseline/20260807_104730_baseline_d0fbfe79/02_AP01/02_metric_scale/SCALE_DIAGNOSTICS.json",
+    "solution": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_main_parity_v1_ap01_baseline_rerun_20260807_104708_098332/jobs/ap01_baseline/20260807_104730_baseline_d0fbfe79/02_AP01/03_static_extrinsics/solution_summary.json"
+  },
+  "parameters": {
+    "method_contract": {
+      "candidate_construction_order": "all_direct_then_all_relay",
+      "candidate_priority_policy": "configured_direct_target_else_relay",
+      "colmap_camera_model_policy": "legacy_shared_pinhole_v1",
+      "colmap_intrinsics_precision": 8,
+      "colmap_intrinsics_serialization": "fixed_decimal_places",
+      "colmap_loop_detection": true,
+      "colmap_mapper_minimum_matches": 15,
+      "colmap_matcher_use_gpu": false,
+      "colmap_matching_mode": "exhaustive",
+      "colmap_refine_extra_parameters": false,
+      "colmap_refine_focal_length": false,
+      "colmap_refine_principal_point": false,
+      "colmap_sequential_overlap": 20,
+      "colmap_sift_extraction_threads": 1,
+      "colmap_sift_max_features": 4096,
+      "colmap_sift_maximum_image_size": 1600,
+      "colmap_single_shared_camera": true,
+      "colmap_sparse_model_selection_policy": "maximum_registered_images_first_lexicographic_tie",
+      "consensus_policy": "none",
+      "contract_schema_version": 2,
+      "direct_aggregation_policy": "legacy_quality_filter_preferred_marker_then_medoid_v1",
+      "direct_maximum_distance_m": 5.5,
+      "direct_minimum_area_px2": 500.0,
+      "direct_minimum_combined_quality": 20.0,
+      "direct_quality_fallback_count": 2,
+      "direct_rotation_mad_floor_deg": 2.0,
+      "direct_target_camera": "cam_edge_1",
+      "direct_target_policy": "single_configured_target",
+      "direct_translation_mad_floor_m": 0.08,
+      "eligibility_policy": "available_aggregate_is_eligible",
+      "final_pose_serialization_decimal_places": 9,
+      "final_pose_serialization_policy": "legacy_aggregate_csv_rpy_roundtrip_v1",
+      "missing_direct_policy": "omit_without_relay_fallback",
+      "moving_support_policy": "best_quality_per_frame_marker_first_tie_registered_only_frame_ascending",
+      "name": "main_route2_parity_v1",
+      "omission_policy": "omit_missing_fixed_aggregate_and_continue",
+      "preferred_direct_marker_id": 14,
+      "quality_image_height_px": 720,
+      "quality_image_width_px": 1280,
+      "quality_model": "legacy_area_over_distance_squared_center_v1",
+      "relay_aggregation_policy": "legacy_flat_weighted_mad_v1",
+      "relay_fallback_fraction": 0.5,
+      "relay_fallback_minimum_count": 3,
+      "relay_input_limit": null,
+      "relay_rotation_mad_floor_deg": 7.0,
+      "relay_target_policy": "all_non_root",
+      "relay_translation_mad_floor_m": 0.3,
+      "reproduction_expected_camera_inventory": [
+        "cam_edge_3",
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_5"
+      ],
+      "reproduction_expected_candidate_counts": [
+        [
+          "cam_edge_3",
+          "root",
+          1
+        ],
+        [
+          "cam_edge_0",
+          "relay",
+          25230
+        ],
+        [
+          "cam_edge_1",
+          "direct",
+          6
+        ],
+        [
+          "cam_edge_1",
+          "relay",
+          57468
+        ],
+        [
+          "cam_edge_5",
+          "relay",
+          63438
+        ]
+      ],
+      "reproduction_expected_registered_images": 175,
+      "reproduction_expected_scale_m_per_colmap_unit": 0.676879570208235,
+      "reproduction_expected_selections": [
+        [
+          "cam_edge_3",
+          "root"
+        ],
+        [
+          "cam_edge_0",
+          "relay"
+        ],
+        [
+          "cam_edge_1",
+          "direct"
+        ],
+        [
+          "cam_edge_5",
+          "relay"
+        ]
+      ],
+      "reproduction_expected_total_moving_images": 189,
+      "reproduction_locked_final_pose_path": "parity/main_route2_v1/ap01/final_pose/wizard/AP01_FINAL_CAMERA_POSES.json",
+      "reproduction_locked_final_pose_sha256": "71c56afbaad6b44e907eade31190bec0bf73dfa9f8099a78af4d7c5b459d9024",
+      "reproduction_rotation_matrix_tolerance": 1e-10,
+      "reproduction_scale_absolute_tolerance": 1e-09,
+      "reproduction_translation_tolerance_m": 1e-09,
+      "reproduction_validation_policy": "locked_main_route2_v1",
+      "scale_aggregation_policy": "legacy_median_three_sigma_mad_v1",
+      "scale_colmap_translation_minimum_units": 1e-09,
+      "scale_colmap_translation_rejection_policy": "less_than",
+      "scale_fallback_fraction": 0.3,
+      "scale_fallback_minimum_count": 10,
+      "scale_final_statistic": "median",
+      "scale_frame_gap_maximum": 45,
+      "scale_frame_gap_minimum": 3,
+      "scale_mad_multiplier": 3.0,
+      "scale_mad_sigma_factor": 1.4826,
+      "scale_maximum_center_norm": 0.95,
+      "scale_maximum_marker_distance_m": 4.0,
+      "scale_metric_translation_maximum_m": 5.0,
+      "scale_metric_translation_minimum_m": 0.12,
+      "scale_minimum_marker_area_px2": 1200.0,
+      "scale_minimum_pair_count": 10,
+      "scale_observation_construction_policy": "legacy_registered_quality_filters_then_all_pairs_v1",
+      "scale_observation_limit_per_marker": null,
+      "scale_pair_quality_policy": "sqrt_marker_area_product",
+      "scale_pnp_quantity_policy": "relative_camera_translation_norm_from_T_cam_marker_v1",
+      "scale_pnp_success_only": true,
+      "scale_registered_frames_only": true,
+      "scale_relative_deviation_floor_fraction": null,
+      "scale_sample_multiplicity_policy": "all_within_marker_unordered_frame_pairs",
+      "static_support_policy": "best_quality_per_camera_marker_first_tie",
+      "tie_break_policy": [
+        "first_observation_on_equal_quality",
+        "marker_id_ascending",
+        "moving_frame_ascending",
+        "first_medoid_on_equal_score",
+        "stable_quality_sort",
+        "first_preferred_aggregate_row"
+      ]
+    },
+    "method_contract_sha256": "5c5cddc137f02706339f78c7e904d1621bce1666254de494b260f72f761898a4"
+  },
+  "runtime_seconds": 1.4714476379999724,
+  "schema_version": 5,
+  "stage_id": "ap01.validate_reproduction",
+  "started_at": "2026-08-07T08:53:26.106+00:00",
+  "status": "FAILED",
+  "traceback": "Traceback (most recent call last):\n  File \"/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/camera_rig_calibration/pipeline/stage_contracts.py\", line 103, in run_stage\n    produced = dict(action())\n                    ^^^^^^^^\n  File \"/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/camera_rig_calibration/methods/ap01/validate_reproduction.py\", line 297, in action\n    raise RuntimeError(\nRuntimeError: AP01 historical reproduction validation failed: registered_images, metric_scale, final_poses\n"
+}
