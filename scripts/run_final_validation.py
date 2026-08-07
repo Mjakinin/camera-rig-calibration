@@ -2,7 +2,7 @@
 """Create and optionally run the final calibration validation matrix.
 
 This script is intentionally a thin orchestration layer around the normal
-schema-v5 rigcal queue/batch machinery.  It never calls a calibration method
+schema-v5 rigcal queue/batch machinery. It never calls a calibration method
 implementation directly and never consumes simulation ground truth while
 building a method configuration.
 
@@ -12,12 +12,19 @@ Default study (recommended before feature freeze):
   baseline_v1, root cam_edge_3, direct target cam_edge_1.
 * main_route2_reference / AP01 robust direct-first:
   recommended_wizard_v1, automatic root, Direct for every non-root camera with
-  usable shared-marker support, Relay fallback otherwise.
+  usable shared-marker support, Relay fallback otherwise. A sparse Direct path
+  is allowed with two independent agreeing marker estimates; the regular
+  translation/rotation dispersion gates remain active.
 * route2 / the same two AP01 variants.
 
+All validation variants pin the common evaluation/export anchor to marker 14 so
+that the comparison frame matches the historical Route-2 study. This does not
+change AP02's calibration reference marker; AP02 is independently pinned to
+reference marker 14 by its method contract.
+
 Use ``--profile full`` to add the current AP02 and AP03 baselines to each
-selected experiment.  AP02 is explicitly kept at reference marker 14 and
-80/80 maximum function evaluations.  AP03 stays on baseline_v1.
+selected experiment. AP02 is explicitly kept at reference marker 14 and 80/80
+maximum function evaluations. AP03 stays on baseline_v1.
 """
 
 from __future__ import annotations
@@ -53,6 +60,15 @@ def repository_root() -> Path:
 
 
 def _project(config: RigConfig, *, label: str) -> RigConfig:
+    """Apply validation-wide publication settings without changing calibration."""
+    evaluation = config.evaluation.model_copy(
+        update={
+            "enabled": True,
+            "anchor_marker_id": 14,
+            "anchor_selection_mode": "explicit",
+        },
+        deep=True,
+    )
     return RigConfig.model_validate(
         config.model_copy(
             update={
@@ -63,7 +79,8 @@ def _project(config: RigConfig, *, label: str) -> RigConfig:
                         "duplicate_policy": "force",
                     },
                     deep=True,
-                )
+                ),
+                "evaluation": evaluation,
             },
             deep=True,
         ).model_dump(mode="python")
@@ -122,12 +139,29 @@ def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
         "baseline",
         ap01_method_contract="recommended_wizard_v1",
     )
+    direct_gate = config.methods.ap01.direct_quality_gate.model_copy(
+        update={
+            # A pair such as cam_edge_1 <-> cam_edge_3 can legitimately have
+            # only a small number of shared static markers. Two independent
+            # agreeing marker transforms are sufficient for this validation;
+            # the existing MAD/dispersion and path-consistency checks still
+            # reject geometrically inconsistent Direct estimates.
+            "minimum_independent_markers": 2,
+            # With sparse overlap, a small high-quality consensus must not be
+            # rejected solely because additional weak common markers became
+            # outliers. Two agreeing inliers among six historical candidates
+            # corresponds to 1/3 support, so 0.30 is the conservative floor.
+            "minimum_inlier_ratio": 0.30,
+        },
+        deep=True,
+    )
     ap01 = config.methods.ap01.model_copy(
         update={
             "method_contract": "recommended_wizard_v1",
             "historical_reproduction": False,
             "advanced_strategy": "wizard_robustness_v1",
             "root_camera": "auto",
+            "direct_quality_gate": direct_gate,
         },
         deep=True,
     )
@@ -139,10 +173,11 @@ def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
         config.model_copy(
             update={
                 "methods": methods,
-                # Auto is intentional here.  Unlike baseline_v1, the robust
-                # contract has Direct targets for all non-root cameras, so the
-                # selected root cannot accidentally consume its sole Direct
-                # target.
+                # Auto is intentional here. Unlike baseline_v1, the robust
+                # contract creates Direct candidates for every non-root camera,
+                # so the selected root cannot accidentally consume the sole
+                # Direct target. Shared-marker pairs such as cam1<->cam3 are
+                # therefore eligible for Direct calibration.
                 "selection": config.selection.model_copy(
                     update={"mode": "auto"}, deep=True
                 ),
@@ -150,7 +185,10 @@ def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
             deep=True,
         ).model_dump(mode="python")
     )
-    return _project(configured, label="ap01_robust_direct_first_auto_root")
+    return _project(
+        configured,
+        label="ap01_robust_direct_first_sparse2_auto_root",
+    )
 
 
 def baseline_ap02(repository: Path, experiment: Path) -> RigConfig:
@@ -223,7 +261,7 @@ def build_configs(
     configs = [
         ("ap01_historical_root_cam3", historical_ap01(repository, experiment)),
         (
-            "ap01_robust_direct_first_auto_root",
+            "ap01_robust_direct_first_sparse2_auto_root",
             robust_ap01(repository, experiment),
         ),
     ]
@@ -239,7 +277,10 @@ def build_configs(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Prepare/run the final AP01 study or full AP01/AP02/AP03 validation batch."
+        description=(
+            "Prepare/run the final AP01 study or full AP01/AP02/AP03 "
+            "validation batch."
+        )
     )
     parser.add_argument(
         "--experiment",
@@ -308,6 +349,8 @@ def main() -> int:
     print("[OK] Final validation configuration prepared")
     print(f"[OK] profile: {args.profile}")
     print(f"[OK] experiments: {', '.join(names)}")
+    print("[OK] common evaluation anchor: marker 14")
+    print("[OK] robust AP01 sparse Direct gate: >=2 inlier markers, ratio >=0.30")
     print(f"[OK] batch: {batch}")
     print()
     print("Run without the Wizard:")
