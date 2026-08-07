@@ -1,0 +1,221 @@
+schema_version: 5
+project:
+  workspace_root: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous
+    Systems/camera-rig-calibration/workspace
+  dataset_cache_root: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous
+    Systems/camera-rig-calibration/workspace/preparation_cache
+  output_root: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results
+  experiment_id: main_route2_reference
+  run_label: baseline
+  execution_mode: complete
+  duplicate_policy: skip
+dataset:
+  id: main_route2_reference
+  category: simulation
+  source_kind: prepared
+  scene_type: simulation
+  description: ''
+  prepared_root: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous
+    Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/dataset
+  input_root: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/reference_inputs/main_route2_reference
+static_cameras:
+- id: cam_edge_0
+  images: []
+  required: true
+  image_topic: /bus_real_data/cam_edge_0/image
+  camera_info_topic: /bus_real_data/cam_edge_0/camera_info
+- id: cam_edge_1
+  images: []
+  required: true
+  image_topic: /bus_real_data/cam_edge_1/image
+  camera_info_topic: /bus_real_data/cam_edge_1/camera_info
+- id: cam_edge_3
+  images: []
+  required: true
+  image_topic: /bus_real_data/cam_edge_3/image
+  camera_info_topic: /bus_real_data/cam_edge_3/camera_info
+- id: cam_edge_5
+  images: []
+  required: true
+  image_topic: /bus_real_data/cam_edge_5/image
+  camera_info_topic: /bus_real_data/cam_edge_5/camera_info
+moving_camera:
+  id: moving_calib_camera
+  intrinsic_scan:
+    mode: balanced
+    target_hz: 3.0
+    preview_max_dimension: 1920
+  checkerboard_columns: 8
+  checkerboard_rows: 6
+  intrinsic_maximum_views: 80
+  intrinsic_minimum_frame_gap: 5
+  intrinsic_minimum_detections: 20
+  image_topic: /bus_real_data/moving_calib_camera/image
+  camera_info_topic: /bus_real_data/moving_calib_camera/camera_info
+mcap:
+  save_all_candidates: false
+simulation:
+  enabled: false
+  preset: existing_main_route2_reference
+  world_id: bus
+  world_baseline:
+    route: route2
+    moving_width: 1280
+    moving_height: 720
+    moving_hfov_deg: 69.1
+    lighting: baseline
+    lighting_scale: 1.0
+    motion_blur_kernel: 0
+    motion_blur_angle_deg: 0.0
+    target_route_frames: 189
+    route_sampling_strategy: original_route_poses
+    settle_seconds: 0.35
+    post_pose_skip: 5
+    frame_timeout_seconds: 3.0
+    startup_timeout_seconds: 60.0
+  world: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera.sdf
+  route: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/config/moving_camera_route2_interpolated_final.json
+  resource_paths:
+  - /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/src/calib_lab/bus_real_data/models
+  moving_model_name: moving_calib_camera
+  moving_sensor_name: moving_calib_camera_sensor
+  settle_seconds: 0.35
+  post_pose_skip: 5
+  frame_timeout_seconds: 3.0
+  startup_timeout_seconds: 60.0
+  route_name: route2
+  moving_width: 1280
+  moving_height: 720
+  moving_hfov_deg: 69.1
+  lighting: baseline
+  lighting_scale: 1.0
+  motion_blur_kernel: 0
+  motion_blur_angle_deg: 0.0
+  target_route_frames: 189
+  route_sampling_strategy: original_route_poses
+sampling:
+  image_format: png
+  start_seconds: 0.0
+markers:
+  dictionary: DICT_4X4_50
+  length_m: 0.17
+  accepted_ids: all_detected
+  detection_mode: baseline
+selection:
+  mode: explicit
+colmap:
+  executable: auto
+  matcher: exhaustive
+  compute_mode: cpu_baseline
+  maximum_image_size: 1600
+  maximum_features: 4096
+  sequential_overlap: 20
+  loop_detection: true
+  mapper_minimum_matches: 8
+  reuse: false
+  ap03_maximum_image_size: 2400
+  ap03_maximum_features: 8192
+methods:
+  enabled:
+  - ap02
+  ap01:
+    method_contract: baseline_v1
+    historical_reproduction: false
+    advanced_strategy: legacy_main_v1
+    direct_target_camera: cam_edge_1
+    root_camera: cam_edge_1
+    top_moving_per_marker: 8
+    scale_top_per_marker: 30
+    direct_quality_gate:
+      minimum_inlier_ratio: 0.7
+      maximum_translation_dispersion_m: 0.12
+      maximum_rotation_dispersion_deg: 4.0
+      minimum_independent_markers: 3
+    relay_quality_gate:
+      minimum_inlier_ratio: 0.7
+      maximum_translation_dispersion_m: 0.3
+      maximum_rotation_dispersion_deg: 7.0
+    direct_relay_consistency:
+      maximum_translation_disagreement_m: 0.12
+      maximum_rotation_disagreement_deg: 4.0
+    observation_quality:
+      minimum_marker_area_ratio: null
+      maximum_pnp_reprojection_error_px: null
+      require_positive_depth: null
+      maximum_marker_distance_m: null
+  ap02:
+    method_contract: baseline_v1
+    historical_reproduction: false
+    reference_marker_selection_mode: baseline
+    reference_marker_id: 14
+    frame_selection_strategy: legacy_smart_v1
+    initialization_strategy: legacy_maximum_bottleneck_v1
+    graph_edge_weight_strategy: legacy_observation_quality_v1
+    reprojection_model: legacy_pinhole_v1
+    top_per_marker: 8
+    top_per_marker_pair: 4
+    static_only_ba_max_function_evaluations: 80
+    combined_ba_max_function_evaluations: 80
+    ba_robust_loss: soft_l1
+    ba_robust_loss_scale_px: 3.0
+    observation_quality:
+      minimum_marker_area_ratio: null
+      maximum_pnp_reprojection_error_px: null
+      require_positive_depth: null
+      maximum_marker_distance_m: null
+    reference_marker_maximum_frames: null
+    maximum_total_frames: null
+  ap03:
+    method_contract: baseline_v1
+    feature_limit_policy: legacy_colmap_defaults_v1
+    scale_input_policy: legacy_registered_image_redetection_v1
+    minimum_marker_area_px2: 100.0
+    single:
+      scale_marker_id: 14
+    multi:
+      marker_ids:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+    scale:
+      reprojection_threshold_px: 5.0
+      ransac_iterations: 1000
+      minimum_inliers: 4
+      maximum_observations_per_marker: null
+    observation_quality:
+      minimum_marker_area_ratio: null
+      maximum_pnp_reprojection_error_px: null
+      require_positive_depth: null
+      maximum_marker_distance_m: null
+  extensions: {}
+observation_quality:
+  minimum_marker_area_ratio: 8.0e-06
+  maximum_pnp_reprojection_error_px: 25.0
+  require_positive_depth: true
+  maximum_marker_distance_m: disabled
+evaluation:
+  enabled: true
+  anchor_marker_id: 2
+  anchor_selection_mode: explicit
+  reprojection_threshold_px: 5.0
+  minimum_inliers: 4
+  ransac_iterations: 800
+  minimum_triangulation_angle_deg: 0.5
+  maximum_moving_observations_per_marker: 80
+reporting:
+  terminal_verbosity: normal
+  csv: true
+  json: true
+  text: true

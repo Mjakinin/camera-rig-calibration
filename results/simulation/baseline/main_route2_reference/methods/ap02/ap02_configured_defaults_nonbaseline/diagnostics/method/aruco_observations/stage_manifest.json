@@ -1,0 +1,37 @@
+{
+  "completed_at": "2026-08-07T21:19:08.584+00:00",
+  "inputs": {
+    "quality_accepted_observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/preflight/observations/shared_all_aruco_observations.csv"
+  },
+  "outputs": {
+    "accepted_observations": 563,
+    "component_manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/02_aruco_observations/component_manifest.json",
+    "graph_summary": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/02_aruco_observations/graph_summary.json",
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv",
+    "selected_moving_frames": 170
+  },
+  "parameters": {
+    "frame_selection": {
+      "maximum_total_frames": null,
+      "reference_marker_maximum_frames": null,
+      "top_per_marker": 8,
+      "top_per_marker_pair": 4
+    },
+    "graph_observation_policy": "legacy_quality_valid_all_observations_v1",
+    "historical_reproduction": false,
+    "method_contract": {
+      "name": "baseline_v1",
+      "reference_marker_policy": "baseline",
+      "root_pose_policy": "reference_marker_identity_v1"
+    },
+    "method_contract_sha256": "7f01fb25fb4a26fbee870636cefd44f2cafa6df6c295a7f711feb84430564f84",
+    "observation_input_mode": "fresh_dataset_derived_observations",
+    "reference_marker_id": 14,
+    "weighted_graph": false
+  },
+  "runtime_seconds": 0.24289100999885704,
+  "schema_version": 5,
+  "stage_id": "ap02.build_graph",
+  "started_at": "2026-08-07T21:19:08.341+00:00",
+  "status": "COMPLETED"
+}

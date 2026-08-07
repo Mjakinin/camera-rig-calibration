@@ -1,0 +1,26 @@
+{
+  "display_depth_m": 0.34,
+  "schema_version": 2,
+  "variants": [
+    {
+      "frustums": [],
+      "label": "root_cam_edge_1",
+      "method": "ap01"
+    },
+    {
+      "frustums": [],
+      "label": "ap02_configured_defaults_nonbaseline",
+      "method": "ap02"
+    },
+    {
+      "frustums": [],
+      "label": "ap03_configured_defaults_nonbaseline",
+      "method": "ap03_multi"
+    },
+    {
+      "frustums": [],
+      "label": "ap03_configured_defaults_nonbaseline",
+      "method": "ap03_single"
+    }
+  ]
+}

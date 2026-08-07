@@ -7,7 +7,7 @@ Solver status: success
 Artifact status: available
 Calibration status: available
 Quality status: good
-Evaluation status: unavailable
+Evaluation status: available
 Anchor export status: OK
 RViz visualization status: OK
 Primary result: combined

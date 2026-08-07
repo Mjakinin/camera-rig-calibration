@@ -1,0 +1,67 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap03_single / ap03_configured_defaults_nonbaseline
+Execution status: completed_shared_colmap
+Solver status: not_applicable
+Artifact status: available
+Calibration status: available
+Quality status: good
+Evaluation status: available
+Anchor export status: OK
+RViz visualization status: OK
+Primary result: single
+Runtime: 323.0 s
+Reference frame: COLMAP gauge with metric marker scale
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: baseline_version=baseline_v1, evaluation_anchor_marker_id=2, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+
+COMMON EVALUATION / EXPORT ANCHOR
+----------------------------------------------------------------------------------------------------------------------
+Marker: 2; export status: OK
+Camera     | x [m]  | y [m] | z [m]  | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw
+-----------+--------+-------+--------+------------+-------------+-----------+-----------+-----------+-----------+---------
+cam_edge_0 | 0.695  | 1.947 | -1.034 | -1.940     | 1.142       | 1.588     | -0.704413 | -0.280862 | 0.651670  | 0.015645
+cam_edge_1 | -1.430 | 0.192 | 3.262  | -2.989     | -0.362      | -0.191    | -0.977626 | 0.079726  | -0.185915 | 0.057670
+cam_edge_3 | 0.610  | 0.412 | 2.488  | -3.033     | 0.520       | 0.189     | -0.961996 | -0.077133 | 0.260442  | 0.028012
+cam_edge_5 | -1.524 | 4.089 | -5.845 | -0.804     | -0.376      | -2.902    | -0.216757 | 0.361092  | -0.906294 | 0.035506
+Full exports: camera_extrinsics_anchor.csv, camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml
+
+AP03 COLMAP / RANSAC / SCALE DIAGNOSTICS
+----------------------------------------------------------------------------------------------------------------------
+Registered images/static cameras: 179/4; moving frames=175; best model=0; sparse points=11321; triangulated corners=4
+Scale observations used/total: 6/6; scale=0.690151 m/COLMAP-unit; relative std=0.004036
+Camera     | Registered | Group | Tracks | Moving tracks | Reproj RMSE [px] | Warnings
+-----------+------------+-------+--------+---------------+------------------+---------
+cam_edge_0 | true       | 1     | 444    | 444           | 0.640            | none
+cam_edge_1 | true       | 2     | 358    | 354           | 0.861            | none
+cam_edge_3 | true       | 3     | 711    | 707           | 0.828            | none
+cam_edge_5 | true       | 4     | 487    | 487           | 1.024            | none
+Camera groups: {"assignment": {"cam_edge_0": [1], "cam_edge_1": [2], "cam_edge_3": [3], "cam_edge_5": [4], "moving_calib_camera": [5]}, "intrinsics_refinement": false, "one_camera_id_per_physical_camera": true, "physical_camera_ids_are_distinct": true}
+Ground truth used by these diagnostics: no
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera     | Source                               | x [m]  | y [m]  | z [m]  | roll [deg] | pitch [deg] | yaw [deg]
+-----------+--------------------------------------+--------+--------+--------+------------+-------------+----------
+cam_edge_0 | ap03_single_scale_from_shared_colmap | 1.334  | -0.231 | -0.195 | 82.311     | -67.917     | -106.608
+cam_edge_1 | ap03_single_scale_from_shared_colmap | -0.317 | 1.378  | -4.749 | 4.570      | 16.417      | 6.341
+cam_edge_3 | ap03_single_scale_from_shared_colmap | 1.634  | 1.094  | -3.790 | 3.599      | -35.232     | -12.667
+cam_edge_5 | ap03_single_scale_from_shared_colmap | -1.400 | -1.959 | 4.515  | 136.019    | 27.106      | 163.871
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                  | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+----------------------+--------+--------+--------+------------+-------------+-----------+-------------
+cam_edge_0-cam_edge_1 | -4.622 | -0.987 | 1.928  | 115.954    | 57.482      | 138.481   | 5.104
+cam_edge_0-cam_edge_3 | -3.841 | -0.107 | 0.078  | 21.146     | 50.497      | 36.179    | 3.843
+cam_edge_0-cam_edge_5 | 5.281  | -0.768 | 2.042  | 121.085    | -59.125     | -144.818  | 5.714
+cam_edge_1-cam_edge_3 | 1.559  | -0.380 | 1.494  | 5.134      | -52.221     | -19.421   | 2.193
+cam_edge_1-cam_edge_5 | -4.004 | -2.511 | 8.706  | 133.307    | 43.989      | 156.595   | 9.906
+cam_edge_3-cam_edge_5 | 2.920  | -3.128 | 8.318  | 141.663    | -7.860      | 176.384   | 9.354
+
+DETAIL ARTIFACTS
+----------------------------------------------------------------------------------------------------------------------
+- ../../../methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json
+- methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/colmap/inspection/AP03_RECONSTRUCTION_DIAGNOSTICS.json
+- provenance/derived_result.json

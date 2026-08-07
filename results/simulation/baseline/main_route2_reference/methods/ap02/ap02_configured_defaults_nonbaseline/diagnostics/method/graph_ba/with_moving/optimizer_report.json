@@ -1,0 +1,15 @@
+{
+  "mode": "with_moving",
+  "success": true,
+  "status": 2,
+  "message": "`ftol` termination condition is satisfied.",
+  "nfev": 62,
+  "maximum_function_evaluations": 80,
+  "initial_cost": 66980.4230384547,
+  "final_cost": 410.86423820810063,
+  "loss": "soft_l1",
+  "loss_scale_px": 3.0,
+  "runtime_seconds": 974.6269959710007,
+  "final_reprojection_rmse_px": 0.6707124793942397,
+  "optimality": 0.015489962961986237
+}

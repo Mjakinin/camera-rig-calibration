@@ -120,7 +120,7 @@
   ],
   "diagnostic_partial": false,
   "diagnostics": "diagnostics",
-  "evaluation_status": "unavailable",
+  "evaluation_status": "available",
   "execution_status": "completed",
   "full_rig_result_available": true,
   "graph_component_count": 1,
@@ -4365,6 +4365,36 @@
       "strategy": "legacy_quality_valid_all_observations_v1"
     },
     "combined_reprojection_rmse_px": 0.672373526318501,
+    "evaluation": {
+      "anchor_camera_gt": {
+        "count": 4,
+        "evaluation_status": "available",
+        "label": "ap02_configured_defaults_nonbaseline",
+        "max_rotation_error_deg": 1.509665509818507,
+        "max_translation_error_cm": 15.884728700789843,
+        "mean_rotation_error_deg": 1.3498643378067432,
+        "mean_translation_error_cm": 9.078669377220285,
+        "median_rotation_error_deg": 1.4033302593489447,
+        "median_translation_error_cm": 7.83636059192543,
+        "method": "ap02"
+      },
+      "pairwise_gt": {
+        "count": 6,
+        "evaluated_camera_count": 4,
+        "evaluation_status": "available",
+        "expected_camera_count": 4,
+        "label": "ap02_configured_defaults_nonbaseline",
+        "max_rotation_error_deg": 0.7121209997667916,
+        "max_translation_error_cm": 9.524964980310894,
+        "mean_rotation_error_deg": 0.37592219289206724,
+        "mean_translation_error_cm": 5.806024241806205,
+        "median_rotation_error_deg": 0.36448418394644333,
+        "median_translation_error_cm": 5.140586876196542,
+        "method": "ap02",
+        "missing_cameras": [],
+        "reason": null
+      }
+    },
     "optimizer": {
       "absolute_cost_improvement": 65549.93053305185,
       "corner_residual_count": 2048,

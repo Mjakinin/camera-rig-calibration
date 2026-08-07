@@ -98,7 +98,7 @@
   ],
   "diagnostics": "diagnostics",
   "estimate_status": "available",
-  "evaluation_status": "unavailable",
+  "evaluation_status": "available",
   "execution_status": "completed",
   "input_fingerprint": "input_0ffd7d57d0b8",
   "label": "root_cam_edge_1",
@@ -10661,6 +10661,36 @@
       "used_pairs": 1648,
       "used_relative_std": 0.05159784104280907,
       "used_std": 0.03484227313868399
+    },
+    "evaluation": {
+      "anchor_camera_gt": {
+        "count": 4,
+        "evaluation_status": "available",
+        "label": "root_cam_edge_1",
+        "max_rotation_error_deg": 5.8125636850651174,
+        "max_translation_error_cm": 61.88516779624486,
+        "mean_rotation_error_deg": 3.5048710442151694,
+        "mean_translation_error_cm": 36.39465915928287,
+        "median_rotation_error_deg": 3.2832609030586566,
+        "median_translation_error_cm": 35.275671804946576,
+        "method": "ap01"
+      },
+      "pairwise_gt": {
+        "count": 6,
+        "evaluated_camera_count": 4,
+        "evaluation_status": "available",
+        "expected_camera_count": 4,
+        "label": "root_cam_edge_1",
+        "max_rotation_error_deg": 7.826786052362624,
+        "max_translation_error_cm": 84.51113093324102,
+        "mean_rotation_error_deg": 5.001752687992278,
+        "mean_translation_error_cm": 59.15120709123979,
+        "median_rotation_error_deg": 5.535563857441259,
+        "median_translation_error_cm": 61.118103659182815,
+        "method": "ap01",
+        "missing_cameras": [],
+        "reason": null
+      }
     }
   },
   "missing_static_cameras": [],

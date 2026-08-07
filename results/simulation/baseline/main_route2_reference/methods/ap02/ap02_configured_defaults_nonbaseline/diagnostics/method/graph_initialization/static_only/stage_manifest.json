@@ -1,0 +1,22 @@
+{
+  "completed_at": "2026-08-07T21:19:09.808+00:00",
+  "inputs": {
+    "observations": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv"
+  },
+  "outputs": {
+    "marker_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/05_graph_initialization/static_only/initial_marker_poses_ref_marker.csv",
+    "moving_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/05_graph_initialization/static_only/initial_moving_frame_poses_ref_marker.csv",
+    "static_poses": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/05_graph_initialization/static_only/initial_static_camera_poses_ref_marker.csv"
+  },
+  "parameters": {
+    "edge_weight_policy": "legacy_observation_quality_v1",
+    "initialization_algorithm": "legacy_maximum_bottleneck_v1",
+    "mode": "static_only",
+    "reference_marker_id": 14
+  },
+  "runtime_seconds": 0.4719475749989215,
+  "schema_version": 5,
+  "stage_id": "ap02.initialize.static_only",
+  "started_at": "2026-08-07T21:19:09.336+00:00",
+  "status": "COMPLETED"
+}

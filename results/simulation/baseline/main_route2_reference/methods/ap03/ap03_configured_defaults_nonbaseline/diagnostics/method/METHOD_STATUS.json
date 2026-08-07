@@ -1,0 +1,14 @@
+{
+  "method": "AP03",
+  "status": "OK",
+  "success": true,
+  "execution_status": "completed",
+  "solver_status": "not_applicable",
+  "calibration_status": "available",
+  "quality_status": "good",
+  "primary_result": "multi",
+  "single_diagnostic_success": true,
+  "registered_static_cameras": 4,
+  "registered_moving_frames": 175,
+  "sparse_point_count": 11321
+}

@@ -59,7 +59,7 @@
     "provenance/derived_result.json"
   ],
   "diagnostics": "diagnostics",
-  "evaluation_status": "unavailable",
+  "evaluation_status": "available",
   "execution_status": "completed_shared_colmap",
   "input_fingerprint": "input_0ffd7d57d0b8",
   "label": "ap03_configured_defaults_nonbaseline",
@@ -224,6 +224,36 @@
       "used_std_scale": 0.002628644277526713
     },
     "ap03_scale_relative_std": 0.0038344137040685505,
+    "evaluation": {
+      "anchor_camera_gt": {
+        "count": 4,
+        "evaluation_status": "available",
+        "label": "ap03_configured_defaults_nonbaseline",
+        "max_rotation_error_deg": 1.5280264943630175,
+        "max_translation_error_cm": 15.763625544539853,
+        "mean_rotation_error_deg": 1.4895402567633886,
+        "mean_translation_error_cm": 8.808948042990682,
+        "median_rotation_error_deg": 1.4906826335912275,
+        "median_translation_error_cm": 8.238939627576409,
+        "method": "ap03_single"
+      },
+      "pairwise_gt": {
+        "count": 6,
+        "evaluated_camera_count": 4,
+        "evaluation_status": "available",
+        "expected_camera_count": 4,
+        "label": "ap03_configured_defaults_nonbaseline",
+        "max_rotation_error_deg": 0.09267238771358124,
+        "max_translation_error_cm": 7.076319306551314,
+        "mean_rotation_error_deg": 0.06350384757326033,
+        "mean_translation_error_cm": 4.368395203785879,
+        "median_rotation_error_deg": 0.06030904127016746,
+        "median_translation_error_cm": 3.970348126748738,
+        "method": "ap03_single",
+        "missing_cameras": [],
+        "reason": null
+      }
+    },
     "shared_colmap": {
       "camera_pose_source": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
       "colmap_rerun": false,

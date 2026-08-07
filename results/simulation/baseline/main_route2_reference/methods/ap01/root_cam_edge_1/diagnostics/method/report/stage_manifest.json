@@ -1,0 +1,18 @@
+{
+  "completed_at": "2026-08-07T21:18:48.824+00:00",
+  "inputs": {
+    "scale": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap01__baseline__01/20260807_231234_baseline_6c8275e0/02_AP01/02_metric_scale/SCALE_DIAGNOSTICS.json",
+    "solution": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap01__baseline__01/20260807_231234_baseline_6c8275e0/02_AP01/03_static_extrinsics/solution_summary.json"
+  },
+  "outputs": {
+    "diagnostics": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap01__baseline__01/20260807_231234_baseline_6c8275e0/02_AP01/03_static_extrinsics/AP01_DIAGNOSTICS.json",
+    "method_status": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap01__baseline__01/20260807_231234_baseline_6c8275e0/02_AP01/METHOD_STATUS.json",
+    "status": "OK_FULL"
+  },
+  "parameters": {},
+  "runtime_seconds": 0.015986086000339128,
+  "schema_version": 5,
+  "stage_id": "ap01.report",
+  "started_at": "2026-08-07T21:18:48.808+00:00",
+  "status": "COMPLETED"
+}

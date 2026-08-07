@@ -45,7 +45,7 @@
         "scale_top_per_marker": 30,
         "top_moving_per_marker": 8
       },
-      "evaluation_status": "unavailable",
+      "evaluation_status": "available",
       "execution_status": "completed",
       "label": "root_cam_edge_1",
       "method": "ap01",
@@ -10604,6 +10604,36 @@
           "used_pairs": 1648,
           "used_relative_std": 0.05159784104280907,
           "used_std": 0.03484227313868399
+        },
+        "evaluation": {
+          "anchor_camera_gt": {
+            "count": 4,
+            "evaluation_status": "available",
+            "label": "root_cam_edge_1",
+            "max_rotation_error_deg": 5.8125636850651174,
+            "max_translation_error_cm": 61.88516779624486,
+            "mean_rotation_error_deg": 3.5048710442151694,
+            "mean_translation_error_cm": 36.39465915928287,
+            "median_rotation_error_deg": 3.2832609030586566,
+            "median_translation_error_cm": 35.275671804946576,
+            "method": "ap01"
+          },
+          "pairwise_gt": {
+            "count": 6,
+            "evaluated_camera_count": 4,
+            "evaluation_status": "available",
+            "expected_camera_count": 4,
+            "label": "root_cam_edge_1",
+            "max_rotation_error_deg": 7.826786052362624,
+            "max_translation_error_cm": 84.51113093324102,
+            "mean_rotation_error_deg": 5.001752687992278,
+            "mean_translation_error_cm": 59.15120709123979,
+            "median_rotation_error_deg": 5.535563857441259,
+            "median_translation_error_cm": 61.118103659182815,
+            "method": "ap01",
+            "missing_cameras": [],
+            "reason": null
+          }
         }
       },
       "primary_result": "baseline",
@@ -10715,7 +10745,7 @@
         "top_per_marker": 8,
         "top_per_marker_pair": 4
       },
-      "evaluation_status": "unavailable",
+      "evaluation_status": "available",
       "execution_status": "completed",
       "label": "ap02_configured_defaults_nonbaseline",
       "method": "ap02",
@@ -14954,6 +14984,36 @@
           "strategy": "legacy_quality_valid_all_observations_v1"
         },
         "combined_reprojection_rmse_px": 0.672373526318501,
+        "evaluation": {
+          "anchor_camera_gt": {
+            "count": 4,
+            "evaluation_status": "available",
+            "label": "ap02_configured_defaults_nonbaseline",
+            "max_rotation_error_deg": 1.509665509818507,
+            "max_translation_error_cm": 15.884728700789843,
+            "mean_rotation_error_deg": 1.3498643378067432,
+            "mean_translation_error_cm": 9.078669377220285,
+            "median_rotation_error_deg": 1.4033302593489447,
+            "median_translation_error_cm": 7.83636059192543,
+            "method": "ap02"
+          },
+          "pairwise_gt": {
+            "count": 6,
+            "evaluated_camera_count": 4,
+            "evaluation_status": "available",
+            "expected_camera_count": 4,
+            "label": "ap02_configured_defaults_nonbaseline",
+            "max_rotation_error_deg": 0.7121209997667916,
+            "max_translation_error_cm": 9.524964980310894,
+            "mean_rotation_error_deg": 0.37592219289206724,
+            "mean_translation_error_cm": 5.806024241806205,
+            "median_rotation_error_deg": 0.36448418394644333,
+            "median_translation_error_cm": 5.140586876196542,
+            "method": "ap02",
+            "missing_cameras": [],
+            "reason": null
+          }
+        },
         "optimizer": {
           "absolute_cost_improvement": 65549.93053305185,
           "corner_residual_count": 2048,
@@ -15035,7 +15095,7 @@
         "scale_reprojection_threshold_px": 5.0,
         "single_scale_marker_id": 14
       },
-      "evaluation_status": "unavailable",
+      "evaluation_status": "available",
       "execution_status": "completed_shared_colmap",
       "label": "ap03_configured_defaults_nonbaseline",
       "method": "ap03_multi",
@@ -15252,6 +15312,36 @@
           "used_std_scale": 0.006932771936196949
         },
         "ap03_scale_relative_std": 0.010119648002016125,
+        "evaluation": {
+          "anchor_camera_gt": {
+            "count": 4,
+            "evaluation_status": "available",
+            "label": "ap03_configured_defaults_nonbaseline",
+            "max_rotation_error_deg": 1.5280264943630175,
+            "max_translation_error_cm": 15.598505007638625,
+            "mean_rotation_error_deg": 1.4895402567635097,
+            "mean_translation_error_cm": 8.724704538974969,
+            "median_rotation_error_deg": 1.4906826335914696,
+            "median_translation_error_cm": 8.187712639299527,
+            "method": "ap03_multi"
+          },
+          "pairwise_gt": {
+            "count": 6,
+            "evaluated_camera_count": 4,
+            "evaluation_status": "available",
+            "expected_camera_count": 4,
+            "label": "ap03_configured_defaults_nonbaseline",
+            "max_rotation_error_deg": 0.09267238771358124,
+            "max_translation_error_cm": 6.413571811882229,
+            "mean_rotation_error_deg": 0.06350384757683983,
+            "mean_translation_error_cm": 3.9664165928651385,
+            "median_rotation_error_deg": 0.06030904127016746,
+            "median_translation_error_cm": 3.60896989853034,
+            "method": "ap03_multi",
+            "missing_cameras": [],
+            "reason": null
+          }
+        },
         "shared_colmap": {
           "camera_pose_source": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
           "colmap_rerun": false,
@@ -15312,7 +15402,7 @@
         "scale_reprojection_threshold_px": 5.0,
         "single_scale_marker_id": 14
       },
-      "evaluation_status": "unavailable",
+      "evaluation_status": "available",
       "execution_status": "completed_shared_colmap",
       "label": "ap03_configured_defaults_nonbaseline",
       "method": "ap03_single",
@@ -15473,6 +15563,36 @@
           "used_std_scale": 0.002628644277526713
         },
         "ap03_scale_relative_std": 0.0038344137040685505,
+        "evaluation": {
+          "anchor_camera_gt": {
+            "count": 4,
+            "evaluation_status": "available",
+            "label": "ap03_configured_defaults_nonbaseline",
+            "max_rotation_error_deg": 1.5280264943630175,
+            "max_translation_error_cm": 15.763625544539853,
+            "mean_rotation_error_deg": 1.4895402567633886,
+            "mean_translation_error_cm": 8.808948042990682,
+            "median_rotation_error_deg": 1.4906826335912275,
+            "median_translation_error_cm": 8.238939627576409,
+            "method": "ap03_single"
+          },
+          "pairwise_gt": {
+            "count": 6,
+            "evaluated_camera_count": 4,
+            "evaluation_status": "available",
+            "expected_camera_count": 4,
+            "label": "ap03_configured_defaults_nonbaseline",
+            "max_rotation_error_deg": 0.09267238771358124,
+            "max_translation_error_cm": 7.076319306551314,
+            "mean_rotation_error_deg": 0.06350384757326033,
+            "mean_translation_error_cm": 4.368395203785879,
+            "median_rotation_error_deg": 0.06030904127016746,
+            "median_translation_error_cm": 3.970348126748738,
+            "method": "ap03_single",
+            "missing_cameras": [],
+            "reason": null
+          }
+        },
         "shared_colmap": {
           "camera_pose_source": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
           "colmap_rerun": false,
@@ -15514,14 +15634,14 @@
       "transformed_cameras_match_ap03_multi_export": true
     },
     "contract": "rigcal_rviz_scene_v2",
-    "fingerprint": "ab7f592be0c5d46e601b049a7aa6488161d59743a7190a2eb4dfd52d9ec3031c",
+    "fingerprint": "ca8bae9891c606af623e3d331ade3bbb61dd5f006924b65a35812fb72382d057",
     "fixed_frame": "evaluation_anchor_marker_2",
     "frustums": "camera_frustums.json",
     "ground_truth": {
-      "available": false,
-      "camera_count": 0,
-      "default_visible": false,
-      "source": null
+      "available": true,
+      "camera_count": 4,
+      "default_visible": true,
+      "source": "metadata/simulation/ground_truth.json"
     },
     "note": "The single point cloud is AP03 Multi/COLMAP context. Camera poses retain their own method/variant identity.",
     "point_cloud": "scene_anchor_frame.ply",
@@ -15531,7 +15651,7 @@
       "anchor_source": "methods/ap03_multi/ap03_configured_defaults_nonbaseline/camera_extrinsics_anchor.json",
       "container_label": "ap03_configured_defaults_nonbaseline",
       "container_method": "ap03",
-      "ground_truth_source": null,
+      "ground_truth_source": "metadata/simulation/ground_truth.json",
       "method": "ap03_multi",
       "model_id": "0",
       "point_count": 11389,

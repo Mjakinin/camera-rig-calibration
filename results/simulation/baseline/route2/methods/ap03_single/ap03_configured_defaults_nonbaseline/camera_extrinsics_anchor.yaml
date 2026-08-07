@@ -244,7 +244,7 @@ cameras:
   yaw_rad: -2.902321664570894
   z_m: -5.849940212628487
 contract: rigcal_anchor_export_v1
-evaluation_status: unavailable
+evaluation_status: available
 fingerprint: 944aad9b044068e3fd3c2d75dbfbe9dcf83a30922f58f4b24ea83461fbb62888
 label: ap03_configured_defaults_nonbaseline
 layout_version: 2

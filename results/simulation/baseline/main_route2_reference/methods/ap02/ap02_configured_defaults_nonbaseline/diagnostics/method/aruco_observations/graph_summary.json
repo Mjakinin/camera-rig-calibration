@@ -1,0 +1,25 @@
+{
+  "schema_version": 5,
+  "reference_marker_id": 14,
+  "static_only": {
+    "reached_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "reached_camera_count": 4,
+    "reached_marker_count": 20
+  },
+  "combined": {
+    "reached_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "reached_camera_count": 4,
+    "reached_marker_count": 20
+  },
+  "component_manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_231151__main_route2_reference/jobs/main_route2_reference__ap02__baseline__02/20260807_231900_baseline_76d43b3e/03_AP02/02_aruco_observations/component_manifest.json"
+}
