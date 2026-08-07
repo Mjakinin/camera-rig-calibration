@@ -211,6 +211,28 @@ def resolve_simulation_ground_truth(
     metadata = dataset_root / "metadata" / "simulation"
     destination = metadata / "ground_truth.json"
     snapshot = metadata / "world_snapshot.sdf"
+    metadata.mkdir(parents=True, exist_ok=True)
+
+    # Freeze acquisition geometry before relying on dataset.json. During a fresh
+    # Gazebo capture the composed world already exists, but dataset.json is only
+    # written after capture/finalization. The previous ordering returned early
+    # on the missing descriptor and therefore silently lost the authoritative
+    # world snapshot.
+    if not snapshot.is_file():
+        snapshot_source: Path | None = None
+        if world_path is not None and world_path.is_file():
+            snapshot_source = world_path
+        else:
+            # Existing layout-v2 experiments may predate the snapshot fix. The
+            # composed world below metadata/simulation/generated is already part
+            # of the published immutable experiment and is therefore a safe
+            # repair source. Never fall back to a mutable source-tree SDF here.
+            published_composed_world = metadata / "generated" / "composed_world.sdf"
+            if published_composed_world.is_file():
+                snapshot_source = published_composed_world
+        if snapshot_source is not None:
+            shutil.copy2(snapshot_source, snapshot)
+
     dataset = _read_json(dataset_root / "dataset.json")
     expected = _expected_cameras(dataset)
     if not expected:
@@ -224,22 +246,20 @@ def resolve_simulation_ground_truth(
             payload, True, "dataset_static_camera_list_empty"
         )
 
-    metadata.mkdir(parents=True, exist_ok=True)
     if not snapshot.is_file():
-        if world_path is None or not world_path.is_file():
-            payload = _unavailable(
-                reason=(
-                    "metadata/simulation/world_snapshot.sdf is missing; "
-                    "a published experiment never falls back to a mutable "
-                    "source-tree SDF"
-                ),
-                expected=expected,
-            )
-            _write_json_if_changed(destination, payload)
-            return GroundTruthResolution(
-                payload, True, "authoritative_snapshot_missing"
-            )
-        shutil.copy2(world_path, snapshot)
+        payload = _unavailable(
+            reason=(
+                "metadata/simulation/world_snapshot.sdf is missing and no "
+                "published immutable composed-world snapshot is available; "
+                "a published experiment never falls back to a mutable "
+                "source-tree SDF"
+            ),
+            expected=expected,
+        )
+        _write_json_if_changed(destination, payload)
+        return GroundTruthResolution(
+            payload, True, "authoritative_snapshot_missing"
+        )
 
     try:
         poses = parse_world_poses(snapshot)
