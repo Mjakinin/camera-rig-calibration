@@ -22,6 +22,10 @@ that the comparison frame matches the historical Route-2 study. This does not
 change AP02's calibration reference marker; AP02 is independently pinned to
 reference marker 14 by its method contract.
 
+Existing experiments are always rebound as PREPARED input. The script resolves
+a local input root that actually contains the published/raw moving frames and
+explicitly disables Gazebo capture before saving any validation config.
+
 Use ``--profile full`` to add the current AP02 and AP03 baselines to each
 selected experiment. AP02 is explicitly kept at reference marker 14 and 80/80
 maximum function evaluations. AP03 stays on baseline_v1.
@@ -36,7 +40,7 @@ from datetime import datetime
 from pathlib import Path
 
 from camera_rig_calibration.config import save_config
-from camera_rig_calibration.config.models import RigConfig
+from camera_rig_calibration.config.models import InputSourceKind, RigConfig
 from camera_rig_calibration.queueing import save_batch, save_queue
 from camera_rig_calibration.rerun import _resolved_rerun_config
 
@@ -48,6 +52,9 @@ EXPERIMENTS = {
     ),
 }
 
+EXPECTED_MOVING_FRAMES = 189
+EXPECTED_STATIC_IMAGES = 4
+
 
 def repository_root() -> Path:
     result = subprocess.run(
@@ -57,6 +64,125 @@ def repository_root() -> Path:
         text=True,
     )
     return Path(result.stdout.strip()).resolve()
+
+
+def _input_counts(root: Path) -> tuple[int, int, int]:
+    moving = len(list((root / "raw_images" / "moving").glob("*.png")))
+    static = len(list((root / "raw_images" / "static").glob("*.png")))
+    camera_info = len(
+        list((root / "raw_images" / "camera_info").glob("*.json"))
+    )
+    return moving, static, camera_info
+
+
+def _candidate_input_roots(
+    repository: Path,
+    experiment: Path,
+    config: RigConfig,
+) -> list[Path]:
+    candidates: list[Path] = [
+        experiment.resolve(),
+        (
+            repository
+            / "results"
+            / "simulation"
+            / "reference_inputs"
+            / experiment.name
+        ).resolve(),
+    ]
+    for configured in (
+        config.dataset.prepared_root,
+        config.dataset.input_root,
+    ):
+        if configured is not None:
+            candidates.append(Path(configured).resolve())
+
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        key = str(candidate)
+        if key not in seen:
+            unique.append(candidate)
+            seen.add(key)
+    return unique
+
+
+def _resolve_existing_input_root(
+    repository: Path,
+    experiment: Path,
+    config: RigConfig,
+) -> Path:
+    checked: list[str] = []
+    for candidate in _candidate_input_roots(repository, experiment, config):
+        moving, static, camera_info = _input_counts(candidate)
+        checked.append(
+            f"{candidate} [moving={moving}, static={static}, "
+            f"camera_info={camera_info}]"
+        )
+        if (
+            moving == EXPECTED_MOVING_FRAMES
+            and static >= EXPECTED_STATIC_IMAGES
+            and camera_info >= 5
+        ):
+            return candidate
+
+    raise RuntimeError(
+        "Final validation requires an existing complete prepared Route-2 input "
+        f"({EXPECTED_MOVING_FRAMES} moving PNGs, at least "
+        f"{EXPECTED_STATIC_IMAGES} static PNGs and 5 CameraInfo JSON files). "
+        "No complete input root was found. Checked:\n  - "
+        + "\n  - ".join(checked)
+    )
+
+
+def _bind_existing_input(
+    config: RigConfig,
+    prepared_root: Path,
+) -> RigConfig:
+    """Bind one validation job to existing pixels and forbid Gazebo recapture."""
+    root = prepared_root.resolve()
+    moving_intrinsics = (
+        root
+        / "raw_images"
+        / "camera_info"
+        / f"{config.moving_camera.id}.json"
+    )
+    dataset = config.dataset.model_copy(
+        update={
+            "source_kind": InputSourceKind.PREPARED,
+            "prepared_root": root,
+            "input_root": root,
+        },
+        deep=True,
+    )
+    moving = config.moving_camera.model_copy(
+        update={
+            "video": None,
+            "frames": None,
+            "intrinsics": (
+                moving_intrinsics
+                if moving_intrinsics.is_file()
+                else config.moving_camera.intrinsics
+            ),
+            "intrinsic_calibration_video": None,
+            "intrinsic_calibration_images": None,
+        },
+        deep=True,
+    )
+    simulation = config.simulation.model_copy(
+        update={"enabled": False},
+        deep=True,
+    )
+    return RigConfig.model_validate(
+        config.model_copy(
+            update={
+                "dataset": dataset,
+                "moving_camera": moving,
+                "simulation": simulation,
+            },
+            deep=True,
+        ).model_dump(mode="python")
+    )
 
 
 def _project(config: RigConfig, *, label: str) -> RigConfig:
@@ -87,12 +213,38 @@ def _project(config: RigConfig, *, label: str) -> RigConfig:
     )
 
 
-def historical_ap01(repository: Path, experiment: Path) -> RigConfig:
+def _base_config(
+    repository: Path,
+    experiment: Path,
+    prepared_root: Path,
+    method: str,
+    *,
+    ap01_method_contract: str | None = None,
+    ap02_historical_reproduction: bool = False,
+    ap03_method_contract: str | None = None,
+) -> RigConfig:
     _, config = _resolved_rerun_config(
         repository,
         experiment,
-        "ap01",
+        method,
         "baseline",
+        ap01_method_contract=ap01_method_contract,
+        ap02_historical_reproduction=ap02_historical_reproduction,
+        ap03_method_contract=ap03_method_contract,
+    )
+    return _bind_existing_input(config, prepared_root)
+
+
+def historical_ap01(
+    repository: Path,
+    experiment: Path,
+    prepared_root: Path,
+) -> RigConfig:
+    config = _base_config(
+        repository,
+        experiment,
+        prepared_root,
+        "ap01",
         ap01_method_contract="baseline_v1",
     )
     camera_ids = {camera.id for camera in config.static_cameras}
@@ -131,12 +283,16 @@ def historical_ap01(repository: Path, experiment: Path) -> RigConfig:
     return _project(configured, label="ap01_historical_root_cam3")
 
 
-def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
-    _, config = _resolved_rerun_config(
+def robust_ap01(
+    repository: Path,
+    experiment: Path,
+    prepared_root: Path,
+) -> RigConfig:
+    config = _base_config(
         repository,
         experiment,
+        prepared_root,
         "ap01",
-        "baseline",
         ap01_method_contract="recommended_wizard_v1",
     )
     direct_gate = config.methods.ap01.direct_quality_gate.model_copy(
@@ -177,12 +333,16 @@ def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
     )
 
 
-def baseline_ap02(repository: Path, experiment: Path) -> RigConfig:
-    _, config = _resolved_rerun_config(
+def baseline_ap02(
+    repository: Path,
+    experiment: Path,
+    prepared_root: Path,
+) -> RigConfig:
+    config = _base_config(
         repository,
         experiment,
+        prepared_root,
         "ap02",
-        "baseline",
         ap02_historical_reproduction=False,
     )
     ap02 = config.methods.ap02.model_copy(
@@ -218,12 +378,16 @@ def baseline_ap02(repository: Path, experiment: Path) -> RigConfig:
     return _project(configured, label="ap02_baseline_ref14")
 
 
-def baseline_ap03(repository: Path, experiment: Path) -> RigConfig:
-    _, config = _resolved_rerun_config(
+def baseline_ap03(
+    repository: Path,
+    experiment: Path,
+    prepared_root: Path,
+) -> RigConfig:
+    config = _base_config(
         repository,
         experiment,
+        prepared_root,
         "ap03",
-        "baseline",
         ap03_method_contract="baseline_v1",
     )
     methods = config.methods.model_copy(
@@ -241,24 +405,45 @@ def baseline_ap03(repository: Path, experiment: Path) -> RigConfig:
 def build_configs(
     repository: Path,
     experiment: Path,
+    prepared_root: Path,
     *,
     profile: str,
 ) -> list[tuple[str, RigConfig]]:
     configs = [
-        ("ap01_historical_root_cam3", historical_ap01(repository, experiment)),
+        (
+            "ap01_historical_root_cam3",
+            historical_ap01(repository, experiment, prepared_root),
+        ),
         (
             "ap01_robust_direct_first_sparse2_auto_root",
-            robust_ap01(repository, experiment),
+            robust_ap01(repository, experiment, prepared_root),
         ),
     ]
     if profile == "full":
         configs.extend(
             [
-                ("ap02_baseline_ref14", baseline_ap02(repository, experiment)),
-                ("ap03_baseline_v1", baseline_ap03(repository, experiment)),
+                (
+                    "ap02_baseline_ref14",
+                    baseline_ap02(repository, experiment, prepared_root),
+                ),
+                (
+                    "ap03_baseline_v1",
+                    baseline_ap03(repository, experiment, prepared_root),
+                ),
             ]
         )
     return configs
+
+
+def _probe_config(repository: Path, experiment: Path) -> RigConfig:
+    _, config = _resolved_rerun_config(
+        repository,
+        experiment,
+        "ap01",
+        "baseline",
+        ap01_method_contract="baseline_v1",
+    )
+    return config
 
 
 def main() -> int:
@@ -311,11 +496,24 @@ def main() -> int:
             raise FileNotFoundError(
                 f"Prepared experiment is missing dataset.json: {experiment}"
             )
+        probe = _probe_config(repository, experiment)
+        prepared_root = _resolve_existing_input_root(
+            repository,
+            experiment,
+            probe,
+        )
+        moving, static, camera_info = _input_counts(prepared_root)
+        print(
+            f"[OK] {name} prepared input: {prepared_root} "
+            f"({moving} moving, {static} static, {camera_info} CameraInfo)"
+        )
+
         config_entries: list[tuple[str, Path]] = []
         experiment_dir = root / name
         for entry_id, config in build_configs(
             repository,
             experiment,
+            prepared_root,
             profile=args.profile,
         ):
             path = experiment_dir / "configs" / f"{entry_id}.yaml"
@@ -335,6 +533,7 @@ def main() -> int:
     print("[OK] Final validation configuration prepared")
     print(f"[OK] profile: {args.profile}")
     print(f"[OK] experiments: {', '.join(names)}")
+    print("[OK] input mode: existing prepared pixels; Gazebo capture disabled")
     print("[OK] common evaluation anchor: marker 14")
     print("[OK] robust AP01 sparse Direct gate: >=2 inlier markers, ratio >=0.30")
     print(f"[OK] batch: {batch}")
