@@ -2,8 +2,8 @@
   "schema_version": 1,
   "dataset_id": "route2",
   "scene_type": "simulation",
-  "created_at": "2026-07-29T16:35:40+00:00",
-  "prepared_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/input_working/route2/d38c569e7fb7",
+  "created_at": "2026-08-07T19:16:14+00:00",
+  "prepared_root": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_210329__route2/input_working/route2/be9873a09590",
   "static_cameras": [
     {
       "id": "cam_edge_0",
@@ -276,7 +276,7 @@
     },
     {
       "role": "resolved_moving_intrinsics",
-      "path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260729_182623__route2/input_working/route2/d38c569e7fb7/raw_images/camera_info/moving_calib_camera.json",
+      "path": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_210329__route2/input_working/route2/be9873a09590/raw_images/camera_info/moving_calib_camera.json",
       "sha256": "0b7e48c1466153b417ee4e654569bfd03c04b3abd3207bdc0961e948d47f6c93",
       "size_bytes": 1016,
       "source": null
@@ -285,7 +285,7 @@
   "automatic_selections": [
     {
       "kind": "ap01_root_camera",
-      "selected": "cam_edge_3",
+      "selected": "cam_edge_1",
       "candidates": [
         "cam_edge_0",
         "cam_edge_1",
@@ -296,7 +296,7 @@
     },
     {
       "kind": "ap02_reference_marker",
-      "selected": 7,
+      "selected": 14,
       "candidates": [
         0,
         1,
@@ -319,11 +319,11 @@
         19,
         20
       ],
-      "reason": "deterministic recommendation from static-only reachability, direct static coverage, moving-frame coverage, observation count, median PnP RMSE and median marker area"
+      "reason": "Route-2 simulation baseline contract: marker 14"
     },
     {
       "kind": "ap03_single_scale_marker",
-      "selected": 0,
+      "selected": 14,
       "candidates": [
         0,
         1,
@@ -346,7 +346,7 @@
         19,
         20
       ],
-      "reason": "deterministic recommendation from moving-frame coverage, direct static coverage, median moving PnP RMSE and median moving marker area"
+      "reason": "explicit user configuration"
     }
   ],
   "notes": [

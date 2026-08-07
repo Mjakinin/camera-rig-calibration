@@ -1,0 +1,22 @@
+{
+  "completed_at": "2026-08-07T19:32:00.770+00:00",
+  "inputs": {
+    "component_manifest": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_210329__route2/jobs/route2__ap02__baseline__02/20260807_213144_baseline_68b48fb1/03_AP02/02_aruco_observations/component_manifest.json"
+  },
+  "outputs": {
+    "component_count": 1,
+    "component_results": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_210329__route2/jobs/route2__ap02__baseline__02/20260807_213144_baseline_68b48fb1/03_AP02/09_component_diagnostics/AP02_COMPONENT_RESULTS.json",
+    "diagnostic_components_calibrated": 0
+  },
+  "parameters": {
+    "cross_component_alignment": false,
+    "maximum_function_evaluations": 80,
+    "robust_loss": "soft_l1",
+    "robust_loss_scale_px": 3.0
+  },
+  "runtime_seconds": 0.05068607700013672,
+  "schema_version": 5,
+  "stage_id": "ap02.component_diagnostics",
+  "started_at": "2026-08-07T19:32:00.719+00:00",
+  "status": "COMPLETED"
+}

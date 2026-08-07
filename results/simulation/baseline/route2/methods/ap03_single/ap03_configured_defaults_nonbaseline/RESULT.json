@@ -1,0 +1,263 @@
+{
+  "anchor_alignment": "diagnostics/anchor_alignment.json",
+  "anchor_camera_count": 4,
+  "anchor_export_available": true,
+  "anchor_export_status": "OK",
+  "anchor_export_warnings": [],
+  "anchor_marker_id": 2,
+  "artifact_status": "available",
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "calibration_status": "available",
+  "camera_extrinsics": "camera_extrinsics.csv",
+  "camera_extrinsics_anchor": "camera_extrinsics_anchor.csv",
+  "camera_extrinsics_anchor_json": "camera_extrinsics_anchor.json",
+  "camera_extrinsics_anchor_yaml": "camera_extrinsics_anchor.yaml",
+  "camera_extrinsics_available": true,
+  "comparison_visibility": "hidden_when_scale_variants_available",
+  "config_summary": {
+    "aruco_detection_mode": "baseline",
+    "baseline_version": "baseline_v1",
+    "colmap_version": null,
+    "compute_configured": "cpu_baseline",
+    "compute_resolved": "cpu_baseline",
+    "evaluation_anchor_marker_id": 2,
+    "feature_limits": "COLMAP defaults",
+    "gpu_requested": null,
+    "gpu_resolved": null,
+    "intrinsics_refinement": null,
+    "mapper_minimum_matches": 8,
+    "matcher": "exhaustive",
+    "maximum_features": null,
+    "maximum_image_size": null,
+    "minimum_marker_area_px2": 100.0,
+    "multi_marker_count": 15,
+    "quality_area_ratio": 8e-06,
+    "quality_max_distance_m": "disabled",
+    "quality_pnp_rmse_px": 25.0,
+    "quality_positive_depth": true,
+    "quality_sources": "maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global",
+    "scale_input": "registered-image detection",
+    "scale_maximum_observations_per_marker": null,
+    "scale_minimum_inliers": 4,
+    "scale_ransac_iterations": 1000,
+    "scale_reprojection_threshold_px": 5.0,
+    "single_scale_marker_id": 14
+  },
+  "derived_fingerprint": "811d816be9441f0cf54ade0c7ec8d4354c2587f43a5a5aa9cde45e1eb7f6b318",
+  "derived_results": [
+    "../../ap03_single/ap03_configured_defaults_nonbaseline",
+    "../../ap03_multi/ap03_configured_defaults_nonbaseline"
+  ],
+  "detail_artifacts": [
+    "../../../methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+    "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/colmap/inspection/AP03_RECONSTRUCTION_DIAGNOSTICS.json",
+    "provenance/derived_result.json"
+  ],
+  "diagnostics": "diagnostics",
+  "evaluation_status": "unavailable",
+  "execution_status": "completed_shared_colmap",
+  "input_fingerprint": "input_0ffd7d57d0b8",
+  "label": "ap03_configured_defaults_nonbaseline",
+  "layout_version": 2,
+  "logs": "logs",
+  "method": "ap03_single",
+  "method_fingerprint": "f94c4fb0e1ca4f136a3ad546068c3e503e7cede98100f4764be0608a8100ed4d",
+  "metrics": {
+    "ap03_reconstruction": {
+      "algorithm": "ap03_colmap_support_diagnostics_v1",
+      "best_model": "0",
+      "camera_groups": {
+        "assignment": {
+          "cam_edge_0": [
+            1
+          ],
+          "cam_edge_1": [
+            2
+          ],
+          "cam_edge_3": [
+            3
+          ],
+          "cam_edge_5": [
+            4
+          ],
+          "moving_calib_camera": [
+            5
+          ]
+        },
+        "intrinsics_refinement": false,
+        "one_camera_id_per_physical_camera": true,
+        "physical_camera_ids_are_distinct": true
+      },
+      "ground_truth_used": false,
+      "quality_status": "good",
+      "registered_image_count": 179,
+      "registered_moving_frame_count": 175,
+      "registered_static_camera_count": 4,
+      "schema_version": 5,
+      "sparse_point_count": 11389,
+      "static_cameras": [
+        {
+          "camera_id": "cam_edge_0",
+          "colmap_camera_id": 1,
+          "image_name": "static_cam_edge_0.png",
+          "median_reprojection_error_px": 0.3635930021040281,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 0.6086924244812527,
+          "shared_moving_track_threshold": 44.900000000000006,
+          "shared_tracks_with_moving": 449,
+          "track_support": 449,
+          "track_support_threshold": 116.75,
+          "warnings": []
+        },
+        {
+          "camera_id": "cam_edge_1",
+          "colmap_camera_id": 2,
+          "image_name": "static_cam_edge_1.png",
+          "median_reprojection_error_px": 0.6353363553027553,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 0.8668589094652421,
+          "shared_moving_track_threshold": 35.9,
+          "shared_tracks_with_moving": 356,
+          "track_support": 359,
+          "track_support_threshold": 116.75,
+          "warnings": []
+        },
+        {
+          "camera_id": "cam_edge_3",
+          "colmap_camera_id": 3,
+          "image_name": "static_cam_edge_3.png",
+          "median_reprojection_error_px": 0.5560579501417607,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 0.8425327837856273,
+          "shared_moving_track_threshold": 71.9,
+          "shared_tracks_with_moving": 716,
+          "track_support": 719,
+          "track_support_threshold": 116.75,
+          "warnings": []
+        },
+        {
+          "camera_id": "cam_edge_5",
+          "colmap_camera_id": 4,
+          "image_name": "static_cam_edge_5.png",
+          "median_reprojection_error_px": 0.8022895506373013,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.0170471053481756,
+          "shared_moving_track_threshold": 48.5,
+          "shared_tracks_with_moving": 485,
+          "track_support": 485,
+          "track_support_threshold": 116.75,
+          "warnings": []
+        }
+      ],
+      "static_median_reprojection_error_px": 0.5956971527222581,
+      "static_track_median": 467.0,
+      "thresholds": {
+        "maximum_median_reprojection_error_px": 3.0,
+        "minimum_shared_moving_tracks": "max(10, 10% of that camera track support)",
+        "minimum_track_support": 116.75
+      },
+      "warnings": []
+    },
+    "ap03_registration": {
+      "missing_static_cameras": [],
+      "registered_images": 179,
+      "registered_moving_frames": 175,
+      "registered_static_cameras": 4,
+      "sparse_points": 11389
+    },
+    "ap03_scale": {
+      "approach": "AP03_targetless_colmap_marker_size_scale_only",
+      "available_static_cameras": [
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_3",
+        "cam_edge_5"
+      ],
+      "best_model": "0",
+      "detected_corner_observations": 120,
+      "detected_corner_observations_before_selection": 120,
+      "detection_mode": "baseline",
+      "failure_reason": "",
+      "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
+      "marker_ids_requested": [
+        14
+      ],
+      "marker_length_m": 0.17,
+      "maximum_observations_per_marker": null,
+      "minimum_marker_area_px2": 100.0,
+      "missing_static_cameras": [],
+      "model_dir": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/simulation_batch_20260807_210329__route2/jobs/route2__ap03__baseline__03/20260807_220315_baseline_acdc29f4/04_AP03/colmap/reconstruction/sparse_txt/0",
+      "num_scale_observations_total": 6,
+      "num_scale_observations_used": 6,
+      "num_sparse_points3d": 11389,
+      "raw_mad_scale": 0.0021354831097716853,
+      "raw_median_scale": 0.6855400800225491,
+      "raw_rel_mad_scale": 0.0031150375769443623,
+      "registered_images": 179,
+      "registered_moving_frames": 175,
+      "registered_static_cameras": 4,
+      "scale_candidates_per_marker": {
+        "14": 6
+      },
+      "scale_inliers_per_marker": {
+        "14": 6
+      },
+      "scale_input_policy": "legacy_registered_image_redetection_v1",
+      "scale_m_per_colmap_unit": 0.6855400800225491,
+      "scale_outliers_per_marker": {
+        "14": 0
+      },
+      "selected_image_marker_observations": 0,
+      "status": "OK_FULL",
+      "triangulated_marker_corners": 4,
+      "used_mean_scale": 0.6855533841321243,
+      "used_rel_std_scale": 0.0038344137040685505,
+      "used_std_scale": 0.002628644277526713
+    },
+    "ap03_scale_relative_std": 0.0038344137040685505,
+    "shared_colmap": {
+      "camera_pose_source": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+      "colmap_rerun": false,
+      "contract": "rigcal_ap03_scale_variants_v1",
+      "fingerprint": "811d816be9441f0cf54ade0c7ec8d4354c2587f43a5a5aa9cde45e1eb7f6b318",
+      "layout_version": 2,
+      "method_rerun": false,
+      "scale_m_per_colmap_unit": 0.6855400800225491,
+      "scale_metadata": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+      "schema_version": 5,
+      "scientific_role": "ap03_single_scale_result",
+      "shared_anchor_geometry": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/derived/shared_anchor_geometry/marker_2_corners_colmap.json",
+      "shared_colmap_best_model": "0",
+      "shared_colmap_container": "methods/ap03/ap03_configured_defaults_nonbaseline"
+    }
+  },
+  "pairwise_camera_count": 6,
+  "pairwise_camera_extrinsics": "pairwise_camera_extrinsics.csv",
+  "primary_result": "single",
+  "provenance": "provenance",
+  "published_at": "2026-08-07T20:09:39+00:00",
+  "quality_status": "good",
+  "queue_id": "simulation_batch_20260807_210329__route2",
+  "reference_frame": "COLMAP gauge with metric marker scale",
+  "runtime_seconds": 330.80368992499643,
+  "schema_version": 5,
+  "scientific_role": "ap03_single_scale_result",
+  "shared_colmap_container": "methods/ap03/ap03_configured_defaults_nonbaseline",
+  "solver_status": "not_applicable",
+  "static_camera_count": 4,
+  "status": "available",
+  "success": true,
+  "transform_convention": "T_reference_camera (camera pose expressed in reference frame)",
+  "visualization_manifest": "../../../visualization/visualization_manifest.json",
+  "visualization_status": "OK",
+  "warnings": []
+}

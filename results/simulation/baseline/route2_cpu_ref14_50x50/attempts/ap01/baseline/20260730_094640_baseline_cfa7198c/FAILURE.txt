@@ -1,8 +1,0 @@
-INCOMPLETE / NON-AUTHORITATIVE CALIBRATION ATTEMPT
-================================================================
-
-Method: ap01
-Variant: baseline
-Cause: method_failed
-Explanation: The method failed; complete evidence is retained in this attempt.
-Evidence: failed: RuntimeError: Variant target exists but does not match this method/input fingerprint: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2_cpu_ref14_50x50/methods/ap01/baseline

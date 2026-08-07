@@ -1,0 +1,105 @@
+{
+  "alignment": {
+    "alignment": "combined_ba_marker_pose",
+    "marker_pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap02/ap02_configured_defaults_nonbaseline/diagnostics/method/graph_ba/with_moving/optimized_marker_poses_ref_marker.csv",
+    "method": "ap02",
+    "reference_marker_id": 14,
+    "transform_anchor_method": {
+      "matrix": [
+        [
+          -0.023165477466196682,
+          -0.9996484663413165,
+          0.012895906141755342,
+          -1.066230936452076
+        ],
+        [
+          0.3904536775459764,
+          0.0028281546220002562,
+          0.9206182309905973,
+          -0.2103602153005137
+        ],
+        [
+          -0.9203310743121662,
+          0.02636181486331851,
+          0.39025090438399523,
+          -1.277218308662754
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": 1.168926077814095,
+      "qw": 0.585216537176582,
+      "qx": -0.3820194574651296,
+      "qy": 0.39866738257104806,
+      "qz": 0.5938409356107475,
+      "roll_rad": 0.0674484710641218,
+      "x_m": -1.066230936452076,
+      "y_m": -0.2103602153005137,
+      "yaw_rad": 1.6300565033055188,
+      "z_m": -1.277218308662754
+    },
+    "transform_method_anchor": {
+      "matrix": [
+        [
+          -0.023165477466196682,
+          0.3904536775459764,
+          -0.9203310743121662,
+          -1.1180275272014533
+        ],
+        [
+          -0.9996484663413165,
+          0.0028281546220002562,
+          0.02636181486331851,
+          -1.0315913965817878
+        ],
+        [
+          0.012895906141755342,
+          0.9206182309905973,
+          0.39025090438399523,
+          0.7058470634141185
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "pitch_rad": -0.012896263609486406,
+      "qw": 0.585216537176582,
+      "qx": 0.3820194574651296,
+      "qy": -0.39866738257104806,
+      "qz": -0.5938409356107475,
+      "roll_rad": 1.1698569880544742,
+      "x_m": -1.1180275272014533,
+      "y_m": -1.0315913965817878,
+      "yaw_rad": -1.593965803697198,
+      "z_m": 0.7058470634141185
+    }
+  },
+  "anchor_marker_id": 2,
+  "contract": "rigcal_anchor_export_v1",
+  "fingerprint": "5a181eabadb3f83744205bbaee87b1b14dcf592a7ef8046553d79517d6f80711",
+  "label": "ap02_configured_defaults_nonbaseline",
+  "method": "ap02",
+  "pairwise_invariance": {
+    "camera_pair_count": 6,
+    "maximum_rotation_difference_deg": 1.7075472925031877e-06,
+    "maximum_translation_difference_m": 2.6645352591003757e-15,
+    "passed": true
+  },
+  "schema_version": 1,
+  "status": {
+    "available": true,
+    "camera_count": 4,
+    "code": "OK",
+    "expected_camera_count": 4,
+    "manual_warning_confirmed": false,
+    "missing_cameras": [],
+    "warnings": []
+  }
+}

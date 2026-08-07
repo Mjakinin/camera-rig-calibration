@@ -2,7 +2,7 @@ Panels:
   - Class: rviz_common/Displays
 Visualization Manager:
   Global Options:
-    Fixed Frame: evaluation_anchor_marker_14
+    Fixed Frame: evaluation_anchor_marker_2
     Background Color: 35; 35; 35
   Displays:
     - Class: rviz_default_plugins/PointCloud2
@@ -16,85 +16,45 @@ Visualization Manager:
       Topic:
         Value: /rigcal/scene/anchor
     - Class: rviz_default_plugins/MarkerArray
-      Name: Ground truth cameras
+      Name: ap01/root_cam_edge_1
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/root_cam_edge_1/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/root_cam_edge_1 anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/root_cam_edge_1/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/ap02_configured_defaults_nonbaseline
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap02/ap02_configured_defaults_nonbaseline/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/ap02_configured_defaults_nonbaseline anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap02/ap02_configured_defaults_nonbaseline/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap03_multi/ap03_configured_defaults_nonbaseline
       Enabled: true
       Topic:
-        Value: /rigcal/ground_truth/cameras
+        Value: /rigcal/methods/ap03_multi/ap03_configured_defaults_nonbaseline/cameras
     - Class: rviz_default_plugins/MarkerArray
-      Name: ap01/root_cam_edge_3
+      Name: ap03_multi/ap03_configured_defaults_nonbaseline anchor edges
       Enabled: false
       Topic:
-        Value: /rigcal/methods/ap01/root_cam_edge_3/cameras
+        Value: /rigcal/methods/ap03_multi/ap03_configured_defaults_nonbaseline/anchor_edges
     - Class: rviz_default_plugins/MarkerArray
-      Name: ap01/root_cam_edge_3 anchor edges
+      Name: ap03_single/ap03_configured_defaults_nonbaseline
       Enabled: false
       Topic:
-        Value: /rigcal/methods/ap01/root_cam_edge_3/anchor_edges
+        Value: /rigcal/methods/ap03_single/ap03_configured_defaults_nonbaseline/cameras
     - Class: rviz_default_plugins/MarkerArray
-      Name: ap01/root_cam_edge_3 estimate-to-GT errors
+      Name: ap03_single/ap03_configured_defaults_nonbaseline anchor edges
       Enabled: false
       Topic:
-        Value: /rigcal/methods/ap01/root_cam_edge_3/error_lines
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap02/combined_nfev_60__ref_marker_7
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap02/combined_nfev_60__ref_marker_7/cameras
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap02/combined_nfev_60__ref_marker_7 anchor edges
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap02/combined_nfev_60__ref_marker_7/anchor_edges
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap02/combined_nfev_60__ref_marker_7 estimate-to-GT errors
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap02/combined_nfev_60__ref_marker_7/error_lines
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap02/combined_nfev_80__ref_marker_7
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap02/combined_nfev_80__ref_marker_7/cameras
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap02/combined_nfev_80__ref_marker_7 anchor edges
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap02/combined_nfev_80__ref_marker_7/anchor_edges
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap02/combined_nfev_80__ref_marker_7 estimate-to-GT errors
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap02/combined_nfev_80__ref_marker_7/error_lines
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap03_multi/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0
-      Enabled: true
-      Topic:
-        Value: /rigcal/methods/ap03_multi/multi_markers_0_1_2_3_4_5_6_7_8_9_10_11_12_13_14_16_17_18_19_20__single_marker_0/cameras
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap03_multi/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 anchor edges
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap03_multi/multi_markers_0_1_2_3_4_5_6_7_8_9_10_11_12_13_14_16_17_18_19_20__single_marker_0/anchor_edges
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap03_multi/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 estimate-to-GT errors
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap03_multi/multi_markers_0_1_2_3_4_5_6_7_8_9_10_11_12_13_14_16_17_18_19_20__single_marker_0/error_lines
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap03_single/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap03_single/multi_markers_0_1_2_3_4_5_6_7_8_9_10_11_12_13_14_16_17_18_19_20__single_marker_0/cameras
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap03_single/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 anchor edges
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap03_single/multi_markers_0_1_2_3_4_5_6_7_8_9_10_11_12_13_14_16_17_18_19_20__single_marker_0/anchor_edges
-    - Class: rviz_default_plugins/MarkerArray
-      Name: ap03_single/multi_markers_0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20__single_marker_0 estimate-to-GT errors
-      Enabled: false
-      Topic:
-        Value: /rigcal/methods/ap03_single/multi_markers_0_1_2_3_4_5_6_7_8_9_10_11_12_13_14_16_17_18_19_20__single_marker_0/error_lines
+        Value: /rigcal/methods/ap03_single/ap03_configured_defaults_nonbaseline/anchor_edges
   Tools:
     - Class: rviz_default_plugins/Interact
     - Class: rviz_default_plugins/MoveCamera

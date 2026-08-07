@@ -1,8 +1,0 @@
-INCOMPLETE / NON-AUTHORITATIVE CALIBRATION ATTEMPT
-================================================================
-
-Method: ap01
-Variant: baseline
-Cause: configuration_validation_failed
-Explanation: The resolved configuration violated a rigcal contract.
-Evidence: RuntimeError: AP01 historical reproduction validation failed: registered_images, metric_scale, final_poses

@@ -1,8 +1,0 @@
-INCOMPLETE / NON-AUTHORITATIVE CALIBRATION ATTEMPT
-================================================================
-
-Method: ap01
-Variant: baseline
-Cause: method_failed
-Explanation: The method failed; complete evidence is retained in this attempt.
-Evidence: TypeError: Object of type ndarray is not JSON serializable

@@ -1,0 +1,10 @@
+{
+  "root_camera": {
+    "baseline": "auto",
+    "value": "cam_edge_1"
+  },
+  "colmap.executable": {
+    "baseline": "auto",
+    "value": "/usr/bin/colmap"
+  }
+}

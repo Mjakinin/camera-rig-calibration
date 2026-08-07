@@ -1,2 +1,0 @@
-entity_type,entity_id,source,x_m,y_m,z_m,roll_deg,pitch_deg,yaw_deg,rvec_x,rvec_y,rvec_z
-static_camera,cam_edge_3,gauge_identity,0.0,0.0,0.0,0.0,-0.0,0.0,0.0,0.0,0.0

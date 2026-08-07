@@ -1,2 +1,0 @@
-model,registered_images,registered_static_cameras,registered_moving_frames,num_3d_points,static_registered_list,static_missing_list,model_path
-0,179,4,175,11454,static_cam_edge_0.png;static_cam_edge_1.png;static_cam_edge_3.png;static_cam_edge_5.png,,/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/route2_cpu_ref14_50x50_queue/jobs/route2_cpu_ref14_50x50__ap03__baseline__03/20260730_005424_baseline_b17cff1e/04_AP03/colmap/reconstruction/sparse_txt/0
