@@ -141,16 +141,7 @@ def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
     )
     direct_gate = config.methods.ap01.direct_quality_gate.model_copy(
         update={
-            # A pair such as cam_edge_1 <-> cam_edge_3 can legitimately have
-            # only a small number of shared static markers. Two independent
-            # agreeing marker transforms are sufficient for this validation;
-            # the existing MAD/dispersion and path-consistency checks still
-            # reject geometrically inconsistent Direct estimates.
             "minimum_independent_markers": 2,
-            # With sparse overlap, a small high-quality consensus must not be
-            # rejected solely because additional weak common markers became
-            # outliers. Two agreeing inliers among six historical candidates
-            # corresponds to 1/3 support, so 0.30 is the validation floor.
             "minimum_inlier_ratio": 0.30,
         },
         deep=True,
@@ -173,11 +164,6 @@ def robust_ap01(repository: Path, experiment: Path) -> RigConfig:
         config.model_copy(
             update={
                 "methods": methods,
-                # Auto is intentional here. Unlike baseline_v1, the robust
-                # contract creates Direct candidates for every non-root camera,
-                # so the selected root cannot accidentally consume the sole
-                # Direct target. Shared-marker pairs such as cam1<->cam3 are
-                # therefore eligible for Direct calibration.
                 "selection": config.selection.model_copy(
                     update={"mode": "auto"}, deep=True
                 ),
