@@ -1,0 +1,5 @@
+camera_id,image_name,registered,colmap_camera_id,track_support,track_support_threshold,shared_tracks_with_moving,shared_moving_track_threshold,median_reprojection_error_px,median_reprojection_threshold_px,reprojection_rmse_px,warnings
+cam_edge_0,static_cam_edge_0.png,True,1,450,116.5,450,45.0,0.37418038870131215,3.0,0.6435908567086659,[]
+cam_edge_1,static_cam_edge_1.png,True,2,359,116.5,355,35.9,0.6224879844359654,3.0,0.8459677951495608,[]
+cam_edge_3,static_cam_edge_3.png,True,3,713,116.5,709,71.3,0.548429873788955,3.0,0.8344880838142203,[]
+cam_edge_5,static_cam_edge_5.png,True,4,482,116.5,482,48.2,0.805606267006987,3.0,1.036856831964613,[]

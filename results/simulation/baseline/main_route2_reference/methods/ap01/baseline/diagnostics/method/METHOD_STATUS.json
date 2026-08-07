@@ -1,0 +1,57 @@
+{
+  "method": "AP01",
+  "status": "OK_FULL",
+  "success": true,
+  "execution_status": "completed",
+  "solver_status": "not_applicable",
+  "quality_status": "good",
+  "calibration_status": "available",
+  "estimate_status": "available",
+  "deployment_eligible": true,
+  "evaluation_status": "available",
+  "camera_statuses": {
+    "cam_edge_3": {
+      "estimate_status": "available",
+      "quality_status": "gauge_identity",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "gauge_identity"
+    },
+    "cam_edge_0": {
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    },
+    "cam_edge_1": {
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "direct_static_aruco_multimarker"
+    },
+    "cam_edge_5": {
+      "estimate_status": "available",
+      "quality_status": "accepted_legacy_available_aggregate",
+      "deployment_eligible": true,
+      "evaluation_status": "available",
+      "selected_method": "moving_relay_multichain_colmap_motion_aruco_metric_scale"
+    }
+  },
+  "available_static_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "deployment_eligible_cameras": [
+    "cam_edge_0",
+    "cam_edge_1",
+    "cam_edge_3",
+    "cam_edge_5"
+  ],
+  "missing_static_cameras": [],
+  "pose_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/final_validation_main_route2_reference_20260808_003644/jobs/ap01_historical_root_cam3/20260808_003723_ap01_historical_root_cam3_aba6d386/02_AP01/03_static_extrinsics/AP01_STATIC_CAMERA_POSES_ROOT_REFERENCE.csv",
+  "diagnostics_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/final_validation_main_route2_reference_20260808_003644/jobs/ap01_historical_root_cam3/20260808_003723_ap01_historical_root_cam3_aba6d386/02_AP01/03_static_extrinsics/AP01_DIAGNOSTICS.json"
+}

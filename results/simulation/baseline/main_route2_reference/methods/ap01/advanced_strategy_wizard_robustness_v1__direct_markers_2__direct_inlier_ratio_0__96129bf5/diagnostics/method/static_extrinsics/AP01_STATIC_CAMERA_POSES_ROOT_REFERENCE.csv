@@ -1,0 +1,5 @@
+entity_type,entity_id,source,x_m,y_m,z_m,roll_deg,pitch_deg,yaw_deg,rvec_x,rvec_y,rvec_z,estimate_status,quality_status,deployment_eligible,evaluation_status
+static_camera,cam_edge_0,direct_multimarker_diagnostic,-0.00997538724571978,-1.6334650308319503,4.779678723604925,120.1987847582889,-67.08693213365676,-150.60739360121428,-0.1952520602831976,-1.805411130393409,-0.6584175642005194,available,rejected_unstable_consensus,False,available
+static_camera,cam_edge_1,gauge_identity,0.0,0.0,0.0,0.0,-0.0,0.0,0.0,0.0,0.0,available,gauge_identity,True,available
+static_camera,cam_edge_3,direct_multimarker_diagnostic,0.2710894103535477,-0.7456512620214831,1.2773543213040803,-4.077121330432098,-39.92281194762784,-15.90008201149387,-0.16453557546078726,-0.682861447020638,-0.2908439918646943,available,rejected_unstable_consensus,False,available
+static_camera,cam_edge_5,direct_multimarker_diagnostic,0.25321175394934814,-1.5873187797273056,1.2866037719948826,-17.21715802450669,-5.1465247620885615,6.267501005519354,-0.29508076957152957,-0.10546876527059308,0.0949965499876923,available,rejected_unstable_consensus,False,available

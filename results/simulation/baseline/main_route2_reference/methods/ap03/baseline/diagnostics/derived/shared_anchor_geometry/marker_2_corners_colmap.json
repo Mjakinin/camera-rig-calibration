@@ -1,0 +1,51 @@
+{
+  "anchor_marker_id": 2,
+  "contract": "rigcal_ap03_scale_variants_v1",
+  "coordinate_frame": "shared COLMAP best-model units; no metric scale",
+  "corners": [
+    {
+      "corner_idx": 0,
+      "inlier_count": "14",
+      "marker_id": 2,
+      "median_reprojection_px": "0.3299247849092781",
+      "observation_count": "14",
+      "x_colmap": 0.4993409094511,
+      "y_colmap": 2.568211634650136,
+      "z_colmap": -1.9998449147128095
+    },
+    {
+      "corner_idx": 1,
+      "inlier_count": "14",
+      "marker_id": 2,
+      "median_reprojection_px": "0.26835306935127495",
+      "observation_count": "14",
+      "x_colmap": 0.7459390992353273,
+      "y_colmap": 2.577558815356331,
+      "z_colmap": -2.0298155537265674
+    },
+    {
+      "corner_idx": 2,
+      "inlier_count": "14",
+      "marker_id": 2,
+      "median_reprojection_px": "0.5093093144629208",
+      "observation_count": "14",
+      "x_colmap": 0.7361665158796782,
+      "y_colmap": 2.8256875624194264,
+      "z_colmap": -2.0239168388300097
+    },
+    {
+      "corner_idx": 3,
+      "inlier_count": "14",
+      "marker_id": 2,
+      "median_reprojection_px": "0.4391633061783592",
+      "observation_count": "14",
+      "x_colmap": 0.48996727841775634,
+      "y_colmap": 2.8167642458567137,
+      "z_colmap": -1.9963106854321593
+    }
+  ],
+  "fingerprint": "0c82364b645cd20fbdd20999e039191d7a5ea654aa6fac328137a22ef8bec0d5",
+  "schema_version": 1,
+  "source": "diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_TRIANGULATED_CORNERS.csv",
+  "source_sha256": "794e0c8d80520193acbdc33d30b89bd7f7dff3e6fb42b61fb08ac6d85b1841d2"
+}

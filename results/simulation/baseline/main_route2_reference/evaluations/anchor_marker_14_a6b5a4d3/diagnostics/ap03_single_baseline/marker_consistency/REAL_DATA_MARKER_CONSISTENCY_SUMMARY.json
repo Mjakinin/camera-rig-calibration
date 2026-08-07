@@ -1,0 +1,22 @@
+[
+  {
+    "method": "AP03_SINGLE",
+    "status": "NOT_AVAILABLE",
+    "original_method_status": "MISSING",
+    "original_method_success": false,
+    "error": "FileNotFoundError: [Errno 2] No such file or directory: '/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/main_route2_reference/methods/ap03/baseline/diagnostics/method/scale_single/02_colmap_sparse/sparse_txt/0/images.txt'",
+    "available_static_cameras": [],
+    "available_static_camera_count": 0,
+    "registered_moving_frames": 0,
+    "evaluated_non_anchor_markers": 0,
+    "pose_frame_ids": [],
+    "pose_frame_count": 0,
+    "marker_frame_ids": [],
+    "marker_frame_count": 0,
+    "candidate_frame_ids": [],
+    "candidate_frame_count": 0,
+    "inlier_frame_ids": [],
+    "inlier_frame_count": 0,
+    "rejected_frame_ids": {}
+  }
+]

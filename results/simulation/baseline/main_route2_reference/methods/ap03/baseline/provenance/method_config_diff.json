@@ -1,0 +1,6 @@
+{
+  "colmap.executable": {
+    "baseline": "auto",
+    "value": "/usr/bin/colmap"
+  }
+}

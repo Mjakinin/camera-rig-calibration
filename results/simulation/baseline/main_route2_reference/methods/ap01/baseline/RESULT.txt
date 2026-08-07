@@ -1,0 +1,62 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap01 / baseline
+Execution status: completed
+Solver status: not_applicable
+Artifact status: available
+Calibration status: available
+Quality status: warning_unstable_consensus
+Evaluation status: available
+Anchor export status: OK
+RViz visualization status: OK
+Primary result: baseline
+Runtime: 372.8 s
+Reference frame: resolved root camera
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: baseline_version=baseline_v1, evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, root_camera=cam_edge_3, top_moving_per_marker=8, scale_top_per_marker=30, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, gpu_requested=false, gpu_resolved=false, maximum_image_size=1600, maximum_features=4096, mapper_minimum_matches=8, direct_minimum_independent_markers=3, direct_minimum_inlier_ratio=0.7, direct_maximum_translation_dispersion_m=0.12, direct_maximum_rotation_dispersion_deg=4.0, relay_minimum_inlier_ratio=0.7, relay_maximum_translation_dispersion_m=0.3, relay_maximum_rotation_dispersion_deg=7.0, path_maximum_translation_disagreement_m=0.12, path_maximum_rotation_disagreement_deg=4.0
+
+WARNINGS
+----------------------------------------------------------------------------------------------------------------------
+- AP01 selected-path consensus exceeds the documented dispersion floor for: cam_edge_1, cam_edge_5.
+
+COMMON EVALUATION / EXPORT ANCHOR
+----------------------------------------------------------------------------------------------------------------------
+Marker: 14; export status: OK
+Camera     | x [m]  | y [m]  | z [m] | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw
+-----------+--------+--------+-------+------------+-------------+-----------+-----------+-----------+-----------+---------
+cam_edge_0 | 0.548  | -1.701 | 2.137 | -1.984     | -0.020      | -0.044    | -0.836965 | 0.013263  | -0.020330 | 0.546718
+cam_edge_1 | -4.041 | 0.520  | 2.070 | -1.838     | 0.015       | -2.006    | -0.423535 | 0.672852  | -0.508186 | 0.331111
+cam_edge_3 | -3.283 | -1.556 | 2.076 | -1.911     | 0.021       | -1.047    | -0.704067 | 0.413456  | -0.281210 | 0.504247
+cam_edge_5 | 5.787  | -0.042 | 2.009 | -1.914     | 0.059       | 1.972     | -0.465136 | -0.671862 | 0.493647  | 0.297594
+Full exports: camera_extrinsics_anchor.csv, camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml
+
+AP01 SELECTION AND SCALE DIAGNOSTICS
+----------------------------------------------------------------------------------------------------------------------
+Relay markers: 20; relay observations selected/registered: 533/533; scale pairs used/total: 1659/1936; scale: 0.676242 m/COLMAP-unit
+Scale observations selected per marker: {"0": 29, "1": 19, "10": 21, "11": 10, "12": 18, "13": 10, "14": 25, "16": 19, "17": 14, "18": 13, "19": 26, "2": 12, "20": 14, "3": 19, "4": 26, "5": 12, "6": 13, "7": 19, "8": 21, "9": 12}
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera     | Source                                                   | x [m]  | y [m]  | z [m] | roll [deg] | pitch [deg] | yaw [deg]
+-----------+----------------------------------------------------------+--------+--------+-------+------------+-------------+----------
+cam_edge_0 | moving_relay_multichain_colmap_motion_aruco_metric_scale | 2.040  | -1.180 | 3.025 | 10.527     | -51.653     | -29.979
+cam_edge_1 | direct_static_aruco_multimarker                          | -2.176 | -0.078 | 0.377 | 17.469     | 50.431      | 25.659
+cam_edge_3 | gauge_identity                                           | 0.000  | 0.000  | 0.000 | 0.000      | -0.000      | 0.000
+cam_edge_5 | moving_relay_multichain_colmap_motion_aruco_metric_scale | 3.226  | -2.871 | 8.119 | 141.165    | -8.125      | 177.974
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                  | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+----------------------+--------+--------+--------+------------+-------------+-----------+-------------
+cam_edge_0-cam_edge_1 | -4.684 | -0.831 | 1.836  | 114.225    | 57.513      | 135.256   | 5.099
+cam_edge_0-cam_edge_3 | -3.834 | -0.003 | -0.028 | 20.415     | 49.393      | 34.340    | 3.834
+cam_edge_0-cam_edge_5 | 5.157  | -0.549 | 1.823  | 119.180    | -57.701     | -143.891  | 5.497
+cam_edge_1-cam_edge_3 | 1.562  | -0.442 | 1.500  | 4.498      | -52.446     | -19.599   | 2.210
+cam_edge_1-cam_edge_5 | -3.636 | -2.305 | 8.853  | 135.099    | 44.169      | 158.498   | 9.845
+cam_edge_3-cam_edge_5 | 3.226  | -2.871 | 8.119  | 141.165    | -8.125      | 177.974   | 9.196
+
+DETAIL ARTIFACTS
+----------------------------------------------------------------------------------------------------------------------
+- diagnostics/method/candidates/AP01_RELAY_SELECTION.json
+- diagnostics/method/metric_scale/SCALE_DIAGNOSTICS.json

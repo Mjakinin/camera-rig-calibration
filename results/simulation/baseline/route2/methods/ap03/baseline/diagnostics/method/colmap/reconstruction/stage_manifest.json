@@ -1,0 +1,24 @@
+{
+  "completed_at": "2026-08-07T23:38:00.096+00:00",
+  "inputs": {
+    "colmap_dataset": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/final_validation_route2_20260808_003644/jobs/ap03_baseline_v1/20260808_013305_ap03_baseline_v1_d92403fc/04_AP03/colmap/dataset"
+  },
+  "outputs": {
+    "database": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/final_validation_route2_20260808_003644/jobs/ap03_baseline_v1/20260808_013305_ap03_baseline_v1_d92403fc/04_AP03/colmap/reconstruction/database.db",
+    "sparse_text": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/workspace/temporary_runs/final_validation_route2_20260808_003644/jobs/ap03_baseline_v1/20260808_013305_ap03_baseline_v1_d92403fc/04_AP03/colmap/reconstruction/sparse_txt"
+  },
+  "parameters": {
+    "gpu": false,
+    "loop_detection": null,
+    "mapper_minimum_matches": 8,
+    "matcher": "exhaustive",
+    "maximum_features": null,
+    "maximum_image_size": null,
+    "sequential_overlap": 20
+  },
+  "runtime_seconds": 280.3513797410051,
+  "schema_version": 5,
+  "stage_id": "ap03.reconstruct",
+  "started_at": "2026-08-07T23:33:15.234+00:00",
+  "status": "COMPLETED"
+}

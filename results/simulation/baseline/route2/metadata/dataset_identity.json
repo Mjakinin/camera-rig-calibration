@@ -23,6 +23,11 @@
       "size_bytes": 74755
     },
     {
+      "path": "metadata/simulation/world_snapshot.sdf",
+      "sha256": "0544fd33378a2622cbe471e4bb10b1b4313540b5f870df3ca0a541591a8d1afb",
+      "size_bytes": 10468
+    },
+    {
       "path": "metadata/simulation_capture.json",
       "sha256": "16065c92f861819cd385b93a0cb38b278e43eaf8ffbb087ba5d2b1065f2be7fc",
       "size_bytes": 2723
@@ -1019,8 +1024,8 @@
     }
   ],
   "contract_version": "rigcal_dataset_identity_v1",
-  "file_count": 201,
-  "fingerprint": "8a69946b40938204560dc149ca8132b18d14e06ea3d5cd8c10aaba7ba153f97f",
+  "file_count": 202,
+  "fingerprint": "1b880aa9463a8c6bd5293dc4587b41ae9c7b834b195efb347200ff68434ac9ce",
   "manifest_source_hashes": {
     "resolved_moving_intrinsics": "0b7e48c1466153b417ee4e654569bfd03c04b3abd3207bdc0961e948d47f6c93",
     "simulation_route": "27bf673ecb28c2706aac4a47f3a4c7bead824bbf09cc8efd2155ff05bc0a24bb",

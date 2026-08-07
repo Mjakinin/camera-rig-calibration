@@ -21,6 +21,36 @@ Visualization Manager:
       Topic:
         Value: /rigcal/ground_truth/cameras
     - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5 anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5 estimate-to-GT errors
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5/error_lines
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/baseline
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/baseline/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/baseline anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/baseline/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap01/baseline estimate-to-GT errors
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap01/baseline/error_lines
+    - Class: rviz_default_plugins/MarkerArray
       Name: ap01/root_cam_edge_1
       Enabled: false
       Topic:
@@ -50,6 +80,21 @@ Visualization Manager:
       Enabled: false
       Topic:
         Value: /rigcal/methods/ap02/ap02_configured_defaults_nonbaseline/error_lines
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/baseline
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap02/baseline/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/baseline anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap02/baseline/anchor_edges
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/baseline estimate-to-GT errors
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap02/baseline/error_lines
     - Class: rviz_default_plugins/MarkerArray
       Name: ap03_multi/ap03_configured_defaults_nonbaseline
       Enabled: true

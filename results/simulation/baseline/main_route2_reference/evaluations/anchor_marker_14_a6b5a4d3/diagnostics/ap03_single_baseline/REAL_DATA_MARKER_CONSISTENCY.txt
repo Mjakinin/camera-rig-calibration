@@ -1,0 +1,14 @@
+REAL-DATA MARKER LENGTH AND REPROJECTION RESULTS
+==========================================================================================================================================
+
+Expected marker edge length: 17.00 cm
+
+METHOD / VARIANT RESULTS
+------------------------------------------------------------------------------------------------------------------------------------------
+Method / variant | Status        | Anchor | Cams | Moving | Markers | Marker RMSE [cm] | Marker RMSE [%] | Moving RMSE [px] | Cross-camera RMSE [px] | Cross corners
+-----------------+---------------+--------+------+--------+---------+------------------+-----------------+------------------+------------------------+--------------
+AP03_SINGLE      | NOT_AVAILABLE | -      | 0    | 0      | 0       | NA               | NA              | NA               | NA                     | 0            
+
+AP03_SINGLE: MARKER RESULTS
+------------------------------------------------------------------------------------------------------------------------------------------
+Unavailable: FileNotFoundError: [Errno 2] No such file or directory: '/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/main_route2_reference/methods/ap03/baseline/diagnostics/method/scale_single/02_colmap_sparse/sparse_txt/0/images.txt'

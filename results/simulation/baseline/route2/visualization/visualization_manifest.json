@@ -8,7 +8,7 @@
     "transformed_cameras_match_ap03_multi_export": true
   },
   "contract": "rigcal_rviz_scene_v2",
-  "fingerprint": "ca8bae9891c606af623e3d331ade3bbb61dd5f006924b65a35812fb72382d057",
+  "fingerprint": "a6906f4503688fce771c7b530eb450c79ec20299cb8d7f0901c6e5d20e82155a",
   "fixed_frame": "evaluation_anchor_marker_2",
   "frustums": "camera_frustums.json",
   "ground_truth": {
@@ -43,6 +43,20 @@
       "anchor_edges_default_visible": false,
       "default_visible": false,
       "error_lines_default_visible": false,
+      "label": "advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5",
+      "method": "ap01"
+    },
+    {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
+      "label": "baseline",
+      "method": "ap01"
+    },
+    {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
       "label": "root_cam_edge_1",
       "method": "ap01"
     },
@@ -51,6 +65,13 @@
       "default_visible": false,
       "error_lines_default_visible": false,
       "label": "ap02_configured_defaults_nonbaseline",
+      "method": "ap02"
+    },
+    {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
+      "label": "baseline",
       "method": "ap02"
     },
     {

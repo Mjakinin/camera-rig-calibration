@@ -1,0 +1,163 @@
+{
+  "prepare_inputs": 1.961955601000227,
+  "_structured": {
+    "prepare_inputs": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "prepare_inputs",
+      "stage_name": "Prepare canonical inputs and provenance",
+      "stage_index": 1,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 1.9619861009996384,
+      "job_elapsed_seconds": 2.1842998940046527,
+      "queue_elapsed_seconds": 1410.8634350089997,
+      "batch_elapsed_seconds": 3348.8250904300003,
+      "log": null,
+      "counts": {}
+    },
+    "validate_dataset": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "validate_dataset",
+      "stage_name": "Validate the canonical dataset",
+      "stage_index": 2,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.10249923000083072,
+      "job_elapsed_seconds": 6.142260338005144,
+      "queue_elapsed_seconds": 1414.8213954530002,
+      "batch_elapsed_seconds": 3352.7830508740008,
+      "log": null,
+      "counts": {}
+    },
+    "detect_markers": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "detect_markers",
+      "stage_name": "Detect shared ArUco observations and debug images",
+      "stage_index": 3,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.03409373700560536,
+      "job_elapsed_seconds": 6.201308394003718,
+      "queue_elapsed_seconds": 1414.8804435089987,
+      "batch_elapsed_seconds": 3352.8420989299993,
+      "log": null,
+      "counts": {}
+    },
+    "observation_quality": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "observation_quality",
+      "stage_name": "Apply immutable checks and job-specific observation quality",
+      "stage_index": 4,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.29280864999600453,
+      "job_elapsed_seconds": 6.517629738998949,
+      "queue_elapsed_seconds": 1415.196764853994,
+      "batch_elapsed_seconds": 3353.1584202749946,
+      "log": null,
+      "counts": {}
+    },
+    "analyze_selections": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "analyze_selections",
+      "stage_name": "Analyze root-camera and method-marker candidates",
+      "stage_index": 5,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.07563990599737735,
+      "job_elapsed_seconds": 6.617330296001455,
+      "queue_elapsed_seconds": 1415.2964654109965,
+      "batch_elapsed_seconds": 3353.258120831997,
+      "log": null,
+      "counts": {}
+    },
+    "method_ap03": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "method_ap03",
+      "stage_name": "AP03",
+      "stage_index": 6,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 314.3981328500013,
+      "job_elapsed_seconds": 321.36506598599954,
+      "queue_elapsed_seconds": 1730.0442011009945,
+      "batch_elapsed_seconds": 3668.005856521995,
+      "log": null,
+      "counts": {
+        "registered_images": 179,
+        "registered_static_cameras": 4
+      }
+    },
+    "comparison": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "comparison",
+      "stage_name": "Normalize and compare method results",
+      "stage_index": 7,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.06935288299428066,
+      "job_elapsed_seconds": 326.13675656099804,
+      "queue_elapsed_seconds": 1734.815891675993,
+      "batch_elapsed_seconds": 3672.7775470969937,
+      "log": null,
+      "counts": {}
+    },
+    "finalize": {
+      "event": "stage_completed",
+      "job_id": "ap03_baseline_v1",
+      "job_index": 4,
+      "job_count": 4,
+      "stage_id": "finalize",
+      "stage_name": "Write final report",
+      "stage_index": 8,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.031539864001388196,
+      "job_elapsed_seconds": 326.2023091950032,
+      "queue_elapsed_seconds": 1734.8814443099982,
+      "batch_elapsed_seconds": 3672.843099730999,
+      "log": null,
+      "counts": {}
+    }
+  },
+  "validate_dataset": 0.10247332599828951,
+  "detect_markers": 0.034071513000526465,
+  "observation_quality": 0.29277871800150024,
+  "analyze_selections": 0.07560753700090572,
+  "_sub_stages": {
+    "ap03_prepare_colmap": {
+      "ap03.prepare_colmap": 1.441
+    },
+    "ap03_reconstruct": {
+      "ap03.reconstruct": 280.351
+    },
+    "ap03_inspect": {
+      "ap03.inspect": 0.513
+    },
+    "ap03_single_scale": {
+      "ap03.estimate_scale.single": 4.952
+    },
+    "ap03_multi_scale": {
+      "ap03.estimate_scale.multi": 25.352
+    },
+    "ap03_report": {
+      "ap03.report": 0.028
+    }
+  },
+  "method_ap03": 314.3981117660005,
+  "comparison": 0.0693053150025662,
+  "finalize": 0.03153436399588827
+}

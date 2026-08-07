@@ -1,0 +1,10 @@
+AP03 COMBINED RESULT
+========================================================================
+Status: OK
+Primary result: multi-marker scale
+Diagnostic result: single-marker scale
+COLMAP reconstructions: 1
+Single and multi use one shared RANSAC configuration.
+Quality: good
+Multi-scale relative standard deviation: 0.010392733347770772
+Reconstruction support: good

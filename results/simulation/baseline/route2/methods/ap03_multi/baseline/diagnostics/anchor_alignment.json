@@ -1,0 +1,32 @@
+{
+  "alignment": {
+    "corner_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03/baseline/diagnostics/derived/shared_anchor_geometry/marker_2_corners_colmap.json",
+    "method": "ap03_multi"
+  },
+  "anchor_marker_id": 14,
+  "contract": "rigcal_anchor_export_v1",
+  "fingerprint": "1b6be0f69fc4d9dca54d6699e2be8ace1c63bd0d57621859809025950ed628c3",
+  "label": "baseline",
+  "method": "ap03_multi",
+  "pairwise_invariance": {
+    "passed": false,
+    "reason": "anchor transform unavailable"
+  },
+  "schema_version": 1,
+  "status": {
+    "available": false,
+    "camera_count": 0,
+    "code": "ANCHOR_SOURCE_MISMATCH",
+    "expected_camera_count": 4,
+    "manual_warning_confirmed": false,
+    "missing_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "warnings": [
+      "The shared AP03 anchor geometry belongs to marker 2, not marker 14."
+    ]
+  }
+}
