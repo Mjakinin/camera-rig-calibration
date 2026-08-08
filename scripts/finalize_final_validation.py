@@ -23,12 +23,17 @@ import time
 from pathlib import Path
 
 from camera_rig_calibration.product_policy import install_product_policy
+from camera_rig_calibration.reporting_authority_policy import (
+    install_reporting_authority_policy,
+)
 
 
 # Reconciliation must use the same final publication/reporting policy as rigcal:
-# derived evaluations are refreshable, the selected common anchor is authoritative
-# for AP03 derived exports, and native calibration artifacts remain immutable.
+# derived evaluations are refreshable, the published common anchor is authoritative
+# for final reporting/AP03 derived exports, and native calibration artifacts remain
+# immutable.
 install_product_policy()
+install_reporting_authority_policy()
 
 from camera_rig_calibration.publication import (  # noqa: E402
     reconcile_existing_experiment,
