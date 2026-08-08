@@ -49,7 +49,7 @@ methods:
     method_contract: baseline_v1
     historical_reproduction: false
     advanced_strategy: legacy_main_v1
-    direct_target_camera: front_right
+    direct_target_camera: auto
     root_camera: auto
     top_moving_per_marker: 8
     scale_top_per_marker: 30
