@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ap01_common_anchor_policy import install_ap01_common_anchor_policy
 from .common_anchor_authority_policy import install_common_anchor_authority_policy
+from .final_reporting_frontdoor_policy import install_final_reporting_frontdoor_policy
 from .marker_preference_policy import install_marker_preference_policy
 from .product_policy import install_product_policy
 from .queue_anchor_preference_policy import install_queue_anchor_preference_policy
@@ -33,6 +34,9 @@ install_queue_anchor_preference_policy()
 install_ap01_common_anchor_policy()
 install_result_output_policy()
 install_real_marker_reporting_policy()
+# Final experiment RESULTS is canonical regardless of wrapper/import order: it
+# states the common export frame and embeds native metric marker diagnostics.
+install_final_reporting_frontdoor_policy()
 install_rviz_manifest_policy()
 # Bind already-imported preflight/runtime consumers only after all selection
 # wrappers are installed, so Wizard and --config use the identical path.
