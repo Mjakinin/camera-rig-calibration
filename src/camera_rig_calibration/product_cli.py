@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .ap01_common_anchor_policy import install_ap01_common_anchor_policy
+from .ap02_convergence_reporting_policy import install_ap02_convergence_reporting_policy
 from .common_anchor_authority_policy import install_common_anchor_authority_policy
 from .final_reporting_frontdoor_policy import install_final_reporting_frontdoor_policy
 from .marker_preference_policy import install_marker_preference_policy
@@ -32,6 +33,9 @@ install_queue_anchor_preference_policy()
 # AP01's native rig estimate remains untouched. Only its marker-0 export frame is
 # robustly aligned from the metric moving trajectory instead of one weak PnP pose.
 install_ap01_common_anchor_policy()
+# AP02 already records its full optimization history. Publish convergence/tail
+# diagnostics from that trace for every completed AP02 result without rerunning BA.
+install_ap02_convergence_reporting_policy()
 install_result_output_policy()
 install_real_marker_reporting_policy()
 # Final experiment RESULTS is canonical regardless of wrapper/import order: it
