@@ -6,13 +6,14 @@ from pathlib import Path
 import numpy as np
 
 from camera_rig_calibration.components import register_builtin_components
-from camera_rig_calibration.marker_preference_policy import (
-    install_marker_preference_policy,
-)
+from camera_rig_calibration.marker_preference_policy import install_marker_preference_policy
 from camera_rig_calibration.product_policy import (
     _DATASET_CONTEXT,
     _refresh_derived_tree,
     install_product_policy,
+)
+from camera_rig_calibration.real_vehicle_marker_zero_policy import (
+    install_real_vehicle_marker_zero_policy,
 )
 from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
@@ -26,6 +27,7 @@ install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
 install_marker_preference_policy()
+install_real_vehicle_marker_zero_policy()
 install_submission_bindings()
 install_ui_display_policy()
 
@@ -35,10 +37,7 @@ from camera_rig_calibration.evaluation import ap03_derived, reporting  # noqa: E
 
 def _job(method_id: str):
     register_builtin_components()
-    return wizard._new_method_job(
-        method_id,
-        prompt_for_single_marker=False,
-    )
+    return wizard._new_method_job(method_id, prompt_for_single_marker=False)
 
 
 def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
@@ -66,7 +65,7 @@ def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
         _DATASET_CONTEXT.reset(token)
 
 
-def test_real_vehicle_uses_marker_zero_preferences_with_auto_fallback() -> None:
+def test_real_vehicle_defaults_use_canonical_marker_zero() -> None:
     ap01 = _job("ap01")
     ap02 = _job("ap02")
     ap03 = _job("ap03")
@@ -86,14 +85,14 @@ def test_real_vehicle_uses_marker_zero_preferences_with_auto_fallback() -> None:
         assert job.selection.mode == "auto"
 
 
-def test_marker_preference_ui_explains_fallback() -> None:
+def test_real_vehicle_ui_explains_strict_zero_and_absence_only_fallback() -> None:
     real_ap02 = _job("ap02")
     real_text = "\n".join(
         f"{label} {current} {baseline} {description}"
         for _, _, label, current, baseline, description in wizard._setting_rows(real_ap02)
     ).lower()
-    assert "preferred marker 0" in real_text
-    assert "auto fallback" in real_text
+    assert "marker 0 required if observed" in real_text
+    assert "only when marker 0 has zero accepted observations" in real_text
 
     token = _DATASET_CONTEXT.set("simulation")
     try:
@@ -197,12 +196,7 @@ def test_direct_anchor_gt_rejects_mismatched_marker_frame() -> None:
     rows = reporting._anchor_camera_gt_rows(
         "ap02",
         "old_marker_2_variant",
-        {
-            "anchor_marker_id": 2,
-            "cameras": [
-                {"camera_id": "cam", "matrix": identity.tolist()}
-            ],
-        },
+        {"anchor_marker_id": 2, "cameras": [{"camera_id": "cam", "matrix": identity.tolist()}]},
         anchor_marker_id=14,
         gt_cameras={"cam": identity},
         gt_markers={14: identity},
@@ -224,9 +218,7 @@ def test_common_evaluation_anchor_overrides_stale_dataset_anchor_for_ap03(
     assert ap03_derived._selection_anchor(tmp_path) == 14
 
 
-def test_derived_evaluations_refresh_without_touching_unrelated_files(
-    tmp_path: Path,
-) -> None:
+def test_derived_evaluations_refresh_without_touching_unrelated_files(tmp_path: Path) -> None:
     source = tmp_path / "transaction" / "evaluations"
     destination = tmp_path / "experiment" / "evaluations"
     source.mkdir(parents=True)
@@ -244,8 +236,6 @@ def test_derived_evaluations_refresh_without_touching_unrelated_files(
     _refresh_derived_tree(source, destination)
 
     assert json.loads(
-        (destination / "SELECTED_COMMON_EVALUATION.json").read_text(
-            encoding="utf-8"
-        )
+        (destination / "SELECTED_COMMON_EVALUATION.json").read_text(encoding="utf-8")
     )["anchor_marker_id"] == 14
     assert unrelated.read_text(encoding="utf-8") == "immutable"
