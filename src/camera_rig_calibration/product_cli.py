@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .product_policy import install_product_policy
 from .reporting_authority_policy import install_reporting_authority_policy
+from .submission_bindings import install_submission_bindings
 from .submission_policy import install_submission_policy
 from .ui_display_policy import install_ui_display_policy
 
@@ -13,6 +14,7 @@ from .ui_display_policy import install_ui_display_policy
 install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
+install_submission_bindings()
 install_ui_display_policy()
 
 from .cli import main  # noqa: E402
