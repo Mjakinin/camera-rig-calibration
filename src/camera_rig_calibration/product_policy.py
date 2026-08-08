@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import hashlib
 import os
 import shutil
@@ -95,7 +96,7 @@ def _install_reporting_policy() -> None:
         )
         # The reconstructed Main AP02 implementation uses 80/80.  The old
         # 50/50 report name/check was stale reporting metadata, not method
-        # semantics.  Preserve every other contract check unchanged.
+        # semantics. Preserve every other contract check unchanged.
         contract["contract"] = "route2_cpu_ref14_80x80_v1"
         payloads = {
             (str(item.get("method", "")), str(item.get("label", ""))): item
@@ -130,6 +131,66 @@ def _install_reporting_policy() -> None:
 
     baseline_contract._rigcal_product_policy = True  # type: ignore[attr-defined]
     reporting._baseline_contract = baseline_contract
+
+
+def _install_selection_policy() -> None:
+    """Keep automatic AP01 selection compatible with its Direct target."""
+    from . import observations
+
+    original = observations.resolve_selections
+    if getattr(original, "_rigcal_product_policy", False):
+        return
+
+    def resolve_selections(*args, **kwargs):
+        resolved = original(*args, **kwargs)
+        config = kwargs.get("config")
+        if config is None and args:
+            config = args[0]
+        if config is None or "ap01" not in set(config.methods.enabled):
+            return resolved
+        ap01 = config.methods.ap01
+        if not (
+            ap01.root_camera == "auto"
+            and ap01.method_contract == "baseline_v1"
+            and not ap01.historical_reproduction
+            and ap01.advanced_strategy == "legacy_main_v1"
+            and resolved.root_camera == ap01.direct_target_camera
+        ):
+            return resolved
+
+        root_payload = resolved.payload.get("ap01_root_camera", {})
+        candidates = {
+            str(candidate.get("id")): candidate
+            for candidate in root_payload.get("candidates", [])
+            if candidate.get("compatible")
+            and str(candidate.get("id")) != ap01.direct_target_camera
+        }
+        if not candidates:
+            # A rig with only the configured Direct target has no alternative
+            # root; keep the original deterministic result and let AP01 report
+            # its actual available Relay/Direct evidence.
+            return resolved
+        alternative = str(
+            observations._best_candidate(candidates, observations._root_rank)
+        )
+        payload = copy.deepcopy(resolved.payload)
+        payload["ap01_root_camera"]["selected"] = alternative
+        payload["ap01_root_camera"]["reason"] = (
+            "automatic AP01 root ranking with the configured Direct target "
+            "reserved as a non-root camera"
+        )
+        return observations.ResolvedSelections(
+            root_camera=alternative,
+            ap02_reference_marker_id=resolved.ap02_reference_marker_id,
+            ap03_single_scale_marker_id=resolved.ap03_single_scale_marker_id,
+            ap03_multi_marker_ids=resolved.ap03_multi_marker_ids,
+            evaluation_anchor_marker_id=resolved.evaluation_anchor_marker_id,
+            marker_ids=resolved.marker_ids,
+            payload=payload,
+        )
+
+    resolve_selections._rigcal_product_policy = True  # type: ignore[attr-defined]
+    observations.resolve_selections = resolve_selections
 
 
 def _replace_product_wording(text: str) -> str:
@@ -317,5 +378,6 @@ def install_product_policy() -> None:
         return
     _install_publication_policy()
     _install_reporting_policy()
+    _install_selection_policy()
     _install_wizard_policy()
     _INSTALLED = True
