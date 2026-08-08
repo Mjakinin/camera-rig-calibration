@@ -38,24 +38,60 @@ def _manual_or_explicit(selection: dict[str, Any]) -> bool:
     return any(token in mode for token in ("manual", "explicit", "forced"))
 
 
+def _result_candidates(method_root: Path) -> list[Path]:
+    candidates: set[Path] = set()
+    if not method_root.is_dir():
+        return []
+    for pattern in (
+        "*/RESULT.json",
+        "*/provenance/resolved_config.yaml",
+        "*/camera_extrinsics.csv",
+        "*/camera_extrinsics_anchor.json",
+    ):
+        for artifact in method_root.glob(pattern):
+            if artifact.is_file():
+                root = artifact.parent
+                if artifact.parent.name == "provenance":
+                    root = artifact.parent.parent
+                candidates.add(root)
+    return sorted(candidates)
+
+
+def _choose_result_root(candidates: list[Path]) -> Path | None:
+    if not candidates:
+        return None
+    preferred = next((path for path in candidates if path.name == "baseline"), None)
+    return preferred or sorted(candidates, key=lambda path: path.name)[0]
+
+
 def _primary_method_roots(experiment_root: Path) -> list[tuple[str, Path]]:
+    """Return the actual public primary result roots for the three method families.
+
+    Older publications used an AP03 container under methods/ap03 while current
+    publications expose AP03 Single/Multi as derived result families. Discovery
+    therefore follows published artifacts rather than assuming one historical
+    directory layout. AP03 Multi is the public primary AP03 estimate.
+    """
+
     roots: list[tuple[str, Path]] = []
-    for method in ("ap01", "ap02", "ap03"):
-        method_root = experiment_root / "methods" / method
-        if not method_root.is_dir():
-            continue
-        candidates = sorted(
-            path.parent
-            for path in method_root.glob("*/RESULT.json")
-            if path.is_file()
+    for method in ("ap01", "ap02"):
+        selected = _choose_result_root(
+            _result_candidates(experiment_root / "methods" / method)
         )
-        if not candidates:
-            continue
-        selected = next(
-            (path for path in candidates if path.name == "baseline"),
-            candidates[0],
+        if selected is not None:
+            roots.append((method, selected))
+
+    ap03_multi = _choose_result_root(
+        _result_candidates(experiment_root / "methods" / "ap03_multi")
+    )
+    if ap03_multi is not None:
+        roots.append(("ap03_multi", ap03_multi))
+    else:
+        ap03_container = _choose_result_root(
+            _result_candidates(experiment_root / "methods" / "ap03")
         )
-        roots.append((method, selected))
+        if ap03_container is not None:
+            roots.append(("ap03", ap03_container))
     return roots
 
 
@@ -63,14 +99,7 @@ def _legacy_preference_evidence(
     experiment_root: Path,
     selection: dict[str, Any],
 ) -> tuple[int | None, list[dict[str, Any]]]:
-    """Infer only category defaults lost by the old queue common-anchor freeze.
-
-    This is intentionally conservative. A manual/explicit common-anchor request is
-    never rewritten. For an old automatic real-vehicle publication, marker 0 is
-    inferred only when completed method configs still retain independent marker-0
-    category-default evidence (AP02 auto reference and/or AP03 Single marker 0).
-    Simulation analogously uses marker 14.
-    """
+    """Infer only category defaults lost by the old queue common-anchor freeze."""
 
     if _manual_or_explicit(selection):
         return None, []
@@ -83,6 +112,15 @@ def _legacy_preference_evidence(
     for method, root in _primary_method_roots(experiment_root):
         config = exporter._config_for_result(root)
         if config is None:
+            evidence.append(
+                {
+                    "method": method,
+                    "kind": "resolved_config",
+                    "value": None,
+                    "matches_category_preference": False,
+                    "result_root": str(root),
+                }
+            )
             continue
         if method == "ap02":
             ref_mode = str(config.methods.ap02.reference_marker_selection_mode)
@@ -95,23 +133,28 @@ def _legacy_preference_evidence(
                     "value": ref,
                     "mode": ref_mode,
                     "matches_category_preference": matched,
+                    "result_root": str(root),
                 }
             )
-        elif method == "ap03":
+        elif method in {"ap03", "ap03_multi"}:
             single = config.methods.ap03.single.scale_marker_id
             matched = single == preferred
             evidence.append(
                 {
-                    "method": method,
+                    "method": "ap03",
+                    "published_method": method,
                     "kind": "single_scale_marker",
                     "value": single,
                     "matches_category_preference": matched,
+                    "result_root": str(root),
                 }
             )
 
     matched = [item for item in evidence if item["matches_category_preference"]]
-    # Require two independent persisted settings when both AP02 and AP03 exist.
-    represented = {item["method"] for item in evidence}
+    represented = {
+        "ap03" if item["method"] in {"ap03", "ap03_multi"} else item["method"]
+        for item in evidence
+    }
     required = 2 if {"ap02", "ap03"}.issubset(represented) else 1
     if len(matched) < required:
         return None, evidence
@@ -191,6 +234,7 @@ def repair_legacy_preferred_anchor(experiment_root: Path) -> dict[str, Any]:
                     "label": root.name,
                     "available": False,
                     "code": "METHOD_OUTPUT_UNAVAILABLE",
+                    "result_root": str(root),
                 }
             )
             continue
@@ -205,10 +249,21 @@ def repair_legacy_preferred_anchor(experiment_root: Path) -> dict[str, Any]:
                 "code": resolution.code,
                 "warnings": list(resolution.warnings),
                 "diagnostics": resolution.diagnostics,
+                "result_root": str(root),
             }
         )
 
-    if not checks or not all(item["available"] for item in checks):
+    expected_families = {"ap01", "ap02", "ap03"}
+    checked_families = {
+        "ap03" if item["method"] in {"ap03", "ap03_multi"} else item["method"]
+        for item in checks
+    }
+    all_primary_present = expected_families.issubset(checked_families)
+    if (
+        not checks
+        or not all_primary_present
+        or not all(item["available"] for item in checks)
+    ):
         payload = {
             "schema_version": 1,
             "status": "preferred_anchor_not_exportable_by_every_method",
@@ -216,6 +271,8 @@ def repair_legacy_preferred_anchor(experiment_root: Path) -> dict[str, Any]:
             "preflight_anchor_marker_id": current,
             "preference_evidence": preference_evidence,
             "method_anchor_checks": checks,
+            "expected_method_families": sorted(expected_families),
+            "checked_method_families": sorted(checked_families),
             "method_rerun": False,
             "colmap_rerun": False,
             "native_method_outputs_modified": False,
