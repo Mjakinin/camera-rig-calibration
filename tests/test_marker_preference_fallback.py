@@ -86,7 +86,11 @@ def _write_observations(root: Path, marker_ids: tuple[int, ...]) -> None:
         writer.writerows(rows)
 
 
-def _config(category: DatasetCategory, preferred: int) -> RigConfig:
+def _config(
+    category: DatasetCategory,
+    preferred: int,
+    prepared_root: Path,
+) -> RigConfig:
     methods = MethodSettings(enabled=["ap02", "ap03"])
     ap02 = methods.ap02.model_copy(
         update={
@@ -113,6 +117,8 @@ def _config(category: DatasetCategory, preferred: int) -> RigConfig:
             id="marker_preference_test",
             category=category,
             source_kind=InputSourceKind.PREPARED,
+            prepared_root=prepared_root,
+            input_root=prepared_root,
         ),
         static_cameras=[
             StaticCameraSettings(id="cam_a"),
@@ -132,7 +138,7 @@ def test_real_vehicle_prefers_zero_when_supported(tmp_path: Path) -> None:
     root = tmp_path / "observations"
     _write_observations(root, (0, 5))
     resolved = observations.resolve_selections(
-        _config(DatasetCategory.REAL_VEHICLE, 0), root
+        _config(DatasetCategory.REAL_VEHICLE, 0, tmp_path), root
     )
     assert resolved.ap02_reference_marker_id == 0
     assert resolved.ap03_single_scale_marker_id == 0
@@ -148,7 +154,7 @@ def test_real_vehicle_zero_missing_falls_back_to_auto(tmp_path: Path) -> None:
     root = tmp_path / "observations"
     _write_observations(root, (5,))
     resolved = observations.resolve_selections(
-        _config(DatasetCategory.REAL_VEHICLE, 0), root
+        _config(DatasetCategory.REAL_VEHICLE, 0, tmp_path), root
     )
     assert resolved.ap02_reference_marker_id == 5
     assert resolved.ap03_single_scale_marker_id == 5
@@ -163,7 +169,7 @@ def test_simulation_fourteen_missing_falls_back_to_auto(tmp_path: Path) -> None:
     root = tmp_path / "observations"
     _write_observations(root, (5,))
     resolved = observations.resolve_selections(
-        _config(DatasetCategory.SIMULATION, 14), root
+        _config(DatasetCategory.SIMULATION, 14, tmp_path), root
     )
     assert resolved.ap02_reference_marker_id == 5
     assert resolved.ap03_single_scale_marker_id == 5
