@@ -41,11 +41,12 @@ def _run_authoritative_marker_consistency(
     experiment_root: Path,
     dataset_root: Path,
 ) -> Path | None:
-    """Regenerate the historical real-data marker-length/Cross-RMSE evaluation.
+    """Regenerate real marker-length/Cross-RMSE diagnostics from native metric results.
 
-    This is evaluation-only. It reads completed method diagnostics and uses the
-    authoritative common export anchor, but never reruns a calibration method or
-    COLMAP and never uses Ground Truth.
+    Evaluation-only: completed AP01/AP02/AP03 outputs are read, never rerun or
+    re-optimized. The common marker is used only for frame alignment where needed;
+    it is not used to re-scale reconstructed marker lengths. Ground Truth is never
+    consulted.
     """
 
     from .evaluation import reporting
@@ -79,7 +80,13 @@ def _run_authoritative_marker_consistency(
                 f"aruco {config_summary.get('aruco_detection_mode', 'baseline')})"
             )
         elif method in {"ap03", "ap03_multi", "ap03_single"}:
-            mode = "Multi" if method == "ap03_multi" else "Single" if method == "ap03_single" else ""
+            mode = (
+                "Multi"
+                if method == "ap03_multi"
+                else "Single"
+                if method == "ap03_single"
+                else ""
+            )
             display_name = (
                 f"AP03{(' ' + mode) if mode else ''} "
                 f"(multi {config_summary.get('multi_marker_count', '-')} markers, "
@@ -116,7 +123,7 @@ def _run_authoritative_marker_consistency(
 
     command = [
         sys.executable,
-        str(Path(reporting.__file__).with_name("marker_consistency.py")),
+        str(Path(reporting.__file__).with_name("real_marker_consistency_native.py")),
         "--dataset",
         str(dataset_root),
         "--results-root",
@@ -149,7 +156,8 @@ def _run_authoritative_marker_consistency(
         "schema_version": 5,
         "layout_version": 2,
         "anchor_marker_id": anchor,
-        "evaluation_scope": "authoritative_common_anchor_posthoc_real_consistency",
+        "evaluation_scope": "native_metric_marker_length_and_cross_reprojection",
+        "metric_scale_source": "native_method_outputs_no_evaluation_rescale",
         "method_rerun": False,
         "colmap_rerun": False,
         "ground_truth_used": False,
@@ -203,13 +211,7 @@ def _install_real_results_authority() -> None:
         except (TypeError, ValueError):
             preflight_id = None
 
-        if preflight_id is not None and preflight_id != authoritative_id:
-            replacement = (
-                f"Common evaluation/export anchor: marker {authoritative_id} "
-                f"(authoritative derived publication; preflight marker {preflight_id} superseded)"
-            )
-        else:
-            replacement = f"Common evaluation/export anchor: marker {authoritative_id}"
+        replacement = f"Common evaluation/export anchor: marker {authoritative_id}"
         text = re.sub(
             r"^Common evaluation anchor: marker .*?$",
             replacement,
