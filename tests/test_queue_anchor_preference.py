@@ -3,6 +3,9 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
+from camera_rig_calibration.common_anchor_authority_policy import (
+    install_common_anchor_authority_policy,
+)
 from camera_rig_calibration.config.models import (
     DatasetCategory,
     DatasetSettings,
@@ -12,12 +15,13 @@ from camera_rig_calibration.config.models import (
     RigConfig,
     StaticCameraSettings,
 )
-from camera_rig_calibration.marker_preference_policy import (
-    install_marker_preference_policy,
-)
+from camera_rig_calibration.marker_preference_policy import install_marker_preference_policy
 from camera_rig_calibration.product_policy import install_product_policy
 from camera_rig_calibration.queue_anchor_preference_policy import (
     install_queue_anchor_preference_policy,
+)
+from camera_rig_calibration.real_vehicle_marker_zero_policy import (
+    install_real_vehicle_marker_zero_policy,
 )
 from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
@@ -30,6 +34,8 @@ install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
 install_marker_preference_policy()
+install_common_anchor_authority_policy()
+install_real_vehicle_marker_zero_policy()
 install_queue_anchor_preference_policy()
 install_submission_bindings()
 
@@ -85,10 +91,6 @@ def _row(
     marker_length_m = 0.17
     half = marker_length_m / 2.0
     z = 1.0 + 0.01 * marker_id
-
-    # Identity rotation and positive-z translation. These image corners are the
-    # exact pinhole projections of AP01/AP02/AP03's canonical marker corners,
-    # so the quality filter reconstructs a near-zero PnP reprojection RMSE.
     projected = [
         (cx + fx * (-half) / z, cy + fy * half / z),
         (cx + fx * half / z, cy + fy * half / z),
@@ -97,7 +99,6 @@ def _row(
     ]
     side_px = fx * marker_length_m / z
     area_px2 = side_px * side_px
-
     row: dict[str, object] = {
         "observer_type": observer_type,
         "observer_id": observer_id,
@@ -118,9 +119,6 @@ def _row(
         "tvec_x_m": 0.0,
         "tvec_y_m": 0.0,
         "tvec_z_m": z,
-        # With x=y=0, Euclidean marker distance is exactly z. Production
-        # detector output contains this field and the quality-ranking contract
-        # consumes it directly.
         "distance_m": z,
         "area_px2": area_px2,
         "marker_area_ratio": area_px2 / (width * height),
@@ -152,18 +150,20 @@ def _write_dataset(root: Path) -> None:
         path.write_bytes(b"x")
 
 
-def _write_observations(path: Path) -> None:
+def _write_observations(path: Path, *, sparse_zero: bool = False) -> None:
     rows = [
-        # Marker 0 exists, but the AP01 root cam_b never sees it. It must not be
-        # forced as the queue-wide common anchor.
+        # Marker 0 is intentionally not visible in AP01 root cam_b. cam_a sees it,
+        # which is enough because AP01 can express a marker through any solved,
+        # reachable static camera.
         _row("static", "cam_a", 0),
         _row("static", "cam_a", 5),
         _row("static", "cam_b", 5),
         _row("moving", "moving_calib_camera", 0, frame_id="0"),
-        _row("moving", "moving_calib_camera", 0, frame_id="1"),
         _row("moving", "moving_calib_camera", 5, frame_id="0"),
         _row("moving", "moving_calib_camera", 5, frame_id="1"),
     ]
+    if not sparse_zero:
+        rows.append(_row("moving", "moving_calib_camera", 0, frame_id="1"))
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=FIELDS)
@@ -176,10 +176,7 @@ def _config(root: Path, method_id: str) -> RigConfig:
     methods = methods.model_copy(
         update={
             "ap01": methods.ap01.model_copy(
-                update={
-                    "root_camera": "cam_b",
-                    "direct_target_camera": "cam_a",
-                }
+                update={"root_camera": "cam_b", "direct_target_camera": "cam_a"}
             ),
             "ap02": methods.ap02.model_copy(
                 update={
@@ -192,9 +189,7 @@ def _config(root: Path, method_id: str) -> RigConfig:
                     "single": methods.ap03.single.model_copy(
                         update={"scale_marker_id": 0}
                     ),
-                    "multi": methods.ap03.multi.model_copy(
-                        update={"marker_ids": "auto"}
-                    ),
+                    "multi": methods.ap03.multi.model_copy(update={"marker_ids": "auto"}),
                 },
                 deep=True,
             ),
@@ -208,10 +203,7 @@ def _config(root: Path, method_id: str) -> RigConfig:
             source_kind=InputSourceKind.PREPARED,
             prepared_root=root,
         ),
-        static_cameras=[
-            StaticCameraSettings(id="cam_a"),
-            StaticCameraSettings(id="cam_b"),
-        ],
+        static_cameras=[StaticCameraSettings(id="cam_a"), StaticCameraSettings(id="cam_b")],
         methods=methods,
         evaluation=EvaluationSettings(
             enabled=True,
@@ -221,39 +213,57 @@ def _config(root: Path, method_id: str) -> RigConfig:
     )
 
 
-def test_real_vehicle_preferred_zero_falls_back_at_queue_common_anchor(
+def test_real_vehicle_zero_stays_common_anchor_without_ap01_root_visibility(
     tmp_path: Path,
 ) -> None:
     dataset = tmp_path / "dataset"
     _write_dataset(dataset)
-    observations = tmp_path / "raw_observations.csv"
-    _write_observations(observations)
-
+    raw = tmp_path / "raw_observations.csv"
+    _write_observations(raw)
     jobs = (
         preflight.PreflightJob("ap01", _config(dataset, "ap01")),
         preflight.PreflightJob("ap03", _config(dataset, "ap03")),
     )
     result = preflight.run_queue_preflight(
         jobs,
-        raw_observations_csv=observations,
+        raw_observations_csv=raw,
         dataset_root=dataset,
         output_directory=tmp_path / "preflight",
         repository_root=tmp_path,
     )
-
-    assert result.ready is True, [
-        (job.job_id, job.status, job.errors) for job in result.jobs
-    ]
-    assert all(job.runnable for job in result.jobs)
-    assert result.common_evaluation_anchor_marker_id == 5
+    assert result.ready is True, [(job.job_id, job.status, job.errors) for job in result.jobs]
+    assert result.common_evaluation_anchor_marker_id == 0
     for job in result.jobs:
         assert job.selections is not None
-        assert job.selections.evaluation_anchor_marker_id == 5
-        preference = job.selections.payload["category_marker_preference"][
-            "evaluation_anchor"
-        ]
-        assert preference == {
-            "preferred": 0,
-            "selected": 5,
-            "fallback_used": True,
-        }
+        assert job.selections.evaluation_anchor_marker_id == 0
+        policy = job.selections.payload["real_vehicle_marker_zero_policy"]
+        assert policy["marker_zero_observed"] is True
+        assert policy["fallback_allowed"] is False
+
+
+def test_real_vehicle_observed_but_insufficient_zero_fails_instead_of_fallback(
+    tmp_path: Path,
+) -> None:
+    dataset = tmp_path / "dataset"
+    _write_dataset(dataset)
+    raw = tmp_path / "raw_observations.csv"
+    _write_observations(raw, sparse_zero=True)
+    jobs = (
+        preflight.PreflightJob("ap01", _config(dataset, "ap01")),
+        preflight.PreflightJob("ap03", _config(dataset, "ap03")),
+    )
+    result = preflight.run_queue_preflight(
+        jobs,
+        raw_observations_csv=raw,
+        dataset_root=dataset,
+        output_directory=tmp_path / "preflight",
+        repository_root=tmp_path,
+    )
+    assert result.ready is False
+    assert result.common_evaluation_anchor_marker_id is None
+    assert all(job.status == "FAILED_PREFLIGHT" for job in result.jobs)
+    assert any(
+        "Automatic fallback is prohibited while marker 0 is observed" in error
+        for job in result.jobs
+        for error in job.errors
+    )
