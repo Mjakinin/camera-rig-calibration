@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import json
 import os
 import shutil
 import time
@@ -94,7 +95,7 @@ def _install_reporting_policy() -> None:
             method_payloads=method_payloads,
             evaluation_anchor=evaluation_anchor,
         )
-        # The reconstructed Main AP02 implementation uses 80/80.  The old
+        # The reconstructed Main AP02 implementation uses 80/80. The old
         # 50/50 report name/check was stale reporting metadata, not method
         # semantics. Preserve every other contract check unchanged.
         contract["contract"] = "route2_cpu_ref14_80x80_v1"
@@ -131,6 +132,39 @@ def _install_reporting_policy() -> None:
 
     baseline_contract._rigcal_product_policy = True  # type: ignore[attr-defined]
     reporting._baseline_contract = baseline_contract
+
+
+def _install_ap03_anchor_policy() -> None:
+    """Make the frozen common evaluation anchor authoritative for AP03 derivation."""
+    from .evaluation import ap03_derived
+
+    original = ap03_derived._selection_anchor
+    if getattr(original, "_rigcal_product_policy", False):
+        return
+
+    def selection_anchor(experiment_root: Path) -> int | None:
+        selected = (
+            experiment_root
+            / "evaluations"
+            / "SELECTED_COMMON_EVALUATION.json"
+        )
+        try:
+            payload = json.loads(selected.read_text(encoding="utf-8"))
+            value = int(payload["anchor_marker_id"])
+        except (
+            OSError,
+            KeyError,
+            TypeError,
+            ValueError,
+            json.JSONDecodeError,
+        ):
+            value = -1
+        if value >= 0:
+            return value
+        return original(experiment_root)
+
+    selection_anchor._rigcal_product_policy = True  # type: ignore[attr-defined]
+    ap03_derived._selection_anchor = selection_anchor
 
 
 def _install_selection_policy() -> None:
@@ -378,6 +412,7 @@ def install_product_policy() -> None:
         return
     _install_publication_policy()
     _install_reporting_policy()
+    _install_ap03_anchor_policy()
     _install_selection_policy()
     _install_wizard_policy()
     _INSTALLED = True
