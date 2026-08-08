@@ -77,14 +77,22 @@ def _config(tmp_path: Path) -> RigConfig:
             "ap01": methods.ap01.model_copy(
                 update={"root_camera": "cam_b", "direct_target_camera": "auto"}
             ),
-            # This is a real-vehicle fixture. Keep inactive AP02 on the public
-            # real-vehicle selection contract as well; the legacy strict
-            # "baseline" reference-marker mode is intentionally simulation-only.
+            # This is a real-vehicle fixture. Keep inactive AP02/AP03 on the
+            # public real-vehicle marker contract as well. The strict AP02
+            # baseline and AP03 marker-14 defaults belong to simulation.
             "ap02": methods.ap02.model_copy(
                 update={
                     "reference_marker_selection_mode": "auto",
                     "reference_marker_id": 0,
                 }
+            ),
+            "ap03": methods.ap03.model_copy(
+                update={
+                    "single": methods.ap03.single.model_copy(
+                        update={"scale_marker_id": 0}
+                    )
+                },
+                deep=True,
             ),
         },
         deep=True,
