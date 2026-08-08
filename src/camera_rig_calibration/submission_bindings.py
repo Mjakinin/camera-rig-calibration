@@ -12,7 +12,13 @@ def install_submission_bindings() -> None:
     queue preflight, selection previews and queue freezing behavior identical.
     """
 
-    from . import observations, preflight, queueing, runtime, wizard
+    from . import observations, preflight, queueing, runtime, submission_policy, wizard
+    from .ap01_auto_direct import automatic_ap01_direct_target
+
+    # The resolver wrapper defined in submission_policy looks up this module
+    # global at call time. Replace its bootstrap selector with the exact AP01
+    # baseline quality/medoid-MAD selector before any preflight can run.
+    submission_policy._automatic_ap01_direct_target = automatic_ap01_direct_target
 
     preflight.resolve_selections = observations.resolve_selections
     wizard.resolve_selections = observations.resolve_selections
