@@ -6,14 +6,21 @@ from pathlib import Path
 import numpy as np
 
 from camera_rig_calibration.anchor_export.adapters import AnchorResolution
-from camera_rig_calibration.config.models import MethodSettings, RigConfig
+from camera_rig_calibration.config.models import (
+    DatasetCategory,
+    DatasetSettings,
+    InputSourceKind,
+    MethodSettings,
+    RigConfig,
+    StaticCameraSettings,
+)
 from camera_rig_calibration.legacy_preferred_anchor_repair import (
     repair_legacy_preferred_anchor,
 )
 from camera_rig_calibration.rviz_manifest_policy import _synchronize_manifest
 
 
-def _real_vehicle_preference_config() -> RigConfig:
+def _real_vehicle_preference_config(tmp_path: Path) -> RigConfig:
     methods = MethodSettings(enabled=["ap01", "ap02", "ap03"])
     methods = methods.model_copy(
         update={
@@ -34,7 +41,19 @@ def _real_vehicle_preference_config() -> RigConfig:
         },
         deep=True,
     )
-    return RigConfig(methods=methods)
+    return RigConfig(
+        dataset=DatasetSettings(
+            id="legacy_anchor_refresh",
+            category=DatasetCategory.REAL_VEHICLE,
+            source_kind=InputSourceKind.PREPARED,
+            prepared_root=tmp_path,
+        ),
+        static_cameras=[
+            StaticCameraSettings(id="cam_edge_0"),
+            StaticCameraSettings(id="cam_edge_1"),
+        ],
+        methods=methods,
+    )
 
 
 def _write_legacy_selection(experiment: Path, *, mode: str = "auto") -> None:
@@ -70,7 +89,7 @@ def test_legacy_real_vehicle_anchor_zero_is_repaired_only_after_all_method_check
     for _, root in roots:
         root.mkdir(parents=True)
 
-    config = _real_vehicle_preference_config()
+    config = _real_vehicle_preference_config(experiment)
     monkeypatch.setattr(
         "camera_rig_calibration.legacy_preferred_anchor_repair._primary_method_roots",
         lambda _: roots,
