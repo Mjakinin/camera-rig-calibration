@@ -47,20 +47,75 @@ FIELDS = [
     "selection_score",
     "pnp_reprojection_rmse_px",
     "marker_area_ratio",
+    "distance_m",
+    "center_u",
+    "center_v",
+    "area_px2",
+    "rvec_x",
+    "rvec_y",
+    "rvec_z",
+    "tvec_x_m",
+    "tvec_y_m",
+    "tvec_z_m",
+    "corner0_u",
+    "corner0_v",
+    "corner1_u",
+    "corner1_v",
+    "corner2_u",
+    "corner2_v",
+    "corner3_u",
+    "corner3_v",
 ]
+
+
+def _observation(**values) -> dict:
+    """Return a minimal but scientifically valid AP01 observation fixture."""
+
+    marker = int(values["marker_id"])
+    frame_text = str(values.get("frame_id", ""))
+    frame = int(frame_text) if frame_text else 0
+    # Keep every synthetic pose finite and deterministic.  The test exercises
+    # selection/anchor authority, not pose accuracy; nevertheless it deliberately
+    # satisfies the same PnP/geometry contract consumed by AP01 production code.
+    z = 2.0 + 0.05 * marker + 0.01 * frame
+    center_u = 320.0 + 3.0 * marker
+    center_v = 240.0 + 2.0 * frame
+    half = 40.0
+    row = {
+        "distance_m": z,
+        "center_u": center_u,
+        "center_v": center_v,
+        "area_px2": (2.0 * half) ** 2,
+        "rvec_x": 0.0,
+        "rvec_y": 0.0,
+        "rvec_z": 0.0,
+        "tvec_x_m": 0.02 * marker,
+        "tvec_y_m": 0.01 * frame,
+        "tvec_z_m": z,
+        "corner0_u": center_u - half,
+        "corner0_v": center_v - half,
+        "corner1_u": center_u + half,
+        "corner1_v": center_v - half,
+        "corner2_u": center_u + half,
+        "corner2_v": center_v + half,
+        "corner3_u": center_u - half,
+        "corner3_v": center_v + half,
+    }
+    row.update(values)
+    return row
 
 
 def _write_selection_observations(root: Path) -> None:
     root.mkdir(parents=True, exist_ok=True)
     rows = [
         # Preferred marker 0 is deliberately not visible in the AP01 root.
-        {"observer_type": "static", "observer_id": "cam_a", "camera_name": "cam_a", "frame_id": "", "marker_id": 0, "pnp_success": "true", "selection_score": 10, "pnp_reprojection_rmse_px": 0.3, "marker_area_ratio": 0.02},
-        {"observer_type": "static", "observer_id": "cam_a", "camera_name": "cam_a", "frame_id": "", "marker_id": 5, "pnp_success": "true", "selection_score": 9, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.02},
-        {"observer_type": "static", "observer_id": "cam_b", "camera_name": "cam_b", "frame_id": "", "marker_id": 5, "pnp_success": "true", "selection_score": 8, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.02},
-        {"observer_type": "moving", "observer_id": "moving_calib_camera", "camera_name": "moving_calib_camera", "frame_id": "0", "marker_id": 0, "pnp_success": "true", "selection_score": 7, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.015},
-        {"observer_type": "moving", "observer_id": "moving_calib_camera", "camera_name": "moving_calib_camera", "frame_id": "1", "marker_id": 0, "pnp_success": "true", "selection_score": 7, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.015},
-        {"observer_type": "moving", "observer_id": "moving_calib_camera", "camera_name": "moving_calib_camera", "frame_id": "2", "marker_id": 5, "pnp_success": "true", "selection_score": 6, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.015},
-        {"observer_type": "moving", "observer_id": "moving_calib_camera", "camera_name": "moving_calib_camera", "frame_id": "3", "marker_id": 5, "pnp_success": "true", "selection_score": 6, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.015},
+        _observation(observer_type="static", observer_id="cam_a", camera_name="cam_a", frame_id="", marker_id=0, pnp_success="true", selection_score=10, pnp_reprojection_rmse_px=0.3, marker_area_ratio=0.02),
+        _observation(observer_type="static", observer_id="cam_a", camera_name="cam_a", frame_id="", marker_id=5, pnp_success="true", selection_score=9, pnp_reprojection_rmse_px=0.4, marker_area_ratio=0.02),
+        _observation(observer_type="static", observer_id="cam_b", camera_name="cam_b", frame_id="", marker_id=5, pnp_success="true", selection_score=8, pnp_reprojection_rmse_px=0.4, marker_area_ratio=0.02),
+        _observation(observer_type="moving", observer_id="moving_calib_camera", camera_name="moving_calib_camera", frame_id="0", marker_id=0, pnp_success="true", selection_score=7, pnp_reprojection_rmse_px=0.4, marker_area_ratio=0.015),
+        _observation(observer_type="moving", observer_id="moving_calib_camera", camera_name="moving_calib_camera", frame_id="1", marker_id=0, pnp_success="true", selection_score=7, pnp_reprojection_rmse_px=0.4, marker_area_ratio=0.015),
+        _observation(observer_type="moving", observer_id="moving_calib_camera", camera_name="moving_calib_camera", frame_id="2", marker_id=5, pnp_success="true", selection_score=6, pnp_reprojection_rmse_px=0.4, marker_area_ratio=0.015),
+        _observation(observer_type="moving", observer_id="moving_calib_camera", camera_name="moving_calib_camera", frame_id="3", marker_id=5, pnp_success="true", selection_score=6, pnp_reprojection_rmse_px=0.4, marker_area_ratio=0.015),
     ]
     with (root / "shared_all_aruco_observations.csv").open(
         "w", newline="", encoding="utf-8"
