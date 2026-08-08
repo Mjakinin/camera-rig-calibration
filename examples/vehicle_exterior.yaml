@@ -56,8 +56,11 @@ methods:
   ap02:
     method_contract: baseline_v1
     historical_reproduction: false
+    # In auto mode an integer is a category preference, not a hard requirement.
+    # Marker 0 is used when it has automatic-quality support; otherwise preflight
+    # falls back to the deterministic AP02 recommendation.
     reference_marker_selection_mode: auto
-    reference_marker_id: auto
+    reference_marker_id: 0
     frame_selection_strategy: legacy_smart_v1
     initialization_strategy: legacy_maximum_bottleneck_v1
     graph_edge_weight_strategy: legacy_observation_quality_v1
@@ -76,7 +79,9 @@ methods:
     scale_input_policy: legacy_registered_image_redetection_v1
     minimum_marker_area_px2: 100.0
     single:
-      scale_marker_id: auto
+      # Category-default preference; marker 0 falls back to AP03 auto selection
+      # when it has insufficient repeated moving support.
+      scale_marker_id: 0
     multi:
       marker_ids: auto
     scale:
@@ -91,5 +96,6 @@ observation_quality:
   maximum_marker_distance_m: disabled
 evaluation:
   enabled: true
-  anchor_marker_id: auto
+  # Auto + integer means preferred common anchor with deterministic auto fallback.
+  anchor_marker_id: 0
   anchor_selection_mode: auto
