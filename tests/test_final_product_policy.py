@@ -14,7 +14,7 @@ from camera_rig_calibration.product_policy import (
 install_product_policy()
 
 from camera_rig_calibration import wizard  # noqa: E402
-from camera_rig_calibration.evaluation import reporting  # noqa: E402
+from camera_rig_calibration.evaluation import ap03_derived, reporting  # noqa: E402
 
 
 def _job(method_id: str):
@@ -104,6 +104,20 @@ def test_reporting_contract_uses_actual_ap02_80_80_baseline() -> None:
     assert "combined_nfev_50" not in checks
     assert checks["static_nfev_80"] is True
     assert checks["combined_nfev_80"] is True
+
+
+def test_common_evaluation_anchor_overrides_stale_dataset_anchor_for_ap03(
+    tmp_path: Path,
+) -> None:
+    (tmp_path / "evaluations").mkdir(parents=True)
+    (tmp_path / "observations").mkdir(parents=True)
+    (tmp_path / "evaluations" / "SELECTED_COMMON_EVALUATION.json").write_text(
+        json.dumps({"anchor_marker_id": 14}), encoding="utf-8"
+    )
+    (tmp_path / "observations" / "SELECTION_CANDIDATES.json").write_text(
+        json.dumps({"evaluation_anchor": {"selected": 2}}), encoding="utf-8"
+    )
+    assert ap03_derived._selection_anchor(tmp_path) == 14
 
 
 def test_derived_evaluations_refresh_without_touching_unrelated_files(
