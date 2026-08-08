@@ -26,3 +26,21 @@ def install_submission_bindings() -> None:
 
     queueing.freeze_selections = observations.freeze_selections
     runtime.freeze_selections = observations.freeze_selections
+
+    # The robustness strategy remains readable for old schema-v5 configs and
+    # historical diagnostics, but it is not a supported submission baseline and
+    # must not look like a normal operator-tunable AP01 mode.
+    current_rows = wizard._setting_rows
+    if not getattr(current_rows, "_rigcal_submission_ap01_rows", False):
+        def setting_rows(job, groups=None):
+            rows = current_rows(job, groups)
+            if job.method_id == "ap01":
+                rows = [
+                    row
+                    for row in rows
+                    if row[0] not in {"ap01_advanced_strategy", "ap01_direct_target"}
+                ]
+            return rows
+
+        setting_rows._rigcal_submission_ap01_rows = True  # type: ignore[attr-defined]
+        wizard._setting_rows = setting_rows
