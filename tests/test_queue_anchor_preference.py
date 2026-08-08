@@ -42,16 +42,30 @@ FIELDS = [
     "camera_name",
     "frame_id",
     "marker_id",
+    "detection_success",
     "pnp_success",
-    "selection_score",
-    "pnp_reprojection_rmse_px",
-    "marker_area_ratio",
+    "marker_length_m",
+    "fx",
+    "fy",
+    "cx",
+    "cy",
+    "distortion_model",
+    *(f"d{index}" for index in range(8)),
     "rvec_x",
     "rvec_y",
     "rvec_z",
     "tvec_x_m",
     "tvec_y_m",
     "tvec_z_m",
+    *(f"corner{index}_{axis}" for index in range(4) for axis in ("u", "v")),
+    "area_px2",
+    "marker_area_ratio",
+    "image_width_px",
+    "image_height_px",
+    "center_u",
+    "center_v",
+    "pnp_reprojection_rmse_px",
+    "selection_score",
 ]
 
 
@@ -62,23 +76,62 @@ def _row(
     *,
     frame_id: str = "",
 ) -> dict[str, object]:
-    return {
+    width = 640.0
+    height = 480.0
+    fx = fy = 500.0
+    cx = width / 2.0
+    cy = height / 2.0
+    marker_length_m = 0.17
+    half = marker_length_m / 2.0
+    z = 1.0 + 0.01 * marker_id
+
+    # Identity rotation and positive-z translation. These image corners are the
+    # exact pinhole projections of AP01/AP02/AP03's canonical marker corners,
+    # so the quality filter reconstructs a near-zero PnP reprojection RMSE.
+    projected = [
+        (cx + fx * (-half) / z, cy + fy * half / z),
+        (cx + fx * half / z, cy + fy * half / z),
+        (cx + fx * half / z, cy + fy * (-half) / z),
+        (cx + fx * (-half) / z, cy + fy * (-half) / z),
+    ]
+    side_px = fx * marker_length_m / z
+    area_px2 = side_px * side_px
+
+    row: dict[str, object] = {
         "observer_type": observer_type,
         "observer_id": observer_id,
         "camera_name": observer_id,
         "frame_id": frame_id,
         "marker_id": marker_id,
+        "detection_success": "true",
         "pnp_success": "true",
-        "selection_score": 100.0 - marker_id,
-        "pnp_reprojection_rmse_px": 0.4,
-        "marker_area_ratio": 0.02,
+        "marker_length_m": marker_length_m,
+        "fx": fx,
+        "fy": fy,
+        "cx": cx,
+        "cy": cy,
+        "distortion_model": "plumb_bob",
         "rvec_x": 0.0,
         "rvec_y": 0.0,
         "rvec_z": 0.0,
         "tvec_x_m": 0.0,
         "tvec_y_m": 0.0,
-        "tvec_z_m": 1.0 + 0.01 * marker_id,
+        "tvec_z_m": z,
+        "area_px2": area_px2,
+        "marker_area_ratio": area_px2 / (width * height),
+        "image_width_px": int(width),
+        "image_height_px": int(height),
+        "center_u": cx,
+        "center_v": cy,
+        "pnp_reprojection_rmse_px": 0.0,
+        "selection_score": 100.0 - marker_id,
     }
+    for index in range(8):
+        row[f"d{index}"] = 0.0
+    for index, (u, v) in enumerate(projected):
+        row[f"corner{index}_u"] = u
+        row[f"corner{index}_v"] = v
+    return row
 
 
 def _write_dataset(root: Path) -> None:
@@ -183,7 +236,9 @@ def test_real_vehicle_preferred_zero_falls_back_at_queue_common_anchor(
         repository_root=tmp_path,
     )
 
-    assert result.ready is True
+    assert result.ready is True, [
+        (job.job_id, job.status, job.errors) for job in result.jobs
+    ]
     assert all(job.runnable for job in result.jobs)
     assert result.common_evaluation_anchor_marker_id == 5
     for job in result.jobs:
