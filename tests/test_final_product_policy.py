@@ -6,6 +6,9 @@ from pathlib import Path
 import numpy as np
 
 from camera_rig_calibration.components import register_builtin_components
+from camera_rig_calibration.marker_preference_policy import (
+    install_marker_preference_policy,
+)
 from camera_rig_calibration.product_policy import (
     _DATASET_CONTEXT,
     _refresh_derived_tree,
@@ -22,6 +25,7 @@ from camera_rig_calibration.ui_display_policy import install_ui_display_policy
 install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
+install_marker_preference_policy()
 install_submission_bindings()
 install_ui_display_policy()
 
@@ -47,7 +51,7 @@ def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
         assert ap01.methods.ap01.advanced_strategy == "legacy_main_v1"
         assert ap01.methods.ap01.root_camera == "cam_edge_3"
         assert ap01.methods.ap01.direct_target_camera == "auto"
-        assert ap02.methods.ap02.reference_marker_selection_mode == "baseline"
+        assert ap02.methods.ap02.reference_marker_selection_mode == "auto"
         assert ap02.methods.ap02.reference_marker_id == 14
         assert ap02.methods.ap02.static_only_ba_max_function_evaluations == 80
         assert ap02.methods.ap02.combined_ba_max_function_evaluations == 80
@@ -56,12 +60,13 @@ def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
         assert ap03.methods.ap03.multi.marker_ids == list(range(15))
         for job in (ap01, ap02, ap03):
             assert job.evaluation.anchor_marker_id == 14
-            assert job.evaluation.anchor_selection_mode == "explicit"
+            assert job.evaluation.anchor_selection_mode == "auto"
+            assert job.selection.mode == "auto"
     finally:
         _DATASET_CONTEXT.reset(token)
 
 
-def test_real_vehicle_uses_same_method_cores_with_data_driven_anchors() -> None:
+def test_real_vehicle_uses_marker_zero_preferences_with_auto_fallback() -> None:
     ap01 = _job("ap01")
     ap02 = _job("ap02")
     ap03 = _job("ap03")
@@ -71,11 +76,36 @@ def test_real_vehicle_uses_same_method_cores_with_data_driven_anchors() -> None:
     assert ap01.methods.ap01.direct_target_camera == "auto"
     assert ap02.methods.ap02.method_contract == "baseline_v1"
     assert ap02.methods.ap02.reference_marker_selection_mode == "auto"
-    assert ap02.methods.ap02.reference_marker_id == "auto"
+    assert ap02.methods.ap02.reference_marker_id == 0
     assert ap03.methods.ap03.method_contract == "baseline_v1"
+    assert ap03.methods.ap03.single.scale_marker_id == 0
+    assert ap03.methods.ap03.multi.marker_ids == "auto"
     for job in (ap01, ap02, ap03):
-        assert job.evaluation.anchor_marker_id == "auto"
+        assert job.evaluation.anchor_marker_id == 0
         assert job.evaluation.anchor_selection_mode == "auto"
+        assert job.selection.mode == "auto"
+
+
+def test_marker_preference_ui_explains_fallback() -> None:
+    real_ap02 = _job("ap02")
+    real_text = "\n".join(
+        f"{label} {current} {baseline} {description}"
+        for _, _, label, current, baseline, description in wizard._setting_rows(real_ap02)
+    ).lower()
+    assert "preferred marker 0" in real_text
+    assert "auto fallback" in real_text
+
+    token = _DATASET_CONTEXT.set("simulation")
+    try:
+        sim_ap02 = _job("ap02")
+        sim_text = "\n".join(
+            f"{label} {current} {baseline} {description}"
+            for _, _, label, current, baseline, description in wizard._setting_rows(sim_ap02)
+        ).lower()
+    finally:
+        _DATASET_CONTEXT.reset(token)
+    assert "preferred marker 14" in sim_text
+    assert "fallback" in sim_text
 
 
 def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
@@ -97,7 +127,7 @@ def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
     assert "algorithm variant" in text
 
 
-def test_reporting_contract_uses_only_baselines_and_actual_ap02_80_80() -> None:
+def test_reporting_contract_accepts_preferred_14_fallback_baseline() -> None:
     contract = reporting._baseline_contract(
         category="simulation",
         method_payloads=[
@@ -107,7 +137,7 @@ def test_reporting_contract_uses_only_baselines_and_actual_ap02_80_80() -> None:
                 "config_summary": {
                     "reference_marker_id": 14,
                     "resolved_reference_marker_id": 14,
-                    "reference_marker_selection_mode": "baseline",
+                    "reference_marker_selection_mode": "auto",
                     "static_max_nfev": 80,
                     "combined_max_nfev": 80,
                     "initialization_algorithm": "maximum_bottleneck",
@@ -130,6 +160,8 @@ def test_reporting_contract_uses_only_baselines_and_actual_ap02_80_80() -> None:
     assert "combined_nfev_50" not in checks
     assert checks["static_nfev_80"] is True
     assert checks["combined_nfev_80"] is True
+    assert checks["reference_preference_14_with_auto_fallback"] is True
+    assert checks["reference_marker_14"] is True
 
 
 def test_published_common_evaluation_is_reporting_authority(tmp_path: Path) -> None:
