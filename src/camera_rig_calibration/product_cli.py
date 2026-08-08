@@ -4,6 +4,7 @@ from .common_anchor_authority_policy import install_common_anchor_authority_poli
 from .marker_preference_policy import install_marker_preference_policy
 from .product_policy import install_product_policy
 from .queue_anchor_preference_policy import install_queue_anchor_preference_policy
+from .reanchor_existing_results_policy import install_reanchor_existing_results_policy
 from .reporting_authority_policy import install_reporting_authority_policy
 from .result_output_policy import install_result_output_policy
 from .submission_bindings import install_submission_bindings
@@ -23,6 +24,9 @@ install_marker_preference_policy()
 # the queue intersects per-method automatic candidates.
 install_common_anchor_authority_policy()
 install_queue_anchor_preference_policy()
+# Existing method estimates may be expressed in a newly selected common anchor
+# without rerunning native calibration or COLMAP when the saved geometry supports it.
+install_reanchor_existing_results_policy()
 install_result_output_policy()
 # Bind every already-imported preflight/runtime consumer only after all
 # selection wrappers are installed, so Wizard and --config use the same path.
