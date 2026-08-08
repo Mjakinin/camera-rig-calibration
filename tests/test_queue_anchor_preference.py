@@ -57,6 +57,7 @@ FIELDS = [
     "tvec_x_m",
     "tvec_y_m",
     "tvec_z_m",
+    "distance_m",
     *(f"corner{index}_{axis}" for index in range(4) for axis in ("u", "v")),
     "area_px2",
     "marker_area_ratio",
@@ -117,6 +118,10 @@ def _row(
         "tvec_x_m": 0.0,
         "tvec_y_m": 0.0,
         "tvec_z_m": z,
+        # With x=y=0, Euclidean marker distance is exactly z. Production
+        # detector output contains this field and the quality-ranking contract
+        # consumes it directly.
+        "distance_m": z,
         "area_px2": area_px2,
         "marker_area_ratio": area_px2 / (width * height),
         "image_width_px": int(width),
