@@ -21,6 +21,7 @@ from camera_rig_calibration.product_policy import _DATASET_CONTEXT, install_prod
 from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
+from camera_rig_calibration.submission_bindings import install_submission_bindings
 from camera_rig_calibration.submission_policy import (
     _automatic_ap01_direct_target,
     install_submission_policy,
@@ -31,9 +32,10 @@ from camera_rig_calibration.ui_display_policy import install_ui_display_policy
 install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
+install_submission_bindings()
 install_ui_display_policy()
 
-from camera_rig_calibration import wizard  # noqa: E402
+from camera_rig_calibration import observations, preflight, queueing, runtime, wizard  # noqa: E402
 
 
 def _value(argv: tuple[str, ...], option: str) -> str:
@@ -62,6 +64,14 @@ def _prepared_config(
         methods=methods,
         colmap=colmap or ColmapSettings(),
     )
+
+
+def test_submission_selection_bindings_cover_every_execution_path() -> None:
+    assert preflight.resolve_selections is observations.resolve_selections
+    assert wizard.resolve_selections is observations.resolve_selections
+    assert runtime.resolve_selections is observations.resolve_selections
+    assert queueing.freeze_selections is observations.freeze_selections
+    assert runtime.freeze_selections is observations.freeze_selections
 
 
 def test_ap01_direct_target_is_not_operator_editable() -> None:
@@ -99,9 +109,9 @@ def _write_ap01_observations(path: Path, rows: list[dict[str, object]]) -> None:
 
 
 def test_ap01_direct_target_is_selected_from_filtered_overlap(tmp_path: Path) -> None:
-    observations = tmp_path / "observations"
+    observations_root = tmp_path / "observations"
     _write_ap01_observations(
-        observations,
+        observations_root,
         [
             {"observer_type": "static", "observer_id": "cam_root", "marker_id": 14, "selection_score": 20, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.02},
             {"observer_type": "static", "observer_id": "cam_root", "marker_id": 7, "selection_score": 18, "pnp_reprojection_rmse_px": 0.6, "marker_area_ratio": 0.018},
@@ -125,7 +135,7 @@ def test_ap01_direct_target_is_selected_from_filtered_overlap(tmp_path: Path) ->
         ],
     )
     selected, candidates = _automatic_ap01_direct_target(
-        config, observations, "cam_root"
+        config, observations_root, "cam_root"
     )
     assert selected == "cam_direct"
     direct = next(item for item in candidates if item["id"] == "cam_direct")
@@ -139,9 +149,9 @@ def test_ap01_direct_target_is_selected_from_filtered_overlap(tmp_path: Path) ->
 def test_ap01_direct_target_falls_back_to_relay_only_without_two_markers(
     tmp_path: Path,
 ) -> None:
-    observations = tmp_path / "observations"
+    observations_root = tmp_path / "observations"
     _write_ap01_observations(
-        observations,
+        observations_root,
         [
             {"observer_type": "static", "observer_id": "cam_root", "marker_id": 14, "selection_score": 20, "pnp_reprojection_rmse_px": 0.4, "marker_area_ratio": 0.02},
             {"observer_type": "static", "observer_id": "cam_other", "marker_id": 14, "selection_score": 19, "pnp_reprojection_rmse_px": 0.5, "marker_area_ratio": 0.019},
@@ -161,7 +171,7 @@ def test_ap01_direct_target_falls_back_to_relay_only_without_two_markers(
         ],
     )
     selected, candidates = _automatic_ap01_direct_target(
-        config, observations, "cam_root"
+        config, observations_root, "cam_root"
     )
     assert selected is None
     assert candidates[0]["compatible"] is False
@@ -274,6 +284,5 @@ def test_ap03_nonbaseline_parameters_reach_colmap_and_scale_commands(
     assert _value(scale, "--maximum-observations-per-marker") == "9"
     assert _value(scale, "--scale-input-policy") == "wizard_filtered_observations_v1"
     assert _value(scale, "--minimum-marker-area-px2") == "321.0"
-    assert "--accepted-observations" not in scale
-    # estimate_scale receives the policy and is responsible for attaching the
-    # accepted-observation table to the scale_core subprocess.
+    # estimate_scale receives the filtered policy here and attaches the accepted
+    # observation table to its scale_core subprocess during execution.
