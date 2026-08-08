@@ -16,14 +16,23 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import json
 import os
 import shutil
 import subprocess
 import time
 from pathlib import Path
 
-from camera_rig_calibration.publication import reconcile_existing_experiment
+from camera_rig_calibration.product_policy import install_product_policy
+
+
+# Reconciliation must use the same final publication/reporting policy as rigcal:
+# derived evaluations are refreshable, the selected common anchor is authoritative
+# for AP03 derived exports, and native calibration artifacts remain immutable.
+install_product_policy()
+
+from camera_rig_calibration.publication import (  # noqa: E402
+    reconcile_existing_experiment,
+)
 
 
 EXPERIMENTS = (
