@@ -1,116 +1,32 @@
 {
   "alignment": {
-    "alignment": "rigid_kabsch_no_scale_fit",
-    "corner_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/derived/shared_anchor_geometry/marker_2_corners_colmap.json",
-    "method": "ap03_single",
-    "provenance_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03_single/ap03_configured_defaults_nonbaseline/provenance/derived_result.json",
-    "scale_m_per_colmap_unit": 0.6855400800225491,
-    "scale_mode": "single",
-    "shared_colmap_best_model": "0",
-    "shared_colmap_container": "methods/ap03/ap03_configured_defaults_nonbaseline",
-    "side_lengths_m": [
-      0.17040851274931743,
-      0.17036342665867923,
-      0.1699882851666109,
-      0.1705653287230269
-    ],
-    "square_fit_rmse_m": 0.0005155170899176788,
-    "transform_anchor_method": {
-      "matrix": [
-        [
-          0.9996629367464441,
-          -0.0027000615427842027,
-          -0.025820971382577072,
-          -0.6591333311109022
-        ],
-        [
-          -0.0024050461666243147,
-          -0.9999315582266497,
-          0.011449655687443907,
-          1.8047322781112716
-        ],
-        [
-          -0.025850118924505804,
-          -0.011383695801003622,
-          -0.9996010118149637,
-          -1.3551508572215658
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          1.0
-        ]
-      ],
-      "pitch_rad": 0.02585299875556844,
-      "qw": 0.005708911998599694,
-      "qx": -0.9998994332916757,
-      "qy": 0.001276405291230756,
-      "qz": 0.012919071805296783,
-      "roll_rad": -3.1302049062986357,
-      "x_m": -0.6591333311109022,
-      "y_m": 1.8047322781112716,
-      "yaw_rad": -0.0024058524508404184,
-      "z_m": -1.3551508572215658
-    },
-    "transform_method_anchor": {
-      "matrix": [
-        [
-          0.9996629367464441,
-          -0.0024050461666243147,
-          -0.025850118924505804,
-          0.6282208151132218
-        ],
-        [
-          -0.0027000615427842027,
-          -0.9999315582266497,
-          -0.011383695801003622,
-          1.787402433351755
-        ],
-        [
-          -0.025820971382577072,
-          0.011449655687443907,
-          -0.9996010118149637,
-          -1.3922931941129
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          1.0
-        ]
-      ],
-      "pitch_rad": 0.025823841481132735,
-      "qw": 0.005708911998599694,
-      "qx": 0.9998994332916757,
-      "qy": -0.001276405291230756,
-      "qz": -0.012919071805296783,
-      "roll_rad": 3.1301389286909194,
-      "x_m": 0.6282208151132218,
-      "y_m": 1.787402433351755,
-      "yaw_rad": -0.0027009653731152054,
-      "z_m": -1.3922931941129
-    }
+    "corner_file": "/mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/derived/shared_anchor_geometry/marker_14_corners_colmap.json",
+    "method": "ap03_single"
   },
   "anchor_marker_id": 2,
   "contract": "rigcal_anchor_export_v1",
-  "fingerprint": "944aad9b044068e3fd3c2d75dbfbe9dcf83a30922f58f4b24ea83461fbb62888",
+  "fingerprint": "638f18439a57e3161772690f987b5b1f7788407bbf7f6e90b226c20aa810d5e1",
   "label": "ap03_configured_defaults_nonbaseline",
   "method": "ap03_single",
   "pairwise_invariance": {
-    "camera_pair_count": 6,
-    "maximum_rotation_difference_deg": 0.0,
-    "maximum_translation_difference_m": 2.6645352591003757e-15,
-    "passed": true
+    "passed": false,
+    "reason": "anchor transform unavailable"
   },
   "schema_version": 1,
   "status": {
-    "available": true,
-    "camera_count": 4,
-    "code": "OK",
+    "available": false,
+    "camera_count": 0,
+    "code": "ANCHOR_SOURCE_MISMATCH",
     "expected_camera_count": 4,
     "manual_warning_confirmed": false,
-    "missing_cameras": [],
-    "warnings": []
+    "missing_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "warnings": [
+      "The shared AP03 anchor geometry belongs to marker 14, not marker 2."
+    ]
   }
 }

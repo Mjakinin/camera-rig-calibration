@@ -53,22 +53,22 @@ cam_edge_1 | 3.757        | 0.146
 cam_edge_3 | 3.020        | 0.119
 cam_edge_5 | 5.943        | 0.223
 
-ap03_multi / ap03_configured_defaults_nonbaseline
+ap03_multi / baseline
 ----------------------------------------------------------------------------------------------------------------------
-Summary: mean 2.214 cm / 0.040 deg; max 3.807 cm / 0.052 deg
+Summary: mean 2.326 cm / 0.063 deg; max 4.102 cm / 0.089 deg
 Camera     | t error [cm] | r error [deg]
 -----------+--------------+--------------
-cam_edge_0 | 0.788        | 0.031
-cam_edge_1 | 2.354        | 0.047
-cam_edge_3 | 1.906        | 0.031
-cam_edge_5 | 3.807        | 0.052
+cam_edge_0 | 0.830        | 0.089
+cam_edge_1 | 2.368        | 0.041
+cam_edge_3 | 2.003        | 0.054
+cam_edge_5 | 4.102        | 0.069
 
-ap03_single / ap03_configured_defaults_nonbaseline
+ap03_single / baseline
 ----------------------------------------------------------------------------------------------------------------------
-Summary: mean 2.697 cm / 0.040 deg; max 4.625 cm / 0.052 deg
+Summary: mean 2.736 cm / 0.063 deg; max 4.807 cm / 0.089 deg
 Camera     | t error [cm] | r error [deg]
 -----------+--------------+--------------
-cam_edge_0 | 0.957        | 0.031
-cam_edge_1 | 2.878        | 0.047
-cam_edge_3 | 2.327        | 0.031
-cam_edge_5 | 4.625        | 0.052
+cam_edge_0 | 0.957        | 0.089
+cam_edge_1 | 2.821        | 0.041
+cam_edge_3 | 2.360        | 0.054
+cam_edge_5 | 4.807        | 0.069

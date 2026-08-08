@@ -29,12 +29,12 @@
     },
     {
       "frustums": [],
-      "label": "ap03_configured_defaults_nonbaseline",
+      "label": "baseline",
       "method": "ap03_multi"
     },
     {
       "frustums": [],
-      "label": "ap03_configured_defaults_nonbaseline",
+      "label": "baseline",
       "method": "ap03_single"
     }
   ]

@@ -1,9 +1,11 @@
 {
   "anchor_alignment": "diagnostics/anchor_alignment.json",
-  "anchor_camera_count": 4,
-  "anchor_export_available": true,
-  "anchor_export_status": "OK",
-  "anchor_export_warnings": [],
+  "anchor_camera_count": 0,
+  "anchor_export_available": false,
+  "anchor_export_status": "ANCHOR_SOURCE_MISMATCH",
+  "anchor_export_warnings": [
+    "The shared AP03 anchor geometry belongs to marker 14, not marker 2."
+  ],
   "anchor_marker_id": 2,
   "artifact_status": "available",
   "available_static_cameras": [
@@ -48,7 +50,7 @@
     "scale_reprojection_threshold_px": 5.0,
     "single_scale_marker_id": 14
   },
-  "derived_fingerprint": "811d816be9441f0cf54ade0c7ec8d4354c2587f43a5a5aa9cde45e1eb7f6b318",
+  "derived_fingerprint": "867646ca19c0356926898a007d7754061af5c35062767b5fa36604530c4c0052",
   "derived_results": [
     "../../ap03_single/ap03_configured_defaults_nonbaseline",
     "../../ap03_multi/ap03_configured_defaults_nonbaseline"
@@ -59,7 +61,7 @@
     "provenance/derived_result.json"
   ],
   "diagnostics": "diagnostics",
-  "evaluation_status": "available",
+  "evaluation_status": "evaluation_unavailable",
   "execution_status": "completed_shared_colmap",
   "input_fingerprint": "input_0ffd7d57d0b8",
   "label": "ap03_configured_defaults_nonbaseline",
@@ -226,46 +228,51 @@
     "ap03_scale_relative_std": 0.0038344137040685505,
     "evaluation": {
       "anchor_camera_gt": {
-        "count": 4,
-        "evaluation_status": "available",
+        "count": 0,
+        "evaluation_status": "evaluation_unavailable",
         "label": "ap03_configured_defaults_nonbaseline",
-        "max_rotation_error_deg": 1.5280264943630175,
-        "max_translation_error_cm": 15.763625544539853,
-        "mean_rotation_error_deg": 1.4895402567633886,
-        "mean_translation_error_cm": 8.808948042990682,
-        "median_rotation_error_deg": 1.4906826335912275,
-        "median_translation_error_cm": 8.238939627576409,
+        "max_rotation_error_deg": null,
+        "max_translation_error_cm": null,
+        "mean_rotation_error_deg": null,
+        "mean_translation_error_cm": null,
+        "median_rotation_error_deg": null,
+        "median_translation_error_cm": null,
         "method": "ap03_single"
       },
       "pairwise_gt": {
-        "count": 6,
-        "evaluated_camera_count": 4,
-        "evaluation_status": "available",
+        "count": 0,
+        "evaluated_camera_count": 0,
+        "evaluation_status": "evaluation_unavailable",
         "expected_camera_count": 4,
         "label": "ap03_configured_defaults_nonbaseline",
-        "max_rotation_error_deg": 0.09267238771358124,
-        "max_translation_error_cm": 7.076319306551314,
-        "mean_rotation_error_deg": 0.06350384757326033,
-        "mean_translation_error_cm": 4.368395203785879,
-        "median_rotation_error_deg": 0.06030904127016746,
-        "median_translation_error_cm": 3.970348126748738,
+        "max_rotation_error_deg": null,
+        "max_translation_error_cm": null,
+        "mean_rotation_error_deg": null,
+        "mean_translation_error_cm": null,
+        "median_rotation_error_deg": null,
+        "median_translation_error_cm": null,
         "method": "ap03_single",
-        "missing_cameras": [],
-        "reason": null
+        "missing_cameras": [
+          "cam_edge_0",
+          "cam_edge_1",
+          "cam_edge_3",
+          "cam_edge_5"
+        ],
+        "reason": "The direct anchor-relative estimate does not contain the exact Ground-Truth camera set; no pair subset is published as a complete evaluation."
       }
     },
     "shared_colmap": {
       "camera_pose_source": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
       "colmap_rerun": false,
       "contract": "rigcal_ap03_scale_variants_v1",
-      "fingerprint": "811d816be9441f0cf54ade0c7ec8d4354c2587f43a5a5aa9cde45e1eb7f6b318",
+      "fingerprint": "867646ca19c0356926898a007d7754061af5c35062767b5fa36604530c4c0052",
       "layout_version": 2,
       "method_rerun": false,
       "scale_m_per_colmap_unit": 0.6855400800225491,
       "scale_metadata": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
       "schema_version": 5,
       "scientific_role": "ap03_single_scale_result",
-      "shared_anchor_geometry": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/derived/shared_anchor_geometry/marker_2_corners_colmap.json",
+      "shared_anchor_geometry": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/derived/shared_anchor_geometry/marker_14_corners_colmap.json",
       "shared_colmap_best_model": "0",
       "shared_colmap_container": "methods/ap03/ap03_configured_defaults_nonbaseline"
     }

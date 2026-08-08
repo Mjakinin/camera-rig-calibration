@@ -323,7 +323,7 @@
     }
   ],
   "contract": "rigcal_anchor_export_v1",
-  "evaluation_status": "available",
+  "evaluation_status": "evaluation_unavailable",
   "fingerprint": "05dc0302dd026c02e074b2c794386dc8c506a44500340722b902adf67b71bb41",
   "label": "root_cam_edge_1",
   "layout_version": 2,

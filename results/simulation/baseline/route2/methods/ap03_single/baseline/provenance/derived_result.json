@@ -2,14 +2,14 @@
   "camera_pose_source": "methods/ap03/baseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
   "colmap_rerun": false,
   "contract": "rigcal_ap03_scale_variants_v1",
-  "fingerprint": "d7b00f5d95e9378feedd2ee72f10493d4cf6aa7f5612104b5528f7164ebbbfe1",
+  "fingerprint": "d371cb32151dcc7f6cf18ff728e0ed7eed077fec44025744cc22ac9bb5d0c930",
   "layout_version": 2,
   "method_rerun": false,
   "scale_m_per_colmap_unit": 0.68610114549572,
   "scale_metadata": "methods/ap03/baseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
   "schema_version": 5,
   "scientific_role": "ap03_single_scale_result",
-  "shared_anchor_geometry": "methods/ap03/baseline/diagnostics/derived/shared_anchor_geometry/marker_2_corners_colmap.json",
+  "shared_anchor_geometry": "methods/ap03/baseline/diagnostics/derived/shared_anchor_geometry/marker_14_corners_colmap.json",
   "shared_colmap_best_model": "0",
   "shared_colmap_container": "methods/ap03/baseline"
 }

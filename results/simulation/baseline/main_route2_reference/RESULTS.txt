@@ -3,24 +3,19 @@ SIMULATION CALIBRATION RESULTS — CAMERA-TO-CAMERA VS GROUND TRUTH
 
 Experiment: main_route2_reference
 Simulation parameters: frame_timeout_seconds=3.0, lighting=baseline, lighting_scale=1.0, motion_blur_angle_deg=0.0, motion_blur_kernel=0, moving_height=720, moving_hfov_deg=69.1, moving_width=1280, post_pose_skip=5, route=route2, route_sampling_strategy=original_route_poses, settle_seconds=0.35, startup_timeout_seconds=60.0, target_route_frames=189
-Common evaluation anchor: marker 2 (configured auto; frozen during preflight)
-Anchor reason: one deterministic anchor frozen across all runnable queue methods before calibration
+Common evaluation anchor: marker 14 (configured 14; frozen during preflight)
+Anchor reason: published common evaluation is authoritative for final reporting; the original preflight recommendation remains preserved in the source selection artifact
 
 BASELINE CONTRACT
 ------------------------------------------------------------------------------------------------------------------------------------------
-Contract: route2_cpu_ref14_50x50_v1
-Overall: NOT A COMPLETE BASELINE CONTRACT
-Method      | Variant                                                                                   | Status       | Failed checks / evidence
-------------+-------------------------------------------------------------------------------------------+--------------+--------------------------------------------------------------
-ap01        | advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5 | NOT BASELINE | evaluation_anchor_marker_14, root_cam_edge_3
-ap01        | baseline                                                                                  | NOT BASELINE | evaluation_anchor_marker_14
-ap01        | root_cam_edge_1                                                                           | NOT BASELINE | evaluation_anchor_marker_14, root_cam_edge_3
-ap02        | ap02_configured_defaults_nonbaseline                                                      | NOT BASELINE | evaluation_anchor_marker_14, static_nfev_50, combined_nfev_50
-ap02        | baseline                                                                                  | NOT BASELINE | evaluation_anchor_marker_14, static_nfev_50, combined_nfev_50
-ap03_multi  | ap03_configured_defaults_nonbaseline                                                      | NOT BASELINE | evaluation_anchor_marker_14
-ap03_multi  | baseline                                                                                  | NOT BASELINE | evaluation_anchor_marker_14
-ap03_single | ap03_configured_defaults_nonbaseline                                                      | NOT BASELINE | evaluation_anchor_marker_14
-ap03_single | baseline                                                                                  | NOT BASELINE | evaluation_anchor_marker_14
+Contract: route2_cpu_ref14_80x80_v1
+Overall: PASS
+Method      | Variant  | Status | Failed checks / evidence
+------------+----------+--------+-------------------------
+ap01        | baseline | PASS   | all checks satisfied
+ap02        | baseline | PASS   | all checks satisfied
+ap03_multi  | baseline | PASS   | all checks satisfied
+ap03_single | baseline | PASS   | all checks satisfied
 
 METHOD / VARIANT SUMMARY
 ------------------------------------------------------------------------------------------------------------------------------------------
@@ -31,10 +26,10 @@ ap01        | baseline                                                          
 ap01        | root_cam_edge_1                                                                           | available | warning_unstable_consensus | 6     | 59.790      | 5.071        | 85.698     | 7.937       | baseline_version=baseline_v1, evaluation_anchor_marker_id=2, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, root_camera=cam_edge_1, top_moving_per_marker=8, scale_top_per_marker=30, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, gpu_requested=false, gpu_resolved=false, maximum_image_size=1600, maximum_features=4096, mapper_minimum_matches=8, direct_minimum_independent_markers=3, direct_minimum_inlier_ratio=0.7, direct_maximum_translation_dispersion_m=0.12, direct_maximum_rotation_dispersion_deg=4.0, relay_minimum_inlier_ratio=0.7, relay_maximum_translation_dispersion_m=0.3, relay_maximum_rotation_dispersion_deg=7.0, path_maximum_translation_disagreement_m=0.12, path_maximum_rotation_disagreement_deg=4.0
 ap02        | ap02_configured_defaults_nonbaseline                                                      | available | good                       | 6     | 5.827       | 0.367        | 9.553      | 0.688       | baseline_version=baseline_v1, evaluation_anchor_marker_id=2, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, reference_marker_selection_mode=baseline, reference_marker_id=14, resolved_reference_marker_id=14, initialization_algorithm=maximum_bottleneck, initialization_diagnostic=unweighted_first_hit_bfs, top_per_marker=8, top_per_marker_pair=4, static_max_nfev=80, combined_max_nfev=80, loss=soft_l1, loss_scale_px=3.0
 ap02        | baseline                                                                                  | available | good                       | 6     | 5.827       | 0.367        | 9.553      | 0.688       | baseline_version=baseline_v1, evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, reference_marker_selection_mode=baseline, reference_marker_id=14, resolved_reference_marker_id=14, initialization_algorithm=maximum_bottleneck, initialization_diagnostic=unweighted_first_hit_bfs, top_per_marker=8, top_per_marker_pair=4, static_max_nfev=80, combined_max_nfev=80, loss=soft_l1, loss_scale_px=3.0
-ap03_multi  | ap03_configured_defaults_nonbaseline                                                      | available | good                       | 6     | 3.667       | 0.065        | 5.928      | 0.099       | baseline_version=baseline_v1, evaluation_anchor_marker_id=2, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
-ap03_multi  | baseline                                                                                  | available | good                       | 0     | -           | -            | -          | -           | baseline_version=baseline_v1, evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
-ap03_single | ap03_configured_defaults_nonbaseline                                                      | available | good                       | 6     | 4.462       | 0.065        | 7.241      | 0.099       | baseline_version=baseline_v1, evaluation_anchor_marker_id=2, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
-ap03_single | baseline                                                                                  | available | good                       | 0     | -           | -            | -          | -           | baseline_version=baseline_v1, evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+ap03_multi  | ap03_configured_defaults_nonbaseline                                                      | available | good                       | 0     | -           | -            | -          | -           | baseline_version=baseline_v1, evaluation_anchor_marker_id=2, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+ap03_multi  | baseline                                                                                  | available | good                       | 6     | 3.877       | 0.101        | 6.193      | 0.149       | baseline_version=baseline_v1, evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+ap03_single | ap03_configured_defaults_nonbaseline                                                      | available | good                       | 0     | -           | -            | -          | -           | baseline_version=baseline_v1, evaluation_anchor_marker_id=2, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+ap03_single | baseline                                                                                  | available | good                       | 6     | 4.555       | 0.101        | 7.325      | 0.149       | baseline_version=baseline_v1, evaluation_anchor_marker_id=14, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=baseline, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=14, multi_marker_count=15, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
 
 SCALE COMPARISON
 ------------------------------------------------------------------------------------------------------------------------------------------
@@ -104,30 +99,30 @@ cam_edge_1-cam_edge_5 | 9.553      | 0.086       | 9.834       | 9.929        | 
 cam_edge_3-cam_edge_5 | 8.596      | 0.146       | 9.286       | 9.371        | 8.544         | 0.058
 
 ap03_multi / ap03_configured_defaults_nonbaseline
-Pair                  | t err [cm] | r err [deg] | GT base [m] | Est base [m] | base err [cm] | dir err [deg]
-----------------------+------------+-------------+-------------+--------------+---------------+--------------
-cam_edge_0-cam_edge_1 | 2.828      | 0.044       | 5.069       | 5.097        | 2.822         | 0.020
-cam_edge_0-cam_edge_3 | 1.904      | 0.060       | 3.819       | 3.838        | 1.860         | 0.061
-cam_edge_0-cam_edge_5 | 3.910      | 0.072       | 5.668       | 5.707        | 3.868         | 0.058
-cam_edge_1-cam_edge_3 | 1.776      | 0.064       | 2.172       | 2.190        | 1.774         | 0.023
-cam_edge_1-cam_edge_5 | 5.928      | 0.099       | 9.834       | 9.893        | 5.908         | 0.028
-cam_edge_3-cam_edge_5 | 5.654      | 0.055       | 9.286       | 9.342        | 5.642         | 0.023
+Evaluation unavailable: the exact direct anchor-relative camera set is incomplete.
 
 ap03_multi / baseline
-Evaluation unavailable: the exact direct anchor-relative camera set is incomplete.
-
-ap03_single / ap03_configured_defaults_nonbaseline
 Pair                  | t err [cm] | r err [deg] | GT base [m] | Est base [m] | base err [cm] | dir err [deg]
 ----------------------+------------+-------------+-------------+--------------+---------------+--------------
-cam_edge_0-cam_edge_1 | 3.505      | 0.044       | 5.069       | 5.104        | 3.500         | 0.020
-cam_edge_0-cam_edge_3 | 2.405      | 0.060       | 3.819       | 3.843        | 2.370         | 0.061
-cam_edge_0-cam_edge_5 | 4.663      | 0.072       | 5.668       | 5.714        | 4.627         | 0.058
-cam_edge_1-cam_edge_3 | 2.067      | 0.064       | 2.172       | 2.193        | 2.065         | 0.023
-cam_edge_1-cam_edge_5 | 7.241      | 0.099       | 9.834       | 9.906        | 7.224         | 0.028
-cam_edge_3-cam_edge_5 | 6.894      | 0.055       | 9.286       | 9.354        | 6.884         | 0.023
+cam_edge_0-cam_edge_1 | 2.661      | 0.080       | 5.069       | 5.096        | 2.653         | 0.024
+cam_edge_0-cam_edge_3 | 1.861      | 0.142       | 3.819       | 3.835        | 1.606         | 0.141
+cam_edge_0-cam_edge_5 | 4.583      | 0.149       | 5.668       | 5.712        | 4.437         | 0.116
+cam_edge_1-cam_edge_3 | 1.984      | 0.077       | 2.172       | 2.192        | 1.972         | 0.058
+cam_edge_1-cam_edge_5 | 6.193      | 0.107       | 9.834       | 9.895        | 6.159         | 0.038
+cam_edge_3-cam_edge_5 | 5.976      | 0.053       | 9.286       | 9.345        | 5.963         | 0.025
+
+ap03_single / ap03_configured_defaults_nonbaseline
+Evaluation unavailable: the exact direct anchor-relative camera set is incomplete.
 
 ap03_single / baseline
-Evaluation unavailable: the exact direct anchor-relative camera set is incomplete.
+Pair                  | t err [cm] | r err [deg] | GT base [m] | Est base [m] | base err [cm] | dir err [deg]
+----------------------+------------+-------------+-------------+--------------+---------------+--------------
+cam_edge_0-cam_edge_1 | 3.245      | 0.080       | 5.069       | 5.102        | 3.239         | 0.024
+cam_edge_0-cam_edge_3 | 2.253      | 0.142       | 3.819       | 3.840        | 2.047         | 0.141
+cam_edge_0-cam_edge_5 | 5.222      | 0.149       | 5.668       | 5.719        | 5.094         | 0.116
+cam_edge_1-cam_edge_3 | 2.235      | 0.077       | 2.172       | 2.194        | 2.224         | 0.058
+cam_edge_1-cam_edge_5 | 7.325      | 0.107       | 9.834       | 9.907        | 7.296         | 0.038
+cam_edge_3-cam_edge_5 | 7.048      | 0.053       | 9.286       | 9.356        | 7.036         | 0.025
 
 METHOD REPORTS AND DETAIL ARTIFACTS
 ------------------------------------------------------------------------------------------------------------------------------------------
@@ -172,15 +167,15 @@ DIRECT COMMON-ANCHOR CAMERA POSES VS GROUND TRUTH
 ------------------------------------------------------------------------------------------------------------------------------------------
 Method      | Variant                                                                                   | Cameras | mean translation [cm] | max translation [cm] | mean rotation [deg] | max rotation [deg]
 ------------+-------------------------------------------------------------------------------------------+---------+-----------------------+----------------------+---------------------+-------------------
-ap01        | advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5 | 4       | 563.457               | 1040.476             | 103.701             | 110.070
-ap01        | baseline                                                                                  | 4       | 583.089               | 1138.670             | 108.318             | 108.795
-ap01        | root_cam_edge_1                                                                           | 4       | 36.796                | 62.106               | 3.556               | 5.845
-ap02        | ap02_configured_defaults_nonbaseline                                                      | 4       | 8.865                 | 15.590               | 1.300               | 1.451
-ap02        | baseline                                                                                  | 4       | 582.597               | 1143.165             | 107.764             | 107.847
-ap03_multi  | ap03_configured_defaults_nonbaseline                                                      | 4       | 8.592                 | 15.635               | 1.478               | 1.522
-ap03_multi  | baseline                                                                                  | 0       | -                     | -                    | -                   | -
-ap03_single | ap03_configured_defaults_nonbaseline                                                      | 4       | 8.758                 | 15.962               | 1.478               | 1.522
-ap03_single | baseline                                                                                  | 0       | -                     | -                    | -                   | -
+ap01        | advanced_strategy_wizard_robustness_v1__direct_markers_2__direct_inlier_ratio_0__96129bf5 | 4       | 269.135               | 895.553              | 40.178              | 142.975
+ap01        | baseline                                                                                  | 4       | 16.287                | 41.801               | 1.260               | 1.997
+ap01        | root_cam_edge_1                                                                           | 0       | -                     | -                    | -                   | -
+ap02        | ap02_configured_defaults_nonbaseline                                                      | 0       | -                     | -                    | -                   | -
+ap02        | baseline                                                                                  | 4       | 4.229                 | 6.026                | 0.264               | 0.669
+ap03_multi  | ap03_configured_defaults_nonbaseline                                                      | 0       | -                     | -                    | -                   | -
+ap03_multi  | baseline                                                                                  | 4       | 2.597                 | 4.420                | 0.146               | 0.168
+ap03_single | ap03_configured_defaults_nonbaseline                                                      | 0       | -                     | -                    | -                   | -
+ap03_single | baseline                                                                                  | 4       | 3.077                 | 5.081                | 0.146               | 0.168
 Detailed values: evaluations/anchor_camera_gt.csv
 
 RVIZ VISUALIZATION

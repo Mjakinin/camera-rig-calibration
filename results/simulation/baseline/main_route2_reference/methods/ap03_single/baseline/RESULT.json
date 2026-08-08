@@ -1,11 +1,9 @@
 {
   "anchor_alignment": "diagnostics/anchor_alignment.json",
-  "anchor_camera_count": 0,
-  "anchor_export_available": false,
-  "anchor_export_status": "ANCHOR_SOURCE_MISMATCH",
-  "anchor_export_warnings": [
-    "The shared AP03 anchor geometry belongs to marker 2, not marker 14."
-  ],
+  "anchor_camera_count": 4,
+  "anchor_export_available": true,
+  "anchor_export_status": "OK",
+  "anchor_export_warnings": [],
   "anchor_marker_id": 14,
   "artifact_status": "available",
   "available_static_cameras": [
@@ -50,7 +48,7 @@
     "scale_reprojection_threshold_px": 5.0,
     "single_scale_marker_id": 14
   },
-  "derived_fingerprint": "8a7c4eed6b764d6dd56878060f59a35ed29f5ed4b3db0e9bfde54dfc2fee8e42",
+  "derived_fingerprint": "53b58465c67b98894eb76a2203620ee1a2321f70af87bf85d4742fc26758fa42",
   "derived_results": [
     "../../ap03_single/baseline",
     "../../ap03_multi/baseline"
@@ -61,7 +59,7 @@
     "provenance/derived_result.json"
   ],
   "diagnostics": "diagnostics",
-  "evaluation_status": "evaluation_unavailable",
+  "evaluation_status": "available",
   "execution_status": "completed_shared_colmap",
   "input_fingerprint": "input_f77b36733636",
   "label": "baseline",
@@ -228,51 +226,46 @@
     "ap03_scale_relative_std": 0.004082280598081662,
     "evaluation": {
       "anchor_camera_gt": {
-        "count": 0,
-        "evaluation_status": "evaluation_unavailable",
+        "count": 4,
+        "evaluation_status": "available",
         "label": "baseline",
-        "max_rotation_error_deg": null,
-        "max_translation_error_cm": null,
-        "mean_rotation_error_deg": null,
-        "mean_translation_error_cm": null,
-        "median_rotation_error_deg": null,
-        "median_translation_error_cm": null,
+        "max_rotation_error_deg": 0.1676763535506477,
+        "max_translation_error_cm": 5.080596010096173,
+        "mean_rotation_error_deg": 0.14640164017155574,
+        "mean_translation_error_cm": 3.0768107258261357,
+        "median_rotation_error_deg": 0.1412816484117431,
+        "median_translation_error_cm": 2.808441044210717,
         "method": "ap03_single"
       },
       "pairwise_gt": {
-        "count": 0,
-        "evaluated_camera_count": 0,
-        "evaluation_status": "evaluation_unavailable",
+        "count": 6,
+        "evaluated_camera_count": 4,
+        "evaluation_status": "available",
         "expected_camera_count": 4,
         "label": "baseline",
-        "max_rotation_error_deg": null,
-        "max_translation_error_cm": null,
-        "mean_rotation_error_deg": null,
-        "mean_translation_error_cm": null,
-        "median_rotation_error_deg": null,
-        "median_translation_error_cm": null,
+        "max_rotation_error_deg": 0.14852405938237997,
+        "max_translation_error_cm": 7.32493075448243,
+        "mean_rotation_error_deg": 0.10130620842050785,
+        "mean_translation_error_cm": 4.55450789378746,
+        "median_rotation_error_deg": 0.0937596527833987,
+        "median_translation_error_cm": 4.233494895538007,
         "method": "ap03_single",
-        "missing_cameras": [
-          "cam_edge_0",
-          "cam_edge_1",
-          "cam_edge_3",
-          "cam_edge_5"
-        ],
-        "reason": "The direct anchor-relative estimate does not contain the exact Ground-Truth camera set; no pair subset is published as a complete evaluation."
+        "missing_cameras": [],
+        "reason": null
       }
     },
     "shared_colmap": {
       "camera_pose_source": "methods/ap03/baseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
       "colmap_rerun": false,
       "contract": "rigcal_ap03_scale_variants_v1",
-      "fingerprint": "8a7c4eed6b764d6dd56878060f59a35ed29f5ed4b3db0e9bfde54dfc2fee8e42",
+      "fingerprint": "53b58465c67b98894eb76a2203620ee1a2321f70af87bf85d4742fc26758fa42",
       "layout_version": 2,
       "method_rerun": false,
       "scale_m_per_colmap_unit": 0.6858339225270489,
       "scale_metadata": "methods/ap03/baseline/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
       "schema_version": 5,
       "scientific_role": "ap03_single_scale_result",
-      "shared_anchor_geometry": "methods/ap03/baseline/diagnostics/derived/shared_anchor_geometry/marker_2_corners_colmap.json",
+      "shared_anchor_geometry": "methods/ap03/baseline/diagnostics/derived/shared_anchor_geometry/marker_14_corners_colmap.json",
       "shared_colmap_best_model": "0",
       "shared_colmap_container": "methods/ap03/baseline"
     }

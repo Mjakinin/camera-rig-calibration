@@ -7,8 +7,8 @@ Solver status: not_applicable
 Artifact status: available
 Calibration status: available
 Quality status: good
-Evaluation status: evaluation_unavailable
-Anchor export status: ANCHOR_SOURCE_MISMATCH
+Evaluation status: available
+Anchor export status: OK
 RViz visualization status: OK
 Primary result: multi
 Runtime: 313.2 s
@@ -18,8 +18,13 @@ Configuration: baseline_version=baseline_v1, evaluation_anchor_marker_id=14, qua
 
 COMMON EVALUATION / EXPORT ANCHOR
 ----------------------------------------------------------------------------------------------------------------------
-Marker: 14; export status: ANCHOR_SOURCE_MISMATCH
-No common-anchor camera pose is available. See diagnostics/anchor_alignment.json.
+Marker: 14; export status: OK
+Camera     | x [m]  | y [m]  | z [m] | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw
+-----------+--------+--------+-------+------------+-------------+-----------+-----------+-----------+-----------+---------
+cam_edge_0 | 0.590  | -1.747 | 2.092 | -1.968     | -0.024      | -0.017    | -0.832728 | 0.000236  | -0.014738 | 0.553486
+cam_edge_1 | -3.992 | 0.483  | 2.145 | -1.858     | 0.012       | -2.000    | -0.429614 | 0.676106  | -0.501154 | 0.327349
+cam_edge_3 | -3.241 | -1.575 | 2.068 | -1.911     | 0.036       | -1.045    | -0.702383 | 0.416584  | -0.275409 | 0.507213
+cam_edge_5 | 5.903  | 0.351  | 2.134 | -1.906     | 0.069       | 1.988     | -0.461124 | -0.671749 | 0.500745  | 0.292184
 Full exports: camera_extrinsics_anchor.csv, camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml
 
 AP03 COLMAP / RANSAC / SCALE DIAGNOSTICS

@@ -8,8 +8,8 @@
     "transformed_cameras_match_ap03_multi_export": true
   },
   "contract": "rigcal_rviz_scene_v2",
-  "fingerprint": "a6906f4503688fce771c7b530eb450c79ec20299cb8d7f0901c6e5d20e82155a",
-  "fixed_frame": "evaluation_anchor_marker_2",
+  "fingerprint": "55cf9f1b618b37704c1aa29db6a1d631a05e3cc79c7ea230746fb6d7cb8c02e7",
+  "fixed_frame": "evaluation_anchor_marker_14",
   "frustums": "camera_frustums.json",
   "ground_truth": {
     "available": true,
@@ -22,17 +22,17 @@
   "point_cloud_display_count": 1,
   "point_cloud_publisher_count": 1,
   "point_cloud_source": {
-    "anchor_source": "methods/ap03_multi/ap03_configured_defaults_nonbaseline/camera_extrinsics_anchor.json",
-    "container_label": "ap03_configured_defaults_nonbaseline",
+    "anchor_source": "methods/ap03_multi/baseline/camera_extrinsics_anchor.json",
+    "container_label": "baseline",
     "container_method": "ap03",
     "ground_truth_source": "metadata/simulation/ground_truth.json",
     "method": "ap03_multi",
     "model_id": "0",
-    "point_count": 11389,
-    "points3D": "methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/method/colmap/reconstruction/sparse_txt/0/points3D.txt",
-    "scale_m_per_colmap_unit": 0.6850803441795348
+    "point_count": 11427,
+    "points3D": "methods/ap03/baseline/diagnostics/method/colmap/reconstruction/sparse_txt/0/points3D.txt",
+    "scale_m_per_colmap_unit": 0.6851286978244893
   },
-  "point_count": 11389,
+  "point_count": 11427,
   "poses": "poses_anchor_frame.json",
   "publisher": "camera_rig_calibration.visualization.ros_scene",
   "rviz_config": "rigcal_result.rviz",
@@ -78,14 +78,14 @@
       "anchor_edges_default_visible": false,
       "default_visible": true,
       "error_lines_default_visible": false,
-      "label": "ap03_configured_defaults_nonbaseline",
+      "label": "baseline",
       "method": "ap03_multi"
     },
     {
       "anchor_edges_default_visible": false,
       "default_visible": false,
       "error_lines_default_visible": false,
-      "label": "ap03_configured_defaults_nonbaseline",
+      "label": "baseline",
       "method": "ap03_single"
     }
   ],

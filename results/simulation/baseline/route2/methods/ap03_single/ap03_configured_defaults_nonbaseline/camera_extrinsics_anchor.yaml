@@ -1,83 +1,19 @@
 anchor_alignment:
-  alignment: rigid_kabsch_no_scale_fit
-  corner_file: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/derived/shared_anchor_geometry/marker_2_corners_colmap.json
+  corner_file: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03/ap03_configured_defaults_nonbaseline/diagnostics/derived/shared_anchor_geometry/marker_14_corners_colmap.json
   method: ap03_single
-  provenance_file: /mnt/c/Users/maxim/Desktop/Application of Robotics and Autonomous
-    Systems/camera-rig-calibration/results/simulation/baseline/route2/methods/ap03_single/ap03_configured_defaults_nonbaseline/provenance/derived_result.json
-  scale_m_per_colmap_unit: 0.6855400800225491
-  scale_mode: single
-  shared_colmap_best_model: '0'
-  shared_colmap_container: methods/ap03/ap03_configured_defaults_nonbaseline
-  side_lengths_m:
-  - 0.17040851274931743
-  - 0.17036342665867923
-  - 0.1699882851666109
-  - 0.1705653287230269
-  square_fit_rmse_m: 0.0005155170899176788
-  transform_anchor_method:
-    matrix:
-    - - 0.9996629367464441
-      - -0.0027000615427842027
-      - -0.025820971382577072
-      - -0.6591333311109022
-    - - -0.0024050461666243147
-      - -0.9999315582266497
-      - 0.011449655687443907
-      - 1.8047322781112716
-    - - -0.025850118924505804
-      - -0.011383695801003622
-      - -0.9996010118149637
-      - -1.3551508572215658
-    - - 0.0
-      - 0.0
-      - 0.0
-      - 1.0
-    pitch_rad: 0.02585299875556844
-    qw: 0.005708911998599694
-    qx: -0.9998994332916757
-    qy: 0.001276405291230756
-    qz: 0.012919071805296783
-    roll_rad: -3.1302049062986357
-    x_m: -0.6591333311109022
-    y_m: 1.8047322781112716
-    yaw_rad: -0.0024058524508404184
-    z_m: -1.3551508572215658
-  transform_method_anchor:
-    matrix:
-    - - 0.9996629367464441
-      - -0.0024050461666243147
-      - -0.025850118924505804
-      - 0.6282208151132218
-    - - -0.0027000615427842027
-      - -0.9999315582266497
-      - -0.011383695801003622
-      - 1.787402433351755
-    - - -0.025820971382577072
-      - 0.011449655687443907
-      - -0.9996010118149637
-      - -1.3922931941129
-    - - 0.0
-      - 0.0
-      - 0.0
-      - 1.0
-    pitch_rad: 0.025823841481132735
-    qw: 0.005708911998599694
-    qx: 0.9998994332916757
-    qy: -0.001276405291230756
-    qz: -0.012919071805296783
-    roll_rad: 3.1301389286909194
-    x_m: 0.6282208151132218
-    y_m: 1.787402433351755
-    yaw_rad: -0.0027009653731152054
-    z_m: -1.3922931941129
 anchor_export_status:
-  available: true
-  camera_count: 4
-  code: OK
+  available: false
+  camera_count: 0
+  code: ANCHOR_SOURCE_MISMATCH
   expected_camera_count: 4
   manual_warning_confirmed: false
-  missing_cameras: []
-  warnings: []
+  missing_cameras:
+  - cam_edge_0
+  - cam_edge_1
+  - cam_edge_3
+  - cam_edge_5
+  warnings:
+  - The shared AP03 anchor geometry belongs to marker 14, not marker 2.
 anchor_marker_id: 2
 anchor_selection:
   mode: explicit
@@ -86,174 +22,16 @@ anchor_selection:
   warning_confirmed: false
 calibration_status: available
 camera_optical_convention: x right, y down, z forward
-cameras:
-- anchor_marker_id: 2
-  camera_id: cam_edge_0
-  child_frame: cam_edge_0_optical_frame
-  deployment_eligible: true
-  estimate_status: available
-  evaluation_status: available
-  label: ap03_configured_defaults_nonbaseline
-  matrix:
-  - - -0.0076532229696254775
-    - 0.3751161240329375
-    - -0.9269462345080663
-    - 0.693668934519978
-  - - 0.41448308849407695
-    - -0.8424035161310051
-    - -0.34432555142267773
-    - 1.944931731594188
-  - - -0.9100248334691691
-    - -0.38683873836603516
-    - -0.14903218769375218
-    - -1.0377129561406444
-  - - 0.0
-    - 0.0
-    - 0.0
-    - 1.0
-  method: ap03_single
-  parent_frame: evaluation_anchor_marker_2
-  pitch_rad: 1.1433439620131498
-  quality_status: accepted
-  qw: 0.015091994613185403
-  qx: -0.7042340663542079
-  qy: -0.2803042518997762
-  qz: 0.6521166596949657
-  roll_rad: -1.938528648976475
-  source: method_primary_result
-  status: available
-  x_m: 0.693668934519978
-  y_m: 1.944931731594188
-  yaw_rad: 1.5892587287658506
-  z_m: -1.0377129561406444
-- anchor_marker_id: 2
-  camera_id: cam_edge_1
-  child_frame: cam_edge_1_optical_frame
-  deployment_eligible: true
-  estimate_status: available
-  evaluation_status: available
-  label: ap03_configured_defaults_nonbaseline
-  matrix:
-  - - 0.9182787396830102
-    - -0.13447703670987782
-    - 0.37239774817245114
-    - -1.4288754719090022
-  - - -0.17660885692545025
-    - -0.9809201967025845
-    - 0.08127040886109255
-    - 0.1988837967596362
-  - - 0.3543634686330804
-    - -0.14039762924883528
-    - -0.9245079976937132
-    - 3.2635171223502457
-  - - 0.0
-    - 0.0
-    - 0.0
-    - 1.0
-  method: ap03_single
-  parent_frame: evaluation_anchor_marker_2
-  pitch_rad: -0.36223327564489133
-  quality_status: accepted
-  qw: 0.056680122809307974
-  qx: -0.9777150574271765
-  qy: 0.07954410931696702
-  qz: -0.1858315496127212
-  roll_rad: -2.990882182924739
-  source: method_primary_result
-  status: available
-  x_m: -1.4288754719090022
-  y_m: 0.1988837967596362
-  yaw_rad: -0.1900059216737073
-  z_m: 3.2635171223502457
-- anchor_marker_id: 2
-  camera_id: cam_edge_3
-  child_frame: cam_edge_3_optical_frame
-  deployment_eligible: true
-  estimate_status: available
-  evaluation_status: available
-  label: ap03_configured_defaults_nonbaseline
-  matrix:
-  - - 0.8522342033411334
-    - 0.1341549012237081
-    - -0.5056672078879156
-    - 0.6106410012377153
-  - - 0.1624032332346229
-    - -0.9866521430146656
-    - 0.011947322692081944
-    - 0.4171682046155991
-  - - -0.4973148424192104
-    - -0.09230390653826767
-    - -0.8626458927899273
-    - 2.4875233120572346
-  - - 0.0
-    - 0.0
-    - 0.0
-    - 1.0
-  method: ap03_single
-  parent_frame: evaluation_anchor_marker_2
-  pitch_rad: 0.5205009879471969
-  quality_status: accepted
-  qw: 0.02709320734308146
-  qx: -0.961968325770881
-  qy: -0.0770706598423295
-  qz: 0.26065880326760726
-  roll_rad: -3.0349973065817024
-  source: method_primary_result
-  status: available
-  x_m: 0.6106410012377153
-  y_m: 0.4171682046155991
-  yaw_rad: 0.18830405899323693
-  z_m: 2.4875233120572346
-- anchor_marker_id: 2
-  camera_id: cam_edge_5
-  child_frame: cam_edge_5_optical_frame
-  deployment_eligible: true
-  estimate_status: available
-  evaluation_status: available
-  label: ap03_configured_defaults_nonbaseline
-  matrix:
-  - - -0.9033786112605322
-    - -0.09226054255886462
-    - 0.4188019543934059
-    - -1.5255866890023384
-  - - -0.22037394703055346
-    - -0.7379017151830031
-    - -0.6379156544561023
-    - 4.076251252561133
-  - - 0.3678891248558013
-    - -0.6685723977376918
-    - 0.6462728067899085
-    - -5.849940212628487
-  - - 0.0
-    - 0.0
-    - 0.0
-    - 1.0
-  method: ap03_single
-  parent_frame: evaluation_anchor_marker_2
-  pitch_rad: -0.3767379220604358
-  quality_status: accepted
-  qw: 0.0353287430655744
-  qx: -0.21693910270659048
-  qy: 0.36027908948744886
-  qz: -0.9065805443027999
-  roll_rad: -0.8023563978561326
-  source: method_primary_result
-  status: available
-  x_m: -1.5255866890023384
-  y_m: 4.076251252561133
-  yaw_rad: -2.902321664570894
-  z_m: -5.849940212628487
+cameras: []
 contract: rigcal_anchor_export_v1
-evaluation_status: available
-fingerprint: 944aad9b044068e3fd3c2d75dbfbe9dcf83a30922f58f4b24ea83461fbb62888
+evaluation_status: evaluation_unavailable
+fingerprint: 638f18439a57e3161772690f987b5b1f7788407bbf7f6e90b226c20aa810d5e1
 label: ap03_configured_defaults_nonbaseline
 layout_version: 2
 method: ap03_single
 pairwise_invariance:
-  camera_pair_count: 6
-  maximum_rotation_difference_deg: 0.0
-  maximum_translation_difference_m: 2.6645352591003757e-15
-  passed: true
+  passed: false
+  reason: anchor transform unavailable
 parent_frame: evaluation_anchor_marker_2
 quaternion_order: qx,qy,qz,qw
 rpy_convention: radians; R = Rz(yaw) @ Ry(pitch) @ Rx(roll)
