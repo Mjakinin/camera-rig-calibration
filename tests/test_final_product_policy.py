@@ -3,16 +3,22 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
+
 from camera_rig_calibration.components import register_builtin_components
 from camera_rig_calibration.product_policy import (
     _DATASET_CONTEXT,
     _refresh_derived_tree,
     install_product_policy,
 )
+from camera_rig_calibration.reporting_authority_policy import (
+    install_reporting_authority_policy,
+)
 from camera_rig_calibration.ui_display_policy import install_ui_display_policy
 
 
 install_product_policy()
+install_reporting_authority_policy()
 install_ui_display_policy()
 
 from camera_rig_calibration import wizard  # noqa: E402
@@ -84,7 +90,7 @@ def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
     assert "marker 14" in text
 
 
-def test_reporting_contract_uses_actual_ap02_80_80_baseline() -> None:
+def test_reporting_contract_uses_only_baselines_and_actual_ap02_80_80() -> None:
     contract = reporting._baseline_contract(
         category="simulation",
         method_payloads=[
@@ -94,19 +100,75 @@ def test_reporting_contract_uses_actual_ap02_80_80_baseline() -> None:
                 "config_summary": {
                     "reference_marker_id": 14,
                     "resolved_reference_marker_id": 14,
+                    "reference_marker_selection_mode": "baseline",
                     "static_max_nfev": 80,
                     "combined_max_nfev": 80,
+                    "initialization_algorithm": "maximum_bottleneck",
                 },
-            }
+            },
+            {
+                "method": "ap01",
+                "label": "old_diagnostic_variant",
+                "config_summary": {"root_camera": "cam_edge_1"},
+            },
         ],
         evaluation_anchor={"selected": 14},
     )
     assert contract["contract"] == "route2_cpu_ref14_80x80_v1"
+    assert [(item["method"], item["label"]) for item in contract["variants"]] == [
+        ("ap02", "baseline")
+    ]
     checks = contract["variants"][0]["checks"]
     assert "static_nfev_50" not in checks
     assert "combined_nfev_50" not in checks
     assert checks["static_nfev_80"] is True
     assert checks["combined_nfev_80"] is True
+
+
+def test_published_common_evaluation_is_reporting_authority(tmp_path: Path) -> None:
+    observations = tmp_path / "observations"
+    evaluations = tmp_path / "evaluations"
+    observations.mkdir(parents=True)
+    evaluations.mkdir(parents=True)
+    selection_path = observations / "SELECTION_CANDIDATES.json"
+    selection_path.write_text(
+        json.dumps(
+            {
+                "evaluation_anchor": {
+                    "selected": 2,
+                    "configured": "auto",
+                    "reason": "old preflight recommendation",
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    (evaluations / "SELECTED_COMMON_EVALUATION.json").write_text(
+        json.dumps({"anchor_marker_id": 14}), encoding="utf-8"
+    )
+
+    effective = reporting._read_json(selection_path)["evaluation_anchor"]
+    assert effective["selected"] == 14
+    assert effective["configured"] == 14
+    assert effective["selection_mode"] == "published_common_evaluation"
+
+
+def test_direct_anchor_gt_rejects_mismatched_marker_frame() -> None:
+    identity = np.eye(4, dtype=float)
+    rows = reporting._anchor_camera_gt_rows(
+        "ap02",
+        "old_marker_2_variant",
+        {
+            "anchor_marker_id": 2,
+            "cameras": [
+                {"camera_id": "cam", "matrix": identity.tolist()}
+            ],
+        },
+        anchor_marker_id=14,
+        gt_cameras={"cam": identity},
+        gt_markers={14: identity},
+    )
+    assert rows == []
 
 
 def test_common_evaluation_anchor_overrides_stale_dataset_anchor_for_ap03(
