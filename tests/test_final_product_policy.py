@@ -9,9 +9,11 @@ from camera_rig_calibration.product_policy import (
     _refresh_derived_tree,
     install_product_policy,
 )
+from camera_rig_calibration.ui_display_policy import install_ui_display_policy
 
 
 install_product_policy()
+install_ui_display_policy()
 
 from camera_rig_calibration import wizard  # noqa: E402
 from camera_rig_calibration.evaluation import ap03_derived, reporting  # noqa: E402
@@ -76,6 +78,7 @@ def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
         for _, _, label, current, baseline, description in rows
     ).lower()
     assert "smart" not in text
+    assert "legacy_smart_v1" not in text
     assert "top frames per marker" in text
     assert "top frames per marker pair" in text
     assert "marker 14" in text
