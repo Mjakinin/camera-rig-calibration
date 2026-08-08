@@ -8,6 +8,9 @@ from camera_rig_calibration.common_anchor_authority_policy import (
     install_common_anchor_authority_policy,
     repair_published_preferred_anchor,
 )
+from camera_rig_calibration.legacy_preferred_anchor_repair import (
+    repair_legacy_preferred_anchor,
+)
 from camera_rig_calibration.marker_preference_policy import (
     install_marker_preference_policy,
 )
@@ -22,6 +25,7 @@ from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
 from camera_rig_calibration.result_output_policy import install_result_output_policy
+from camera_rig_calibration.rviz_manifest_policy import install_rviz_manifest_policy
 from camera_rig_calibration.submission_bindings import install_submission_bindings
 from camera_rig_calibration.submission_policy import install_submission_policy
 from camera_rig_calibration.ui_display_policy import install_ui_display_policy
@@ -35,6 +39,7 @@ install_common_anchor_authority_policy()
 install_queue_anchor_preference_policy()
 install_reanchor_existing_results_policy()
 install_result_output_policy()
+install_rviz_manifest_policy()
 install_submission_bindings()
 install_ui_display_policy()
 
@@ -87,6 +92,9 @@ def main() -> None:
         experiment_root / "observations" / "SELECTION_CANDIDATES.json"
     ).get("evaluation_anchor", {}).get("selected")
     repair = repair_published_preferred_anchor(experiment_root)
+    if repair.get("status") == "not_applicable":
+        repair = repair_legacy_preferred_anchor(experiment_root)
+
     payload = write_scientific_experiment_reports(
         experiment_root,
         dataset_root=dataset_root,
