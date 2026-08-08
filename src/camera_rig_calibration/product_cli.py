@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .marker_preference_policy import install_marker_preference_policy
 from .product_policy import install_product_policy
+from .queue_anchor_preference_policy import install_queue_anchor_preference_policy
 from .reporting_authority_policy import install_reporting_authority_policy
 from .submission_bindings import install_submission_bindings
 from .submission_policy import install_submission_policy
@@ -16,6 +17,7 @@ install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
 install_marker_preference_policy()
+install_queue_anchor_preference_policy()
 # Bind every already-imported preflight/runtime consumer only after all
 # selection wrappers are installed, so Wizard and --config use the same path.
 install_submission_bindings()
