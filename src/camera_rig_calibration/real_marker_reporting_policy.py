@@ -123,7 +123,8 @@ def _run_authoritative_marker_consistency(
 
     command = [
         sys.executable,
-        str(Path(reporting.__file__).with_name("real_marker_consistency_native.py")),
+        "-m",
+        "camera_rig_calibration.evaluation.real_marker_consistency_native",
         "--dataset",
         str(dataset_root),
         "--results-root",
