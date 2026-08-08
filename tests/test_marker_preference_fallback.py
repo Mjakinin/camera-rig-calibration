@@ -13,10 +13,11 @@ from camera_rig_calibration.config.models import (
     SelectionSettings,
     StaticCameraSettings,
 )
-from camera_rig_calibration.marker_preference_policy import (
-    install_marker_preference_policy,
-)
+from camera_rig_calibration.marker_preference_policy import install_marker_preference_policy
 from camera_rig_calibration.product_policy import install_product_policy
+from camera_rig_calibration.real_vehicle_marker_zero_policy import (
+    install_real_vehicle_marker_zero_policy,
+)
 from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
@@ -28,6 +29,7 @@ install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
 install_marker_preference_policy()
+install_real_vehicle_marker_zero_policy()
 install_submission_bindings()
 
 from camera_rig_calibration import observations  # noqa: E402
@@ -86,6 +88,30 @@ def _write_observations(root: Path, marker_ids: tuple[int, ...]) -> None:
         writer.writerows(rows)
 
 
+def _write_sparse_zero_plus_supported_five(root: Path) -> None:
+    _write_observations(root, (5,))
+    path = root / "shared_all_aruco_observations.csv"
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    rows.append(
+        {
+            "observer_type": "static",
+            "observer_id": "cam_a",
+            "camera_name": "cam_a",
+            "frame_id": "",
+            "marker_id": 0,
+            "pnp_success": "true",
+            "selection_score": 20.0,
+            "pnp_reprojection_rmse_px": 0.5,
+            "marker_area_ratio": 0.01,
+        }
+    )
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FIELDS)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def _config(
     category: DatasetCategory,
     preferred: int,
@@ -103,15 +129,11 @@ def _config(
             "single": methods.ap03.single.model_copy(
                 update={"scale_marker_id": preferred}
             ),
-            "multi": methods.ap03.multi.model_copy(
-                update={"marker_ids": "auto"}
-            ),
+            "multi": methods.ap03.multi.model_copy(update={"marker_ids": "auto"}),
         },
         deep=True,
     )
-    methods = methods.model_copy(
-        update={"ap02": ap02, "ap03": ap03}, deep=True
-    )
+    methods = methods.model_copy(update={"ap02": ap02, "ap03": ap03}, deep=True)
     return RigConfig(
         dataset=DatasetSettings(
             id="marker_preference_test",
@@ -120,10 +142,7 @@ def _config(
             prepared_root=prepared_root,
             input_root=prepared_root,
         ),
-        static_cameras=[
-            StaticCameraSettings(id="cam_a"),
-            StaticCameraSettings(id="cam_b"),
-        ],
+        static_cameras=[StaticCameraSettings(id="cam_a"), StaticCameraSettings(id="cam_b")],
         methods=methods,
         selection=SelectionSettings(mode="auto"),
         evaluation=EvaluationSettings(
@@ -143,11 +162,26 @@ def test_real_vehicle_prefers_zero_when_supported(tmp_path: Path) -> None:
     assert resolved.ap02_reference_marker_id == 0
     assert resolved.ap03_single_scale_marker_id == 0
     assert resolved.evaluation_anchor_marker_id == 0
-    policy = resolved.payload["category_marker_preference"]
-    assert policy["ap02"]["fallback_used"] is False
-    assert policy["ap03_single"]["fallback_used"] is False
-    assert policy["evaluation_anchor"]["fallback_used"] is False
-    assert policy["ground_truth_used"] is False
+    policy = resolved.payload["real_vehicle_marker_zero_policy"]
+    assert policy["marker_zero_observed"] is True
+    assert policy["fallback_allowed"] is False
+
+
+def test_real_vehicle_zero_observed_never_silently_falls_back(tmp_path: Path) -> None:
+    root = tmp_path / "observations"
+    _write_sparse_zero_plus_supported_five(root)
+    resolved = observations.resolve_selections(
+        _config(DatasetCategory.REAL_VEHICLE, 0, tmp_path), root
+    )
+    # Marker 5 is the stronger automatic candidate, but marker 0 exists. The
+    # scientific reference therefore stays 0; queue preflight is responsible for
+    # failing visibly if the sparse marker-0 support is insufficient.
+    assert resolved.ap02_reference_marker_id == 0
+    assert resolved.ap03_single_scale_marker_id == 0
+    assert resolved.evaluation_anchor_marker_id == 0
+    policy = resolved.payload["real_vehicle_marker_zero_policy"]
+    assert policy["marker_zero_observed"] is True
+    assert policy["fallback_allowed"] is False
 
 
 def test_real_vehicle_zero_missing_falls_back_to_auto(tmp_path: Path) -> None:
@@ -159,10 +193,9 @@ def test_real_vehicle_zero_missing_falls_back_to_auto(tmp_path: Path) -> None:
     assert resolved.ap02_reference_marker_id == 5
     assert resolved.ap03_single_scale_marker_id == 5
     assert resolved.evaluation_anchor_marker_id == 5
-    policy = resolved.payload["category_marker_preference"]
-    assert policy["ap02"]["fallback_used"] is True
-    assert policy["ap03_single"]["fallback_used"] is True
-    assert policy["evaluation_anchor"]["fallback_used"] is True
+    policy = resolved.payload["real_vehicle_marker_zero_policy"]
+    assert policy["marker_zero_observed"] is False
+    assert policy["fallback_allowed"] is True
 
 
 def test_simulation_fourteen_missing_falls_back_to_auto(tmp_path: Path) -> None:
