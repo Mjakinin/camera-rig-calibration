@@ -74,7 +74,10 @@ methods:
   ap02:
     method_contract: baseline_v1
     historical_reproduction: false
-    reference_marker_selection_mode: baseline
+    # Auto + integer is the documented category preference. Marker 14 is used
+    # when it has automatic-quality support; otherwise preflight falls back to
+    # the deterministic AP02 recommendation instead of aborting the queue.
+    reference_marker_selection_mode: auto
     reference_marker_id: 14
     frame_selection_strategy: legacy_smart_v1
     initialization_strategy: legacy_maximum_bottleneck_v1
@@ -94,6 +97,8 @@ methods:
     scale_input_policy: legacy_registered_image_redetection_v1
     minimum_marker_area_px2: 100.0
     single:
+      # Simulation category preference; falls back to AP03 auto when marker 14
+      # lacks compatible repeated moving-camera support.
       scale_marker_id: 14
     multi:
       marker_ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -109,5 +114,6 @@ observation_quality:
   maximum_marker_distance_m: disabled
 evaluation:
   enabled: true
+  # Auto + integer means preferred common anchor with deterministic auto fallback.
   anchor_marker_id: 14
-  anchor_selection_mode: explicit
+  anchor_selection_mode: auto
