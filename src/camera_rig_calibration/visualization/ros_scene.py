@@ -33,6 +33,16 @@ def _ply_points(path: Path) -> list[tuple[float, float, float, int, int, int]]:
 
 
 def _color(key: str) -> tuple[float, float, float]:
+    method = key.split("/", 1)[0].strip().lower()
+    fixed = {
+        "ap01": (0.78, 0.28, 0.95),
+        "ap02": (0.10, 0.72, 0.95),
+        "ap03": (0.20, 0.82, 0.30),
+        "ap03_multi": (0.20, 0.82, 0.30),
+        "ap03_single": (0.98, 0.62, 0.12),
+    }
+    if method in fixed:
+        return fixed[method]
     palette = (
         (0.95, 0.25, 0.25),
         (0.20, 0.75, 0.30),
