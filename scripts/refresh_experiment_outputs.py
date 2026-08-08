@@ -15,6 +15,9 @@ from camera_rig_calibration.product_policy import install_product_policy
 from camera_rig_calibration.queue_anchor_preference_policy import (
     install_queue_anchor_preference_policy,
 )
+from camera_rig_calibration.reanchor_existing_results_policy import (
+    install_reanchor_existing_results_policy,
+)
 from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
@@ -30,6 +33,7 @@ install_submission_policy()
 install_marker_preference_policy()
 install_common_anchor_authority_policy()
 install_queue_anchor_preference_policy()
+install_reanchor_existing_results_policy()
 install_result_output_policy()
 install_submission_bindings()
 install_ui_display_policy()
