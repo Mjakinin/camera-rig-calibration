@@ -7,6 +7,7 @@ from .queue_anchor_preference_policy import install_queue_anchor_preference_poli
 from .reanchor_existing_results_policy import install_reanchor_existing_results_policy
 from .reporting_authority_policy import install_reporting_authority_policy
 from .result_output_policy import install_result_output_policy
+from .rviz_manifest_policy import install_rviz_manifest_policy
 from .submission_bindings import install_submission_bindings
 from .submission_policy import install_submission_policy
 from .ui_display_policy import install_ui_display_policy
@@ -28,6 +29,7 @@ install_queue_anchor_preference_policy()
 # without rerunning native calibration or COLMAP when the saved geometry supports it.
 install_reanchor_existing_results_policy()
 install_result_output_policy()
+install_rviz_manifest_policy()
 # Bind every already-imported preflight/runtime consumer only after all
 # selection wrappers are installed, so Wizard and --config use the same path.
 install_submission_bindings()
