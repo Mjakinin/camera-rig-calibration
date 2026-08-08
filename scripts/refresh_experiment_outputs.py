@@ -21,6 +21,9 @@ from camera_rig_calibration.queue_anchor_preference_policy import (
 from camera_rig_calibration.reanchor_existing_results_policy import (
     install_reanchor_existing_results_policy,
 )
+from camera_rig_calibration.real_marker_reporting_policy import (
+    install_real_marker_reporting_policy,
+)
 from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
@@ -39,6 +42,7 @@ install_common_anchor_authority_policy()
 install_queue_anchor_preference_policy()
 install_reanchor_existing_results_policy()
 install_result_output_policy()
+install_real_marker_reporting_policy()
 install_rviz_manifest_policy()
 install_submission_bindings()
 install_ui_display_policy()
@@ -114,6 +118,13 @@ def main() -> None:
     print("  method rerun: False")
     print("  COLMAP rerun: False")
     print("  native method outputs modified: False")
+    marker_status = _read_json(
+        experiment_root
+        / "evaluations"
+        / "method_anchors_reconciled"
+        / "COMMON_ANCHOR_STATUS.json"
+    )
+    print(f"  marker consistency: {marker_status.get('status', 'unavailable')}")
     print(f"  results: {experiment_root / 'RESULTS.txt'}")
     print(
         "  6DoF YAML: "
