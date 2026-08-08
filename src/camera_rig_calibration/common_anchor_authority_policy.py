@@ -18,16 +18,6 @@ def _read_json(path: Path) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
-def _write_json(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
-
-
 def _candidate(payload: dict[str, Any], marker_id: int) -> dict[str, Any]:
     for item in payload.get("ap03_single_scale_marker", {}).get("candidates", []):
         try:
@@ -56,12 +46,12 @@ def _ap02_reference_candidate(payload: dict[str, Any], marker_id: int) -> dict[s
 
 
 def _preferred_export_compatible(config: Any, resolved: Any, marker_id: int) -> bool:
-    """Match preflight common-anchor eligibility to the actual anchor exporters.
+    """Check whether enabled method exporters can express their result in marker_id.
 
-    AP01 can reconstruct the anchor from any reachable static camera that sees it;
-    the root camera itself does not have to see the marker. AP02 requires the marker
-    to be in the selected combined component. AP03 requires repeated moving support;
-    final four-corner triangulation remains a post-COLMAP export check.
+    AP01 may use any reachable solved static camera that observes the marker; the
+    AP01 root itself does not need to see it. AP02 requires the marker in the
+    selected combined graph component. AP03 requires compatible repeated moving
+    support. Ground Truth is never consulted.
     """
 
     payload = resolved.payload
@@ -139,13 +129,13 @@ def _install_selection_compatibility() -> None:
                 "automatic_observation_candidates": sorted(automatic_candidates),
                 "reason": (
                     f"preferred common anchor {preferred} is reconstructable by "
-                    "the enabled methods using their actual anchor-export geometry; "
-                    "AP01 root visibility is not required"
+                    "the enabled method exporters; AP01 root visibility is not required"
                 ),
             }
         )
-        recommendations = payload.setdefault("automatic_recommendations", {})
-        recommendations["evaluation_anchor_marker_id"] = int(preferred)
+        payload.setdefault("automatic_recommendations", {})[
+            "evaluation_anchor_marker_id"
+        ] = int(preferred)
         category = payload.setdefault("category_marker_preference", {})
         category["evaluation_anchor"] = {
             "preferred": int(preferred),
@@ -200,154 +190,11 @@ def _install_anchor_export_authority() -> None:
             anchor = int(anchor_value)
         except (TypeError, ValueError):
             return config
-        evaluation = config.evaluation.model_copy(
-            update={"anchor_marker_id": anchor}
-        )
+        evaluation = config.evaluation.model_copy(update={"anchor_marker_id": anchor})
         return config.model_copy(update={"evaluation": evaluation}, deep=True)
 
     config_for_result._rigcal_common_anchor_authority = True  # type: ignore[attr-defined]
     exporter._config_for_result = config_for_result
-
-
-def _preferred_from_selection(selection: dict[str, Any]) -> int | None:
-    evaluation = selection.get("evaluation_anchor", {})
-    category = selection.get("category_marker_preference", {}).get(
-        "evaluation_anchor", {}
-    )
-    value = evaluation.get("preferred_marker_id", category.get("preferred"))
-    mode = str(evaluation.get("selection_mode", ""))
-    if value is None or mode not in {
-        "preferred_with_auto_fallback",
-        "published_common_evaluation",
-    }:
-        return None
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def _primary_method_roots(experiment_root: Path) -> list[tuple[str, Path]]:
-    roots: list[tuple[str, Path]] = []
-    for method in ("ap01", "ap02", "ap03"):
-        method_root = experiment_root / "methods" / method
-        if not method_root.is_dir():
-            continue
-        candidates = sorted(
-            path.parent
-            for path in method_root.glob("*/RESULT.json")
-            if path.is_file()
-        )
-        if not candidates:
-            continue
-        selected = next((path for path in candidates if path.name == "baseline"), candidates[0])
-        roots.append((method, selected))
-    return roots
-
-
-def repair_published_preferred_anchor(experiment_root: Path) -> dict[str, Any]:
-    """Repair only derived common-anchor authority for runs affected by the old root-only gate.
-
-    Native calibration estimates are never modified. The old preflight selection remains
-    preserved in observations/SELECTION_CANDIDATES.json; a derived authoritative
-    SELECTED_COMMON_EVALUATION.json records the repaired anchor and evidence.
-    """
-
-    from .anchor_export import adapters, exporter
-
-    experiment_root = experiment_root.resolve()
-    selection = _read_json(
-        experiment_root / "observations" / "SELECTION_CANDIDATES.json"
-    )
-    preferred = _preferred_from_selection(selection)
-    if preferred is None:
-        return {"status": "not_applicable", "reason": "no category-preferred anchor request"}
-    current = selection.get("evaluation_anchor", {}).get("selected")
-    checks: list[dict[str, Any]] = []
-    roots = _primary_method_roots(experiment_root)
-    if not roots:
-        return {"status": "unavailable", "reason": "no completed primary method outputs"}
-
-    for method, root in roots:
-        config = exporter._config_for_result(root)
-        native = adapters.load_camera_poses(root)
-        if config is None or not native:
-            checks.append(
-                {
-                    "method": method,
-                    "label": root.name,
-                    "available": False,
-                    "code": "METHOD_OUTPUT_UNAVAILABLE",
-                }
-            )
-            continue
-        resolution = adapters.resolve_method_anchor(
-            root, config, method, preferred, native
-        )
-        checks.append(
-            {
-                "method": method,
-                "label": root.name,
-                "available": bool(resolution.available),
-                "code": resolution.code,
-                "warnings": list(resolution.warnings),
-            }
-        )
-
-    if not checks or not all(item["available"] for item in checks):
-        payload = {
-            "schema_version": 1,
-            "status": "preferred_anchor_not_exportable_by_every_method",
-            "preferred_anchor_marker_id": preferred,
-            "preflight_anchor_marker_id": current,
-            "ground_truth_used": False,
-            "method_anchor_checks": checks,
-        }
-        _write_json(
-            experiment_root / "evaluations" / "COMMON_ANCHOR_REPAIR.json",
-            payload,
-        )
-        return payload
-
-    selected_path = (
-        experiment_root / "evaluations" / "SELECTED_COMMON_EVALUATION.json"
-    )
-    existing = _read_json(selected_path)
-    repaired = {
-        **existing,
-        "schema_version": max(int(existing.get("schema_version") or 0), 5),
-        "anchor_marker_id": preferred,
-        "success_for_every_method": True,
-        "selection_mode": "repaired_category_preference_export_compatibility",
-        "configured_preferred_anchor_marker_id": preferred,
-        "superseded_preflight_anchor_marker_id": current,
-        "ground_truth_used": False,
-        "reason": (
-            "The original preflight used an obsolete AP01 root-visibility gate. "
-            "Completed method outputs prove that the configured preferred marker "
-            "is exportable by every primary method; only derived anchor/report/"
-            "visualization outputs are refreshed."
-        ),
-        "method_anchor_checks": checks,
-    }
-    _write_json(selected_path, repaired)
-    audit = {
-        "schema_version": 1,
-        "status": "repaired",
-        "preferred_anchor_marker_id": preferred,
-        "preflight_anchor_marker_id": current,
-        "published_anchor_marker_id": preferred,
-        "method_rerun": False,
-        "colmap_rerun": False,
-        "native_method_outputs_modified": False,
-        "ground_truth_used": False,
-        "method_anchor_checks": checks,
-    }
-    _write_json(
-        experiment_root / "evaluations" / "COMMON_ANCHOR_REPAIR.json",
-        audit,
-    )
-    return audit
 
 
 def install_common_anchor_authority_policy() -> None:
