@@ -14,11 +14,15 @@ from camera_rig_calibration.product_policy import (
 from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
+from camera_rig_calibration.submission_bindings import install_submission_bindings
+from camera_rig_calibration.submission_policy import install_submission_policy
 from camera_rig_calibration.ui_display_policy import install_ui_display_policy
 
 
 install_product_policy()
 install_reporting_authority_policy()
+install_submission_policy()
+install_submission_bindings()
 install_ui_display_policy()
 
 from camera_rig_calibration import wizard  # noqa: E402
@@ -42,6 +46,7 @@ def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
         assert ap01.methods.ap01.method_contract == "baseline_v1"
         assert ap01.methods.ap01.advanced_strategy == "legacy_main_v1"
         assert ap01.methods.ap01.root_camera == "cam_edge_3"
+        assert ap01.methods.ap01.direct_target_camera == "auto"
         assert ap02.methods.ap02.reference_marker_selection_mode == "baseline"
         assert ap02.methods.ap02.reference_marker_id == 14
         assert ap02.methods.ap02.static_only_ba_max_function_evaluations == 80
@@ -63,6 +68,7 @@ def test_real_vehicle_uses_same_method_cores_with_data_driven_anchors() -> None:
     assert ap01.methods.ap01.method_contract == "baseline_v1"
     assert ap01.methods.ap01.advanced_strategy == "legacy_main_v1"
     assert ap01.methods.ap01.root_camera == "auto"
+    assert ap01.methods.ap01.direct_target_camera == "auto"
     assert ap02.methods.ap02.method_contract == "baseline_v1"
     assert ap02.methods.ap02.reference_marker_selection_mode == "auto"
     assert ap02.methods.ap02.reference_marker_id == "auto"
@@ -88,6 +94,7 @@ def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
     assert "top frames per marker" in text
     assert "top frames per marker pair" in text
     assert "marker 14" in text
+    assert "algorithm variant" in text
 
 
 def test_reporting_contract_uses_only_baselines_and_actual_ap02_80_80() -> None:
