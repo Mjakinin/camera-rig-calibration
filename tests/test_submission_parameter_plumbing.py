@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
+from camera_rig_calibration.ap01_auto_direct import automatic_ap01_direct_target
 from camera_rig_calibration.config.models import (
     AP02Settings,
     AP03Settings,
@@ -22,10 +23,7 @@ from camera_rig_calibration.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
 from camera_rig_calibration.submission_bindings import install_submission_bindings
-from camera_rig_calibration.submission_policy import (
-    _automatic_ap01_direct_target,
-    install_submission_policy,
-)
+from camera_rig_calibration.submission_policy import install_submission_policy
 from camera_rig_calibration.ui_display_policy import install_ui_display_policy
 
 
@@ -35,7 +33,14 @@ install_submission_policy()
 install_submission_bindings()
 install_ui_display_policy()
 
-from camera_rig_calibration import observations, preflight, queueing, runtime, wizard  # noqa: E402
+from camera_rig_calibration import (  # noqa: E402
+    observations,
+    preflight,
+    queueing,
+    runtime,
+    submission_policy,
+    wizard,
+)
 
 
 def _value(argv: tuple[str, ...], option: str) -> str:
@@ -72,6 +77,10 @@ def test_submission_selection_bindings_cover_every_execution_path() -> None:
     assert runtime.resolve_selections is observations.resolve_selections
     assert queueing.freeze_selections is observations.freeze_selections
     assert runtime.freeze_selections is observations.freeze_selections
+    assert (
+        submission_policy._automatic_ap01_direct_target
+        is automatic_ap01_direct_target
+    )
 
 
 def test_ap01_direct_target_is_not_operator_editable() -> None:
@@ -91,7 +100,35 @@ def test_ap01_direct_target_is_not_operator_editable() -> None:
 
 
 def _write_ap01_observations(path: Path, rows: list[dict[str, object]]) -> None:
+    """Write minimal but scientifically valid AP01 static PnP observations.
+
+    The auto-Direct selector intentionally reuses AP01's real baseline candidate
+    construction.  Test rows therefore include finite PnP poses and marker
+    geometry instead of mocking only the high-level selection-score columns.
+    """
+
     path.mkdir(parents=True, exist_ok=True)
+    defaults: dict[str, object] = {
+        "pnp_success": "true",
+        "distance_m": 2.0,
+        "center_u": 640.0,
+        "center_v": 360.0,
+        "corner0_u": 620.0,
+        "corner0_v": 340.0,
+        "corner1_u": 660.0,
+        "corner1_v": 340.0,
+        "corner2_u": 660.0,
+        "corner2_v": 380.0,
+        "corner3_u": 620.0,
+        "corner3_v": 380.0,
+        "rvec_x": 0.0,
+        "rvec_y": 0.0,
+        "rvec_z": 0.0,
+        "tvec_x_m": 0.0,
+        "tvec_y_m": 0.0,
+        "tvec_z_m": 2.0,
+    }
+    materialized = [{**defaults, **row} for row in rows]
     fields = [
         "observer_type",
         "observer_id",
@@ -99,13 +136,31 @@ def _write_ap01_observations(path: Path, rows: list[dict[str, object]]) -> None:
         "selection_score",
         "pnp_reprojection_rmse_px",
         "marker_area_ratio",
+        "pnp_success",
+        "distance_m",
+        "center_u",
+        "center_v",
+        "corner0_u",
+        "corner0_v",
+        "corner1_u",
+        "corner1_v",
+        "corner2_u",
+        "corner2_v",
+        "corner3_u",
+        "corner3_v",
+        "rvec_x",
+        "rvec_y",
+        "rvec_z",
+        "tvec_x_m",
+        "tvec_y_m",
+        "tvec_z_m",
     ]
     with (path / "shared_all_aruco_observations.csv").open(
         "w", newline="", encoding="utf-8"
     ) as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows(materialized)
 
 
 def test_ap01_direct_target_is_selected_from_filtered_overlap(tmp_path: Path) -> None:
@@ -134,13 +189,16 @@ def test_ap01_direct_target_is_selected_from_filtered_overlap(tmp_path: Path) ->
             StaticCameraSettings(id="cam_relay"),
         ],
     )
-    selected, candidates = _automatic_ap01_direct_target(
+    selected, candidates = automatic_ap01_direct_target(
         config, observations_root, "cam_root"
     )
     assert selected == "cam_direct"
     direct = next(item for item in candidates if item["id"] == "cam_direct")
     relay = next(item for item in candidates if item["id"] == "cam_relay")
     assert direct["independent_shared_markers"] == 2
+    assert direct["quality_filtered_markers"] == 2
+    assert direct["independent_inlier_markers"] == 2
+    assert direct["quality_filter_fallback_used"] is False
     assert direct["compatible"] is True
     assert relay["independent_shared_markers"] == 1
     assert relay["compatible"] is False
@@ -170,10 +228,11 @@ def test_ap01_direct_target_falls_back_to_relay_only_without_two_markers(
             StaticCameraSettings(id="cam_other"),
         ],
     )
-    selected, candidates = _automatic_ap01_direct_target(
+    selected, candidates = automatic_ap01_direct_target(
         config, observations_root, "cam_root"
     )
     assert selected is None
+    assert candidates[0]["independent_shared_markers"] == 1
     assert candidates[0]["compatible"] is False
 
 
