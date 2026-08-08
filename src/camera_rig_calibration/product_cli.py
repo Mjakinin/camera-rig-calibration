@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .ap01_common_anchor_policy import install_ap01_common_anchor_policy
+from .ap02_convergence_frontdoor_policy import install_ap02_convergence_frontdoor_policy
 from .ap02_convergence_reporting_policy import install_ap02_convergence_reporting_policy
 from .common_anchor_authority_policy import install_common_anchor_authority_policy
 from .final_reporting_frontdoor_policy import install_final_reporting_frontdoor_policy
@@ -41,6 +42,9 @@ install_real_marker_reporting_policy()
 # Final experiment RESULTS is canonical regardless of wrapper/import order: it
 # states the common export frame and embeds native metric marker diagnostics.
 install_final_reporting_frontdoor_policy()
+# Make the same AP02 convergence summary visible in experiment-level reports for
+# Real Vehicle, Simulation and subsequent ablation runs.
+install_ap02_convergence_frontdoor_policy()
 install_rviz_manifest_policy()
 # Bind already-imported preflight/runtime consumers only after all selection
 # wrappers are installed, so Wizard and --config use the identical path.
