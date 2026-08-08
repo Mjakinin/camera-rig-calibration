@@ -9,6 +9,7 @@ from .real_marker_reporting_policy import install_real_marker_reporting_policy
 from .real_vehicle_marker_zero_policy import install_real_vehicle_marker_zero_policy
 from .reporting_authority_policy import install_reporting_authority_policy
 from .result_output_policy import install_result_output_policy
+from .result_view_policy import install_result_view_policy
 from .rviz_manifest_policy import install_rviz_manifest_policy
 from .submission_bindings import install_submission_bindings
 from .submission_policy import install_submission_policy
@@ -37,6 +38,9 @@ install_rviz_manifest_policy()
 # wrappers are installed, so Wizard and --config use the identical path.
 install_submission_bindings()
 install_ui_display_policy()
+# Result browsing is read-only and must not re-run expensive report generation
+# before the menu is shown. Missing/legacy artifacts still reconcile on demand.
+install_result_view_policy()
 
 from .cli import main  # noqa: E402
 
