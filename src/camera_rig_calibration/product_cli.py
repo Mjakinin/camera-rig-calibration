@@ -8,6 +8,7 @@ from .final_reporting_frontdoor_policy import install_final_reporting_frontdoor_
 from .marker_preference_policy import install_marker_preference_policy
 from .product_policy import install_product_policy
 from .queue_anchor_preference_policy import install_queue_anchor_preference_policy
+from .real_ap02_budget_policy import install_real_ap02_budget_policy
 from .real_marker_reporting_policy import install_real_marker_reporting_policy
 from .real_vehicle_marker_zero_policy import install_real_vehicle_marker_zero_policy
 from .reporting_authority_policy import install_reporting_authority_policy
@@ -23,6 +24,10 @@ from .ui_display_policy import install_ui_display_policy
 # Scientific method implementations remain unchanged; these layers own the
 # submission-facing defaults, selection contract, reporting and visualization.
 install_product_policy()
+# New Real Vehicle jobs keep static AP02 BA at 80 evaluations but allow the
+# combined BA up to 160 so normal ftol/xtol/gtol termination can occur before
+# the safety ceiling. Simulation retains its frozen historical contract.
+install_real_ap02_budget_policy()
 install_reporting_authority_policy()
 install_submission_policy()
 install_marker_preference_policy()
