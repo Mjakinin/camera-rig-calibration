@@ -25,5 +25,9 @@ setup(
         "standalone": ["opencv-contrib-python-headless>=4.5,<5"],
         "dev": ["build>=1.2,<2", "pytest>=7,<9", "pytest-cov>=5,<7"],
     },
-    entry_points={"console_scripts": ["rigcal=camera_rig_calibration.cli:main"]},
+    entry_points={
+        "console_scripts": [
+            "rigcal=camera_rig_calibration.product_cli:main"
+        ]
+    },
 )
