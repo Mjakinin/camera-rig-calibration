@@ -136,13 +136,21 @@ def _check_ros() -> tuple[bool, str]:
     return True, ""
 
 
-def launch_isolated_rviz(
+def launch_visualization_directory(
+    visualization_root: Path,
     experiment_root: Path,
     repository_root: Path,
+    *,
+    scene_label: str | None = None,
 ) -> dict[str, Any]:
-    from .scene import ensure_visualization_artifacts
-
-    manifest = ensure_visualization_artifacts(experiment_root)
+    visualization_root = visualization_root.resolve()
+    manifest_path = visualization_root / "visualization_manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            f"RViz visualization manifest is unavailable: {manifest_path}"
+        ) from exc
     if not manifest.get("available"):
         raise RuntimeError(str(manifest.get("reason") or manifest.get("status")))
     available, reason = _check_ros()
@@ -150,7 +158,8 @@ def launch_isolated_rviz(
         raise RuntimeError(reason)
     session_root = repository_root.resolve() / "workspace" / "rviz_sessions"
     domain, lock = _reserve_domain(session_root)
-    session_id = f"{experiment_root.name}_{int(time.time())}_{domain}"
+    suffix = f"_{scene_label}" if scene_label else ""
+    session_id = f"{experiment_root.name}{suffix}_{int(time.time())}_{domain}"
     log = session_root / f"{session_id}.log"
     session_manifest = session_root / f"{session_id}.json"
     command = [
@@ -160,6 +169,8 @@ def launch_isolated_rviz(
         "--supervise",
         "--experiment",
         str(experiment_root.resolve()),
+        "--visualization",
+        str(visualization_root),
         "--domain",
         str(domain),
         "--lock",
@@ -181,6 +192,7 @@ def launch_isolated_rviz(
             "domain_id": domain,
             "session_id": session_id,
             "experiment": str(experiment_root.resolve()),
+            "visualization": str(visualization_root),
             "reserved_at": _now(),
         },
     )
@@ -190,6 +202,8 @@ def launch_isolated_rviz(
         "pid": process.pid,
         "ros_domain_id": domain,
         "experiment": str(experiment_root.resolve()),
+        "visualization": str(visualization_root),
+        "scene_label": scene_label,
         "log": str(log.resolve()),
         "manifest": str(session_manifest.resolve()),
         "started_at": _now(),
@@ -198,9 +212,30 @@ def launch_isolated_rviz(
     return payload
 
 
+def launch_isolated_rviz(
+    experiment_root: Path,
+    repository_root: Path,
+) -> dict[str, Any]:
+    from .scene import ensure_visualization_artifacts
+
+    manifest = ensure_visualization_artifacts(experiment_root)
+    if not manifest.get("available"):
+        raise RuntimeError(str(manifest.get("reason") or manifest.get("status")))
+    return launch_visualization_directory(
+        experiment_root.resolve() / "visualization",
+        experiment_root,
+        repository_root,
+        scene_label="common_anchor",
+    )
+
+
 def _supervise(args: argparse.Namespace) -> int:
     experiment = Path(args.experiment).resolve()
-    visualization = experiment / "visualization"
+    visualization = (
+        Path(args.visualization).resolve()
+        if args.visualization
+        else experiment / "visualization"
+    )
     lock = Path(args.lock).resolve()
     session_manifest = Path(args.session_manifest).resolve()
     environment = os.environ.copy()
@@ -280,6 +315,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--supervise", action="store_true")
     parser.add_argument("--experiment")
+    parser.add_argument("--visualization")
     parser.add_argument("--domain", type=int)
     parser.add_argument("--lock")
     parser.add_argument("--session-manifest")
