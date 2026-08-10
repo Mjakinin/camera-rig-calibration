@@ -13,6 +13,7 @@ from .product_policy import install_product_policy
 from .queue_anchor_preference_policy import install_queue_anchor_preference_policy
 from .real_ap02_budget_policy import install_real_ap02_budget_policy
 from .real_marker_reporting_policy import install_real_marker_reporting_policy
+from .real_partial_evaluation_policy import install_real_partial_evaluation_policy
 from .real_vehicle_marker_zero_policy import install_real_vehicle_marker_zero_policy
 from .reporting_authority_policy import install_reporting_authority_policy
 from .result_output_policy import install_result_output_policy
@@ -50,6 +51,10 @@ install_ap03_camera_model_sensitivity_policy()
 # diagnostics from that trace for every completed AP02 result without rerunning BA.
 install_ap02_convergence_reporting_policy()
 install_result_output_policy()
+# Real Vehicle evaluation remains enabled, but common-anchor observability is a
+# post-method reporting concern rather than a calibration-readiness gate. AP02
+# disconnected components remain runnable and are surfaced in RESULT artifacts.
+install_real_partial_evaluation_policy()
 install_real_marker_reporting_policy()
 # Final experiment RESULTS is canonical regardless of wrapper/import order: it
 # states the common export frame and embeds native metric marker diagnostics.
