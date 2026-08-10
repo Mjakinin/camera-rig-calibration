@@ -1,0 +1,14 @@
+{
+  "canonical_dataset_root": "/workspaces/project/results/real_vehicle/3Hz/IMG_4388_20260810_151035__aruco_high_sensitivity",
+  "content_addressing": "normalized input SHA-256",
+  "file_counts": {
+    "copied": 0,
+    "existing": 0,
+    "hardlinked": 279
+  },
+  "input_id": "input_2a160111b13e",
+  "layout_version": 2,
+  "published_at": "2026-08-10T15:15:02+00:00",
+  "status": "ready",
+  "storage": "hardlinks where supported, byte copies otherwise; deleting the source does not remove files from this dataset"
+}

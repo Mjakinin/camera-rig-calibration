@@ -1,0 +1,60 @@
+{
+  "available": true,
+  "consistency_checks": {
+    "point_count_matches_metadata": true,
+    "scale_matches_multi_metadata": true,
+    "shared_container_membership": true,
+    "strict_best_model": true,
+    "transformed_cameras_match_ap03_multi_export": true
+  },
+  "contract": "rigcal_rviz_scene_v2",
+  "fingerprint": "82e68abb77db76da29adef829675b9d3cdbedc145fe683f8ebcaa285f388a802",
+  "fixed_frame": "evaluation_anchor_marker_0",
+  "frustums": "camera_frustums.json",
+  "ground_truth": {
+    "available": false,
+    "camera_count": 0,
+    "default_visible": false,
+    "source": null
+  },
+  "note": "The single point cloud is AP03 Multi/COLMAP context. Camera poses retain their own method/variant identity.",
+  "point_cloud": "scene_anchor_frame.ply",
+  "point_cloud_display_count": 1,
+  "point_cloud_publisher_count": 1,
+  "point_cloud_source": {
+    "anchor_source": "methods/ap03_multi/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/camera_extrinsics_anchor.json",
+    "container_label": "aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",
+    "container_method": "ap03",
+    "ground_truth_source": null,
+    "method": "ap03_multi",
+    "model_id": "0",
+    "point_count": 56934,
+    "points3D": "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/method/colmap/reconstruction/sparse_txt/0/points3D.txt",
+    "scale_m_per_colmap_unit": 5.477844926575327
+  },
+  "point_count": 56934,
+  "poses": "poses_anchor_frame.json",
+  "publisher": "camera_rig_calibration.visualization.ros_scene",
+  "rviz_config": "rigcal_result.rviz",
+  "schema_version": 2,
+  "status": "OK",
+  "variants": [
+    {
+      "anchor_edges_default_visible": true,
+      "default_visible": true,
+      "error_lines_default_visible": false,
+      "label": "aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",
+      "method": "ap03_multi"
+    },
+    {
+      "anchor_edges_default_visible": false,
+      "default_visible": false,
+      "error_lines_default_visible": false,
+      "label": "aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",
+      "method": "ap03_single"
+    }
+  ],
+  "warnings": [
+    "Visible ghosting, if present, belongs to this one unmodified best-model reconstruction; Ground Truth is never used to deform or align the point cloud."
+  ]
+}

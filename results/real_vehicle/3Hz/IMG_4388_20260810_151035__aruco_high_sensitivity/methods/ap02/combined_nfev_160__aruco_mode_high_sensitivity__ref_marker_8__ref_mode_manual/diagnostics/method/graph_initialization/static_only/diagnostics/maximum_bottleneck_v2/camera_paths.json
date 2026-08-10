@@ -1,0 +1,257 @@
+[
+  {
+    "camera_id": "camera_back_left",
+    "initialization_algorithm": "maximum_bottleneck_v2",
+    "selected_graph_path": [
+      {
+        "from": "marker:8",
+        "to": "observer:camera_center_left",
+        "observation": {
+          "selection_score": 2.174621328348062,
+          "pnp_reprojection_rmse_px": 1.7751496590168854,
+          "marker_area_ratio": 0.0005316144534382618,
+          "area_px2": 1251.5139875374734,
+          "distance_m": 4.461930343293276,
+          "observer_id": "camera_center_left",
+          "marker_id": 8,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "observer:camera_center_left",
+        "to": "marker:2",
+        "observation": {
+          "selection_score": 11.13158051738139,
+          "pnp_reprojection_rmse_px": 0.11954717126931697,
+          "marker_area_ratio": 0.0004012369335941833,
+          "area_px2": 944.5823593810201,
+          "distance_m": 4.852399828643446,
+          "observer_id": "camera_center_left",
+          "marker_id": 2,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "marker:2",
+        "to": "observer:camera_back_left",
+        "observation": {
+          "selection_score": 1.5001483600425238,
+          "pnp_reprojection_rmse_px": 1.1589545389222642,
+          "marker_area_ratio": 0.00016304238168962754,
+          "area_px2": 383.8304619565606,
+          "distance_m": 7.409364219981579,
+          "observer_id": "camera_back_left",
+          "marker_id": 2,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 1.5001483600425238,
+    "path_mean_score": 4.935450068590659,
+    "weakest_edge": {
+      "from": "marker:2",
+      "to": "observer:camera_back_left",
+      "observation": {
+        "selection_score": 1.5001483600425238,
+        "pnp_reprojection_rmse_px": 1.1589545389222642,
+        "marker_area_ratio": 0.00016304238168962754,
+        "area_px2": 383.8304619565606,
+        "distance_m": 7.409364219981579,
+        "observer_id": "camera_back_left",
+        "marker_id": 2,
+        "frame_id": "static",
+        "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+      }
+    },
+    "initial_pose": [
+      [
+        0.08406659427388445,
+        0.7853923074942665,
+        -0.6132631825374988,
+        0.63502503249392
+      ],
+      [
+        0.8884572369180307,
+        0.21959230607736793,
+        0.40301731635204247,
+        -6.21264054272938
+      ],
+      [
+        0.45119457653563255,
+        -0.5787384058799406,
+        -0.6793271021123595,
+        4.338867214662012
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "camera_center_left",
+    "initialization_algorithm": "maximum_bottleneck_v2",
+    "selected_graph_path": [
+      {
+        "from": "marker:8",
+        "to": "observer:camera_center_left",
+        "observation": {
+          "selection_score": 2.174621328348062,
+          "pnp_reprojection_rmse_px": 1.7751496590168854,
+          "marker_area_ratio": 0.0005316144534382618,
+          "area_px2": 1251.5139875374734,
+          "distance_m": 4.461930343293276,
+          "observer_id": "camera_center_left",
+          "marker_id": 8,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      }
+    ],
+    "path_length": 1,
+    "path_bottleneck_score": 2.174621328348062,
+    "path_mean_score": 2.174621328348062,
+    "weakest_edge": {
+      "from": "marker:8",
+      "to": "observer:camera_center_left",
+      "observation": {
+        "selection_score": 2.174621328348062,
+        "pnp_reprojection_rmse_px": 1.7751496590168854,
+        "marker_area_ratio": 0.0005316144534382618,
+        "area_px2": 1251.5139875374734,
+        "distance_m": 4.461930343293276,
+        "observer_id": "camera_center_left",
+        "marker_id": 8,
+        "frame_id": "static",
+        "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.16025838809634874,
+        0.917234748556675,
+        0.364688449344003,
+        -2.0052611231195994
+      ],
+      [
+        0.9703128707277939,
+        0.07859101115093248,
+        0.2287277549102025,
+        -0.7129738849324085
+      ],
+      [
+        0.18113581077398166,
+        0.390517437519053,
+        -0.9025995507692239,
+        3.921660165785756
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "camera_center_right",
+    "initialization_algorithm": "maximum_bottleneck_v2",
+    "selected_graph_path": [
+      {
+        "from": "marker:8",
+        "to": "observer:camera_center_left",
+        "observation": {
+          "selection_score": 2.174621328348062,
+          "pnp_reprojection_rmse_px": 1.7751496590168854,
+          "marker_area_ratio": 0.0005316144534382618,
+          "area_px2": 1251.5139875374734,
+          "distance_m": 4.461930343293276,
+          "observer_id": "camera_center_left",
+          "marker_id": 8,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "observer:camera_center_left",
+        "to": "marker:37",
+        "observation": {
+          "selection_score": 12.56457816982507,
+          "pnp_reprojection_rmse_px": 0.8407632956490936,
+          "marker_area_ratio": 0.0015929140387124837,
+          "area_px2": 3750.0,
+          "distance_m": 2.0689198117630796,
+          "observer_id": "camera_center_left",
+          "marker_id": 37,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "marker:37",
+        "to": "observer:camera_center_right",
+        "observation": {
+          "selection_score": 29.953494392621955,
+          "pnp_reprojection_rmse_px": 0.2698350782801159,
+          "marker_area_ratio": 0.0019352995037462152,
+          "area_px2": 4556.03564453125,
+          "distance_m": 1.9530027003963335,
+          "observer_id": "camera_center_right",
+          "marker_id": 37,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 2.174621328348062,
+    "path_mean_score": 14.897564630265029,
+    "weakest_edge": {
+      "from": "marker:8",
+      "to": "observer:camera_center_left",
+      "observation": {
+        "selection_score": 2.174621328348062,
+        "pnp_reprojection_rmse_px": 1.7751496590168854,
+        "marker_area_ratio": 0.0005316144534382618,
+        "area_px2": 1251.5139875374734,
+        "distance_m": 4.461930343293276,
+        "observer_id": "camera_center_left",
+        "marker_id": 8,
+        "frame_id": "static",
+        "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+      }
+    },
+    "initial_pose": [
+      [
+        0.0649393261068001,
+        -0.9299324524098855,
+        0.36195098822869815,
+        -1.8590707159364666
+      ],
+      [
+        -0.986463110622882,
+        -0.005091704579900478,
+        0.1639042584092911,
+        -0.6359224443447281
+      ],
+      [
+        -0.15057694147851217,
+        -0.3676951298282417,
+        -0.9176747115375737,
+        3.8633315217127406
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  }
+]

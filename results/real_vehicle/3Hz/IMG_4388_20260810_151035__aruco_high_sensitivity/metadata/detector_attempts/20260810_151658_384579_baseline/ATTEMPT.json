@@ -1,0 +1,13 @@
+{
+  "capture_repeated": false,
+  "created_at": "2026-08-10T15:19:44+00:00",
+  "intrinsics_repeated": false,
+  "next_detection_mode": "high_sensitivity",
+  "observation_promotion": "renamed",
+  "previous_detection_mode": "baseline",
+  "raw_images_reused": "dataset/raw_images",
+  "retry_log": "retry_execution/logs",
+  "schema_version": 5,
+  "status": "superseded_by_detector_retry",
+  "video_extraction_repeated": false
+}

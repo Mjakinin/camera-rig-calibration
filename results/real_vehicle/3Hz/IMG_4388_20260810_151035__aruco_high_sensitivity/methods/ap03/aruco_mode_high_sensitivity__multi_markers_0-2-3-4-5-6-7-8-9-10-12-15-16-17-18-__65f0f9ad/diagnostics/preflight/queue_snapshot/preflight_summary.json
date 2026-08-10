@@ -1,0 +1,192 @@
+{
+  "ap02_combined_graph": null,
+  "ap02_frame_selection": null,
+  "automatic_recommendations": {
+    "ap01_root_camera": "camera_center_left",
+    "ap02_reference_marker_id": 8,
+    "ap03_multi_marker_ids": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "ap03_single_scale_marker_id": 17,
+    "evaluation_anchor_marker_id": 17
+  },
+  "camera_coverage": [
+    {
+      "accepted_observation_count": 2,
+      "camera_id": "camera_back_center",
+      "marker_ids": [
+        10,
+        17
+      ],
+      "raw_detection_count": 2,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 2,
+      "camera_id": "camera_back_left",
+      "marker_ids": [
+        2,
+        8
+      ],
+      "raw_detection_count": 2,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 0,
+      "camera_id": "camera_back_right",
+      "marker_ids": [],
+      "raw_detection_count": 0,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 5,
+      "camera_id": "camera_center_left",
+      "marker_ids": [
+        2,
+        6,
+        8,
+        15,
+        37
+      ],
+      "raw_detection_count": 5,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 5,
+      "camera_id": "camera_center_right",
+      "marker_ids": [
+        3,
+        4,
+        5,
+        20,
+        37
+      ],
+      "raw_detection_count": 5,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 2,
+      "camera_id": "camera_front_left",
+      "marker_ids": [
+        0,
+        19
+      ],
+      "raw_detection_count": 2,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 2,
+      "camera_id": "camera_front_narrow",
+      "marker_ids": [
+        7,
+        9
+      ],
+      "raw_detection_count": 2,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 1,
+      "camera_id": "camera_front_right",
+      "marker_ids": [
+        12
+      ],
+      "raw_detection_count": 1,
+      "required": true
+    },
+    {
+      "accepted_observation_count": 2,
+      "camera_id": "camera_front_wide",
+      "marker_ids": [
+        7,
+        9
+      ],
+      "raw_detection_count": 2,
+      "required": true
+    }
+  ],
+  "common_evaluation_anchor_marker_id": 0,
+  "details": [
+    "Observation quality: 369 accepted, 0 rejected; configured limits were not altered",
+    "Effective quality sources: maximum_marker_distance_m=global, maximum_pnp_reprojection_error_px=global, minimum_marker_area_ratio=global, require_positive_depth=global",
+    "Accepted static-camera observation coverage: 8/9",
+    "Static cameras without accepted observations: camera_back_right",
+    "Moving-camera accepted observations: 348",
+    "ArUco detection mode: high_sensitivity",
+    "AP03 ArUco scale-support coverage: 8/9 cameras",
+    "AP03 cameras without direct selected-marker support: camera_back_right",
+    "AP03 COLMAP registration graph coverage is reported during reconstruction; preflight does not predict feature matching",
+    "Common evaluation anchor frozen before methods: marker 15",
+    "Common evaluation/export anchor marker 0 required; fallback blocked",
+    "Non-blocking evaluation preflight removed evaluation-only readiness errors: Real Vehicle canonical marker 0 was observed, but it is not export-compatible for every enabled method after filtering. Automatic fallback is prohibited while marker 0 is observed; fix marker-0 support/quality or explicitly change the scientific reference. Affected jobs: IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01"
+  ],
+  "detection_mode": "high_sensitivity",
+  "errors": [],
+  "evaluation_readiness_policy": {
+    "calibration_gating": false,
+    "compatibility_evidence_overridden": false,
+    "enabled": true,
+    "unobservable_evaluation_is_reported": true
+  },
+  "job_id": "IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02",
+  "method_id": "ap03",
+  "observation_quality": {
+    "effective": {
+      "maximum_marker_distance_m": "disabled",
+      "maximum_pnp_reprojection_error_px": 25.0,
+      "minimum_marker_area_ratio": 8e-06,
+      "require_positive_depth": true
+    },
+    "sources": {
+      "maximum_marker_distance_m": "global",
+      "maximum_pnp_reprojection_error_px": "global",
+      "minimum_marker_area_ratio": "global",
+      "require_positive_depth": "global"
+    }
+  },
+  "resolved_selections": {
+    "ap02_reference_marker_id": 0,
+    "ap03_multi_marker_ids": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "ap03_single_scale_marker_id": 0,
+    "evaluation_anchor_marker_id": 0,
+    "root_camera": "camera_center_left"
+  },
+  "schema_version": 5,
+  "status": "READY",
+  "warnings": [
+    "Common evaluation/export observability is incomplete, but evaluation remains enabled and does not gate calibration. Unavailable method/anchor combinations will be reported after calibration instead of failing method preflight."
+  ]
+}

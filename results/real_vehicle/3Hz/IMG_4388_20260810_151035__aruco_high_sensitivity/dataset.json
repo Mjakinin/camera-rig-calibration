@@ -1,0 +1,64 @@
+{
+  "category": "real_vehicle",
+  "created_at": "2026-08-10T15:15:02+00:00",
+  "experiment_fingerprint": "9806b9f8c779de01d83e07818a1af276c14797c14197f682c7bc1c810735bb8e",
+  "id": "IMG_4388_20260810_151035__aruco_high_sensitivity",
+  "input_fingerprint": "input_2a160111b13e",
+  "layout_version": 2,
+  "moving_camera": {
+    "id": "moving_calib_camera"
+  },
+  "scene_type": "other",
+  "schema_version": 5,
+  "simulation_parameters": null,
+  "source_kind": "video",
+  "static_cameras": [
+    {
+      "id": "camera_back_center",
+      "label": null
+    },
+    {
+      "id": "camera_back_left",
+      "label": null
+    },
+    {
+      "id": "camera_back_right",
+      "label": null
+    },
+    {
+      "id": "camera_center_left",
+      "label": null
+    },
+    {
+      "id": "camera_center_right",
+      "label": null
+    },
+    {
+      "id": "camera_front_left",
+      "label": null
+    },
+    {
+      "id": "camera_front_narrow",
+      "label": null
+    },
+    {
+      "id": "camera_front_right",
+      "label": null
+    },
+    {
+      "id": "camera_front_wide",
+      "label": null
+    }
+  ],
+  "storage": {
+    "canonical_id": "IMG_4388_20260810_151035__aruco_high_sensitivity",
+    "category": "real_vehicle",
+    "dataset_root": "/workspaces/project/results/real_vehicle/3Hz/IMG_4388_20260810_151035__aruco_high_sensitivity",
+    "factor": "sampling_rate",
+    "layout_version": 2,
+    "relative_path": "3Hz/IMG_4388_20260810_151035__aruco_high_sensitivity",
+    "result_root": "/workspaces/project/results/real_vehicle/3Hz/IMG_4388_20260810_151035__aruco_high_sensitivity",
+    "schema_version": 5,
+    "value": "3Hz"
+  }
+}

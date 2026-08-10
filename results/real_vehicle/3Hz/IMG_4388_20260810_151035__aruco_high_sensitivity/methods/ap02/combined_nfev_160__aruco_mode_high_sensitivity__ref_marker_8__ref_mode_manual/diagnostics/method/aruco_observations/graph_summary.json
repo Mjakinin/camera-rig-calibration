@@ -1,0 +1,24 @@
+{
+  "schema_version": 5,
+  "reference_marker_id": 8,
+  "static_only": {
+    "reached_cameras": [
+      "camera_back_left",
+      "camera_center_left",
+      "camera_center_right"
+    ],
+    "reached_camera_count": 3,
+    "reached_marker_count": 9
+  },
+  "combined": {
+    "reached_cameras": [
+      "camera_back_left",
+      "camera_center_left",
+      "camera_center_right",
+      "camera_front_right"
+    ],
+    "reached_camera_count": 4,
+    "reached_marker_count": 12
+  },
+  "component_manifest": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01/20260810_171451_combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_auto__ref_mode_manual_a0d1273b/03_AP02/02_aruco_observations/component_manifest.json"
+}

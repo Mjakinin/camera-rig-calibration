@@ -1,0 +1,22 @@
+{
+  "completed_at": "2026-08-10T17:16:50.403+00:00",
+  "inputs": {
+    "component_manifest": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01/20260810_171451_combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_auto__ref_mode_manual_a0d1273b/03_AP02/02_aruco_observations/component_manifest.json"
+  },
+  "outputs": {
+    "component_count": 4,
+    "component_results": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01/20260810_171451_combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_auto__ref_mode_manual_a0d1273b/03_AP02/09_component_diagnostics/AP02_COMPONENT_RESULTS.json",
+    "diagnostic_components_calibrated": 1
+  },
+  "parameters": {
+    "cross_component_alignment": false,
+    "maximum_function_evaluations": 160,
+    "robust_loss": "soft_l1",
+    "robust_loss_scale_px": 3.0
+  },
+  "runtime_seconds": 112.05908555199858,
+  "schema_version": 5,
+  "stage_id": "ap02.component_diagnostics",
+  "started_at": "2026-08-10T17:14:58.344+00:00",
+  "status": "COMPLETED"
+}

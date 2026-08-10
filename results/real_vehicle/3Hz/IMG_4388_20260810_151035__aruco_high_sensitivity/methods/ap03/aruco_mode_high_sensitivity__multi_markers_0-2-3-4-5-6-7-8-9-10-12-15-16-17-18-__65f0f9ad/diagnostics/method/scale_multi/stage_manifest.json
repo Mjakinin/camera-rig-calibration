@@ -1,0 +1,47 @@
+{
+  "completed_at": "2026-08-10T21:01:42.770+00:00",
+  "inputs": {
+    "accepted_observations": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/preflight/observations",
+    "reconstruction": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/colmap/reconstruction/sparse_txt"
+  },
+  "outputs": {
+    "metadata": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+    "static_poses": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+    "status": "PARTIAL_8_OF_9_SCALE_WEAK"
+  },
+  "parameters": {
+    "detection_mode": "high_sensitivity",
+    "marker_ids": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "marker_length_m": 0.17,
+    "maximum_observations_per_marker": null,
+    "minimum_inliers": 4,
+    "minimum_marker_area_px2": 100.0,
+    "mode": "multi",
+    "ransac_iterations": 1000,
+    "reprojection_threshold_px": 5.0,
+    "scale_input_policy": "legacy_registered_image_redetection_v1"
+  },
+  "runtime_seconds": 184.30460503599897,
+  "schema_version": 5,
+  "stage_id": "ap03.estimate_scale.multi",
+  "started_at": "2026-08-10T20:58:38.465+00:00",
+  "status": "COMPLETED"
+}

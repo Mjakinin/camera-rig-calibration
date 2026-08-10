@@ -1,0 +1,31 @@
+{
+  "completed_at": "2026-08-10T17:42:04.513+00:00",
+  "inputs": {
+    "canonical_dataset": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset"
+  },
+  "outputs": {
+    "images": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/colmap/dataset/images",
+    "manifest": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/colmap/dataset/image_manifest.csv",
+    "moving_images": 254,
+    "static_images": 9
+  },
+  "parameters": {
+    "camera_ids": [
+      "camera_back_center",
+      "camera_back_left",
+      "camera_back_right",
+      "camera_center_left",
+      "camera_center_right",
+      "camera_front_left",
+      "camera_front_narrow",
+      "camera_front_right",
+      "camera_front_wide"
+    ],
+    "moving_camera_id": "moving_calib_camera"
+  },
+  "runtime_seconds": 0.02083155400760006,
+  "schema_version": 5,
+  "stage_id": "ap03.prepare_colmap",
+  "started_at": "2026-08-10T17:42:04.492+00:00",
+  "status": "COMPLETED"
+}

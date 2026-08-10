@@ -1,0 +1,34 @@
+AP02 Reference-marker Graph Bundle Adjustment
+============================================
+
+Mode: static_only
+Reference marker id: 8
+
+Optimized variable poses: 11
+Parameter count: 66
+Marker observations used: 12
+Scalar residual count: 96
+
+Initial reprojection error [px]:
+- mean: 1.724876
+- median: 0.665028
+- max: 14.023805
+
+Final reprojection error [px]:
+- mean: 0.932416
+- median: 0.704290
+- max: 2.380223
+
+Optimizer:
+- success: True
+- status: 2
+- message: `ftol` termination condition is satisfied.
+- nfev: 42
+- cost: 31.404731
+
+Outputs:
+- optimized_static_camera_poses_ref_marker.csv
+- optimized_moving_frame_poses_ref_marker.csv
+- optimized_marker_poses_ref_marker.csv
+- reprojection_errors_by_observation.csv
+

@@ -1,0 +1,113 @@
+method,marker_id,corner_index,static_camera,cross_camera_reprojection_error_px
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,0,camera_back_left,0.5690899704683205
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,1,camera_back_left,0.7201786945183685
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,2,camera_back_left,1.8416049286136853
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,3,camera_back_left,0.9337637046187481
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,0,camera_center_left,2.745493891923038
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,1,camera_center_left,1.3238783491290753
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,2,camera_center_left,1.167555980292592
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",2,3,camera_center_left,0.46852427865875895
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",3,0,camera_center_right,1.1671003614469178
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",3,1,camera_center_right,6.430791957584441
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",3,2,camera_center_right,9.820793255636158
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",3,3,camera_center_right,6.0098746375754075
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",4,0,camera_center_right,8.802707535877108
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",4,1,camera_center_right,4.290733131867902
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",4,2,camera_center_right,3.7170296402487866
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",4,3,camera_center_right,8.553298366749145
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",5,0,camera_center_right,1.9460853551289912
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",5,1,camera_center_right,6.196741955753713
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",5,2,camera_center_right,4.857693166203377
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",5,3,camera_center_right,6.045086993464335
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",6,0,camera_center_left,1.4764118957688146
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",6,1,camera_center_left,6.561488187616265
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",6,2,camera_center_left,4.3193283391555175
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",6,3,camera_center_left,3.348853190598778
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,0,camera_back_left,0.8469402623698339
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,1,camera_back_left,0.8899661150125527
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,2,camera_back_left,2.7168999195112638
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,3,camera_back_left,3.4159912204040164
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,0,camera_center_left,2.9678070774075245
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,1,camera_center_left,7.006000806109645
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,2,camera_center_left,2.6646857919250406
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",8,3,camera_center_left,2.580093332884537
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",12,0,camera_front_right,10.804081798195455
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",12,1,camera_front_right,14.908288787529832
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",12,2,camera_front_right,5.236058280628392
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",12,3,camera_front_right,4.941492205441642
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",15,0,camera_center_left,9.301303070676662
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",15,1,camera_center_left,5.071175321232431
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",15,2,camera_center_left,12.93633611199705
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",15,3,camera_center_left,21.314220740840916
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",20,0,camera_center_right,12.52623208117162
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",20,1,camera_center_right,3.318390791129818
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",20,2,camera_center_right,6.922746717577901
+"AP02 (ref 8, nfev 160, aruco high_sensitivity)",20,3,camera_center_right,13.540819872583524
+"AP03 (multi - markers, aruco baseline)",0,0,camera_front_left,151.62463884517763
+"AP03 (multi - markers, aruco baseline)",0,1,camera_front_left,141.25640135513038
+"AP03 (multi - markers, aruco baseline)",0,2,camera_front_left,151.3461937907104
+"AP03 (multi - markers, aruco baseline)",0,3,camera_front_left,158.6985227138823
+"AP03 (multi - markers, aruco baseline)",2,0,camera_back_left,100.34118863286922
+"AP03 (multi - markers, aruco baseline)",2,1,camera_back_left,102.09080374861504
+"AP03 (multi - markers, aruco baseline)",2,2,camera_back_left,100.47170088142258
+"AP03 (multi - markers, aruco baseline)",2,3,camera_back_left,102.48167869814651
+"AP03 (multi - markers, aruco baseline)",2,0,camera_center_left,152.89222738724044
+"AP03 (multi - markers, aruco baseline)",2,1,camera_center_left,141.59159288450456
+"AP03 (multi - markers, aruco baseline)",2,2,camera_center_left,130.8970500272091
+"AP03 (multi - markers, aruco baseline)",2,3,camera_center_left,138.70684862864766
+"AP03 (multi - markers, aruco baseline)",3,0,camera_center_right,1298.583416850019
+"AP03 (multi - markers, aruco baseline)",3,1,camera_center_right,1329.4618617660274
+"AP03 (multi - markers, aruco baseline)",3,2,camera_center_right,1287.7884102681346
+"AP03 (multi - markers, aruco baseline)",3,3,camera_center_right,1256.672464594934
+"AP03 (multi - markers, aruco baseline)",4,0,camera_center_right,1643.7416335399698
+"AP03 (multi - markers, aruco baseline)",4,1,camera_center_right,1516.1247010178756
+"AP03 (multi - markers, aruco baseline)",4,2,camera_center_right,1797.4011635057507
+"AP03 (multi - markers, aruco baseline)",4,3,camera_center_right,2109.441764566564
+"AP03 (multi - markers, aruco baseline)",5,0,camera_center_right,72.85429153492261
+"AP03 (multi - markers, aruco baseline)",5,1,camera_center_right,66.1501447312701
+"AP03 (multi - markers, aruco baseline)",5,2,camera_center_right,1090.8873348083669
+"AP03 (multi - markers, aruco baseline)",5,3,camera_center_right,76.0268297034491
+"AP03 (multi - markers, aruco baseline)",6,0,camera_center_left,106.40434837073177
+"AP03 (multi - markers, aruco baseline)",6,1,camera_center_left,93.10305853450167
+"AP03 (multi - markers, aruco baseline)",6,2,camera_center_left,92.05837348863184
+"AP03 (multi - markers, aruco baseline)",6,3,camera_center_left,108.414474495783
+"AP03 (multi - markers, aruco baseline)",7,0,camera_front_narrow,1450.875936976659
+"AP03 (multi - markers, aruco baseline)",7,1,camera_front_narrow,1402.6448886051048
+"AP03 (multi - markers, aruco baseline)",7,2,camera_front_narrow,1217.0163447933976
+"AP03 (multi - markers, aruco baseline)",7,3,camera_front_narrow,1260.4138414743384
+"AP03 (multi - markers, aruco baseline)",7,0,camera_front_wide,960.9292964579901
+"AP03 (multi - markers, aruco baseline)",7,1,camera_front_wide,942.4469077132501
+"AP03 (multi - markers, aruco baseline)",7,2,camera_front_wide,721.1940146465513
+"AP03 (multi - markers, aruco baseline)",7,3,camera_front_wide,734.3926100139746
+"AP03 (multi - markers, aruco baseline)",8,0,camera_back_left,109.1633091558754
+"AP03 (multi - markers, aruco baseline)",8,1,camera_back_left,109.94147823853017
+"AP03 (multi - markers, aruco baseline)",8,2,camera_back_left,111.27231006445177
+"AP03 (multi - markers, aruco baseline)",8,3,camera_back_left,104.69752727908282
+"AP03 (multi - markers, aruco baseline)",8,0,camera_center_left,68.90443878721273
+"AP03 (multi - markers, aruco baseline)",8,1,camera_center_left,56.8790942984939
+"AP03 (multi - markers, aruco baseline)",8,2,camera_center_left,51.589694994234996
+"AP03 (multi - markers, aruco baseline)",8,3,camera_center_left,72.45696522687611
+"AP03 (multi - markers, aruco baseline)",9,0,camera_front_narrow,1646.9653654576557
+"AP03 (multi - markers, aruco baseline)",9,1,camera_front_narrow,1506.3638277774562
+"AP03 (multi - markers, aruco baseline)",9,2,camera_front_narrow,1296.6544974823348
+"AP03 (multi - markers, aruco baseline)",9,3,camera_front_narrow,1063.895387884146
+"AP03 (multi - markers, aruco baseline)",9,0,camera_front_wide,1095.9935594292501
+"AP03 (multi - markers, aruco baseline)",9,1,camera_front_wide,999.7735075871246
+"AP03 (multi - markers, aruco baseline)",9,2,camera_front_wide,767.4799947229304
+"AP03 (multi - markers, aruco baseline)",9,3,camera_front_wide,642.8716540797946
+"AP03 (multi - markers, aruco baseline)",12,0,camera_front_right,131.2569433557025
+"AP03 (multi - markers, aruco baseline)",12,1,camera_front_right,124.77628277174125
+"AP03 (multi - markers, aruco baseline)",12,2,camera_front_right,138.53793931211223
+"AP03 (multi - markers, aruco baseline)",12,3,camera_front_right,140.20051411670087
+"AP03 (multi - markers, aruco baseline)",15,0,camera_center_left,95.90657021148904
+"AP03 (multi - markers, aruco baseline)",15,1,camera_center_left,71.56460031722337
+"AP03 (multi - markers, aruco baseline)",15,2,camera_center_left,66.79576253023095
+"AP03 (multi - markers, aruco baseline)",15,3,camera_center_left,94.03691405385659
+"AP03 (multi - markers, aruco baseline)",19,0,camera_front_left,282.07939807172136
+"AP03 (multi - markers, aruco baseline)",19,1,camera_front_left,270.3337164765771
+"AP03 (multi - markers, aruco baseline)",19,2,camera_front_left,283.96406890119596
+"AP03 (multi - markers, aruco baseline)",19,3,camera_front_left,294.3005892447779
+"AP03 (multi - markers, aruco baseline)",20,0,camera_center_right,1561.721642450904
+"AP03 (multi - markers, aruco baseline)",20,1,camera_center_right,1624.8342442870708
+"AP03 (multi - markers, aruco baseline)",20,2,camera_center_right,1554.4376558458896
+"AP03 (multi - markers, aruco baseline)",20,3,camera_center_right,1498.935785076161

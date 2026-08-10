@@ -1,0 +1,15 @@
+AP02 COMBINED GRAPH DIAGNOSIS
+========================================================================
+
+Reference marker: 8
+Primary coverage: 4/9 static cameras
+Connected components: 5
+Missing from primary component: camera_back_center, camera_back_right, camera_front_left, camera_front_narrow, camera_front_wide
+Cause: required_camera_without_detection, no_detected_cross_group_observations
+Required cameras without any marker detection: camera_back_right. No detected observation connects the listed marker/camera groups. Possible causes are missing transition frames or markers that were visible but not detected; the graph alone cannot distinguish them.
+
+component_01: cameras=camera_back_left,camera_center_left,camera_center_right,camera_front_right; markers=2,3,4,5,6,8,12,15,16,18,20,37; moving_frames=90; connecting_moving_frames=65; calibratable=yes
+component_02: cameras=camera_front_narrow,camera_front_wide; markers=7,9; moving_frames=25; connecting_moving_frames=24; calibratable=yes
+component_03: cameras=camera_back_center; markers=10,17; moving_frames=38; connecting_moving_frames=35; calibratable=no
+component_04: cameras=camera_front_left; markers=0,19; moving_frames=25; connecting_moving_frames=9; calibratable=no
+component_05: cameras=-; markers=26; moving_frames=1; connecting_moving_frames=0; calibratable=no

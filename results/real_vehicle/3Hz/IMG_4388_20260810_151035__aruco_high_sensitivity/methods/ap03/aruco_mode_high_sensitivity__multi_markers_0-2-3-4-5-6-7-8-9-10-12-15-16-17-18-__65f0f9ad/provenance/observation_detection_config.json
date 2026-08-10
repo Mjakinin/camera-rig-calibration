@@ -1,0 +1,42 @@
+{
+  "schema_version": 5,
+  "layout_version": 2,
+  "input_id": "input_2a160111b13e",
+  "observation_id": "detection_04e32be8ea1b",
+  "markers": {
+    "dictionary": "DICT_4X4_50",
+    "length_m": 0.17,
+    "accepted_ids": "all_detected",
+    "detection_mode": "high_sensitivity"
+  },
+  "effective_detector": {
+    "contract": "rigcal_aruco_detector_v2",
+    "mode": "high_sensitivity",
+    "dictionary": "DICT_4X4_50",
+    "opencv_version": "4.5.4",
+    "parameters": {
+      "adaptiveThreshWinSizeMin": 3,
+      "adaptiveThreshWinSizeMax": 53,
+      "adaptiveThreshWinSizeStep": 4,
+      "minMarkerPerimeterRate": 0.008,
+      "minCornerDistanceRate": 0.01,
+      "minMarkerDistanceRate": 0.01,
+      "minDistanceToBorder": 1,
+      "polygonalApproxAccuracyRate": 0.05,
+      "errorCorrectionRate": 0.8,
+      "cornerRefinementMethod": "CORNER_REFINE_SUBPIX"
+    },
+    "gamma_passes": [
+      0.6,
+      0.65
+    ],
+    "support_rule": {
+      "same_marker_id": true,
+      "maximum_center_distance_image_diagonal_fraction": 0.01,
+      "maximum_area_ratio": 2.0,
+      "minimum_area_image_fraction": 0.0001
+    }
+  },
+  "detector_contract": "rigcal_aruco_detector_v2",
+  "observation_input_contract": "raw_detection_with_dimensions_and_area_ratio_v2"
+}

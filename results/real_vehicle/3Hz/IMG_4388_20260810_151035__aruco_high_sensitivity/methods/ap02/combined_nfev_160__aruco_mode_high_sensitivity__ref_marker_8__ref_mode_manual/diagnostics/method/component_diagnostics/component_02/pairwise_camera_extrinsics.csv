@@ -1,0 +1,4 @@
+camera_a,camera_b,baseline_m,observability
+camera_back_center,camera_front_narrow,12.324888840569937,within_component
+camera_back_center,camera_front_wide,12.29687680553169,within_component
+camera_front_narrow,camera_front_wide,0.29299578899819706,within_component

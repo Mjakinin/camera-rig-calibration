@@ -1,0 +1,10 @@
+camera_id,image_name,registered,colmap_camera_id,track_support,track_support_threshold,shared_tracks_with_moving,shared_moving_track_threshold,median_reprojection_error_px,median_reprojection_threshold_px,reprojection_rmse_px,warnings
+camera_back_center,static_camera_back_center.png,False,,0,,0,,,,,['unregistered_static_camera']
+camera_back_left,static_camera_back_left.png,True,2,115,28.375,115,11.5,1.1559074104522906,3.0,1.2869521020457908,[]
+camera_back_right,static_camera_back_right.png,True,3,79,28.375,79,10.0,1.5239124731030942,3.0,1.6666763625869128,[]
+camera_center_left,static_camera_center_left.png,True,4,51,28.375,51,10.0,1.10525593356023,3.0,1.1625821367622018,[]
+camera_center_right,static_camera_center_right.png,True,5,112,28.375,112,11.200000000000001,1.058492024809588,3.0,1.208916917651785,[]
+camera_front_left,static_camera_front_left.png,True,6,108,28.375,108,10.8,1.136102159867603,3.0,1.2638426788497357,[]
+camera_front_narrow,static_camera_front_narrow.png,True,7,199,28.375,199,19.900000000000002,1.1521211309571473,3.0,1.1993515611607963,[]
+camera_front_right,static_camera_front_right.png,True,8,132,28.375,132,13.200000000000001,1.3717615283396167,3.0,1.4756789633407204,[]
+camera_front_wide,static_camera_front_wide.png,True,9,282,28.375,282,28.200000000000003,1.1726229744484626,3.0,1.3205079860945315,[]

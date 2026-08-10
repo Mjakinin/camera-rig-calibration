@@ -1,0 +1,127 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap02 / combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_8__ref_mode_manual
+Execution status: completed
+Solver status: limit_reached
+Artifact status: available
+Calibration status: available
+Quality status: partial_coverage
+Evaluation status: unavailable
+Anchor export status: ANCHOR_NOT_RECONSTRUCTED
+RViz visualization status: OK
+Primary result: combined
+Runtime: 1531.6 s
+Reference frame: ArUco marker 8
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: baseline_version=baseline_v1, evaluation_anchor_marker_id=0, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=high_sensitivity, reference_marker_selection_mode=manual, reference_marker_id=8, resolved_reference_marker_id=8, initialization_algorithm=maximum_bottleneck, initialization_diagnostic=unweighted_first_hit_bfs, top_per_marker=8, top_per_marker_pair=4, static_max_nfev=80, combined_max_nfev=160, loss=soft_l1, loss_scale_px=3.0
+
+WARNINGS
+----------------------------------------------------------------------------------------------------------------------
+- AP02 Combined reaches 4/9 static cameras in 4 disconnected components. Cross-component extrinsics are not observable.
+- The operator explicitly continued with incomplete observation coverage. Results are diagnostic; cross-component camera relationships are not observable.
+- AP02 Combined reprojection RMSE is 5.610 px (warning: >5 px).
+- The AP02 combined optimizer reached its configured limit (160 evaluations). Solver completion and geometric quality are reported independently.
+
+COMMON EVALUATION / EXPORT ANCHOR
+----------------------------------------------------------------------------------------------------------------------
+Marker: 0; export status: ANCHOR_NOT_RECONSTRUCTED
+No common-anchor camera pose is available. See diagnostics/anchor_alignment.json.
+Full exports: camera_extrinsics_anchor.csv, camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml
+
+AP02 COMBINED GRAPH
+----------------------------------------------------------------------------------------------------------------------
+Primary coverage: 4/9 cameras
+Cause: required_camera_without_detection, no_detected_cross_group_observations
+Required cameras without any marker detection: camera_back_right. No detected observation connects the listed marker/camera groups. Possible causes are missing transition frames or markers that were visible but not detected; the graph alone cannot distinguish them.
+Component    | Cameras                                                                    | Markers                       | Moving frames | Bridging frames | Runnable
+-------------+----------------------------------------------------------------------------+-------------------------------+---------------+-----------------+---------
+component_01 | camera_back_left,camera_center_left,camera_center_right,camera_front_right | 2,3,4,5,6,8,12,15,16,18,20,37 | 91            | 70              | yes
+component_02 | camera_back_center,camera_front_narrow,camera_front_wide                   | 7,9,10,17                     | 65            | 59              | yes
+component_03 | camera_front_left                                                          | 0,19                          | 25            | 9               | no
+component_04 | -                                                                          | 26                            | 1             | 0               | no
+Relationships between different components: not observable
+
+AP02 FRAME SELECTION AND COMBINED BA
+----------------------------------------------------------------------------------------------------------------------
+Moving frames selected/input/minimum graph set: 182/-/-
+Combined BA: status=0, nfev=160/160, RMSE initial/final=104.094/5.610 px, cost=125216.785 -> 4529.934
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera              | Source         | x [m]  | y [m]  | z [m] | roll [deg] | pitch [deg] | yaw [deg]
+--------------------+----------------+--------+--------+-------+------------+-------------+----------
+camera_back_left    | ba_with_moving | 4.473  | -5.472 | 3.041 | -85.877    | 1.014       | 68.832
+camera_center_left  | ba_with_moving | 2.304  | -0.095 | 4.180 | -146.425   | -6.483      | 90.448
+camera_center_right | ba_with_moving | 2.369  | -0.156 | 4.011 | 144.619    | 2.667       | -94.568
+camera_front_right  | ba_with_moving | -1.257 | 8.744  | 4.163 | -176.400   | -37.002     | -88.624
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                                   | tx [m] | ty [m] | tz [m] | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+---------------------------------------+--------+--------+--------+------------+-------------+-----------+-------------
+camera_back_left-camera_center_left    | 4.210  | -0.926 | 4.041  | -58.266    | -21.986     | -6.351    | 5.909
+camera_back_left-camera_center_right   | 4.180  | -0.762 | 3.946  | 58.122     | 16.810      | 177.439   | 5.799
+camera_back_left-camera_front_right    | 11.166 | -0.563 | 10.544 | 110.984    | 15.252      | -140.844  | 15.368
+camera_center_left-camera_center_right | -0.080 | 0.143  | 0.098  | -1.383     | 0.389       | -173.723  | 0.191
+camera_center_left-camera_front_right  | 8.807  | -2.346 | 2.779  | 46.226     | 35.485      | -152.990  | 9.529
+camera_center_right-camera_front_right | -8.580 | 3.382  | 2.705  | 47.631     | 34.623      | 21.535    | 9.611
+
+DETAIL ARTIFACTS
+----------------------------------------------------------------------------------------------------------------------
+- diagnostics/method/aruco_observations/ap02_frame_selection.json
+- diagnostics/method/component_diagnostics/component_02/graph_ba/with_moving/ap02_optimization_history.csv
+- diagnostics/method/graph_ba/static_only/ap02_optimization_history.csv
+- diagnostics/method/graph_ba/with_moving/ap02_optimization_history.csv
+- diagnostics/method/graph_ba/with_moving/ap02_optimization_summary.json
+
+AP02 DISCONNECTED / PARTIAL COMPONENT RESULTS
+----------------------------------------------------------------------------------------------------------------------
+Overall component status: partial_coverage
+Primary component: component_01
+Cross-component extrinsics: not_observable
+Camera-pair observability: within-component=9, cross-component/unobservable=27
+Each component keeps its own local marker frame. Components are never artificially aligned.
+Component    | Role       | Execution         | Local ref | Cameras                                                                    | Markers                       | Moving | Quality   | Artifact                  
+-------------+------------+-------------------+-----------+----------------------------------------------------------------------------+-------------------------------+--------+-----------+---------------------------
+component_01 | primary    | primary_component | 2         | camera_back_left,camera_center_left,camera_center_right,camera_front_right | 2,3,4,5,6,8,12,15,16,18,20,37 | 91     | -         | ../07_graph_ba/with_moving
+component_02 | diagnostic | available         | 7         | camera_back_center,camera_front_narrow,camera_front_wide                   | 7,9,10,17                     | 65     | converged | component_02              
+component_03 | diagnostic | not_calibratable  | 0         | camera_front_left                                                          | 0,19                          | 25     | -         | -                         
+component_04 | diagnostic | not_calibratable  | 26        | -                                                                          | 26                            | 1      | -         | -
+
+AP02 OPTIMIZATION CONVERGENCE
+----------------------------------------------------------------------------------------------------------------------
+Trace diagnostic only; no calibration is rerun. Tail comparisons use best-observed robust cost up to the recorded solver_nfev.
+static_only: termination=converged, nfev=42/80, cost=156.4356 -> 31.4047, RMSE=3.5810 -> 1.1821 px, optimality=0.0018
+  solver message: `ftol` termination condition is satisfied.
+with_moving: termination=function_evaluation_limit_reached, nfev=160/160, cost=125216.7846 -> 4529.9340, RMSE=104.0945 -> 5.6100 px, optimality=2890.5109
+  solver message: The maximum number of function evaluations is exceeded.
+Detailed machine-readable diagnostics:
+- diagnostics/reporting/AP02_CONVERGENCE_SUMMARY.json
+- diagnostics/reporting/AP02_CONVERGENCE_CHECKPOINTS.csv
+Ground truth used: no
+
+AP02 LOCAL COMPONENT CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+These are valid only inside the listed component/local marker frame.
+Cross-component transforms are NOT observable and are not synthesized.
+
+component_01 | execution=primary_component | local frame=marker_2
+    camera_back_left: x_m=4.472571m, y_m=-5.471860m, z_m=3.040541m; roll=-85.877456deg, pitch=1.013620deg, yaw=68.831961deg
+    camera_center_left: x_m=2.304020m, y_m=-0.094897m, z_m=4.179680m; roll=-146.424576deg, pitch=-6.482655deg, yaw=90.448406deg
+    camera_center_right: x_m=2.369309m, y_m=-0.155558m, z_m=4.010506m; roll=144.619362deg, pitch=2.666673deg, yaw=-94.568013deg
+    camera_front_right: x_m=-1.256796m, y_m=8.743577m, z_m=4.162831m; roll=-176.400447deg, pitch=-37.002179deg, yaw=-88.624370deg
+    artifact: camera_extrinsics.csv
+
+component_02 | execution=available | local frame=marker_7
+    camera_back_center: x_m=3.730141m, y_m=-1.040296m, z_m=-9.863484m; roll=-64.013375deg, pitch=-0.272551deg, yaw=88.760617deg
+    camera_front_narrow: x_m=0.163788m, y_m=0.131643m, z_m=1.875790m; roll=-177.571508deg, pitch=-3.651914deg, yaw=-4.497934deg
+    camera_front_wide: x_m=0.441253m, y_m=0.057995m, z_m=1.934403m; roll=162.123886deg, pitch=-2.997904deg, yaw=-3.900508deg
+    artifact: diagnostics/method/component_diagnostics/component_02/camera_extrinsics.csv
+
+component_03 | execution=not_calibratable | local frame=marker_0
+    poses: unavailable (AP02 rig diagnostics require at least two static cameras and one moving-frame observer)
+
+component_04 | execution=not_calibratable | local frame=marker_26
+    poses: unavailable (AP02 rig diagnostics require at least two static cameras and one moving-frame observer)
+

@@ -1,0 +1,32 @@
+{
+  "method": "AP02",
+  "status": "PARTIAL_4_OF_9",
+  "success": true,
+  "execution_status": "completed",
+  "solver_status": "maximum_function_evaluations_reached",
+  "calibration_status": "partial_coverage",
+  "primary_result": "combined",
+  "primary_result_available": true,
+  "full_rig_result_available": false,
+  "comparison_eligible": false,
+  "diagnostic_partial": true,
+  "quality_status": "warning_high_reprojection",
+  "available_static_cameras": [
+    "camera_back_left",
+    "camera_center_left",
+    "camera_center_right",
+    "camera_front_right"
+  ],
+  "missing_static_cameras": [
+    "camera_back_center",
+    "camera_back_right",
+    "camera_front_left",
+    "camera_front_narrow",
+    "camera_front_wide"
+  ],
+  "graph_component_count": 4,
+  "primary_component_id": "component_01",
+  "cross_component_extrinsics": "not_observable",
+  "static_only_diagnostic_status": "COMPLETED",
+  "reference_marker_id": 8
+}

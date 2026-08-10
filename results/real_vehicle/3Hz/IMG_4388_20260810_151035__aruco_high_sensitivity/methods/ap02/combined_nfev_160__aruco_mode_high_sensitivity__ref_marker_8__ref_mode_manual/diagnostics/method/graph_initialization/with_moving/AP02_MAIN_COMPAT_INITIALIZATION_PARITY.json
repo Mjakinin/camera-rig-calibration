@@ -1,0 +1,4728 @@
+{
+  "schema_version": 5,
+  "algorithm_version": "legacy_maximum_bottleneck_v1",
+  "reference_marker_id": 8,
+  "mode": "with_moving",
+  "productive_uses_ground_truth": false,
+  "observation_score_parity": {
+    "pair_count": 369,
+    "same_top_count": 369,
+    "pairs": [
+      {
+        "observer_id": "camera_back_center",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.3588921816645267,
+        "main_observation_score": 1.124493975792389
+      },
+      {
+        "observer_id": "camera_back_center",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.5030931879145858,
+        "main_observation_score": 7.419922924081156
+      },
+      {
+        "observer_id": "camera_back_left",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.2184343910896599,
+        "main_observation_score": 1.5001483600425238
+      },
+      {
+        "observer_id": "camera_back_left",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.18606598439029962,
+        "main_observation_score": 0.660250890329944
+      },
+      {
+        "observer_id": "camera_center_left",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.5600735105529756,
+        "main_observation_score": 11.13158051738139
+      },
+      {
+        "observer_id": "camera_center_left",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.4094524347486632,
+        "main_observation_score": 1.943110790720192
+      },
+      {
+        "observer_id": "camera_center_left",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.39201701215151397,
+        "main_observation_score": 2.174621328348062
+      },
+      {
+        "observer_id": "camera_center_left",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.46313644895803724,
+        "main_observation_score": 23.15838545199387
+      },
+      {
+        "observer_id": "camera_center_left",
+        "marker_id": 37,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.5547125129129943,
+        "main_observation_score": 12.56457816982507
+      },
+      {
+        "observer_id": "camera_center_right",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.45727894210250375,
+        "main_observation_score": 4.951172118405906
+      },
+      {
+        "observer_id": "camera_center_right",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.43480720678110735,
+        "main_observation_score": 18.80182139320025
+      },
+      {
+        "observer_id": "camera_center_right",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.4593056926441397,
+        "main_observation_score": 22.7564273825311
+      },
+      {
+        "observer_id": "camera_center_right",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.39985812567875423,
+        "main_observation_score": 1.9831008812487332
+      },
+      {
+        "observer_id": "camera_center_right",
+        "marker_id": 37,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.6325025663413589,
+        "main_observation_score": 29.953494392621955
+      },
+      {
+        "observer_id": "camera_front_left",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.5617563336090617,
+        "main_observation_score": 15.816361287699786
+      },
+      {
+        "observer_id": "camera_front_left",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.45157484180110563,
+        "main_observation_score": 15.011039621243285
+      },
+      {
+        "observer_id": "camera_front_narrow",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.817560144645838,
+        "main_observation_score": 105.90192733414284
+      },
+      {
+        "observer_id": "camera_front_narrow",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.8064871297802502,
+        "main_observation_score": 97.56232466649286
+      },
+      {
+        "observer_id": "camera_front_right",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.4071940900405139,
+        "main_observation_score": 4.583498326332541
+      },
+      {
+        "observer_id": "camera_front_wide",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.6452547724968252,
+        "main_observation_score": 48.864308656222335
+      },
+      {
+        "observer_id": "camera_front_wide",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "static",
+        "main_score_top_frame": "static",
+        "selection_score": 0.6130666459792891,
+        "main_observation_score": 37.11740568084032
+      },
+      {
+        "observer_id": "moving_frame_000000",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "0",
+        "main_score_top_frame": "0",
+        "selection_score": 0.6894639971619541,
+        "main_observation_score": 21.824282709505223
+      },
+      {
+        "observer_id": "moving_frame_000000",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "0",
+        "main_score_top_frame": "0",
+        "selection_score": 0.6678291000955816,
+        "main_observation_score": 18.94494859197232
+      },
+      {
+        "observer_id": "moving_frame_000001",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "1",
+        "main_score_top_frame": "1",
+        "selection_score": 0.6858251822828829,
+        "main_observation_score": 19.088970697073226
+      },
+      {
+        "observer_id": "moving_frame_000001",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "1",
+        "main_score_top_frame": "1",
+        "selection_score": 0.6726556084006148,
+        "main_observation_score": 20.765794354778038
+      },
+      {
+        "observer_id": "moving_frame_000002",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "2",
+        "main_score_top_frame": "2",
+        "selection_score": 0.697148531263331,
+        "main_observation_score": 21.547003322805285
+      },
+      {
+        "observer_id": "moving_frame_000002",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "2",
+        "main_score_top_frame": "2",
+        "selection_score": 0.6626050555734634,
+        "main_observation_score": 18.52523155680326
+      },
+      {
+        "observer_id": "moving_frame_000003",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "3",
+        "main_score_top_frame": "3",
+        "selection_score": 0.6939201886689492,
+        "main_observation_score": 20.324173104367578
+      },
+      {
+        "observer_id": "moving_frame_000003",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "3",
+        "main_score_top_frame": "3",
+        "selection_score": 0.6681267453847941,
+        "main_observation_score": 20.589805506360925
+      },
+      {
+        "observer_id": "moving_frame_000003",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "3",
+        "main_score_top_frame": "3",
+        "selection_score": 0.39910389324004064,
+        "main_observation_score": 6.410714222021227
+      },
+      {
+        "observer_id": "moving_frame_000004",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "4",
+        "main_score_top_frame": "4",
+        "selection_score": 0.6947273814344673,
+        "main_observation_score": 21.610534427250062
+      },
+      {
+        "observer_id": "moving_frame_000004",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "4",
+        "main_score_top_frame": "4",
+        "selection_score": 0.6717855291592962,
+        "main_observation_score": 21.79738551487568
+      },
+      {
+        "observer_id": "moving_frame_000005",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "5",
+        "main_score_top_frame": "5",
+        "selection_score": 0.704099488385739,
+        "main_observation_score": 26.308297228528666
+      },
+      {
+        "observer_id": "moving_frame_000005",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "5",
+        "main_score_top_frame": "5",
+        "selection_score": 0.6682325124791357,
+        "main_observation_score": 21.3607633587838
+      },
+      {
+        "observer_id": "moving_frame_000006",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "6",
+        "main_score_top_frame": "6",
+        "selection_score": 0.7035220083087133,
+        "main_observation_score": 28.406577062963294
+      },
+      {
+        "observer_id": "moving_frame_000006",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "6",
+        "main_score_top_frame": "6",
+        "selection_score": 0.6764459568221552,
+        "main_observation_score": 24.33850850313447
+      },
+      {
+        "observer_id": "moving_frame_000007",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "7",
+        "main_score_top_frame": "7",
+        "selection_score": 0.7046855651264906,
+        "main_observation_score": 29.047043814044653
+      },
+      {
+        "observer_id": "moving_frame_000007",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "7",
+        "main_score_top_frame": "7",
+        "selection_score": 0.6750612735055628,
+        "main_observation_score": 25.375034980551227
+      },
+      {
+        "observer_id": "moving_frame_000008",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "8",
+        "main_score_top_frame": "8",
+        "selection_score": 0.7099229868577611,
+        "main_observation_score": 30.91041387003677
+      },
+      {
+        "observer_id": "moving_frame_000008",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "8",
+        "main_score_top_frame": "8",
+        "selection_score": 0.6634970329402017,
+        "main_observation_score": 24.13527875017206
+      },
+      {
+        "observer_id": "moving_frame_000009",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "9",
+        "main_score_top_frame": "9",
+        "selection_score": 0.720160485077496,
+        "main_observation_score": 32.17937248817006
+      },
+      {
+        "observer_id": "moving_frame_000009",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "9",
+        "main_score_top_frame": "9",
+        "selection_score": 0.6571136206001075,
+        "main_observation_score": 25.718276427940005
+      },
+      {
+        "observer_id": "moving_frame_000010",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "10",
+        "main_score_top_frame": "10",
+        "selection_score": 0.7400422770221269,
+        "main_observation_score": 35.327370057314766
+      },
+      {
+        "observer_id": "moving_frame_000010",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "10",
+        "main_score_top_frame": "10",
+        "selection_score": 0.6332462832941697,
+        "main_observation_score": 23.835802871188765
+      },
+      {
+        "observer_id": "moving_frame_000011",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "11",
+        "main_score_top_frame": "11",
+        "selection_score": 0.7347823400428232,
+        "main_observation_score": 38.559220554603534
+      },
+      {
+        "observer_id": "moving_frame_000011",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "11",
+        "main_score_top_frame": "11",
+        "selection_score": 0.6321933822324259,
+        "main_observation_score": 27.532395430892112
+      },
+      {
+        "observer_id": "moving_frame_000012",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "12",
+        "main_score_top_frame": "12",
+        "selection_score": 0.7040775113280673,
+        "main_observation_score": 32.98236863981473
+      },
+      {
+        "observer_id": "moving_frame_000012",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "12",
+        "main_score_top_frame": "12",
+        "selection_score": 0.628530120160239,
+        "main_observation_score": 29.604659508901115
+      },
+      {
+        "observer_id": "moving_frame_000013",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "13",
+        "main_score_top_frame": "13",
+        "selection_score": 0.6927046023566945,
+        "main_observation_score": 33.69864037966863
+      },
+      {
+        "observer_id": "moving_frame_000013",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "13",
+        "main_score_top_frame": "13",
+        "selection_score": 0.6047918328675405,
+        "main_observation_score": 26.76513713082167
+      },
+      {
+        "observer_id": "moving_frame_000014",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "14",
+        "main_score_top_frame": "14",
+        "selection_score": 0.7226556927498009,
+        "main_observation_score": 47.391014698075466
+      },
+      {
+        "observer_id": "moving_frame_000014",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "14",
+        "main_score_top_frame": "14",
+        "selection_score": 0.6365189086488096,
+        "main_observation_score": 39.21701740001363
+      },
+      {
+        "observer_id": "moving_frame_000015",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "15",
+        "main_score_top_frame": "15",
+        "selection_score": 0.6776583332810117,
+        "main_observation_score": 37.002287730229106
+      },
+      {
+        "observer_id": "moving_frame_000015",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "15",
+        "main_score_top_frame": "15",
+        "selection_score": 0.5429498901175597,
+        "main_observation_score": 17.723722088078745
+      },
+      {
+        "observer_id": "moving_frame_000016",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "16",
+        "main_score_top_frame": "16",
+        "selection_score": 0.684862940527888,
+        "main_observation_score": 44.688473972188035
+      },
+      {
+        "observer_id": "moving_frame_000016",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "16",
+        "main_score_top_frame": "16",
+        "selection_score": 0.5062738048723194,
+        "main_observation_score": 10.19283980812238
+      },
+      {
+        "observer_id": "moving_frame_000035",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "35",
+        "main_score_top_frame": "35",
+        "selection_score": 0.4073635093579429,
+        "main_observation_score": 5.04282750726044
+      },
+      {
+        "observer_id": "moving_frame_000036",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "36",
+        "main_score_top_frame": "36",
+        "selection_score": 0.43089229381764305,
+        "main_observation_score": 4.85658044405713
+      },
+      {
+        "observer_id": "moving_frame_000037",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "37",
+        "main_score_top_frame": "37",
+        "selection_score": 0.48009729062278356,
+        "main_observation_score": 6.991235932863677
+      },
+      {
+        "observer_id": "moving_frame_000037",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "37",
+        "main_score_top_frame": "37",
+        "selection_score": 0.4020076988946072,
+        "main_observation_score": 2.600069228766373
+      },
+      {
+        "observer_id": "moving_frame_000038",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "38",
+        "main_score_top_frame": "38",
+        "selection_score": 0.47532960406502756,
+        "main_observation_score": 6.099269638777272
+      },
+      {
+        "observer_id": "moving_frame_000039",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "39",
+        "main_score_top_frame": "39",
+        "selection_score": 0.46824353299603666,
+        "main_observation_score": 5.324317529945543
+      },
+      {
+        "observer_id": "moving_frame_000040",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "40",
+        "main_score_top_frame": "40",
+        "selection_score": 0.4868726676906382,
+        "main_observation_score": 6.40138690213356
+      },
+      {
+        "observer_id": "moving_frame_000040",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "40",
+        "main_score_top_frame": "40",
+        "selection_score": 0.44584825244414866,
+        "main_observation_score": 3.8984316438018296
+      },
+      {
+        "observer_id": "moving_frame_000041",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "41",
+        "main_score_top_frame": "41",
+        "selection_score": 0.4854459920777315,
+        "main_observation_score": 5.58048217878788
+      },
+      {
+        "observer_id": "moving_frame_000041",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "41",
+        "main_score_top_frame": "41",
+        "selection_score": 0.44009987609146883,
+        "main_observation_score": 3.689025712593368
+      },
+      {
+        "observer_id": "moving_frame_000042",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "42",
+        "main_score_top_frame": "42",
+        "selection_score": 0.4734706550630061,
+        "main_observation_score": 4.143122813809323
+      },
+      {
+        "observer_id": "moving_frame_000042",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "42",
+        "main_score_top_frame": "42",
+        "selection_score": 0.3747440084364647,
+        "main_observation_score": 1.3706662030026437
+      },
+      {
+        "observer_id": "moving_frame_000043",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "43",
+        "main_score_top_frame": "43",
+        "selection_score": 0.48409933928229504,
+        "main_observation_score": 4.235182690722242
+      },
+      {
+        "observer_id": "moving_frame_000043",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "43",
+        "main_score_top_frame": "43",
+        "selection_score": 0.3698190521265196,
+        "main_observation_score": 1.2403871743157353
+      },
+      {
+        "observer_id": "moving_frame_000044",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "44",
+        "main_score_top_frame": "44",
+        "selection_score": 0.5573004739760226,
+        "main_observation_score": 12.096885512389214
+      },
+      {
+        "observer_id": "moving_frame_000044",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "44",
+        "main_score_top_frame": "44",
+        "selection_score": 0.4789469657974188,
+        "main_observation_score": 6.1461614342987465
+      },
+      {
+        "observer_id": "moving_frame_000045",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "45",
+        "main_score_top_frame": "45",
+        "selection_score": 0.5623397916871418,
+        "main_observation_score": 10.305202972450584
+      },
+      {
+        "observer_id": "moving_frame_000045",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "45",
+        "main_score_top_frame": "45",
+        "selection_score": 0.46815295977459254,
+        "main_observation_score": 5.448422611950838
+      },
+      {
+        "observer_id": "moving_frame_000046",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "46",
+        "main_score_top_frame": "46",
+        "selection_score": 0.5880765669338273,
+        "main_observation_score": 10.91502066162194
+      },
+      {
+        "observer_id": "moving_frame_000046",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "46",
+        "main_score_top_frame": "46",
+        "selection_score": 0.4997503965704225,
+        "main_observation_score": 7.573860408659847
+      },
+      {
+        "observer_id": "moving_frame_000047",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "47",
+        "main_score_top_frame": "47",
+        "selection_score": 0.45392647581514906,
+        "main_observation_score": 3.96070334953589
+      },
+      {
+        "observer_id": "moving_frame_000047",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "47",
+        "main_score_top_frame": "47",
+        "selection_score": 0.5976874609861919,
+        "main_observation_score": 10.575030820556547
+      },
+      {
+        "observer_id": "moving_frame_000047",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "47",
+        "main_score_top_frame": "47",
+        "selection_score": 0.49014602371423477,
+        "main_observation_score": 6.88345803592067
+      },
+      {
+        "observer_id": "moving_frame_000048",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "48",
+        "main_score_top_frame": "48",
+        "selection_score": 0.3608959524313611,
+        "main_observation_score": 1.0128349025593548
+      },
+      {
+        "observer_id": "moving_frame_000048",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "48",
+        "main_score_top_frame": "48",
+        "selection_score": 0.6022264426528422,
+        "main_observation_score": 10.011849236328452
+      },
+      {
+        "observer_id": "moving_frame_000048",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "48",
+        "main_score_top_frame": "48",
+        "selection_score": 0.4726108215046235,
+        "main_observation_score": 5.66515953346832
+      },
+      {
+        "observer_id": "moving_frame_000049",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "49",
+        "main_score_top_frame": "49",
+        "selection_score": 0.5321406144898245,
+        "main_observation_score": 8.926857748706878
+      },
+      {
+        "observer_id": "moving_frame_000049",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "49",
+        "main_score_top_frame": "49",
+        "selection_score": 0.6156541262089402,
+        "main_observation_score": 9.768479166596224
+      },
+      {
+        "observer_id": "moving_frame_000049",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "49",
+        "main_score_top_frame": "49",
+        "selection_score": 0.4794235879019985,
+        "main_observation_score": 6.259975763495178
+      },
+      {
+        "observer_id": "moving_frame_000050",
+        "marker_id": 12,
+        "same_top_observation": true,
+        "selection_score_top_frame": "50",
+        "main_score_top_frame": "50",
+        "selection_score": 0.5997273571604708,
+        "main_observation_score": 10.825375293674067
+      },
+      {
+        "observer_id": "moving_frame_000050",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "50",
+        "main_score_top_frame": "50",
+        "selection_score": 0.44980169553255284,
+        "main_observation_score": 3.9119295708258393
+      },
+      {
+        "observer_id": "moving_frame_000051",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "51",
+        "main_score_top_frame": "51",
+        "selection_score": 0.38318053184130857,
+        "main_observation_score": 1.5562036104698256
+      },
+      {
+        "observer_id": "moving_frame_000051",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "51",
+        "main_score_top_frame": "51",
+        "selection_score": 0.47272229007612,
+        "main_observation_score": 4.924060883599705
+      },
+      {
+        "observer_id": "moving_frame_000052",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "52",
+        "main_score_top_frame": "52",
+        "selection_score": 0.4960598580046467,
+        "main_observation_score": 7.075740985581568
+      },
+      {
+        "observer_id": "moving_frame_000052",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "52",
+        "main_score_top_frame": "52",
+        "selection_score": 0.5633114596482339,
+        "main_observation_score": 15.426567064400606
+      },
+      {
+        "observer_id": "moving_frame_000053",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "53",
+        "main_score_top_frame": "53",
+        "selection_score": 0.4763016874555193,
+        "main_observation_score": 5.721015717662442
+      },
+      {
+        "observer_id": "moving_frame_000053",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "53",
+        "main_score_top_frame": "53",
+        "selection_score": 0.4010263045551318,
+        "main_observation_score": 2.0912745874074643
+      },
+      {
+        "observer_id": "moving_frame_000053",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "53",
+        "main_score_top_frame": "53",
+        "selection_score": 0.4532261183943281,
+        "main_observation_score": 2.802489830490335
+      },
+      {
+        "observer_id": "moving_frame_000054",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "54",
+        "main_score_top_frame": "54",
+        "selection_score": 0.47856523607082196,
+        "main_observation_score": 5.773920019187731
+      },
+      {
+        "observer_id": "moving_frame_000054",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "54",
+        "main_score_top_frame": "54",
+        "selection_score": 0.4500270662327219,
+        "main_observation_score": 3.867276374960114
+      },
+      {
+        "observer_id": "moving_frame_000054",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "54",
+        "main_score_top_frame": "54",
+        "selection_score": 0.5483383203182042,
+        "main_observation_score": 12.733004794269798
+      },
+      {
+        "observer_id": "moving_frame_000055",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "55",
+        "main_score_top_frame": "55",
+        "selection_score": 0.4951211807673446,
+        "main_observation_score": 6.907104011989071
+      },
+      {
+        "observer_id": "moving_frame_000055",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "55",
+        "main_score_top_frame": "55",
+        "selection_score": 0.46160814860320154,
+        "main_observation_score": 4.504497953640022
+      },
+      {
+        "observer_id": "moving_frame_000055",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "55",
+        "main_score_top_frame": "55",
+        "selection_score": 0.5692660945925505,
+        "main_observation_score": 15.124778714084727
+      },
+      {
+        "observer_id": "moving_frame_000056",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "56",
+        "main_score_top_frame": "56",
+        "selection_score": 0.4936522692498873,
+        "main_observation_score": 6.535959842235194
+      },
+      {
+        "observer_id": "moving_frame_000056",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "56",
+        "main_score_top_frame": "56",
+        "selection_score": 0.36703527534130714,
+        "main_observation_score": 1.0254289502575937
+      },
+      {
+        "observer_id": "moving_frame_000056",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "56",
+        "main_score_top_frame": "56",
+        "selection_score": 0.5749442777732267,
+        "main_observation_score": 13.675245371250462
+      },
+      {
+        "observer_id": "moving_frame_000057",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "57",
+        "main_score_top_frame": "57",
+        "selection_score": 0.49102585721283437,
+        "main_observation_score": 5.440441448923026
+      },
+      {
+        "observer_id": "moving_frame_000057",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "57",
+        "main_score_top_frame": "57",
+        "selection_score": 0.3900713497935197,
+        "main_observation_score": 1.374971249124732
+      },
+      {
+        "observer_id": "moving_frame_000057",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "57",
+        "main_score_top_frame": "57",
+        "selection_score": 0.5613642145921486,
+        "main_observation_score": 10.26115545980075
+      },
+      {
+        "observer_id": "moving_frame_000058",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "58",
+        "main_score_top_frame": "58",
+        "selection_score": 0.4554344643505669,
+        "main_observation_score": 2.4704853121479355
+      },
+      {
+        "observer_id": "moving_frame_000058",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "58",
+        "main_score_top_frame": "58",
+        "selection_score": 0.4777501800939179,
+        "main_observation_score": 4.729671310348551
+      },
+      {
+        "observer_id": "moving_frame_000058",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "58",
+        "main_score_top_frame": "58",
+        "selection_score": 0.5715920293203673,
+        "main_observation_score": 11.735283576958837
+      },
+      {
+        "observer_id": "moving_frame_000059",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "59",
+        "main_score_top_frame": "59",
+        "selection_score": 0.45261111547614385,
+        "main_observation_score": 3.1867222366614416
+      },
+      {
+        "observer_id": "moving_frame_000059",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "59",
+        "main_score_top_frame": "59",
+        "selection_score": 0.45671562296859886,
+        "main_observation_score": 4.883826954283716
+      },
+      {
+        "observer_id": "moving_frame_000059",
+        "marker_id": 18,
+        "same_top_observation": true,
+        "selection_score_top_frame": "59",
+        "main_score_top_frame": "59",
+        "selection_score": 0.6093016247694824,
+        "main_observation_score": 18.899531882293005
+      },
+      {
+        "observer_id": "moving_frame_000060",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "60",
+        "main_score_top_frame": "60",
+        "selection_score": 0.4118147362084044,
+        "main_observation_score": 4.443313512206296
+      },
+      {
+        "observer_id": "moving_frame_000060",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "60",
+        "main_score_top_frame": "60",
+        "selection_score": 0.3377415528773429,
+        "main_observation_score": 3.539039328879519
+      },
+      {
+        "observer_id": "moving_frame_000061",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "61",
+        "main_score_top_frame": "61",
+        "selection_score": 0.3342535295147749,
+        "main_observation_score": 3.7295134003357373
+      },
+      {
+        "observer_id": "moving_frame_000061",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "61",
+        "main_score_top_frame": "61",
+        "selection_score": 0.47876978707867346,
+        "main_observation_score": 10.270648239982378
+      },
+      {
+        "observer_id": "moving_frame_000061",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "61",
+        "main_score_top_frame": "61",
+        "selection_score": 0.3088834435252521,
+        "main_observation_score": 1.4423003760536093
+      },
+      {
+        "observer_id": "moving_frame_000061",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "61",
+        "main_score_top_frame": "61",
+        "selection_score": 0.36439650197231366,
+        "main_observation_score": 6.578256741676414
+      },
+      {
+        "observer_id": "moving_frame_000062",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "62",
+        "main_score_top_frame": "62",
+        "selection_score": 0.39284076629235015,
+        "main_observation_score": 4.900354095311267
+      },
+      {
+        "observer_id": "moving_frame_000062",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "62",
+        "main_score_top_frame": "62",
+        "selection_score": 0.465047048865521,
+        "main_observation_score": 12.096302569772119
+      },
+      {
+        "observer_id": "moving_frame_000062",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "62",
+        "main_score_top_frame": "62",
+        "selection_score": 0.33759124426665893,
+        "main_observation_score": 4.314742783406999
+      },
+      {
+        "observer_id": "moving_frame_000062",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "62",
+        "main_score_top_frame": "62",
+        "selection_score": 0.4579865441132949,
+        "main_observation_score": 12.500436650367547
+      },
+      {
+        "observer_id": "moving_frame_000063",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "63",
+        "main_score_top_frame": "63",
+        "selection_score": 0.3714078885938699,
+        "main_observation_score": 2.929199636023351
+      },
+      {
+        "observer_id": "moving_frame_000063",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "63",
+        "main_score_top_frame": "63",
+        "selection_score": 0.26408373103143323,
+        "main_observation_score": 1.6129497982446621
+      },
+      {
+        "observer_id": "moving_frame_000063",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "63",
+        "main_score_top_frame": "63",
+        "selection_score": 0.49768382106560355,
+        "main_observation_score": 14.048170204633166
+      },
+      {
+        "observer_id": "moving_frame_000064",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "64",
+        "main_score_top_frame": "64",
+        "selection_score": 0.4419514095301948,
+        "main_observation_score": 5.376864700782159
+      },
+      {
+        "observer_id": "moving_frame_000064",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "64",
+        "main_score_top_frame": "64",
+        "selection_score": 0.4217301686400381,
+        "main_observation_score": 4.997032352900414
+      },
+      {
+        "observer_id": "moving_frame_000065",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "65",
+        "main_score_top_frame": "65",
+        "selection_score": 0.46042342014865034,
+        "main_observation_score": 5.932762172734212
+      },
+      {
+        "observer_id": "moving_frame_000065",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "65",
+        "main_score_top_frame": "65",
+        "selection_score": 0.5080082450657055,
+        "main_observation_score": 12.56034538432158
+      },
+      {
+        "observer_id": "moving_frame_000066",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "66",
+        "main_score_top_frame": "66",
+        "selection_score": 0.4057599753894512,
+        "main_observation_score": 3.1275393471561657
+      },
+      {
+        "observer_id": "moving_frame_000066",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "66",
+        "main_score_top_frame": "66",
+        "selection_score": 0.5591176299300016,
+        "main_observation_score": 19.5450429971241
+      },
+      {
+        "observer_id": "moving_frame_000067",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "67",
+        "main_score_top_frame": "67",
+        "selection_score": 0.5216608486353183,
+        "main_observation_score": 9.936229826466727
+      },
+      {
+        "observer_id": "moving_frame_000067",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "67",
+        "main_score_top_frame": "67",
+        "selection_score": 0.5242099102359725,
+        "main_observation_score": 13.49145554741324
+      },
+      {
+        "observer_id": "moving_frame_000068",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "68",
+        "main_score_top_frame": "68",
+        "selection_score": 0.5477534368923906,
+        "main_observation_score": 12.448369320422394
+      },
+      {
+        "observer_id": "moving_frame_000068",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "68",
+        "main_score_top_frame": "68",
+        "selection_score": 0.5490548622447391,
+        "main_observation_score": 14.863277778660688
+      },
+      {
+        "observer_id": "moving_frame_000069",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "69",
+        "main_score_top_frame": "69",
+        "selection_score": 0.5161618241101706,
+        "main_observation_score": 9.287543578688958
+      },
+      {
+        "observer_id": "moving_frame_000069",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "69",
+        "main_score_top_frame": "69",
+        "selection_score": 0.5483451725134907,
+        "main_observation_score": 12.886675652692102
+      },
+      {
+        "observer_id": "moving_frame_000070",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "70",
+        "main_score_top_frame": "70",
+        "selection_score": 0.4200611674145041,
+        "main_observation_score": 2.689335610699812
+      },
+      {
+        "observer_id": "moving_frame_000070",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "70",
+        "main_score_top_frame": "70",
+        "selection_score": 0.5567761045716222,
+        "main_observation_score": 13.625665633494819
+      },
+      {
+        "observer_id": "moving_frame_000071",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "71",
+        "main_score_top_frame": "71",
+        "selection_score": 0.5065128547522193,
+        "main_observation_score": 8.234942799446316
+      },
+      {
+        "observer_id": "moving_frame_000071",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "71",
+        "main_score_top_frame": "71",
+        "selection_score": 0.5619900324996134,
+        "main_observation_score": 13.70667829928888
+      },
+      {
+        "observer_id": "moving_frame_000072",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "72",
+        "main_score_top_frame": "72",
+        "selection_score": 0.4798289469632268,
+        "main_observation_score": 5.185672309677451
+      },
+      {
+        "observer_id": "moving_frame_000072",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "72",
+        "main_score_top_frame": "72",
+        "selection_score": 0.5558748586784283,
+        "main_observation_score": 10.764118336771553
+      },
+      {
+        "observer_id": "moving_frame_000073",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "73",
+        "main_score_top_frame": "73",
+        "selection_score": 0.5600720966270539,
+        "main_observation_score": 11.380792374877272
+      },
+      {
+        "observer_id": "moving_frame_000073",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "73",
+        "main_score_top_frame": "73",
+        "selection_score": 0.5702580469265208,
+        "main_observation_score": 10.674172529003267
+      },
+      {
+        "observer_id": "moving_frame_000074",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "74",
+        "main_score_top_frame": "74",
+        "selection_score": 0.5985019878663171,
+        "main_observation_score": 15.705966430342816
+      },
+      {
+        "observer_id": "moving_frame_000074",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "74",
+        "main_score_top_frame": "74",
+        "selection_score": 0.572925420133759,
+        "main_observation_score": 13.361792203264308
+      },
+      {
+        "observer_id": "moving_frame_000075",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "75",
+        "main_score_top_frame": "75",
+        "selection_score": 0.5810210282802231,
+        "main_observation_score": 14.879213553465782
+      },
+      {
+        "observer_id": "moving_frame_000075",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "75",
+        "main_score_top_frame": "75",
+        "selection_score": 0.5502187553292264,
+        "main_observation_score": 12.213751775366529
+      },
+      {
+        "observer_id": "moving_frame_000076",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "76",
+        "main_score_top_frame": "76",
+        "selection_score": 0.5623968362421745,
+        "main_observation_score": 14.48343995253384
+      },
+      {
+        "observer_id": "moving_frame_000076",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "76",
+        "main_score_top_frame": "76",
+        "selection_score": 0.5075077807319477,
+        "main_observation_score": 2.29871452135786
+      },
+      {
+        "observer_id": "moving_frame_000077",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "77",
+        "main_score_top_frame": "77",
+        "selection_score": 0.5193505960616115,
+        "main_observation_score": 11.188739221712279
+      },
+      {
+        "observer_id": "moving_frame_000078",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "78",
+        "main_score_top_frame": "78",
+        "selection_score": 0.5054020144411439,
+        "main_observation_score": 11.615216410753451
+      },
+      {
+        "observer_id": "moving_frame_000078",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "78",
+        "main_score_top_frame": "78",
+        "selection_score": 0.4782646994461509,
+        "main_observation_score": 2.202100308192281
+      },
+      {
+        "observer_id": "moving_frame_000079",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "79",
+        "main_score_top_frame": "79",
+        "selection_score": 0.5171464599289267,
+        "main_observation_score": 13.804362695656465
+      },
+      {
+        "observer_id": "moving_frame_000080",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "80",
+        "main_score_top_frame": "80",
+        "selection_score": 0.5136527206223386,
+        "main_observation_score": 13.565972435048321
+      },
+      {
+        "observer_id": "moving_frame_000080",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "80",
+        "main_score_top_frame": "80",
+        "selection_score": 0.45806324920908287,
+        "main_observation_score": 4.346630842298628
+      },
+      {
+        "observer_id": "moving_frame_000081",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "81",
+        "main_score_top_frame": "81",
+        "selection_score": 0.4828283730866205,
+        "main_observation_score": 11.57329684637282
+      },
+      {
+        "observer_id": "moving_frame_000081",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "81",
+        "main_score_top_frame": "81",
+        "selection_score": 0.48946279057820835,
+        "main_observation_score": 17.71803244960976
+      },
+      {
+        "observer_id": "moving_frame_000082",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "82",
+        "main_score_top_frame": "82",
+        "selection_score": 0.49328291087326853,
+        "main_observation_score": 16.257061924202297
+      },
+      {
+        "observer_id": "moving_frame_000082",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "82",
+        "main_score_top_frame": "82",
+        "selection_score": 0.5065563035685107,
+        "main_observation_score": 17.09899986280564
+      },
+      {
+        "observer_id": "moving_frame_000083",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "83",
+        "main_score_top_frame": "83",
+        "selection_score": 0.4781138416059298,
+        "main_observation_score": 16.61026407214647
+      },
+      {
+        "observer_id": "moving_frame_000083",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "83",
+        "main_score_top_frame": "83",
+        "selection_score": 0.5071700224736214,
+        "main_observation_score": 13.656557468323713
+      },
+      {
+        "observer_id": "moving_frame_000084",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "84",
+        "main_score_top_frame": "84",
+        "selection_score": 0.47395149630373967,
+        "main_observation_score": 18.70367681796171
+      },
+      {
+        "observer_id": "moving_frame_000084",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "84",
+        "main_score_top_frame": "84",
+        "selection_score": 0.4257310634511717,
+        "main_observation_score": 3.658116731357076
+      },
+      {
+        "observer_id": "moving_frame_000085",
+        "marker_id": 3,
+        "same_top_observation": true,
+        "selection_score_top_frame": "85",
+        "main_score_top_frame": "85",
+        "selection_score": 0.461530930633481,
+        "main_observation_score": 17.606867740852397
+      },
+      {
+        "observer_id": "moving_frame_000085",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "85",
+        "main_score_top_frame": "85",
+        "selection_score": 0.4602242448155764,
+        "main_observation_score": 4.736320577309904
+      },
+      {
+        "observer_id": "moving_frame_000086",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "86",
+        "main_score_top_frame": "86",
+        "selection_score": 0.45030803082707377,
+        "main_observation_score": 2.8917802624424636
+      },
+      {
+        "observer_id": "moving_frame_000087",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "87",
+        "main_score_top_frame": "87",
+        "selection_score": 0.42225498159473956,
+        "main_observation_score": 3.703792043877498
+      },
+      {
+        "observer_id": "moving_frame_000088",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "88",
+        "main_score_top_frame": "88",
+        "selection_score": 0.45382746293988113,
+        "main_observation_score": 14.312172263215663
+      },
+      {
+        "observer_id": "moving_frame_000089",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "89",
+        "main_score_top_frame": "89",
+        "selection_score": 0.45131692172763294,
+        "main_observation_score": 9.714614018923696
+      },
+      {
+        "observer_id": "moving_frame_000089",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "89",
+        "main_score_top_frame": "89",
+        "selection_score": 0.4505796540544911,
+        "main_observation_score": 12.432833215733776
+      },
+      {
+        "observer_id": "moving_frame_000089",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "89",
+        "main_score_top_frame": "89",
+        "selection_score": 0.34301798350457086,
+        "main_observation_score": 3.4420648014897757
+      },
+      {
+        "observer_id": "moving_frame_000090",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "90",
+        "main_score_top_frame": "90",
+        "selection_score": 0.48533773115325834,
+        "main_observation_score": 9.055200295190831
+      },
+      {
+        "observer_id": "moving_frame_000090",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "90",
+        "main_score_top_frame": "90",
+        "selection_score": 0.45941507802894105,
+        "main_observation_score": 10.330888329708287
+      },
+      {
+        "observer_id": "moving_frame_000091",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "91",
+        "main_score_top_frame": "91",
+        "selection_score": 0.5270611700093056,
+        "main_observation_score": 15.623092411565066
+      },
+      {
+        "observer_id": "moving_frame_000091",
+        "marker_id": 20,
+        "same_top_observation": true,
+        "selection_score_top_frame": "91",
+        "main_score_top_frame": "91",
+        "selection_score": 0.28770984922184417,
+        "main_observation_score": 3.1046189594490303
+      },
+      {
+        "observer_id": "moving_frame_000092",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "92",
+        "main_score_top_frame": "92",
+        "selection_score": 0.4990283561572453,
+        "main_observation_score": 6.358290873700768
+      },
+      {
+        "observer_id": "moving_frame_000092",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "92",
+        "main_score_top_frame": "92",
+        "selection_score": 0.5247833624128511,
+        "main_observation_score": 12.352410045792356
+      },
+      {
+        "observer_id": "moving_frame_000093",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "93",
+        "main_score_top_frame": "93",
+        "selection_score": 0.5735505230054719,
+        "main_observation_score": 15.338656963096096
+      },
+      {
+        "observer_id": "moving_frame_000094",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "94",
+        "main_score_top_frame": "94",
+        "selection_score": 0.481267440696432,
+        "main_observation_score": 5.632879843342059
+      },
+      {
+        "observer_id": "moving_frame_000095",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "95",
+        "main_score_top_frame": "95",
+        "selection_score": 0.5689979700705525,
+        "main_observation_score": 11.99859950355211
+      },
+      {
+        "observer_id": "moving_frame_000096",
+        "marker_id": 4,
+        "same_top_observation": true,
+        "selection_score_top_frame": "96",
+        "main_score_top_frame": "96",
+        "selection_score": 0.5019195419664788,
+        "main_observation_score": 7.541228509604803
+      },
+      {
+        "observer_id": "moving_frame_000096",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "96",
+        "main_score_top_frame": "96",
+        "selection_score": 0.5703311412866031,
+        "main_observation_score": 12.497601620093471
+      },
+      {
+        "observer_id": "moving_frame_000097",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "97",
+        "main_score_top_frame": "97",
+        "selection_score": 0.5411565457896332,
+        "main_observation_score": 11.735578981432356
+      },
+      {
+        "observer_id": "moving_frame_000098",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "98",
+        "main_score_top_frame": "98",
+        "selection_score": 0.4563784107313265,
+        "main_observation_score": 7.228396134040541
+      },
+      {
+        "observer_id": "moving_frame_000099",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "99",
+        "main_score_top_frame": "99",
+        "selection_score": 0.4579565075496517,
+        "main_observation_score": 9.95330114072173
+      },
+      {
+        "observer_id": "moving_frame_000100",
+        "marker_id": 5,
+        "same_top_observation": true,
+        "selection_score_top_frame": "100",
+        "main_score_top_frame": "100",
+        "selection_score": 0.3276624097983138,
+        "main_observation_score": 3.830737399893703
+      },
+      {
+        "observer_id": "moving_frame_000104",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "104",
+        "main_score_top_frame": "104",
+        "selection_score": 0.3375993934409076,
+        "main_observation_score": 1.897504318999434
+      },
+      {
+        "observer_id": "moving_frame_000117",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "117",
+        "main_score_top_frame": "117",
+        "selection_score": 0.40152688423767585,
+        "main_observation_score": 1.4173547121472265
+      },
+      {
+        "observer_id": "moving_frame_000118",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "118",
+        "main_score_top_frame": "118",
+        "selection_score": 0.3663367458197362,
+        "main_observation_score": 0.7968916731891326
+      },
+      {
+        "observer_id": "moving_frame_000119",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "119",
+        "main_score_top_frame": "119",
+        "selection_score": 0.4586780578137851,
+        "main_observation_score": 3.186370434398466
+      },
+      {
+        "observer_id": "moving_frame_000119",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "119",
+        "main_score_top_frame": "119",
+        "selection_score": 0.3559431040687895,
+        "main_observation_score": 1.1778586205024288
+      },
+      {
+        "observer_id": "moving_frame_000120",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "120",
+        "main_score_top_frame": "120",
+        "selection_score": 0.5253138557431863,
+        "main_observation_score": 6.877196612417781
+      },
+      {
+        "observer_id": "moving_frame_000120",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "120",
+        "main_score_top_frame": "120",
+        "selection_score": 0.3942556784672309,
+        "main_observation_score": 1.9684481167285761
+      },
+      {
+        "observer_id": "moving_frame_000121",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "121",
+        "main_score_top_frame": "121",
+        "selection_score": 0.4277156227197126,
+        "main_observation_score": 3.007576297061703
+      },
+      {
+        "observer_id": "moving_frame_000121",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "121",
+        "main_score_top_frame": "121",
+        "selection_score": 0.42336479203932603,
+        "main_observation_score": 2.714303682408099
+      },
+      {
+        "observer_id": "moving_frame_000122",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "122",
+        "main_score_top_frame": "122",
+        "selection_score": 0.40604116484591113,
+        "main_observation_score": 2.399784102101701
+      },
+      {
+        "observer_id": "moving_frame_000122",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "122",
+        "main_score_top_frame": "122",
+        "selection_score": 0.4178868511717931,
+        "main_observation_score": 2.392936238541152
+      },
+      {
+        "observer_id": "moving_frame_000123",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "123",
+        "main_score_top_frame": "123",
+        "selection_score": 0.4346477640393382,
+        "main_observation_score": 3.9890073411613107
+      },
+      {
+        "observer_id": "moving_frame_000123",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "123",
+        "main_score_top_frame": "123",
+        "selection_score": 0.4386727928509295,
+        "main_observation_score": 2.9550030904594298
+      },
+      {
+        "observer_id": "moving_frame_000124",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "124",
+        "main_score_top_frame": "124",
+        "selection_score": 0.4250060312235656,
+        "main_observation_score": 3.966965023975855
+      },
+      {
+        "observer_id": "moving_frame_000124",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "124",
+        "main_score_top_frame": "124",
+        "selection_score": 0.5067737458736866,
+        "main_observation_score": 6.09175395290247
+      },
+      {
+        "observer_id": "moving_frame_000125",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "125",
+        "main_score_top_frame": "125",
+        "selection_score": 0.4137557559102717,
+        "main_observation_score": 3.6232494382610696
+      },
+      {
+        "observer_id": "moving_frame_000125",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "125",
+        "main_score_top_frame": "125",
+        "selection_score": 0.4284101877198592,
+        "main_observation_score": 2.442614472097168
+      },
+      {
+        "observer_id": "moving_frame_000126",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "126",
+        "main_score_top_frame": "126",
+        "selection_score": 0.42832847025814497,
+        "main_observation_score": 4.394602613143326
+      },
+      {
+        "observer_id": "moving_frame_000126",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "126",
+        "main_score_top_frame": "126",
+        "selection_score": 0.4497719669058628,
+        "main_observation_score": 3.3134638661266163
+      },
+      {
+        "observer_id": "moving_frame_000127",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "127",
+        "main_score_top_frame": "127",
+        "selection_score": 0.5541970535211016,
+        "main_observation_score": 16.743998496899373
+      },
+      {
+        "observer_id": "moving_frame_000127",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "127",
+        "main_score_top_frame": "127",
+        "selection_score": 0.44399324631101256,
+        "main_observation_score": 2.762308501299087
+      },
+      {
+        "observer_id": "moving_frame_000128",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "128",
+        "main_score_top_frame": "128",
+        "selection_score": 0.4913337399853253,
+        "main_observation_score": 9.889848894091749
+      },
+      {
+        "observer_id": "moving_frame_000128",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "128",
+        "main_score_top_frame": "128",
+        "selection_score": 0.5220442706982121,
+        "main_observation_score": 7.820802071183753
+      },
+      {
+        "observer_id": "moving_frame_000129",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "129",
+        "main_score_top_frame": "129",
+        "selection_score": 0.529185045580996,
+        "main_observation_score": 13.948609211840726
+      },
+      {
+        "observer_id": "moving_frame_000129",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "129",
+        "main_score_top_frame": "129",
+        "selection_score": 0.5661215323273864,
+        "main_observation_score": 11.587002642011283
+      },
+      {
+        "observer_id": "moving_frame_000130",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "130",
+        "main_score_top_frame": "130",
+        "selection_score": 0.5414432946851647,
+        "main_observation_score": 14.534092467233963
+      },
+      {
+        "observer_id": "moving_frame_000130",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "130",
+        "main_score_top_frame": "130",
+        "selection_score": 0.548532373115531,
+        "main_observation_score": 10.465999700458728
+      },
+      {
+        "observer_id": "moving_frame_000131",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "131",
+        "main_score_top_frame": "131",
+        "selection_score": 0.5506357403360831,
+        "main_observation_score": 15.130778879616287
+      },
+      {
+        "observer_id": "moving_frame_000131",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "131",
+        "main_score_top_frame": "131",
+        "selection_score": 0.5511115545818607,
+        "main_observation_score": 11.172552190930599
+      },
+      {
+        "observer_id": "moving_frame_000132",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "132",
+        "main_score_top_frame": "132",
+        "selection_score": 0.602377816754735,
+        "main_observation_score": 25.195102645896736
+      },
+      {
+        "observer_id": "moving_frame_000132",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "132",
+        "main_score_top_frame": "132",
+        "selection_score": 0.6714545744212643,
+        "main_observation_score": 30.61460168695107
+      },
+      {
+        "observer_id": "moving_frame_000133",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "133",
+        "main_score_top_frame": "133",
+        "selection_score": 0.5926573046382023,
+        "main_observation_score": 23.80479546760748
+      },
+      {
+        "observer_id": "moving_frame_000133",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "133",
+        "main_score_top_frame": "133",
+        "selection_score": 0.5877626138997493,
+        "main_observation_score": 14.971657888527439
+      },
+      {
+        "observer_id": "moving_frame_000134",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "134",
+        "main_score_top_frame": "134",
+        "selection_score": 0.5307242556652187,
+        "main_observation_score": 11.972881627152972
+      },
+      {
+        "observer_id": "moving_frame_000134",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "134",
+        "main_score_top_frame": "134",
+        "selection_score": 0.6103586268991281,
+        "main_observation_score": 18.45667712632505
+      },
+      {
+        "observer_id": "moving_frame_000135",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "135",
+        "main_score_top_frame": "135",
+        "selection_score": 0.5498834186953288,
+        "main_observation_score": 14.888846901976773
+      },
+      {
+        "observer_id": "moving_frame_000135",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "135",
+        "main_score_top_frame": "135",
+        "selection_score": 0.6374929325561924,
+        "main_observation_score": 22.292121276477108
+      },
+      {
+        "observer_id": "moving_frame_000136",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "136",
+        "main_score_top_frame": "136",
+        "selection_score": 0.5619294682968912,
+        "main_observation_score": 19.53121228220321
+      },
+      {
+        "observer_id": "moving_frame_000136",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "136",
+        "main_score_top_frame": "136",
+        "selection_score": 0.6606367430178972,
+        "main_observation_score": 23.440792312567616
+      },
+      {
+        "observer_id": "moving_frame_000137",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "137",
+        "main_score_top_frame": "137",
+        "selection_score": 0.5795190397640552,
+        "main_observation_score": 26.610744010250645
+      },
+      {
+        "observer_id": "moving_frame_000137",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "137",
+        "main_score_top_frame": "137",
+        "selection_score": 0.6660724459321626,
+        "main_observation_score": 22.73742388774733
+      },
+      {
+        "observer_id": "moving_frame_000138",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "138",
+        "main_score_top_frame": "138",
+        "selection_score": 0.48238664138662424,
+        "main_observation_score": 8.360225005896876
+      },
+      {
+        "observer_id": "moving_frame_000138",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "138",
+        "main_score_top_frame": "138",
+        "selection_score": 0.6645101496605971,
+        "main_observation_score": 22.013495742523002
+      },
+      {
+        "observer_id": "moving_frame_000139",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "139",
+        "main_score_top_frame": "139",
+        "selection_score": 0.5474949668603012,
+        "main_observation_score": 19.141889951953793
+      },
+      {
+        "observer_id": "moving_frame_000139",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "139",
+        "main_score_top_frame": "139",
+        "selection_score": 0.6626212335059404,
+        "main_observation_score": 20.891568701148124
+      },
+      {
+        "observer_id": "moving_frame_000140",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "140",
+        "main_score_top_frame": "140",
+        "selection_score": 0.5430031323558364,
+        "main_observation_score": 16.992990255273785
+      },
+      {
+        "observer_id": "moving_frame_000140",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "140",
+        "main_score_top_frame": "140",
+        "selection_score": 0.656491450121547,
+        "main_observation_score": 18.7999051445984
+      },
+      {
+        "observer_id": "moving_frame_000141",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "141",
+        "main_score_top_frame": "141",
+        "selection_score": 0.517275797159318,
+        "main_observation_score": 12.634355404020434
+      },
+      {
+        "observer_id": "moving_frame_000141",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "141",
+        "main_score_top_frame": "141",
+        "selection_score": 0.6329898874209441,
+        "main_observation_score": 16.376579898790528
+      },
+      {
+        "observer_id": "moving_frame_000142",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "142",
+        "main_score_top_frame": "142",
+        "selection_score": 0.5622647818328234,
+        "main_observation_score": 18.95628101211397
+      },
+      {
+        "observer_id": "moving_frame_000142",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "142",
+        "main_score_top_frame": "142",
+        "selection_score": 0.6180623570425341,
+        "main_observation_score": 15.3650667396854
+      },
+      {
+        "observer_id": "moving_frame_000143",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "143",
+        "main_score_top_frame": "143",
+        "selection_score": 0.5468249683633681,
+        "main_observation_score": 14.3451234682759
+      },
+      {
+        "observer_id": "moving_frame_000143",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "143",
+        "main_score_top_frame": "143",
+        "selection_score": 0.6190515267080098,
+        "main_observation_score": 17.22872678648441
+      },
+      {
+        "observer_id": "moving_frame_000144",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "144",
+        "main_score_top_frame": "144",
+        "selection_score": 0.5377944330067939,
+        "main_observation_score": 11.31843073343982
+      },
+      {
+        "observer_id": "moving_frame_000144",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "144",
+        "main_score_top_frame": "144",
+        "selection_score": 0.6000275921739091,
+        "main_observation_score": 14.637130655526084
+      },
+      {
+        "observer_id": "moving_frame_000145",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "145",
+        "main_score_top_frame": "145",
+        "selection_score": 0.48416538315024216,
+        "main_observation_score": 5.228785516975252
+      },
+      {
+        "observer_id": "moving_frame_000145",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "145",
+        "main_score_top_frame": "145",
+        "selection_score": 0.6522327435212981,
+        "main_observation_score": 25.00306548565095
+      },
+      {
+        "observer_id": "moving_frame_000146",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "146",
+        "main_score_top_frame": "146",
+        "selection_score": 0.5586585981606881,
+        "main_observation_score": 11.313167457209333
+      },
+      {
+        "observer_id": "moving_frame_000146",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "146",
+        "main_score_top_frame": "146",
+        "selection_score": 0.4979995665502206,
+        "main_observation_score": 3.4971004069443374
+      },
+      {
+        "observer_id": "moving_frame_000147",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "147",
+        "main_score_top_frame": "147",
+        "selection_score": 0.5873286653028502,
+        "main_observation_score": 15.255079220821075
+      },
+      {
+        "observer_id": "moving_frame_000147",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "147",
+        "main_score_top_frame": "147",
+        "selection_score": 0.4901862484131153,
+        "main_observation_score": 4.061458139491765
+      },
+      {
+        "observer_id": "moving_frame_000148",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "148",
+        "main_score_top_frame": "148",
+        "selection_score": 0.5480071689723744,
+        "main_observation_score": 12.823139819404897
+      },
+      {
+        "observer_id": "moving_frame_000148",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "148",
+        "main_score_top_frame": "148",
+        "selection_score": 0.47769640754326315,
+        "main_observation_score": 5.011167338232364
+      },
+      {
+        "observer_id": "moving_frame_000149",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "149",
+        "main_score_top_frame": "149",
+        "selection_score": 0.5039695111024964,
+        "main_observation_score": 10.133806342740511
+      },
+      {
+        "observer_id": "moving_frame_000149",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "149",
+        "main_score_top_frame": "149",
+        "selection_score": 0.4625236520079327,
+        "main_observation_score": 5.5246608258449
+      },
+      {
+        "observer_id": "moving_frame_000150",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "150",
+        "main_score_top_frame": "150",
+        "selection_score": 0.39794892189533665,
+        "main_observation_score": 3.553134362007046
+      },
+      {
+        "observer_id": "moving_frame_000150",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "150",
+        "main_score_top_frame": "150",
+        "selection_score": 0.4368808709201743,
+        "main_observation_score": 4.942597993437348
+      },
+      {
+        "observer_id": "moving_frame_000151",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "151",
+        "main_score_top_frame": "151",
+        "selection_score": 0.462371131619671,
+        "main_observation_score": 9.288907134785248
+      },
+      {
+        "observer_id": "moving_frame_000151",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "151",
+        "main_score_top_frame": "151",
+        "selection_score": 0.4043697089921057,
+        "main_observation_score": 4.307807310245434
+      },
+      {
+        "observer_id": "moving_frame_000152",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "152",
+        "main_score_top_frame": "152",
+        "selection_score": 0.3504030025115445,
+        "main_observation_score": 3.4019296274400497
+      },
+      {
+        "observer_id": "moving_frame_000152",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "152",
+        "main_score_top_frame": "152",
+        "selection_score": 0.3881908958460294,
+        "main_observation_score": 4.731995483704356
+      },
+      {
+        "observer_id": "moving_frame_000153",
+        "marker_id": 10,
+        "same_top_observation": true,
+        "selection_score_top_frame": "153",
+        "main_score_top_frame": "153",
+        "selection_score": 0.30098278674998796,
+        "main_observation_score": 2.858977792904513
+      },
+      {
+        "observer_id": "moving_frame_000153",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "153",
+        "main_score_top_frame": "153",
+        "selection_score": 0.29898206558566764,
+        "main_observation_score": 2.025674162066699
+      },
+      {
+        "observer_id": "moving_frame_000154",
+        "marker_id": 17,
+        "same_top_observation": true,
+        "selection_score_top_frame": "154",
+        "main_score_top_frame": "154",
+        "selection_score": 0.259633675251626,
+        "main_observation_score": 1.0445707005273674
+      },
+      {
+        "observer_id": "moving_frame_000166",
+        "marker_id": 26,
+        "same_top_observation": true,
+        "selection_score_top_frame": "166",
+        "main_score_top_frame": "166",
+        "selection_score": 0.3469048327456924,
+        "main_observation_score": 4.307183080716777
+      },
+      {
+        "observer_id": "moving_frame_000176",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "176",
+        "main_score_top_frame": "176",
+        "selection_score": 0.43618835430391945,
+        "main_observation_score": 7.144455476861797
+      },
+      {
+        "observer_id": "moving_frame_000176",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "176",
+        "main_score_top_frame": "176",
+        "selection_score": 0.3457531427984548,
+        "main_observation_score": 2.1655524327011664
+      },
+      {
+        "observer_id": "moving_frame_000178",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "178",
+        "main_score_top_frame": "178",
+        "selection_score": 0.4023076347394825,
+        "main_observation_score": 5.477953617621442
+      },
+      {
+        "observer_id": "moving_frame_000178",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "178",
+        "main_score_top_frame": "178",
+        "selection_score": 0.3664653360627117,
+        "main_observation_score": 1.39181884814675
+      },
+      {
+        "observer_id": "moving_frame_000178",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "178",
+        "main_score_top_frame": "178",
+        "selection_score": 0.42776175761005925,
+        "main_observation_score": 9.583896699306516
+      },
+      {
+        "observer_id": "moving_frame_000178",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "178",
+        "main_score_top_frame": "178",
+        "selection_score": 0.2945100334799797,
+        "main_observation_score": 1.645050127230652
+      },
+      {
+        "observer_id": "moving_frame_000180",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "180",
+        "main_score_top_frame": "180",
+        "selection_score": 0.37602430451431884,
+        "main_observation_score": 9.263969397316544
+      },
+      {
+        "observer_id": "moving_frame_000182",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "182",
+        "main_score_top_frame": "182",
+        "selection_score": 0.39213083501621687,
+        "main_observation_score": 4.247492126813773
+      },
+      {
+        "observer_id": "moving_frame_000182",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "182",
+        "main_score_top_frame": "182",
+        "selection_score": 0.3865215559910833,
+        "main_observation_score": 2.1293047647250143
+      },
+      {
+        "observer_id": "moving_frame_000182",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "182",
+        "main_score_top_frame": "182",
+        "selection_score": 0.4061241016400219,
+        "main_observation_score": 1.7600210366108617
+      },
+      {
+        "observer_id": "moving_frame_000183",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "183",
+        "main_score_top_frame": "183",
+        "selection_score": 0.45985383009247544,
+        "main_observation_score": 9.04210893781621
+      },
+      {
+        "observer_id": "moving_frame_000183",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "183",
+        "main_score_top_frame": "183",
+        "selection_score": 0.38396731282502505,
+        "main_observation_score": 1.7811739366158297
+      },
+      {
+        "observer_id": "moving_frame_000183",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "183",
+        "main_score_top_frame": "183",
+        "selection_score": 0.3801464599097893,
+        "main_observation_score": 1.1572218318439662
+      },
+      {
+        "observer_id": "moving_frame_000184",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "184",
+        "main_score_top_frame": "184",
+        "selection_score": 0.3654317943369248,
+        "main_observation_score": 2.3823587102734716
+      },
+      {
+        "observer_id": "moving_frame_000184",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "184",
+        "main_score_top_frame": "184",
+        "selection_score": 0.4052511049660213,
+        "main_observation_score": 2.123386279479485
+      },
+      {
+        "observer_id": "moving_frame_000184",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "184",
+        "main_score_top_frame": "184",
+        "selection_score": 0.4212193595951979,
+        "main_observation_score": 2.826463539188604
+      },
+      {
+        "observer_id": "moving_frame_000185",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "185",
+        "main_score_top_frame": "185",
+        "selection_score": 0.3906210020152581,
+        "main_observation_score": 3.44424127014809
+      },
+      {
+        "observer_id": "moving_frame_000185",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "185",
+        "main_score_top_frame": "185",
+        "selection_score": 0.4147402524502103,
+        "main_observation_score": 2.1252453570247907
+      },
+      {
+        "observer_id": "moving_frame_000185",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "185",
+        "main_score_top_frame": "185",
+        "selection_score": 0.40614772865748056,
+        "main_observation_score": 2.3725553041558998
+      },
+      {
+        "observer_id": "moving_frame_000186",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "186",
+        "main_score_top_frame": "186",
+        "selection_score": 0.4269659414260849,
+        "main_observation_score": 5.671636104360237
+      },
+      {
+        "observer_id": "moving_frame_000186",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "186",
+        "main_score_top_frame": "186",
+        "selection_score": 0.5393697441490567,
+        "main_observation_score": 9.491448339023776
+      },
+      {
+        "observer_id": "moving_frame_000186",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "186",
+        "main_score_top_frame": "186",
+        "selection_score": 0.4365860605862881,
+        "main_observation_score": 4.068756395120491
+      },
+      {
+        "observer_id": "moving_frame_000187",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "187",
+        "main_score_top_frame": "187",
+        "selection_score": 0.373592619562296,
+        "main_observation_score": 2.4759807219407586
+      },
+      {
+        "observer_id": "moving_frame_000187",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "187",
+        "main_score_top_frame": "187",
+        "selection_score": 0.46189790909953177,
+        "main_observation_score": 3.8812858521441975
+      },
+      {
+        "observer_id": "moving_frame_000187",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "187",
+        "main_score_top_frame": "187",
+        "selection_score": 0.4498816416971263,
+        "main_observation_score": 4.826198234094122
+      },
+      {
+        "observer_id": "moving_frame_000188",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "188",
+        "main_score_top_frame": "188",
+        "selection_score": 0.4417492444936858,
+        "main_observation_score": 7.169681913511324
+      },
+      {
+        "observer_id": "moving_frame_000188",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "188",
+        "main_score_top_frame": "188",
+        "selection_score": 0.46896065023006006,
+        "main_observation_score": 3.8970257820416077
+      },
+      {
+        "observer_id": "moving_frame_000188",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "188",
+        "main_score_top_frame": "188",
+        "selection_score": 0.4698381054399406,
+        "main_observation_score": 6.387680352756758
+      },
+      {
+        "observer_id": "moving_frame_000189",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "189",
+        "main_score_top_frame": "189",
+        "selection_score": 0.49941186281565214,
+        "main_observation_score": 13.914120907081456
+      },
+      {
+        "observer_id": "moving_frame_000189",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "189",
+        "main_score_top_frame": "189",
+        "selection_score": 0.4525434375407408,
+        "main_observation_score": 2.8168508108999086
+      },
+      {
+        "observer_id": "moving_frame_000189",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "189",
+        "main_score_top_frame": "189",
+        "selection_score": 0.46079538977700707,
+        "main_observation_score": 5.790034433129335
+      },
+      {
+        "observer_id": "moving_frame_000190",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "190",
+        "main_score_top_frame": "190",
+        "selection_score": 0.4211343488806979,
+        "main_observation_score": 5.940213585113881
+      },
+      {
+        "observer_id": "moving_frame_000190",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "190",
+        "main_score_top_frame": "190",
+        "selection_score": 0.45828394048752735,
+        "main_observation_score": 3.1788141556884764
+      },
+      {
+        "observer_id": "moving_frame_000190",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "190",
+        "main_score_top_frame": "190",
+        "selection_score": 0.4771836004270399,
+        "main_observation_score": 6.596169044865758
+      },
+      {
+        "observer_id": "moving_frame_000191",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "191",
+        "main_score_top_frame": "191",
+        "selection_score": 0.44688507559321367,
+        "main_observation_score": 3.293819996157732
+      },
+      {
+        "observer_id": "moving_frame_000191",
+        "marker_id": 8,
+        "same_top_observation": true,
+        "selection_score_top_frame": "191",
+        "main_score_top_frame": "191",
+        "selection_score": 0.49609657283359004,
+        "main_observation_score": 7.541875808283135
+      },
+      {
+        "observer_id": "moving_frame_000192",
+        "marker_id": 6,
+        "same_top_observation": true,
+        "selection_score_top_frame": "192",
+        "main_score_top_frame": "192",
+        "selection_score": 0.44965227496637467,
+        "main_observation_score": 4.41102089807851
+      },
+      {
+        "observer_id": "moving_frame_000192",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "192",
+        "main_score_top_frame": "192",
+        "selection_score": 0.5363635871608026,
+        "main_observation_score": 8.704228397286471
+      },
+      {
+        "observer_id": "moving_frame_000193",
+        "marker_id": 2,
+        "same_top_observation": true,
+        "selection_score_top_frame": "193",
+        "main_score_top_frame": "193",
+        "selection_score": 0.33493480493488137,
+        "main_observation_score": 4.444461183493967
+      },
+      {
+        "observer_id": "moving_frame_000193",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "193",
+        "main_score_top_frame": "193",
+        "selection_score": 0.5219519050360147,
+        "main_observation_score": 11.282232688956977
+      },
+      {
+        "observer_id": "moving_frame_000194",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "194",
+        "main_score_top_frame": "194",
+        "selection_score": 0.5444355550429064,
+        "main_observation_score": 13.588399450921235
+      },
+      {
+        "observer_id": "moving_frame_000195",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "195",
+        "main_score_top_frame": "195",
+        "selection_score": 0.5874874265364226,
+        "main_observation_score": 16.593052646270944
+      },
+      {
+        "observer_id": "moving_frame_000195",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "195",
+        "main_score_top_frame": "195",
+        "selection_score": 0.489464837137135,
+        "main_observation_score": 13.875005021111253
+      },
+      {
+        "observer_id": "moving_frame_000196",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "196",
+        "main_score_top_frame": "196",
+        "selection_score": 0.6150270306123837,
+        "main_observation_score": 14.546818589374968
+      },
+      {
+        "observer_id": "moving_frame_000196",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "196",
+        "main_score_top_frame": "196",
+        "selection_score": 0.49239703754386815,
+        "main_observation_score": 9.039891996742933
+      },
+      {
+        "observer_id": "moving_frame_000197",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "197",
+        "main_score_top_frame": "197",
+        "selection_score": 0.6165561419854348,
+        "main_observation_score": 15.540619264055177
+      },
+      {
+        "observer_id": "moving_frame_000197",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "197",
+        "main_score_top_frame": "197",
+        "selection_score": 0.5901775672590331,
+        "main_observation_score": 16.509842328316747
+      },
+      {
+        "observer_id": "moving_frame_000198",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "198",
+        "main_score_top_frame": "198",
+        "selection_score": 0.6003388531099714,
+        "main_observation_score": 16.708773205974172
+      },
+      {
+        "observer_id": "moving_frame_000198",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "198",
+        "main_score_top_frame": "198",
+        "selection_score": 0.5673595432601586,
+        "main_observation_score": 12.740587291007378
+      },
+      {
+        "observer_id": "moving_frame_000199",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "199",
+        "main_score_top_frame": "199",
+        "selection_score": 0.5945096458155823,
+        "main_observation_score": 13.309424111386056
+      },
+      {
+        "observer_id": "moving_frame_000199",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "199",
+        "main_score_top_frame": "199",
+        "selection_score": 0.5508433873357406,
+        "main_observation_score": 12.424372804363204
+      },
+      {
+        "observer_id": "moving_frame_000200",
+        "marker_id": 15,
+        "same_top_observation": true,
+        "selection_score_top_frame": "200",
+        "main_score_top_frame": "200",
+        "selection_score": 0.5940028378850886,
+        "main_observation_score": 9.224061966487344
+      },
+      {
+        "observer_id": "moving_frame_000200",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "200",
+        "main_score_top_frame": "200",
+        "selection_score": 0.5535601441709911,
+        "main_observation_score": 15.419647456518835
+      },
+      {
+        "observer_id": "moving_frame_000201",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "201",
+        "main_score_top_frame": "201",
+        "selection_score": 0.5524325833552505,
+        "main_observation_score": 16.8699523712922
+      },
+      {
+        "observer_id": "moving_frame_000202",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "202",
+        "main_score_top_frame": "202",
+        "selection_score": 0.5325883813229945,
+        "main_observation_score": 11.797061908037222
+      },
+      {
+        "observer_id": "moving_frame_000203",
+        "marker_id": 16,
+        "same_top_observation": true,
+        "selection_score_top_frame": "203",
+        "main_score_top_frame": "203",
+        "selection_score": 0.6007404893222366,
+        "main_observation_score": 18.718607643148427
+      },
+      {
+        "observer_id": "moving_frame_000205",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "205",
+        "main_score_top_frame": "205",
+        "selection_score": 0.5333804656996247,
+        "main_observation_score": 9.000827558562253
+      },
+      {
+        "observer_id": "moving_frame_000206",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "206",
+        "main_score_top_frame": "206",
+        "selection_score": 0.6000973768793871,
+        "main_observation_score": 14.797105646342825
+      },
+      {
+        "observer_id": "moving_frame_000208",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "208",
+        "main_score_top_frame": "208",
+        "selection_score": 0.6295257384700301,
+        "main_observation_score": 19.67682921386942
+      },
+      {
+        "observer_id": "moving_frame_000210",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "210",
+        "main_score_top_frame": "210",
+        "selection_score": 0.5651266925657616,
+        "main_observation_score": 10.876155743311275
+      },
+      {
+        "observer_id": "moving_frame_000211",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "211",
+        "main_score_top_frame": "211",
+        "selection_score": 0.5932682808306589,
+        "main_observation_score": 14.13088192998546
+      },
+      {
+        "observer_id": "moving_frame_000212",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "212",
+        "main_score_top_frame": "212",
+        "selection_score": 0.5857073790192114,
+        "main_observation_score": 12.448882991629413
+      },
+      {
+        "observer_id": "moving_frame_000213",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "213",
+        "main_score_top_frame": "213",
+        "selection_score": 0.5922268783344266,
+        "main_observation_score": 11.930171672122583
+      },
+      {
+        "observer_id": "moving_frame_000214",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "214",
+        "main_score_top_frame": "214",
+        "selection_score": 0.5948517958087531,
+        "main_observation_score": 9.408880599244295
+      },
+      {
+        "observer_id": "moving_frame_000215",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "215",
+        "main_score_top_frame": "215",
+        "selection_score": 0.6089910449055326,
+        "main_observation_score": 9.497397138323505
+      },
+      {
+        "observer_id": "moving_frame_000215",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "215",
+        "main_score_top_frame": "215",
+        "selection_score": 0.5527123090942134,
+        "main_observation_score": 10.586123768753806
+      },
+      {
+        "observer_id": "moving_frame_000216",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "216",
+        "main_score_top_frame": "216",
+        "selection_score": 0.6069340436424288,
+        "main_observation_score": 9.825807218682685
+      },
+      {
+        "observer_id": "moving_frame_000216",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "216",
+        "main_score_top_frame": "216",
+        "selection_score": 0.5785276792692405,
+        "main_observation_score": 13.051402290454304
+      },
+      {
+        "observer_id": "moving_frame_000217",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "217",
+        "main_score_top_frame": "217",
+        "selection_score": 0.6054608828768735,
+        "main_observation_score": 9.344368045633143
+      },
+      {
+        "observer_id": "moving_frame_000217",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "217",
+        "main_score_top_frame": "217",
+        "selection_score": 0.5060869353338038,
+        "main_observation_score": 5.5463297794184685
+      },
+      {
+        "observer_id": "moving_frame_000218",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "218",
+        "main_score_top_frame": "218",
+        "selection_score": 0.6262430006005093,
+        "main_observation_score": 12.427550523607108
+      },
+      {
+        "observer_id": "moving_frame_000218",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "218",
+        "main_score_top_frame": "218",
+        "selection_score": 0.5872011062216586,
+        "main_observation_score": 13.916403246063028
+      },
+      {
+        "observer_id": "moving_frame_000219",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "219",
+        "main_score_top_frame": "219",
+        "selection_score": 0.6255506429323135,
+        "main_observation_score": 19.607504926579168
+      },
+      {
+        "observer_id": "moving_frame_000222",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "222",
+        "main_score_top_frame": "222",
+        "selection_score": 0.5793380616888614,
+        "main_observation_score": 14.360132103791893
+      },
+      {
+        "observer_id": "moving_frame_000223",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "223",
+        "main_score_top_frame": "223",
+        "selection_score": 0.5743584836291087,
+        "main_observation_score": 11.100493659994882
+      },
+      {
+        "observer_id": "moving_frame_000230",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "230",
+        "main_score_top_frame": "230",
+        "selection_score": 0.5069953865595279,
+        "main_observation_score": 17.32178332182313
+      },
+      {
+        "observer_id": "moving_frame_000231",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "231",
+        "main_score_top_frame": "231",
+        "selection_score": 0.4086041740688095,
+        "main_observation_score": 4.6478141843057434
+      },
+      {
+        "observer_id": "moving_frame_000231",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "231",
+        "main_score_top_frame": "231",
+        "selection_score": 0.49761820623029046,
+        "main_observation_score": 14.044035338478777
+      },
+      {
+        "observer_id": "moving_frame_000232",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "232",
+        "main_score_top_frame": "232",
+        "selection_score": 0.4485095178941866,
+        "main_observation_score": 6.108725429443916
+      },
+      {
+        "observer_id": "moving_frame_000232",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "232",
+        "main_score_top_frame": "232",
+        "selection_score": 0.4409881912288728,
+        "main_observation_score": 5.90616681565668
+      },
+      {
+        "observer_id": "moving_frame_000233",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "233",
+        "main_score_top_frame": "233",
+        "selection_score": 0.4613953915543153,
+        "main_observation_score": 5.888026209925246
+      },
+      {
+        "observer_id": "moving_frame_000233",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "233",
+        "main_score_top_frame": "233",
+        "selection_score": 0.45532693904031624,
+        "main_observation_score": 5.771112113387452
+      },
+      {
+        "observer_id": "moving_frame_000234",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "234",
+        "main_score_top_frame": "234",
+        "selection_score": 0.4972956861513501,
+        "main_observation_score": 8.259135425478219
+      },
+      {
+        "observer_id": "moving_frame_000234",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "234",
+        "main_score_top_frame": "234",
+        "selection_score": 0.545349143407648,
+        "main_observation_score": 14.67778284487684
+      },
+      {
+        "observer_id": "moving_frame_000235",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "235",
+        "main_score_top_frame": "235",
+        "selection_score": 0.5380778601381669,
+        "main_observation_score": 12.323903237695477
+      },
+      {
+        "observer_id": "moving_frame_000235",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "235",
+        "main_score_top_frame": "235",
+        "selection_score": 0.5590205738030258,
+        "main_observation_score": 16.341236501542642
+      },
+      {
+        "observer_id": "moving_frame_000236",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "236",
+        "main_score_top_frame": "236",
+        "selection_score": 0.5444917067320486,
+        "main_observation_score": 13.03707920363695
+      },
+      {
+        "observer_id": "moving_frame_000236",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "236",
+        "main_score_top_frame": "236",
+        "selection_score": 0.4792127006334922,
+        "main_observation_score": 7.562351076110269
+      },
+      {
+        "observer_id": "moving_frame_000237",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "237",
+        "main_score_top_frame": "237",
+        "selection_score": 0.5165036393101259,
+        "main_observation_score": 12.887667747628837
+      },
+      {
+        "observer_id": "moving_frame_000237",
+        "marker_id": 9,
+        "same_top_observation": true,
+        "selection_score_top_frame": "237",
+        "main_score_top_frame": "237",
+        "selection_score": 0.4269297280124404,
+        "main_observation_score": 5.89070775566425
+      },
+      {
+        "observer_id": "moving_frame_000239",
+        "marker_id": 7,
+        "same_top_observation": true,
+        "selection_score_top_frame": "239",
+        "main_score_top_frame": "239",
+        "selection_score": 0.40440093481320866,
+        "main_observation_score": 4.700778978296572
+      },
+      {
+        "observer_id": "moving_frame_000244",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "244",
+        "main_score_top_frame": "244",
+        "selection_score": 0.4257999598558474,
+        "main_observation_score": 4.0627313124626125
+      },
+      {
+        "observer_id": "moving_frame_000245",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "245",
+        "main_score_top_frame": "245",
+        "selection_score": 0.43420177072660254,
+        "main_observation_score": 2.332140140027574
+      },
+      {
+        "observer_id": "moving_frame_000246",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "246",
+        "main_score_top_frame": "246",
+        "selection_score": 0.4655927893414919,
+        "main_observation_score": 3.5333469980537067
+      },
+      {
+        "observer_id": "moving_frame_000247",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "247",
+        "main_score_top_frame": "247",
+        "selection_score": 0.33662374421749774,
+        "main_observation_score": 1.0542081709641913
+      },
+      {
+        "observer_id": "moving_frame_000247",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "247",
+        "main_score_top_frame": "247",
+        "selection_score": 0.4522409254416224,
+        "main_observation_score": 3.0398640255052936
+      },
+      {
+        "observer_id": "moving_frame_000248",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "248",
+        "main_score_top_frame": "248",
+        "selection_score": 0.3473286695912441,
+        "main_observation_score": 1.0498052071669082
+      },
+      {
+        "observer_id": "moving_frame_000248",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "248",
+        "main_score_top_frame": "248",
+        "selection_score": 0.45244404646649883,
+        "main_observation_score": 3.1064186948159396
+      },
+      {
+        "observer_id": "moving_frame_000249",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "249",
+        "main_score_top_frame": "249",
+        "selection_score": 0.5429188110965064,
+        "main_observation_score": 12.58416971038257
+      },
+      {
+        "observer_id": "moving_frame_000250",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "250",
+        "main_score_top_frame": "250",
+        "selection_score": 0.37443904139803474,
+        "main_observation_score": 1.0866287353385902
+      },
+      {
+        "observer_id": "moving_frame_000250",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "250",
+        "main_score_top_frame": "250",
+        "selection_score": 0.4434528674705547,
+        "main_observation_score": 3.3625206845655864
+      },
+      {
+        "observer_id": "moving_frame_000251",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "251",
+        "main_score_top_frame": "251",
+        "selection_score": 0.41815913644147895,
+        "main_observation_score": 2.048373585244297
+      },
+      {
+        "observer_id": "moving_frame_000251",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "251",
+        "main_score_top_frame": "251",
+        "selection_score": 0.44111529498754376,
+        "main_observation_score": 3.4048510979026005
+      },
+      {
+        "observer_id": "moving_frame_000252",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "252",
+        "main_score_top_frame": "252",
+        "selection_score": 0.4617844321233112,
+        "main_observation_score": 4.870209493280793
+      },
+      {
+        "observer_id": "moving_frame_000253",
+        "marker_id": 0,
+        "same_top_observation": true,
+        "selection_score_top_frame": "253",
+        "main_score_top_frame": "253",
+        "selection_score": 0.5130187011202137,
+        "main_observation_score": 6.865774746460427
+      },
+      {
+        "observer_id": "moving_frame_000253",
+        "marker_id": 19,
+        "same_top_observation": true,
+        "selection_score_top_frame": "253",
+        "main_score_top_frame": "253",
+        "selection_score": 0.44867996571128416,
+        "main_observation_score": 4.009781540380555
+      }
+    ]
+  },
+  "camera_paths": {
+    "camera_back_left": {
+      "main_compatible": {
+        "camera_id": "camera_back_left",
+        "initialization_algorithm": "legacy_maximum_bottleneck_v1",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_back_left",
+            "observation": {
+              "selection_score": 1.5001483600425238,
+              "pnp_reprojection_rmse_px": 1.1589545389222642,
+              "marker_area_ratio": 0.00016304238168962754,
+              "area_px2": 383.8304619565606,
+              "distance_m": 7.409364219981579,
+              "observer_id": "camera_back_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+            }
+          }
+        ],
+        "path_length": 3,
+        "path_bottleneck_score": 1.5001483600425238,
+        "path_mean_score": 5.019170208770202,
+        "weakest_edge": {
+          "from": "marker:2",
+          "to": "observer:camera_back_left",
+          "observation": {
+            "selection_score": 1.5001483600425238,
+            "pnp_reprojection_rmse_px": 1.1589545389222642,
+            "marker_area_ratio": 0.00016304238168962754,
+            "area_px2": 383.8304619565606,
+            "distance_m": 7.409364219981579,
+            "observer_id": "camera_back_left",
+            "marker_id": 2,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+          }
+        },
+        "initial_pose": [
+          [
+            0.343523346669949,
+            -0.0712281815344964,
+            -0.9364391365422348,
+            4.563792327437187
+          ],
+          [
+            0.9389100836927823,
+            0.003787519171931189,
+            0.34414169965079,
+            -5.3662756165198715
+          ],
+          [
+            -0.020965806273316158,
+            -0.9974528564567904,
+            0.06817795914735691,
+            3.1024335263733773
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "maximum_bottleneck_v2": {
+        "camera_id": "camera_back_left",
+        "initialization_algorithm": "maximum_bottleneck_v2",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_back_left",
+            "observation": {
+              "selection_score": 1.5001483600425238,
+              "pnp_reprojection_rmse_px": 1.1589545389222642,
+              "marker_area_ratio": 0.00016304238168962754,
+              "area_px2": 383.8304619565606,
+              "distance_m": 7.409364219981579,
+              "observer_id": "camera_back_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+            }
+          }
+        ],
+        "path_length": 3,
+        "path_bottleneck_score": 1.5001483600425238,
+        "path_mean_score": 5.019170208770202,
+        "weakest_edge": {
+          "from": "marker:2",
+          "to": "observer:camera_back_left",
+          "observation": {
+            "selection_score": 1.5001483600425238,
+            "pnp_reprojection_rmse_px": 1.1589545389222642,
+            "marker_area_ratio": 0.00016304238168962754,
+            "area_px2": 383.8304619565606,
+            "distance_m": 7.409364219981579,
+            "observer_id": "camera_back_left",
+            "marker_id": 2,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+          }
+        },
+        "initial_pose": [
+          [
+            0.343523346669949,
+            -0.0712281815344964,
+            -0.9364391365422348,
+            4.563792327437187
+          ],
+          [
+            0.9389100836927823,
+            0.003787519171931189,
+            0.34414169965079,
+            -5.3662756165198715
+          ],
+          [
+            -0.020965806273316158,
+            -0.9974528564567904,
+            0.06817795914735691,
+            3.1024335263733773
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "unweighted_first_hit_bfs_diagnostic": {
+        "camera_id": "camera_back_left",
+        "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:camera_back_left",
+            "observation": {
+              "selection_score": 0.660250890329944,
+              "pnp_reprojection_rmse_px": 1.7544862023578374,
+              "marker_area_ratio": 0.00017224500720233122,
+              "area_px2": 405.4950620755553,
+              "distance_m": 7.36228659671688,
+              "observer_id": "camera_back_left",
+              "marker_id": 8,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+            }
+          }
+        ],
+        "path_length": 1,
+        "path_bottleneck_score": 0.660250890329944,
+        "path_mean_score": 0.660250890329944,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:camera_back_left",
+          "observation": {
+            "selection_score": 0.660250890329944,
+            "pnp_reprojection_rmse_px": 1.7544862023578374,
+            "marker_area_ratio": 0.00017224500720233122,
+            "area_px2": 405.4950620755553,
+            "distance_m": 7.36228659671688,
+            "observer_id": "camera_back_left",
+            "marker_id": 8,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+          }
+        },
+        "initial_pose": [
+          [
+            0.37134381616923967,
+            -0.02837315072687241,
+            -0.9280618161042377,
+            4.089749366728744
+          ],
+          [
+            0.9244173588070835,
+            0.10487547544216053,
+            0.36667926228096986,
+            -5.551200072200881
+          ],
+          [
+            0.08692707822653067,
+            -0.9940805294183217,
+            0.06517349232922581,
+            2.5809672233362018
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "explicit_cam_edge_5_evidence": false
+    },
+    "camera_center_left": {
+      "main_compatible": {
+        "camera_id": "camera_center_left",
+        "initialization_algorithm": "legacy_maximum_bottleneck_v1",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 11.13158051738139,
+              "pnp_reprojection_rmse_px": 0.11954717126931697,
+              "marker_area_ratio": 0.0004012369335941833,
+              "area_px2": 944.5823593810201,
+              "distance_m": 4.852399828643446,
+              "observer_id": "camera_center_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          }
+        ],
+        "path_length": 3,
+        "path_bottleneck_score": 6.387680352756758,
+        "path_mean_score": 8.229647594549824,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:moving_frame_000188",
+          "observation": {
+            "selection_score": 6.387680352756758,
+            "pnp_reprojection_rmse_px": 0.9259982735770929,
+            "marker_area_ratio": 0.001221881607338286,
+            "area_px2": 2533.69370097667,
+            "distance_m": 4.512780259459374,
+            "observer_id": "moving_frame_000188",
+            "marker_id": 8,
+            "frame_id": "188",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.022154149644940103,
+            0.820080184252863,
+            -0.5718196263239829,
+            2.2886328054540246
+          ],
+          [
+            0.9994889302897771,
+            0.031351863121010126,
+            0.006240104729854138,
+            0.25148087494766735
+          ],
+          [
+            0.023044996891032708,
+            -0.5713891424192721,
+            -0.8203556399779677,
+            3.912351549474378
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "maximum_bottleneck_v2": {
+        "camera_id": "camera_center_left",
+        "initialization_algorithm": "maximum_bottleneck_v2",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 11.13158051738139,
+              "pnp_reprojection_rmse_px": 0.11954717126931697,
+              "marker_area_ratio": 0.0004012369335941833,
+              "area_px2": 944.5823593810201,
+              "distance_m": 4.852399828643446,
+              "observer_id": "camera_center_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          }
+        ],
+        "path_length": 3,
+        "path_bottleneck_score": 6.387680352756758,
+        "path_mean_score": 8.229647594549824,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:moving_frame_000188",
+          "observation": {
+            "selection_score": 6.387680352756758,
+            "pnp_reprojection_rmse_px": 0.9259982735770929,
+            "marker_area_ratio": 0.001221881607338286,
+            "area_px2": 2533.69370097667,
+            "distance_m": 4.512780259459374,
+            "observer_id": "moving_frame_000188",
+            "marker_id": 8,
+            "frame_id": "188",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.022154149644940103,
+            0.820080184252863,
+            -0.5718196263239829,
+            2.2886328054540246
+          ],
+          [
+            0.9994889302897771,
+            0.031351863121010126,
+            0.006240104729854138,
+            0.25148087494766735
+          ],
+          [
+            0.023044996891032708,
+            -0.5713891424192721,
+            -0.8203556399779677,
+            3.912351549474378
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "unweighted_first_hit_bfs_diagnostic": {
+        "camera_id": "camera_center_left",
+        "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 2.174621328348062,
+              "pnp_reprojection_rmse_px": 1.7751496590168854,
+              "marker_area_ratio": 0.0005316144534382618,
+              "area_px2": 1251.5139875374734,
+              "distance_m": 4.461930343293276,
+              "observer_id": "camera_center_left",
+              "marker_id": 8,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          }
+        ],
+        "path_length": 1,
+        "path_bottleneck_score": 2.174621328348062,
+        "path_mean_score": 2.174621328348062,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:camera_center_left",
+          "observation": {
+            "selection_score": 2.174621328348062,
+            "pnp_reprojection_rmse_px": 1.7751496590168854,
+            "marker_area_ratio": 0.0005316144534382618,
+            "area_px2": 1251.5139875374734,
+            "distance_m": 4.461930343293276,
+            "observer_id": "camera_center_left",
+            "marker_id": 8,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.16025838809634874,
+            0.917234748556675,
+            0.364688449344003,
+            -2.0052611231195994
+          ],
+          [
+            0.9703128707277939,
+            0.07859101115093248,
+            0.2287277549102025,
+            -0.7129738849324085
+          ],
+          [
+            0.18113581077398166,
+            0.390517437519053,
+            -0.9025995507692239,
+            3.921660165785756
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "explicit_cam_edge_5_evidence": false
+    },
+    "camera_center_right": {
+      "main_compatible": {
+        "camera_id": "camera_center_right",
+        "initialization_algorithm": "legacy_maximum_bottleneck_v1",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 11.13158051738139,
+              "pnp_reprojection_rmse_px": 0.11954717126931697,
+              "marker_area_ratio": 0.0004012369335941833,
+              "area_px2": 944.5823593810201,
+              "distance_m": 4.852399828643446,
+              "observer_id": "camera_center_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_left",
+            "to": "marker:37",
+            "observation": {
+              "selection_score": 12.56457816982507,
+              "pnp_reprojection_rmse_px": 0.8407632956490936,
+              "marker_area_ratio": 0.0015929140387124837,
+              "area_px2": 3750.0,
+              "distance_m": 2.0689198117630796,
+              "observer_id": "camera_center_left",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "marker:37",
+            "to": "observer:camera_center_right",
+            "observation": {
+              "selection_score": 29.953494392621955,
+              "pnp_reprojection_rmse_px": 0.2698350782801159,
+              "marker_area_ratio": 0.0019352995037462152,
+              "area_px2": 4556.03564453125,
+              "distance_m": 1.9530027003963335,
+              "observer_id": "camera_center_right",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          }
+        ],
+        "path_length": 5,
+        "path_bottleneck_score": 6.387680352756758,
+        "path_mean_score": 13.4414030692193,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:moving_frame_000188",
+          "observation": {
+            "selection_score": 6.387680352756758,
+            "pnp_reprojection_rmse_px": 0.9259982735770929,
+            "marker_area_ratio": 0.001221881607338286,
+            "area_px2": 2533.69370097667,
+            "distance_m": 4.512780259459374,
+            "observer_id": "moving_frame_000188",
+            "marker_id": 8,
+            "frame_id": "188",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.0031516164675322238,
+            -0.8144880200625434,
+            -0.5801718129039355,
+            2.313312419565232
+          ],
+          [
+            -0.9971701831809012,
+            0.04613755198361193,
+            -0.059354461263911175,
+            0.2966812912956981
+          ],
+          [
+            0.07511120481400381,
+            0.5783429704522718,
+            -0.8123285760330187,
+            3.74484444700499
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "maximum_bottleneck_v2": {
+        "camera_id": "camera_center_right",
+        "initialization_algorithm": "maximum_bottleneck_v2",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 11.13158051738139,
+              "pnp_reprojection_rmse_px": 0.11954717126931697,
+              "marker_area_ratio": 0.0004012369335941833,
+              "area_px2": 944.5823593810201,
+              "distance_m": 4.852399828643446,
+              "observer_id": "camera_center_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_left",
+            "to": "marker:37",
+            "observation": {
+              "selection_score": 12.56457816982507,
+              "pnp_reprojection_rmse_px": 0.8407632956490936,
+              "marker_area_ratio": 0.0015929140387124837,
+              "area_px2": 3750.0,
+              "distance_m": 2.0689198117630796,
+              "observer_id": "camera_center_left",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "marker:37",
+            "to": "observer:camera_center_right",
+            "observation": {
+              "selection_score": 29.953494392621955,
+              "pnp_reprojection_rmse_px": 0.2698350782801159,
+              "marker_area_ratio": 0.0019352995037462152,
+              "area_px2": 4556.03564453125,
+              "distance_m": 1.9530027003963335,
+              "observer_id": "camera_center_right",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          }
+        ],
+        "path_length": 5,
+        "path_bottleneck_score": 6.387680352756758,
+        "path_mean_score": 13.4414030692193,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:moving_frame_000188",
+          "observation": {
+            "selection_score": 6.387680352756758,
+            "pnp_reprojection_rmse_px": 0.9259982735770929,
+            "marker_area_ratio": 0.001221881607338286,
+            "area_px2": 2533.69370097667,
+            "distance_m": 4.512780259459374,
+            "observer_id": "moving_frame_000188",
+            "marker_id": 8,
+            "frame_id": "188",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.0031516164675322238,
+            -0.8144880200625434,
+            -0.5801718129039355,
+            2.313312419565232
+          ],
+          [
+            -0.9971701831809012,
+            0.04613755198361193,
+            -0.059354461263911175,
+            0.2966812912956981
+          ],
+          [
+            0.07511120481400381,
+            0.5783429704522718,
+            -0.8123285760330187,
+            3.74484444700499
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "unweighted_first_hit_bfs_diagnostic": {
+        "camera_id": "camera_center_right",
+        "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 2.174621328348062,
+              "pnp_reprojection_rmse_px": 1.7751496590168854,
+              "marker_area_ratio": 0.0005316144534382618,
+              "area_px2": 1251.5139875374734,
+              "distance_m": 4.461930343293276,
+              "observer_id": "camera_center_left",
+              "marker_id": 8,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_left",
+            "to": "marker:37",
+            "observation": {
+              "selection_score": 12.56457816982507,
+              "pnp_reprojection_rmse_px": 0.8407632956490936,
+              "marker_area_ratio": 0.0015929140387124837,
+              "area_px2": 3750.0,
+              "distance_m": 2.0689198117630796,
+              "observer_id": "camera_center_left",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "marker:37",
+            "to": "observer:camera_center_right",
+            "observation": {
+              "selection_score": 29.953494392621955,
+              "pnp_reprojection_rmse_px": 0.2698350782801159,
+              "marker_area_ratio": 0.0019352995037462152,
+              "area_px2": 4556.03564453125,
+              "distance_m": 1.9530027003963335,
+              "observer_id": "camera_center_right",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          }
+        ],
+        "path_length": 3,
+        "path_bottleneck_score": 2.174621328348062,
+        "path_mean_score": 14.897564630265029,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:camera_center_left",
+          "observation": {
+            "selection_score": 2.174621328348062,
+            "pnp_reprojection_rmse_px": 1.7751496590168854,
+            "marker_area_ratio": 0.0005316144534382618,
+            "area_px2": 1251.5139875374734,
+            "distance_m": 4.461930343293276,
+            "observer_id": "camera_center_left",
+            "marker_id": 8,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+          }
+        },
+        "initial_pose": [
+          [
+            0.0649393261068001,
+            -0.9299324524098855,
+            0.36195098822869815,
+            -1.8590707159364666
+          ],
+          [
+            -0.986463110622882,
+            -0.005091704579900478,
+            0.1639042584092911,
+            -0.6359224443447281
+          ],
+          [
+            -0.15057694147851217,
+            -0.3676951298282417,
+            -0.9176747115375737,
+            3.8633315217127406
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "explicit_cam_edge_5_evidence": false
+    },
+    "camera_front_right": {
+      "main_compatible": {
+        "camera_id": "camera_front_right",
+        "initialization_algorithm": "legacy_maximum_bottleneck_v1",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 11.13158051738139,
+              "pnp_reprojection_rmse_px": 0.11954717126931697,
+              "marker_area_ratio": 0.0004012369335941833,
+              "area_px2": 944.5823593810201,
+              "distance_m": 4.852399828643446,
+              "observer_id": "camera_center_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_left",
+            "to": "marker:37",
+            "observation": {
+              "selection_score": 12.56457816982507,
+              "pnp_reprojection_rmse_px": 0.8407632956490936,
+              "marker_area_ratio": 0.0015929140387124837,
+              "area_px2": 3750.0,
+              "distance_m": 2.0689198117630796,
+              "observer_id": "camera_center_left",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "marker:37",
+            "to": "observer:camera_center_right",
+            "observation": {
+              "selection_score": 29.953494392621955,
+              "pnp_reprojection_rmse_px": 0.2698350782801159,
+              "marker_area_ratio": 0.0019352995037462152,
+              "area_px2": 4556.03564453125,
+              "distance_m": 1.9530027003963335,
+              "observer_id": "camera_center_right",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_right",
+            "to": "marker:4",
+            "observation": {
+              "selection_score": 18.80182139320025,
+              "pnp_reprojection_rmse_px": 0.3008624008767849,
+              "marker_area_ratio": 0.0014584042093346756,
+              "area_px2": 3433.3401879146695,
+              "distance_m": 3.391497849264363,
+              "observer_id": "camera_center_right",
+              "marker_id": 4,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          },
+          {
+            "from": "marker:4",
+            "to": "observer:moving_frame_000049",
+            "observation": {
+              "selection_score": 8.926857748706878,
+              "pnp_reprojection_rmse_px": 0.1875122040910381,
+              "marker_area_ratio": 0.0004364739511902933,
+              "area_px2": 905.0723851881921,
+              "distance_m": 5.711284039066219,
+              "observer_id": "moving_frame_000049",
+              "marker_id": 4,
+              "frame_id": "49",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000049.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000049",
+            "to": "marker:12",
+            "observation": {
+              "selection_score": 9.768479166596224,
+              "pnp_reprojection_rmse_px": 2.015280494552993,
+              "marker_area_ratio": 0.00845875226869176,
+              "area_px2": 17540.068704359233,
+              "distance_m": 2.223650393301857,
+              "observer_id": "moving_frame_000049",
+              "marker_id": 12,
+              "frame_id": "49",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000049.png"
+            }
+          },
+          {
+            "from": "marker:12",
+            "to": "observer:camera_front_right",
+            "observation": {
+              "selection_score": 4.583498326332541,
+              "pnp_reprojection_rmse_px": 1.2473547539144185,
+              "marker_area_ratio": 0.0008916382639887737,
+              "area_px2": 2099.073401764035,
+              "distance_m": 3.916940184919551,
+              "observer_id": "camera_front_right",
+              "marker_id": 12,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_front_right.png"
+            }
+          }
+        ],
+        "path_length": 9,
+        "path_bottleneck_score": 4.583498326332541,
+        "path_mean_score": 12.143074664548045,
+        "weakest_edge": {
+          "from": "marker:12",
+          "to": "observer:camera_front_right",
+          "observation": {
+            "selection_score": 4.583498326332541,
+            "pnp_reprojection_rmse_px": 1.2473547539144185,
+            "marker_area_ratio": 0.0008916382639887737,
+            "area_px2": 2099.073401764035,
+            "distance_m": 3.916940184919551,
+            "observer_id": "camera_front_right",
+            "marker_id": 12,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_front_right.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.025304633069142372,
+            -0.9925372895167003,
+            -0.11928706746364906,
+            0.9160079533714549
+          ],
+          [
+            -0.829163521620484,
+            0.08749497081597829,
+            -0.5521163686179118,
+            7.853640351998406
+          ],
+          [
+            0.5584331024922806,
+            0.08493738282259555,
+            -0.8251897424472102,
+            4.109770963467334
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "maximum_bottleneck_v2": {
+        "camera_id": "camera_front_right",
+        "initialization_algorithm": "maximum_bottleneck_v2",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:moving_frame_000188",
+            "observation": {
+              "selection_score": 6.387680352756758,
+              "pnp_reprojection_rmse_px": 0.9259982735770929,
+              "marker_area_ratio": 0.001221881607338286,
+              "area_px2": 2533.69370097667,
+              "distance_m": 4.512780259459374,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 8,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000188",
+            "to": "marker:2",
+            "observation": {
+              "selection_score": 7.169681913511324,
+              "pnp_reprojection_rmse_px": 0.9303161513634244,
+              "marker_area_ratio": 0.0014547654664860557,
+              "area_px2": 3016.601671305485,
+              "distance_m": 4.2267290858464674,
+              "observer_id": "moving_frame_000188",
+              "marker_id": 2,
+              "frame_id": "188",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+            }
+          },
+          {
+            "from": "marker:2",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 11.13158051738139,
+              "pnp_reprojection_rmse_px": 0.11954717126931697,
+              "marker_area_ratio": 0.0004012369335941833,
+              "area_px2": 944.5823593810201,
+              "distance_m": 4.852399828643446,
+              "observer_id": "camera_center_left",
+              "marker_id": 2,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_left",
+            "to": "marker:37",
+            "observation": {
+              "selection_score": 12.56457816982507,
+              "pnp_reprojection_rmse_px": 0.8407632956490936,
+              "marker_area_ratio": 0.0015929140387124837,
+              "area_px2": 3750.0,
+              "distance_m": 2.0689198117630796,
+              "observer_id": "camera_center_left",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "marker:37",
+            "to": "observer:camera_center_right",
+            "observation": {
+              "selection_score": 29.953494392621955,
+              "pnp_reprojection_rmse_px": 0.2698350782801159,
+              "marker_area_ratio": 0.0019352995037462152,
+              "area_px2": 4556.03564453125,
+              "distance_m": 1.9530027003963335,
+              "observer_id": "camera_center_right",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_right",
+            "to": "marker:4",
+            "observation": {
+              "selection_score": 18.80182139320025,
+              "pnp_reprojection_rmse_px": 0.3008624008767849,
+              "marker_area_ratio": 0.0014584042093346756,
+              "area_px2": 3433.3401879146695,
+              "distance_m": 3.391497849264363,
+              "observer_id": "camera_center_right",
+              "marker_id": 4,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          },
+          {
+            "from": "marker:4",
+            "to": "observer:moving_frame_000049",
+            "observation": {
+              "selection_score": 8.926857748706878,
+              "pnp_reprojection_rmse_px": 0.1875122040910381,
+              "marker_area_ratio": 0.0004364739511902933,
+              "area_px2": 905.0723851881921,
+              "distance_m": 5.711284039066219,
+              "observer_id": "moving_frame_000049",
+              "marker_id": 4,
+              "frame_id": "49",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000049.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000049",
+            "to": "marker:12",
+            "observation": {
+              "selection_score": 9.768479166596224,
+              "pnp_reprojection_rmse_px": 2.015280494552993,
+              "marker_area_ratio": 0.00845875226869176,
+              "area_px2": 17540.068704359233,
+              "distance_m": 2.223650393301857,
+              "observer_id": "moving_frame_000049",
+              "marker_id": 12,
+              "frame_id": "49",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000049.png"
+            }
+          },
+          {
+            "from": "marker:12",
+            "to": "observer:camera_front_right",
+            "observation": {
+              "selection_score": 4.583498326332541,
+              "pnp_reprojection_rmse_px": 1.2473547539144185,
+              "marker_area_ratio": 0.0008916382639887737,
+              "area_px2": 2099.073401764035,
+              "distance_m": 3.916940184919551,
+              "observer_id": "camera_front_right",
+              "marker_id": 12,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_front_right.png"
+            }
+          }
+        ],
+        "path_length": 9,
+        "path_bottleneck_score": 4.583498326332541,
+        "path_mean_score": 12.143074664548045,
+        "weakest_edge": {
+          "from": "marker:12",
+          "to": "observer:camera_front_right",
+          "observation": {
+            "selection_score": 4.583498326332541,
+            "pnp_reprojection_rmse_px": 1.2473547539144185,
+            "marker_area_ratio": 0.0008916382639887737,
+            "area_px2": 2099.073401764035,
+            "distance_m": 3.916940184919551,
+            "observer_id": "camera_front_right",
+            "marker_id": 12,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_front_right.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.025304633069142372,
+            -0.9925372895167003,
+            -0.11928706746364906,
+            0.9160079533714549
+          ],
+          [
+            -0.829163521620484,
+            0.08749497081597829,
+            -0.5521163686179118,
+            7.853640351998406
+          ],
+          [
+            0.5584331024922806,
+            0.08493738282259555,
+            -0.8251897424472102,
+            4.109770963467334
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "unweighted_first_hit_bfs_diagnostic": {
+        "camera_id": "camera_front_right",
+        "initialization_algorithm": "unweighted_first_hit_bfs_diagnostic",
+        "selected_graph_path": [
+          {
+            "from": "marker:8",
+            "to": "observer:camera_center_left",
+            "observation": {
+              "selection_score": 2.174621328348062,
+              "pnp_reprojection_rmse_px": 1.7751496590168854,
+              "marker_area_ratio": 0.0005316144534382618,
+              "area_px2": 1251.5139875374734,
+              "distance_m": 4.461930343293276,
+              "observer_id": "camera_center_left",
+              "marker_id": 8,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_left",
+            "to": "marker:37",
+            "observation": {
+              "selection_score": 12.56457816982507,
+              "pnp_reprojection_rmse_px": 0.8407632956490936,
+              "marker_area_ratio": 0.0015929140387124837,
+              "area_px2": 3750.0,
+              "distance_m": 2.0689198117630796,
+              "observer_id": "camera_center_left",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+            }
+          },
+          {
+            "from": "marker:37",
+            "to": "observer:camera_center_right",
+            "observation": {
+              "selection_score": 29.953494392621955,
+              "pnp_reprojection_rmse_px": 0.2698350782801159,
+              "marker_area_ratio": 0.0019352995037462152,
+              "area_px2": 4556.03564453125,
+              "distance_m": 1.9530027003963335,
+              "observer_id": "camera_center_right",
+              "marker_id": 37,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          },
+          {
+            "from": "observer:camera_center_right",
+            "to": "marker:4",
+            "observation": {
+              "selection_score": 18.80182139320025,
+              "pnp_reprojection_rmse_px": 0.3008624008767849,
+              "marker_area_ratio": 0.0014584042093346756,
+              "area_px2": 3433.3401879146695,
+              "distance_m": 3.391497849264363,
+              "observer_id": "camera_center_right",
+              "marker_id": 4,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+            }
+          },
+          {
+            "from": "marker:4",
+            "to": "observer:moving_frame_000047",
+            "observation": {
+              "selection_score": 3.96070334953589,
+              "pnp_reprojection_rmse_px": 0.6342765602867458,
+              "marker_area_ratio": 0.0003343905255481073,
+              "area_px2": 693.3921937765554,
+              "distance_m": 6.19629533368418,
+              "observer_id": "moving_frame_000047",
+              "marker_id": 4,
+              "frame_id": "47",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000047.png"
+            }
+          },
+          {
+            "from": "observer:moving_frame_000047",
+            "to": "marker:12",
+            "observation": {
+              "selection_score": 10.575030820556547,
+              "pnp_reprojection_rmse_px": 1.5232138046605426,
+              "marker_area_ratio": 0.005771943209392815,
+              "area_px2": 11968.70143899694,
+              "distance_m": 2.640386732515802,
+              "observer_id": "moving_frame_000047",
+              "marker_id": 12,
+              "frame_id": "47",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000047.png"
+            }
+          },
+          {
+            "from": "marker:12",
+            "to": "observer:camera_front_right",
+            "observation": {
+              "selection_score": 4.583498326332541,
+              "pnp_reprojection_rmse_px": 1.2473547539144185,
+              "marker_area_ratio": 0.0008916382639887737,
+              "area_px2": 2099.073401764035,
+              "distance_m": 3.916940184919551,
+              "observer_id": "camera_front_right",
+              "marker_id": 12,
+              "frame_id": "static",
+              "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_front_right.png"
+            }
+          }
+        ],
+        "path_length": 7,
+        "path_bottleneck_score": 2.174621328348062,
+        "path_mean_score": 11.801963968631473,
+        "weakest_edge": {
+          "from": "marker:8",
+          "to": "observer:camera_center_left",
+          "observation": {
+            "selection_score": 2.174621328348062,
+            "pnp_reprojection_rmse_px": 1.7751496590168854,
+            "marker_area_ratio": 0.0005316144534382618,
+            "area_px2": 1251.5139875374734,
+            "distance_m": 4.461930343293276,
+            "observer_id": "camera_center_left",
+            "marker_id": 8,
+            "frame_id": "static",
+            "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+          }
+        },
+        "initial_pose": [
+          [
+            -0.8496999628240406,
+            -0.05456610336757575,
+            0.5244354236129587,
+            -1.4032215985633365
+          ],
+          [
+            0.4844722659236771,
+            0.31171970334024246,
+            0.8173845178985534,
+            -7.194764256936546
+          ],
+          [
+            -0.20807834276445408,
+            0.9486060124797601,
+            -0.2384324565986097,
+            2.503237020433926
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "explicit_cam_edge_5_evidence": false
+    }
+  }
+}

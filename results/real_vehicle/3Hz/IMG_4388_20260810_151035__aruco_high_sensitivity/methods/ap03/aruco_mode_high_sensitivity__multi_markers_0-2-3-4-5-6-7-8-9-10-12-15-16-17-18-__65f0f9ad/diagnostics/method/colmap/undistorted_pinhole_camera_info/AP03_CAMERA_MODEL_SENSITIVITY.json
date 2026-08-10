@@ -1,0 +1,36 @@
+{
+  "diagnostic_camera_info": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/colmap/undistorted_pinhole_camera_info/camera_info/moving_calib_camera.json",
+  "distortion_used_by_colmap": false,
+  "distortion_used_for_preprocessing": true,
+  "ground_truth_used": false,
+  "image_preprocessing": "opencv_undistort_same_intrinsic_matrix",
+  "intrinsic_terms_preserved": [
+    "fx",
+    "fy",
+    "cx",
+    "cy"
+  ],
+  "moving_camera_id": "moving_calib_camera",
+  "original_camera_info": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/camera_info/moving_calib_camera.json",
+  "original_distortion": {
+    "D": [
+      0.23999743083214609,
+      -1.6358069039702752,
+      -4.4934225898476364e-05,
+      0.0017468931619849986,
+      3.7166088637899355
+    ],
+    "d": [
+      0.23999743083214609,
+      -1.6358069039702752,
+      -4.4934225898476364e-05,
+      0.0017468931619849986,
+      3.7166088637899355
+    ],
+    "distortion_model": "plumb_bob"
+  },
+  "original_files_modified": false,
+  "policy": "moving_undistorted_pinhole_v1",
+  "schema_version": 5,
+  "scope": "ap03_colmap_moving_camera_only"
+}

@@ -1,0 +1,19 @@
+{
+  "completed_at": "2026-08-10T21:01:43.160+00:00",
+  "inputs": {
+    "multi_scale": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/scale_multi",
+    "single_scale": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/scale_single"
+  },
+  "outputs": {
+    "json_report": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/AP03_REPORT.json",
+    "method_status": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/METHOD_STATUS.json",
+    "status": "OK",
+    "text_report": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/AP03_REPORT.txt"
+  },
+  "parameters": {},
+  "runtime_seconds": 0.0019368760113138705,
+  "schema_version": 5,
+  "stage_id": "ap03.report",
+  "started_at": "2026-08-10T21:01:43.158+00:00",
+  "status": "COMPLETED"
+}

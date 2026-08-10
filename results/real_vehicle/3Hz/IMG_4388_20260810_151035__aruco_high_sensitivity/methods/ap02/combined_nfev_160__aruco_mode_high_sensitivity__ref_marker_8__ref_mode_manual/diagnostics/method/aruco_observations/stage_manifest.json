@@ -1,0 +1,37 @@
+{
+  "completed_at": "2026-08-10T17:14:57.344+00:00",
+  "inputs": {
+    "quality_accepted_observations": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01/20260810_171451_combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_auto__ref_mode_manual_a0d1273b/preflight/observations/shared_all_aruco_observations.csv"
+  },
+  "outputs": {
+    "accepted_observations": 369,
+    "component_manifest": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01/20260810_171451_combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_auto__ref_mode_manual_a0d1273b/03_AP02/02_aruco_observations/component_manifest.json",
+    "graph_summary": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01/20260810_171451_combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_auto__ref_mode_manual_a0d1273b/03_AP02/02_aruco_observations/graph_summary.json",
+    "observations": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap02__combined_nfev_160__ref_marker_auto__ref_mode_manual__ref_manual__01/20260810_171451_combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_auto__ref_mode_manual_a0d1273b/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv",
+    "selected_moving_frames": 182
+  },
+  "parameters": {
+    "frame_selection": {
+      "maximum_total_frames": null,
+      "reference_marker_maximum_frames": null,
+      "top_per_marker": 8,
+      "top_per_marker_pair": 4
+    },
+    "graph_observation_policy": "legacy_quality_valid_all_observations_v1",
+    "historical_reproduction": false,
+    "method_contract": {
+      "name": "baseline_v1",
+      "reference_marker_policy": "baseline",
+      "root_pose_policy": "reference_marker_identity_v1"
+    },
+    "method_contract_sha256": "5cdabfca70ea3b855540364a96f9812e536d47e3922a908c1a778c745480742f",
+    "observation_input_mode": "fresh_dataset_derived_observations",
+    "reference_marker_id": 8,
+    "weighted_graph": false
+  },
+  "runtime_seconds": 0.17280796200793702,
+  "schema_version": 5,
+  "stage_id": "ap02.build_graph",
+  "started_at": "2026-08-10T17:14:57.171+00:00",
+  "status": "COMPLETED"
+}

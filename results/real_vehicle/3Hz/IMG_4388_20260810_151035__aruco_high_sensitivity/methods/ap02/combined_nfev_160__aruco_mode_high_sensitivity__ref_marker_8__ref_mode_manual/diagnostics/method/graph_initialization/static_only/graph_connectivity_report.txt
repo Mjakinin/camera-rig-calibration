@@ -1,0 +1,29 @@
+AP02 main-compatible widest-path pose graph initialization
+==========================================================
+
+Mode: static_only
+Reference marker id: 8
+Productive algorithm: legacy_maximum_bottleneck_v1
+Diagnostics: maximum_bottleneck_v2, unweighted_first_hit_bfs_diagnostic
+
+Raw observations in mode: 21
+Observer-marker initialization edges: 21
+Used initialization edges: 11
+
+Initialized static cameras: 3 / 8
+Initialized moving frames: 0 / 0
+Initialized markers: 9 / 16
+
+Initialized static cameras: ['camera_back_left', 'camera_center_left', 'camera_center_right']
+Missing static cameras: ['camera_back_center', 'camera_front_left', 'camera_front_narrow', 'camera_front_right', 'camera_front_wide']
+
+Initialized markers: [2, 3, 4, 5, 6, 8, 15, 20, 37]
+Missing markers: [0, 7, 9, 10, 12, 17, 19]
+
+Missing moving frames count: 0
+
+Interpretation:
+- Productive BA poses use the validated main-compatible maximum frontier tree from the configured reference marker.
+- First-hit BFS is retained only in diagnostics and never initializes bundle adjustment.
+- Ground truth is not read by either initialization.
+

@@ -1,0 +1,502 @@
+[
+  {
+    "camera_id": "camera_back_left",
+    "initialization_algorithm": "maximum_bottleneck_v2",
+    "selected_graph_path": [
+      {
+        "from": "marker:8",
+        "to": "observer:moving_frame_000188",
+        "observation": {
+          "selection_score": 6.387680352756758,
+          "pnp_reprojection_rmse_px": 0.9259982735770929,
+          "marker_area_ratio": 0.001221881607338286,
+          "area_px2": 2533.69370097667,
+          "distance_m": 4.512780259459374,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 8,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "observer:moving_frame_000188",
+        "to": "marker:2",
+        "observation": {
+          "selection_score": 7.169681913511324,
+          "pnp_reprojection_rmse_px": 0.9303161513634244,
+          "marker_area_ratio": 0.0014547654664860557,
+          "area_px2": 3016.601671305485,
+          "distance_m": 4.2267290858464674,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 2,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "marker:2",
+        "to": "observer:camera_back_left",
+        "observation": {
+          "selection_score": 1.5001483600425238,
+          "pnp_reprojection_rmse_px": 1.1589545389222642,
+          "marker_area_ratio": 0.00016304238168962754,
+          "area_px2": 383.8304619565606,
+          "distance_m": 7.409364219981579,
+          "observer_id": "camera_back_left",
+          "marker_id": 2,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 1.5001483600425238,
+    "path_mean_score": 5.019170208770202,
+    "weakest_edge": {
+      "from": "marker:2",
+      "to": "observer:camera_back_left",
+      "observation": {
+        "selection_score": 1.5001483600425238,
+        "pnp_reprojection_rmse_px": 1.1589545389222642,
+        "marker_area_ratio": 0.00016304238168962754,
+        "area_px2": 383.8304619565606,
+        "distance_m": 7.409364219981579,
+        "observer_id": "camera_back_left",
+        "marker_id": 2,
+        "frame_id": "static",
+        "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_back_left.png"
+      }
+    },
+    "initial_pose": [
+      [
+        0.343523346669949,
+        -0.0712281815344964,
+        -0.9364391365422348,
+        4.563792327437187
+      ],
+      [
+        0.9389100836927823,
+        0.003787519171931189,
+        0.34414169965079,
+        -5.3662756165198715
+      ],
+      [
+        -0.020965806273316158,
+        -0.9974528564567904,
+        0.06817795914735691,
+        3.1024335263733773
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "camera_center_left",
+    "initialization_algorithm": "maximum_bottleneck_v2",
+    "selected_graph_path": [
+      {
+        "from": "marker:8",
+        "to": "observer:moving_frame_000188",
+        "observation": {
+          "selection_score": 6.387680352756758,
+          "pnp_reprojection_rmse_px": 0.9259982735770929,
+          "marker_area_ratio": 0.001221881607338286,
+          "area_px2": 2533.69370097667,
+          "distance_m": 4.512780259459374,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 8,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "observer:moving_frame_000188",
+        "to": "marker:2",
+        "observation": {
+          "selection_score": 7.169681913511324,
+          "pnp_reprojection_rmse_px": 0.9303161513634244,
+          "marker_area_ratio": 0.0014547654664860557,
+          "area_px2": 3016.601671305485,
+          "distance_m": 4.2267290858464674,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 2,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "marker:2",
+        "to": "observer:camera_center_left",
+        "observation": {
+          "selection_score": 11.13158051738139,
+          "pnp_reprojection_rmse_px": 0.11954717126931697,
+          "marker_area_ratio": 0.0004012369335941833,
+          "area_px2": 944.5823593810201,
+          "distance_m": 4.852399828643446,
+          "observer_id": "camera_center_left",
+          "marker_id": 2,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      }
+    ],
+    "path_length": 3,
+    "path_bottleneck_score": 6.387680352756758,
+    "path_mean_score": 8.229647594549824,
+    "weakest_edge": {
+      "from": "marker:8",
+      "to": "observer:moving_frame_000188",
+      "observation": {
+        "selection_score": 6.387680352756758,
+        "pnp_reprojection_rmse_px": 0.9259982735770929,
+        "marker_area_ratio": 0.001221881607338286,
+        "area_px2": 2533.69370097667,
+        "distance_m": 4.512780259459374,
+        "observer_id": "moving_frame_000188",
+        "marker_id": 8,
+        "frame_id": "188",
+        "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.022154149644940103,
+        0.820080184252863,
+        -0.5718196263239829,
+        2.2886328054540246
+      ],
+      [
+        0.9994889302897771,
+        0.031351863121010126,
+        0.006240104729854138,
+        0.25148087494766735
+      ],
+      [
+        0.023044996891032708,
+        -0.5713891424192721,
+        -0.8203556399779677,
+        3.912351549474378
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "camera_center_right",
+    "initialization_algorithm": "maximum_bottleneck_v2",
+    "selected_graph_path": [
+      {
+        "from": "marker:8",
+        "to": "observer:moving_frame_000188",
+        "observation": {
+          "selection_score": 6.387680352756758,
+          "pnp_reprojection_rmse_px": 0.9259982735770929,
+          "marker_area_ratio": 0.001221881607338286,
+          "area_px2": 2533.69370097667,
+          "distance_m": 4.512780259459374,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 8,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "observer:moving_frame_000188",
+        "to": "marker:2",
+        "observation": {
+          "selection_score": 7.169681913511324,
+          "pnp_reprojection_rmse_px": 0.9303161513634244,
+          "marker_area_ratio": 0.0014547654664860557,
+          "area_px2": 3016.601671305485,
+          "distance_m": 4.2267290858464674,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 2,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "marker:2",
+        "to": "observer:camera_center_left",
+        "observation": {
+          "selection_score": 11.13158051738139,
+          "pnp_reprojection_rmse_px": 0.11954717126931697,
+          "marker_area_ratio": 0.0004012369335941833,
+          "area_px2": 944.5823593810201,
+          "distance_m": 4.852399828643446,
+          "observer_id": "camera_center_left",
+          "marker_id": 2,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "observer:camera_center_left",
+        "to": "marker:37",
+        "observation": {
+          "selection_score": 12.56457816982507,
+          "pnp_reprojection_rmse_px": 0.8407632956490936,
+          "marker_area_ratio": 0.0015929140387124837,
+          "area_px2": 3750.0,
+          "distance_m": 2.0689198117630796,
+          "observer_id": "camera_center_left",
+          "marker_id": 37,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "marker:37",
+        "to": "observer:camera_center_right",
+        "observation": {
+          "selection_score": 29.953494392621955,
+          "pnp_reprojection_rmse_px": 0.2698350782801159,
+          "marker_area_ratio": 0.0019352995037462152,
+          "area_px2": 4556.03564453125,
+          "distance_m": 1.9530027003963335,
+          "observer_id": "camera_center_right",
+          "marker_id": 37,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+        }
+      }
+    ],
+    "path_length": 5,
+    "path_bottleneck_score": 6.387680352756758,
+    "path_mean_score": 13.4414030692193,
+    "weakest_edge": {
+      "from": "marker:8",
+      "to": "observer:moving_frame_000188",
+      "observation": {
+        "selection_score": 6.387680352756758,
+        "pnp_reprojection_rmse_px": 0.9259982735770929,
+        "marker_area_ratio": 0.001221881607338286,
+        "area_px2": 2533.69370097667,
+        "distance_m": 4.512780259459374,
+        "observer_id": "moving_frame_000188",
+        "marker_id": 8,
+        "frame_id": "188",
+        "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.0031516164675322238,
+        -0.8144880200625434,
+        -0.5801718129039355,
+        2.313312419565232
+      ],
+      [
+        -0.9971701831809012,
+        0.04613755198361193,
+        -0.059354461263911175,
+        0.2966812912956981
+      ],
+      [
+        0.07511120481400381,
+        0.5783429704522718,
+        -0.8123285760330187,
+        3.74484444700499
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  {
+    "camera_id": "camera_front_right",
+    "initialization_algorithm": "maximum_bottleneck_v2",
+    "selected_graph_path": [
+      {
+        "from": "marker:8",
+        "to": "observer:moving_frame_000188",
+        "observation": {
+          "selection_score": 6.387680352756758,
+          "pnp_reprojection_rmse_px": 0.9259982735770929,
+          "marker_area_ratio": 0.001221881607338286,
+          "area_px2": 2533.69370097667,
+          "distance_m": 4.512780259459374,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 8,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "observer:moving_frame_000188",
+        "to": "marker:2",
+        "observation": {
+          "selection_score": 7.169681913511324,
+          "pnp_reprojection_rmse_px": 0.9303161513634244,
+          "marker_area_ratio": 0.0014547654664860557,
+          "area_px2": 3016.601671305485,
+          "distance_m": 4.2267290858464674,
+          "observer_id": "moving_frame_000188",
+          "marker_id": 2,
+          "frame_id": "188",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000188.png"
+        }
+      },
+      {
+        "from": "marker:2",
+        "to": "observer:camera_center_left",
+        "observation": {
+          "selection_score": 11.13158051738139,
+          "pnp_reprojection_rmse_px": 0.11954717126931697,
+          "marker_area_ratio": 0.0004012369335941833,
+          "area_px2": 944.5823593810201,
+          "distance_m": 4.852399828643446,
+          "observer_id": "camera_center_left",
+          "marker_id": 2,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "observer:camera_center_left",
+        "to": "marker:37",
+        "observation": {
+          "selection_score": 12.56457816982507,
+          "pnp_reprojection_rmse_px": 0.8407632956490936,
+          "marker_area_ratio": 0.0015929140387124837,
+          "area_px2": 3750.0,
+          "distance_m": 2.0689198117630796,
+          "observer_id": "camera_center_left",
+          "marker_id": 37,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_left.png"
+        }
+      },
+      {
+        "from": "marker:37",
+        "to": "observer:camera_center_right",
+        "observation": {
+          "selection_score": 29.953494392621955,
+          "pnp_reprojection_rmse_px": 0.2698350782801159,
+          "marker_area_ratio": 0.0019352995037462152,
+          "area_px2": 4556.03564453125,
+          "distance_m": 1.9530027003963335,
+          "observer_id": "camera_center_right",
+          "marker_id": 37,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+        }
+      },
+      {
+        "from": "observer:camera_center_right",
+        "to": "marker:4",
+        "observation": {
+          "selection_score": 18.80182139320025,
+          "pnp_reprojection_rmse_px": 0.3008624008767849,
+          "marker_area_ratio": 0.0014584042093346756,
+          "area_px2": 3433.3401879146695,
+          "distance_m": 3.391497849264363,
+          "observer_id": "camera_center_right",
+          "marker_id": 4,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_center_right.png"
+        }
+      },
+      {
+        "from": "marker:4",
+        "to": "observer:moving_frame_000049",
+        "observation": {
+          "selection_score": 8.926857748706878,
+          "pnp_reprojection_rmse_px": 0.1875122040910381,
+          "marker_area_ratio": 0.0004364739511902933,
+          "area_px2": 905.0723851881921,
+          "distance_m": 5.711284039066219,
+          "observer_id": "moving_frame_000049",
+          "marker_id": 4,
+          "frame_id": "49",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000049.png"
+        }
+      },
+      {
+        "from": "observer:moving_frame_000049",
+        "to": "marker:12",
+        "observation": {
+          "selection_score": 9.768479166596224,
+          "pnp_reprojection_rmse_px": 2.015280494552993,
+          "marker_area_ratio": 0.00845875226869176,
+          "area_px2": 17540.068704359233,
+          "distance_m": 2.223650393301857,
+          "observer_id": "moving_frame_000049",
+          "marker_id": 12,
+          "frame_id": "49",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/moving/frame_000049.png"
+        }
+      },
+      {
+        "from": "marker:12",
+        "to": "observer:camera_front_right",
+        "observation": {
+          "selection_score": 4.583498326332541,
+          "pnp_reprojection_rmse_px": 1.2473547539144185,
+          "marker_area_ratio": 0.0008916382639887737,
+          "area_px2": 2099.073401764035,
+          "distance_m": 3.916940184919551,
+          "observer_id": "camera_front_right",
+          "marker_id": 12,
+          "frame_id": "static",
+          "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_front_right.png"
+        }
+      }
+    ],
+    "path_length": 9,
+    "path_bottleneck_score": 4.583498326332541,
+    "path_mean_score": 12.143074664548045,
+    "weakest_edge": {
+      "from": "marker:12",
+      "to": "observer:camera_front_right",
+      "observation": {
+        "selection_score": 4.583498326332541,
+        "pnp_reprojection_rmse_px": 1.2473547539144185,
+        "marker_area_ratio": 0.0008916382639887737,
+        "area_px2": 2099.073401764035,
+        "distance_m": 3.916940184919551,
+        "observer_id": "camera_front_right",
+        "marker_id": 12,
+        "frame_id": "static",
+        "image_path": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/dataset/raw_images/static/camera_front_right.png"
+      }
+    },
+    "initial_pose": [
+      [
+        -0.025304633069142372,
+        -0.9925372895167003,
+        -0.11928706746364906,
+        0.9160079533714549
+      ],
+      [
+        -0.829163521620484,
+        0.08749497081597829,
+        -0.5521163686179118,
+        7.853640351998406
+      ],
+      [
+        0.5584331024922806,
+        0.08493738282259555,
+        -0.8251897424472102,
+        4.109770963467334
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  }
+]

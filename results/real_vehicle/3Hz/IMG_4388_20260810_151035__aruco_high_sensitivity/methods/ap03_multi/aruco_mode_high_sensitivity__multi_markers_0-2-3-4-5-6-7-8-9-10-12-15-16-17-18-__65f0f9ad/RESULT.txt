@@ -1,0 +1,107 @@
+RIGCAL CALIBRATION RESULT
+======================================================================================================================
+
+Method / variant: ap03_multi / aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
+Execution status: completed_shared_colmap
+Solver status: not_applicable
+Artifact status: available
+Calibration status: available
+Quality status: poor_scale_dispersion
+Evaluation status: available
+Anchor export status: PARTIAL_CAMERA_COVERAGE
+RViz visualization status: OK
+Primary result: multi
+Runtime: 11979.0 s
+Reference frame: COLMAP gauge with metric marker scale
+Transform convention: T_reference_camera (camera pose expressed in reference frame)
+Configuration: baseline_version=baseline_v1, evaluation_anchor_marker_id=0, quality_area_ratio=0.000008, quality_pnp_rmse_px=25.0, quality_positive_depth=true, quality_max_distance_m=disabled, aruco_detection_mode=high_sensitivity, feature_limits=COLMAP defaults, scale_input=registered-image detection, minimum_marker_area_px2=100.0, single_scale_marker_id=0, multi_marker_count=17, matcher=exhaustive, compute_configured=cpu_baseline, compute_resolved=cpu_baseline, mapper_minimum_matches=8, scale_reprojection_threshold_px=5.0, scale_ransac_iterations=1000, scale_minimum_inliers=4
+
+WARNINGS
+----------------------------------------------------------------------------------------------------------------------
+- AP03 reconstruction support warnings: camera_back_center:unregistered_static_camera.
+- AP03 Multi scale relative standard deviation is 71.48% (poor: >10%).
+
+COMMON EVALUATION / EXPORT ANCHOR
+----------------------------------------------------------------------------------------------------------------------
+Marker: 0; export status: PARTIAL_CAMERA_COVERAGE
+Camera              | x [m]  | y [m]   | z [m]  | roll [rad] | pitch [rad] | yaw [rad] | qx        | qy        | qz        | qw
+--------------------+--------+---------+--------+------------+-------------+-----------+-----------+-----------+-----------+---------
+camera_back_left    | 0.839  | 7.290   | 1.372  | -1.481     | -0.202      | -2.420    | -0.306625 | 0.601899  | -0.710992 | 0.195420
+camera_back_right   | -2.313 | -1.878  | -1.069 | -1.458     | 0.053       | 2.085     | -0.352872 | -0.564971 | 0.652830  | 0.360697
+camera_center_left  | 0.487  | 3.439   | 3.430  | -2.683     | -0.149      | -1.600    | -0.688731 | 0.684915  | -0.213023 | 0.105650
+camera_center_right | -4.390 | -3.299  | 4.881  | -3.007     | -0.301      | 1.492     | -0.717598 | -0.676949 | -0.064564 | 0.150413
+camera_front_left   | -0.272 | -2.694  | 1.466  | -2.145     | 0.243       | -0.717    | -0.796135 | 0.360371  | -0.066573 | 0.481528
+camera_front_narrow | -4.814 | -11.146 | 3.218  | -1.625     | -0.024      | -3.053    | -0.040362 | 0.724836  | -0.687393 | 0.021768
+camera_front_right  | 17.180 | -25.791 | 24.594 | -2.435     | 0.511       | 1.326     | -0.769181 | -0.489881 | 0.392998  | 0.118027
+camera_front_wide   | -5.389 | -11.190 | 3.690  | -2.036     | -0.046      | -3.010    | -0.068103 | 0.848122  | -0.525190 | 0.015080
+Full exports: camera_extrinsics_anchor.csv, camera_extrinsics_anchor.json, camera_extrinsics_anchor.yaml
+
+AP03 COLMAP / RANSAC / SCALE DIAGNOSTICS
+----------------------------------------------------------------------------------------------------------------------
+Registered images/static cameras: 262/8; moving frames=254; best model=0; sparse points=56934; triangulated corners=68
+Scale observations used/total: 102/102; scale=5.477845 m/COLMAP-unit; relative std=0.714770
+Camera              | Registered | Group | Tracks | Moving tracks | Reproj RMSE [px] | Warnings
+--------------------+------------+-------+--------+---------------+------------------+---------------------------
+camera_back_center  | false      | None  | 0      | 0             | -                | unregistered_static_camera
+camera_back_left    | true       | 2     | 115    | 115           | 1.287            | none
+camera_back_right   | true       | 3     | 79     | 79            | 1.667            | none
+camera_center_left  | true       | 4     | 51     | 51            | 1.163            | none
+camera_center_right | true       | 5     | 112    | 112           | 1.209            | none
+camera_front_left   | true       | 6     | 108    | 108           | 1.264            | none
+camera_front_narrow | true       | 7     | 199    | 199           | 1.199            | none
+camera_front_right  | true       | 8     | 132    | 132           | 1.476            | none
+camera_front_wide   | true       | 9     | 282    | 282           | 1.321            | none
+Camera groups: {"assignment": {"camera_back_left": [2], "camera_back_right": [3], "camera_center_left": [4], "camera_center_right": [5], "camera_front_left": [6], "camera_front_narrow": [7], "camera_front_right": [8], "camera_front_wide": [9], "moving_calib_camera": [10]}, "intrinsics_refinement": false, "one_camera_id_per_physical_camera": true, "physical_camera_ids_are_distinct": true}
+Ground truth used by these diagnostics: no
+
+FINAL STATIC-CAMERA POSES
+----------------------------------------------------------------------------------------------------------------------
+Camera              | Source                              | x [m]  | y [m]  | z [m]  | roll [deg] | pitch [deg] | yaw [deg]
+--------------------+-------------------------------------+--------+--------+--------+------------+-------------+----------
+camera_back_left    | ap03_multi_scale_from_shared_colmap | -0.333 | 0.381  | -5.228 | -13.642    | -22.072     | -2.850
+camera_back_right   | ap03_multi_scale_from_shared_colmap | 5.906  | 5.486  | 0.685  | -62.725    | 70.121      | -66.264
+camera_center_left  | ap03_multi_scale_from_shared_colmap | 1.449  | -0.229 | -1.273 | -96.134    | -63.777     | 27.437
+camera_center_right | ap03_multi_scale_from_shared_colmap | 8.486  | 0.209  | 3.374  | 152.963    | 43.328      | -124.523
+camera_front_left   | ap03_multi_scale_from_shared_colmap | 4.360  | 3.651  | 3.031  | -160.041   | -45.740     | 130.357
+camera_front_narrow | ap03_multi_scale_from_shared_colmap | 11.718 | 4.447  | 9.383  | -25.883    | 15.159      | -6.361
+camera_front_right  | ap03_multi_scale_from_shared_colmap | -2.920 | -7.760 | 37.524 | 125.544    | 56.736      | 160.454
+camera_front_wide   | ap03_multi_scale_from_shared_colmap | 12.279 | 3.957  | 9.394  | -49.387    | 12.385      | -6.572
+
+PAIRWISE CAMERA-TO-CAMERA EXTRINSICS
+----------------------------------------------------------------------------------------------------------------------
+Pair                                    | tx [m]  | ty [m]  | tz [m]  | roll [deg] | pitch [deg] | yaw [deg] | baseline [m]
+----------------------------------------+---------+---------+---------+------------+-------------+-----------+-------------
+camera_back_left-camera_back_right      | 7.761   | 4.494   | 4.419   | -164.437   | 76.956      | -160.196  | 9.998
+camera_back_left-camera_center_left     | 3.164   | -1.210  | 2.779   | -62.093    | -46.145     | 4.495     | 4.381
+camera_back_left-camera_center_right    | 11.403  | -0.839  | 4.591   | 119.150    | 38.644      | -141.566  | 12.321
+camera_back_left-camera_front_left      | 7.296   | 1.996   | 6.611   | -142.253   | -69.957     | 120.446   | 10.046
+camera_back_left-camera_front_narrow    | 16.457  | 2.384   | 9.937   | -10.419    | 36.960      | 6.114     | 19.371
+camera_back_left-camera_front_right     | 14.046  | -17.564 | 37.349  | 117.376    | 31.600      | 160.142   | 43.597
+camera_back_left-camera_front_wide      | 17.003  | 1.985   | 9.624   | -34.535    | 34.335      | 4.978     | 19.638
+camera_back_right-camera_center_left    | 3.010   | -5.206  | -4.494  | 118.644    | -31.294     | -176.967  | 7.507
+camera_back_right-camera_center_right   | -0.533  | -5.610  | 3.160   | -100.368   | 29.463      | -27.052   | 6.461
+camera_back_right-camera_front_left     | -1.846  | -2.580  | -1.093  | 148.803    | 20.734      | 164.429   | 3.356
+camera_back_right-camera_front_narrow   | -7.061  | -3.133  | 7.131   | -15.757    | -65.514     | 7.924     | 10.513
+camera_back_right-camera_front_right    | -31.728 | -24.446 | -2.485  | -31.636    | 40.336      | 30.253    | 40.130
+camera_back_right-camera_front_wide     | -6.842  | -3.555  | 7.704   | -37.501    | -68.199     | 6.066     | 10.900
+camera_center_left-camera_center_right  | 7.017   | 4.014   | -2.439  | 36.570     | 21.663      | -165.375  | 8.444
+camera_center_left-camera_front_left    | 5.792   | 1.783   | 2.306   | 43.885     | -38.872     | -42.554   | 6.484
+camera_center_left-camera_front_narrow  | 14.538  | 5.431   | -0.001  | 75.017     | 26.398      | 82.312    | 15.519
+camera_center_left-camera_front_right   | 31.556  | -23.100 | -7.181  | 70.709     | -23.725     | -179.420  | 39.761
+camera_center_left-camera_front_wide    | 14.668  | 5.743   | -0.665  | 50.205     | 27.093      | 79.295    | 15.767
+camera_center_right-camera_front_left   | -0.126  | 4.497   | 2.958   | 48.121     | 2.666       | 128.648   | 5.384
+camera_center_right-camera_front_narrow | -7.995  | 0.094   | -0.759  | 105.111    | -3.500      | -98.756   | 8.032
+camera_center_right-camera_front_right  | -13.954 | 19.704  | -27.872 | 25.900     | -44.107     | 19.500    | 36.875
+camera_center_right-camera_front_wide   | -7.941  | -0.534  | -1.155  | 81.743     | -1.523      | -100.715  | 8.042
+camera_front_left-camera_front_narrow   | 1.648   | 3.225   | -9.056  | 139.598    | 31.826      | 142.901   | 9.753
+camera_front_left-camera_front_right    | 21.924  | -21.350 | -20.891 | 116.660    | -74.123     | 168.044   | 37.054
+camera_front_left-camera_front_wide     | 1.142   | 3.146   | -9.597  | 115.814    | 34.562      | 142.298   | 10.164
+camera_front_narrow-camera_front_right  | -20.095 | -22.724 | 15.328  | 73.098     | 52.857      | 119.443   | 33.988
+camera_front_narrow-camera_front_wide   | 0.588   | -0.457  | -0.032  | -23.425    | -2.406      | -1.397    | 0.745
+camera_front_right-camera_front_wide    | 17.814  | -10.257 | 27.148  | 54.628     | -45.190     | -119.099  | 34.052
+
+DETAIL ARTIFACTS
+----------------------------------------------------------------------------------------------------------------------
+- ../../../methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/method/scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json
+- methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/method/colmap/inspection/AP03_RECONSTRUCTION_DIAGNOSTICS.json
+- provenance/derived_result.json

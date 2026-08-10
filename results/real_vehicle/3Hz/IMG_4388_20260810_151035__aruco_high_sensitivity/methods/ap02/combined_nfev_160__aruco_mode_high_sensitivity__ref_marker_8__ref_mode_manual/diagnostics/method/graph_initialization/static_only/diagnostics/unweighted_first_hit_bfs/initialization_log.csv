@@ -1,0 +1,12 @@
+initialization_algorithm,initialized_type,initialized_id,from_type,from_id,observed_marker_id,observer_id,frame_id,edge_quality,path_length,path_bottleneck_score,pnp_reprojection_rmse_px,area_px2,distance_m
+unweighted_first_hit_bfs_diagnostic,observer,camera_back_left,marker,8,8,camera_back_left,static,0.660250890329944,1,0.660250890329944,1.7544862023578374,405.4950620755553,7.36228659671688
+unweighted_first_hit_bfs_diagnostic,observer,camera_center_left,marker,8,8,camera_center_left,static,2.174621328348062,1,2.174621328348062,1.7751496590168854,1251.5139875374734,4.461930343293276
+unweighted_first_hit_bfs_diagnostic,marker,2,observer,camera_back_left,2,camera_back_left,static,1.5001483600425238,2,0.660250890329944,1.1589545389222642,383.8304619565606,7.409364219981579
+unweighted_first_hit_bfs_diagnostic,marker,6,observer,camera_center_left,6,camera_center_left,static,1.943110790720192,2,1.943110790720192,1.7301810536251434,995.5535013526678,4.745737177550554
+unweighted_first_hit_bfs_diagnostic,marker,15,observer,camera_center_left,15,camera_center_left,static,23.15838545199387,2,2.174621328348062,0.1386749185773539,3279.808459099382,3.6377504820260165
+unweighted_first_hit_bfs_diagnostic,marker,37,observer,camera_center_left,37,camera_center_left,static,12.56457816982507,2,2.174621328348062,0.8407632956490936,3750.0,2.0689198117630796
+unweighted_first_hit_bfs_diagnostic,observer,camera_center_right,marker,37,37,camera_center_right,static,29.953494392621955,3,2.174621328348062,0.2698350782801159,4556.03564453125,1.9530027003963335
+unweighted_first_hit_bfs_diagnostic,marker,3,observer,camera_center_right,3,camera_center_right,static,4.951172118405906,4,2.174621328348062,0.6311496495823368,885.7255943119526,5.103967704719091
+unweighted_first_hit_bfs_diagnostic,marker,4,observer,camera_center_right,4,camera_center_right,static,18.80182139320025,4,2.174621328348062,0.3008624008767849,3433.3401879146695,3.391497849264363
+unweighted_first_hit_bfs_diagnostic,marker,5,observer,camera_center_right,5,camera_center_right,static,22.7564273825311,4,2.174621328348062,0.1840499431885821,3508.321316629648,3.4467605530439736
+unweighted_first_hit_bfs_diagnostic,marker,20,observer,camera_center_right,20,camera_center_right,static,1.9831008812487332,4,1.9831008812487332,1.9007502325504422,1232.121248908341,4.425093885674544

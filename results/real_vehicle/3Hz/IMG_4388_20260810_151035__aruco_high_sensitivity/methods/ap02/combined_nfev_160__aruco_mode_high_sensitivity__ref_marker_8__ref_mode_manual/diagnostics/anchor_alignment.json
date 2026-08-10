@@ -1,0 +1,37 @@
+{
+  "alignment": {
+    "marker_pose_file": "/workspaces/project/results/real_vehicle/3Hz/IMG_4388_20260810_151035__aruco_high_sensitivity/methods/ap02/combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_8__ref_mode_manual/diagnostics/method/graph_ba/with_moving/optimized_marker_poses_ref_marker.csv",
+    "method": "ap02"
+  },
+  "anchor_marker_id": 0,
+  "contract": "rigcal_anchor_export_v1",
+  "fingerprint": "0de37e57c579136d9d30c4c4d4b6aa50c4e0373bfaa342ae0bda28c15d967490",
+  "label": "combined_nfev_160__aruco_mode_high_sensitivity__ref_marker_8__ref_mode_manual",
+  "method": "ap02",
+  "pairwise_invariance": {
+    "passed": false,
+    "reason": "anchor transform unavailable"
+  },
+  "schema_version": 1,
+  "status": {
+    "available": false,
+    "camera_count": 0,
+    "code": "ANCHOR_NOT_RECONSTRUCTED",
+    "expected_camera_count": 9,
+    "manual_warning_confirmed": false,
+    "missing_cameras": [
+      "camera_back_center",
+      "camera_back_left",
+      "camera_back_right",
+      "camera_center_left",
+      "camera_center_right",
+      "camera_front_left",
+      "camera_front_narrow",
+      "camera_front_right",
+      "camera_front_wide"
+    ],
+    "warnings": [
+      "The AP02 Combined BA result has no pose for the selected anchor."
+    ]
+  }
+}

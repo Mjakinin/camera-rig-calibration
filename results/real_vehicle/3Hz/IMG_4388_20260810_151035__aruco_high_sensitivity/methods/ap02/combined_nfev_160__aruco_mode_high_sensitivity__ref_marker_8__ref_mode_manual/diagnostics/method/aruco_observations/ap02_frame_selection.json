@@ -1,0 +1,3459 @@
+{
+  "frames": [
+    {
+      "frame_id": "moving_frame_000000",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 40.76923130147755,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000001",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 39.85476505185126,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000002",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 40.072234879608544,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000003",
+      "marker_count": 3,
+      "marker_ids": [
+        7,
+        9,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 47.32469283274973,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000004",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 43.407919942125744,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000005",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 47.669060587312465,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000006",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 52.745085566097764,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000007",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 54.422078794595876,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000008",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 55.045692620208825,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000009",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 57.897648916110064,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000010",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 59.16317292850353,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000011",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 66.09161598549565,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000012",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 62.587028148715845,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000013",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 60.4637775104903,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000014",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 86.6080320980891,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000015",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 54.72600981830785,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000016",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 54.881313780310414,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000035",
+      "marker_count": 1,
+      "marker_ids": [
+        12
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 5.04282750726044,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000036",
+      "marker_count": 1,
+      "marker_ids": [
+        12
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.85658044405713,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000037",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 9.59130516163005,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000038",
+      "marker_count": 1,
+      "marker_ids": [
+        12
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 6.099269638777272,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000039",
+      "marker_count": 1,
+      "marker_ids": [
+        12
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 5.324317529945543,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000040",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 10.29981854593539,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000041",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 9.269507891381249,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000042",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 5.513789016811967,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000043",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 5.475569865037977,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000044",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.24304694668796,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000045",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 15.753625584401423,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000046",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.488881070281785,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000047",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 21.419192206013108,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000048",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 16.689843672356126,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000049",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 24.95531267879828,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000050",
+      "marker_count": 2,
+      "marker_ids": [
+        12,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 14.737304864499906,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000051",
+      "marker_count": 2,
+      "marker_ids": [
+        4,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 6.480264494069531,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000052",
+      "marker_count": 2,
+      "marker_ids": [
+        4,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.502308049982176,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000053",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 10.614780135560242,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000054",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.374201188417643,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000055",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 26.53638067971382,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000056",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 21.236634163743247,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000057",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 17.07656815784851,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000058",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.93544019945532,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000059",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        18
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 26.970081073238163,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000060",
+      "marker_count": 2,
+      "marker_ids": [
+        5,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 7.982352841085815,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000061",
+      "marker_count": 4,
+      "marker_ids": [
+        3,
+        4,
+        5,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.02071875804814,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000062",
+      "marker_count": 4,
+      "marker_ids": [
+        3,
+        4,
+        5,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 33.81183609885793,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000063",
+      "marker_count": 3,
+      "marker_ids": [
+        3,
+        5,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.590319638901178,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000064",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 10.373897053682573,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000065",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.493107557055794,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000066",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.672582344280265,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000067",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 23.427685373879967,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000068",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 27.311647099083082,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000069",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.17421923138106,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000070",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 16.31500124419463,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000071",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 21.941621098735197,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000072",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 15.949790646449003,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000073",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.05496490388054,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000074",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 29.067758633607124,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000075",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 27.09296532883231,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000076",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 16.7821544738917,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000077",
+      "marker_count": 1,
+      "marker_ids": [
+        3
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.188739221712279,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000078",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 13.817316718945733,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000079",
+      "marker_count": 1,
+      "marker_ids": [
+        3
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 13.804362695656465,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000080",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 17.91260327734695,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000081",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 29.291329295982578,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000082",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 33.35606178700794,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000083",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 30.266821540470183,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000084",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.361793549318786,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000085",
+      "marker_count": 2,
+      "marker_ids": [
+        3,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.3431883181623,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000086",
+      "marker_count": 1,
+      "marker_ids": [
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 2.8917802624424636,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000087",
+      "marker_count": 1,
+      "marker_ids": [
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 3.703792043877498,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000088",
+      "marker_count": 1,
+      "marker_ids": [
+        4
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 14.312172263215663,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000089",
+      "marker_count": 3,
+      "marker_ids": [
+        4,
+        5,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 25.589512036147244,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000090",
+      "marker_count": 2,
+      "marker_ids": [
+        4,
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 19.386088624899116,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000091",
+      "marker_count": 2,
+      "marker_ids": [
+        5,
+        20
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.727711371014095,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000092",
+      "marker_count": 2,
+      "marker_ids": [
+        4,
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.710700919493124,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000093",
+      "marker_count": 1,
+      "marker_ids": [
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 15.338656963096096,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000094",
+      "marker_count": 1,
+      "marker_ids": [
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 5.632879843342059,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000095",
+      "marker_count": 1,
+      "marker_ids": [
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.99859950355211,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000096",
+      "marker_count": 2,
+      "marker_ids": [
+        4,
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 20.038830129698276,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000097",
+      "marker_count": 1,
+      "marker_ids": [
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.735578981432356,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000098",
+      "marker_count": 1,
+      "marker_ids": [
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 7.228396134040541,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000099",
+      "marker_count": 1,
+      "marker_ids": [
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 9.95330114072173,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000100",
+      "marker_count": 1,
+      "marker_ids": [
+        5
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 3.830737399893703,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000104",
+      "marker_count": 1,
+      "marker_ids": [
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 1.897504318999434,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000117",
+      "marker_count": 1,
+      "marker_ids": [
+        10
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 1.4173547121472265,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000118",
+      "marker_count": 1,
+      "marker_ids": [
+        10
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 0.7968916731891326,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000119",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.364229054900894,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000120",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 8.845644729146358,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000121",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 5.7218799794698025,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000122",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.792720340642853,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000123",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 6.9440104316207405,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000124",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 10.058718976878325,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000125",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 6.065863910358237,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000126",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 7.7080664792699425,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000127",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 19.50630699819846,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000128",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 17.7106509652755,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000129",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 25.53561185385201,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000130",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 25.000092167692692,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000131",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 26.303331070546886,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000132",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 55.8097043328478,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000133",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 38.77645335613492,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000134",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 30.429558753478023,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000135",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 37.18096817845388,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000136",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 42.97200459477082,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000137",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 49.348167897997975,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000138",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 30.373720748419878,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000139",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 40.03345865310192,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000140",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 35.79289539987219,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000141",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 29.010935302810964,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000142",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 34.321347751799365,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000143",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 31.57385025476031,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000144",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 25.955561388965904,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000145",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 30.2318510026262,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000146",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 14.810267864153671,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000147",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 19.31653736031284,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000148",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 17.834307157637262,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000149",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 15.65846716858541,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000150",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 8.495732355444394,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000151",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 13.596714445030681,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000152",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 8.133925111144405,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000153",
+      "marker_count": 2,
+      "marker_ids": [
+        10,
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.884651954971212,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000154",
+      "marker_count": 1,
+      "marker_ids": [
+        17
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 1.0445707005273674,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000166",
+      "marker_count": 1,
+      "marker_ids": [
+        26
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.307183080716777,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000176",
+      "marker_count": 2,
+      "marker_ids": [
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 9.310007909562962,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000178",
+      "marker_count": 4,
+      "marker_ids": [
+        2,
+        8,
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.098719292305358,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000180",
+      "marker_count": 1,
+      "marker_ids": [
+        15
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 9.263969397316544,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000182",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 8.136817928149648,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000183",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.980504706276005,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000184",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 7.33220852894156,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000185",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 7.94204193132878,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000186",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 19.231840838504503,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000187",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.183464808179078,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000188",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 17.45438804830969,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000189",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.5210061511107,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000190",
+      "marker_count": 3,
+      "marker_ids": [
+        2,
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 15.715196785668116,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000191",
+      "marker_count": 2,
+      "marker_ids": [
+        6,
+        8
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 10.835695804440867,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000192",
+      "marker_count": 2,
+      "marker_ids": [
+        6,
+        15
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 13.11524929536498,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000193",
+      "marker_count": 2,
+      "marker_ids": [
+        2,
+        15
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 15.726693872450944,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000194",
+      "marker_count": 1,
+      "marker_ids": [
+        15
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 13.588399450921235,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000195",
+      "marker_count": 2,
+      "marker_ids": [
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 30.468057667382197,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000196",
+      "marker_count": 2,
+      "marker_ids": [
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 23.586710586117903,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000197",
+      "marker_count": 2,
+      "marker_ids": [
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 32.050461592371924,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000198",
+      "marker_count": 2,
+      "marker_ids": [
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 29.449360496981548,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000199",
+      "marker_count": 2,
+      "marker_ids": [
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 25.73379691574926,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000200",
+      "marker_count": 2,
+      "marker_ids": [
+        15,
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 24.64370942300618,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000201",
+      "marker_count": 1,
+      "marker_ids": [
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 16.8699523712922,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000202",
+      "marker_count": 1,
+      "marker_ids": [
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.797061908037222,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000203",
+      "marker_count": 1,
+      "marker_ids": [
+        16
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.718607643148427,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000205",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 9.000827558562253,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000206",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 14.797105646342825,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000208",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 19.67682921386942,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000210",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 10.876155743311275,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000211",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 14.13088192998546,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000212",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 12.448882991629413,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000213",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.930171672122583,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000214",
+      "marker_count": 1,
+      "marker_ids": [
+        0
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 9.408880599244295,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000215",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 20.08352090707731,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000216",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.87720950913699,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000217",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 14.89069782505161,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000218",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 26.343953769670136,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000219",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 19.607504926579168,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000222",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 14.360132103791893,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000223",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.100493659994882,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000230",
+      "marker_count": 1,
+      "marker_ids": [
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 17.32178332182313,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000231",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.69184952278452,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000232",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 12.014892245100596,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000233",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 11.659138323312698,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000234",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 22.936918270355058,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000235",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 28.66513973923812,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000236",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 20.599430279747217,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000237",
+      "marker_count": 2,
+      "marker_ids": [
+        7,
+        9
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 18.778375503293088,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000239",
+      "marker_count": 1,
+      "marker_ids": [
+        7
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.700778978296572,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000244",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.0627313124626125,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000245",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 2.332140140027574,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000246",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 3.5333469980537067,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000247",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.094072196469485,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000248",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.156223901982848,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000249",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 12.58416971038257,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000250",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.449149419904177,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000251",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 5.453224683146898,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000252",
+      "marker_count": 1,
+      "marker_ids": [
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 4.870209493280793,
+      "tie_breaker": "legacy input order"
+    },
+    {
+      "frame_id": "moving_frame_000253",
+      "marker_count": 2,
+      "marker_ids": [
+        0,
+        19
+      ],
+      "score_area": "",
+      "score_border": "",
+      "score_distance": "",
+      "score_reprojection": "",
+      "selected": true,
+      "selection_reasons": [
+        "legacy_quality_valid_graph"
+      ],
+      "selection_score": 10.875556286840983,
+      "tie_breaker": "legacy input order"
+    }
+  ],
+  "input_observations": 369,
+  "limits": {
+    "maximum_total_frames": null,
+    "reference_marker_maximum_frames": null,
+    "top_per_marker": 8,
+    "top_per_marker_pair": 4
+  },
+  "quality_valid_observations": 369,
+  "schema_version": 1,
+  "selected_frame_ids": [
+    "moving_frame_000000",
+    "moving_frame_000001",
+    "moving_frame_000002",
+    "moving_frame_000003",
+    "moving_frame_000004",
+    "moving_frame_000005",
+    "moving_frame_000006",
+    "moving_frame_000007",
+    "moving_frame_000008",
+    "moving_frame_000009",
+    "moving_frame_000010",
+    "moving_frame_000011",
+    "moving_frame_000012",
+    "moving_frame_000013",
+    "moving_frame_000014",
+    "moving_frame_000015",
+    "moving_frame_000016",
+    "moving_frame_000035",
+    "moving_frame_000036",
+    "moving_frame_000037",
+    "moving_frame_000038",
+    "moving_frame_000039",
+    "moving_frame_000040",
+    "moving_frame_000041",
+    "moving_frame_000042",
+    "moving_frame_000043",
+    "moving_frame_000044",
+    "moving_frame_000045",
+    "moving_frame_000046",
+    "moving_frame_000047",
+    "moving_frame_000048",
+    "moving_frame_000049",
+    "moving_frame_000050",
+    "moving_frame_000051",
+    "moving_frame_000052",
+    "moving_frame_000053",
+    "moving_frame_000054",
+    "moving_frame_000055",
+    "moving_frame_000056",
+    "moving_frame_000057",
+    "moving_frame_000058",
+    "moving_frame_000059",
+    "moving_frame_000060",
+    "moving_frame_000061",
+    "moving_frame_000062",
+    "moving_frame_000063",
+    "moving_frame_000064",
+    "moving_frame_000065",
+    "moving_frame_000066",
+    "moving_frame_000067",
+    "moving_frame_000068",
+    "moving_frame_000069",
+    "moving_frame_000070",
+    "moving_frame_000071",
+    "moving_frame_000072",
+    "moving_frame_000073",
+    "moving_frame_000074",
+    "moving_frame_000075",
+    "moving_frame_000076",
+    "moving_frame_000077",
+    "moving_frame_000078",
+    "moving_frame_000079",
+    "moving_frame_000080",
+    "moving_frame_000081",
+    "moving_frame_000082",
+    "moving_frame_000083",
+    "moving_frame_000084",
+    "moving_frame_000085",
+    "moving_frame_000086",
+    "moving_frame_000087",
+    "moving_frame_000088",
+    "moving_frame_000089",
+    "moving_frame_000090",
+    "moving_frame_000091",
+    "moving_frame_000092",
+    "moving_frame_000093",
+    "moving_frame_000094",
+    "moving_frame_000095",
+    "moving_frame_000096",
+    "moving_frame_000097",
+    "moving_frame_000098",
+    "moving_frame_000099",
+    "moving_frame_000100",
+    "moving_frame_000104",
+    "moving_frame_000117",
+    "moving_frame_000118",
+    "moving_frame_000119",
+    "moving_frame_000120",
+    "moving_frame_000121",
+    "moving_frame_000122",
+    "moving_frame_000123",
+    "moving_frame_000124",
+    "moving_frame_000125",
+    "moving_frame_000126",
+    "moving_frame_000127",
+    "moving_frame_000128",
+    "moving_frame_000129",
+    "moving_frame_000130",
+    "moving_frame_000131",
+    "moving_frame_000132",
+    "moving_frame_000133",
+    "moving_frame_000134",
+    "moving_frame_000135",
+    "moving_frame_000136",
+    "moving_frame_000137",
+    "moving_frame_000138",
+    "moving_frame_000139",
+    "moving_frame_000140",
+    "moving_frame_000141",
+    "moving_frame_000142",
+    "moving_frame_000143",
+    "moving_frame_000144",
+    "moving_frame_000145",
+    "moving_frame_000146",
+    "moving_frame_000147",
+    "moving_frame_000148",
+    "moving_frame_000149",
+    "moving_frame_000150",
+    "moving_frame_000151",
+    "moving_frame_000152",
+    "moving_frame_000153",
+    "moving_frame_000154",
+    "moving_frame_000166",
+    "moving_frame_000176",
+    "moving_frame_000178",
+    "moving_frame_000180",
+    "moving_frame_000182",
+    "moving_frame_000183",
+    "moving_frame_000184",
+    "moving_frame_000185",
+    "moving_frame_000186",
+    "moving_frame_000187",
+    "moving_frame_000188",
+    "moving_frame_000189",
+    "moving_frame_000190",
+    "moving_frame_000191",
+    "moving_frame_000192",
+    "moving_frame_000193",
+    "moving_frame_000194",
+    "moving_frame_000195",
+    "moving_frame_000196",
+    "moving_frame_000197",
+    "moving_frame_000198",
+    "moving_frame_000199",
+    "moving_frame_000200",
+    "moving_frame_000201",
+    "moving_frame_000202",
+    "moving_frame_000203",
+    "moving_frame_000205",
+    "moving_frame_000206",
+    "moving_frame_000208",
+    "moving_frame_000210",
+    "moving_frame_000211",
+    "moving_frame_000212",
+    "moving_frame_000213",
+    "moving_frame_000214",
+    "moving_frame_000215",
+    "moving_frame_000216",
+    "moving_frame_000217",
+    "moving_frame_000218",
+    "moving_frame_000219",
+    "moving_frame_000222",
+    "moving_frame_000223",
+    "moving_frame_000230",
+    "moving_frame_000231",
+    "moving_frame_000232",
+    "moving_frame_000233",
+    "moving_frame_000234",
+    "moving_frame_000235",
+    "moving_frame_000236",
+    "moving_frame_000237",
+    "moving_frame_000239",
+    "moving_frame_000244",
+    "moving_frame_000245",
+    "moving_frame_000246",
+    "moving_frame_000247",
+    "moving_frame_000248",
+    "moving_frame_000249",
+    "moving_frame_000250",
+    "moving_frame_000251",
+    "moving_frame_000252",
+    "moving_frame_000253"
+  ],
+  "selected_moving_frames": 182,
+  "strategy": "legacy_quality_valid_all_observations_v1"
+}

@@ -1,0 +1,366 @@
+{
+  "anchor_alignment": "diagnostics/anchor_alignment.json",
+  "anchor_camera_count": 8,
+  "anchor_export_available": true,
+  "anchor_export_status": "PARTIAL_CAMERA_COVERAGE",
+  "anchor_export_warnings": [
+    "No anchor-relative pose is available for: camera_back_center"
+  ],
+  "anchor_marker_id": 0,
+  "artifact_status": "available",
+  "available_static_cameras": [
+    "camera_back_left",
+    "camera_back_right",
+    "camera_center_left",
+    "camera_center_right",
+    "camera_front_left",
+    "camera_front_narrow",
+    "camera_front_right",
+    "camera_front_wide"
+  ],
+  "calibration_status": "available",
+  "camera_extrinsics": "camera_extrinsics.csv",
+  "camera_extrinsics_anchor": "camera_extrinsics_anchor.csv",
+  "camera_extrinsics_anchor_json": "camera_extrinsics_anchor.json",
+  "camera_extrinsics_anchor_yaml": "camera_extrinsics_anchor.yaml",
+  "camera_extrinsics_available": true,
+  "comparison_visibility": "hidden_when_scale_variants_available",
+  "config_summary": {
+    "aruco_detection_mode": "high_sensitivity",
+    "baseline_version": "baseline_v1",
+    "colmap_version": null,
+    "compute_configured": "cpu_baseline",
+    "compute_resolved": "cpu_baseline",
+    "evaluation_anchor_marker_id": 0,
+    "feature_limits": "COLMAP defaults",
+    "gpu_requested": null,
+    "gpu_resolved": null,
+    "intrinsics_refinement": null,
+    "mapper_minimum_matches": 8,
+    "matcher": "exhaustive",
+    "maximum_features": null,
+    "maximum_image_size": null,
+    "minimum_marker_area_px2": 100.0,
+    "multi_marker_count": 17,
+    "quality_area_ratio": 8e-06,
+    "quality_max_distance_m": "disabled",
+    "quality_pnp_rmse_px": 25.0,
+    "quality_positive_depth": true,
+    "quality_sources": "maximum_marker_distance_m:global,maximum_pnp_reprojection_error_px:global,minimum_marker_area_ratio:global,require_positive_depth:global",
+    "scale_input": "registered-image detection",
+    "scale_maximum_observations_per_marker": null,
+    "scale_minimum_inliers": 4,
+    "scale_ransac_iterations": 1000,
+    "scale_reprojection_threshold_px": 5.0,
+    "single_scale_marker_id": 0
+  },
+  "derived_fingerprint": "bceafa113d9fcb6bc1b1aa889b64dd94bb386606811aefc9a5bf49e8927fb069",
+  "derived_results": [
+    "../../ap03_single/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",
+    "../../ap03_multi/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad"
+  ],
+  "detail_artifacts": [
+    "../../../methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+    "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/method/colmap/inspection/AP03_RECONSTRUCTION_DIAGNOSTICS.json",
+    "provenance/derived_result.json"
+  ],
+  "diagnostics": "diagnostics",
+  "evaluation_status": "available",
+  "execution_status": "completed_shared_colmap",
+  "input_fingerprint": "input_2a160111b13e",
+  "label": "aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",
+  "layout_version": 2,
+  "logs": "logs",
+  "method": "ap03_single",
+  "method_fingerprint": "d1be7bcc1e86b6f7c02f97e0fd37ffebb2d5b7e2a0c7f13dbb95c082661a05c3",
+  "metrics": {
+    "ap03_reconstruction": {
+      "algorithm": "ap03_colmap_support_diagnostics_v1",
+      "best_model": "0",
+      "camera_groups": {
+        "assignment": {
+          "camera_back_left": [
+            2
+          ],
+          "camera_back_right": [
+            3
+          ],
+          "camera_center_left": [
+            4
+          ],
+          "camera_center_right": [
+            5
+          ],
+          "camera_front_left": [
+            6
+          ],
+          "camera_front_narrow": [
+            7
+          ],
+          "camera_front_right": [
+            8
+          ],
+          "camera_front_wide": [
+            9
+          ],
+          "moving_calib_camera": [
+            10
+          ]
+        },
+        "intrinsics_refinement": false,
+        "one_camera_id_per_physical_camera": true,
+        "physical_camera_ids_are_distinct": true
+      },
+      "ground_truth_used": false,
+      "quality_status": "warning_weak_reconstruction_support",
+      "registered_image_count": 262,
+      "registered_moving_frame_count": 254,
+      "registered_static_camera_count": 8,
+      "schema_version": 5,
+      "sparse_point_count": 56934,
+      "static_cameras": [
+        {
+          "camera_id": "camera_back_center",
+          "colmap_camera_id": null,
+          "image_name": "static_camera_back_center.png",
+          "median_reprojection_error_px": null,
+          "registered": false,
+          "reprojection_rmse_px": null,
+          "shared_tracks_with_moving": 0,
+          "track_support": 0,
+          "warnings": [
+            "unregistered_static_camera"
+          ]
+        },
+        {
+          "camera_id": "camera_back_left",
+          "colmap_camera_id": 2,
+          "image_name": "static_camera_back_left.png",
+          "median_reprojection_error_px": 1.1559074104522906,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.2869521020457908,
+          "shared_moving_track_threshold": 11.5,
+          "shared_tracks_with_moving": 115,
+          "track_support": 115,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        },
+        {
+          "camera_id": "camera_back_right",
+          "colmap_camera_id": 3,
+          "image_name": "static_camera_back_right.png",
+          "median_reprojection_error_px": 1.5239124731030942,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.6666763625869128,
+          "shared_moving_track_threshold": 10.0,
+          "shared_tracks_with_moving": 79,
+          "track_support": 79,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        },
+        {
+          "camera_id": "camera_center_left",
+          "colmap_camera_id": 4,
+          "image_name": "static_camera_center_left.png",
+          "median_reprojection_error_px": 1.10525593356023,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.1625821367622018,
+          "shared_moving_track_threshold": 10.0,
+          "shared_tracks_with_moving": 51,
+          "track_support": 51,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        },
+        {
+          "camera_id": "camera_center_right",
+          "colmap_camera_id": 5,
+          "image_name": "static_camera_center_right.png",
+          "median_reprojection_error_px": 1.058492024809588,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.208916917651785,
+          "shared_moving_track_threshold": 11.200000000000001,
+          "shared_tracks_with_moving": 112,
+          "track_support": 112,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        },
+        {
+          "camera_id": "camera_front_left",
+          "colmap_camera_id": 6,
+          "image_name": "static_camera_front_left.png",
+          "median_reprojection_error_px": 1.136102159867603,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.2638426788497357,
+          "shared_moving_track_threshold": 10.8,
+          "shared_tracks_with_moving": 108,
+          "track_support": 108,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        },
+        {
+          "camera_id": "camera_front_narrow",
+          "colmap_camera_id": 7,
+          "image_name": "static_camera_front_narrow.png",
+          "median_reprojection_error_px": 1.1521211309571473,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.1993515611607963,
+          "shared_moving_track_threshold": 19.900000000000002,
+          "shared_tracks_with_moving": 199,
+          "track_support": 199,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        },
+        {
+          "camera_id": "camera_front_right",
+          "colmap_camera_id": 8,
+          "image_name": "static_camera_front_right.png",
+          "median_reprojection_error_px": 1.3717615283396167,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.4756789633407204,
+          "shared_moving_track_threshold": 13.200000000000001,
+          "shared_tracks_with_moving": 132,
+          "track_support": 132,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        },
+        {
+          "camera_id": "camera_front_wide",
+          "colmap_camera_id": 9,
+          "image_name": "static_camera_front_wide.png",
+          "median_reprojection_error_px": 1.1726229744484626,
+          "median_reprojection_threshold_px": 3.0,
+          "registered": true,
+          "reprojection_rmse_px": 1.3205079860945315,
+          "shared_moving_track_threshold": 28.200000000000003,
+          "shared_tracks_with_moving": 282,
+          "track_support": 282,
+          "track_support_threshold": 28.375,
+          "warnings": []
+        }
+      ],
+      "static_median_reprojection_error_px": 1.154014270704719,
+      "static_track_median": 113.5,
+      "thresholds": {
+        "maximum_median_reprojection_error_px": 3.0,
+        "minimum_shared_moving_tracks": "max(10, 10% of that camera track support)",
+        "minimum_track_support": 28.375
+      },
+      "warnings": [
+        {
+          "camera_id": "camera_back_center",
+          "code": "unregistered_static_camera"
+        }
+      ]
+    },
+    "ap03_registration": {
+      "missing_static_cameras": [
+        "camera_back_center"
+      ],
+      "registered_images": 262,
+      "registered_moving_frames": 254,
+      "registered_static_cameras": 8,
+      "sparse_points": 56934
+    },
+    "ap03_scale": {
+      "approach": "AP03_targetless_colmap_marker_size_scale_only",
+      "available_static_cameras": [
+        "camera_back_left",
+        "camera_back_right",
+        "camera_center_left",
+        "camera_center_right",
+        "camera_front_left",
+        "camera_front_narrow",
+        "camera_front_right",
+        "camera_front_wide"
+      ],
+      "best_model": "0",
+      "detected_corner_observations": 72,
+      "detected_corner_observations_before_selection": 72,
+      "detection_mode": "high_sensitivity",
+      "failure_reason": "",
+      "important_rule": "No SDF marker map, no GT marker pose, no GT camera pose used by this method output.",
+      "marker_ids_requested": [
+        0
+      ],
+      "marker_length_m": 0.17,
+      "maximum_observations_per_marker": null,
+      "minimum_marker_area_px2": 100.0,
+      "missing_static_cameras": [
+        "camera_back_center"
+      ],
+      "model_dir": "/workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/IMG_4388_20260810_151035__ap03__multi_markers_auto__single_marker_0__moving_undistorted_pinhole_diag__02/20260810_174200_aruco_mode_high_sensitivity__multi_markers_auto__single_marker_0_8f119e22/04_AP03/colmap/reconstruction/sparse_txt/0",
+      "num_scale_observations_total": 6,
+      "num_scale_observations_used": 6,
+      "num_sparse_points3d": 56934,
+      "raw_mad_scale": 1.0112152968169181,
+      "raw_median_scale": 6.030306050658492,
+      "raw_rel_mad_scale": 0.1676888848297337,
+      "registered_images": 262,
+      "registered_moving_frames": 254,
+      "registered_static_cameras": 8,
+      "scale_candidates_per_marker": {
+        "0": 6
+      },
+      "scale_inliers_per_marker": {
+        "0": 6
+      },
+      "scale_input_policy": "legacy_registered_image_redetection_v1",
+      "scale_m_per_colmap_unit": 6.030306050658492,
+      "scale_outliers_per_marker": {
+        "0": 0
+      },
+      "selected_image_marker_observations": 0,
+      "status": "PARTIAL_8_OF_9_SCALE_WEAK",
+      "triangulated_marker_corners": 4,
+      "used_mean_scale": 6.376631087970089,
+      "used_rel_std_scale": 0.2118054734135282,
+      "used_std_scale": 1.2772518278881855
+    },
+    "ap03_scale_relative_std": 0.2118054734135282,
+    "shared_colmap": {
+      "camera_pose_source": "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv",
+      "colmap_rerun": false,
+      "contract": "rigcal_ap03_scale_variants_v1",
+      "fingerprint": "bceafa113d9fcb6bc1b1aa889b64dd94bb386606811aefc9a5bf49e8927fb069",
+      "layout_version": 2,
+      "method_rerun": false,
+      "scale_m_per_colmap_unit": 6.030306050658492,
+      "scale_metadata": "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/method/scale_single/AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json",
+      "schema_version": 5,
+      "scientific_role": "ap03_single_scale_result",
+      "shared_anchor_geometry": "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad/diagnostics/derived/shared_anchor_geometry/marker_0_corners_colmap.json",
+      "shared_colmap_best_model": "0",
+      "shared_colmap_container": "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad"
+    }
+  },
+  "pairwise_camera_count": 28,
+  "pairwise_camera_extrinsics": "pairwise_camera_extrinsics.csv",
+  "primary_result": "single",
+  "provenance": "provenance",
+  "published_at": "2026-08-10T21:01:46+00:00",
+  "quality_status": "poor_scale_dispersion",
+  "queue_id": "IMG_4388_20260810_151035_queue",
+  "reference_frame": "COLMAP gauge with metric marker scale",
+  "runtime_seconds": 11979.034852191005,
+  "schema_version": 5,
+  "scientific_role": "ap03_single_scale_result",
+  "shared_colmap_container": "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",
+  "solver_status": "not_applicable",
+  "static_camera_count": 8,
+  "status": "available",
+  "success": true,
+  "transform_convention": "T_reference_camera (camera pose expressed in reference frame)",
+  "visualization_manifest": "../../../visualization/visualization_manifest.json",
+  "visualization_status": "OK",
+  "warnings": [
+    "AP03 reconstruction support warnings: camera_back_center:unregistered_static_camera.",
+    "AP03 Single scale relative standard deviation is 21.18% (poor: >10%)."
+  ]
+}
