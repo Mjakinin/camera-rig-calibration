@@ -155,8 +155,12 @@ def _install_ap03_command_policy() -> None:
             if spec.stage_id in {"ap03_single_scale", "ap03_multi_scale"}:
                 argv = list(spec.argv)
                 if "--image-dir" not in argv:
+                    if spec.output_directory is None:
+                        raise RuntimeError(
+                            "AP03 sensitivity scale stage has no output directory"
+                        )
                     image_dir = (
-                        spec.directory.parent
+                        spec.output_directory.parent
                         / "colmap"
                         / "undistorted_pinhole_dataset"
                         / "images"
