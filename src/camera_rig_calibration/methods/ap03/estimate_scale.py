@@ -26,10 +26,17 @@ def run(
     minimum_marker_area_px2: float,
     dictionary: str,
     detection_mode: str = "baseline",
+    image_dir: Path | None = None,
 ) -> StageResult:
     if mode not in {"single", "multi"}:
         raise ValueError(f"Unsupported AP03 scale mode: {mode}")
     stage_root = output_root / f"scale_{mode}"
+    resolved_image_dir = (
+        image_dir.resolve()
+        if image_dir is not None
+        else (output_root / "colmap/dataset/images").resolve()
+    )
+
     def action() -> dict[str, Path | str]:
         command = [
                 sys.executable,
@@ -54,7 +61,7 @@ def run(
                 "--txt-root",
                 str(output_root / "colmap/reconstruction/sparse_txt"),
                 "--image-dir",
-                str(output_root / "colmap/dataset/images"),
+                str(resolved_image_dir),
                 "--inspect-summary",
                 str(output_root / "colmap/inspection/colmap_model_summary.csv"),
                 "--static-cameras",
@@ -109,6 +116,7 @@ def run(
             "reconstruction": output_root
             / "colmap/reconstruction/sparse_txt",
             "accepted_observations": observations_root,
+            "scale_images": resolved_image_dir,
         },
         parameters={
             "mode": mode,
@@ -123,6 +131,7 @@ def run(
             "scale_input_policy": scale_input_policy,
             "minimum_marker_area_px2": minimum_marker_area_px2,
             "detection_mode": detection_mode,
+            "image_dir": str(resolved_image_dir),
         },
         failure_is_diagnostic=mode == "single",
     )
@@ -144,6 +153,7 @@ def main() -> None:
     parser.add_argument("--scale-input-policy", required=True)
     parser.add_argument("--minimum-marker-area-px2", type=float, required=True)
     parser.add_argument("--dictionary", required=True)
+    parser.add_argument("--image-dir", type=Path)
     parser.add_argument(
         "--detection-mode",
         choices=("baseline", "subpixel_refined", "high_sensitivity"),
@@ -174,6 +184,7 @@ def main() -> None:
         minimum_marker_area_px2=args.minimum_marker_area_px2,
         dictionary=args.dictionary,
         detection_mode=args.detection_mode,
+        image_dir=(args.image_dir.resolve() if args.image_dir is not None else None),
     )
 
 
