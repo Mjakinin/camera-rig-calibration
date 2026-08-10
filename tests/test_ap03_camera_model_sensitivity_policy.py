@@ -187,7 +187,7 @@ def test_prepare_undistorted_dataset_keeps_static_and_rectifies_moving(
     assert summary["original_files_modified"] is False
 
 
-def test_policy_switches_only_ap03_reconstruction_stage(tmp_path: Path) -> None:
+def test_policy_switches_reconstruction_and_scale_image_geometry(tmp_path: Path) -> None:
     install_ap03_camera_model_sensitivity_policy()
     config = _config(tmp_path, UNDISTORTED_PINHOLE)
     context = RunContext(
@@ -210,6 +210,19 @@ def test_policy_switches_only_ap03_reconstruction_stage(tmp_path: Path) -> None:
     )
     assert "undistorted moving-camera PINHOLE" in reconstruction.display_name
 
+    expected_images = str(
+        context.run_directory
+        / "04_AP03"
+        / "colmap"
+        / "undistorted_pinhole_dataset"
+        / "images"
+    )
+    for stage_id in ("ap03_single_scale", "ap03_multi_scale"):
+        scale = next(command for command in commands if command.stage_id == stage_id)
+        image_index = scale.argv.index("--image-dir")
+        assert scale.argv[image_index + 1] == expected_images
+        assert "matched to undistorted COLMAP image geometry" in scale.display_name
+
     calibrated = _config(tmp_path / "calibrated", CALIBRATED)
     calibrated_context = RunContext(
         repository_root=tmp_path,
@@ -230,6 +243,11 @@ def test_policy_switches_only_ap03_reconstruction_stage(tmp_path: Path) -> None:
         "camera_rig_calibration.methods.ap03.reconstruct_stage"
         in calibrated_reconstruction.argv
     )
+    for stage_id in ("ap03_single_scale", "ap03_multi_scale"):
+        scale = next(
+            command for command in calibrated_commands if command.stage_id == stage_id
+        )
+        assert "--image-dir" not in scale.argv
 
 
 def test_sensitivity_policy_has_distinct_colmap_artifact_fingerprint(
