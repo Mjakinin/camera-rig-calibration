@@ -60,15 +60,22 @@ def _install_wizard_policy() -> None:
 
     wizard._method_job_label = method_job_label
 
-    original_method_queue = wizard._method_queue
+    original_edit_method_job = wizard._edit_method_job
 
-    def method_queue(*args, **kwargs):
-        jobs = original_method_queue(*args, **kwargs)
-        if _DATASET_CONTEXT.get() != "real_vehicle":
-            return jobs
-        for job in jobs:
-            if job.method_id != "ap03":
-                continue
+    def edit_method_job(
+        console,
+        job,
+        *,
+        groups=wizard.METHOD_JOB_GROUPS,
+        title=None,
+        selection_contexts=(),
+    ):
+        active_groups = set(groups)
+        if (
+            _DATASET_CONTEXT.get() == "real_vehicle"
+            and job.method_id == "ap03"
+            and "METHOD-SPECIFIC SETTINGS" in active_groups
+        ):
             current = _policy_from_methods(job.methods)
             selected = wizard._prompt_enum_choice(
                 "AP03 COLMAP moving-camera model",
@@ -90,9 +97,16 @@ def _install_wizard_policy() -> None:
                     contextual, selected
                 )
             wizard._refresh_method_job_label(job)
-        return jobs
 
-    wizard._method_queue = method_queue
+        return original_edit_method_job(
+            console,
+            job,
+            groups=groups,
+            title=title,
+            selection_contexts=selection_contexts,
+        )
+
+    wizard._edit_method_job = edit_method_job
     wizard._AP03_CAMERA_MODEL_SENSITIVITY_POLICY = True
 
 
