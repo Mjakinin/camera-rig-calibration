@@ -3,6 +3,9 @@ from __future__ import annotations
 from .ap01_common_anchor_policy import install_ap01_common_anchor_policy
 from .ap02_convergence_frontdoor_policy import install_ap02_convergence_frontdoor_policy
 from .ap02_convergence_reporting_policy import install_ap02_convergence_reporting_policy
+from .ap02_partial_reference_reporting_policy import (
+    install_ap02_partial_reference_reporting_policy,
+)
 from .ap03_camera_model_sensitivity_policy import (
     install_ap03_camera_model_sensitivity_policy,
 )
@@ -55,6 +58,9 @@ install_result_output_policy()
 # post-method reporting concern rather than a calibration-readiness gate. AP02
 # disconnected components remain runnable and are surfaced in RESULT artifacts.
 install_real_partial_evaluation_policy()
+# The primary AP02 component remains in the reference marker frozen for the real
+# solve; only separately calibrated diagnostic components use their own anchors.
+install_ap02_partial_reference_reporting_policy()
 install_real_marker_reporting_policy()
 # Final experiment RESULTS is canonical regardless of wrapper/import order: it
 # states the common export frame and embeds native metric marker diagnostics.
