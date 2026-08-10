@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -11,7 +13,7 @@ from typing import Any
 from camera_rig_calibration.pipeline import StageResult, run_stage
 
 
-POLICY_ID = "moving_pinhole_intrinsics_only_v1"
+POLICY_ID = "moving_undistorted_pinhole_v1"
 
 
 def _distortion_snapshot(data: dict[str, Any]) -> dict[str, Any]:
@@ -28,12 +30,33 @@ def _distortion_snapshot(data: dict[str, Any]) -> dict[str, Any]:
     return snapshot
 
 
-def _zero_distortion(data: dict[str, Any]) -> dict[str, Any]:
-    """Return a camera-info copy that serializes as a COLMAP PINHOLE model.
+def _camera_matrix_and_distortion(data: dict[str, Any]):
+    import numpy as np
 
-    Focal lengths and principal point stay untouched. Only distortion metadata
-    is removed in the diagnostic copy consumed by AP03 COLMAP.
-    """
+    flat_k = data.get("K", data.get("k"))
+    if flat_k is None and "camera_matrix" in data:
+        value = data["camera_matrix"]
+        flat_k = value.get("data") if isinstance(value, dict) else value
+    if flat_k is None:
+        fx = float(data["fx"])
+        fy = float(data.get("fy", fx))
+        cx = float(data["cx"])
+        cy = float(data["cy"])
+        flat_k = [fx, 0.0, cx, 0.0, fy, cy, 0.0, 0.0, 1.0]
+    matrix = np.asarray(flat_k, dtype=float).reshape(3, 3)
+
+    distortion = data.get("D", data.get("d"))
+    if distortion is None and "distortion_coefficients" in data:
+        value = data["distortion_coefficients"]
+        distortion = value.get("data") if isinstance(value, dict) else value
+    if distortion is None:
+        distortion = data.get("distortion", [])
+    coefficients = np.asarray(list(distortion), dtype=float).reshape(-1)
+    return matrix, coefficients
+
+
+def _zero_distortion(data: dict[str, Any]) -> dict[str, Any]:
+    """Return camera-info for images already rectified to the same K matrix."""
     result = json.loads(json.dumps(data))
     result["distortion_model"] = "none"
     result["D"] = []
@@ -52,13 +75,26 @@ def _zero_distortion(data: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+def _link_or_copy(source: Path, destination: Path) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.exists() or destination.is_symlink():
+        destination.unlink()
+    try:
+        os.link(source, destination)
+    except OSError:
+        try:
+            destination.symlink_to(source.resolve())
+        except OSError:
+            shutil.copy2(source, destination)
+
+
 def prepare_pinhole_camera_info(
     *,
     shared_raw: Path,
     destination: Path,
     moving_camera_id: str,
 ) -> Path:
-    """Copy camera-info metadata and pinhole only the moving-camera copy."""
+    """Copy camera-info and make only the rectified moving-camera copy PINHOLE."""
     source_camera_info = shared_raw / "camera_info"
     if not source_camera_info.is_dir():
         raise RuntimeError(
@@ -72,6 +108,7 @@ def prepare_pinhole_camera_info(
         shutil.copy2(source, destination_camera_info / source.name)
 
     moving_path = destination_camera_info / f"{moving_camera_id}.json"
+    source_moving_path = source_camera_info / f"{moving_camera_id}.json"
     if not moving_path.is_file():
         raise RuntimeError(
             "AP03 sensitivity could not find moving-camera intrinsics: "
@@ -89,18 +126,97 @@ def prepare_pinhole_camera_info(
         "policy": POLICY_ID,
         "scope": "ap03_colmap_moving_camera_only",
         "moving_camera_id": moving_camera_id,
+        "image_preprocessing": "opencv_undistort_same_intrinsic_matrix",
         "intrinsic_terms_preserved": ["fx", "fy", "cx", "cy"],
+        "distortion_used_for_preprocessing": True,
         "distortion_used_by_colmap": False,
         "original_distortion": _distortion_snapshot(original),
         "diagnostic_camera_info": str(moving_path),
-        "original_camera_info": str(
-            source_camera_info / f"{moving_camera_id}.json"
-        ),
+        "original_camera_info": str(source_moving_path),
         "original_files_modified": False,
         "ground_truth_used": False,
     }
     (destination / "AP03_CAMERA_MODEL_SENSITIVITY.json").write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return destination
+
+
+def prepare_undistorted_colmap_dataset(
+    *,
+    source_dataset: Path,
+    shared_raw: Path,
+    destination: Path,
+    moving_camera_id: str,
+) -> Path:
+    """Rectify only AP03 moving images; link static images unchanged."""
+    import cv2
+
+    manifest = source_dataset / "image_manifest.csv"
+    source_images = source_dataset / "images"
+    if not manifest.is_file() or not source_images.is_dir():
+        raise RuntimeError(
+            f"AP03 prepared COLMAP dataset is incomplete: {source_dataset}"
+        )
+
+    moving_info_path = shared_raw / "camera_info" / f"{moving_camera_id}.json"
+    if not moving_info_path.is_file():
+        raise RuntimeError(
+            f"Missing moving-camera intrinsics for undistortion: {moving_info_path}"
+        )
+    moving_info = json.loads(moving_info_path.read_text(encoding="utf-8"))
+    matrix, distortion = _camera_matrix_and_distortion(moving_info)
+
+    shutil.rmtree(destination, ignore_errors=True)
+    destination_images = destination / "images"
+    destination_images.mkdir(parents=True, exist_ok=True)
+
+    with manifest.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    if not rows:
+        raise RuntimeError(f"Empty AP03 image manifest: {manifest}")
+
+    moving_count = 0
+    static_count = 0
+    for row in rows:
+        image_name = str(row["image_name"])
+        source = source_images / image_name
+        destination_image = destination_images / image_name
+        if not source.is_file():
+            raise RuntimeError(f"Missing AP03 source image: {source}")
+        if str(row.get("source_type", "")) != "moving":
+            _link_or_copy(source, destination_image)
+            static_count += 1
+            continue
+
+        image = cv2.imread(str(source), cv2.IMREAD_UNCHANGED)
+        if image is None:
+            raise RuntimeError(f"Could not read AP03 moving image: {source}")
+        if distortion.size and float(abs(distortion).max()) > 1e-15:
+            image = cv2.undistort(image, matrix, distortion, None, matrix)
+        if not cv2.imwrite(str(destination_image), image):
+            raise RuntimeError(
+                f"Could not write undistorted AP03 moving image: {destination_image}"
+            )
+        moving_count += 1
+
+    shutil.copy2(manifest, destination / "image_manifest.csv")
+    (destination / "AP03_UNDISTORTION_SUMMARY.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "policy": POLICY_ID,
+                "moving_images_undistorted": moving_count,
+                "static_images_linked_unchanged": static_count,
+                "new_camera_matrix_policy": "preserve_original_fx_fy_cx_cy",
+                "original_files_modified": False,
+                "ground_truth_used": False,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
         encoding="utf-8",
     )
     return destination
@@ -123,8 +239,9 @@ def run(
     reuse: bool,
 ) -> StageResult:
     stage_root = output_root / "colmap" / "reconstruction"
-    colmap_dataset = output_root / "colmap" / "dataset"
-    diagnostic_shared_raw = output_root / "colmap" / "camera_model_input"
+    prepared_colmap_dataset = output_root / "colmap" / "dataset"
+    diagnostic_colmap_dataset = output_root / "colmap" / "undistorted_pinhole_dataset"
+    diagnostic_shared_raw = output_root / "colmap" / "undistorted_pinhole_camera_info"
 
     def action() -> dict[str, Path]:
         prepared_shared_raw = prepare_pinhole_camera_info(
@@ -132,12 +249,18 @@ def run(
             destination=diagnostic_shared_raw,
             moving_camera_id=moving_camera_id,
         )
+        prepared_dataset = prepare_undistorted_colmap_dataset(
+            source_dataset=prepared_colmap_dataset,
+            shared_raw=dataset / "raw_images",
+            destination=diagnostic_colmap_dataset,
+            moving_camera_id=moving_camera_id,
+        )
         command = [
             sys.executable,
             "-m",
             "camera_rig_calibration.methods.ap03.reconstruct",
             "--dataset-root",
-            str(colmap_dataset),
+            str(prepared_dataset),
             "--shared-raw",
             str(prepared_shared_raw),
             "--run-root",
@@ -169,9 +292,7 @@ def run(
             command.append("--reuse")
         subprocess.run(command, check=True)
 
-        policy_source = (
-            diagnostic_shared_raw / "AP03_CAMERA_MODEL_SENSITIVITY.json"
-        )
+        policy_source = diagnostic_shared_raw / "AP03_CAMERA_MODEL_SENSITIVITY.json"
         policy_destination = stage_root / "AP03_CAMERA_MODEL_SENSITIVITY.json"
         if policy_source.is_file():
             shutil.copy2(policy_source, policy_destination)
@@ -179,13 +300,19 @@ def run(
             "database": stage_root / "database.db",
             "sparse_text": stage_root / "sparse_txt",
             "camera_model_policy": policy_destination,
+            "undistorted_dataset": diagnostic_colmap_dataset,
         }
 
     return run_stage(
         "ap03.reconstruct",
         stage_root,
         action,
-        inputs={"colmap_dataset": colmap_dataset},
+        inputs={
+            "colmap_dataset": prepared_colmap_dataset,
+            "moving_camera_info": (
+                dataset / "raw_images" / "camera_info" / f"{moving_camera_id}.json"
+            ),
+        },
         parameters={
             "matcher": matcher,
             "gpu": use_gpu,
@@ -196,6 +323,7 @@ def run(
             "mapper_minimum_matches": mapper_minimum_matches,
             "camera_model_policy": POLICY_ID,
             "camera_model_scope": "moving_camera_only",
+            "moving_image_preprocessing": "undistort_same_K",
             "original_camera_info_modified": False,
         },
     )
