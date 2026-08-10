@@ -9,8 +9,8 @@ _INSTALLED = False
 _EXTENSION_NAMESPACE = "ap03"
 _EXTENSION_KEY = "colmap_camera_model_policy"
 CALIBRATED = "calibrated"
-PINHOLE_INTRINSICS_ONLY = "pinhole_intrinsics_only"
-_ALLOWED = {CALIBRATED, PINHOLE_INTRINSICS_ONLY}
+UNDISTORTED_PINHOLE = "undistorted_pinhole"
+_ALLOWED = {CALIBRATED, UNDISTORTED_PINHOLE}
 
 
 def _policy_from_methods(methods: Any) -> str:
@@ -54,8 +54,8 @@ def _install_wizard_policy() -> None:
         if job.method_id != "ap03":
             return label
         methods = wizard._job_methods(job, context_key)
-        if _policy_from_methods(methods) == PINHOLE_INTRINSICS_ONLY:
-            return wizard.safe_id(f"{label}__moving_pinhole_diag")
+        if _policy_from_methods(methods) == UNDISTORTED_PINHOLE:
+            return wizard.safe_id(f"{label}__moving_undistorted_pinhole_diag")
         return label
 
     wizard._method_job_label = method_job_label
@@ -83,11 +83,11 @@ def _install_wizard_policy() -> None:
                 (
                     (
                         CALIBRATED,
-                        "scientific baseline: preserve calibrated distortion mapping",
+                        "baseline: raw moving frames with calibrated distortion model",
                     ),
                     (
-                        PINHOLE_INTRINSICS_ONLY,
-                        "diagnostic sensitivity: preserve fx/fy/cx/cy but ignore moving-camera distortion only inside AP03 COLMAP",
+                        UNDISTORTED_PINHOLE,
+                        "diagnostic: undistort moving frames first, then use the same fx/fy/cx/cy as PINHOLE",
                     ),
                 ),
             )
@@ -122,7 +122,7 @@ def _install_ap03_command_policy() -> None:
         policy = _policy_from_methods(context.config.methods)
         if policy == CALIBRATED:
             return specs
-        if policy != PINHOLE_INTRINSICS_ONLY:
+        if policy != UNDISTORTED_PINHOLE:
             raise ValueError(f"Unsupported AP03 camera-model policy: {policy}")
 
         updated = []
@@ -148,7 +148,7 @@ def _install_ap03_command_policy() -> None:
                     argv=tuple(argv),
                     display_name=(
                         "AP03: grouped COLMAP reconstruction "
-                        "(moving-camera pinhole sensitivity)"
+                        "(undistorted moving-camera PINHOLE sensitivity)"
                     ),
                 )
             )
@@ -174,12 +174,17 @@ def _install_fingerprint_policy() -> None:
             policy_id = (
                 "calibration_distortion_mapping_v1"
                 if policy == CALIBRATED
-                else "moving_pinhole_intrinsics_only_v1"
+                else "moving_undistorted_pinhole_v1"
             )
             payload["ap03_camera_model_sensitivity"] = {
                 "policy": policy,
                 "resolved_policy_id": policy_id,
                 "scope": "moving_camera_only",
+                "moving_image_preprocessing": (
+                    "none"
+                    if policy == CALIBRATED
+                    else "opencv_undistort_same_intrinsic_matrix"
+                ),
                 "original_camera_info_modified": False,
                 "ground_truth_used": False,
             }
@@ -227,10 +232,11 @@ def _install_fingerprint_policy() -> None:
 def install_ap03_camera_model_sensitivity_policy() -> None:
     """Expose an auditable AP03 camera-model sensitivity variant.
 
-    The baseline remains unchanged. The diagnostic mode creates a private copy
-    of camera-info metadata for AP03 COLMAP, preserves fx/fy/cx/cy, removes only
-    moving-camera distortion in that copy, and uses a distinct result/fingerprint
-    identity so baseline artifacts can never be silently reused.
+    The baseline remains unchanged. The diagnostic mode rectifies only the
+    moving-camera images with their calibrated distortion, then reconstructs
+    those rectified images with the same fx/fy/cx/cy as a PINHOLE camera. Static
+    images and camera models remain unchanged. A distinct fingerprint prevents
+    reuse of baseline AP03 COLMAP artifacts.
     """
     global _INSTALLED
     if _INSTALLED:
@@ -243,6 +249,6 @@ def install_ap03_camera_model_sensitivity_policy() -> None:
 
 __all__ = [
     "CALIBRATED",
-    "PINHOLE_INTRINSICS_ONLY",
+    "UNDISTORTED_PINHOLE",
     "install_ap03_camera_model_sensitivity_policy",
 ]
