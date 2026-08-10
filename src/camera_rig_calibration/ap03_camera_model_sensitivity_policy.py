@@ -202,6 +202,13 @@ def _install_fingerprint_policy() -> None:
         colmap_artifact_fingerprint._rigcal_ap03_camera_model_sensitivity = True  # type: ignore[attr-defined]
         experiments.colmap_artifact_fingerprint = colmap_artifact_fingerprint
 
+    # runtime.py imports the artifact-fingerprint function directly during the
+    # Wizard import. Rebind that local reference after wrapping experiments so a
+    # sensitivity run can never reuse the calibrated AP03 COLMAP cache.
+    from . import runtime
+
+    runtime.colmap_artifact_fingerprint = experiments.colmap_artifact_fingerprint
+
 
 def install_ap03_camera_model_sensitivity_policy() -> None:
     """Expose an auditable AP03 camera-model sensitivity variant.
