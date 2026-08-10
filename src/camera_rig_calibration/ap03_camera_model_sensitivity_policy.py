@@ -127,31 +127,54 @@ def _install_ap03_command_policy() -> None:
 
         updated = []
         for spec in specs:
-            if spec.stage_id != "ap03_reconstruct":
-                updated.append(spec)
+            if spec.stage_id == "ap03_reconstruct":
+                argv = list(spec.argv)
+                try:
+                    module_index = argv.index(
+                        "camera_rig_calibration.methods.ap03.reconstruct_stage"
+                    )
+                except ValueError as exc:
+                    raise RuntimeError(
+                        "AP03 sensitivity policy could not locate the reconstruction stage"
+                    ) from exc
+                argv[module_index] = (
+                    "camera_rig_calibration.methods.ap03.pinhole_reconstruct_stage"
+                )
+                updated.append(
+                    replace(
+                        spec,
+                        argv=tuple(argv),
+                        display_name=(
+                            "AP03: grouped COLMAP reconstruction "
+                            "(undistorted moving-camera PINHOLE sensitivity)"
+                        ),
+                    )
+                )
                 continue
-            argv = list(spec.argv)
-            try:
-                module_index = argv.index(
-                    "camera_rig_calibration.methods.ap03.reconstruct_stage"
+
+            if spec.stage_id in {"ap03_single_scale", "ap03_multi_scale"}:
+                argv = list(spec.argv)
+                if "--image-dir" not in argv:
+                    image_dir = (
+                        spec.directory.parent
+                        / "colmap"
+                        / "undistorted_pinhole_dataset"
+                        / "images"
+                    )
+                    argv.extend(["--image-dir", str(image_dir)])
+                updated.append(
+                    replace(
+                        spec,
+                        argv=tuple(argv),
+                        display_name=(
+                            spec.display_name
+                            + " (matched to undistorted COLMAP image geometry)"
+                        ),
+                    )
                 )
-            except ValueError as exc:
-                raise RuntimeError(
-                    "AP03 sensitivity policy could not locate the reconstruction stage"
-                ) from exc
-            argv[module_index] = (
-                "camera_rig_calibration.methods.ap03.pinhole_reconstruct_stage"
-            )
-            updated.append(
-                replace(
-                    spec,
-                    argv=tuple(argv),
-                    display_name=(
-                        "AP03: grouped COLMAP reconstruction "
-                        "(undistorted moving-camera PINHOLE sensitivity)"
-                    ),
-                )
-            )
+                continue
+
+            updated.append(spec)
         return tuple(updated)
 
     commands._rigcal_ap03_camera_model_sensitivity = True  # type: ignore[attr-defined]
@@ -184,6 +207,11 @@ def _install_fingerprint_policy() -> None:
                     "none"
                     if policy == CALIBRATED
                     else "opencv_undistort_same_intrinsic_matrix"
+                ),
+                "scale_redetection_image_geometry": (
+                    "original_colmap_dataset"
+                    if policy == CALIBRATED
+                    else "same_undistorted_images_as_reconstruction"
                 ),
                 "original_camera_info_modified": False,
                 "ground_truth_used": False,
@@ -235,8 +263,10 @@ def install_ap03_camera_model_sensitivity_policy() -> None:
     The baseline remains unchanged. The diagnostic mode rectifies only the
     moving-camera images with their calibrated distortion, then reconstructs
     those rectified images with the same fx/fy/cx/cy as a PINHOLE camera. Static
-    images and camera models remain unchanged. A distinct fingerprint prevents
-    reuse of baseline AP03 COLMAP artifacts.
+    images and camera models remain unchanged. Marker-scale redetection uses the
+    exact same rectified image geometry as the COLMAP reconstruction, so detected
+    marker pixels and sparse-model camera rays remain consistent. A distinct
+    fingerprint prevents reuse of baseline AP03 COLMAP artifacts.
     """
     global _INSTALLED
     if _INSTALLED:
