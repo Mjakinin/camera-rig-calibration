@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
+from camera_rig_calibration.components import register_builtin_components
 from camera_rig_calibration.observations import ResolvedSelections
 from camera_rig_calibration.preflight import PreflightJobResult
 from camera_rig_calibration.real_partial_evaluation_policy import (
@@ -196,8 +197,8 @@ def test_component_pose_detail_includes_local_numeric_extrinsics(
     assert "AP02 LOCAL COMPONENT CAMERA POSES" in text
     assert "component_01" in text
     assert "component_02" in text
-    assert "camera_b: x=1.000000m" in text
-    assert "camera_d: x=0.000000m, y=2.000000m" in text
+    assert "camera_b: x_m=1.000000m" in text
+    assert "camera_d: x_m=0.000000m, y_m=2.000000m" in text
     assert "NOT observable" in text
 
 
@@ -205,6 +206,7 @@ def test_real_vehicle_wizard_hides_evaluation_disable_switch() -> None:
     from camera_rig_calibration import wizard
     from camera_rig_calibration.product_policy import _DATASET_CONTEXT
 
+    register_builtin_components()
     install_real_partial_evaluation_policy()
     token = _DATASET_CONTEXT.set("real_vehicle")
     try:
