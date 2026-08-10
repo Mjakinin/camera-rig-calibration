@@ -7,6 +7,8 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Any, Iterable
 
+import yaml
+
 
 _INSTALLED = False
 _EVALUATION_ONLY_PREFIXES = (
@@ -65,15 +67,13 @@ def _calibration_readiness(config: Any, report: Any, errors: tuple[str, ...]) ->
 
 
 def _selection_with_real_anchor(report: Any, marker_id: int = 0) -> Any:
+    """Keep marker 0 requested without falsifying compatibility evidence."""
+
     selections = report.selections
     if selections is None or marker_id not in set(selections.marker_ids):
         return report
     payload = copy.deepcopy(selections.payload)
     anchor = payload.setdefault("evaluation_anchor", {})
-    observation_candidates = {
-        int(value) for value in anchor.get("observation_candidates", [])
-    }
-    observation_candidates.add(marker_id)
     anchor.update(
         {
             "configured": marker_id,
@@ -81,25 +81,24 @@ def _selection_with_real_anchor(report: Any, marker_id: int = 0) -> Any:
             "preferred_marker_id": marker_id,
             "selection_mode": "real_vehicle_canonical_nonblocking_v1",
             "resolution_stage": "preflight",
-            "observation_candidates": sorted(observation_candidates),
             "reason": (
                 "Real Vehicle canonical marker 0 remains the requested common "
                 "evaluation/export anchor. Calibration readiness is independent "
                 "from common-anchor export observability; methods that cannot "
                 "express a partial result in marker 0 remain runnable and are "
-                "reported as evaluation unavailable/not observable."
+                "reported as evaluation unavailable/not observable. Existing "
+                "observation/automatic compatibility candidate sets are retained "
+                "unchanged."
             ),
         }
     )
-    payload.setdefault("automatic_recommendations", {})[
-        "evaluation_anchor_marker_id"
-    ] = marker_id
     payload["real_vehicle_marker_zero_policy"] = {
         "canonical_marker_id": marker_id,
         "marker_zero_observed": True,
         "selected": marker_id,
         "calibration_gating": False,
         "common_evaluation_requested": True,
+        "compatibility_evidence_overridden": False,
         "unobservable_method_results_are_reported_not_failed": True,
         "ground_truth_used": False,
     }
@@ -140,6 +139,7 @@ def _rewrite_preflight_summary(report: Any) -> None:
     summary["evaluation_readiness_policy"] = {
         "enabled": True,
         "calibration_gating": False,
+        "compatibility_evidence_overridden": False,
         "unobservable_evaluation_is_reported": True,
     }
     _write_json(summary_path, summary)
@@ -275,6 +275,7 @@ def _install_nonblocking_preflight() -> None:
                         "canonical_marker_id": 0,
                         "marker_zero_observed": marker_zero_observed,
                         "calibration_gating": False,
+                        "compatibility_evidence_overridden": False,
                         "unobservable_evaluation_is_reported": True,
                         "ground_truth_used": False,
                     },
@@ -582,15 +583,13 @@ def _install_partial_result_reporting() -> None:
                     config_path = result_root / "provenance" / "resolved_config.yaml"
                     evaluation_requested = True
                     try:
-                        import yaml
-
                         config = yaml.safe_load(
                             config_path.read_text(encoding="utf-8")
                         ) or {}
                         evaluation_requested = bool(
                             config.get("evaluation", {}).get("enabled", True)
                         )
-                    except (OSError, ValueError):
+                    except (OSError, TypeError, ValueError, yaml.YAMLError):
                         evaluation_requested = True
                     payload["evaluation_requested"] = evaluation_requested
                     if evaluation_requested and payload.get("evaluation_status") in {
@@ -615,6 +614,12 @@ def _install_partial_result_reporting() -> None:
                 if "AP02 LOCAL COMPONENT CAMERA POSES" not in text:
                     text = text.rstrip() + "\n\n" + detail + "\n"
                 text_path.write_text(text, encoding="utf-8")
+                for index, item in enumerate(payloads):
+                    if (
+                        str(item.get("method")) == "ap02"
+                        and str(item.get("label")) == result_root.name
+                    ):
+                        payloads[index] = payload
             return payloads
 
         refresh_method_reports._rigcal_ap02_partial_components = True  # type: ignore[attr-defined]
