@@ -65,6 +65,7 @@ def test_marker_zero_can_remain_evaluation_anchor_without_changing_ap02_referenc
                 "configured": "auto",
                 "selected": 8,
                 "observation_candidates": [8],
+                "automatic_observation_candidates": [8],
             },
             "automatic_recommendations": {
                 "evaluation_anchor_marker_id": 8,
@@ -86,6 +87,15 @@ def test_marker_zero_can_remain_evaluation_anchor_without_changing_ap02_referenc
     assert updated.selections.ap02_reference_marker_id == 8
     assert updated.selections.evaluation_anchor_marker_id == 0
     assert updated.selections.payload["evaluation_anchor"]["selected"] == 0
+    # Marker 0 remains the requested canonical anchor, but the scientific
+    # compatibility evidence must not be forged to claim that it is evaluable.
+    assert updated.selections.payload["evaluation_anchor"]["observation_candidates"] == [8]
+    assert updated.selections.payload["evaluation_anchor"]["automatic_observation_candidates"] == [8]
+    assert (
+        updated.selections.payload["real_vehicle_marker_zero_policy"]
+        ["compatibility_evidence_overridden"]
+        is False
+    )
     assert (
         updated.selections.payload["real_vehicle_marker_zero_policy"]
         ["calibration_gating"]
