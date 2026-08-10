@@ -22,6 +22,7 @@ from .reporting_authority_policy import install_reporting_authority_policy
 from .result_output_policy import install_result_output_policy
 from .result_view_policy import install_result_view_policy
 from .rviz_manifest_policy import install_rviz_manifest_policy
+from .rviz_method_selection_policy import install_rviz_method_selection_policy
 from .submission_bindings import install_submission_bindings
 from .submission_policy import install_submission_policy
 from .ui_display_policy import install_ui_display_policy
@@ -69,6 +70,9 @@ install_final_reporting_frontdoor_policy()
 # Real Vehicle, Simulation and subsequent ablation runs.
 install_ap02_convergence_frontdoor_policy()
 install_rviz_manifest_policy()
+# Result option 5 now offers the common-anchor overlay plus separate native AP02
+# component views when partial AP02 has no valid common export frame.
+install_rviz_method_selection_policy()
 # Bind already-imported preflight/runtime consumers only after all selection
 # wrappers are installed, so Wizard and --config use the identical path.
 install_submission_bindings()
