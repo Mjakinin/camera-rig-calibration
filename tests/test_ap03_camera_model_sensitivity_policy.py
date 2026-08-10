@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from camera_rig_calibration import experiments
 from camera_rig_calibration.ap03_camera_model_sensitivity_policy import (
     CALIBRATED,
     PINHOLE_INTRINSICS_ONLY,
@@ -17,7 +18,6 @@ from camera_rig_calibration.config.models import (
     StaticCameraSettings,
 )
 from camera_rig_calibration.contracts import RunContext
-from camera_rig_calibration.experiments import colmap_artifact_fingerprint
 from camera_rig_calibration.methods.ap03.pipeline import AP03Method
 from camera_rig_calibration.methods.ap03.pinhole_reconstruct_stage import (
     prepare_pinhole_camera_info,
@@ -156,6 +156,8 @@ def test_sensitivity_policy_has_distinct_colmap_artifact_fingerprint(
 
     assert _policy_from_methods(calibrated.methods) == CALIBRATED
     assert _policy_from_methods(pinhole.methods) == PINHOLE_INTRINSICS_ONLY
-    assert colmap_artifact_fingerprint(calibrated, "ap03", "input_x") != (
-        colmap_artifact_fingerprint(pinhole, "ap03", "input_x")
+    assert experiments.colmap_artifact_fingerprint(
+        calibrated, "ap03", "input_x"
+    ) != experiments.colmap_artifact_fingerprint(
+        pinhole, "ap03", "input_x"
     )
