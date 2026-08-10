@@ -4,31 +4,22 @@ The actual calibration implementations live below :mod:`camera_rig_calibration.m
 This package contains only the adapters that connect inputs, methods,
 evaluators and experiment variants to the runtime registries.
 
-Method adapters and the registration routine are imported lazily.  This keeps
-``components.common`` usable from an individual method module without forcing
-``components.registration`` to import that same method again while it is only
-partially initialized.
+Public adapters are imported lazily.  In particular, importing
+``components.common`` from one calibration method must not initialize the
+registration module and recursively import that same partially initialized
+method.
 """
-
-from .evaluation import MarkerConsistencyEvaluator
-from .experiments import ColmapMatcherExperiments
-from .inputs import (
-    FilesystemInputAdapter,
-    McapInputAdapter,
-    PreparedInputAdapter,
-    SimulationInputAdapter,
-)
 
 
 def register_builtin_components() -> None:
-    """Register all built-in adapters without eager method-package imports."""
+    """Register all built-in adapters without eager package-level imports."""
     from .registration import register_builtin_components as _register
 
     _register()
 
 
 def __getattr__(name: str):
-    """Preserve the historical public method-adapter imports lazily."""
+    """Resolve the historical public component exports on first access."""
     if name == "AP01Method":
         from ..methods.ap01.pipeline import AP01Method
 
@@ -41,6 +32,33 @@ def __getattr__(name: str):
         from ..methods.ap03.pipeline import AP03Method
 
         return AP03Method
+    if name == "MarkerConsistencyEvaluator":
+        from .evaluation import MarkerConsistencyEvaluator
+
+        return MarkerConsistencyEvaluator
+    if name == "ColmapMatcherExperiments":
+        from .experiments import ColmapMatcherExperiments
+
+        return ColmapMatcherExperiments
+    if name in {
+        "FilesystemInputAdapter",
+        "McapInputAdapter",
+        "PreparedInputAdapter",
+        "SimulationInputAdapter",
+    }:
+        from .inputs import (
+            FilesystemInputAdapter,
+            McapInputAdapter,
+            PreparedInputAdapter,
+            SimulationInputAdapter,
+        )
+
+        return {
+            "FilesystemInputAdapter": FilesystemInputAdapter,
+            "McapInputAdapter": McapInputAdapter,
+            "PreparedInputAdapter": PreparedInputAdapter,
+            "SimulationInputAdapter": SimulationInputAdapter,
+        }[name]
     raise AttributeError(name)
 
 
