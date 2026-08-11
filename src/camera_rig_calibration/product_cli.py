@@ -25,6 +25,7 @@ from .rviz_manifest_policy import install_rviz_manifest_policy
 from .rviz_method_selection_policy import install_rviz_method_selection_policy
 from .submission_bindings import install_submission_bindings
 from .submission_policy import install_submission_policy
+from .submission_quality_policy import install_submission_quality_policy
 from .ui_display_policy import install_ui_display_policy
 
 
@@ -55,6 +56,11 @@ install_ap03_camera_model_sensitivity_policy()
 # diagnostics from that trace for every completed AP02 result without rerunning BA.
 install_ap02_convergence_reporting_policy()
 install_result_output_policy()
+# Preserve the distinction between successful execution and valid calibration.
+# In particular, weak AP03 metric scale and partial AP02 coverage remain
+# available as diagnostics but can never become deployment-eligible by default
+# in publication or common-anchor export layers.
+install_submission_quality_policy()
 # Real Vehicle evaluation remains enabled, but common-anchor observability is a
 # post-method reporting concern rather than a calibration-readiness gate. AP02
 # disconnected components remain runnable and are surfaced in RESULT artifacts.
