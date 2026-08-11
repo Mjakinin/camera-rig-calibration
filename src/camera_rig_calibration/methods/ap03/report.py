@@ -5,6 +5,9 @@ import json
 from pathlib import Path
 
 from camera_rig_calibration.pipeline import StageResult, run_stage
+from camera_rig_calibration.submission_quality_policy import (
+    ap03_quality_semantics,
+)
 
 
 def _read_optional(path: Path) -> dict:
@@ -28,40 +31,26 @@ def run(*, output_root: Path) -> StageResult:
             / "scale_multi"
             / "AP03_MARKER_SIZE_SCALE_ONLY_METADATA.json"
         )
-        multi_success = multi.get("scale_m_per_colmap_unit") is not None
-        if not multi_success:
+        if multi.get("scale_m_per_colmap_unit") is None:
             raise RuntimeError("AP03 multi-marker primary scale is unavailable")
+
         single_success = single.get("scale_m_per_colmap_unit") is not None
-        status = "OK" if single_success else "PARTIAL"
         reconstruction = _read_optional(
             output_root
             / "colmap"
             / "inspection"
             / "AP03_RECONSTRUCTION_DIAGNOSTICS.json"
         )
-        scale_relative_std = multi.get("used_rel_std_scale")
-        scale_quality = (
-            "unavailable"
-            if scale_relative_std is None
-            else "good"
-            if float(scale_relative_std) <= 0.05
-            else "warning_scale_dispersion"
-            if float(scale_relative_std) <= 0.10
-            else "poor_scale_dispersion"
+        semantics = ap03_quality_semantics(
+            multi,
+            reconstruction=reconstruction,
         )
+        status = str(multi.get("status") or "UNKNOWN")
+        scale_relative_std = multi.get("used_rel_std_scale")
         reconstruction_quality = reconstruction.get(
             "quality_status", "unavailable"
         )
-        quality_status = (
-            "poor_scale_dispersion"
-            if scale_quality == "poor_scale_dispersion"
-            else "warning_reconstruction_or_scale"
-            if (
-                scale_quality != "good"
-                or reconstruction_quality != "good"
-            )
-            else "good"
-        )
+
         report = {
             "schema_version": 5,
             "method": "AP03",
@@ -73,18 +62,14 @@ def run(*, output_root: Path) -> StageResult:
             "shared_scale_configuration": True,
             "execution_status": "completed",
             "solver_status": "not_applicable",
-            "calibration_status": "available",
-            "quality_status": quality_status,
-            "scale_quality_status": scale_quality,
+            **semantics,
             "scale_relative_std": scale_relative_std,
             "reconstruction_quality_status": reconstruction_quality,
             "reconstruction_diagnostics": reconstruction,
             "aruco_consistency_gate": {
                 "maximum_translation_deviation_m": 0.30,
                 "maximum_rotation_deviation_deg": 7.0,
-                "status": (
-                    "deferred_to_post_method_anchor_evaluation"
-                ),
+                "status": "deferred_to_post_method_anchor_evaluation",
                 "ground_truth_used": False,
             },
         }
@@ -103,15 +88,17 @@ def run(*, output_root: Path) -> StageResult:
                     "Diagnostic result: single-marker scale",
                     "COLMAP reconstructions: 1",
                     "Single and multi use one shared RANSAC configuration.",
-                    f"Quality: {quality_status}",
+                    f"Quality: {semantics['quality_status']}",
+                    f"Calibration: {semantics['calibration_status']}",
+                    (
+                        "Deployment eligible: "
+                        f"{str(semantics['deployment_eligible']).lower()}"
+                    ),
                     (
                         "Multi-scale relative standard deviation: "
                         f"{scale_relative_std if scale_relative_std is not None else 'unavailable'}"
                     ),
-                    (
-                        "Reconstruction support: "
-                        f"{reconstruction_quality}"
-                    ),
+                    f"Reconstruction support: {reconstruction_quality}",
                     "",
                 ]
             ),
@@ -119,28 +106,27 @@ def run(*, output_root: Path) -> StageResult:
         )
         for name in ("evaluation_single", "evaluation_multi"):
             (output_root / name).mkdir(parents=True, exist_ok=True)
+
         method_status = output_root / "METHOD_STATUS.json"
         method_status.write_text(
             json.dumps(
                 {
                     "method": "AP03",
                     "status": status,
+                    # success means the method pipeline completed and produced
+                    # its primary diagnostic artifact. Calibration validity is
+                    # represented independently below.
                     "success": True,
                     "execution_status": "completed",
                     "solver_status": "not_applicable",
-                    "calibration_status": "available",
-                    "quality_status": quality_status,
+                    **semantics,
                     "primary_result": "multi",
                     "single_diagnostic_success": single_success,
-                    "registered_static_cameras": (
-                        reconstruction.get(
-                            "registered_static_camera_count"
-                        )
+                    "registered_static_cameras": reconstruction.get(
+                        "registered_static_camera_count"
                     ),
-                    "registered_moving_frames": (
-                        reconstruction.get(
-                            "registered_moving_frame_count"
-                        )
+                    "registered_moving_frames": reconstruction.get(
+                        "registered_moving_frame_count"
                     ),
                     "sparse_point_count": reconstruction.get(
                         "sparse_point_count"
