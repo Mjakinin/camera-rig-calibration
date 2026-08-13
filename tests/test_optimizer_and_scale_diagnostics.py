@@ -52,12 +52,22 @@ def test_ap02_records_residual_calls_without_claiming_solver_iterations(
         ap02_root,
         observations_csv,
         initialization_root,
+        moving_frame_selection_policy,
+        reference_marker_maximum_frames,
+        top_per_marker,
+        top_per_marker_pair,
+        maximum_total_frames,
     ):
         del (
             reference_marker_id,
             maximum_function_evaluations,
             observations_csv,
             initialization_root,
+            moving_frame_selection_policy,
+            reference_marker_maximum_frames,
+            top_per_marker,
+            top_per_marker_pair,
+            maximum_total_frames,
         )
         (ap02_root / "07_graph_ba" / mode).mkdir(parents=True)
         optimize.core.least_squares(
