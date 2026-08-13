@@ -115,6 +115,11 @@ results/real_vehicle_data/
 results/**/_pipeline_logs/
 results/**/*.log
 
+# Detailed row-level parity traces are reproducible generated diagnostics. Keep
+# compact parity summaries in Git, not multi-megabyte candidate dumps/diffs.
+parity/**/AP01_CANDIDATES.jsonl
+parity/**/AP01_CANDIDATE_DIFF.csv
+
 # ============================================================
 # LFS-free repository payload policy
 # ============================================================
