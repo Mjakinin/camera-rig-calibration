@@ -1,0 +1,20 @@
+name: Repository hygiene
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  repository-hygiene:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Enforce LFS-free tracked-file size policy
+        run: python tools/check_repository_hygiene.py
