@@ -1,85 +1,11 @@
 from __future__ import annotations
 
-from .ap01_common_anchor_policy import install_ap01_common_anchor_policy
-from .ap02_convergence_frontdoor_policy import install_ap02_convergence_frontdoor_policy
-from .ap02_convergence_reporting_policy import install_ap02_convergence_reporting_policy
-from .ap02_partial_reference_reporting_policy import (
-    install_ap02_partial_reference_reporting_policy,
-)
-from .ap03_camera_model_sensitivity_policy import (
-    install_ap03_camera_model_sensitivity_policy,
-)
-from .common_anchor_authority_policy import install_common_anchor_authority_policy
-from .final_reporting_frontdoor_policy import install_final_reporting_frontdoor_policy
-from .marker_preference_policy import install_marker_preference_policy
-from .product_policy import install_product_policy
-from .queue_anchor_preference_policy import install_queue_anchor_preference_policy
-from .real_ap02_budget_policy import install_real_ap02_budget_policy
-from .real_marker_reporting_policy import install_real_marker_reporting_policy
-from .real_partial_evaluation_policy import install_real_partial_evaluation_policy
-from .real_vehicle_marker_zero_policy import install_real_vehicle_marker_zero_policy
-from .reporting_authority_policy import install_reporting_authority_policy
-from .result_output_policy import install_result_output_policy
-from .result_view_policy import install_result_view_policy
-from .rviz_manifest_policy import install_rviz_manifest_policy
-from .rviz_method_selection_policy import install_rviz_method_selection_policy
-from .submission_bindings import install_submission_bindings
-from .submission_policy import install_submission_policy
-from .ui_display_policy import install_ui_display_policy
+from .bootstrap import install_product_stack
 
 
-# Install product defaults before the public CLI imports the wizard and queue.
-# Scientific method implementations remain unchanged; these layers own the
-# submission-facing defaults, selection contract, reporting and visualization.
-install_product_policy()
-# New Real Vehicle jobs keep static AP02 BA at 80 evaluations but allow the
-# combined BA up to 160 so normal ftol/xtol/gtol termination can occur before
-# the safety ceiling. Simulation retains its frozen historical contract.
-install_real_ap02_budget_policy()
-install_reporting_authority_policy()
-install_submission_policy()
-install_marker_preference_policy()
-install_common_anchor_authority_policy()
-# Real Vehicle has one canonical marker contract: marker 0 is retained whenever
-# observed. A different marker is allowed only when marker 0 is absent.
-install_real_vehicle_marker_zero_policy()
-install_queue_anchor_preference_policy()
-# AP01's native rig estimate remains untouched. Only its marker-0 export frame is
-# robustly aligned from the metric moving trajectory instead of one weak PnP pose.
-install_ap01_common_anchor_policy()
-# AP03 keeps its calibrated camera-model baseline unchanged. Real-data wizard
-# runs may explicitly select a separately fingerprinted moving-camera PINHOLE
-# sensitivity variant without mutating the source camera-info metadata.
-install_ap03_camera_model_sensitivity_policy()
-# AP02 already records its full optimization history. Publish convergence/tail
-# diagnostics from that trace for every completed AP02 result without rerunning BA.
-install_ap02_convergence_reporting_policy()
-install_result_output_policy()
-# Real Vehicle evaluation remains enabled, but common-anchor observability is a
-# post-method reporting concern rather than a calibration-readiness gate. AP02
-# disconnected components remain runnable and are surfaced in RESULT artifacts.
-install_real_partial_evaluation_policy()
-# The primary AP02 component remains in the reference marker frozen for the real
-# solve; only separately calibrated diagnostic components use their own anchors.
-install_ap02_partial_reference_reporting_policy()
-install_real_marker_reporting_policy()
-# Final experiment RESULTS is canonical regardless of wrapper/import order: it
-# states the common export frame and embeds native metric marker diagnostics.
-install_final_reporting_frontdoor_policy()
-# Make the same AP02 convergence summary visible in experiment-level reports for
-# Real Vehicle, Simulation and subsequent ablation runs.
-install_ap02_convergence_frontdoor_policy()
-install_rviz_manifest_policy()
-# Result option 5 now offers the common-anchor overlay plus separate native AP02
-# component views when partial AP02 has no valid common export frame.
-install_rviz_method_selection_policy()
-# Bind already-imported preflight/runtime consumers only after all selection
-# wrappers are installed, so Wizard and --config use the identical path.
-install_submission_bindings()
-install_ui_display_policy()
-# Result browsing is read-only and must not re-run expensive report generation
-# before the menu is shown. Missing/legacy artifacts still reconcile on demand.
-install_result_view_policy()
+# Install product-facing compatibility policies before importing the public CLI.
+# The numerical AP01/AP02/AP03 implementations are not modified here.
+install_product_stack()
 
 from .cli import main  # noqa: E402
 
