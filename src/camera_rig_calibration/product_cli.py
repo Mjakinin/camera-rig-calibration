@@ -1,13 +1,18 @@
 from __future__ import annotations
 
-from .bootstrap import install_product_stack
+from . import bootstrap
 
 
-# Install product-facing compatibility policies before importing the public CLI.
-# The numerical AP01/AP02/AP03 implementations are not modified here.
-install_product_stack()
+def main() -> int:
+    """Install product-facing policies, then delegate to the canonical CLI."""
+    bootstrap.install_product_stack()
 
-from .cli import main  # noqa: E402
+    # Import only after the policy stack is installed.  Keeping this import
+    # inside the entry point makes importing product_cli itself side-effect
+    # free while preserving the runtime ordering of the ``rigcal`` command.
+    from .cli import main as cli_main
+
+    return cli_main()
 
 
 __all__ = ["main"]
