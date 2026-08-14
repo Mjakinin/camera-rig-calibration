@@ -185,6 +185,51 @@ def test_schema_v5_unambiguous_migrations(
     assert loaded.colmap.compute_mode == "cpu_baseline"
 
 
+def test_retired_method_option_names_load_as_current_baselines(
+    prepared_config: RigConfig, tmp_path: Path
+) -> None:
+    payload = prepared_config.model_dump(mode="json", exclude_none=True)
+    payload["methods"]["ap01"].update(
+        {
+            "historical_reproduction": False,
+            "advanced_strategy": "legacy_main_v1",
+        }
+    )
+    payload["methods"]["ap02"].update(
+        {
+            "historical_reproduction": False,
+            "frame_selection_strategy": "legacy_smart_v1",
+            "initialization_strategy": "legacy_maximum_bottleneck_v1",
+            "graph_edge_weight_strategy": "legacy_observation_quality_v1",
+            "reprojection_model": "legacy_pinhole_v1",
+        }
+    )
+    payload["methods"]["ap03"].update(
+        {
+            "feature_limit_policy": "legacy_colmap_defaults_v1",
+            "scale_input_policy": "legacy_registered_image_redetection_v1",
+        }
+    )
+    source = tmp_path / "retired-method-options.yaml"
+    source.write_text(yaml.safe_dump(payload), encoding="utf-8")
+
+    with pytest.warns(DeprecationWarning, match="retired schema-v5"):
+        loaded = load_config(source, resolve_paths=False)
+
+    assert loaded.methods.ap02.frame_selection_strategy == "smart_v1"
+    assert loaded.methods.ap02.initialization_strategy == "maximum_frontier_v1"
+    assert (
+        loaded.methods.ap02.graph_edge_weight_strategy
+        == "geometric_observation_quality_v1"
+    )
+    assert loaded.methods.ap02.reprojection_model == "pinhole_v1"
+    assert loaded.methods.ap03.feature_limit_policy == "colmap_defaults_v1"
+    assert (
+        loaded.methods.ap03.scale_input_policy
+        == "registered_image_redetection_v1"
+    )
+
+
 def test_ap02_reference_selection_modes_preserve_schema_v5_compatibility(
     prepared_config: RigConfig,
 ) -> None:

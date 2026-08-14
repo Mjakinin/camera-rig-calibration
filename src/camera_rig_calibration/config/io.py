@@ -76,6 +76,65 @@ def _migrate_schema_v5(payload: dict[str, Any], source: Path) -> dict[str, Any]:
     """Apply only unambiguous migrations within the supported v5 contract."""
 
     migrated = deepcopy(payload)
+    methods = migrated.get("methods")
+    retired_method_options: list[str] = []
+    if isinstance(methods, dict):
+        for method_id in ("ap01", "ap02"):
+            settings = methods.get(method_id)
+            if not isinstance(settings, dict):
+                continue
+            if "historical_reproduction" in settings:
+                settings.pop("historical_reproduction")
+                retired_method_options.append(
+                    f"methods.{method_id}.historical_reproduction"
+                )
+        ap01 = methods.get("ap01")
+        if isinstance(ap01, dict) and "advanced_strategy" in ap01:
+            ap01.pop("advanced_strategy")
+            retired_method_options.append("methods.ap01.advanced_strategy")
+
+        renamed_values = {
+            ("ap02", "frame_selection_strategy"): {
+                "legacy_smart_v1": "smart_v1",
+            },
+            ("ap02", "initialization_strategy"): {
+                "legacy_maximum_bottleneck_v1": "maximum_frontier_v1",
+            },
+            ("ap02", "graph_edge_weight_strategy"): {
+                "legacy_observation_quality_v1": (
+                    "geometric_observation_quality_v1"
+                ),
+            },
+            ("ap02", "reprojection_model"): {
+                "legacy_pinhole_v1": "pinhole_v1",
+            },
+            ("ap03", "feature_limit_policy"): {
+                "legacy_colmap_defaults_v1": "colmap_defaults_v1",
+            },
+            ("ap03", "scale_input_policy"): {
+                "legacy_registered_image_redetection_v1": (
+                    "registered_image_redetection_v1"
+                ),
+            },
+        }
+        for (method_id, key), aliases in renamed_values.items():
+            settings = methods.get(method_id)
+            if not isinstance(settings, dict):
+                continue
+            current = settings.get(key)
+            if current not in aliases:
+                continue
+            settings[key] = aliases[current]
+            retired_method_options.append(f"methods.{method_id}.{key}")
+    if retired_method_options:
+        warnings.warn(
+            "Migrated retired schema-v5 method options: "
+            + ", ".join(retired_method_options)
+            + ".",
+            DeprecationWarning,
+            stacklevel=3,
+        )
+
     colmap = migrated.get("colmap")
     if isinstance(colmap, dict) and "gpu_mode" in colmap:
         legacy_gpu_mode = str(colmap.pop("gpu_mode")).strip().lower()
