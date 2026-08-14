@@ -91,10 +91,8 @@ def test_ap03_combines_single_and_multi_with_one_colmap_run(
     assert "--loop-detection" not in reconstruct
     single = commands[3].argv
     multi = commands[4].argv
-    assert single[single.index("--marker-ids") + 1] == "14"
-    assert multi[multi.index("--marker-ids") + 1] == ",".join(
-        str(value) for value in range(15)
-    )
+    assert single[single.index("--marker-ids") + 1] == "9"
+    assert multi[multi.index("--marker-ids") + 1] == "7,9"
     for flag in (
         "--reprojection-threshold-px",
         "--ransac-iterations",

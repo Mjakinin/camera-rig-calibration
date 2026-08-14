@@ -81,6 +81,12 @@ def test_normal_baseline_never_resolves_the_frozen_stream(tmp_path: Path) -> Non
 def test_frozen_ap02_validation_is_strict_and_fail_closed(
     tmp_path: Path,
 ) -> None:
+    if not (DATASET / "metadata/dataset_identity.json").is_file():
+        with pytest.raises(
+            RuntimeError, match="Prepared AP02 dataset identity is missing"
+        ):
+            _validate()
+        return
     frozen = _validate()
     assert frozen.observations == FROZEN
     assert frozen.provenance["source_observation_count"] == 513
@@ -99,6 +105,31 @@ def test_historical_build_graph_records_validated_provenance(
 ) -> None:
     contract = _contract()
     output = tmp_path / "03_AP02"
+    if not (DATASET / "metadata/dataset_identity.json").is_file():
+        with pytest.raises(
+            RuntimeError, match="Prepared AP02 dataset identity is missing"
+        ):
+            build_graph(
+                observations_root=DATASET / "observations",
+                dataset_root=DATASET,
+                output_root=output,
+                camera_ids=(
+                    "cam_edge_0",
+                    "cam_edge_1",
+                    "cam_edge_3",
+                    "cam_edge_5",
+                ),
+                reference_marker_id=14,
+                reference_marker_maximum_frames=None,
+                top_per_marker=8,
+                top_per_marker_pair=4,
+                maximum_total_frames=None,
+                graph_observation_policy=contract.graph_observation_policy,
+                method_contract=contract.fingerprint_payload(),
+                method_contract_sha256=contract.scientific_fingerprint(),
+                historical_reproduction=True,
+            )
+        return
     result = build_graph(
         observations_root=DATASET / "observations",
         dataset_root=DATASET,

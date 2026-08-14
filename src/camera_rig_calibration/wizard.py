@@ -3817,15 +3817,17 @@ def _setting_rows(
                 "Validated against the registered method config model.",
             )
         )
-    if job.method_id == "ap03" or (
-        job.method_id == "ap01"
-        and job.methods.ap01.advanced_strategy == "wizard_robustness_v1"
-    ):
+    if job.method_id in {"ap01", "ap03"}:
         rows.extend([
             ("matcher", "COLMAP SETTINGS", "Matcher", job.colmap.matcher, "exhaustive", "Exhaustive compares all image pairs; sequential limits temporal pairs."),
             ("compute_mode", "COLMAP SETTINGS", "COLMAP compute mode", job.colmap.compute_mode, "cpu_baseline", "CPU baseline is reproducible; GPU is explicit; auto probes capability and records the resolved device."),
             ("mapper_matches", "COLMAP SETTINGS", "Mapper minimum matches", job.colmap.mapper_minimum_matches, 8, "Higher requires stronger image pairs; lower may add weak registrations."),
         ])
+        if job.method_id == "ap01":
+            rows.extend([
+                ("maximum_image_size", "COLMAP SETTINGS", "Maximum feature image size", job.colmap.maximum_image_size, 1600, "Maximum AP01 moving-reconstruction image dimension used during SIFT extraction."),
+                ("maximum_features", "COLMAP SETTINGS", "Maximum features per image", job.colmap.maximum_features, 4096, "Maximum AP01 SIFT features extracted per moving image."),
+            ])
         if (
             job.method_id == "ap03"
             and job.methods.ap03.feature_limit_policy

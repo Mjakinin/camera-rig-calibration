@@ -286,11 +286,15 @@ def test_repository_final_pose_evidence_is_exact_and_hash_locked() -> None:
     def load(relative: str) -> dict:
         return json.loads((evidence / relative).read_text(encoding="utf-8"))
 
-    def digest(relative: str) -> str:
+    def digest(relative: str, *, canonical_csv_crlf: bool = False) -> str:
         sha = hashlib.sha256()
-        with (evidence / relative).open("rb") as handle:
-            for block in iter(lambda: handle.read(1024 * 1024), b""):
-                sha.update(block)
+        payload = (evidence / relative).read_bytes()
+        if canonical_csv_crlf:
+            # csv.writer produced this frozen Windows artifact with CRLF. Git
+            # stores text files with LF, so reconstruct the locked generator
+            # bytes before comparing the historical SHA-256.
+            payload = payload.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+        sha.update(payload)
         return sha.hexdigest()
 
     report = load("ap01/final_pose/AP01_FINAL_POSE_PARITY.json")
@@ -318,7 +322,10 @@ def test_repository_final_pose_evidence_is_exact_and_hash_locked() -> None:
     assert selected["aggregate_selection_invoked"] is False
     assert pre_fix["classification"] == "DIFFERENT_EXPORT_SEMANTICS"
     for artifact in pre_fix["artifacts"]:
-        assert artifact["sha256"] == digest(artifact["path"])
+        assert artifact["sha256"] == digest(
+            artifact["path"],
+            canonical_csv_crlf=artifact["path"].endswith(".csv"),
+        )
     assert lock["locks"]["ap01_final_pose_selected_candidates_sha256"] == digest(
         "frozen/AP01_SELECTED_CANDIDATES.json"
     )

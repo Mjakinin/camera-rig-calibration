@@ -6,6 +6,10 @@ from pathlib import Path
 import pytest
 
 from camera_rig_calibration.config.models import (
+    AP02Settings,
+    AP03MultiSettings,
+    AP03Settings,
+    AP03SingleSettings,
     DatasetSettings,
     MethodSettings,
     MovingCameraSettings,
@@ -49,6 +53,27 @@ def make_prepared_dataset(root: Path, camera_ids: list[str]) -> Path:
     return root
 
 
+def real_method_settings(
+    enabled: list[str],
+    *,
+    extensions: dict[str, dict] | None = None,
+) -> MethodSettings:
+    """Build method settings with observation-driven real-data markers."""
+
+    return MethodSettings(
+        enabled=enabled,
+        ap02=AP02Settings(
+            reference_marker_selection_mode="auto",
+            reference_marker_id="auto",
+        ),
+        ap03=AP03Settings(
+            single=AP03SingleSettings(scale_marker_id="auto"),
+            multi=AP03MultiSettings(marker_ids="auto"),
+        ),
+        extensions=extensions or {},
+    )
+
+
 @pytest.fixture
 def prepared_config(tmp_path: Path) -> RigConfig:
     cameras = ["front-left", "roof.camera"]
@@ -66,5 +91,7 @@ def prepared_config(tmp_path: Path) -> RigConfig:
         ),
         static_cameras=[StaticCameraSettings(id=value) for value in cameras],
         moving_camera=MovingCameraSettings(id="calibration_camera"),
-        methods=MethodSettings(enabled=["ap02"]),
+        # Generic/real datasets must resolve their AP02 reference marker from
+        # observations.  The marker-14 baseline is simulation-only.
+        methods=real_method_settings(["ap02"]),
     )

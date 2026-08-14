@@ -322,6 +322,16 @@ def test_frozen_historical_sfm_is_guarded_and_invokes_no_colmap(
         / "results/simulation/baseline/route2_main_parity_v1"
     )
     contract = resolve_ap01_method_contract("main_route2_parity_v1")
+    if not (dataset / "metadata/dataset_identity.json").is_file():
+        with pytest.raises(
+            RuntimeError, match="Prepared AP01 dataset identity is missing"
+        ):
+            validate_frozen_intermediate(
+                dataset=dataset,
+                moving_camera_id="moving_calib_camera",
+                contract=contract,
+            )
+        return
     frozen = validate_frozen_intermediate(
         dataset=dataset,
         moving_camera_id="moving_calib_camera",

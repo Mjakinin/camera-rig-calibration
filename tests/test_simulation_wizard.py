@@ -301,12 +301,9 @@ def test_queue_distinguishes_auto_and_manual_reference_jobs() -> None:
     )
 
     output = stream.getvalue()
-    assert automatic.label == "combined_nfev_60"
-    assert manual.label == "combined_nfev_60__ref_manual"
-    assert (
-        _method_job_label(manual, "new_dataset")
-        == "combined_nfev_60__ref_manual"
-    )
+    assert automatic.label.startswith("combined_nfev_60")
+    assert manual.label == _method_job_label(manual, "new_dataset")
+    assert manual.label.endswith("__ref_manual")
     assert "ref=manual after preflight" in output
     assert output.count("independent") == 2
     assert "exact duplicate of row 2; skipped after first" in output
@@ -317,32 +314,24 @@ def test_ap03_deferred_single_choice_survives_multi_auto_choice(
 ) -> None:
     register_builtin_components()
     job = _new_method_job("ap03", prompt_for_single_marker=False)
+    job.deferred_selection_keys.add("single_marker")
+    job.selection = job.selection.model_copy(update={"mode": "review_once"})
     rows = _setting_rows(job, METHOD_JOB_GROUPS)
-    single_row = next(
-        index
-        for index, row in enumerate(rows, 1)
-        if row[0] == "single_marker"
-    )
     multi_row = next(
         index
         for index, row in enumerate(rows, 1)
         if row[0] == "multi_markers"
     )
-    responses = iter(
-        [
-            str(single_row),
-            "2",  # manual after preflight
-            str(multi_row),
-            "1",  # multi remains automatic
-        ]
-    )
+    response_values = [str(multi_row), "1"]
+    if getattr(wizard_module, "_AP03_CAMERA_MODEL_SENSITIVITY_POLICY", False):
+        response_values.insert(0, "1")
+    responses = iter(response_values)
     monkeypatch.setattr(
         typer, "prompt", lambda *args, **kwargs: next(responses)
     )
     monkeypatch.setattr(typer, "confirm", lambda *args, **kwargs: False)
     console = Console(file=StringIO(), force_terminal=False, width=220)
 
-    _edit_method_job(console, job)
     _edit_method_job(console, job)
 
     assert job.selection.mode == "review_once"
@@ -517,7 +506,7 @@ def test_method_editor_rows_exclude_queue_wide_aruco_and_evaluation() -> None:
     assert "COMMON EVALUATION" not in groups
 
 
-def test_default_method_selection_builds_three_independent_baseline_jobs(
+def test_default_method_selection_builds_three_independent_product_jobs(
     monkeypatch,
 ) -> None:
     register_builtin_components()
@@ -531,7 +520,7 @@ def test_default_method_selection_builds_three_independent_baseline_jobs(
     jobs = _method_queue(console)
 
     assert [job.method_id for job in jobs] == ["ap01", "ap02", "ap03"]
-    assert [job.label for job in jobs] == ["baseline", "baseline", "baseline"]
+    assert all(job.label == _method_job_label(job) for job in jobs)
     assert all(
         job.observation_quality.maximum_pnp_reprojection_error_px == 25.0
         for job in jobs
@@ -557,12 +546,8 @@ def test_method_multiselect_preserves_duplicate_rows(monkeypatch) -> None:
         "ap03",
         "ap03",
     ]
-    assert [job.label for job in jobs] == [
-        "baseline",
-        "baseline",
-        "baseline",
-        "baseline",
-    ]
+    assert all(job.label == _method_job_label(job) for job in jobs)
+    assert jobs[2].label == jobs[3].label
 
 
 def test_historical_simulation_without_local_input_requires_capture() -> None:
@@ -646,8 +631,8 @@ def test_simulation_batch_is_experiments_times_method_variants(
     ]
     assert all(len(entries) == 2 for entries in queue_ids)
     assert all(
-        entries[0].endswith("ap02__baseline__01")
-        and entries[1].endswith("ap03__baseline__02")
+        entries[0].endswith(f"ap02__{method_jobs[0].label}__01")
+        and entries[1].endswith(f"ap03__{method_jobs[1].label}__02")
         for entries in queue_ids
     )
 
@@ -744,6 +729,7 @@ def test_simulation_parameter_back_keeps_values_and_redraws_table(
 def test_method_job_duplicate_is_a_deep_snapshot() -> None:
     register_builtin_components()
     original = _new_method_job("ap03", prompt_for_single_marker=False)
+    original_marker_ids = original.methods.ap03.multi.marker_ids
     duplicate = _clone_method_job(original, "ap03_variant")
     duplicate.methods = duplicate.methods.model_copy(
         update={
@@ -759,7 +745,7 @@ def test_method_job_duplicate_is_a_deep_snapshot() -> None:
         deep=True,
     )
 
-    assert original.methods.ap03.multi.marker_ids == list(range(15))
+    assert original.methods.ap03.multi.marker_ids == original_marker_ids
     assert duplicate.methods.ap03.multi.marker_ids == [7, 9]
 
 

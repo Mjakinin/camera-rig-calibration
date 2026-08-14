@@ -133,8 +133,12 @@ def test_baseline_label_requires_complete_simulation_contract(
     config = prepared_config.model_copy(deep=True)
     config.dataset.category = DatasetCategory.SIMULATION
     config.evaluation.anchor_marker_id = 14
-    config.methods.ap02.reference_marker_selection_mode = "baseline"
-    config.methods.ap02.reference_marker_id = 14
+    config.methods.ap02 = config.methods.ap02.model_copy(
+        update={
+            "reference_marker_selection_mode": "baseline",
+            "reference_marker_id": 14,
+        }
+    )
     assert method_result_label(config, "ap02") == "baseline"
 
     config.methods.ap02.combined_ba_max_function_evaluations = 51

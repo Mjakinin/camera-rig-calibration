@@ -14,6 +14,7 @@ from camera_rig_calibration.config.models import (
 from camera_rig_calibration.experiments import (
     experiment_fingerprint,
     experiment_paths,
+    method_result_label,
     write_experiment_manifest,
 )
 from camera_rig_calibration.publication import (
@@ -261,9 +262,8 @@ def test_transaction_publishes_flat_dataset_and_method_result_atomically(
         results={"baseline": {"status": "completed", "result": str(execution)}},
     )
 
-    target = (
-        paths.methods
-        / "ap02/ap02_configured_defaults_nonbaseline"
+    target = paths.methods / "ap02" / method_result_label(
+        prepared_config, "ap02"
     )
     assert results["baseline"]["result"] == str(target.resolve())
     assert (paths.dataset_root / "raw_images/moving/frame.png").read_bytes() == b"moving"
@@ -427,7 +427,7 @@ def test_completed_staging_directory_is_reused_after_failed_rename(
     )
     transaction = config.project.workspace_root / "temporary_runs/staged"
     execution = _successful_ap02_execution(transaction, config)
-    label = "ap02_configured_defaults_nonbaseline"
+    label = method_result_label(config, "ap02")
     target = experiment_paths(config).methods / "ap02" / label
     staged = target.with_name(f".incoming_{label}_interrupted")
     (staged / "provenance").mkdir(parents=True)

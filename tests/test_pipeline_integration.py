@@ -16,7 +16,6 @@ from camera_rig_calibration.config import save_config
 from camera_rig_calibration.config.models import (
     DatasetSettings,
     EvaluationSettings,
-    MethodSettings,
     MovingCameraSettings,
     ProjectSettings,
     RigConfig,
@@ -28,7 +27,7 @@ from camera_rig_calibration.registry import calibration_methods
 from camera_rig_calibration.queueing import QueueConfig, QueueEntry, QueueRunner
 from camera_rig_calibration.runtime import PipelineOrchestrator
 
-from conftest import write_intrinsics
+from conftest import real_method_settings, write_intrinsics
 
 
 class PipelineDummyOptions(BaseModel):
@@ -97,7 +96,7 @@ def test_complete_orchestrator_contract_without_running_ap_methods(tmp_path: Pat
         dataset=DatasetSettings(id="outside_contract", prepared_root=dataset),
         static_cameras=[StaticCameraSettings(id=value) for value in camera_ids],
         moving_camera=MovingCameraSettings(id="calibration-camera"),
-        methods=MethodSettings(enabled=["pipeline_dummy"]),
+        methods=real_method_settings(["pipeline_dummy"]),
         selection=SelectionSettings(mode="auto"),
         evaluation=EvaluationSettings(enabled=False),
     )
@@ -126,7 +125,7 @@ def test_complete_orchestrator_contract_without_running_ap_methods(tmp_path: Pat
             "project": config.project.model_copy(
                 update={"run_label": "capture_test", "execution_mode": "prepare_only"}
             ),
-            "methods": MethodSettings(enabled=["ap02"]),
+            "methods": real_method_settings(["ap02"]),
             "evaluation": EvaluationSettings(enabled=True),
         },
         deep=True,
@@ -205,8 +204,8 @@ def test_queue_auto_freezes_automatic_selections_and_reuses_shared_preparation(
     }
     configs = [
         RigConfig(
-            methods=MethodSettings(
-                enabled=[method.id], extensions={method.id: {}}
+            methods=real_method_settings(
+                [method.id], extensions={method.id: {}}
             ),
             **common,
         )
@@ -363,8 +362,8 @@ def test_queue_review_freezes_one_decision_mapping_per_variant(
     }
     configs = [
         RigConfig(
-            methods=MethodSettings(
-                enabled=[method.id], extensions={method.id: {}}
+            methods=real_method_settings(
+                [method.id], extensions={method.id: {}}
             ),
             **common,
         )
@@ -470,9 +469,8 @@ def test_resume_retries_only_publication_after_completed_method(
         moving_camera=MovingCameraSettings(
             id="calibration-camera"
         ),
-        methods=MethodSettings(
-            enabled=[method.id],
-            extensions={method.id: {}},
+        methods=real_method_settings(
+            [method.id], extensions={method.id: {}}
         ),
         selection=SelectionSettings(mode="auto"),
         evaluation=EvaluationSettings(enabled=False),
@@ -553,8 +551,8 @@ def test_queue_runs_ready_job_when_an_independent_job_fails_preflight(
             for value in ("cam_a", "cam_b")
         ],
         "moving_camera": MovingCameraSettings(id="moving"),
-        "methods": MethodSettings(
-            enabled=[method.id], extensions={method.id: {}}
+        "methods": real_method_settings(
+            [method.id], extensions={method.id: {}}
         ),
         "selection": SelectionSettings(mode="auto"),
         "evaluation": EvaluationSettings(enabled=False),
@@ -625,9 +623,8 @@ def test_required_camera_gate_waits_and_diagnostic_override_is_published(
             StaticCameraSettings(id="cam_b"),
         ],
         moving_camera=MovingCameraSettings(id="moving"),
-        methods=MethodSettings(
-            enabled=[method.id],
-            extensions={method.id: {}},
+        methods=real_method_settings(
+            [method.id], extensions={method.id: {}}
         ),
         selection=SelectionSettings(mode="auto"),
         evaluation=EvaluationSettings(enabled=False),

@@ -129,7 +129,9 @@ def test_review_freezes_distinct_method_selections(
     _write(root, rows)
     config = prepared_config.model_copy(
         update={
-            "methods": MethodSettings(enabled=["ap03"]),
+            "methods": prepared_config.methods.model_copy(
+                update={"enabled": ["ap03"]}, deep=True
+            ),
             "selection": SelectionSettings(mode="review_once"),
             "evaluation": EvaluationSettings(anchor_marker_id="auto"),
         },
@@ -181,9 +183,12 @@ def test_disabled_methods_do_not_promote_singleton_marker_recommendations(
     _write(root, [_row("static", "front-left", 7)])
     config = prepared_config.model_copy(
         update={
-            "methods": MethodSettings(
-                enabled=["diagnostic_extension"],
-                extensions={"diagnostic_extension": {}},
+            "methods": prepared_config.methods.model_copy(
+                update={
+                    "enabled": ["diagnostic_extension"],
+                    "extensions": {"diagnostic_extension": {}},
+                },
+                deep=True,
             ),
             "evaluation": EvaluationSettings(enabled=False),
         },

@@ -55,13 +55,16 @@ def test_ap02_maximum_bottleneck_beats_short_weak_bfs_path() -> None:
             _observation("moving_frame_0001", 14, 0.90, frame="bridge_a"),
             _observation("moving_frame_0001", 7, 0.90, frame="bridge_b"),
             _observation("cam_edge_5", 7, 0.90, frame="strong_direct"),
-        ]
+        ],
+        edge_weight_policy="wizard_selection_score_v2",
     )
     graph = build_graph(rows)
     start = marker_node(14)
 
     bfs = deterministic_breadth_first_tree(graph, start)
-    productive, metrics = maximum_bottleneck_tree(graph, start)
+    productive, metrics = maximum_bottleneck_tree(
+        graph, start, edge_weight_policy="wizard_selection_score_v2"
+    )
 
     assert bfs[observer_node("cam_edge_5")][1]["frame_id"] == "weak_direct"
     assert (
@@ -86,7 +89,8 @@ def test_ap02_edge_selection_uses_documented_tie_breakers() -> None:
             _observation(
                 "cam_edge_5", 14, 0.8, frame="larger_area", rmse=1.0, area=0.03
             ),
-        ]
+        ],
+        edge_weight_policy="wizard_selection_score_v2",
     )
     assert len(selected) == 1
     assert selected[0]["frame_id"] == "larger_area"

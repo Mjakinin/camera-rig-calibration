@@ -6,10 +6,11 @@ from pathlib import Path
 
 from camera_rig_calibration.config.models import (
     DatasetCategory,
-    MethodSettings,
     ObservationQualitySettings,
 )
 from camera_rig_calibration.preflight import PreflightJob, run_queue_preflight
+
+from conftest import real_method_settings
 
 
 def _row(
@@ -71,7 +72,7 @@ def test_failed_job_does_not_block_independent_runnable_job(
         writer.writeheader()
         writer.writerows(rows)
     ready = prepared_config.model_copy(
-        update={"methods": MethodSettings(enabled=["ap02"])}, deep=True
+        update={"methods": real_method_settings(["ap02"])}, deep=True
     )
     rejected = ready.model_copy(
         update={
@@ -155,7 +156,7 @@ def test_ap02_partial_static_and_complete_combined_is_ready_without_warning(
                 type(prepared_config.static_cameras[0])(id=camera_id)
                 for camera_id in camera_ids
             ],
-            "methods": MethodSettings(enabled=["ap02"]),
+            "methods": real_method_settings(["ap02"]),
         },
         deep=True,
     )
@@ -214,7 +215,7 @@ def test_ap02_incomplete_combined_graph_blocks_preflight(
                 camera_type(id=camera_id)
                 for camera_id in ("cam_1", "cam_2", "cam_3", "cam_4")
             ],
-            "methods": MethodSettings(enabled=["ap02"]),
+            "methods": real_method_settings(["ap02"]),
         },
         deep=True,
     )
@@ -271,7 +272,7 @@ def test_ap02_three_of_four_combined_is_runnable_diagnostic_partial(
             "static_cameras": [
                 camera_type(id=camera_id) for camera_id in cameras
             ],
-            "methods": MethodSettings(enabled=["ap02"]),
+            "methods": real_method_settings(["ap02"]),
         },
         deep=True,
     )
@@ -318,7 +319,7 @@ def test_required_camera_without_raw_observation_is_reported(
         writer.writeheader()
         writer.writerows(rows)
     config = prepared_config.model_copy(
-        update={"methods": MethodSettings(enabled=["ap01"])},
+        update={"methods": real_method_settings(["ap01"])},
         deep=True,
     )
 
@@ -376,7 +377,7 @@ def test_simulation_ap02_incomplete_graph_uses_the_same_review_gate(
             "static_cameras": [
                 camera_type(id=camera_id) for camera_id in cameras
             ],
-            "methods": MethodSettings(enabled=["ap02"]),
+            "methods": real_method_settings(["ap02"]),
         },
         deep=True,
     )

@@ -127,10 +127,31 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
         "quality_override_positive_depth",
         "quality_override_distance",
     }
+    ap01_job = _new_method_job("ap01", prompt_for_single_marker=False)
+    ap01_job.methods = ap01_job.methods.model_copy(
+        update={
+            "ap01": ap01_job.methods.ap01.model_copy(
+                update={"advanced_strategy": "wizard_robustness_v1"}
+            )
+        },
+        deep=True,
+    )
+    ap03_job = _new_method_job("ap03", prompt_for_single_marker=False)
+    ap03_job.methods = ap03_job.methods.model_copy(
+        update={
+            "ap03": ap03_job.methods.ap03.model_copy(
+                update={
+                    "feature_limit_policy": "wizard_explicit_limits_v1",
+                    "scale_input_policy": "wizard_filtered_observations_v1",
+                }
+            )
+        },
+        deep=True,
+    )
     ap01 = {
         row[0]
         for row in _setting_rows(
-            _new_method_job("ap01", prompt_for_single_marker=False),
+            ap01_job,
             METHOD_JOB_GROUPS,
         )
     }
@@ -144,7 +165,7 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
     ap03 = {
         row[0]
         for row in _setting_rows(
-            _new_method_job("ap03", prompt_for_single_marker=False),
+            ap03_job,
             METHOD_JOB_GROUPS,
         )
     }
@@ -181,8 +202,8 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
         "matcher",
         "compute_mode",
         "mapper_matches",
-        "maximum_image_size",
-        "maximum_features",
+        "ap03_image_size",
+        "ap03_features",
     } <= ap03
     assert "label" not in ap01 | ap02 | ap03
 

@@ -257,7 +257,7 @@ def test_wizard_controls_are_policy_aware_and_product_named() -> None:
     ap01 = _new_method_job("ap01", prompt_for_single_marker=False)
     baseline_keys = {row[0] for row in _setting_rows(ap01, None)}
     assert "ap01_direct_inlier_ratio" not in baseline_keys
-    assert "matcher" not in baseline_keys
+    assert {"matcher", "maximum_image_size", "maximum_features"} <= baseline_keys
     ap01.methods.ap01.advanced_strategy = "wizard_robustness_v1"
     robust_keys = {row[0] for row in _setting_rows(ap01, None)}
     assert {"ap01_direct_inlier_ratio", "matcher"} <= robust_keys
