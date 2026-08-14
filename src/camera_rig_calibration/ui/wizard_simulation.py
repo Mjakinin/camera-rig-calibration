@@ -145,16 +145,28 @@ def _simulation_input(
             )
         console.print(table)
 
-    preset = _choice(
-        "Gazebo simulation setup",
-        {
-            "1": "use the Route-2 baseline (recommended; reuse existing capture)",
-            "2": "reuse one existing simulation/ablation by its table number",
-            "3": "create a new bus-simulation parameter combination from baseline",
-            "0": "back to input type",
-        },
-        "1",
-    )
+    while True:
+        preset = _choice(
+            "Gazebo simulation setup",
+            {
+                "1": "use the Route-2 baseline (recommended; reuse existing capture)",
+                "2": "reuse one existing simulation/ablation by its table number",
+                "3": "create a new bus-simulation parameter combination from baseline",
+                "4": "change the simulation world (Coming soon — unavailable)",
+                "0": "back to input type",
+            },
+            "1",
+        )
+        if preset != "4":
+            break
+        console.print(
+            Panel(
+                "Custom simulation worlds are not available yet. "
+                "The reviewed Bus world remains selected; no SDF file or "
+                "path has been changed.",
+                title="Change simulation world — Coming soon",
+            )
+        )
     if preset == "0":
         raise WizardBack()
     reused_dataset: Path | None = None

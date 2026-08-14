@@ -102,6 +102,23 @@ def test_baseline_simulation_shows_catalogue_without_claiming_missing_input(
     assert moving.id == "moving_calib_camera"
 
 
+def test_custom_simulation_world_is_visible_but_unavailable(monkeypatch) -> None:
+    prompts = iter(["4", "1"])
+    monkeypatch.setattr(typer, "prompt", lambda *args, **kwargs: next(prompts))
+    monkeypatch.setattr(typer, "confirm", lambda *args, **kwargs: False)
+    stream = StringIO()
+
+    _, _, simulation, _, _ = _simulation_input(
+        REPOSITORY,
+        Console(file=stream, force_terminal=False, width=240),
+    )
+
+    output = stream.getvalue()
+    assert "Change simulation world — Coming soon" in output
+    assert "no SDF file or path has been changed" in output
+    assert simulation.world_id == "bus"
+
+
 def test_existing_ablation_with_local_input_can_be_reused(
     tmp_path: Path, monkeypatch
 ) -> None:
