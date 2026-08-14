@@ -5,17 +5,11 @@ import sys
 from pathlib import Path
 
 
-DEFAULT_MAX_LINES = 2_000
+DEFAULT_MAX_LINES = 999
 
-# These are explicit migration ceilings, not preferred module sizes. Lower a
-# ceiling whenever the corresponding module is split; do not raise it to make
-# the check pass.
-LEGACY_MODULE_BUDGETS = {
-    Path("wizard.py"): 6_043,
-    Path("evaluation/reporting.py"): 3_666,
-    Path("queueing.py"): 3_230,
-    Path("runtime.py"): 2_479,
-}
+# Kept as an injectable compatibility seam for the checker unit tests. The
+# active package deliberately has no exceptions to the global limit.
+LEGACY_MODULE_BUDGETS: dict[Path, int] = {}
 
 
 def source_layout_violations(
@@ -24,7 +18,7 @@ def source_layout_violations(
     default_max_lines: int = DEFAULT_MAX_LINES,
     legacy_budgets: dict[Path, int] | None = None,
 ) -> list[tuple[Path, int, int]]:
-    """Return Python modules whose line count exceeds its growth budget."""
+    """Return Python modules whose line count exceeds its size limit."""
     budgets = LEGACY_MODULE_BUDGETS if legacy_budgets is None else legacy_budgets
     violations: list[tuple[Path, int, int]] = []
     for source in sorted(package_root.rglob("*.py")):
@@ -39,8 +33,7 @@ def source_layout_violations(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description=(
-            "Prevent new oversized Python modules and growth of explicitly "
-            "budgeted legacy modules."
+            "Reject productive Python modules with more than 999 lines."
         )
     )
     parser.add_argument(
@@ -56,20 +49,20 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     violations = source_layout_violations(args.package_root.resolve())
     if violations:
-        print("Source layout failed: module growth budget exceeded.", file=sys.stderr)
+        print("Source layout failed: module size limit exceeded.", file=sys.stderr)
         for path, actual, maximum in violations:
             print(
                 f"  - {path}: {actual} lines (budget {maximum})",
                 file=sys.stderr,
             )
         print(
-            "Move the new responsibility into a focused module; do not raise "
-            "a legacy budget.",
+            "Move the responsibility into a focused module; the active "
+            "package has no legacy exceptions.",
             file=sys.stderr,
         )
         return 1
     print(
-        "Source layout OK: no module exceeds its maintained growth budget."
+        "Source layout OK: every productive module is at most 999 lines."
     )
     return 0
 

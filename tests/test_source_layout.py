@@ -5,6 +5,17 @@ from pathlib import Path
 from tools.check_source_layout import source_layout_violations
 
 
+PACKAGE_ROOT = (
+    Path(__file__).resolve().parents[1]
+    / "src"
+    / "camera_rig_calibration"
+)
+
+
+def test_active_package_has_no_module_over_999_lines() -> None:
+    assert source_layout_violations(PACKAGE_ROOT) == []
+
+
 def test_source_layout_accepts_modules_within_budget(tmp_path: Path) -> None:
     (tmp_path / "small.py").write_text("first = 1\nsecond = 2\n")
 

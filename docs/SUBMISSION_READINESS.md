@@ -60,6 +60,8 @@ python3 -m pip check
 python3 -m compileall -q src run tests
 PYTHONPATH="$PWD/src" python3 -m pytest \
   -m "not slow and not requires_colmap and not requires_ros" -q
+python3 tools/check_source_layout.py
+python3 tools/check_repository_hygiene.py
 git diff --check
 ```
 
@@ -88,19 +90,17 @@ anchor-export or visualization metadata.
 ## Maintainability boundary
 
 The active package is registry-based and extension points are documented in
-`docs/extensions.md`. `run/rigcal.py` is intentionally a thin launcher. The
-first behavior-preserving UI split is complete: method settings/editing, result
-browsing, run management, storage cleanup and intrinsics management now live in
-focused modules below `src/camera_rig_calibration/ui/`; `wizard.py` retains the
-stable navigation and product-policy facade.
+`docs/extensions.md`. `run/rigcal.py` is intentionally a thin launcher.
+Wizard, queue, runtime, reporting, publication, AP01/AP02, input preparation,
+observation selection and preflight now use small compatibility facades over
+focused implementation modules. Typed late-bound dependency objects preserve
+the existing policy hooks and facade monkey-patches.
 
-The mature orchestration/reporting modules `wizard.py`, `queueing.py`,
-`runtime.py` and `evaluation/reporting.py` remain larger than the preferred
-2,000-line ceiling. Their current sizes are explicit migration budgets enforced
-by `tools/check_source_layout.py`: they may shrink, but must not grow. Continue
-splitting them only along tested responsibility boundaries. New UI panels,
-scientific algorithms and reporting formats belong in dedicated modules rather
-than these compatibility facades.
+`tools/check_source_layout.py` enforces a hard 999-line maximum for every
+productive Python module below `src/camera_rig_calibration/`; the active package
+has no legacy exceptions. New modules should normally remain below 850 lines.
+New UI panels, scientific algorithms and reporting formats belong in dedicated
+modules rather than the compatibility facades.
 
 Likewise, large files under `parity/` are frozen audit evidence rather than the
 runtime application architecture. Do not delete them merely to reduce line

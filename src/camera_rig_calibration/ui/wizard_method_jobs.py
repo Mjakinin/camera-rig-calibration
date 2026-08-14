@@ -3,91 +3,32 @@
 from __future__ import annotations
 
 import json
-import hashlib
-import re
-import subprocess
-import sys
 import tempfile
-from dataclasses import dataclass, field
-from datetime import datetime
-from decimal import Decimal
 from pathlib import Path
-from typing import Iterable
 
 import typer
 import yaml
 from pydantic import ValidationError
 from rich.console import Console
-from rich.panel import Panel
 from rich.table import Table
 
-from ..components import register_builtin_components
-from ..config import config_fingerprint, load_config, save_user_config
 from ..config.models import (
     ColmapSettings,
     DatasetCategory,
     DatasetSettings,
     EvaluationSettings,
-    McapSettings,
     MethodSettings,
     MarkerSettings,
-    MovingCameraSettings,
-    IntrinsicScanSettings,
     InputSourceKind,
     ObservationQualitySettings,
-    ProjectSettings,
     RigConfig,
-    SamplingSettings,
-    SceneType,
     SelectionSettings,
-    SimulationSettings,
-    StaticCameraSettings,
     effective_observation_quality,
 )
-from ..dataset.discovery import (
-    IMAGE_SUFFIXES,
-    discover_image_directories,
-    discover_inputs,
-    inspect_prepared_dataset,
-    media_path_role,
-    safe_id,
-)
-from ..doctor import run_checks
-from ..experiments import automatic_method_label
-from ..input.topics import McapTopic, list_mcap_topics
-from ..input.video_geometry import probe_video_geometry
-from ..intrinsics_profiles import (
-    IntrinsicProfile,
-    discover_intrinsic_profiles,
-    intrinsic_dimensions,
-)
-from ..inventory import (
-    BASELINE_SIMULATION_PARAMETERS,
-    PreparedDatasetSummary,
-    RawInputSummary,
-    SimulationExperimentSummary,
-    discover_prepared_datasets,
-    discover_raw_input_folders,
-    discover_simulation_experiments,
-    find_matching_simulation,
-    format_simulation_parameters,
-)
-from ..registry import (
-    calibration_methods,
-    experiment_providers,
-    input_adapters,
-)
-from ..runtime import PipelineOrchestrator
+from ..dataset.discovery import safe_id
+from ..registry import calibration_methods
 from ..observation_quality import filter_observations
 from ..observations import ResolvedSelections, resolve_selections
-from ..queueing import SelectionReviewJob, save_batch
-# Compatibility hooks wrapped by the product policy stack. The concrete result
-# browser lives under ui/, but these names remain stable until the wrappers are
-# converted to explicit composition.
-from ..publication import reconcile_existing_experiment
-from ..visualization import launch_isolated_rviz
-
-
 
 from .wizard_models import (
     MethodQueueJob,
@@ -104,6 +45,7 @@ from .wizard_prompts import (
     _show_input_error,
 )
 from .wizard_bindings import current_wizard_bindings
+
 
 def _new_method_job(
     method_id: str,

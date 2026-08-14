@@ -30,6 +30,12 @@ services live below `src/camera_rig_calibration/ui/`:
 
 - `method_settings.py` declares the editable parameters and their help text;
 - `method_editor.py` owns interactive editing of one method queue row;
+- `wizard_method_jobs.py` and `wizard_method_queue.py` own method creation,
+  guided selection and queue editing;
+- `wizard_new_flow.py`, `wizard_saved_flow.py` and `wizard_review.py` own the
+  new-run, saved-setup and review flows;
+- `wizard_media.py`, `wizard_real_input.py`, `wizard_prepared.py` and
+  `wizard_simulation.py` own their respective input workflows;
 - `run_management.py` owns resume, interrupt and incomplete-run handling;
 - `result_browser.py` owns result discovery and visualization dispatch;
 - `storage_cleanup.py` and `intrinsics.py` own their respective maintenance
@@ -40,6 +46,39 @@ CLI entry points remain stable. New UI screens should be added as focused
 modules here and exposed through a thin facade function. New calibration
 methods still enter through the registries described in `extensions.md`; the UI
 does not duplicate scientific implementations.
+
+## Responsibility-oriented facades
+
+Stable import paths remain intentionally small. Their implementations are
+grouped by responsibility:
+
+- `queueing.py` composes models, preflight, execution, evaluation and dataset
+  publication from `queue_services/`;
+- `runtime.py` composes environment, observation, cache, command and stage
+  services from `runtime_services/`;
+- `preflight.py` composes job checks, raw-marker inventory, common-anchor
+  resolution and queue reporting from `preflight_services/`;
+- `evaluation/reporting.py` re-exports core I/O, configuration, quality,
+  method, real-data and simulation reporting modules;
+- `publication.py` re-exports dataset, method, inventory and transactional
+  publication modules;
+- `observations.py` re-exports candidate construction, ranking, resolution and
+  configuration freezing;
+- `input/intrinsics_calibration.py` and `input/preparation.py` retain their
+  established entry points while delegating to focused workflow modules;
+- AP01 `core.py` and AP02 `initialize.py` remain scientific compatibility
+  facades over focused algorithm modules.
+
+Late-bound `WizardBindings`, `QueueBindings`, `RuntimeBindings`,
+`ReportingBindings`, `PreflightDependencies` and `AP01CoreBindings` read hooks
+from their public facades at execution time. The existing product-policy stack
+and tests may therefore patch the established import paths without creating
+cycles between implementation modules.
+
+Every productive Python module below `src/camera_rig_calibration/` is limited
+to 999 lines by `tools/check_source_layout.py`; there are no active-package
+legacy exceptions. New modules should normally stay below 850 lines and split
+earlier when they acquire a second independent responsibility.
 
 ## Queue and batch model
 

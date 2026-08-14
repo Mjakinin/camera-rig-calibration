@@ -23,6 +23,29 @@ extension's startup hook), restart `rigcal`, and select it from the queue.
 Methods with required config fields are prompted for their initial YAML
 mapping; defaults are used when the model can be constructed without input.
 
+## Where extension code belongs
+
+The public facade modules are compatibility boundaries, not implementation
+containers. Add new behavior to the focused area that owns it:
+
+- method configuration and AP01/AP02/AP03-specific handlers belong below
+  `ui/`, with the established YAML fallback retained for additional methods;
+- queue phases belong below `queue_services/`, runtime stages below
+  `runtime_services/`, and preflight checks below `preflight_services/`;
+- scientific report formats belong in a focused `evaluation/reporting_*.py`
+  module and publication mechanics in `publication_*.py`;
+- new observation ranking or selection behavior belongs in the corresponding
+  `observation_*.py` module;
+- AP01/AP02 scientific changes belong in their focused method modules, never
+  in the compatibility facade.
+
+Re-export a deliberately public symbol from the existing facade when backward
+compatibility requires it. If a product policy or test may replace the symbol,
+resolve it through the area's typed binding object at call time. Do not import
+the facade back into implementation modules except inside such a lazy binding
+factory. The source-layout check rejects any productive module above 999 lines;
+new modules should target at most 850.
+
 ## Adding a simulation parameter
 
 The simulation surface is deliberately bus-only. A new bus parameter type
