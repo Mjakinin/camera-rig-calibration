@@ -2,14 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from conftest import REPOSITORY_ROOT
 from tools.check_source_layout import source_layout_violations
 
 
-PACKAGE_ROOT = (
-    Path(__file__).resolve().parents[1]
-    / "src"
-    / "camera_rig_calibration"
-)
+PACKAGE_ROOT = REPOSITORY_ROOT / "src" / "camera_rig_calibration"
 
 
 def test_active_package_has_no_module_over_999_lines() -> None:

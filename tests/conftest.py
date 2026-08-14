@@ -20,6 +20,9 @@ from camera_rig_calibration.config.models import (
 )
 
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+
+
 def write_intrinsics(path: Path, camera_id: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
