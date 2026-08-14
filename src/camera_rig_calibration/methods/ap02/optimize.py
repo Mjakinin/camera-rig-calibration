@@ -20,123 +20,6 @@ import numpy as np
 from . import optimize_core as core
 
 
-HISTORICAL_PRE_SOLVER_TARGETS = {
-    "reference_marker_id": 14,
-    "initialized_moving_frames": 170,
-    "ba_observations": 458,
-    "variable_poses": 160,
-    "parameter_count": 960,
-    "initial_mean_reprojection_px": 10.247645,
-    "loss": "soft_l1",
-    "loss_scale_px": 3.0,
-    "maximum_function_evaluations": 80,
-}
-
-
-def validate_historical_pre_solver(
-    *,
-    ap02_root: Path,
-    initialization_root: Path,
-    reference_marker_id: int,
-    maximum_function_evaluations: int,
-    robust_loss: str,
-    robust_loss_scale_px: float,
-    initial_parameters: np.ndarray,
-    initial_residuals: np.ndarray,
-) -> dict[str, object]:
-    """Authorize the historical solver only after invariant reproduction."""
-
-    provenance_path = (
-        ap02_root
-        / "02_aruco_observations"
-        / "HISTORICAL_REPRODUCTION_PROVENANCE.json"
-    )
-    if not provenance_path.is_file():
-        raise RuntimeError(
-            "Historical AP02 pre-solver guard has no frozen-input provenance"
-        )
-    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
-    moving_initialization = (
-        initialization_root
-        / "with_moving"
-        / "initial_moving_frame_poses_ref_marker.csv"
-    )
-    if not moving_initialization.is_file():
-        raise RuntimeError(
-            "Historical AP02 moving-frame initialization is missing"
-        )
-    with moving_initialization.open(newline="", encoding="utf-8") as handle:
-        initialized_moving_frames = sum(1 for _ in csv.DictReader(handle))
-    residuals = np.asarray(initial_residuals, dtype=np.float64)
-    parameters = np.asarray(initial_parameters, dtype=np.float64)
-    if len(residuals) % 8:
-        raise RuntimeError(
-            "Historical AP02 residual vector is not four marker corners"
-        )
-    pairwise = residuals.reshape(-1, 2)
-    actual = {
-        "reference_marker_id": reference_marker_id,
-        "initialized_moving_frames": initialized_moving_frames,
-        "ba_observations": len(residuals) // 8,
-        "variable_poses": len(parameters) // 6,
-        "parameter_count": len(parameters),
-        "initial_mean_reprojection_px": float(
-            np.mean(np.linalg.norm(pairwise, axis=1))
-        ),
-        "loss": robust_loss,
-        "loss_scale_px": robust_loss_scale_px,
-        "maximum_function_evaluations": maximum_function_evaluations,
-    }
-    tolerances = {
-        "initial_mean_reprojection_px": 5e-6,
-        "loss_scale_px": 1e-12,
-    }
-    checks = {
-        key: (
-            abs(float(actual[key]) - float(expected))
-            <= tolerances.get(key, 0.0)
-            if isinstance(expected, float)
-            else actual[key] == expected
-        )
-        for key, expected in HISTORICAL_PRE_SOLVER_TARGETS.items()
-    }
-    checks["frozen_input_provenance"] = (
-        provenance.get("historical_reproduction") is True
-        and provenance.get("ground_truth_used") is False
-        and provenance.get("validation_status") == "passed"
-        and provenance.get("reference_marker_id") == 14
-    )
-    failed = [name for name, passed in checks.items() if not passed]
-    payload = {
-        "schema_version": 1,
-        "historical_reproduction": True,
-        "ground_truth_used": False,
-        "actual": actual,
-        "validation_targets": HISTORICAL_PRE_SOLVER_TARGETS,
-        "tolerances": tolerances,
-        "checks": checks,
-        "status": "passed" if not failed else "failed",
-        "solver_authorized": not failed,
-    }
-    evidence = (
-        ap02_root
-        / "07_graph_ba"
-        / "with_moving"
-        / "HISTORICAL_PRE_SOLVER_INVARIANTS.json"
-    )
-    evidence.parent.mkdir(parents=True, exist_ok=True)
-    evidence.write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    if failed:
-        raise RuntimeError(
-            "Historical AP02 pre-solver invariant mismatch: "
-            + ", ".join(failed)
-        )
-    return payload
-
-
 def distortion_from_row(row: dict) -> tuple[str, np.ndarray]:
     model = str(row.get("distortion_model", "plumb_bob") or "plumb_bob")
     model = model.strip().lower()
@@ -255,22 +138,21 @@ def main() -> None:
     parser.add_argument("--robust-loss-scale-px", type=float, default=3.0)
     parser.add_argument(
         "--reprojection-model",
-        choices=["legacy_pinhole_v1", "distortion_aware_v1"],
-        default="legacy_pinhole_v1",
+        choices=["pinhole_v1", "distortion_aware_v1"],
+        default="pinhole_v1",
     )
     parser.add_argument(
         "--moving-frame-selection-policy",
         choices=[
-            "legacy_smart_at_ba_boundary_v1",
+            "smart_at_ba_boundary_v1",
             "all_graph_preselected_frames_v1",
         ],
-        default="legacy_smart_at_ba_boundary_v1",
+        default="smart_at_ba_boundary_v1",
     )
     parser.add_argument("--reference-marker-maximum-frames", type=int)
     parser.add_argument("--top-per-marker", type=int, default=8)
     parser.add_argument("--top-per-marker-pair", type=int, default=4)
     parser.add_argument("--maximum-total-frames", type=int)
-    parser.add_argument("--historical-reproduction", action="store_true")
     args = parser.parse_args()
     if args.robust_loss_scale_px <= 0:
         parser.error("--robust-loss-scale-px must be greater than zero")
@@ -357,17 +239,6 @@ def main() -> None:
             np.asarray(initial, dtype=np.float64),
             source="initial_diagnostic",
         )
-        if args.historical_reproduction and args.mode == "with_moving":
-            validate_historical_pre_solver(
-                ap02_root=ap02_root,
-                initialization_root=initialization_root,
-                reference_marker_id=args.ref_marker_id,
-                maximum_function_evaluations=args.max_nfev,
-                robust_loss=args.robust_loss,
-                robust_loss_scale_px=args.robust_loss_scale_px,
-                initial_parameters=np.asarray(initial, dtype=np.float64),
-                initial_residuals=initial_residuals,
-            )
         result = scipy_least_squares(
             lambda parameters: evaluate(
                 parameters, source="solver_residual_call"

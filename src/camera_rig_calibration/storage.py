@@ -146,26 +146,19 @@ def build_results_cleanup_plan(repository_root: Path) -> CleanupPlan:
     )
 
 
-def build_dataset_cleanup_plan(repository_root: Path) -> CleanupPlan:
-    """Select legacy datasets and preparation caches, never ``data_local``."""
+def build_preparation_cache_cleanup_plan(repository_root: Path) -> CleanupPlan:
+    """Select reusable preparation caches, never published or local input."""
     root = repository_root.resolve()
     workspace = root / "workspace"
-    legacy = root / "datasets"
-    candidates = _children(legacy, "legacy canonical dataset")
-    dataset_cache_names = (
-        "preparation_cache",
-        "dataset_cache",
-        "datasets",
-    )
-    for name in dataset_cache_names:
-        path = workspace / name
-        if path.exists() or path.is_symlink():
-            candidates.append(
-                CleanupTarget(path.absolute(), "prepared dataset cache")
-            )
+    candidates: list[CleanupTarget] = []
+    path = workspace / "preparation_cache"
+    if path.exists() or path.is_symlink():
+        candidates.append(
+            CleanupTarget(path.absolute(), "prepared dataset cache")
+        )
     return _build_plan(
         candidates,
-        scope_roots=(legacy, workspace),
+        scope_roots=(workspace,),
     )
 
 
@@ -177,9 +170,7 @@ def build_temporary_cleanup_plan(repository_root: Path) -> CleanupPlan:
         _children(
             workspace,
             "temporary run, queue, batch or reusable artifact",
-            excluded_names=frozenset(
-                {"preparation_cache", "dataset_cache", "datasets"}
-            ),
+            excluded_names=frozenset({"preparation_cache", "README.md"}),
         ),
         scope_roots=(workspace,),
     )
@@ -207,9 +198,9 @@ def combine_cleanup_plans(*plans: CleanupPlan) -> CleanupPlan:
 
 
 def build_cleanup_plan(repository_root: Path) -> CleanupPlan:
-    """Compatibility helper for all non-result generated storage."""
+    """Build one plan for all non-result generated storage."""
     return combine_cleanup_plans(
-        build_dataset_cleanup_plan(repository_root),
+        build_preparation_cache_cleanup_plan(repository_root),
         build_temporary_cleanup_plan(repository_root),
     )
 

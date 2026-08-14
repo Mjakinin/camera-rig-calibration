@@ -400,10 +400,10 @@ def main() -> None:
     ap.add_argument(
         "--scale-input-policy",
         choices=(
-            "legacy_registered_image_redetection_v1",
+            "registered_image_redetection_v1",
             "wizard_filtered_observations_v1",
         ),
-        default="legacy_registered_image_redetection_v1",
+        default="registered_image_redetection_v1",
     )
     ap.add_argument("--static-cameras", default=",".join(STATIC_CAMERAS))
     args = ap.parse_args()

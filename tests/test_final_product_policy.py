@@ -6,21 +6,21 @@ from pathlib import Path
 import numpy as np
 
 from camera_rig_calibration.components import register_builtin_components
-from camera_rig_calibration.marker_preference_policy import install_marker_preference_policy
-from camera_rig_calibration.product_policy import (
+from camera_rig_calibration.policies.marker_preference_policy import install_marker_preference_policy
+from camera_rig_calibration.policies.product_policy import (
     _DATASET_CONTEXT,
     _refresh_derived_tree,
     install_product_policy,
 )
-from camera_rig_calibration.real_vehicle_marker_zero_policy import (
+from camera_rig_calibration.policies.real_vehicle_marker_zero_policy import (
     install_real_vehicle_marker_zero_policy,
 )
-from camera_rig_calibration.reporting_authority_policy import (
+from camera_rig_calibration.policies.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
-from camera_rig_calibration.submission_bindings import install_submission_bindings
-from camera_rig_calibration.submission_policy import install_submission_policy
-from camera_rig_calibration.ui_display_policy import install_ui_display_policy
+from camera_rig_calibration.policies.submission_bindings import install_submission_bindings
+from camera_rig_calibration.policies.submission_policy import install_submission_policy
+from camera_rig_calibration.policies.ui_display_policy import install_ui_display_policy
 
 
 install_product_policy()
@@ -47,7 +47,6 @@ def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
         ap02 = _job("ap02")
         ap03 = _job("ap03")
         assert ap01.methods.ap01.method_contract == "baseline_v1"
-        assert ap01.methods.ap01.advanced_strategy == "legacy_main_v1"
         assert ap01.methods.ap01.root_camera == "cam_edge_3"
         assert ap01.methods.ap01.direct_target_camera == "auto"
         assert ap02.methods.ap02.reference_marker_selection_mode == "auto"
@@ -70,7 +69,6 @@ def test_real_vehicle_defaults_use_canonical_marker_zero() -> None:
     ap02 = _job("ap02")
     ap03 = _job("ap03")
     assert ap01.methods.ap01.method_contract == "baseline_v1"
-    assert ap01.methods.ap01.advanced_strategy == "legacy_main_v1"
     assert ap01.methods.ap01.root_camera == "auto"
     assert ap01.methods.ap01.direct_target_camera == "auto"
     assert ap02.methods.ap02.method_contract == "baseline_v1"
@@ -119,7 +117,7 @@ def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
         for _, _, label, current, baseline, description in rows
     ).lower()
     assert "smart" not in text
-    assert "legacy_smart_v1" not in text
+    assert "smart_v1" not in text
     assert "top frames per marker" in text
     assert "top frames per marker pair" in text
     assert "marker 14" in text

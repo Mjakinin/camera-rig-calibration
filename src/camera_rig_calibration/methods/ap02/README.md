@@ -4,18 +4,14 @@ AP02 constructs a camera/frame/marker observation graph, initializes poses and
 optimizes the combined static + moving graph. The combined result is primary;
 static-only and disconnected-component runs are diagnostics.
 
-The canonical `baseline_v1` preserves Legacy Main semantics: marker 14,
-Legacy geometric edge weights, maximum-bottleneck initialization on every
-quality-valid graph observation, smart 8/4 moving-frame selection at the BA
-boundary, deterministic parameter/residual order, pinhole reprojection and
-`soft_l1` loss with `f_scale=3`. Newer Wizard robustness behavior remains
-available only through explicit advanced strategies.
+The canonical `baseline_v1` uses marker 14, geometric edge weights,
+maximum-frontier initialization on every quality-valid graph observation,
+smart 8/4 moving-frame selection at the BA boundary, deterministic
+parameter/residual order, pinhole reprojection and `soft_l1` loss with
+`f_scale=3`. More configurable graph selection and distortion-aware
+reprojection remain available through explicit advanced settings.
 
-Normal `baseline_v1` execution always consumes fresh dataset-derived
-observations. The optional `historical_reproduction` switch is off by default
-and admits the frozen historical AP02 observation intermediate only after
-strict dataset, intrinsics, scientific-contract, artifact, ordering/schema and
-reference-marker fingerprint validation.
+Every run derives its observation graph from the selected dataset.
 
 Execution order:
 

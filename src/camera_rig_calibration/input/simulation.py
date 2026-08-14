@@ -19,6 +19,8 @@ from ..evaluation.reporting import ensure_simulation_ground_truth
 
 from ..assets import ensure_bus_mesh
 from .simulation_variants import apply_motion_blur, compose_route, compose_world
+from .simulation_profiles import validate_reviewed_bus_world
+from .simulation_routes import simulation_route_manifest
 
 
 _GAZEBO_ASSET_ERRORS = (
@@ -368,7 +370,11 @@ def capture(repository: Path, dataset: Path, mapping_path: Path) -> None:
         raise FileNotFoundError(
             f"Simulation world/route not found: {source_world}, {source_route}"
         )
+    if str(mapping.get("world_id", "bus")) != "bus":
+        raise RuntimeError("Only the reviewed bus simulation world is enabled")
+    validate_reviewed_bus_world(repository, source_world)
     _validate_known_world_assets(repository, source_world)
+    source_route_contract = simulation_route_manifest(source_route)
     generated = dataset / "metadata" / "simulation" / "generated"
     world = compose_world(
         source_world,
@@ -404,6 +410,7 @@ def capture(repository: Path, dataset: Path, mapping_path: Path) -> None:
         generated / "composed_route.json",
         target_frames=mapping.get("target_route_frames"),
     )
+    composed_route_contract = simulation_route_manifest(route)
     _require_command("ign")
     _require_command("ros2")
 
@@ -563,6 +570,20 @@ def capture(repository: Path, dataset: Path, mapping_path: Path) -> None:
                         "world": str(world),
                         "world_name": world_name,
                         "route": str(route),
+                        "route_contract": {
+                            "route_name": mapping.get("route_name"),
+                            "source": source_route_contract,
+                            "composed": composed_route_contract,
+                            "captured_frames": [
+                                {
+                                    "file": image.name,
+                                    "sha256": hashlib.sha256(
+                                        image.read_bytes()
+                                    ).hexdigest(),
+                                }
+                                for image in captured_images
+                            ],
+                        },
                         "moving_frames": len(images),
                         "moving_frame_diversity": diversity,
                         "gazebo": {

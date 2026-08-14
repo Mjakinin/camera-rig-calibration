@@ -11,7 +11,7 @@ from itertools import combinations
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
-from camera_rig_calibration.ap02_graph import graph_components
+from camera_rig_calibration.methods.ap02.graph_diagnostics import graph_components
 
 
 class AP02FrameSelectionError(RuntimeError):
@@ -26,14 +26,14 @@ class AP02FrameSelection:
     summary: dict[str, Any]
 
 
-def legacy_frame_number(observer_id: str) -> int:
+def frame_number(observer_id: str) -> int:
     try:
         return int(observer_id.rsplit("_", 1)[-1])
     except (TypeError, ValueError):
         return 10**9
 
 
-def select_legacy_smart_moving_observations(
+def select_smart_moving_observations(
     rows: list[dict[str, str]],
     *,
     reference_marker_id: int,
@@ -43,7 +43,7 @@ def select_legacy_smart_moving_observations(
     maximum_total_frames: int | None,
     observation_score: Callable[[dict[str, str]], float],
 ) -> AP02FrameSelection:
-    """Exact Legacy Main smart selection, applied only at the BA boundary."""
+    """Select a compact moving-frame set at the BA boundary."""
 
     by_frame: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in rows:
@@ -75,7 +75,7 @@ def select_legacy_smart_moving_observations(
             reference_candidates,
             key=lambda observer_id: (
                 scores_by_frame[observer_id][reference_marker_id],
-                -legacy_frame_number(observer_id),
+                -frame_number(observer_id),
             ),
             reverse=True,
         )[:reference_marker_maximum_frames]
@@ -88,7 +88,7 @@ def select_legacy_smart_moving_observations(
             per_marker[marker_id].append((score, observer_id))
     for marker_id, candidates in per_marker.items():
         candidates.sort(
-            key=lambda item: (item[0], -legacy_frame_number(item[1])),
+            key=lambda item: (item[0], -frame_number(item[1])),
             reverse=True,
         )
         selected = candidates if top_per_marker is None else candidates[:top_per_marker]
@@ -103,7 +103,7 @@ def select_legacy_smart_moving_observations(
             )
     for pair, candidates in per_pair.items():
         candidates.sort(
-            key=lambda item: (item[0], -legacy_frame_number(item[1])),
+            key=lambda item: (item[0], -frame_number(item[1])),
             reverse=True,
         )
         selected = (
@@ -129,14 +129,14 @@ def select_legacy_smart_moving_observations(
             key=lambda observer_id: (
                 len(reasons[observer_id]),
                 sum(scores_by_frame[observer_id].values()),
-                -legacy_frame_number(observer_id),
+                -frame_number(observer_id),
             ),
             reverse=True,
         )
         remaining = max(0, maximum_total_frames - len(mandatory))
         selected_frames = mandatory | set(optional[:remaining])
 
-    selected_ids = tuple(sorted(selected_frames, key=legacy_frame_number))
+    selected_ids = tuple(sorted(selected_frames, key=frame_number))
     selected_rows = tuple(
         row for row in rows if str(row.get("observer_id")) in selected_frames
     )
@@ -146,7 +146,7 @@ def select_legacy_smart_moving_observations(
         diagnostics.append(
             {
                 "observer_id": observer_id,
-                "frame_number": legacy_frame_number(observer_id),
+                "frame_number": frame_number(observer_id),
                 "marker_ids": ";".join(str(value) for value in sorted(scores)),
                 "marker_count": len(scores),
                 "frame_score": sum(scores.values()),
@@ -160,7 +160,7 @@ def select_legacy_smart_moving_observations(
         diagnostics=tuple(diagnostics),
         summary={
             "schema_version": 1,
-            "strategy": "legacy_smart_at_ba_boundary_v1",
+            "strategy": "smart_at_ba_boundary_v1",
             "reference_marker_id": reference_marker_id,
             "input_moving_frames": len(by_frame),
             "selected_moving_frames": len(selected_ids),

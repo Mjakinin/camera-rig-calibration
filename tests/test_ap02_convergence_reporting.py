@@ -4,7 +4,7 @@ import csv
 import json
 from pathlib import Path
 
-from camera_rig_calibration.ap02_convergence_reporting_policy import (
+from camera_rig_calibration.policies.ap02_convergence_reporting_policy import (
     _representative_points,
     _tail_window,
     analyze_ap02_convergence,

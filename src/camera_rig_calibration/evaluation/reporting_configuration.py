@@ -221,7 +221,7 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
     multi = method_config.get("multi", {})
     marker_ids = multi.get("marker_ids")
     feature_limit_policy = method_config.get(
-        "feature_limit_policy", "legacy_colmap_defaults_v1"
+        "feature_limit_policy", "colmap_defaults_v1"
     )
     explicit_limits = feature_limit_policy == "wizard_explicit_limits_v1"
     configured_ap03_image_size = (
@@ -238,7 +238,7 @@ def _configuration_summary(result_root: Path, method: str) -> dict[str, Any]:
             "explicit limits" if explicit_limits else "COLMAP defaults"
         ),
         "scale_input": {
-            "legacy_registered_image_redetection_v1": (
+            "registered_image_redetection_v1": (
                 "registered-image detection"
             ),
             "wizard_filtered_observations_v1": (

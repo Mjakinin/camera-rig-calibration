@@ -17,7 +17,9 @@ from pathlib import Path
 
 import numpy as np
 
-from . import marker_consistency as legacy
+from . import marker_consistency_core as core
+from .marker_consistency_reporting import report as base_report
+from .marker_consistency_runner import run_evaluation
 
 
 def _load_ap01_any_static(
@@ -33,14 +35,14 @@ def _load_ap01_any_static(
     if not diag_path.is_file():
         diag_path = next(iter(root.rglob("AP01_DIAGNOSTICS.json")))
     diag = json.loads(diag_path.read_text())
-    scale = legacy.num(diag["metric_scale"]["scale_m_per_colmap_unit"])
+    scale = core.num(diag["metric_scale"]["scale_m_per_colmap_unit"])
 
     images = root / "moving_colmap" / "sparse_txt_best" / "images.txt"
     if not images.is_file():
         images = root / "01_moving_colmap" / "sparse_txt_best" / "images.txt"
     if not images.is_file():
         images = next(iter(root.rglob("sparse_txt_best/images.txt")))
-    col = legacy.scaled_colmap_poses(images, scale)
+    col = core.scaled_colmap_poses(images, scale)
 
     anchor_candidates = []
     anchor_weights = []
@@ -48,29 +50,29 @@ def _load_ap01_any_static(
     for (camera_id, marker_id), row in static_obs.items():
         if marker_id != anchor or camera_id not in static_pose:
             continue
-        anchor_candidates.append(static_pose[camera_id] @ legacy.pnp_pose(row))
-        anchor_weights.append(legacy.quality(row))
+        anchor_candidates.append(static_pose[camera_id] @ core.pnp_pose(row))
+        anchor_weights.append(core.quality(row))
         anchor_cameras.append(camera_id)
     if not anchor_candidates:
         raise RuntimeError(
             f"Evaluation anchor {anchor} is not observed by any solved AP01 static camera"
         )
-    method_anchor = legacy.mean_transform(anchor_candidates, anchor_weights)
+    method_anchor = core.mean_transform(anchor_candidates, anchor_weights)
 
     alignment_candidates = []
     alignment_weights = []
     for row in moving_obs:
         if int(float(row["marker_id"])) != anchor:
             continue
-        frame = legacy.frame_id(row.get("frame_id", row.get("observer_id")))
+        frame = core.frame_id(row.get("frame_id", row.get("observer_id")))
         if frame not in col:
             continue
-        method_moving = method_anchor @ legacy.inv(legacy.pnp_pose(row))
-        alignment_candidates.append(method_moving @ legacy.inv(col[frame]))
-        alignment_weights.append(legacy.quality(row))
+        method_moving = method_anchor @ core.inv(core.pnp_pose(row))
+        alignment_candidates.append(method_moving @ core.inv(col[frame]))
+        alignment_weights.append(core.quality(row))
     if not alignment_candidates:
         raise RuntimeError("No AP01 moving-frame observation supports anchor alignment")
-    method_colmap = legacy.mean_transform(alignment_candidates, alignment_weights)
+    method_colmap = core.mean_transform(alignment_candidates, alignment_weights)
     return (
         {frame: method_colmap @ pose for frame, pose in col.items()},
         {
@@ -82,6 +84,24 @@ def _load_ap01_any_static(
             "anchor_alignment_observations": len(alignment_candidates),
         },
     )
+
+
+def _load_native_poses(method, root, static_obs, moving_obs, anchor):
+    """Load native metric trajectories without replacing shared functions."""
+    static_poses, static_pose_file = core.static_poses(root)
+    if method.startswith("AP01"):
+        moving_poses, metadata = _load_ap01_any_static(
+            root,
+            static_poses,
+            static_obs,
+            moving_obs,
+            anchor,
+        )
+    elif method.startswith("AP02"):
+        moving_poses, metadata = core.load_ap02(root)
+    else:
+        moving_poses, metadata = core.load_ap03(root)
+    return static_poses, moving_poses, static_pose_file, metadata
 
 
 def _evaluate_native_metric(
@@ -99,9 +119,9 @@ def _evaluate_native_metric(
     pose_frames = sorted(mposes)
     marker_frames = sorted(
         {
-            legacy.frame_id(row.get("frame_id", row.get("observer_id")))
+            core.frame_id(row.get("frame_id", row.get("observer_id")))
             for row in mrows
-            if legacy.frame_id(row.get("frame_id", row.get("observer_id"))) is not None
+            if core.frame_id(row.get("frame_id", row.get("observer_id"))) is not None
         }
     )
     candidate_frames = sorted(set(pose_frames).intersection(marker_frames))
@@ -110,7 +130,7 @@ def _evaluate_native_metric(
     reproj_rows = []
 
     for marker in markers:
-        rows = legacy.selected_marker_rows(
+        rows = core.selected_marker_rows(
             mrows, mposes, marker, args.max_moving_observations_per_marker
         )
         if len(rows) < args.min_inliers:
@@ -124,12 +144,12 @@ def _evaluate_native_metric(
             observations = []
             frame_ids = []
             for row in rows:
-                frame = legacy.frame_id(row.get("frame_id", row.get("observer_id")))
+                frame = core.frame_id(row.get("frame_id", row.get("observer_id")))
                 if frame not in mposes:
                     continue
-                observations.append(legacy.obs(row, mposes[frame], corner_index))
+                observations.append(core.obs(row, mposes[frame], corner_index))
                 frame_ids.append(frame)
-            point, inside, errors, angle = legacy.robust_triangulate(
+            point, inside, errors, angle = core.robust_triangulate(
                 observations,
                 args,
                 7919 + 17 * marker + corner_index,
@@ -147,14 +167,14 @@ def _evaluate_native_metric(
 
         static_errors = []
         static_cameras = []
-        for camera_id in legacy.CAMERAS:
+        for camera_id in core.CAMERAS:
             row = srows.get((camera_id, marker))
             if row is None or camera_id not in sposes:
                 continue
             camera_errors = []
             for corner_index, point in enumerate(corners):
-                observation = legacy.obs(row, sposes[camera_id], corner_index)
-                projected = legacy.project(point, observation)
+                observation = core.obs(row, sposes[camera_id], corner_index)
+                projected = core.project(point, observation)
                 error = (
                     float("inf")
                     if projected is None
@@ -176,7 +196,7 @@ def _evaluate_native_metric(
                 static_cameras.append(camera_id)
 
         reconstructed[marker] = {
-            "raw": float(np.median(legacy.marker_lengths(corners))),
+            "raw": float(np.median(core.marker_lengths(corners))),
             "fit": fit,
             "cross": static_errors,
             "cams": static_cameras,
@@ -240,17 +260,19 @@ def _evaluate_native_metric(
                 "expected_marker_size_cm": 100.0 * length,
                 "absolute_size_error_cm": error_cm,
                 "relative_size_error_percent": error_pct,
-                "moving_fit_reprojection_rmse_px": legacy.rmse(data["fit"]),
-                "moving_to_static_reprojection_rmse_px": legacy.rmse(data["cross"]),
-                "moving_to_static_reprojection_median_px": legacy.med(data["cross"]),
+                "moving_fit_reprojection_rmse_px": core.rmse(data["fit"]),
+                "moving_to_static_reprojection_rmse_px": core.rmse(data["cross"]),
+                "moving_to_static_reprojection_median_px": core.med(data["cross"]),
                 "moving_to_static_reprojection_observations": len(data["cross"]),
             }
         )
 
-    expected = len(legacy.CAMERAS)
+    expected = len(core.CAMERAS)
     summary = {
         "method": method,
-        "status": "OK" if len(sposes) == expected else f"PARTIAL_{len(sposes)}_OF_{expected}",
+        "status": (
+            "OK" if len(sposes) == expected else f"PARTIAL_{len(sposes)}_OF_{expected}"
+        ),
         "available_static_cameras": sorted(sposes),
         "available_static_camera_count": len(sposes),
         "registered_moving_frames": len(mposes),
@@ -262,14 +284,14 @@ def _evaluate_native_metric(
         "reconstructed_markers_total": len(reconstructed),
         "evaluated_non_anchor_markers": len(size_cm),
         "markers_with_moving_to_static_validation": validated,
-        "marker_length_rmse_cm": legacy.rmse(size_cm),
-        "marker_length_rmse_percent": legacy.rmse(size_pct),
-        "median_absolute_size_error_cm": legacy.med(size_cm),
-        "median_relative_size_error_percent": legacy.med(size_pct),
-        "moving_fit_reprojection_rmse_px": legacy.rmse(fit),
-        "moving_fit_reprojection_median_px": legacy.med(fit),
-        "moving_to_static_reprojection_rmse_px": legacy.rmse(cross),
-        "moving_to_static_reprojection_median_px": legacy.med(cross),
+        "marker_length_rmse_cm": core.rmse(size_cm),
+        "marker_length_rmse_percent": core.rmse(size_pct),
+        "median_absolute_size_error_cm": core.med(size_cm),
+        "median_relative_size_error_percent": core.med(size_pct),
+        "moving_fit_reprojection_rmse_px": core.rmse(fit),
+        "moving_fit_reprojection_median_px": core.med(fit),
+        "moving_to_static_reprojection_rmse_px": core.rmse(cross),
+        "moving_to_static_reprojection_median_px": core.med(cross),
         "moving_to_static_reprojection_observations": len(cross),
         **frame_support,
     }
@@ -277,7 +299,7 @@ def _evaluate_native_metric(
 
 
 def _report_native(path, dataset, anchor, length, summaries, marker_rows):
-    legacy._ORIGINAL_REPORT(path, dataset, anchor, length, summaries, marker_rows)
+    base_report(path, dataset, anchor, length, summaries, marker_rows)
     report_path = Path(path)
     text = report_path.read_text(encoding="utf-8")
     note = (
@@ -294,12 +316,12 @@ def _report_native(path, dataset, anchor, length, summaries, marker_rows):
 
 
 def main() -> None:
-    legacy.load_ap01 = _load_ap01_any_static
-    legacy.evaluate = _evaluate_native_metric
-    if not hasattr(legacy, "_ORIGINAL_REPORT"):
-        legacy._ORIGINAL_REPORT = legacy.report
-    legacy.report = _report_native
-    legacy.main()
+    run_evaluation(
+        core.args_parse(),
+        load_poses_fn=_load_native_poses,
+        evaluate_fn=_evaluate_native_metric,
+        report_fn=_report_native,
+    )
 
 
 if __name__ == "__main__":

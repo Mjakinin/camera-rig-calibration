@@ -50,7 +50,6 @@ from ..dataset.discovery import (
     discover_inputs,
     inspect_prepared_dataset,
     media_path_role,
-    safe_id,
 )
 from ..doctor import run_checks
 from ..experiments import automatic_method_label
@@ -190,7 +189,7 @@ def _edit_simulation_parameters(
         or {"baseline", "dark_extreme", "low", "normal", "bright", "custom"}
     )
     meanings = {
-        "route": "Moving-camera route: Route 2 baseline, Route 1, or custom JSON.",
+        "route": "Moving-camera route discovered from built-ins or data_local/simulation_routes.",
         "route_file": "Exact moving-camera route JSON saved in the resolved configuration.",
         "target_route_frames": "Moving-camera frames; at least 2. Static cameras still use one snapshot.",
         "route_sampling_strategy": "Derived automatically from route and frame count.",
@@ -306,8 +305,10 @@ def _edit_simulation_parameters(
         back_to_simulation_table = False
         for index in selected:
             key, current = rows[index - 1]
-            if key == "route_sampling_strategy":
-                typer.echo("Sampling strategy is derived; edit route or frame count.")
+            if key in {"route_file", "route_sampling_strategy"}:
+                typer.echo(
+                    "This value is derived; edit the route name or frame count."
+                )
                 continue
             while True:
                 try:
@@ -322,26 +323,16 @@ def _edit_simulation_parameters(
                     if key == "route":
                         route_names = ", ".join(routes)
                         value = field_value(
-                            f"Route ({route_names}, or path to JSON)",
+                            f"Route ({route_names})",
                             current,
                         )
-                        if value in routes:
-                            route = routes[value]
-                            parameters["route"] = value
-                        else:
-                            candidate = Path(value).expanduser().resolve()
-                            if not candidate.is_file():
-                                raise ValueError(f"route file does not exist: {candidate}")
-                            route = candidate
-                            parameters["route"] = safe_id(candidate.stem)
-                    elif key == "route_file":
-                        candidate = Path(
-                            field_value("Route JSON", route)
-                        ).expanduser().resolve()
-                        if not candidate.is_file():
-                            raise ValueError(f"route file does not exist: {candidate}")
-                        route = candidate
-                        parameters["route"] = safe_id(candidate.stem)
+                        if value not in routes:
+                            raise ValueError(
+                                "unknown route; put custom JSON below "
+                                "data_local/simulation_routes and restart the wizard"
+                            )
+                        route = routes[value]
+                        parameters["route"] = value
                     elif key in {"moving_width", "moving_height"}:
                         value = int(field_value(key, current))
                         if value < 64:

@@ -23,7 +23,7 @@ For development:
 
 ```bash
 python3 -m pip install -e ".[scientific,standalone,dev]"
-python3 -m compileall -q src run tests
+python3 -m compileall -q src tests
 pytest -q
 ```
 
@@ -39,9 +39,14 @@ The menu provides:
 0. Exit
 ```
 
-The wizard discovers inputs under `data_local`, canonical datasets under
-`datasets`, managed intrinsics under `config/intrinsics`, and the built-in bus
-simulation assets. It does not prompt for arbitrary filesystem paths.
+The wizard discovers inputs under `data_local`, published/prepared experiments
+under `results`, managed intrinsics under `config/intrinsics`, the built-in bus
+simulation assets, and validated local routes below
+`data_local/simulation_routes`. It does not prompt for arbitrary world paths.
+
+The purpose of every root and source directory is listed in the
+[repository structure](docs/repository_structure.md); the scientific artifact
+tree is explained directly in [results/README.md](results/README.md).
 
 ## Input conventions
 
@@ -74,14 +79,23 @@ The two repository profiles are:
 
 ## Simulation
 
-The stable release supports only the reviewed bus Gazebo world and its declared
-Route-1/Route-2 assets. The experiment queue can:
+The stable release supports only the reviewed bus Gazebo world. Its declared
+Route-1/Route-2 assets and valid JSON files below
+`data_local/simulation_routes/` are available as moving-camera routes. The
+experiment queue can:
 
 - add the Route-2 baseline;
 - add several existing simulation experiments;
 - derive new combinations from the baseline or another queued experiment;
 - combine route, density, resolution, FOV, lighting, motion blur and capture
   parameters.
+
+A local route needs at least two ordered, uniquely numbered frames with
+`frame`, optional `segment`, metric `x/y/z`, and radian
+`roll/pitch/yaw`. Invalid or non-finite routes fail before Gazebo starts. The
+optional frame count deterministically interpolates the route. Route hash,
+resolved pose sequence and captured frames are recorded in run metadata.
+Arbitrary SDF worlds are intentionally not executable in this release.
 
 Route, density, resolution, FOV and blur affect the moving camera. Lighting
 affects the whole world. `pct` means percent.
@@ -110,8 +124,11 @@ Single remain visible diagnostics and are not counted as separate methods in
 the scientific comparison.
 
 Additional registered `CalibrationMethod` components appear automatically.
-AP01–AP03 keep their dedicated editors; extension methods use their strict
-validated YAML configuration model.
+AP01–AP03 keep their dedicated editors; extension methods receive UI fields
+from their strict Pydantic configuration model and retain a validated YAML
+fallback. Their canonical 6DOF result is consumed by publication, comparison,
+the results browser and pose visualization without AP-specific UI branches.
+See the [Method SDK](docs/method_sdk.md).
 
 Observation quality has one queue-wide baseline and optional overrides per
 method row. The default area threshold is the resolution-neutral marker/image
@@ -236,6 +253,8 @@ COMPARISON.json
 methods/<method>/<label>/
   RESULT.txt
   RESULT.json
+  canonical_method_result.json
+  camera_poses_6dof.csv
   camera_extrinsics.csv
   camera_extrinsics_anchor.csv
   camera_extrinsics_anchor.json
@@ -313,8 +332,8 @@ Interrupted, selection-waiting and publication-failed work remains under
 automatically.
 
 `Cleanup storage` reviews three independent permanent-deletion groups in this
-order: published `results` (including their embedded datasets), legacy/prepared
-datasets and dataset caches, then temporary workspace runs/queues/batches.
+order: published `results` (including their embedded datasets), reusable
+preparation caches, then temporary workspace runs/queues/batches.
 Each group defaults to “no”; selected groups require a final typed `DELETE`
 confirmation and are verified after deletion. Cleanup is blocked while another
 rigcal process is active. `data_local` and `config/intrinsics` are never
@@ -323,13 +342,14 @@ selected or queried by this action.
 The public code is package-first:
 
 - `src/camera_rig_calibration/`: all active implementation;
-- `run/rigcal.py`: thin source-checkout launcher;
-- `run/README.md`: pipeline order;
 - `src/calib_lab/`: reviewed Gazebo assets;
 - `data_local/`: user recordings;
 - `results/`: complete experiments with immutable inputs and scientific outputs;
 - `workspace/`: temporary runs and internal reusable caches;
 - `tests/`: software fixtures and contracts.
+
+Start the installed CLI with `rigcal` or, from a source checkout, with
+`python -m camera_rig_calibration`.
 
 See [architecture](docs/architecture.md),
 [configuration](docs/configuration.md), and the

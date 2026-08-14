@@ -1,6 +1,0 @@
-{
-  "ground_truth_used": false,
-  "reason": "No legacy/Wizard paired pre-solver evidence exists yet on the exact historical Main pixels; calibration and COLMAP were intentionally not run.",
-  "schema_version": 1,
-  "status": "unavailable"
-}

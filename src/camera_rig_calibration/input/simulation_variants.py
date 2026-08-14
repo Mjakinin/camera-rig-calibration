@@ -7,6 +7,8 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any
 
+from .simulation_routes import load_simulation_route
+
 
 def _child(parent: ET.Element, name: str) -> ET.Element:
     node = parent.find(name)
@@ -165,6 +167,7 @@ def _angle_interpolate(first: float, second: float, fraction: float) -> float:
 def compose_route(
     source: Path, destination: Path, *, target_frames: int | None
 ) -> Path:
+    load_simulation_route(source)
     payload = json.loads(source.read_text(encoding="utf-8"))
     frames = payload.get("frames")
     if not isinstance(frames, list) or len(frames) < 2:

@@ -115,8 +115,8 @@ def test_complete_orchestrator_contract_without_running_ap_methods(tmp_path: Pat
     )
     assert len(dataset_manifest["automatic_selections"]) == 3
     commands = (run / "commands.txt").read_text()
-    assert "camera_rig_calibration/observation_detection.py" in commands.replace(
-        "\\", "/"
+    assert (
+        "camera_rig_calibration.observation_services.detection" in commands
     )
     assert "run/real_vehicle_data" not in commands.replace("\\", "/")
 

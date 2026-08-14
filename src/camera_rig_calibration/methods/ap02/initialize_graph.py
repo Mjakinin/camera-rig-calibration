@@ -70,7 +70,7 @@ def filter_mode(
 def best_observations(
     rows: list[dict[str, str]],
     *,
-    edge_weight_policy: str = "legacy_observation_quality_v1",
+    edge_weight_policy: str = "geometric_observation_quality_v1",
 ) -> list[dict[str, str]]:
     """Choose one deterministic initialization edge per observer/marker.
 
@@ -83,7 +83,7 @@ def best_observations(
         dict[str, str],
     ] = {}
 
-    if edge_weight_policy == "legacy_observation_quality_v1":
+    if edge_weight_policy == "geometric_observation_quality_v1":
         for row in rows:
             if not is_success(row):
                 continue
@@ -155,7 +155,7 @@ def _finite_float(
 
 
 def observation_pnp_rmse(row: dict[str, str]) -> float:
-    """Read the preflight-audited PnP RMSE, with legacy recomputation."""
+    """Read the preflight-audited PnP RMSE, with a geometric fallback."""
 
     stored = _finite_float(
         row, "pnp_reprojection_rmse_px", float("nan")
@@ -167,11 +167,11 @@ def observation_pnp_rmse(row: dict[str, str]) -> float:
 
 def edge_quality(
     row: dict[str, str],
-    policy: str = "legacy_observation_quality_v1",
+    policy: str = "geometric_observation_quality_v1",
 ) -> float:
     """Return the configured, GT-free AP02 graph-edge score."""
-    if policy == "legacy_observation_quality_v1":
-        return main_observation_score(row)
+    if policy == "geometric_observation_quality_v1":
+        return observation_score(row)
     if policy != "wizard_selection_score_v2":
         raise ValueError(f"Unknown AP02 graph-edge weight policy: {policy}")
     score = _finite_float(row, "selection_score", float("nan"))
@@ -358,19 +358,13 @@ def maximum_bottleneck_tree(
     return parent, best
 
 
-def main_compat_widest_path_tree(
+def maximum_frontier_tree(
     adjacency,
     start: Node,
     *,
     edge_weight_policy: str = "wizard_selection_score_v2",
 ):
-    """Reproduce the validated ``main`` maximum-frontier initialization.
-
-    This is Prim's rooted maximum-spanning-tree construction used by the
-    former ``05_initialize_ref_marker_pose_graph_v2.py`` workflow.  It is kept
-    separate from :func:`maximum_bottleneck_tree`, whose richer path-level
-    tie-breakers remain useful as an independent diagnostic.
-    """
+    """Build a rooted maximum-spanning tree from the strongest frontier edge."""
 
     visited = {start}
     parent: dict[Node, tuple[Node, dict[str, str]]] = {}
@@ -415,7 +409,7 @@ def main_compat_widest_path_tree(
             continue
         if source not in visited:
             raise RuntimeError(
-                "Main-compatible frontier contains an uninitialized parent: "
+                "Maximum-frontier tree contains an uninitialized parent: "
                 f"{source}"
             )
         score = edge_quality(row, edge_weight_policy)
@@ -440,8 +434,8 @@ def main_compat_widest_path_tree(
     return parent, metrics
 
 
-def main_observation_score(row: dict[str, str]) -> float:
-    """Legacy-main GT-free observation score for parity evidence only."""
+def observation_score(row: dict[str, str]) -> float:
+    """Return the baseline geometry-only score for one AP02 observation."""
 
     if not is_success(row):
         return 0.0

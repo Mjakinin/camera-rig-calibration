@@ -55,6 +55,10 @@ from ..progress import ProgressClock, progress_text, terminal_lines
 from ..pipeline import StageContract, validate_stage_dag
 from ..registry import calibration_methods, evaluators, input_adapters
 from ..results import write_comparison
+from ..method_sdk.service import (
+    materialize_method_result,
+    resolved_method_metadata,
+)
 
 
 from .common import (
@@ -194,11 +198,14 @@ class ExecutionMixin:
         self._validate_explicit_rerun_dataset_identity(
             actual_dataset_identity
         )
-        self.manifest["algorithm_version"] = {
-            "ap01": "ap01_main_compat_hierarchical_v1",
-            "ap02": "ap02_main_compat_widest_path_v1",
-            "ap03": "ap03_shared_colmap_single_multi_v1",
-        }.get(next(iter(config.methods.enabled), ""), "extension_v1")
+        initial_method_id = next(iter(config.methods.enabled), "")
+        self.manifest["algorithm_version"] = (
+            resolved_method_metadata(
+                initial_method_id
+            ).run_manifest_algorithm_version
+            if initial_method_id
+            else "unknown"
+        )
         self._save_state()
         _write_json(
             pointer_path,
@@ -604,7 +611,17 @@ class ExecutionMixin:
             self._store_colmap_artifact(
                 config, input_id, method_id
             )
-            method_results[method_id] = method.collect(context)
+            method_status = method.collect(context)
+            canonical = materialize_method_result(
+                method, context, method_status
+            )
+            if canonical is not None:
+                method_status = {
+                    **method_status,
+                    "canonical_result_status": canonical.status,
+                    "canonical_pose_count": len(canonical.camera_poses),
+                }
+            method_results[method_id] = method_status
 
         if config.evaluation.enabled and not self.defer_evaluation:
             if resolved.evaluation_anchor_marker_id is None:

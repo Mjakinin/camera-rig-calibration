@@ -19,7 +19,8 @@ application.
 - `wizard.py`, `queueing.py`, `publication.py`: interactive setup, execution
   and publication
 
-The public launcher is `run/rigcal.py`; it delegates to this package.
+The public launchers are the installed `rigcal` command and
+`python -m camera_rig_calibration`.
 
 ## `calib_lab/`
 

@@ -11,6 +11,8 @@ from pydantic import BaseModel
 from ...components.common import calibration_requirements, read_method_status
 from ...config.models import AP02Settings
 from ...contracts import CommandSpec, RequirementResult, RunContext
+from ...method_sdk.builtin_results import ap02_result
+from ...method_sdk.contracts import MethodInputRequirements
 from .contracts import resolve_ap02_method_contract
 
 
@@ -20,6 +22,14 @@ class AP02Method:
 
     id: str = "ap02"
     display_name: str = "AP02"
+    algorithm_version: str = "ap02_maximum_frontier_v1"
+    run_manifest_algorithm_version: str = "ap02_maximum_frontier_v1"
+    artifact_directory: str = "03_AP02"
+    primary_pose_path: str = (
+        "07_graph_ba/with_moving/optimized_static_camera_poses_ref_marker.csv"
+    )
+    result_contract_required: bool = True
+    input_requirements: MethodInputRequirements = MethodInputRequirements()
     config_model: type[BaseModel] = AP02Settings
 
     def requirements(self, context: RunContext) -> RequirementResult:
@@ -77,11 +87,6 @@ class AP02Method:
         ):
             if value is not None:
                 selection_arguments.extend([option, str(value)])
-        historical_arguments = (
-            ["--historical-reproduction"]
-            if settings.historical_reproduction
-            else []
-        )
         stages = [
             (
                 "ap02_build_graph",
@@ -91,8 +96,6 @@ class AP02Method:
                     "camera_rig_calibration.methods.ap02.build_graph",
                     "--observations-root",
                     str(context.observations_root),
-                    "--dataset",
-                    str(context.dataset_root),
                     "--out",
                     str(output),
                     "--cameras",
@@ -103,7 +106,6 @@ class AP02Method:
                     contract.graph_observation_policy,
                     "--method-contract-sha256",
                     contract.scientific_fingerprint(),
-                    *historical_arguments,
                     *selection_arguments,
                 ],
                 output / "02_aruco_observations",
@@ -169,7 +171,6 @@ class AP02Method:
                     contract.reprojection_model,
                     "--moving-frame-selection-policy",
                     contract.moving_frame_selection_policy,
-                    *historical_arguments,
                     *selection_arguments,
                 ],
                 output / "07_graph_ba/static_only",
@@ -217,7 +218,6 @@ class AP02Method:
                     contract.reprojection_model,
                     "--moving-frame-selection-policy",
                     contract.moving_frame_selection_policy,
-                    *historical_arguments,
                     *selection_arguments,
                 ],
                 output / "07_graph_ba/with_moving",
@@ -264,3 +264,8 @@ class AP02Method:
 
     def collect(self, context: RunContext) -> dict[str, Any]:
         return read_method_status(context.run_directory / "03_AP02")
+
+    def canonical_result(
+        self, context: RunContext, status: dict[str, Any]
+    ):
+        return ap02_result(context, status)

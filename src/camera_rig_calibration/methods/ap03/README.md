@@ -1,12 +1,11 @@
-# AP03 — reconstructed Main SfM/Multi-camera baseline
+# AP03 — SfM/Multi-camera baseline
 
-AP03 defaults to the immutable `baseline_v1` contract reconstructed from Main.
-It registers the four static images and every sorted moving image together,
-with one calibrated COLMAP camera per static camera and one shared camera for
-the moving sequence. Intrinsics remain fixed. Main left SIFT feature limits
-unset, used exhaustive CPU matching with eight mapper matches, and selected
-the sparse model by registered-static count, total registrations, then point
-count.
+AP03 defaults to the immutable `baseline_v1` contract. It registers the four
+static images and every sorted moving image together, with one calibrated
+COLMAP camera per static camera and one shared camera for the moving sequence.
+Intrinsics remain fixed. The baseline leaves SIFT feature limits unset, uses
+exhaustive CPU matching with eight mapper matches, and selects the sparse model
+by registered-static count, total registrations, then point count.
 
 The primary Multi result re-detects markers 0–14 in registered images, rejects
 detections below 100 px², triangulates marker corners, and obtains metric scale

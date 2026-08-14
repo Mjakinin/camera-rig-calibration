@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 
 from camera_rig_calibration.methods.ap03.report import run as run_ap03_report
-from camera_rig_calibration.submission_quality_policy import (
+from camera_rig_calibration.policies.submission_quality_policy import (
     _merge_method_status,
     _repair_anchor_exports,
     ap03_quality_semantics,

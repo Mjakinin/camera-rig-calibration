@@ -429,8 +429,9 @@ def _simulation_job_from_parameters(
         None,
     )
     if route is None:
+        available = ", ".join(candidate.id for candidate in bus.routes)
         raise ValueError(
-            f"Unsupported bus route '{route_name}'; choose route1 or route2"
+            f"Unsupported bus route '{route_name}'; choose one of: {available}"
         )
     world = bus.lighting_profiles.get(str(normalized["lighting"]))
     if world is None:
@@ -644,7 +645,7 @@ def _simulation_input_queue(
         elif action == "2":
             if not experiments:
                 _show_input_error(
-                    "No historical bus simulation experiment is discoverable."
+                    "No published bus simulation experiment is discoverable."
                 )
                 continue
             raw = typer.prompt(

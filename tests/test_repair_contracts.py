@@ -20,7 +20,7 @@ from camera_rig_calibration.methods.ap01.solve_extrinsics import (
 )
 from camera_rig_calibration.methods.ap02.initialize import (
     build_graph,
-    main_compat_widest_path_tree,
+    maximum_frontier_tree,
     marker_node,
     maximum_bottleneck_tree,
 )
@@ -56,14 +56,14 @@ def _identity_dataset(root: Path, *, image: bytes = b"image") -> Path:
     return root
 
 
-def _write_frozen_observations(
+def _write_reused_observations(
     root: Path,
     *,
     dictionary: str = "DICT_4X4_50",
     length_m: float = 0.17,
     detection_mode: str = "baseline",
     input_id: str = "input_fixture",
-    frozen_id: str = "detection_legacy_opencv",
+    observation_id_value: str = "detection_fixture_v1",
 ) -> None:
     observations = root / "observations"
     observations.mkdir(exist_ok=True)
@@ -72,7 +72,7 @@ def _write_frozen_observations(
             {
                 "schema_version": 5,
                 "input_id": input_id,
-                "observation_id": frozen_id,
+                "observation_id": observation_id_value,
                 "markers": {
                     "dictionary": dictionary,
                     "length_m": length_m,
@@ -188,7 +188,7 @@ def _observation(
     }
 
 
-def test_main_compat_ap02_uses_strongest_frontier_edge() -> None:
+def test_ap02_maximum_frontier_uses_strongest_edge() -> None:
     rows = [
         _observation("cam_a", 14, 0.90),
         _observation("cam_a", 1, 0.20),
@@ -197,7 +197,7 @@ def test_main_compat_ap02_uses_strongest_frontier_edge() -> None:
     ]
     graph = build_graph(rows)
     start = marker_node(14)
-    parent, _metrics = main_compat_widest_path_tree(graph, start)
+    parent, _metrics = maximum_frontier_tree(graph, start)
     v2_parent, _v2_metrics = maximum_bottleneck_tree(graph, start)
     assert parent[("observer", "cam_a")][0] == start
     assert ("observer", "cam_b") in parent
@@ -311,7 +311,7 @@ def test_prepare_single_method_rerun_reuses_dataset_without_capture(
         ),
         encoding="utf-8",
     )
-    _write_frozen_observations(
+    _write_reused_observations(
         experiment,
         dictionary=prepared_config.markers.dictionary,
         length_m=prepared_config.markers.length_m,
@@ -365,7 +365,7 @@ def test_prepare_single_method_rerun_reuses_dataset_without_capture(
     )
     assert (
         prepared.observation_contract["observation_id"]
-        == "detection_legacy_opencv"
+        == "detection_fixture_v1"
     )
 
 
@@ -390,7 +390,7 @@ def test_ap01_single_method_rerun_accepts_explicit_contract(
         ),
         encoding="utf-8",
     )
-    _write_frozen_observations(
+    _write_reused_observations(
         experiment,
         dictionary=prepared_config.markers.dictionary,
         length_m=prepared_config.markers.length_m,
@@ -423,14 +423,14 @@ def test_ap01_single_method_rerun_accepts_explicit_contract(
         variant="baseline",
         reuse_prepared_input=True,
         reuse_matching_intermediates=False,
-        ap01_method_contract="main_route2_parity_v1",
+        ap01_method_contract="recommended_wizard_v1",
     )
 
     assert prepared.config.methods.ap01.method_contract == (
-        "main_route2_parity_v1"
+        "recommended_wizard_v1"
     )
     saved = load_config(prepared.queue.entries[0].config)
-    assert saved.methods.ap01.method_contract == "main_route2_parity_v1"
+    assert saved.methods.ap01.method_contract == "recommended_wizard_v1"
 
 
 def test_ap01_contract_override_rejects_other_methods(
@@ -443,18 +443,18 @@ def test_ap01_contract_override_rejects_other_methods(
             tmp_path,
             "ap02",
             "baseline",
-            ap01_method_contract="main_route2_parity_v1",
+            ap01_method_contract="recommended_wizard_v1",
         )
 
 
-def test_method_rerun_reuses_frozen_detector_provenance(
+def test_method_rerun_reuses_published_detector_provenance(
     prepared_config,
     tmp_path: Path,
 ) -> None:
     transaction = tmp_path / "transaction"
     shared = transaction / "dataset"
     shared.mkdir(parents=True)
-    _write_frozen_observations(
+    _write_reused_observations(
         shared,
         dictionary=prepared_config.markers.dictionary,
         length_m=prepared_config.markers.length_m,
@@ -462,15 +462,15 @@ def test_method_rerun_reuses_frozen_detector_provenance(
     )
     detection_path = shared / "observations/detection_config.json"
     original = detection_path.read_bytes()
-    assert observation_id(prepared_config) != "detection_legacy_opencv"
+    assert observation_id(prepared_config) != "detection_fixture_v1"
 
     orchestrator = PipelineOrchestrator(
         tmp_path,
         transaction_root=transaction,
         rerun_metadata={
-            "reuse_frozen_observations": True,
-            "frozen_observation_contract": {
-                "observation_id": "detection_legacy_opencv"
+            "reuse_published_observations": True,
+            "published_observation_contract": {
+                "observation_id": "detection_fixture_v1"
             },
         },
     )
@@ -485,11 +485,11 @@ def test_method_rerun_reuses_frozen_detector_provenance(
     assert bound == shared / "observations"
     assert detection_path.read_bytes() == original
     assert orchestrator.manifest["observation_id"] == (
-        "detection_legacy_opencv"
+        "detection_fixture_v1"
     )
-    assert orchestrator.manifest["frozen_observations_reused"] is True
+    assert orchestrator.manifest["published_observations_reused"] is True
     assert PipelineOrchestrator._observation_contract_ready(
-        bound, "detection_legacy_opencv"
+        bound, "detection_fixture_v1"
     )
 
 
@@ -500,7 +500,7 @@ def test_method_rerun_rejects_changed_marker_contract(
     transaction = tmp_path / "transaction"
     shared = transaction / "dataset"
     shared.mkdir(parents=True)
-    _write_frozen_observations(
+    _write_reused_observations(
         shared,
         dictionary=prepared_config.markers.dictionary,
         length_m=prepared_config.markers.length_m,
@@ -518,9 +518,9 @@ def test_method_rerun_rejects_changed_marker_contract(
         tmp_path,
         transaction_root=transaction,
         rerun_metadata={
-            "reuse_frozen_observations": True,
-            "frozen_observation_contract": {
-                "observation_id": "detection_legacy_opencv"
+            "reuse_published_observations": True,
+            "published_observation_contract": {
+                "observation_id": "detection_fixture_v1"
             },
         },
     )

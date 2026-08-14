@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from camera_rig_calibration import real_partial_evaluation_policy as partial
-from camera_rig_calibration.ap02_partial_reference_reporting_policy import (
+from camera_rig_calibration.policies import real_partial_evaluation_policy as partial
+from camera_rig_calibration.policies.ap02_partial_reference_reporting_policy import (
     install_ap02_partial_reference_reporting_policy,
 )
 

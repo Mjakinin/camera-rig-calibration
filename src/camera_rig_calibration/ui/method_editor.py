@@ -17,6 +17,8 @@ from ..config.models import (
     ObservationQualitySettings,
 )
 from ..registry import calibration_methods
+from ..method_sdk.contracts import method_metadata
+from .auto_form import auto_form_field, update_auto_form_value
 
 
 @dataclass(frozen=True)
@@ -114,6 +116,29 @@ def edit_method_job(
                 typer.echo("COLMAP is not applicable to AP02.")
                 continue
             try:
+                if key == "extension_custom_editor":
+                    method = calibration_methods.get(job.method_id)
+                    editor = method_metadata(method).config_editor
+                    if editor is None:
+                        raise RuntimeError(
+                            f"Method '{job.method_id}' has no custom editor"
+                        )
+                    current_payload = job.methods.extensions.get(
+                        job.method_id, {}
+                    )
+                    current_model = method.config_model.model_validate(
+                        current_payload
+                    )
+                    edited_model = editor.edit(console, current_model)
+                    validated = method.config_model.model_validate(
+                        edited_model
+                    ).model_dump(mode="python")
+                    extensions = dict(job.methods.extensions)
+                    extensions[job.method_id] = validated
+                    job.methods = job.methods.model_copy(
+                        update={"extensions": extensions}, deep=True
+                    )
+                    continue
                 if key in GUIDED_SELECTION_KEYS:
                     _configure_guided_selection(
                         console,
@@ -168,13 +193,13 @@ def edit_method_job(
                             ),
                         ),
                     )
-                elif key == "ap01_advanced_strategy":
+                elif key == "ap01_method_contract":
                     value = _prompt_enum_choice(
                         label,
                         str(current),
                         (
-                            ("legacy_main_v1", "standard Direct/Relay behavior"),
-                            ("wizard_robustness_v1", "configurable caps and consensus gates"),
+                            ("baseline_v1", "standard Direct/Relay behavior"),
+                            ("recommended_wizard_v1", "configurable caps and consensus gates"),
                         ),
                     )
                 elif key == "ap02_frame_strategy":
@@ -182,7 +207,7 @@ def edit_method_job(
                         label,
                         str(current),
                         (
-                            ("legacy_smart_v1", "smart selection at the BA boundary"),
+                            ("smart_v1", "smart selection at the BA boundary"),
                             ("wizard_graph_preserving_v1", "advanced pre-initialization graph selection"),
                         ),
                     )
@@ -191,7 +216,7 @@ def edit_method_job(
                         label,
                         str(current),
                         (
-                            ("legacy_maximum_bottleneck_v1", "deterministic maximum-frontier tree"),
+                            ("maximum_frontier_v1", "deterministic maximum-frontier tree"),
                             ("wizard_maximum_bottleneck_v2", "advanced path-level tie strategy"),
                             ("unweighted_bfs_diagnostic", "diagnostic unweighted breadth-first tree"),
                         ),
@@ -201,7 +226,7 @@ def edit_method_job(
                         label,
                         str(current),
                         (
-                            ("legacy_observation_quality_v1", "geometric observation quality"),
+                            ("geometric_observation_quality_v1", "geometric observation quality"),
                             ("wizard_selection_score_v2", "advanced shared quality score"),
                         ),
                     )
@@ -210,7 +235,7 @@ def edit_method_job(
                         label,
                         str(current),
                         (
-                            ("legacy_pinhole_v1", "zero-distortion pinhole projection"),
+                            ("pinhole_v1", "zero-distortion pinhole projection"),
                             ("distortion_aware_v1", "advanced camera-info distortion projection"),
                         ),
                     )
@@ -218,7 +243,7 @@ def edit_method_job(
                     value = _prompt_enum_choice(
                         label, str(current),
                         (
-                            ("legacy_colmap_defaults_v1", "leave SIFT limits unset"),
+                            ("colmap_defaults_v1", "leave SIFT limits unset"),
                             ("wizard_explicit_limits_v1", "apply configured AP03 SIFT limits"),
                         ),
                     )
@@ -226,7 +251,7 @@ def edit_method_job(
                     value = _prompt_enum_choice(
                         label, str(current),
                         (
-                            ("legacy_registered_image_redetection_v1", "re-detect every registered image"),
+                            ("registered_image_redetection_v1", "re-detect every registered image"),
                             ("wizard_filtered_observations_v1", "gate re-detections through filtered observations"),
                         ),
                     )
@@ -284,6 +309,35 @@ def edit_method_job(
                             ),
                         ),
                     )
+                elif key.startswith("extension."):
+                    method = calibration_methods.get(job.method_id)
+                    payload = job.methods.extensions.get(job.method_id, {})
+                    form_field = auto_form_field(
+                        method.config_model, payload, key
+                    )
+                    if form_field.choices:
+                        value = _prompt_enum_choice(
+                            label,
+                            str(current).lower()
+                            if isinstance(current, bool)
+                            else str(current),
+                            tuple(
+                                (
+                                    str(choice).lower()
+                                    if isinstance(choice, bool)
+                                    else str(choice),
+                                    f"set {label} to {choice}",
+                                )
+                                for choice in form_field.choices
+                            ),
+                        )
+                    else:
+                        value = typer.prompt(
+                            f"{label} (b = back)",
+                            default=_format_setting_value(current),
+                        ).strip()
+                        if value.lower() in {"b", "back"}:
+                            raise WizardBack()
                 else:
                     prompt_default = _format_setting_value(current)
                     if key in {
@@ -385,10 +439,10 @@ def edit_method_job(
                         contexts=selection_contexts,
                         requested_mode="manual",
                     )
-            elif key == "ap01_advanced_strategy":
-                field = "advanced_strategy"
-                updated = value
-                ap01 = job.methods.ap01.model_copy(update={field: updated})
+            elif key == "ap01_method_contract":
+                ap01 = job.methods.ap01.model_copy(
+                    update={"method_contract": value}
+                )
                 job.methods = job.methods.model_copy(
                     update={"ap01": ap01}, deep=True
                 )
@@ -719,6 +773,18 @@ def edit_method_job(
                 extensions = dict(job.methods.extensions)
                 extensions[job.method_id] = validated
                 job.methods = job.methods.model_copy(update={"extensions": extensions}, deep=True)
+            elif key.startswith("extension."):
+                method = calibration_methods.get(job.method_id)
+                payload = job.methods.extensions.get(job.method_id, {})
+                path = tuple(key.removeprefix("extension.").split("."))
+                validated = update_auto_form_value(
+                    method.config_model, payload, path, value
+                )
+                extensions = dict(job.methods.extensions)
+                extensions[job.method_id] = validated
+                job.methods = job.methods.model_copy(
+                    update={"extensions": extensions}, deep=True
+                )
         if back_to_table:
             continue
         # Validate all copied models and then show the resolved values again. This also

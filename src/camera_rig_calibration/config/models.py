@@ -379,12 +379,8 @@ class AP01PathConsistency(StrictModel):
 
 class AP01Settings(StrictModel):
     method_contract: Literal[
-        "baseline_v1", "main_route2_parity_v1", "recommended_wizard_v1"
+        "baseline_v1", "recommended_wizard_v1"
     ] = "baseline_v1"
-    historical_reproduction: bool = False
-    advanced_strategy: Literal[
-        "legacy_main_v1", "wizard_robustness_v1"
-    ] = "legacy_main_v1"
     direct_target_camera: str = "cam_edge_1"
     root_camera: str = "auto"
     top_moving_per_marker: int | None = Field(default=8, ge=1)
@@ -413,25 +409,24 @@ class AP01Settings(StrictModel):
 
 class AP02Settings(StrictModel):
     method_contract: Literal["baseline_v1"] = "baseline_v1"
-    historical_reproduction: bool = False
     reference_marker_selection_mode: Literal[
         "baseline", "auto", "manual", "explicit"
     ] = "baseline"
     reference_marker_id: int | Literal["auto"] = 14
     frame_selection_strategy: Literal[
-        "legacy_smart_v1", "wizard_graph_preserving_v1"
-    ] = "legacy_smart_v1"
+        "smart_v1", "wizard_graph_preserving_v1"
+    ] = "smart_v1"
     initialization_strategy: Literal[
-        "legacy_maximum_bottleneck_v1",
+        "maximum_frontier_v1",
         "wizard_maximum_bottleneck_v2",
         "unweighted_bfs_diagnostic",
-    ] = "legacy_maximum_bottleneck_v1"
+    ] = "maximum_frontier_v1"
     graph_edge_weight_strategy: Literal[
-        "legacy_observation_quality_v1", "wizard_selection_score_v2"
-    ] = "legacy_observation_quality_v1"
+        "geometric_observation_quality_v1", "wizard_selection_score_v2"
+    ] = "geometric_observation_quality_v1"
     reprojection_model: Literal[
-        "legacy_pinhole_v1", "distortion_aware_v1"
-    ] = "legacy_pinhole_v1"
+        "pinhole_v1", "distortion_aware_v1"
+    ] = "pinhole_v1"
     reference_marker_maximum_frames: int | None = Field(
         default=None, ge=1
     )
@@ -515,12 +510,12 @@ class AP03MultiSettings(StrictModel):
 class AP03Settings(StrictModel):
     method_contract: Literal["baseline_v1"] = "baseline_v1"
     feature_limit_policy: Literal[
-        "legacy_colmap_defaults_v1", "wizard_explicit_limits_v1"
-    ] = "legacy_colmap_defaults_v1"
+        "colmap_defaults_v1", "wizard_explicit_limits_v1"
+    ] = "colmap_defaults_v1"
     scale_input_policy: Literal[
-        "legacy_registered_image_redetection_v1",
+        "registered_image_redetection_v1",
         "wizard_filtered_observations_v1",
-    ] = "legacy_registered_image_redetection_v1"
+    ] = "registered_image_redetection_v1"
     minimum_marker_area_px2: float = Field(default=100.0, ge=0.0)
     single: AP03SingleSettings = Field(default_factory=AP03SingleSettings)
     multi: AP03MultiSettings = Field(default_factory=AP03MultiSettings)

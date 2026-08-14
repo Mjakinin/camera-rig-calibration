@@ -18,7 +18,9 @@ class MarkerConsistencyEvaluator:
 
     def requirements(self, context: RunContext) -> RequirementResult:
         if context.resolved_evaluation_anchor_marker_id is None:
-            return RequirementResult.unavailable("evaluation scale anchor is unresolved")
+            return RequirementResult.unavailable(
+                "evaluation scale anchor is unresolved"
+            )
         supported = {"ap01", "ap02", "ap03"}
         if not supported.intersection(context.config.methods.enabled):
             return RequirementResult.unavailable(
@@ -35,10 +37,8 @@ class MarkerConsistencyEvaluator:
         }
         argv = [
             sys.executable,
-            str(
-                context.repository_root
-                / "src/camera_rig_calibration/evaluation/marker_consistency.py"
-            ),
+            "-m",
+            "camera_rig_calibration.evaluation.marker_consistency",
             "--dataset",
             str(context.dataset_root),
             "--results-root",

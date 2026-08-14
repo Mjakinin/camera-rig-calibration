@@ -57,7 +57,7 @@ def initialize_from_tree(
     *,
     path_metrics: dict[Node, dict[str, object]] | None = None,
     algorithm: str = "unweighted_first_hit_bfs",
-    edge_weight_policy: str = "legacy_observation_quality_v1",
+    edge_weight_policy: str = "geometric_observation_quality_v1",
 ):
     start = marker_node(ref_marker_id)
 

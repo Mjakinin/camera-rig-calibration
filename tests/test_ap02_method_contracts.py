@@ -29,50 +29,24 @@ def _resolved() -> ResolvedSelections:
     )
 
 
-def test_ap01_baseline_v1_is_fresh_legacy_main_by_default() -> None:
+def test_ap01_baseline_v1_uses_fresh_inputs_by_default() -> None:
     settings = AP01Settings()
     assert settings.method_contract == "baseline_v1"
-    assert settings.historical_reproduction is False
-    assert settings.advanced_strategy == "legacy_main_v1"
     contract = resolve_ap01_method_contract(
-        ap01_execution_contract_name(
-            settings.method_contract,
-            historical_reproduction=settings.historical_reproduction,
-            advanced_strategy=settings.advanced_strategy,
-        )
+        ap01_execution_contract_name(settings.method_contract)
     )
     assert contract.name == "baseline_v1"
     assert contract.sfm_execution_policy == "fresh_colmap"
     assert contract.scale_execution_policy == "fresh_metric_scale_estimation"
     assert contract.quality_model == (
-        "legacy_area_over_distance_squared_center_v1"
+        "baseline_area_over_distance_squared_center_v1"
     )
     assert contract.direct_target_policy == "single_configured_target"
     assert contract.relay_input_limit is None
-    assert contract.reproduction_validation_policy == "none"
 
 
-def test_ap01_historical_reproduction_is_explicit_and_guarded() -> None:
-    assert ap01_execution_contract_name(
-        "baseline_v1", historical_reproduction=True
-    ) == "main_route2_parity_v1"
-    historical = resolve_ap01_method_contract("main_route2_parity_v1")
-    assert historical.sfm_execution_policy == "frozen_historical_reproduction"
-    assert historical.sfm_frozen_input_fingerprint
-    assert historical.sfm_frozen_intrinsics_sha256
-    assert historical.sfm_frozen_images_sha256
-    assert historical.scale_frozen_metric_sha256
-    with pytest.raises(ValueError, match="requires legacy_main_v1"):
-        ap01_execution_contract_name(
-            "baseline_v1",
-            historical_reproduction=True,
-            advanced_strategy="wizard_robustness_v1",
-        )
-
-
-def test_ap02_baseline_v1_resolves_complete_legacy_contract() -> None:
+def test_ap02_baseline_v1_resolves_complete_contract() -> None:
     settings = AP02Settings()
-    assert settings.historical_reproduction is False
     contract = resolve_ap02_method_contract(
         settings.method_contract,
         reference_marker_selection_mode=(
@@ -101,20 +75,20 @@ def test_ap02_baseline_v1_resolves_complete_legacy_contract() -> None:
     assert contract.name == "baseline_v1"
     assert contract.reference_marker_id == 14
     assert contract.graph_observation_policy == (
-        "legacy_quality_valid_all_observations_v1"
+        "quality_valid_all_observations_v1"
     )
     assert contract.moving_frame_selection_policy == (
-        "legacy_smart_at_ba_boundary_v1"
+        "smart_at_ba_boundary_v1"
     )
     assert contract.top_per_marker == 8
     assert contract.top_per_marker_pair == 4
     assert contract.initialization_algorithm == (
-        "legacy_maximum_bottleneck_v1"
+        "maximum_frontier_v1"
     )
     assert contract.graph_edge_weight_policy == (
-        "legacy_observation_quality_v1"
+        "geometric_observation_quality_v1"
     )
-    assert contract.reprojection_model == "legacy_pinhole_v1"
+    assert contract.reprojection_model == "pinhole_v1"
     assert contract.robust_loss == "soft_l1"
     assert contract.robust_loss_scale_px == 3.0
     assert contract.static_maximum_function_evaluations == 80
@@ -180,15 +154,15 @@ def test_ap02_wizard_robustness_features_remain_explicitly_configurable() -> Non
     )
 
 
-def test_ap01_reproduction_and_ap02_advanced_state_change_method_fingerprints(
+def test_ap01_and_ap02_advanced_state_change_method_fingerprints(
     prepared_config,
 ) -> None:
     ap01 = prepared_config.model_copy(deep=True)
     ap01.methods.enabled = ["ap01"]
-    historical = ap01.model_copy(deep=True)
-    historical.methods.ap01.historical_reproduction = True
+    advanced_ap01 = ap01.model_copy(deep=True)
+    advanced_ap01.methods.ap01.method_contract = "recommended_wizard_v1"
     assert method_fingerprint(ap01, "ap01", _resolved()) != method_fingerprint(
-        historical, "ap01", _resolved()
+        advanced_ap01, "ap01", _resolved()
     )
 
     ap02 = prepared_config.model_copy(deep=True)

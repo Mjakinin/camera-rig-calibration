@@ -27,6 +27,27 @@ class ComponentRegistry(Generic[T]):
             raise ValueError(f"{self.kind} components must define a non-empty id")
         if component_id in self._items and not replace:
             raise ValueError(f"duplicate {self.kind} id: {component_id}")
+        if self.kind == "calibration method":
+            from pydantic import BaseModel
+
+            from .method_sdk.contracts import method_metadata
+
+            config_model = getattr(component, "config_model", None)
+            if not (
+                isinstance(config_model, type)
+                and issubclass(config_model, BaseModel)
+            ):
+                raise TypeError(
+                    f"calibration method '{component_id}' needs a Pydantic config_model"
+                )
+            metadata = method_metadata(component)
+            if (
+                metadata.result_contract_required
+                and not callable(getattr(component, "canonical_result", None))
+            ):
+                raise TypeError(
+                    f"calibration method '{component_id}' requires canonical_result()"
+                )
         self._items[component_id] = component
         return component
 

@@ -73,8 +73,8 @@ class AP03MethodContract:
 def resolve_ap03_method_contract(
     name: AP03ContractName | str = DEFAULT_AP03_CONTRACT,
     *,
-    feature_limit_policy: str = "legacy_colmap_defaults_v1",
-    scale_input_policy: str = "legacy_registered_image_redetection_v1",
+    feature_limit_policy: str = "colmap_defaults_v1",
+    scale_input_policy: str = "registered_image_redetection_v1",
     scale_marker_ids: Sequence[int] = tuple(range(15)),
     marker_length_m: float = 0.17,
     marker_dictionary: str = "DICT_4X4_50",
@@ -97,12 +97,12 @@ def resolve_ap03_method_contract(
             f"Unknown AP03 method contract '{name}'; choose baseline_v1"
         )
     if feature_limit_policy not in {
-        "legacy_colmap_defaults_v1",
+        "colmap_defaults_v1",
         "wizard_explicit_limits_v1",
     }:
         raise ValueError(f"Unknown AP03 feature-limit policy: {feature_limit_policy}")
     if scale_input_policy not in {
-        "legacy_registered_image_redetection_v1",
+        "registered_image_redetection_v1",
         "wizard_filtered_observations_v1",
     }:
         raise ValueError(f"Unknown AP03 scale-input policy: {scale_input_policy}")
@@ -110,7 +110,7 @@ def resolve_ap03_method_contract(
     if not marker_ids:
         raise ValueError("AP03 scale marker set must not be empty")
     explicit_limits = feature_limit_policy == "wizard_explicit_limits_v1"
-    legacy_scale = scale_input_policy == "legacy_registered_image_redetection_v1"
+    redetection_scale = scale_input_policy == "registered_image_redetection_v1"
     return AP03MethodContract(
         name="baseline_v1",
         contract_schema_version=1,
@@ -151,7 +151,7 @@ def resolve_ap03_method_contract(
         scale_ransac_iterations=ransac_iterations,
         scale_minimum_inliers=minimum_inliers,
         scale_maximum_observations_per_marker=(
-            maximum_observations_per_marker if not legacy_scale else None
+            maximum_observations_per_marker if not redetection_scale else None
         ),
         scale_observation_geometry="four_sides_plus_two_diagonals_per_complete_marker_v1",
         scale_outlier_policy="median_max_3mad_or_10_percent_then_min4_fallback_all_v1",

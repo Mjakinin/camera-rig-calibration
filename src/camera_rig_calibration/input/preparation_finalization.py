@@ -166,7 +166,7 @@ def finalize_dataset(config: RigConfig, plan: PreparationPlan) -> DatasetManifes
             "scene_type is descriptive metadata and does not change method mathematics",
             *(
                 [
-                    "Simulation inputs were captured into a new immutable dataset cache; historical results were not overwritten."
+                    "Simulation inputs were captured into a new immutable dataset cache; published results were not overwritten."
                 ]
                 if config.simulation.enabled
                 else []

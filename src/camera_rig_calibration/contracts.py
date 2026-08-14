@@ -79,6 +79,10 @@ class InputAdapter(Protocol):
 class CalibrationMethod(Protocol):
     id: str
     display_name: str
+    algorithm_version: str
+    artifact_directory: str
+    primary_pose_path: str | None
+    result_contract_required: bool
     config_model: type[BaseModel]
 
     def requirements(self, context: RunContext) -> RequirementResult: ...
@@ -86,6 +90,10 @@ class CalibrationMethod(Protocol):
     def commands(self, context: RunContext) -> Sequence[CommandSpec]: ...
 
     def collect(self, context: RunContext) -> dict[str, Any]: ...
+
+    def canonical_result(
+        self, context: RunContext, status: dict[str, Any]
+    ) -> Any: ...
 
 
 class Evaluator(Protocol):

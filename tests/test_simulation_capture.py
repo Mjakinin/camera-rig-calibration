@@ -10,6 +10,13 @@ from camera_rig_calibration.input.simulation import (
     _validate_known_world_assets,
     capture_frame_diversity,
 )
+from camera_rig_calibration.input.simulation_profiles import (
+    reviewed_bus_world_paths,
+    validate_reviewed_bus_world,
+)
+
+
+REPOSITORY = Path(__file__).resolve().parents[1]
 
 
 def _write_bus_world(path: Path) -> None:
@@ -56,6 +63,22 @@ def test_non_bus_custom_world_does_not_require_bus_asset(tmp_path: Path) -> None
     )
 
     _validate_known_world_assets(tmp_path, world)
+
+
+def test_only_reviewed_bus_world_sources_are_executable(tmp_path: Path) -> None:
+    approved = reviewed_bus_world_paths(REPOSITORY)
+
+    assert approved
+    assert all(path.is_file() for path in approved)
+    assert validate_reviewed_bus_world(REPOSITORY, approved[0]) == approved[0]
+
+    custom = tmp_path / "custom.sdf"
+    custom.write_text(
+        '<sdf version="1.9"><world name="custom"/></sdf>',
+        encoding="utf-8",
+    )
+    with pytest.raises(RuntimeError, match="Arbitrary simulation SDF"):
+        validate_reviewed_bus_world(REPOSITORY, custom)
 
 
 def test_stale_simulation_frames_are_rejected(tmp_path: Path) -> None:

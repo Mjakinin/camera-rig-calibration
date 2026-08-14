@@ -167,19 +167,19 @@ class ObservationMixin:
     def _observation_id(self, config: RigConfig) -> str:
         return observation_id(config)
 
-    def _frozen_observation_id(
+    def _published_observation_id(
         self,
         config: RigConfig,
         *,
         shared: Path,
         input_id: str,
     ) -> str | None:
-        if not self.rerun_metadata.get("reuse_frozen_observations"):
+        if not self.rerun_metadata.get("reuse_published_observations"):
             return None
-        declared = self.rerun_metadata.get("frozen_observation_contract")
+        declared = self.rerun_metadata.get("published_observation_contract")
         if not isinstance(declared, dict):
             raise RuntimeError(
-                "Prepared rerun is missing its frozen observation contract"
+                "Prepared rerun is missing its published observation contract"
             )
         stored = _read_json(shared / "detection_config.json")
         stored_id = str(stored.get("observation_id", "")).strip()
@@ -187,7 +187,7 @@ class ObservationMixin:
         if not stored_id or stored_id != declared_id:
             raise RuntimeError(
                 "Prepared observations no longer match the observation "
-                "contract frozen for this rerun."
+                "contract selected for this rerun."
             )
         if stored.get("input_id") != input_id:
             raise RuntimeError(
@@ -253,13 +253,13 @@ class ObservationMixin:
         existing_config = _read_json(shared / "detection_config.json")
         existing_observation_id = existing_config.get("observation_id")
         existing_csv = shared / "shared_all_aruco_observations.csv"
-        frozen_observation_id = self._frozen_observation_id(
+        published_observation_id = self._published_observation_id(
             config,
             shared=shared,
             input_id=input_id,
         )
-        if frozen_observation_id is not None:
-            observation_id = frozen_observation_id
+        if published_observation_id is not None:
+            observation_id = published_observation_id
         if (
             existing_csv.is_file()
             and existing_observation_id
@@ -271,7 +271,7 @@ class ObservationMixin:
                 f"ID (recommended suffix: __aruco_{config.markers.detection_mode}) "
                 "instead of overwriting scientific evidence."
             )
-        if frozen_observation_id is None:
+        if published_observation_id is None:
             _write_json(
                 shared / "detection_config.json",
                 {
@@ -305,10 +305,10 @@ class ObservationMixin:
             view.symlink_to(shared.resolve(), target_is_directory=True)
         self.manifest["observation_id"] = observation_id
         self.manifest["observations_root"] = str(shared)
-        self.manifest["frozen_observations_reused"] = (
-            frozen_observation_id is not None
+        self.manifest["published_observations_reused"] = (
+            published_observation_id is not None
         )
-        if frozen_observation_id is not None:
+        if published_observation_id is not None:
             self.manifest["observation_runtime_detector_id"] = (
                 self._observation_id(config)
             )

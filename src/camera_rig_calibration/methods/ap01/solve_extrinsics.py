@@ -174,11 +174,11 @@ def select_candidate_aggregates(
             direct_pose = direct_stats = None
             relay_pose = relay_stats = None
             if direct:
-                direct_pose, direct_stats = core.aggregate_legacy_direct_candidates(
+                direct_pose, direct_stats = core.aggregate_baseline_direct_candidates(
                     direct, contract
                 )
             if relay:
-                relay_pose, relay_stats = core.aggregate_legacy_relay_candidates(
+                relay_pose, relay_stats = core.aggregate_baseline_relay_candidates(
                     relay, contract
                 )
             fixed_type = "direct" if target in direct_targets else "relay"
@@ -199,7 +199,7 @@ def select_candidate_aggregates(
                     if fixed_type == "direct"
                     else "moving_relay_multichain_colmap_motion_aruco_metric_scale"
                 )
-                quality_status = "accepted_legacy_available_aggregate"
+                quality_status = "accepted_baseline_available_aggregate"
                 deployment_eligible = bool(np.all(np.isfinite(selected)))
                 if not deployment_eligible:
                     selected = None

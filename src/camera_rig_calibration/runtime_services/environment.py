@@ -105,9 +105,9 @@ class EnvironmentMixin:
                 )
             working.parent.mkdir(parents=True, exist_ok=True)
             legacy.rename(working)
-            legacy_parent = legacy.parent
-            if legacy_parent.is_dir() and not any(legacy_parent.iterdir()):
-                legacy_parent.rmdir()
+            former_parent = legacy.parent
+            if former_parent.is_dir() and not any(former_parent.iterdir()):
+                former_parent.rmdir()
             self.console.print(
                 "[green]Reusing the already extracted input from the "
                 "interrupted queue preflight.[/green]"

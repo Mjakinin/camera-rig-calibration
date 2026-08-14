@@ -66,7 +66,7 @@ def R_to_rpy_deg(R: np.ndarray) -> tuple[float, float, float]:
 def rpy_deg_to_R(
     roll_deg: float, pitch_deg: float, yaw_deg: float
 ) -> np.ndarray:
-    """Reconstruct the ZYX rotation used by the Legacy aggregate CSV."""
+    """Reconstruct the ZYX rotation used by the baseline aggregate CSV."""
 
     roll, pitch, yaw = (
         math.radians(float(value))
@@ -94,7 +94,7 @@ def serialize_final_pose(
         return np.asarray(transform, dtype=np.float64).copy()
     if (
         contract.final_pose_serialization_policy
-        != "legacy_aggregate_csv_rpy_roundtrip_v1"
+        != "baseline_aggregate_csv_rpy_roundtrip_v1"
     ):
         raise ValueError(
             "Unknown AP01 final-pose serialization policy: "
@@ -102,7 +102,7 @@ def serialize_final_pose(
         )
     places = contract.final_pose_serialization_decimal_places
     if places is None:
-        raise ValueError("Legacy AP01 final-pose serialization needs precision")
+        raise ValueError("Baseline AP01 final-pose serialization needs precision")
     result = np.eye(4, dtype=np.float64)
     rpy = R_to_rpy_deg(np.asarray(transform, dtype=np.float64)[:3, :3])
     serialized_rpy = tuple(float(f"{value:.{places}f}") for value in rpy)

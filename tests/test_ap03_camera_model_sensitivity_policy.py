@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from camera_rig_calibration import experiments
-from camera_rig_calibration.ap03_camera_model_sensitivity_policy import (
+from camera_rig_calibration.policies.ap03_camera_model_sensitivity_policy import (
     CALIBRATED,
     UNDISTORTED_PINHOLE,
     _methods_with_policy,

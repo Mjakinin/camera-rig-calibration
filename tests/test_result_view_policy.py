@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from camera_rig_calibration.result_view_policy import install_result_view_policy
+from camera_rig_calibration.policies.result_view_policy import install_result_view_policy
 
 
 install_result_view_policy()

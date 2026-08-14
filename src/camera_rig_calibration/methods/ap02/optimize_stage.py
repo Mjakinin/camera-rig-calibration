@@ -16,15 +16,14 @@ def run(
     maximum_function_evaluations: int,
     robust_loss: str,
     robust_loss_scale_px: float,
-    reprojection_model: str = "legacy_pinhole_v1",
+    reprojection_model: str = "pinhole_v1",
     moving_frame_selection_policy: str = (
-        "legacy_smart_at_ba_boundary_v1"
+        "smart_at_ba_boundary_v1"
     ),
     reference_marker_maximum_frames: int | None = None,
     top_per_marker: int | None = 8,
     top_per_marker_pair: int | None = 4,
     maximum_total_frames: int | None = None,
-    historical_reproduction: bool = False,
     log_path: Path | None = None,
 ) -> StageResult:
     stage_root = output_root / "07_graph_ba" / mode
@@ -61,8 +60,6 @@ def run(
             "--moving-frame-selection-policy",
             moving_frame_selection_policy,
         ]
-        if historical_reproduction:
-            command.append("--historical-reproduction")
         for option, value in (
             (
                 "--reference-marker-maximum-frames",
@@ -125,7 +122,6 @@ def run(
             "observation_input": (
                 "quality-ranked, graph-preserving AP02 frame selection"
             ),
-            "historical_reproduction": historical_reproduction,
         },
         failure_is_diagnostic=mode == "static_only",
     )
@@ -146,17 +142,16 @@ def main() -> None:
     )
     parser.add_argument("--robust-loss-scale-px", type=float, required=True)
     parser.add_argument(
-        "--reprojection-model", default="legacy_pinhole_v1"
+        "--reprojection-model", default="pinhole_v1"
     )
     parser.add_argument(
         "--moving-frame-selection-policy",
-        default="legacy_smart_at_ba_boundary_v1",
+        default="smart_at_ba_boundary_v1",
     )
     parser.add_argument("--reference-marker-maximum-frames", type=int)
     parser.add_argument("--top-per-marker", type=int, default=8)
     parser.add_argument("--top-per-marker-pair", type=int, default=4)
     parser.add_argument("--maximum-total-frames", type=int)
-    parser.add_argument("--historical-reproduction", action="store_true")
     args = parser.parse_args()
     run(
         output_root=args.out.resolve(),
@@ -173,7 +168,6 @@ def main() -> None:
         top_per_marker=args.top_per_marker,
         top_per_marker_pair=args.top_per_marker_pair,
         maximum_total_frames=args.maximum_total_frames,
-        historical_reproduction=args.historical_reproduction,
     )
 
 

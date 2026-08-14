@@ -13,7 +13,7 @@ from rich.table import Table
 from ..results import index_results
 from ..storage import (
     CleanupPlan,
-    build_dataset_cleanup_plan,
+    build_preparation_cache_cleanup_plan,
     build_results_cleanup_plan,
     build_temporary_cleanup_plan,
     combine_cleanup_plans,
@@ -70,8 +70,8 @@ def run_storage_cleanup(
             "Choose three storage groups independently. Every selected group "
             "is shown first and deleted only after one final confirmation.\n\n"
             "Published results include their embedded canonical raw images, "
-            "observations and diagnostics. Dataset cleanup additionally "
-            "covers legacy datasets/ and workspace/preparation_cache. "
+            "observations and diagnostics. Preparation-cache cleanup covers "
+            "only reusable normalized inputs under workspace/. "
             "Temporary cleanup covers runs, queues, batches and caches under "
             "workspace/.\n\n"
             "Always kept: data_local/, config/intrinsics/, source code and "
@@ -120,11 +120,11 @@ def run_storage_cleanup(
             ),
         ),
         (
-            "datasets",
-            build_dataset_cleanup_plan(repository_root),
-            "2. Prepared datasets and dataset caches",
+            "preparation cache",
+            build_preparation_cache_cleanup_plan(repository_root),
+            "2. Reusable preparation cache",
             (
-                "Select all legacy/prepared datasets and dataset caches for "
+                "Select all reusable prepared-input caches for "
                 "permanent deletion?"
             ),
         ),

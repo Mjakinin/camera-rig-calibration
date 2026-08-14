@@ -2,9 +2,10 @@
 
 AP01 estimates the moving-camera reconstruction scale from ArUco observations,
 builds candidate relay transforms and solves the static-camera extrinsics.
-The canonical `baseline_v1` is the reconstructed Legacy Main method. Ordinary
-execution uses fresh SfM and scale; exact historical SfM reuse requires the
-explicit, fail-closed `historical_reproduction` option.
+The canonical `baseline_v1` uses a fixed Direct target and Relay support for
+the remaining cameras. Every run computes fresh SfM and metric scale from the
+selected input dataset. `recommended_wizard_v1` exposes the configurable
+multi-marker consensus strategy.
 
 Execution order:
 

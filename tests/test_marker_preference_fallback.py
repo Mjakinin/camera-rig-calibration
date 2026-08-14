@@ -13,16 +13,16 @@ from camera_rig_calibration.config.models import (
     SelectionSettings,
     StaticCameraSettings,
 )
-from camera_rig_calibration.marker_preference_policy import install_marker_preference_policy
-from camera_rig_calibration.product_policy import install_product_policy
-from camera_rig_calibration.real_vehicle_marker_zero_policy import (
+from camera_rig_calibration.policies.marker_preference_policy import install_marker_preference_policy
+from camera_rig_calibration.policies.product_policy import install_product_policy
+from camera_rig_calibration.policies.real_vehicle_marker_zero_policy import (
     install_real_vehicle_marker_zero_policy,
 )
-from camera_rig_calibration.reporting_authority_policy import (
+from camera_rig_calibration.policies.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
-from camera_rig_calibration.submission_bindings import install_submission_bindings
-from camera_rig_calibration.submission_policy import install_submission_policy
+from camera_rig_calibration.policies.submission_bindings import install_submission_bindings
+from camera_rig_calibration.policies.submission_policy import install_submission_policy
 
 
 install_product_policy()

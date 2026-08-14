@@ -31,13 +31,12 @@ from camera_rig_calibration.config.models import (
 def test_ap02_canonical_baseline_defaults_are_explicit() -> None:
     assert AP02Settings().model_dump() == {
         "method_contract": "baseline_v1",
-        "historical_reproduction": False,
         "reference_marker_selection_mode": "baseline",
         "reference_marker_id": 14,
-        "frame_selection_strategy": "legacy_smart_v1",
-        "initialization_strategy": "legacy_maximum_bottleneck_v1",
-        "graph_edge_weight_strategy": "legacy_observation_quality_v1",
-        "reprojection_model": "legacy_pinhole_v1",
+        "frame_selection_strategy": "smart_v1",
+        "initialization_strategy": "maximum_frontier_v1",
+        "graph_edge_weight_strategy": "geometric_observation_quality_v1",
+        "reprojection_model": "pinhole_v1",
         "reference_marker_maximum_frames": None,
         "top_per_marker": 8,
         "top_per_marker_pair": 4,

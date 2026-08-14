@@ -39,7 +39,7 @@ ROOT_CAMERA = "cam_edge_3"
 from .core_geometry import (
     T_from_observation,
     invT,
-    legacy_detection_quality,
+    baseline_detection_quality,
     marker_area_from_corners,
     observation_quality,
 )
@@ -57,8 +57,8 @@ def prepare_observations(
     def prepare_quality(
         row: dict[str, str], image_size: tuple[int, int]
     ) -> tuple[float, dict[str, float | str]]:
-        if contract.quality_model == "legacy_area_over_distance_squared_center_v1":
-            return legacy_detection_quality(
+        if contract.quality_model == "baseline_area_over_distance_squared_center_v1":
+            return baseline_detection_quality(
                 row,
                 float(contract.quality_image_width_px or 1280),
                 float(contract.quality_image_height_px or 720),
@@ -169,7 +169,7 @@ def robust_scale(
                 ),
             )
         elif contract.scale_observation_construction_policy == (
-            "legacy_registered_quality_filters_then_all_pairs_v1"
+            "baseline_registered_quality_filters_then_all_pairs_v1"
         ):
             selected = list(rows)
         else:
@@ -290,12 +290,12 @@ def robust_scale(
         )
     if (
         contract.scale_aggregation_policy
-        == "legacy_median_three_sigma_mad_v1"
+        == "baseline_median_three_sigma_mad_v1"
         and mad <= 1e-12
     ):
         kept = pairs
     elif contract.scale_aggregation_policy in {
-        "legacy_median_three_sigma_mad_v1",
+        "baseline_median_three_sigma_mad_v1",
         "wizard_median_mad_relative_floor_v1",
     }:
         kept = [
@@ -309,7 +309,7 @@ def robust_scale(
             f"{contract.scale_aggregation_policy}"
         )
     fallback_threshold: float | int
-    if contract.scale_aggregation_policy == "legacy_median_three_sigma_mad_v1":
+    if contract.scale_aggregation_policy == "baseline_median_three_sigma_mad_v1":
         fallback_threshold = max(
             contract.scale_fallback_minimum_count,
             contract.scale_fallback_fraction * len(pairs),

@@ -11,6 +11,8 @@ from pydantic import BaseModel
 from ...components.common import calibration_requirements, read_method_status
 from ...config.models import AP03Settings
 from ...contracts import CommandSpec, RequirementResult, RunContext
+from ...method_sdk.builtin_results import ap03_result
+from ...method_sdk.contracts import MethodInputRequirements
 from .contracts import resolve_ap03_method_contract
 
 
@@ -20,6 +22,14 @@ class AP03Method:
 
     id: str = "ap03"
     display_name: str = "AP03"
+    algorithm_version: str = "ap03_baseline_method_contract_v1"
+    run_manifest_algorithm_version: str = "ap03_shared_colmap_single_multi_v1"
+    artifact_directory: str = "04_AP03"
+    primary_pose_path: str = (
+        "scale_multi/AP03_MARKER_SIZE_SCALE_ONLY_STATIC_CAMERA_POSES.csv"
+    )
+    result_contract_required: bool = True
+    input_requirements: MethodInputRequirements = MethodInputRequirements()
     config_model: type[BaseModel] = AP03Settings
 
     def requirements(self, context: RunContext) -> RequirementResult:
@@ -258,3 +268,8 @@ class AP03Method:
 
     def collect(self, context: RunContext) -> dict[str, Any]:
         return read_method_status(context.run_directory / "04_AP03")
+
+    def canonical_result(
+        self, context: RunContext, status: dict[str, Any]
+    ):
+        return ap03_result(context, status)

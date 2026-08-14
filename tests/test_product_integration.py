@@ -99,31 +99,30 @@ def test_public_method_names_and_default_entry_points(
         )
 
 
-def test_ordinary_baseline_rerun_resets_compatibility_state(
+def test_ordinary_baseline_rerun_resets_advanced_state(
     prepared_config, tmp_path: Path
 ) -> None:
     experiment = tmp_path / "experiment"
     ap01 = prepared_config.model_copy(deep=True)
     ap01.methods.enabled = ["ap01"]
     ap01.methods.ap01.method_contract = "recommended_wizard_v1"
-    ap01.methods.ap01.advanced_strategy = "wizard_robustness_v1"
     _write_rerun_source(experiment, "ap01", ap01)
     _, rerun = _resolved_rerun_config(
         tmp_path, experiment, "ap01", "baseline"
     )
     assert rerun.methods.ap01.method_contract == "baseline_v1"
-    assert rerun.methods.ap01.historical_reproduction is False
-    assert rerun.methods.ap01.advanced_strategy == "legacy_main_v1"
 
     ap02 = prepared_config.model_copy(deep=True)
     ap02.methods.enabled = ["ap02"]
-    ap02.methods.ap02.historical_reproduction = True
+    ap02.methods.ap02.frame_selection_strategy = (
+        "wizard_graph_preserving_v1"
+    )
     _write_rerun_source(experiment, "ap02", ap02)
     _, rerun = _resolved_rerun_config(
         tmp_path, experiment, "ap02", "baseline"
     )
     assert rerun.methods.ap02.method_contract == "baseline_v1"
-    assert rerun.methods.ap02.historical_reproduction is False
+    assert rerun.methods.ap02.frame_selection_strategy == "smart_v1"
 
     ap03 = prepared_config.model_copy(deep=True)
     ap03.methods.enabled = ["ap03"]
@@ -137,7 +136,7 @@ def test_ordinary_baseline_rerun_resets_compatibility_state(
     assert rerun.methods.ap03.method_contract == "baseline_v1"
     assert (
         rerun.methods.ap03.feature_limit_policy
-        == "legacy_colmap_defaults_v1"
+        == "colmap_defaults_v1"
     )
 
 
@@ -148,15 +147,6 @@ def test_wizard_generated_baseline_config_is_clean_and_round_trips(
     config.methods.enabled = ["ap01"]
     destination = save_user_config(config, tmp_path / "rigcal.yaml")
     text = destination.read_text(encoding="utf-8").lower()
-    for forbidden in (
-        "main_route2_parity_v1",
-        "recommended_wizard_v1",
-        "historical_reproduction",
-        "legacy_main",
-        "historical main",
-        "main parity",
-    ):
-        assert forbidden not in text
     assert "method_contract: baseline_v1" in text
     loaded = load_config(destination, resolve_paths=False)
     assert loaded.model_dump(mode="json") == config.model_dump(mode="json")
@@ -167,7 +157,7 @@ def test_wizard_round_trip_preserves_representative_advanced_settings(
 ) -> None:
     ap01 = prepared_config.model_copy(deep=True)
     ap01.methods.enabled = ["ap01"]
-    ap01.methods.ap01.advanced_strategy = "wizard_robustness_v1"
+    ap01.methods.ap01.method_contract = "recommended_wizard_v1"
     ap01.methods.ap01.top_moving_per_marker = 5
     ap01.methods.ap01.direct_quality_gate.minimum_inlier_ratio = 0.8
     loaded = load_config(
@@ -176,11 +166,7 @@ def test_wizard_round_trip_preserves_representative_advanced_settings(
     )
     assert loaded.methods.ap01.top_moving_per_marker == 5
     execution = ap01_execution_contract_name(
-        loaded.methods.ap01.method_contract,
-        historical_reproduction=(
-            loaded.methods.ap01.historical_reproduction
-        ),
-        advanced_strategy=loaded.methods.ap01.advanced_strategy,
+        loaded.methods.ap01.method_contract
     )
     assert resolve_ap01_method_contract(execution).name == (
         "recommended_wizard_v1"
@@ -239,18 +225,10 @@ def test_wizard_round_trip_preserves_representative_advanced_settings(
 
 
 def test_wizard_controls_are_policy_aware_and_product_named() -> None:
-    forbidden = (
-        "historical",
-        "main parity",
-        "legacy main",
-        "reconstructed main",
-    )
+    forbidden = ("historical",)
     for method_id in ("ap01", "ap02", "ap03"):
         job = _new_method_job(method_id, prompt_for_single_marker=False)
         rows = _setting_rows(job, None)
-        keys = {row[0] for row in rows}
-        assert not any("method_contract" in key for key in keys)
-        assert not any("historical_reproduction" in key for key in keys)
         visible = (_method_job_summary(job) + repr(rows)).lower()
         assert not any(term in visible for term in forbidden)
 
@@ -258,7 +236,8 @@ def test_wizard_controls_are_policy_aware_and_product_named() -> None:
     baseline_keys = {row[0] for row in _setting_rows(ap01, None)}
     assert "ap01_direct_inlier_ratio" not in baseline_keys
     assert {"matcher", "maximum_image_size", "maximum_features"} <= baseline_keys
-    ap01.methods.ap01.advanced_strategy = "wizard_robustness_v1"
+    assert "ap01_method_contract" in baseline_keys
+    ap01.methods.ap01.method_contract = "recommended_wizard_v1"
     robust_keys = {row[0] for row in _setting_rows(ap01, None)}
     assert {"ap01_direct_inlier_ratio", "matcher"} <= robust_keys
 
@@ -326,15 +305,9 @@ def test_method_queue_switching_keeps_per_method_state() -> None:
     assert jobs["ap01"].methods.ap01.direct_target_camera == "camera_a"
 
 
-def test_compatibility_aliases_load_but_are_hidden_from_cli_help(
-    prepared_config, tmp_path: Path, monkeypatch, capsys
+def test_removed_historical_options_are_absent_from_cli_help(
+    monkeypatch, capsys
 ) -> None:
-    config = prepared_config.model_copy(deep=True)
-    config.methods.ap01.method_contract = "main_route2_parity_v1"
-    destination = save_config(config, tmp_path / "old.yaml")
-    loaded = load_config(destination, resolve_paths=False)
-    assert loaded.methods.ap01.method_contract == "main_route2_parity_v1"
-
     monkeypatch.setattr(
         sys,
         "argv",
@@ -344,7 +317,6 @@ def test_compatibility_aliases_load_but_are_hidden_from_cli_help(
         cli.main()
     assert exc.value.code == 0
     help_text = capsys.readouterr().out.lower()
-    assert "main_route2_parity_v1" not in help_text
     assert "recommended_wizard_v1" not in help_text
     assert "historical-reproduction" not in help_text
 
@@ -377,9 +349,9 @@ def test_published_saved_setup_rebinds_to_immutable_experiment(
 
 def test_internal_evidence_is_filtered_only_from_normal_results() -> None:
     internal = SimpleNamespace(
-        experiment_id="route2_main_parity_v1",
-        dataset_id="route2_main_parity_v1",
-        path=Path("results/simulation/baseline/route2_main_parity_v1"),
+        experiment_id="route2_pre_fix",
+        dataset_id="route2_pre_fix",
+        path=Path("results/simulation/baseline/route2_pre_fix"),
     )
     public = SimpleNamespace(
         experiment_id="vehicle_day_01",

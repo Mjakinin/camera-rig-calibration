@@ -131,7 +131,7 @@ def test_gui_exposes_every_supported_scientific_parameter_group() -> None:
     ap01_job.methods = ap01_job.methods.model_copy(
         update={
             "ap01": ap01_job.methods.ap01.model_copy(
-                update={"advanced_strategy": "wizard_robustness_v1"}
+                update={"method_contract": "recommended_wizard_v1"}
             )
         },
         deep=True,
@@ -268,7 +268,4 @@ def test_active_package_never_imports_historical_run_scripts() -> None:
         assert "run.bus_real_data" not in text
         assert "run/real_vehicle_data" not in text
         assert "run/bus_real_data" not in text
-    assert sorted(
-        path.relative_to(repository / "run").as_posix()
-        for path in (repository / "run").rglob("*.py")
-    ) == ["rigcal.py"]
+    assert not (repository / "run").exists()

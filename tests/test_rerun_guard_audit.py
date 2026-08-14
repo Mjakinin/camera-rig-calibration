@@ -158,11 +158,11 @@ def test_rerun_context_is_explicit_and_reconcile_waits_for_success(
         reuse_prepared_input=True,
         reuse_matching_intermediates=False,
         reconcile_after=True,
-        ap01_method_contract="main_route2_parity_v1",
+        ap01_method_contract="recommended_wizard_v1",
     )
 
     assert captured["explicit_method_rerun"] is True
     assert captured["rerun_metadata"]["ap01_baseline"][
-        "reuse_frozen_observations"
+        "reuse_published_observations"
     ] is True
     assert len(reconciled) == expected_reconcile_calls

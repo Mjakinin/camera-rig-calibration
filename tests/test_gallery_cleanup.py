@@ -11,7 +11,7 @@ import camera_rig_calibration.wizard as wizard_module
 from camera_rig_calibration.storage import (
     CleanupPlan,
     CleanupTarget,
-    build_dataset_cleanup_plan,
+    build_preparation_cache_cleanup_plan,
     build_results_cleanup_plan,
     build_temporary_cleanup_plan,
     execute_cleanup,
@@ -51,10 +51,9 @@ def test_results_cleanup_removes_every_published_result_but_not_data_local(
     assert all("data_local" not in str(target.path) for target in plan.targets)
 
 
-def test_dataset_cleanup_is_separate_from_temporary_workspace_cleanup(
+def test_preparation_cache_cleanup_is_separate_from_temporary_workspace_cleanup(
     tmp_path: Path,
 ) -> None:
-    legacy = _write(tmp_path / "datasets/real_vehicle/test/dataset.json")
     prepared = _write(
         tmp_path / "workspace/preparation_cache/test/hash/dataset.json"
     )
@@ -64,10 +63,9 @@ def test_dataset_cleanup_is_separate_from_temporary_workspace_cleanup(
         tmp_path / "results/real_vehicle/3Hz/test/RESULTS.txt"
     )
 
-    dataset_plan = build_dataset_cleanup_plan(tmp_path)
-    execute_cleanup(dataset_plan)
+    cache_plan = build_preparation_cache_cleanup_plan(tmp_path)
+    execute_cleanup(cache_plan)
 
-    assert not legacy.exists()
     assert not prepared.exists()
     assert queue.is_file()
     assert result.is_file()
@@ -150,7 +148,6 @@ def test_cleanup_wizard_confirms_groups_then_deletes_without_data_local_prompt(
         tmp_path
         / "results/real_vehicle/3Hz/test/methods/ap02/baseline/RESULT.txt"
     )
-    _write(tmp_path / "datasets/legacy/dataset.json")
     _write(tmp_path / "workspace/preparation_cache/test/dataset.json")
     _write(tmp_path / "workspace/temporary_runs/stale/log.txt")
     local = _write(tmp_path / "data_local/capture.mov")
@@ -176,7 +173,6 @@ def test_cleanup_wizard_confirms_groups_then_deletes_without_data_local_prompt(
     wizard_module.cleanup_storage_wizard(tmp_path, console)
 
     assert not any((tmp_path / "results").iterdir())
-    assert not any((tmp_path / "datasets").iterdir())
     assert not any((tmp_path / "workspace").iterdir())
     assert local.is_file()
     assert all("data_local" not in value for value in prompts)
@@ -186,7 +182,7 @@ def test_cleanup_wizard_confirms_groups_then_deletes_without_data_local_prompt(
             "for permanent deletion?"
         ),
         (
-            "Select all legacy/prepared datasets and dataset caches for "
+            "Select all reusable prepared-input caches for "
             "permanent deletion?"
         ),
         (

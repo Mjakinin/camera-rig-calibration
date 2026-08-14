@@ -42,7 +42,7 @@ def _commands(config, tmp_path: Path):
     return calibration_methods.get("ap03").commands(context)
 
 
-def test_ap03_defaults_resolve_main_baseline_contract() -> None:
+def test_ap03_defaults_resolve_baseline_contract() -> None:
     settings = AP03Settings()
     contract = resolve_ap03_method_contract(
         settings.method_contract,
@@ -68,7 +68,7 @@ def test_ap03_defaults_resolve_main_baseline_contract() -> None:
     )
 
 
-def test_ap03_baseline_commands_match_main_feature_and_scale_inputs(
+def test_ap03_baseline_commands_use_fixed_feature_and_scale_inputs(
     prepared_config, tmp_path: Path
 ) -> None:
     config = prepared_config.model_copy(deep=True)
@@ -87,7 +87,7 @@ def test_ap03_baseline_commands_match_main_feature_and_scale_inputs(
         str(value) for value in range(15)
     )
     assert multi[multi.index("--scale-input-policy") + 1] == (
-        "legacy_registered_image_redetection_v1"
+        "registered_image_redetection_v1"
     )
     assert multi[multi.index("--minimum-marker-area-px2") + 1] == "100.0"
     flattened = " ".join(token for command in commands for token in command.argv)
@@ -116,7 +116,7 @@ def test_ap03_advanced_wizard_policies_remain_explicit(
     )
 
 
-def test_ap03_model_selection_is_main_compatible(tmp_path: Path) -> None:
+def test_ap03_model_selection_prefers_most_registered_images(tmp_path: Path) -> None:
     summary = tmp_path / "colmap_model_summary.csv"
     summary.write_text(
         "model,registered_images,registered_static_cameras,num_3d_points\n"

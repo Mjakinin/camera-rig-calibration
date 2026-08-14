@@ -7,7 +7,7 @@ from types import SimpleNamespace
 from camera_rig_calibration.components import register_builtin_components
 from camera_rig_calibration.observations import ResolvedSelections
 from camera_rig_calibration.preflight import PreflightJobResult
-from camera_rig_calibration.real_partial_evaluation_policy import (
+from camera_rig_calibration.policies.real_partial_evaluation_policy import (
     _calibration_readiness,
     _component_pose_detail,
     _component_summary_text,
@@ -204,7 +204,7 @@ def test_component_pose_detail_includes_local_numeric_extrinsics(
 
 def test_real_vehicle_wizard_hides_evaluation_disable_switch() -> None:
     from camera_rig_calibration import wizard
-    from camera_rig_calibration.product_policy import _DATASET_CONTEXT
+    from camera_rig_calibration.policies.product_policy import _DATASET_CONTEXT
 
     register_builtin_components()
     install_real_partial_evaluation_policy()

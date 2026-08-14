@@ -753,14 +753,8 @@ def main() -> None:
                 "--ap01-method-contract",
                 choices=(
                     "baseline_v1",
-                    "main_route2_parity_v1",
                     "recommended_wizard_v1",
                 ),
-                help=argparse.SUPPRESS,
-            )
-            parser.add_argument(
-                "--ap02-historical-reproduction",
-                action="store_true",
                 help=argparse.SUPPRESS,
             )
             parser.add_argument(
@@ -793,9 +787,6 @@ def main() -> None:
                 ),
                 reconcile_after=arguments.reconcile_after,
                 ap01_method_contract=arguments.ap01_method_contract,
-                ap02_historical_reproduction=(
-                    arguments.ap02_historical_reproduction
-                ),
                 ap03_method_contract=arguments.ap03_method_contract,
                 console=console,
             )

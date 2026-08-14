@@ -20,7 +20,6 @@ class ResultEntry:
     input_id: str = ""
     dataset_state: str = "unknown"
     variant: str = ""
-    legacy: bool = False
 
 
 def _read_json(path: Path) -> dict[str, Any]:

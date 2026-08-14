@@ -110,12 +110,8 @@ class QueueEvaluationMixin:
             }:
                 continue
             result_path = Path(str(row.get("result", "")))
-            manifest_path = (
-                result_path / "provenance" / "run_manifest.json"
-            )
-            config_path = (
-                result_path / "provenance" / "resolved_config.yaml"
-            )
+            manifest_path = result_path / "provenance" / "run_manifest.json"
+            config_path = result_path / "provenance" / "resolved_config.yaml"
             if not manifest_path.is_file() or not config_path.is_file():
                 continue
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -140,9 +136,7 @@ class QueueEvaluationMixin:
         for (experiment_text, input_id), group in groups.items():
             experiment = Path(experiment_text)
             first_path, first_manifest, first_config = group[0]
-            enabled_group = [
-                item for item in group if item[2].evaluation.enabled
-            ]
+            enabled_group = [item for item in group if item[2].evaluation.enabled]
             if not enabled_group:
                 continue
             group = enabled_group
@@ -186,27 +180,19 @@ class QueueEvaluationMixin:
             payload = json.loads(candidate_path.read_text(encoding="utf-8"))
             eligible = set(
                 int(value)
-                for value in payload["evaluation_anchor"][
-                    "observation_candidates"
-                ]
+                for value in payload["evaluation_anchor"]["observation_candidates"]
             )
             configured_anchors = [
-                config.evaluation.anchor_marker_id
-                for _, _, config in group
+                config.evaluation.anchor_marker_id for _, _, config in group
             ]
             explicit_anchors = {
-                int(value)
-                for value in configured_anchors
-                if isinstance(value, int)
+                int(value) for value in configured_anchors if isinstance(value, int)
             }
             if len(explicit_anchors) != 1 or any(
-                not isinstance(value, int)
-                for value in configured_anchors
+                not isinstance(value, int) for value in configured_anchors
             ):
                 final = (
-                    experiment
-                    / "evaluations"
-                    / "COMMON_EVALUATION_UNAVAILABLE.json"
+                    experiment / "evaluations" / "COMMON_EVALUATION_UNAVAILABLE.json"
                 )
                 final.parent.mkdir(parents=True, exist_ok=True)
                 final.write_text(
@@ -218,9 +204,7 @@ class QueueEvaluationMixin:
                                 "evaluation anchor frozen for every method "
                                 "during preflight."
                             ),
-                            "configured_anchor_marker_ids": sorted(
-                                explicit_anchors
-                            ),
+                            "configured_anchor_marker_ids": sorted(explicit_anchors),
                         },
                         indent=2,
                     )
@@ -232,8 +216,7 @@ class QueueEvaluationMixin:
             ranked = [
                 item
                 for item in payload["ap03_single_scale_marker"]["candidates"]
-                if int(item["id"]) == requested_anchor
-                and int(item["id"]) in eligible
+                if int(item["id"]) == requested_anchor and int(item["id"]) in eligible
             ]
             methods: list[tuple[str, Path]] = []
             for result_path, manifest, _ in group:
@@ -242,10 +225,7 @@ class QueueEvaluationMixin:
                     continue
                 if method_id == "ap02":
                     status_path = (
-                        result_path
-                        / "diagnostics"
-                        / "method"
-                        / "METHOD_STATUS.json"
+                        result_path / "diagnostics" / "method" / "METHOD_STATUS.json"
                     )
                     if status_path.is_file():
                         try:
@@ -254,9 +234,7 @@ class QueueEvaluationMixin:
                             )
                         except (OSError, json.JSONDecodeError):
                             method_status = {}
-                        if not method_status.get(
-                            "comparison_eligible", True
-                        ):
+                        if not method_status.get("comparison_eligible", True):
                             self.console.print(
                                 "[yellow]AP02 diagnostic partial result is "
                                 "excluded from common primary-method "
@@ -281,9 +259,7 @@ class QueueEvaluationMixin:
                     {
                         "method_id": manifest.get("method_id"),
                         "variant": manifest.get("variant"),
-                        "method_fingerprint": manifest.get(
-                            "method_fingerprint"
-                        ),
+                        "method_fingerprint": manifest.get("method_fingerprint"),
                     }
                     for _, manifest, _ in group
                 ]
@@ -305,18 +281,12 @@ class QueueEvaluationMixin:
                     / "results"
                     / "evaluations"
                 )
-                output = (
-                    transaction_evaluations
-                    / f"anchor_marker_{anchor}_{eval_sha}"
-                )
+                output = transaction_evaluations / f"anchor_marker_{anchor}_{eval_sha}"
                 previous_status = output / "COMMON_ANCHOR_STATUS.json"
                 if previous_status.is_file() and not any(
-                    config.project.duplicate_policy == "force"
-                    for _, _, config in group
+                    config.project.duplicate_policy == "force" for _, _, config in group
                 ):
-                    previous = json.loads(
-                        previous_status.read_text(encoding="utf-8")
-                    )
+                    previous = json.loads(previous_status.read_text(encoding="utf-8"))
                     if (
                         previous.get("success_for_every_method")
                         and previous.get("evaluation_job_fingerprint")
@@ -330,10 +300,8 @@ class QueueEvaluationMixin:
                         break
                 argv = [
                     sys.executable,
-                    str(
-                        self.repository_root
-                        / "src/camera_rig_calibration/evaluation/marker_consistency.py"
-                    ),
+                    "-m",
+                    "camera_rig_calibration.evaluation.marker_consistency",
                     "--dataset",
                     str(dataset_root),
                     "--results-root",
@@ -353,17 +321,11 @@ class QueueEvaluationMixin:
                     "--ransac-iters",
                     str(first_config.evaluation.ransac_iterations),
                     "--min-triangulation-angle-deg",
-                    str(
-                        first_config.evaluation.minimum_triangulation_angle_deg
-                    ),
+                    str(first_config.evaluation.minimum_triangulation_angle_deg),
                     "--max-moving-observations-per-marker",
-                    str(
-                        first_config.evaluation.maximum_moving_observations_per_marker
-                    ),
+                    str(first_config.evaluation.maximum_moving_observations_per_marker),
                     "--cameras",
-                    ",".join(
-                        camera.id for camera in first_config.static_cameras
-                    ),
+                    ",".join(camera.id for camera in first_config.static_cameras),
                 ]
                 for label, directory in methods:
                     argv += ["--method", f"{label}={directory.resolve()}"]
@@ -385,9 +347,7 @@ class QueueEvaluationMixin:
                     f"[cyan]Common evaluation finished in "
                     f"{runtime_seconds:.1f} s[/cyan]"
                 )
-                (output / "evaluation.log").parent.mkdir(
-                    parents=True, exist_ok=True
-                )
+                (output / "evaluation.log").parent.mkdir(parents=True, exist_ok=True)
                 (output / "evaluation.log").write_text(
                     completed.stdout, encoding="utf-8"
                 )
@@ -405,9 +365,7 @@ class QueueEvaluationMixin:
                     completed.returncode == 0
                     and len(summaries) == len(methods)
                     and all(
-                        not str(row.get("status", "")).startswith(
-                            "NOT_AVAILABLE"
-                        )
+                        not str(row.get("status", "")).startswith("NOT_AVAILABLE")
                         for row in summaries
                     )
                 )
@@ -432,13 +390,10 @@ class QueueEvaluationMixin:
                     comparison.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(
                         summary_path,
-                        comparison
-                        / "COMMON_METHOD_EVALUATION_SUMMARY.json",
+                        comparison / "COMMON_METHOD_EVALUATION_SUMMARY.json",
                     )
                     support_path = (
-                        output
-                        / "marker_consistency"
-                        / "COMMON_SUPPORT_REPORT.json"
+                        output / "marker_consistency" / "COMMON_SUPPORT_REPORT.json"
                     )
                     if support_path.is_file():
                         shutil.copy2(
@@ -453,17 +408,12 @@ class QueueEvaluationMixin:
                         if manifest.get("method_id") != "ap03":
                             continue
                         single_output = (
-                            output
-                            / "diagnostics"
-                            / f"ap03_single_{result_path.name}"
+                            output / "diagnostics" / f"ap03_single_{result_path.name}"
                         )
                         single_argv = [
                             sys.executable,
-                            str(
-                                self.repository_root
-                                / "src/camera_rig_calibration/evaluation/"
-                                "marker_consistency.py"
-                            ),
+                            "-m",
+                            "camera_rig_calibration.evaluation.marker_consistency",
                             "--dataset",
                             str(dataset_root),
                             "--results-root",
@@ -483,17 +433,13 @@ class QueueEvaluationMixin:
                             "--ransac-iters",
                             str(config.evaluation.ransac_iterations),
                             "--min-triangulation-angle-deg",
-                            str(
-                                config.evaluation.minimum_triangulation_angle_deg
-                            ),
+                            str(config.evaluation.minimum_triangulation_angle_deg),
                             "--max-moving-observations-per-marker",
                             str(
                                 config.evaluation.maximum_moving_observations_per_marker
                             ),
                             "--cameras",
-                            ",".join(
-                                camera.id for camera in config.static_cameras
-                            ),
+                            ",".join(camera.id for camera in config.static_cameras),
                             "--method",
                             (
                                 "AP03_SINGLE="
@@ -535,9 +481,9 @@ class QueueEvaluationMixin:
                 / "results"
                 / "evaluations"
                 / (
-                "SELECTED_COMMON_EVALUATION.json"
-                if selection is not None
-                else "COMMON_EVALUATION_UNAVAILABLE.json"
+                    "SELECTED_COMMON_EVALUATION.json"
+                    if selection is not None
+                    else "COMMON_EVALUATION_UNAVAILABLE.json"
                 )
             )
             final.parent.mkdir(parents=True, exist_ok=True)
@@ -552,9 +498,7 @@ class QueueEvaluationMixin:
                             "Calibration results remain available and no "
                             "replacement anchor was attempted."
                         ),
-                        "candidate_marker_ids": [
-                            int(item["id"]) for item in ranked
-                        ],
+                        "candidate_marker_ids": [int(item["id"]) for item in ranked],
                     },
                     indent=2,
                 )
@@ -563,4 +507,4 @@ class QueueEvaluationMixin:
             )
 
 
-__all__ = ['QueueEvaluationMixin']
+__all__ = ["QueueEvaluationMixin"]

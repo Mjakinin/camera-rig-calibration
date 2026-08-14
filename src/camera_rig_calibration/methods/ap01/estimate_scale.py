@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import shutil
 from pathlib import Path
 
 from camera_rig_calibration.pipeline import StageResult, run_stage
@@ -9,7 +8,6 @@ from camera_rig_calibration.pipeline import StageResult, run_stage
 from . import core
 from ._shared import cameras, parser, prepared_observations
 from .contracts import resolve_ap01_method_contract
-from .frozen_intermediate import validate_frozen_intermediate
 
 
 def run(
@@ -50,44 +48,14 @@ def run(
     def action() -> dict[str, Path | float | int]:
         stage_root.mkdir(parents=True, exist_ok=True)
         scale_file = stage_root / "metric_scale.txt"
-        pairs: list[dict] | None
-        if contract.scale_execution_policy == "frozen_historical_sfm_gauge_scale":
-            frozen = validate_frozen_intermediate(
-                dataset=dataset,
-                moving_camera_id=moving_camera_id,
-                contract=contract,
-            )
-            shutil.copy2(frozen.metric_scale, scale_file)
-            scale = float(scale_file.read_text(encoding="utf-8").strip())
-            statistics = {
-                "scale_m_per_colmap_unit": scale,
-                "raw_pairs": 1869,
-                "used_pairs": 1617,
-                "sfm_mode": "frozen_historical_reproduction",
-                "scale_mode": "frozen_historical_sfm_gauge_scale",
-                "ground_truth_used": False,
-                "source_manifest": str(frozen.manifest),
-                "source_metric_scale_sha256": (
-                    contract.scale_frozen_metric_sha256
-                ),
-                "method_contract": contract.fingerprint_payload(),
-                "method_contract_sha256": contract.scientific_fingerprint(),
-            }
-            pairs = None
-        elif contract.scale_execution_policy == "fresh_metric_scale_estimation":
-            _, moving_rows, colmap_poses = prepared_observations(arguments)
-            scale, statistics, pairs = core.robust_scale(
-                moving_rows,
-                colmap_poses,
-                maximum_observations_per_marker=scale_top_per_marker,
-                contract=contract,
-            )
-            scale_file.write_text(f"{scale:.12g}\n", encoding="utf-8")
-        else:
-            raise ValueError(
-                "Unknown AP01 scale execution policy: "
-                f"{contract.scale_execution_policy}"
-            )
+        _, moving_rows, colmap_poses = prepared_observations(arguments)
+        scale, statistics, pairs = core.robust_scale(
+            moving_rows,
+            colmap_poses,
+            maximum_observations_per_marker=scale_top_per_marker,
+            contract=contract,
+        )
+        scale_file.write_text(f"{scale:.12g}\n", encoding="utf-8")
         diagnostics = stage_root / "SCALE_DIAGNOSTICS.json"
         diagnostics.write_text(
             json.dumps(statistics, indent=2) + "\n",
@@ -98,10 +66,9 @@ def run(
             "diagnostics": diagnostics,
             "used_observation_pairs": int(statistics["used_pairs"]),
         }
-        if pairs is not None:
-            pairs_file = stage_root / "scale_pairs.csv"
-            core.write_csv(pairs_file, pairs)
-            outputs["pairs"] = pairs_file
+        pairs_file = stage_root / "scale_pairs.csv"
+        core.write_csv(pairs_file, pairs)
+        outputs["pairs"] = pairs_file
         return outputs
 
     return run_stage(

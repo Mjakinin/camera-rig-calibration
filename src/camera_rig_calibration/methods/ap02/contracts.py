@@ -68,10 +68,10 @@ def resolve_ap02_method_contract(
     *,
     reference_marker_selection_mode: str = "baseline",
     reference_marker_id: int | str = 14,
-    frame_selection_strategy: str = "legacy_smart_v1",
-    initialization_strategy: str = "legacy_maximum_bottleneck_v1",
-    graph_edge_weight_strategy: str = "legacy_observation_quality_v1",
-    reprojection_model: str = "legacy_pinhole_v1",
+    frame_selection_strategy: str = "smart_v1",
+    initialization_strategy: str = "maximum_frontier_v1",
+    graph_edge_weight_strategy: str = "geometric_observation_quality_v1",
+    reprojection_model: str = "pinhole_v1",
     reference_marker_maximum_frames: int | None = None,
     top_per_marker: int | None = 8,
     top_per_marker_pair: int | None = 4,
@@ -86,15 +86,15 @@ def resolve_ap02_method_contract(
             f"Unknown AP02 method contract '{name}'; choose baseline_v1"
         )
 
-    legacy_selection = frame_selection_strategy == "legacy_smart_v1"
-    if not legacy_selection and frame_selection_strategy != (
+    baseline_selection = frame_selection_strategy == "smart_v1"
+    if not baseline_selection and frame_selection_strategy != (
         "wizard_graph_preserving_v1"
     ):
         raise ValueError(
             f"Unknown AP02 frame-selection strategy: {frame_selection_strategy}"
         )
     if initialization_strategy not in {
-        "legacy_maximum_bottleneck_v1",
+        "maximum_frontier_v1",
         "wizard_maximum_bottleneck_v2",
         "unweighted_bfs_diagnostic",
     }:
@@ -102,7 +102,7 @@ def resolve_ap02_method_contract(
             f"Unknown AP02 initialization strategy: {initialization_strategy}"
         )
     if graph_edge_weight_strategy not in {
-        "legacy_observation_quality_v1",
+        "geometric_observation_quality_v1",
         "wizard_selection_score_v2",
     }:
         raise ValueError(
@@ -110,7 +110,7 @@ def resolve_ap02_method_contract(
             f"{graph_edge_weight_strategy}"
         )
     if reprojection_model not in {
-        "legacy_pinhole_v1",
+        "pinhole_v1",
         "distortion_aware_v1",
     }:
         raise ValueError(f"Unknown AP02 reprojection model: {reprojection_model}")
@@ -121,13 +121,13 @@ def resolve_ap02_method_contract(
         reference_marker_policy=reference_marker_selection_mode,
         reference_marker_id=reference_marker_id,
         graph_observation_policy=(
-            "legacy_quality_valid_all_observations_v1"
-            if legacy_selection
+            "quality_valid_all_observations_v1"
+            if baseline_selection
             else "wizard_graph_preserving_preselection_v1"
         ),
         moving_frame_selection_policy=(
-            "legacy_smart_at_ba_boundary_v1"
-            if legacy_selection
+            "smart_at_ba_boundary_v1"
+            if baseline_selection
             else "all_graph_preselected_frames_v1"
         ),
         reference_marker_maximum_frames=reference_marker_maximum_frames,
@@ -135,8 +135,8 @@ def resolve_ap02_method_contract(
         top_per_marker_pair=top_per_marker_pair,
         maximum_total_frames=maximum_total_frames,
         frame_scoring_policy=(
-            "legacy_observation_quality_v1"
-            if legacy_selection
+            "geometric_observation_quality_v1"
+            if baseline_selection
             else "wizard_selection_score_v2"
         ),
         graph_node_policy="bipartite_observer_marker_v1",
@@ -145,11 +145,11 @@ def resolve_ap02_method_contract(
         initialization_observation_policy="all_quality_valid_graph_edges_v1",
         initialization_algorithm=initialization_strategy,
         root_pose_policy="reference_marker_identity_v1",
-        pose_propagation_policy="legacy_T_ref_entity_chain_v1",
+        pose_propagation_policy="reference_entity_chain_v1",
         disconnected_frame_policy="omit_unreachable_v1",
         ba_observation_policy=(
-            "all_static_plus_legacy_smart_moving_v1"
-            if legacy_selection
+            "all_static_plus_smart_moving_v1"
+            if baseline_selection
             else "all_graph_preselected_observations_v1"
         ),
         fixed_pose_policy="reference_marker_only_v1",
@@ -172,7 +172,7 @@ def resolve_ap02_method_contract(
         deterministic_tie_policy=(
             "first_input_observation_on_equal_score",
             "moving_frame_number_ascending_on_equal_score",
-            "legacy_frontier_insertion_order_on_equal_edge_weight",
+            "frontier_insertion_order_on_equal_edge_weight",
             "observer_id_then_marker_id_parameter_order",
         ),
         ground_truth_policy="forbidden_during_calibration",

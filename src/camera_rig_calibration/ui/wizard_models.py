@@ -87,6 +87,12 @@ from ..queueing import SelectionReviewJob, save_batch
 from ..publication import reconcile_existing_experiment
 from ..visualization import launch_isolated_rviz
 from .wizard_bindings import current_wizard_bindings
+from ..input.simulation_profiles import (
+    SimulationCameraProfile,
+    SimulationWorldProfile,
+    bus_world_profile,
+)
+from ..input.simulation_routes import SimulationRouteAsset
 
 
 
@@ -259,125 +265,15 @@ class SimulationQueueJob:
         )
 
 
-@dataclass(frozen=True)
-class _BusCamera:
-    id: str
-    image_topic: str
-    camera_info_topic: str
-    model_name: str
-    sensor_name: str
+_BusCamera = SimulationCameraProfile
+_BusRoute = SimulationRouteAsset
+_BusDefinition = SimulationWorldProfile
 
 
-@dataclass(frozen=True)
-class _BusRoute:
-    id: str
-    path: Path
+def _bus_definition(repository_root: Path) -> SimulationWorldProfile:
+    """Compatibility facade for the reviewed built-in world profile."""
 
-
-@dataclass(frozen=True)
-class _BusDefinition:
-    id: str
-    display_name: str
-    sdf: Path
-    resource_paths: tuple[Path, ...]
-    static_cameras: tuple[_BusCamera, ...]
-    moving_camera: _BusCamera
-    routes: tuple[_BusRoute, ...]
-    baseline_route: _BusRoute
-    capabilities: tuple[str, ...]
-    lighting_profiles: dict[str, Path | None]
-    baseline: dict[str, object]
-
-
-def _bus_definition(repository_root: Path) -> _BusDefinition:
-    root = repository_root.resolve()
-    route_root = root / "src/calib_lab/bus_real_data/config"
-    world_root = root / "src/calib_lab/bus_real_data/worlds"
-    routes = (
-        _BusRoute(
-            "route2",
-            (
-                route_root
-                / "moving_camera_route2_interpolated_final.json"
-            ).resolve(),
-        ),
-        _BusRoute(
-            "route1",
-            (
-                route_root
-                / "moving_camera_route1_interpolated_final.json"
-            ).resolve(),
-        ),
-    )
-    static_cameras = tuple(
-        _BusCamera(
-            id=camera_id,
-            model_name=camera_id,
-            sensor_name=f"{camera_id}_sensor",
-            image_topic=f"/bus_real_data/{camera_id}/image",
-            camera_info_topic=f"/bus_real_data/{camera_id}/camera_info",
-        )
-        for camera_id in (
-            "cam_edge_0",
-            "cam_edge_1",
-            "cam_edge_3",
-            "cam_edge_5",
-        )
-    )
-    return _BusDefinition(
-        id="bus",
-        display_name="Bus interior calibration world",
-        sdf=(world_root / "bus_real_data_moving_camera.sdf").resolve(),
-        resource_paths=(
-            (root / "src/calib_lab/bus_real_data/models").resolve(),
-        ),
-        static_cameras=static_cameras,
-        moving_camera=_BusCamera(
-            id="moving_calib_camera",
-            model_name="moving_calib_camera",
-            sensor_name="moving_calib_camera_sensor",
-            image_topic="/bus_real_data/moving_calib_camera/image",
-            camera_info_topic=(
-                "/bus_real_data/moving_calib_camera/camera_info"
-            ),
-        ),
-        routes=routes,
-        baseline_route=routes[0],
-        capabilities=(
-            "route",
-            "density",
-            "resolution",
-            "fov",
-            "lighting",
-            "motion_blur",
-            "capture",
-        ),
-        lighting_profiles={
-            "baseline": None,
-            **{
-                name: (
-                    world_root
-                    / "lighting"
-                    / (
-                        "bus_real_data_moving_camera_light_ceiling_"
-                        f"{name}.sdf"
-                    )
-                ).resolve()
-                for name in (
-                    "dark_extreme",
-                    "low",
-                    "normal",
-                    "bright",
-                )
-            },
-            "custom": (
-                world_root
-                / "lighting"
-                / "bus_real_data_moving_camera_light_ceiling_normal.sdf"
-            ).resolve(),
-        },
-        baseline=dict(BASELINE_SIMULATION_PARAMETERS),
-    )
+    return bus_world_profile(repository_root)
 
 
 class WizardBack(Exception):

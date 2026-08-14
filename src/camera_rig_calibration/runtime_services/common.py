@@ -53,6 +53,7 @@ from ..progress import ProgressClock, progress_text, terminal_lines
 from ..pipeline import StageContract, validate_stage_dag
 from ..registry import calibration_methods, evaluators, input_adapters
 from ..results import write_comparison
+from ..method_sdk.service import resolved_method_metadata
 
 
 T = TypeVar("T")
@@ -109,9 +110,8 @@ def _run_id(config: RigConfig) -> str:
 
 def _run_directories(config: RigConfig) -> tuple[str, ...]:
     selected = tuple(
-        METHOD_DIRECTORIES[method_id]
+        resolved_method_metadata(method_id).artifact_directory.as_posix()
         for method_id in config.methods.enabled
-        if method_id in METHOD_DIRECTORIES
     )
     return (*BASE_RUN_DIRECTORIES[:2], *selected, *BASE_RUN_DIRECTORIES[2:])
 

@@ -1,7 +1,7 @@
 """Compatibility facade for phased queue preflight."""
 from __future__ import annotations
 
-from .ap02_graph import (
+from .methods.ap02.graph_diagnostics import (
     AP02GraphDiagnosis,
     diagnose_ap02_graph,
     graph_components,

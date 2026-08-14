@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from camera_rig_calibration.pipeline import StageResult, run_stage
-from camera_rig_calibration.submission_quality_policy import (
+from camera_rig_calibration.policies.submission_quality_policy import (
     ap03_quality_semantics,
 )
 

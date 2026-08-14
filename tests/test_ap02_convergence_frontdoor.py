@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from camera_rig_calibration.ap02_convergence_frontdoor_policy import _append_if_needed
+from camera_rig_calibration.policies.ap02_convergence_frontdoor_policy import _append_if_needed
 
 
 def test_ap02_convergence_is_added_to_experiment_frontdoor() -> None:

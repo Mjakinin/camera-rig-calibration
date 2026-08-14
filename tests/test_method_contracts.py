@@ -46,10 +46,10 @@ def test_ap02_command_uses_generic_cameras_and_canonical_defaults(
         token for command in commands for token in command.argv
     )
     assert "--moving-frame-selection-policy " \
-        "legacy_smart_at_ba_boundary_v1" in flattened
+        "smart_at_ba_boundary_v1" in flattened
     assert "--initialization-algorithm " \
-        "legacy_maximum_bottleneck_v1" in flattened
-    assert "--edge-weight-policy legacy_observation_quality_v1" in flattened
+        "maximum_frontier_v1" in flattened
+    assert "--edge-weight-policy geometric_observation_quality_v1" in flattened
     assert "max-moving-frames" not in flattened
     assert "--top-per-marker 8" in flattened
     assert "--top-per-marker-pair 4" in flattened
@@ -103,7 +103,7 @@ def test_ap03_combines_single_and_multi_with_one_colmap_run(
         token for command in commands for token in command.argv
     )
     assert "--minimum-marker-area-px2 100.0" in flattened
-    assert "--scale-input-policy legacy_registered_image_redetection_v1" in flattened
+    assert "--scale-input-policy registered_image_redetection_v1" in flattened
     assert "single-ransac" not in flattened
     assert "multi-ransac" not in flattened
     assert commands[3].diagnostic is True
@@ -163,7 +163,7 @@ def test_nondefault_gui_parameters_reach_ap01_ap02_ap03_commands(
             "ap01": prepared_config.methods.ap01.model_copy(
                 update={
                     "root_camera": "roof.camera",
-                    "advanced_strategy": "wizard_robustness_v1",
+                    "method_contract": "recommended_wizard_v1",
                 }
             ),
             "ap02": prepared_config.methods.ap02.model_copy(

@@ -1,12 +1,12 @@
 """Compatibility facade for observation selection and freezing."""
 from __future__ import annotations
 
-from .observation_candidates import (
+from .observation_services.candidates import (
     _marker_candidates,
     _marker_choice,
     _root_candidates,
 )
-from .observation_core import (
+from .observation_services.core import (
     ResolvedSelections,
     _ap02_rank,
     _best_candidate,
@@ -23,5 +23,5 @@ from .observation_core import (
     ap03_candidate_rank,
     write_selection_candidates_csv,
 )
-from .observation_freeze import freeze_selections
-from .observation_resolution import resolve_selections
+from .observation_services.freeze import freeze_selections
+from .observation_services.resolution import resolve_selections

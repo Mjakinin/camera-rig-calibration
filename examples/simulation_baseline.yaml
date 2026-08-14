@@ -65,24 +65,21 @@ methods:
   enabled: [ap01, ap02, ap03]
   ap01:
     method_contract: baseline_v1
-    historical_reproduction: false
-    advanced_strategy: legacy_main_v1
     direct_target_camera: auto
     root_camera: cam_edge_3
     top_moving_per_marker: 8
     scale_top_per_marker: 30
   ap02:
     method_contract: baseline_v1
-    historical_reproduction: false
     # Auto + integer is the documented category preference. Marker 14 is used
     # when it has automatic-quality support; otherwise preflight falls back to
     # the deterministic AP02 recommendation instead of aborting the queue.
     reference_marker_selection_mode: auto
     reference_marker_id: 14
-    frame_selection_strategy: legacy_smart_v1
-    initialization_strategy: legacy_maximum_bottleneck_v1
-    graph_edge_weight_strategy: legacy_observation_quality_v1
-    reprojection_model: legacy_pinhole_v1
+    frame_selection_strategy: smart_v1
+    initialization_strategy: maximum_frontier_v1
+    graph_edge_weight_strategy: geometric_observation_quality_v1
+    reprojection_model: pinhole_v1
     reference_marker_maximum_frames: null
     top_per_marker: 8
     top_per_marker_pair: 4
@@ -93,8 +90,8 @@ methods:
     ba_robust_loss_scale_px: 3.0
   ap03:
     method_contract: baseline_v1
-    feature_limit_policy: legacy_colmap_defaults_v1
-    scale_input_policy: legacy_registered_image_redetection_v1
+    feature_limit_policy: colmap_defaults_v1
+    scale_input_policy: registered_image_redetection_v1
     minimum_marker_area_px2: 100.0
     single:
       # Simulation category preference; falls back to AP03 auto when marker 14

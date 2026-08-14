@@ -13,8 +13,8 @@ def run(
     output_root: Path,
     reference_marker_id: int,
     mode: str,
-    initialization_algorithm: str = "legacy_maximum_bottleneck_v1",
-    edge_weight_policy: str = "legacy_observation_quality_v1",
+    initialization_algorithm: str = "maximum_frontier_v1",
+    edge_weight_policy: str = "geometric_observation_quality_v1",
     log_path: Path | None = None,
 ) -> StageResult:
     stage_root = output_root / "05_graph_initialization" / mode
@@ -87,11 +87,11 @@ def main() -> None:
     )
     parser.add_argument(
         "--initialization-algorithm",
-        default="legacy_maximum_bottleneck_v1",
+        default="maximum_frontier_v1",
     )
     parser.add_argument(
         "--edge-weight-policy",
-        default="legacy_observation_quality_v1",
+        default="geometric_observation_quality_v1",
     )
     args = parser.parse_args()
     run(

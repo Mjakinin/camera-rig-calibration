@@ -1,0 +1,521 @@
+"""Method configuration identity, labels and fingerprints."""
+
+from __future__ import annotations
+
+import re
+from typing import Any
+
+from ..config.models import (
+    AP01Settings,
+    AP02Settings,
+    AP03Settings,
+    ColmapSettings,
+    MarkerSettings,
+    ObservationQualitySettings,
+    RigConfig,
+    effective_observation_quality,
+)
+from ..dataset.discovery import safe_id
+from ..method_sdk.service import registered_method, resolved_method_metadata
+from ..methods.common.aruco_utils import effective_detector_config
+from ..observations import ResolvedSelections
+from .identity import digest as _digest, result_category
+
+
+def build_method_payload(
+    config: RigConfig, method_id: str, selections: ResolvedSelections
+) -> dict[str, Any]:
+    method_settings = (
+        getattr(config.methods, method_id).model_dump(mode="json")
+        if method_id in {"ap01", "ap02", "ap03"}
+        else config.methods.extensions.get(method_id, {})
+    )
+    effective_quality, quality_sources = effective_observation_quality(
+        config, method_id
+    )
+    payload: dict[str, Any] = {
+        "method_id": method_id,
+        "algorithm_version": resolved_method_metadata(
+            method_id
+        ).algorithm_version,
+        "settings": method_settings,
+        "marker_detection": {
+            "settings": config.markers.model_dump(mode="json"),
+            "effective_detector": effective_detector_config(
+                config.markers.detection_mode,
+                config.markers.dictionary,
+            ),
+        },
+        "observation_quality": {
+            "effective": effective_quality.model_dump(mode="json"),
+            "sources": quality_sources,
+        },
+    }
+    if method_id in {"ap01", "ap03"}:
+        colmap = config.colmap.model_dump(mode="json")
+        colmap_defaults = ColmapSettings().model_dump(mode="json")
+        if method_id == "ap01":
+            for key in (
+                "ap03_maximum_image_size",
+                "ap03_maximum_features",
+                "ap03_loop_detection",
+            ):
+                colmap[key] = colmap_defaults[key]
+            if config.methods.ap01.method_contract == "baseline_v1":
+                for key in (
+                    "matcher",
+                    "compute_mode",
+                    "maximum_image_size",
+                    "maximum_features",
+                    "sequential_overlap",
+                    "loop_detection",
+                    "mapper_minimum_matches",
+                ):
+                    colmap[key] = colmap_defaults[key]
+        else:
+            if config.colmap.ap03_maximum_image_size is not None:
+                colmap["maximum_image_size"] = colmap_defaults[
+                    "maximum_image_size"
+                ]
+            if config.colmap.ap03_maximum_features is not None:
+                colmap["maximum_features"] = colmap_defaults[
+                    "maximum_features"
+                ]
+            if config.colmap.ap03_loop_detection is not None:
+                colmap["loop_detection"] = colmap_defaults[
+                    "loop_detection"
+                ]
+        payload["colmap"] = colmap
+    if method_id == "ap01":
+        from ..methods.ap01.contracts import (
+            ap01_execution_contract_name,
+            resolve_ap01_method_contract,
+        )
+
+        ap01 = config.methods.ap01
+        execution_contract_name = ap01_execution_contract_name(
+            ap01.method_contract
+        )
+        payload["resolved_method_contract"] = resolve_ap01_method_contract(
+            execution_contract_name,
+            direct_target_camera=ap01.direct_target_camera,
+            top_moving_per_marker=ap01.top_moving_per_marker,
+            scale_top_per_marker=ap01.scale_top_per_marker,
+            colmap_matcher=config.colmap.matcher,
+            colmap_use_gpu=config.colmap.use_gpu,
+            colmap_maximum_image_size=config.colmap.maximum_image_size,
+            colmap_maximum_features=config.colmap.maximum_features,
+            colmap_sequential_overlap=config.colmap.sequential_overlap,
+            colmap_loop_detection=config.colmap.loop_detection,
+            colmap_mapper_minimum_matches=(
+                config.colmap.mapper_minimum_matches
+            ),
+        ).fingerprint_payload()
+        payload["resolved_root_camera"] = selections.root_camera
+    elif method_id == "ap02":
+        payload["resolved_ap02_reference_marker_id"] = (
+            selections.ap02_reference_marker_id
+        )
+    elif method_id == "ap03":
+        from ..methods.ap03.contracts import resolve_ap03_method_contract
+
+        ap03 = config.methods.ap03
+        resolved_multi = list(selections.ap03_multi_marker_ids)
+        payload["resolved_method_contract"] = resolve_ap03_method_contract(
+            ap03.method_contract,
+            feature_limit_policy=ap03.feature_limit_policy,
+            scale_input_policy=ap03.scale_input_policy,
+            scale_marker_ids=resolved_multi,
+            marker_length_m=config.markers.length_m,
+            marker_dictionary=config.markers.dictionary,
+            marker_detection_mode=config.markers.detection_mode,
+            minimum_marker_area_px2=ap03.minimum_marker_area_px2,
+            reprojection_threshold_px=ap03.scale.reprojection_threshold_px,
+            ransac_iterations=ap03.scale.ransac_iterations,
+            minimum_inliers=ap03.scale.minimum_inliers,
+            maximum_observations_per_marker=(
+                ap03.scale.maximum_observations_per_marker
+            ),
+            colmap_matcher=config.colmap.matcher,
+            colmap_use_gpu=config.colmap.use_gpu,
+            colmap_maximum_image_size=(
+                config.colmap.ap03_maximum_image_size
+                or config.colmap.maximum_image_size
+            ),
+            colmap_maximum_features=(
+                config.colmap.ap03_maximum_features
+                or config.colmap.maximum_features
+            ),
+            colmap_sequential_overlap=config.colmap.sequential_overlap,
+            colmap_loop_detection=(
+                config.colmap.ap03_loop_detection
+                if config.colmap.ap03_loop_detection is not None
+                else config.colmap.loop_detection
+            ),
+            colmap_mapper_minimum_matches=(
+                config.colmap.mapper_minimum_matches
+            ),
+        ).fingerprint_payload()
+        payload["resolved_single_scale_marker_id"] = (
+            selections.ap03_single_scale_marker_id
+        )
+        payload["resolved_multi_marker_ids"] = resolved_multi
+    return payload
+
+
+def method_fingerprint(
+    config: RigConfig, method_id: str, selections: ResolvedSelections
+) -> str:
+    return _digest(build_method_payload(config, method_id, selections), 64)
+
+
+def evaluation_fingerprint(config: RigConfig, anchor_marker_id: int) -> str:
+    return _digest(
+        {
+            "evaluation": config.evaluation.model_dump(mode="json"),
+            "anchor_marker_id": anchor_marker_id,
+            "marker_length_m": config.markers.length_m,
+        },
+        64,
+    )
+
+
+def _token(value: Any) -> str:
+    text = str(value).lower().strip()
+    text = text.replace(".", "p")
+    return re.sub(r"[^a-z0-9_-]+", "_", text).strip("_") or "value"
+
+
+def _flatten(value: Any, prefix: str = "") -> dict[str, Any]:
+    if not isinstance(value, dict):
+        return {prefix: value}
+    result: dict[str, Any] = {}
+    for key, item in value.items():
+        path = f"{prefix}.{key}" if prefix else key
+        if isinstance(item, dict):
+            result.update(_flatten(item, path))
+        else:
+            result[path] = item
+    return result
+
+
+def _method_defaults(method_id: str) -> dict[str, Any]:
+    models = {
+        "ap01": AP01Settings,
+        "ap02": AP02Settings,
+        "ap03": AP03Settings,
+    }
+    return models[method_id]().model_dump(mode="json")
+
+
+def _extension_defaults(method_id: str) -> dict[str, Any]:
+    method = registered_method(method_id)
+    if method is None:
+        return {}
+    try:
+        return method.config_model().model_dump(mode="json")
+    except Exception:
+        return {}
+
+
+def method_config_diff(
+    config: RigConfig,
+    method_id: str,
+    selections: ResolvedSelections | None = None,
+) -> dict[str, dict[str, Any]]:
+    del selections
+    if method_id in {"ap01", "ap02", "ap03"}:
+        current = getattr(config.methods, method_id).model_dump(mode="json")
+        defaults = _method_defaults(method_id)
+        current.pop("observation_quality", None)
+        defaults.pop("observation_quality", None)
+    else:
+        current = dict(config.methods.extensions.get(method_id, {}))
+        defaults = _extension_defaults(method_id)
+    if method_id in {"ap01", "ap03"}:
+        current["colmap"] = config.colmap.model_dump(mode="json")
+        defaults["colmap"] = ColmapSettings().model_dump(mode="json")
+    current["markers"] = config.markers.model_dump(mode="json")
+    defaults["markers"] = MarkerSettings().model_dump(mode="json")
+    effective_quality, quality_sources = effective_observation_quality(
+        config, method_id
+    )
+    current["observation_quality"] = effective_quality.model_dump(mode="json")
+    current["observation_quality_source"] = quality_sources
+    defaults["observation_quality"] = (
+        type(config.observation_quality)().model_dump(mode="json")
+    )
+    defaults["observation_quality_source"] = {
+        field_name: "global"
+        for field_name in defaults["observation_quality"]
+    }
+    flat_current = _flatten(current)
+    flat_defaults = _flatten(defaults)
+    return {
+        key: {"baseline": flat_defaults.get(key), "value": value}
+        for key, value in flat_current.items()
+        if value != flat_defaults.get(key)
+    }
+
+
+_LABEL_FIELDS = {
+    "root_camera": "root",
+    "top_moving_per_marker": "moving_top_per_marker",
+    "scale_top_per_marker": "scale_top_per_marker",
+    "direct_quality_gate.minimum_independent_markers": "direct_markers",
+    "direct_quality_gate.minimum_inlier_ratio": "direct_inlier_ratio",
+    "direct_quality_gate.maximum_translation_dispersion_m": "direct_t_disp",
+    "direct_quality_gate.maximum_rotation_dispersion_deg": "direct_r_disp",
+    "relay_quality_gate.minimum_inlier_ratio": "relay_inlier_ratio",
+    "relay_quality_gate.maximum_translation_dispersion_m": "relay_t_disp",
+    "relay_quality_gate.maximum_rotation_dispersion_deg": "relay_r_disp",
+    "direct_relay_consistency.maximum_translation_disagreement_m": "path_t_disagree",
+    "direct_relay_consistency.maximum_rotation_disagreement_deg": "path_r_disagree",
+    "reference_marker_selection_mode": "ref_mode",
+    "reference_marker_id": "ref_marker",
+    "reference_marker_maximum_frames": "ref_frames",
+    "top_per_marker": "frame_top_per_marker",
+    "top_per_marker_pair": "frame_top_per_pair",
+    "maximum_total_frames": "frame_cap",
+    "static_only_ba_max_function_evaluations": "static_nfev",
+    "combined_ba_max_function_evaluations": "combined_nfev",
+    "ba_robust_loss": "loss",
+    "ba_robust_loss_scale_px": "loss_scale_px",
+    "single.scale_marker_id": "single_marker",
+    "multi.marker_ids": "multi_markers",
+    "scale.reprojection_threshold_px": "scale_reproj_px",
+    "scale.ransac_iterations": "scale_ransac",
+    "scale.minimum_inliers": "scale_inliers",
+    "scale.maximum_observations_per_marker": "scale_obs_per_marker",
+    "colmap.matcher": "matcher",
+    "colmap.compute_mode": "compute",
+    "colmap.maximum_image_size": "image_size",
+    "colmap.maximum_features": "features",
+    "colmap.sequential_overlap": "overlap",
+    "colmap.loop_detection": "loop",
+    "colmap.mapper_minimum_matches": "mapper_matches",
+    "colmap.ap03_maximum_image_size": "ap03_image_size",
+    "colmap.ap03_maximum_features": "ap03_features",
+    "colmap.ap03_loop_detection": "ap03_loop",
+    "markers.dictionary": "aruco",
+    "markers.length_m": "marker_m",
+    "markers.accepted_ids": "marker_ids",
+    "markers.detection_mode": "aruco_mode",
+    "observation_quality.maximum_pnp_reprojection_error_px": "pnp_reproj_px",
+    "observation_quality.minimum_marker_area_ratio": "marker_area_ratio",
+    "observation_quality.require_positive_depth": "positive_depth",
+    "observation_quality.maximum_marker_distance_m": "marker_distance_m",
+    "quality_override_fields": "quality_override",
+}
+
+
+def _label_value(value: Any) -> str:
+    if isinstance(value, list):
+        return "-".join(_token(item) for item in value)
+    return _token(value)
+
+
+def automatic_method_label(
+    method_id: str,
+    *,
+    methods: Any,
+    markers: MarkerSettings,
+    observation_quality: ObservationQualitySettings,
+    colmap: ColmapSettings,
+) -> str:
+    """Name a result only from calibration-affecting deviations to baseline."""
+    overrides: dict[str, Any] = {}
+    if method_id in {"ap01", "ap02", "ap03"}:
+        current = getattr(methods, method_id).model_dump(mode="json")
+        defaults = _method_defaults(method_id)
+        overrides = current.pop("observation_quality", {})
+        defaults.pop("observation_quality", None)
+    else:
+        current = dict(methods.extensions.get(method_id, {}))
+        defaults = _extension_defaults(method_id)
+    if method_id in {"ap01", "ap03"}:
+        current["colmap"] = colmap.model_dump(mode="json")
+        defaults["colmap"] = ColmapSettings().model_dump(mode="json")
+    current["markers"] = markers.model_dump(mode="json")
+    defaults["markers"] = MarkerSettings().model_dump(mode="json")
+    effective_quality = observation_quality.model_dump(mode="json")
+    for field_name, value in overrides.items():
+        if value is not None:
+            effective_quality[field_name] = value
+    current["observation_quality"] = effective_quality
+    current["quality_override_fields"] = sorted(
+        field_name
+        for field_name, value in overrides.items()
+        if value is not None
+    )
+    defaults["observation_quality"] = ObservationQualitySettings().model_dump(
+        mode="json"
+    )
+    defaults["quality_override_fields"] = []
+    flat_current = _flatten(current)
+    flat_defaults = _flatten(defaults)
+    differences = [
+        (path, value)
+        for path, value in sorted(flat_current.items())
+        if value != flat_defaults.get(path)
+        and path not in {"colmap.executable", "colmap.reuse"}
+    ]
+    if not differences:
+        return "baseline"
+    tokens = [
+        f"{_LABEL_FIELDS.get(path, path.replace('.', '_'))}_{_label_value(value)}"
+        for path, value in differences
+    ]
+    readable = "__".join(tokens)
+    if len(readable) <= 88:
+        return safe_id(readable)
+    digest = _digest(
+        {path: value for path, value in differences},
+        8,
+    )
+    return safe_id(f"{readable[:79].rstrip('_')}__{digest}")
+
+
+def method_variant_name(
+    config: RigConfig,
+    method_id: str,
+    selections: ResolvedSelections,
+    *,
+    fingerprint_value: str | None = None,
+) -> str:
+    if method_id == "ap01":
+        primary = f"root_{_token(selections.root_camera)}"
+    elif method_id == "ap02":
+        primary = f"ref_marker_{selections.ap02_reference_marker_id}"
+    elif method_id == "ap03":
+        markers = selections.ap03_multi_marker_ids
+        marker_set_hash = _digest(list(markers), 6)
+        if config.methods.ap03_multi.marker_ids == "auto":
+            multi = f"multi_all_{len(markers)}_{marker_set_hash}"
+        elif len(markers) <= 4:
+            multi = "multi_" + "-".join(
+                str(marker) for marker in markers
+            )
+        else:
+            multi = f"multi_set_{len(markers)}_{marker_set_hash}"
+        primary = (
+            f"single_marker_{selections.ap03_single_scale_marker_id}__{multi}"
+        )
+    else:
+        primary = _token(method_id)
+
+    tokens = [primary]
+    if method_id in {"ap01", "ap03"}:
+        tokens.append(f"matcher_{config.colmap.matcher}")
+    diff = method_config_diff(config, method_id, selections)
+    ignored = {
+        "root_camera",
+        "reference_marker_id",
+        "scale_marker_id",
+        "marker_ids",
+        "single.scale_marker_id",
+        "multi.marker_ids",
+        "colmap.matcher",
+    }
+    additions: list[str] = []
+    for path, values in sorted(diff.items()):
+        if path in ignored:
+            continue
+        short = {
+            "reprojection_threshold_px": "reproj",
+            "minimum_inliers": "inliers",
+            "markers.length_m": "marker_size_m",
+            "observation_quality.minimum_marker_area_ratio": "area_ratio",
+            "observation_quality.maximum_pnp_reprojection_error_px": "pnp_reproj",
+            "observation_quality.maximum_marker_distance_m": "distance_max",
+        }.get(path, path.split(".")[-1])
+        additions.append(f"{_token(short)}_{_token(values['value'])}")
+    if additions:
+        tokens.extend(additions[:4])
+        if len(additions) > 4:
+            tokens.append(f"plus_{len(additions) - 4}")
+    elif method_id == "ap02":
+        tokens.append("baseline")
+    fingerprint = (fingerprint_value or method_fingerprint(config, method_id, selections))[:8]
+    readable = "__".join(tokens)
+    maximum_readable = 80 - len(fingerprint) - 1
+    readable = readable[:maximum_readable].rstrip("_")
+    return f"{readable}_{fingerprint}"
+
+
+def method_result_label(config: RigConfig, method_id: str) -> str:
+    """Return the deterministic public label for the effective configuration."""
+    is_simulation = result_category(config) == "simulation"
+    anchor_is_14 = config.evaluation.anchor_marker_id == 14
+    colmap_cpu_baseline = (
+        config.colmap.compute_mode == "cpu_baseline"
+        and config.colmap.matcher == "exhaustive"
+        and config.colmap.mapper_minimum_matches == 8
+    )
+    baseline_contract = False
+    if method_id == "ap01":
+        baseline_contract = (
+            is_simulation
+            and anchor_is_14
+            and config.methods.ap01.root_camera == "cam_edge_3"
+            and colmap_cpu_baseline
+            and config.colmap.maximum_image_size == 1600
+            and config.colmap.maximum_features == 4096
+        )
+    elif method_id == "ap02":
+        ap02 = config.methods.ap02
+        baseline_contract = (
+            is_simulation
+            and anchor_is_14
+            and ap02.reference_marker_selection_mode == "baseline"
+            and ap02.reference_marker_id == 14
+            and ap02.method_contract == "baseline_v1"
+            and ap02.frame_selection_strategy == "smart_v1"
+            and ap02.initialization_strategy
+            == "maximum_frontier_v1"
+            and ap02.graph_edge_weight_strategy
+            == "geometric_observation_quality_v1"
+            and ap02.reprojection_model == "pinhole_v1"
+            and ap02.static_only_ba_max_function_evaluations == 80
+            and ap02.combined_ba_max_function_evaluations == 80
+            and ap02.ba_robust_loss == "soft_l1"
+            and abs(ap02.ba_robust_loss_scale_px - 3.0) <= 1e-12
+        )
+    elif method_id == "ap03":
+        ap03 = config.methods.ap03
+        baseline_contract = (
+            is_simulation
+            and anchor_is_14
+            and colmap_cpu_baseline
+            and ap03.method_contract == "baseline_v1"
+            and ap03.feature_limit_policy == "colmap_defaults_v1"
+            and ap03.scale_input_policy
+            == "registered_image_redetection_v1"
+            and abs(ap03.minimum_marker_area_px2 - 100.0) <= 1e-12
+            and ap03.single.scale_marker_id == 14
+            and ap03.multi.marker_ids == list(range(15))
+        )
+    if baseline_contract:
+        return "baseline"
+    label = automatic_method_label(
+        method_id,
+        methods=config.methods,
+        markers=config.markers,
+        observation_quality=config.observation_quality,
+        colmap=config.colmap,
+    )
+    return (
+        label
+        if label != "baseline"
+        else safe_id(f"{method_id}_configured_defaults_nonbaseline")
+    )
+
+__all__ = [
+    "automatic_method_label",
+    "build_method_payload",
+    "evaluation_fingerprint",
+    "method_config_diff",
+    "method_fingerprint",
+    "method_result_label",
+    "method_variant_name",
+]

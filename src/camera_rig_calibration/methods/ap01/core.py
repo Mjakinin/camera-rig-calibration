@@ -26,7 +26,7 @@ from .core_colmap import (
 from .core_geometry import (
     T_from_observation,
     invT,
-    legacy_detection_quality,
+    baseline_detection_quality,
     make_T,
     marker_area_from_corners,
     observation_quality,
@@ -46,11 +46,11 @@ from .core_io import (
     write_csv,
     write_status,
 )
-from .core_legacy import (
-    aggregate_legacy_direct_candidates,
-    aggregate_legacy_relay_candidates,
-    legacy_medoid_inliers,
-    legacy_se3_medoid,
+from .core_baseline import (
+    aggregate_baseline_direct_candidates,
+    aggregate_baseline_relay_candidates,
+    medoid_inliers,
+    se3_medoid,
     weighted_transform_mean,
 )
 from .core_runner import (

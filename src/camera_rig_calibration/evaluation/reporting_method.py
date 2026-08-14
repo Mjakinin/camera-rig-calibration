@@ -64,6 +64,7 @@ from .reporting_simulation_geometry import (
 )
 from .reporting_bindings import current_reporting_bindings
 
+
 def _method_report_text(
     payload: dict[str, Any],
     poses: dict[str, PoseRecord],
@@ -129,26 +130,28 @@ def _method_report_text(
     ]
     lines.extend(
         [
-            _text_table(
-                [
-                    "Camera",
-                    "x [m]",
-                    "y [m]",
-                    "z [m]",
-                    "roll [rad]",
-                    "pitch [rad]",
-                    "yaw [rad]",
-                    "qx",
-                    "qy",
-                    "qz",
-                    "qw",
-                ],
-                anchor_rows,
-            )
-            if anchor_rows
-            else (
-                "No common-anchor camera pose is available. "
-                "See diagnostics/anchor_alignment.json."
+            (
+                _text_table(
+                    [
+                        "Camera",
+                        "x [m]",
+                        "y [m]",
+                        "z [m]",
+                        "roll [rad]",
+                        "pitch [rad]",
+                        "yaw [rad]",
+                        "qx",
+                        "qy",
+                        "qz",
+                        "qw",
+                    ],
+                    anchor_rows,
+                )
+                if anchor_rows
+                else (
+                    "No common-anchor camera pose is available. "
+                    "See diagnostics/anchor_alignment.json."
+                )
             ),
             (
                 "Full exports: camera_extrinsics_anchor.csv, "
@@ -163,18 +166,11 @@ def _method_report_text(
             [
                 component.get("component_id", "-"),
                 ",".join(component.get("static_cameras", [])) or "-",
-                ",".join(
-                    str(value)
-                    for value in component.get("marker_ids", [])
-                )
+                ",".join(str(value) for value in component.get("marker_ids", []))
                 or "-",
                 component.get("moving_frame_count", 0),
                 component.get("connecting_moving_frame_count", 0),
-                (
-                    "yes"
-                    if component.get("calibratable")
-                    else "no"
-                ),
+                ("yes" if component.get("calibratable") else "no"),
             ]
             for component in graph.get("components", [])
         ]
@@ -200,10 +196,7 @@ def _method_report_text(
                     ],
                     component_rows,
                 ),
-                (
-                    "Relationships between different components: "
-                    "not observable"
-                ),
+                ("Relationships between different components: " "not observable"),
                 "",
             ]
         )
@@ -218,8 +211,7 @@ def _method_report_text(
                 if isinstance(row, dict) and row.get("marker_id") is not None
             }
             relay_selected = sum(
-                str(row.get("selected", "")).strip().lower()
-                in {"true", "1", "yes"}
+                str(row.get("selected", "")).strip().lower() in {"true", "1", "yes"}
                 for row in relay
                 if isinstance(row, dict)
             )
@@ -240,9 +232,7 @@ def _method_report_text(
                     (
                         "Scale observations selected per marker: "
                         + json.dumps(
-                            scale.get(
-                                "selected_observations_per_marker", {}
-                            ),
+                            scale.get("selected_observations_per_marker", {}),
                             sort_keys=True,
                         )
                     ),
@@ -251,9 +241,7 @@ def _method_report_text(
             )
     elif payload.get("method") == "ap02":
         frames = diagnostics.get("ap02_frame_selection", {})
-        optimization = diagnostics.get(
-            "ap02_combined_optimization", {}
-        )
+        optimization = diagnostics.get("ap02_combined_optimization", {})
         if frames or optimization:
             lines.extend(
                 [
@@ -369,21 +357,23 @@ def _method_report_text(
         [
             "FINAL STATIC-CAMERA POSES",
             "-" * width,
-            _text_table(
-                [
-                    "Camera",
-                    "Source",
-                    "x [m]",
-                    "y [m]",
-                    "z [m]",
-                    "roll [deg]",
-                    "pitch [deg]",
-                    "yaw [deg]",
-                ],
-                pose_rows,
-            )
-            if pose_rows
-            else "No final static-camera pose is available.",
+            (
+                _text_table(
+                    [
+                        "Camera",
+                        "Source",
+                        "x [m]",
+                        "y [m]",
+                        "z [m]",
+                        "roll [deg]",
+                        "pitch [deg]",
+                        "yaw [deg]",
+                    ],
+                    pose_rows,
+                )
+                if pose_rows
+                else "No final static-camera pose is available."
+            ),
             "",
             "PAIRWISE CAMERA-TO-CAMERA EXTRINSICS",
             "-" * width,
@@ -441,9 +431,7 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
     _method_report_text = hooks.method_report_text
     _repository_root = hooks.repository_root
     results: list[dict[str, Any]] = []
-    for result_path in sorted(
-        (experiment_root / "methods").glob("*/*/RESULT.json")
-    ):
+    for result_path in sorted((experiment_root / "methods").glob("*/*/RESULT.json")):
         root = result_path.parent
         payload = _read_json(result_path)
         method = str(payload.get("method") or root.parent.name)
@@ -452,18 +440,10 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
             and payload.get("comparison_visibility")
             == "hidden_when_scale_variants_available"
             and (
-                experiment_root
-                / "methods"
-                / "ap03_single"
-                / root.name
-                / "RESULT.json"
+                experiment_root / "methods" / "ap03_single" / root.name / "RESULT.json"
             ).is_file()
             and (
-                experiment_root
-                / "methods"
-                / "ap03_multi"
-                / root.name
-                / "RESULT.json"
+                experiment_root / "methods" / "ap03_multi" / root.name / "RESULT.json"
             ).is_file()
         ):
             continue
@@ -484,29 +464,25 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
             else None
         )
         quality, warnings, metrics = _quality_details(root, method)
-        method_diagnostics, detail_paths = _method_diagnostics(
-            root, method
-        )
+        method_diagnostics, detail_paths = _method_diagnostics(root, method)
         metrics.update(method_diagnostics)
         if previous_evaluation_metrics is not None:
             metrics["evaluation"] = previous_evaluation_metrics
         config_summary = _configuration_summary(root, method)
         anchor_payload = _read_json(root / "camera_extrinsics_anchor.json")
         anchor_cameras = [
-            item
-            for item in anchor_payload.get("cameras", [])
-            if isinstance(item, dict)
+            item for item in anchor_payload.get("cameras", []) if isinstance(item, dict)
         ]
         solver_details = metrics.get("solver", {})
         if method == "ap02":
             solver_status = (
                 "success"
                 if solver_details.get("success")
-                else "limit_reached"
-                if solver_details.get("limit_reached")
-                else "failed"
-                if solver_details
-                else "unknown"
+                else (
+                    "limit_reached"
+                    if solver_details.get("limit_reached")
+                    else "failed" if solver_details else "unknown"
+                )
             )
         else:
             solver_status = "not_applicable"
@@ -518,9 +494,7 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
                 "label": label,
                 "status": "available",
                 "artifact_status": "available",
-                "execution_status": payload.get(
-                    "execution_status", "completed"
-                ),
+                "execution_status": payload.get("execution_status", "completed"),
                 "solver_status": solver_status,
                 "quality_status": quality,
                 "warnings": warnings,
@@ -528,17 +502,11 @@ def refresh_method_reports(experiment_root: Path) -> list[dict[str, Any]]:
                 "config_summary": config_summary,
                 "static_camera_count": len(poses),
                 "available_static_cameras": sorted(poses),
-                "pairwise_camera_extrinsics": (
-                    "pairwise_camera_extrinsics.csv"
-                ),
+                "pairwise_camera_extrinsics": ("pairwise_camera_extrinsics.csv"),
                 "pairwise_camera_count": len(pairs),
                 "detail_artifacts": detail_paths,
-                "calibration_status": payload.get(
-                    "calibration_status", "available"
-                ),
-                "evaluation_status": payload.get(
-                    "evaluation_status", "not_run"
-                ),
+                "calibration_status": payload.get("calibration_status", "available"),
+                "evaluation_status": payload.get("evaluation_status", "not_run"),
                 "anchor_export_status": payload.get(
                     "anchor_export_status", "ANCHOR_NOT_AVAILABLE"
                 ),
@@ -570,9 +538,7 @@ def complete_existing_dataset(
         "REFERENCE_MARKER_ID.txt",
     )
     candidates = sorted(
-        (experiment_root / "methods").glob(
-            "*/*/diagnostics/preflight/observations"
-        )
+        (experiment_root / "methods").glob("*/*/diagnostics/preflight/observations")
     )
     source = next(
         (
@@ -614,9 +580,7 @@ def complete_existing_dataset(
             "selection_files": list(required),
             "quality_directory": "quality",
             "debug_images": (
-                "debug_images"
-                if (observations / "debug_images").is_dir()
-                else None
+                "debug_images" if (observations / "debug_images").is_dir() else None
             ),
             "finalized_at": finalized_at,
             "reconciled_from": str(source.relative_to(experiment_root)),
@@ -632,26 +596,18 @@ def run_real_marker_consistency(
     force: bool = False,
 ) -> Path | None:
     """Evaluate every published real-data method without rerunning it."""
-    selection_path = (
-        dataset_root / "observations" / "SELECTION_CANDIDATES.json"
-    )
+    selection_path = dataset_root / "observations" / "SELECTION_CANDIDATES.json"
     selection = _read_json(selection_path)
     anchor_value = selection.get("evaluation_anchor", {}).get("selected")
     if anchor_value is None:
         return None
     anchor = int(anchor_value)
-    output = (
-        experiment_root
-        / "evaluations"
-        / "method_anchors_reconciled"
-    )
+    output = experiment_root / "evaluations" / "method_anchors_reconciled"
     report = output / "REAL_DATA_MARKER_CONSISTENCY.txt"
     if report.is_file() and not force:
         return report
     methods: list[tuple[str, Path]] = []
-    for result_path in sorted(
-        (experiment_root / "methods").glob("*/*/RESULT.json")
-    ):
+    for result_path in sorted((experiment_root / "methods").glob("*/*/RESULT.json")):
         method = result_path.parents[1].name
         label = result_path.parent.name
         method_root = result_path.parent / "diagnostics" / "method"
@@ -695,26 +651,18 @@ def run_real_marker_consistency(
     ]
     first_config = next(
         (
-            result_path.parent
-            / "provenance"
-            / "resolved_config.yaml"
+            result_path.parent / "provenance" / "resolved_config.yaml"
             for result_path in sorted(
                 (experiment_root / "methods").glob("*/*/RESULT.json")
             )
-            if (
-                result_path.parent
-                / "provenance"
-                / "resolved_config.yaml"
-            ).is_file()
+            if (result_path.parent / "provenance" / "resolved_config.yaml").is_file()
         ),
         None,
     )
     marker_length = 0.17
     if first_config is not None:
         try:
-            resolved = yaml.safe_load(
-                first_config.read_text(encoding="utf-8")
-            )
+            resolved = yaml.safe_load(first_config.read_text(encoding="utf-8"))
             marker_length = float(
                 resolved.get("markers", {}).get("length_m", marker_length)
             )
@@ -722,7 +670,8 @@ def run_real_marker_consistency(
             pass
     command = [
         sys.executable,
-        str(Path(__file__).with_name("marker_consistency.py")),
+        "-m",
+        "camera_rig_calibration.evaluation.marker_consistency",
         "--dataset",
         str(dataset_root),
         "--results-root",
@@ -749,9 +698,7 @@ def run_real_marker_consistency(
         check=False,
     )
     output.mkdir(parents=True, exist_ok=True)
-    (output / "evaluation.log").write_text(
-        completed.stdout, encoding="utf-8"
-    )
+    (output / "evaluation.log").write_text(completed.stdout, encoding="utf-8")
     if completed.returncode != 0 or not report.is_file():
         _write_json(
             output / "COMMON_ANCHOR_STATUS.json",
@@ -760,9 +707,7 @@ def run_real_marker_consistency(
                 "status": "unavailable",
                 "anchor_marker_id": anchor,
                 "return_code": completed.returncode,
-                "reason": (
-                    "Common marker evaluation failed; see evaluation.log."
-                ),
+                "reason": ("Common marker evaluation failed; see evaluation.log."),
             },
         )
         return None
@@ -771,20 +716,19 @@ def run_real_marker_consistency(
         {
             "schema_version": 5,
             "layout_version": 2,
-                "status": "available",
-                "evaluation_scope": "single_preflight_frozen_anchor",
-                "anchor_marker_id": anchor,
-                "methods": [name for name, _ in methods],
-                "reconciled_without_method_rerun": True,
-            },
-        )
+            "status": "available",
+            "evaluation_scope": "single_preflight_frozen_anchor",
+            "anchor_marker_id": anchor,
+            "methods": [name for name, _ in methods],
+            "reconciled_without_method_rerun": True,
+        },
+    )
     return report
 
 
-
 __all__ = [
-    '_method_report_text',
-    'refresh_method_reports',
-    'complete_existing_dataset',
-    'run_real_marker_consistency',
+    "_method_report_text",
+    "refresh_method_reports",
+    "complete_existing_dataset",
+    "run_real_marker_consistency",
 ]

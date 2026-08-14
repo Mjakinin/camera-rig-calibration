@@ -19,6 +19,8 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import Image
 
+from camera_rig_calibration.input.simulation_routes import load_simulation_route
+
 
 def rpy_to_quat(roll, pitch, yaw):
     cr = math.cos(roll * 0.5)
@@ -291,7 +293,9 @@ def main():
 
     img_dir.mkdir(parents=True, exist_ok=True)
 
-    route_data = json.loads(Path(args.route).read_text())
+    route_path = Path(args.route)
+    load_simulation_route(route_path)
+    route_data = json.loads(route_path.read_text())
     frames = route_data["frames"]
 
     rclpy.init()
@@ -371,7 +375,7 @@ def main():
             rows.append(
                 {
                     "frame": frame_idx,
-                    "segment": r["segment"],
+                    "segment": r.get("segment", "custom"),
                     "x": r["x"],
                     "y": r["y"],
                     "z": r["z"],

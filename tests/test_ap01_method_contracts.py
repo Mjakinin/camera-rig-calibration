@@ -10,10 +10,6 @@ import pytest
 from camera_rig_calibration.config.models import MethodSettings
 from camera_rig_calibration.experiments import method_fingerprint
 from camera_rig_calibration.methods.ap01 import core, solve_extrinsics
-from camera_rig_calibration.methods.ap01 import (
-    estimate_scale,
-    reconstruct_moving,
-)
 from camera_rig_calibration.methods.ap01.build_candidates import (
     construct_candidates,
 )
@@ -21,17 +17,11 @@ from camera_rig_calibration.methods.ap01.contracts import (
     AP01MethodContract,
     resolve_ap01_method_contract,
 )
-from camera_rig_calibration.methods.ap01.frozen_intermediate import (
-    validate_frozen_intermediate,
-)
 from camera_rig_calibration.observations import ResolvedSelections
 
 
 ROOT = "root"
 TARGET = "target"
-REPOSITORY = Path(__file__).resolve().parents[1]
-
-
 def _transform(x: float = 0.0) -> np.ndarray:
     result = np.eye(4, dtype=np.float64)
     result[0, 3] = x
@@ -121,19 +111,19 @@ def _resolved() -> ResolvedSelections:
 
 
 def test_contracts_are_immutable_complete_and_fingerprint_distinct() -> None:
-    parity = resolve_ap01_method_contract("main_route2_parity_v1")
+    baseline = resolve_ap01_method_contract("baseline_v1")
     recommended = resolve_ap01_method_contract("recommended_wizard_v1")
-    assert set(parity.fingerprint_payload()) == {
+    assert set(baseline.fingerprint_payload()) == {
         field.name for field in fields(AP01MethodContract)
     }
-    assert parity.scientific_fingerprint() != recommended.scientific_fingerprint()
+    assert baseline.scientific_fingerprint() != recommended.scientific_fingerprint()
     with pytest.raises(FrozenInstanceError):
-        parity.quality_model = "changed"  # type: ignore[misc]
+        baseline.quality_model = "changed"  # type: ignore[misc]
 
 
-def test_parity_contract_resolves_complete_legacy_colmap_behavior() -> None:
+def test_baseline_contract_resolves_complete_baseline_colmap_behavior() -> None:
     contract = resolve_ap01_method_contract(
-        "main_route2_parity_v1",
+        "baseline_v1",
         colmap_matcher="sequential",
         colmap_use_gpu=True,
         colmap_maximum_image_size=999,
@@ -141,7 +131,7 @@ def test_parity_contract_resolves_complete_legacy_colmap_behavior() -> None:
         colmap_mapper_minimum_matches=3,
     )
 
-    assert contract.colmap_camera_model_policy == "legacy_shared_pinhole_v1"
+    assert contract.colmap_camera_model_policy == "baseline_shared_pinhole_v1"
     assert contract.colmap_single_shared_camera is True
     assert contract.colmap_intrinsics_serialization == "fixed_decimal_places"
     assert contract.colmap_intrinsics_precision == 8
@@ -185,8 +175,8 @@ def test_recommended_contract_preserves_configurable_colmap_behavior() -> None:
     assert contract.scale_execution_policy == "fresh_metric_scale_estimation"
 
 
-def test_parity_intrinsics_and_colmap_commands_match_legacy() -> None:
-    contract = resolve_ap01_method_contract("main_route2_parity_v1")
+def test_baseline_intrinsics_and_colmap_commands_are_fixed() -> None:
+    contract = resolve_ap01_method_contract("baseline_v1")
     info = {
         "K": np.asarray(
             [[929.4671630859375, 0.0, 640.0], [0.0, 929.467134475708, 360.0], [0.0, 0.0, 1.0]]
@@ -226,8 +216,8 @@ def test_parity_intrinsics_and_colmap_commands_match_legacy() -> None:
     assert _option(mapper, "--Mapper.ba_refine_extra_params") == "0"
 
 
-def test_legacy_scale_pair_construction_bounds_filters_and_no_cap() -> None:
-    contract = resolve_ap01_method_contract("main_route2_parity_v1")
+def test_baseline_scale_pair_construction_bounds_filters_and_no_cap() -> None:
+    contract = resolve_ap01_method_contract("baseline_v1")
     good_frames = [0, 3, 6, 9, 12]
     all_frames = [*good_frames, 15, 18, 21]
     rows = [
@@ -287,11 +277,10 @@ def test_recommended_scale_contract_retains_current_behavior() -> None:
     assert contract.final_pose_serialization_policy == (
         "native_full_precision_v1"
     )
-    assert contract.reproduction_validation_policy == "none"
 
 
-def test_parity_final_pose_uses_legacy_nine_decimal_rpy_roundtrip() -> None:
-    contract = resolve_ap01_method_contract("main_route2_parity_v1")
+def test_baseline_final_pose_uses_baseline_nine_decimal_rpy_roundtrip() -> None:
+    contract = resolve_ap01_method_contract("baseline_v1")
     transform = np.eye(4, dtype=np.float64)
     transform[:3, :3] = core.rpy_deg_to_R(
         10.5240656136, -51.6364639324, -29.9764764846
@@ -314,106 +303,8 @@ def test_parity_final_pose_uses_legacy_nine_decimal_rpy_roundtrip() -> None:
     )
 
 
-def test_frozen_historical_sfm_is_guarded_and_invokes_no_colmap(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    dataset = (
-        REPOSITORY
-        / "results/simulation/baseline/route2_main_parity_v1"
-    )
-    contract = resolve_ap01_method_contract("main_route2_parity_v1")
-    if not (dataset / "metadata/dataset_identity.json").is_file():
-        with pytest.raises(
-            RuntimeError, match="Prepared AP01 dataset identity is missing"
-        ):
-            validate_frozen_intermediate(
-                dataset=dataset,
-                moving_camera_id="moving_calib_camera",
-                contract=contract,
-            )
-        return
-    frozen = validate_frozen_intermediate(
-        dataset=dataset,
-        moving_camera_id="moving_calib_camera",
-        contract=contract,
-    )
-    assert frozen.payload["sfm_mode"] == "frozen_historical_reproduction"
-    assert frozen.payload["ground_truth_used"] is False
-
-    def forbidden(*args, **kwargs):
-        raise AssertionError("fresh scientific generator was invoked")
-
-    monkeypatch.setattr(core, "run_colmap", forbidden)
-    monkeypatch.setattr(core, "robust_scale", forbidden)
-    output = tmp_path / "02_AP01"
-    reconstructed = reconstruct_moving.run(
-        dataset=dataset,
-        observations_root=dataset / "observations",
-        output_root=output,
-        camera_ids=("cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"),
-        root_camera="cam_edge_3",
-        moving_camera_id="moving_calib_camera",
-        matcher="exhaustive",
-        use_gpu=False,
-        maximum_image_size=1600,
-        maximum_features=4096,
-        sequential_overlap=20,
-        loop_detection=True,
-        mapper_minimum_matches=15,
-        colmap_executable="forbidden",
-        reuse=False,
-        method_contract="main_route2_parity_v1",
-    )
-    assert reconstructed.outputs["registered_images"] == 175
-    provenance = json.loads(
-        (output / "01_moving_colmap/FROZEN_SFM_PROVENANCE.json").read_text()
-    )
-    assert provenance["sfm_mode"] == "frozen_historical_reproduction"
-    estimated = estimate_scale.run(
-        dataset=dataset,
-        observations_root=dataset / "observations",
-        output_root=output,
-        camera_ids=("cam_edge_0", "cam_edge_1", "cam_edge_3", "cam_edge_5"),
-        root_camera="cam_edge_3",
-        moving_camera_id="moving_calib_camera",
-        scale_top_per_marker=30,
-        method_contract="main_route2_parity_v1",
-    )
-    assert estimated.outputs["used_observation_pairs"] == 1617
-    assert float(
-        (output / "02_metric_scale/metric_scale.txt").read_text()
-    ) == pytest.approx(0.676879570208, abs=0.0)
-
-
-def test_frozen_historical_sfm_guards_fail_closed(tmp_path: Path) -> None:
-    contract = resolve_ap01_method_contract("main_route2_parity_v1")
-    identity = tmp_path / "metadata/dataset_identity.json"
-    identity.parent.mkdir(parents=True)
-    identity.write_text('{"fingerprint": "different"}\n')
-    with pytest.raises(RuntimeError, match="input fingerprint mismatch"):
-        validate_frozen_intermediate(
-            dataset=tmp_path,
-            moving_camera_id="moving_calib_camera",
-            contract=contract,
-        )
-    with pytest.raises(RuntimeError, match="manifest mismatch"):
-        validate_frozen_intermediate(
-            dataset=(
-                REPOSITORY
-                / "results/simulation/baseline/route2_main_parity_v1"
-            ),
-            moving_camera_id="moving_calib_camera",
-            contract=replace(
-                contract,
-                colmap_mapper_minimum_matches=(
-                    contract.colmap_mapper_minimum_matches + 1
-                ),
-            ),
-        )
-
-
 def test_every_method_contract_field_changes_scientific_fingerprint() -> None:
-    contract = resolve_ap01_method_contract("main_route2_parity_v1")
+    contract = resolve_ap01_method_contract("baseline_v1")
     original = contract.scientific_fingerprint()
 
     for field in fields(AP01MethodContract):
@@ -436,7 +327,7 @@ def test_every_method_contract_field_changes_scientific_fingerprint() -> None:
         assert mutated.scientific_fingerprint() != original, field.name
 
 
-def test_legacy_quality_formula_and_wizard_score_remain_separate() -> None:
+def test_baseline_quality_formula_and_wizard_score_remain_separate() -> None:
     row = {
         "distance_m": "2",
         "center_u": "640",
@@ -450,17 +341,17 @@ def test_legacy_quality_formula_and_wizard_score_remain_separate() -> None:
             for axis, value in (("u", u), ("v", v))
         },
     }
-    legacy, components = core.legacy_detection_quality(row)
-    assert legacy == pytest.approx(400.0 / 4.0)
+    baseline_score, components = core.baseline_detection_quality(row)
+    assert baseline_score == pytest.approx(400.0 / 4.0)
     assert components["area_px2_from_corners"] == 400.0
     assert float(row["selection_score"]) == 0.125
-    assert legacy != float(row["selection_score"])
+    assert baseline_score != float(row["selection_score"])
 
 
-def test_parity_direct_scope_order_and_uncapped_relay_multiplicity() -> None:
+def test_baseline_direct_scope_order_and_uncapped_relay_multiplicity() -> None:
     camera_ids = ("target_b", "target_a", ROOT)
     contract = resolve_ap01_method_contract(
-        "main_route2_parity_v1", direct_target_camera="target_a"
+        "baseline_v1", direct_target_camera="target_a"
     )
     static = [
         _static(ROOT, 1),
@@ -519,9 +410,9 @@ def test_recommended_contract_preserves_all_direct_scope_and_relay_cap() -> None
     ] == [0]
 
 
-def test_parity_direct_priority_and_missing_direct_omission() -> None:
+def test_baseline_direct_priority_and_missing_direct_omission() -> None:
     contract = resolve_ap01_method_contract(
-        "main_route2_parity_v1", direct_target_camera=TARGET
+        "baseline_v1", direct_target_camera=TARGET
     )
     candidates = [_candidate(2, x=2.0), _candidate(14, x=14.0)]
     result = solve_extrinsics.select_candidate_aggregates(
@@ -546,9 +437,9 @@ def test_parity_direct_priority_and_missing_direct_omission() -> None:
     )
 
 
-def test_parity_selection_diagnostics_are_json_serializable() -> None:
+def test_baseline_selection_diagnostics_are_json_serializable() -> None:
     contract = resolve_ap01_method_contract(
-        "main_route2_parity_v1", direct_target_camera=TARGET
+        "baseline_v1", direct_target_camera=TARGET
     )
     result = solve_extrinsics.select_candidate_aggregates(
         [_candidate(2, x=2.0), _candidate(14, x=14.0)],
@@ -563,13 +454,13 @@ def test_parity_selection_diagnostics_are_json_serializable() -> None:
     assert "quality_filtered_weighted_mean_diagnostic" in serialized
 
 
-def test_same_candidate_is_parity_eligible_but_recommended_rejected() -> None:
-    parity = solve_extrinsics.select_candidate_aggregates(
+def test_same_candidate_is_baseline_eligible_but_recommended_rejected() -> None:
+    baseline = solve_extrinsics.select_candidate_aggregates(
         [_candidate()],
         camera_ids=(ROOT, TARGET),
         root_camera=ROOT,
         contract=resolve_ap01_method_contract(
-            "main_route2_parity_v1", direct_target_camera=TARGET
+            "baseline_v1", direct_target_camera=TARGET
         ),
         include_flattened=False,
     )
@@ -580,7 +471,7 @@ def test_same_candidate_is_parity_eligible_but_recommended_rejected() -> None:
         contract=resolve_ap01_method_contract("recommended_wizard_v1"),
         include_flattened=False,
     )
-    assert parity["camera_statuses"][TARGET]["deployment_eligible"] is True
+    assert baseline["camera_statuses"][TARGET]["deployment_eligible"] is True
     assert recommended["camera_statuses"][TARGET]["deployment_eligible"] is False
     assert recommended["camera_statuses"][TARGET]["quality_status"] == (
         "rejected_unstable_consensus"
@@ -596,11 +487,12 @@ def test_ap01_method_fingerprint_changes_with_resolved_contract(
     recommended = prepared_config.model_copy(
         update={"methods": MethodSettings(enabled=["ap01"])}, deep=True
     )
-    parity = recommended.model_copy(deep=True)
-    parity.methods.ap01.method_contract = "main_route2_parity_v1"
+    recommended.methods.ap01.method_contract = "recommended_wizard_v1"
+    baseline = recommended.model_copy(deep=True)
+    baseline.methods.ap01.method_contract = "baseline_v1"
     assert method_fingerprint(
         recommended, "ap01", _resolved()
-    ) != method_fingerprint(parity, "ap01", _resolved())
+    ) != method_fingerprint(baseline, "ap01", _resolved())
 
 
 def test_pure_contract_boundaries_invoke_no_stage_runner_or_colmap(
@@ -616,7 +508,7 @@ def test_pure_contract_boundaries_invoke_no_stage_runner_or_colmap(
         camera_ids=(ROOT, TARGET),
         root_camera=ROOT,
         contract=resolve_ap01_method_contract(
-            "main_route2_parity_v1", direct_target_camera=TARGET
+            "baseline_v1", direct_target_camera=TARGET
         ),
         include_flattened=False,
     )

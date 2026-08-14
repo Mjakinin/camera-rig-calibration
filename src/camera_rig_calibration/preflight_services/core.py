@@ -8,7 +8,7 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Iterable
 
-from ..ap02_graph import (
+from ..methods.ap02.graph_diagnostics import (
     AP02GraphDiagnosis,
     diagnose_ap02_graph,
     graph_components,

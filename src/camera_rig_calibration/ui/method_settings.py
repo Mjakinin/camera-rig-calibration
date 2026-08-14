@@ -8,6 +8,8 @@ from typing import Any, Callable
 import yaml
 
 from ..registry import calibration_methods
+from ..method_sdk.contracts import method_metadata
+from .auto_form import auto_form_fields
 
 
 SettingRow = tuple[str, str, str, object, object, str]
@@ -118,11 +120,11 @@ def build_setting_rows(
     if job.method_id == "ap01":
         value, base = job.methods.ap01, defaults.methods.ap01
         rows.extend([
-            ("ap01_advanced_strategy", "METHOD-SPECIFIC SETTINGS", "AP01 strategy", value.advanced_strategy, base.advanced_strategy, "The baseline strategy uses Direct/Relay selection; the robustness strategy enables configurable caps and consensus gates."),
+            ("ap01_method_contract", "METHOD-SPECIFIC SETTINGS", "AP01 strategy", value.method_contract, base.method_contract, "The baseline strategy uses Direct/Relay selection; the robustness strategy enables configurable caps and consensus gates."),
             ("ap01_direct_target", "METHOD-SPECIFIC SETTINGS", "Direct target camera", value.direct_target_camera, base.direct_target_camera, "One configurable camera is calibrated through the Direct path; other cameras use Relay support."),
             ("root_camera", "METHOD-SPECIFIC SETTINGS", "Root camera", guided_current("root_camera", value.root_camera), base.root_camera, "Coordinate origin; auto is resolved from filtered graph coverage."),
         ])
-        if value.advanced_strategy == "wizard_robustness_v1":
+        if value.method_contract == "recommended_wizard_v1":
             rows.extend([
                 ("ap01_top_moving", "METHOD-SPECIFIC SETTINGS", "Relay observations per marker", value.top_moving_per_marker, base.top_moving_per_marker, "Quality-ranked moving observations kept per marker; null keeps all."),
                 ("ap01_scale_top", "METHOD-SPECIFIC SETTINGS", "Scale observations per marker", value.scale_top_per_marker, base.scale_top_per_marker, "Quality-ranked observations kept before scale-pair construction; null keeps all."),
@@ -190,8 +192,43 @@ def build_setting_rows(
         if job.methods.ap03.scale_input_policy == "wizard_filtered_observations_v1":
             rows.append(("scale_max_observations", "METHOD-SPECIFIC SETTINGS", "Maximum observations per marker", scale.maximum_observations_per_marker, base_scale.maximum_observations_per_marker, "Quality-ranked cap before corner triangulation; null keeps all."))
     else:
+        method = calibration_methods.get(job.method_id)
         current_extension = job.methods.extensions.get(job.method_id, {})
         default_extension = defaults.methods.extensions.get(job.method_id, {})
+        metadata = method_metadata(method)
+        if metadata.config_editor is not None:
+            rows.append(
+                (
+                    "extension_custom_editor",
+                    "METHOD-SPECIFIC SETTINGS",
+                    "Open method-specific editor",
+                    "available",
+                    "optional",
+                    "The registered method provides a focused custom editor.",
+                )
+            )
+        rows.extend(
+            (
+                field.key,
+                "METHOD-SPECIFIC SETTINGS",
+                field.label,
+                field.current,
+                field.default,
+                (
+                    field.description
+                    + (
+                        " Choices: "
+                        + ", ".join(map(str, field.choices))
+                        + "."
+                        if field.choices
+                        else ""
+                    )
+                ),
+            )
+            for field in auto_form_fields(
+                method.config_model, current_extension
+            )
+        )
         rows.append(
             (
                 "extension",
@@ -203,7 +240,7 @@ def build_setting_rows(
                 yaml.safe_dump(
                     default_extension, default_flow_style=True
                 ).strip(),
-                "Validated against the registered method config model.",
+                "Advanced YAML fallback, validated against the same registered model.",
             )
         )
     if job.method_id in {"ap01", "ap03"}:

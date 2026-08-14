@@ -132,7 +132,7 @@ def test_ap01_path_disagreement_is_independent_from_stability() -> None:
     assert result["consistent"] is False
 
 
-def test_ap02_legacy_marker_modes_and_baseline_contract() -> None:
+def test_ap02_marker_modes_and_baseline_contract() -> None:
     assert AP02Settings(reference_marker_id=7).reference_marker_selection_mode == (
         "explicit"
     )

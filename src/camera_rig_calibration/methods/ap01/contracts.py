@@ -9,18 +9,16 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import asdict, dataclass, replace
+from dataclasses import asdict, dataclass
 from typing import Literal, Sequence
 
 
 AP01ContractName = Literal[
     "baseline_v1",
-    "main_route2_parity_v1",
     "recommended_wizard_v1",
 ]
 AP01_CONTRACT_NAMES: tuple[AP01ContractName, ...] = (
     "baseline_v1",
-    "main_route2_parity_v1",
     "recommended_wizard_v1",
 )
 DEFAULT_AP01_CONTRACT: AP01ContractName = "baseline_v1"
@@ -28,30 +26,13 @@ DEFAULT_AP01_CONTRACT: AP01ContractName = "baseline_v1"
 
 def ap01_execution_contract_name(
     name: AP01ContractName | str,
-    *,
-    historical_reproduction: bool = False,
-    advanced_strategy: str = "legacy_main_v1",
 ) -> AP01ContractName:
-    """Translate canonical settings and readable aliases at one boundary."""
+    """Validate and return the selected AP01 strategy."""
 
-    if name == "main_route2_parity_v1":
-        return "main_route2_parity_v1"
-    if name == "recommended_wizard_v1":
-        return "recommended_wizard_v1"
-    if name != "baseline_v1":
+    if name not in AP01_CONTRACT_NAMES:
         choices = ", ".join(AP01_CONTRACT_NAMES)
         raise ValueError(f"Unknown AP01 method contract '{name}'; choose {choices}")
-    if historical_reproduction:
-        if advanced_strategy != "legacy_main_v1":
-            raise ValueError(
-                "AP01 historical reproduction requires legacy_main_v1"
-            )
-        return "main_route2_parity_v1"
-    if advanced_strategy == "legacy_main_v1":
-        return "baseline_v1"
-    if advanced_strategy == "wizard_robustness_v1":
-        return "recommended_wizard_v1"
-    raise ValueError(f"Unknown AP01 advanced strategy: {advanced_strategy}")
+    return name
 
 
 @dataclass(frozen=True)
@@ -61,11 +42,6 @@ class AP01MethodContract:
     name: AP01ContractName
     contract_schema_version: int
     sfm_execution_policy: str
-    sfm_frozen_intermediate_manifest: str | None
-    sfm_frozen_intermediate_schema_version: int | None
-    sfm_frozen_input_fingerprint: str | None
-    sfm_frozen_intrinsics_sha256: str | None
-    sfm_frozen_images_sha256: str | None
     colmap_camera_model_policy: str
     colmap_single_shared_camera: bool
     colmap_intrinsics_serialization: str
@@ -83,7 +59,6 @@ class AP01MethodContract:
     colmap_refine_extra_parameters: bool
     colmap_sparse_model_selection_policy: str
     scale_execution_policy: str
-    scale_frozen_metric_sha256: str | None
     scale_observation_construction_policy: str
     scale_registered_frames_only: bool
     scale_pnp_success_only: bool
@@ -139,20 +114,6 @@ class AP01MethodContract:
     relay_fallback_fraction: float | None
     final_pose_serialization_policy: str
     final_pose_serialization_decimal_places: int | None
-    reproduction_validation_policy: str
-    reproduction_expected_registered_images: int | None
-    reproduction_expected_total_moving_images: int | None
-    reproduction_expected_scale_m_per_colmap_unit: float | None
-    reproduction_scale_absolute_tolerance: float | None
-    reproduction_expected_candidate_counts: tuple[
-        tuple[str, str, int], ...
-    ]
-    reproduction_expected_selections: tuple[tuple[str, str], ...]
-    reproduction_expected_camera_inventory: tuple[str, ...]
-    reproduction_locked_final_pose_path: str | None
-    reproduction_locked_final_pose_sha256: str | None
-    reproduction_translation_tolerance_m: float | None
-    reproduction_rotation_matrix_tolerance: float | None
 
     def fingerprint_payload(self) -> dict[str, object]:
         """Return every immutable field; callers must fingerprint this whole value."""
@@ -201,74 +162,14 @@ def resolve_ap01_method_contract(
     colmap_loop_detection: bool = True,
     colmap_mapper_minimum_matches: int = 8,
 ) -> AP01MethodContract:
-    """Resolve a canonical baseline or a readable legacy alias.
-
-    ``baseline_v1`` is the reconstructed Main scientific method with fresh
-    COLMAP and metric-scale estimation.  The two older names remain readable:
-    ``main_route2_parity_v1`` explicitly requests the fingerprint-guarded
-    historical reproduction, while ``recommended_wizard_v1`` retains the
-    former robustness-oriented strategy for saved configurations.
-    """
+    """Resolve one of the two supported AP01 scientific strategies."""
 
     if name == "baseline_v1":
-        historical = resolve_ap01_method_contract(
-            "main_route2_parity_v1",
-            direct_target_camera=direct_target_camera,
-            top_moving_per_marker=top_moving_per_marker,
-            scale_top_per_marker=scale_top_per_marker,
-            colmap_matcher=colmap_matcher,
-            colmap_use_gpu=colmap_use_gpu,
-            colmap_maximum_image_size=colmap_maximum_image_size,
-            colmap_maximum_features=colmap_maximum_features,
-            colmap_sequential_overlap=colmap_sequential_overlap,
-            colmap_loop_detection=colmap_loop_detection,
-            colmap_mapper_minimum_matches=colmap_mapper_minimum_matches,
-        )
-        return replace(
-            historical,
-            name="baseline_v1",
-            sfm_execution_policy="fresh_colmap",
-            sfm_frozen_intermediate_manifest=None,
-            sfm_frozen_intermediate_schema_version=None,
-            sfm_frozen_input_fingerprint=None,
-            sfm_frozen_intrinsics_sha256=None,
-            sfm_frozen_images_sha256=None,
-            scale_execution_policy="fresh_metric_scale_estimation",
-            scale_frozen_metric_sha256=None,
-            reproduction_validation_policy="none",
-            reproduction_expected_registered_images=None,
-            reproduction_expected_total_moving_images=None,
-            reproduction_expected_scale_m_per_colmap_unit=None,
-            reproduction_scale_absolute_tolerance=None,
-            reproduction_expected_candidate_counts=(),
-            reproduction_expected_selections=(),
-            reproduction_expected_camera_inventory=(),
-            reproduction_locked_final_pose_path=None,
-            reproduction_locked_final_pose_sha256=None,
-            reproduction_translation_tolerance_m=None,
-            reproduction_rotation_matrix_tolerance=None,
-        )
-
-    if name == "main_route2_parity_v1":
         return AP01MethodContract(
-            name="main_route2_parity_v1",
+            name="baseline_v1",
             contract_schema_version=3,
-            sfm_execution_policy="frozen_historical_reproduction",
-            sfm_frozen_intermediate_manifest=(
-                "parity/main_route2_v1/frozen/"
-                "AP01_FROZEN_SFM_CONTRACT.json"
-            ),
-            sfm_frozen_intermediate_schema_version=1,
-            sfm_frozen_input_fingerprint=(
-                "1536228671cf800e5b569a63b6a60e073aeb5ad2fe50dd04cfe067fd34966d97"
-            ),
-            sfm_frozen_intrinsics_sha256=(
-                "d12b5f4a90d6020af5583673eabccdc10a636269fe0b4ab48a73be5ab0b870a1"
-            ),
-            sfm_frozen_images_sha256=(
-                "eba9622608b5ea5b955c7031026512e8a9db2ee1db0ed453fa90c3388aa064ff"
-            ),
-            colmap_camera_model_policy="legacy_shared_pinhole_v1",
+            sfm_execution_policy="fresh_colmap",
+            colmap_camera_model_policy="baseline_shared_pinhole_v1",
             colmap_single_shared_camera=True,
             colmap_intrinsics_serialization="fixed_decimal_places",
             colmap_intrinsics_precision=8,
@@ -286,12 +187,9 @@ def resolve_ap01_method_contract(
             colmap_sparse_model_selection_policy=(
                 "maximum_registered_images_first_lexicographic_tie"
             ),
-            scale_execution_policy="frozen_historical_sfm_gauge_scale",
-            scale_frozen_metric_sha256=(
-                "f08016b37bbc9fbc45176591fb9c2485c3fb9b43ceb2ecab4c9200f84c031fb8"
-            ),
+            scale_execution_policy="fresh_metric_scale_estimation",
             scale_observation_construction_policy=(
-                "legacy_registered_quality_filters_then_all_pairs_v1"
+                "baseline_registered_quality_filters_then_all_pairs_v1"
             ),
             scale_registered_frames_only=True,
             scale_pnp_success_only=True,
@@ -312,7 +210,7 @@ def resolve_ap01_method_contract(
                 "all_within_marker_unordered_frame_pairs"
             ),
             scale_pair_quality_policy="sqrt_marker_area_product",
-            scale_aggregation_policy="legacy_median_three_sigma_mad_v1",
+            scale_aggregation_policy="baseline_median_three_sigma_mad_v1",
             scale_mad_sigma_factor=1.4826,
             scale_mad_multiplier=3.0,
             scale_relative_deviation_floor_fraction=None,
@@ -320,7 +218,7 @@ def resolve_ap01_method_contract(
             scale_fallback_fraction=0.30,
             scale_final_statistic="median",
             scale_minimum_pair_count=10,
-            quality_model="legacy_area_over_distance_squared_center_v1",
+            quality_model="baseline_area_over_distance_squared_center_v1",
             quality_image_width_px=1280,
             quality_image_height_px=720,
             static_support_policy="best_quality_per_camera_marker_first_tie",
@@ -333,9 +231,9 @@ def resolve_ap01_method_contract(
             candidate_construction_order="all_direct_then_all_relay",
             relay_input_limit=None,
             direct_aggregation_policy=(
-                "legacy_quality_filter_preferred_marker_then_medoid_v1"
+                "baseline_quality_filter_preferred_marker_then_medoid_v1"
             ),
-            relay_aggregation_policy="legacy_flat_weighted_mad_v1",
+            relay_aggregation_policy="baseline_flat_weighted_mad_v1",
             candidate_priority_policy="configured_direct_target_else_relay",
             eligibility_policy="available_aggregate_is_eligible",
             consensus_policy="none",
@@ -361,55 +259,15 @@ def resolve_ap01_method_contract(
             relay_fallback_minimum_count=3,
             relay_fallback_fraction=0.5,
             final_pose_serialization_policy=(
-                "legacy_aggregate_csv_rpy_roundtrip_v1"
+                "baseline_aggregate_csv_rpy_roundtrip_v1"
             ),
             final_pose_serialization_decimal_places=9,
-            reproduction_validation_policy="locked_main_route2_v1",
-            reproduction_expected_registered_images=175,
-            reproduction_expected_total_moving_images=189,
-            reproduction_expected_scale_m_per_colmap_unit=(
-                0.676879570208235
-            ),
-            reproduction_scale_absolute_tolerance=1e-9,
-            reproduction_expected_candidate_counts=(
-                ("cam_edge_3", "root", 1),
-                ("cam_edge_0", "relay", 25230),
-                ("cam_edge_1", "direct", 6),
-                ("cam_edge_1", "relay", 57468),
-                ("cam_edge_5", "relay", 63438),
-            ),
-            reproduction_expected_selections=(
-                ("cam_edge_3", "root"),
-                ("cam_edge_0", "relay"),
-                ("cam_edge_1", "direct"),
-                ("cam_edge_5", "relay"),
-            ),
-            reproduction_expected_camera_inventory=(
-                "cam_edge_3",
-                "cam_edge_0",
-                "cam_edge_1",
-                "cam_edge_5",
-            ),
-            reproduction_locked_final_pose_path=(
-                "parity/main_route2_v1/ap01/final_pose/wizard/"
-                "AP01_FINAL_CAMERA_POSES.json"
-            ),
-            reproduction_locked_final_pose_sha256=(
-                "71c56afbaad6b44e907eade31190bec0bf73dfa9f8099a78af4d7c5b459d9024"
-            ),
-            reproduction_translation_tolerance_m=1e-9,
-            reproduction_rotation_matrix_tolerance=1e-10,
         )
     if name == "recommended_wizard_v1":
         return AP01MethodContract(
             name="recommended_wizard_v1",
             contract_schema_version=3,
             sfm_execution_policy="fresh_colmap",
-            sfm_frozen_intermediate_manifest=None,
-            sfm_frozen_intermediate_schema_version=None,
-            sfm_frozen_input_fingerprint=None,
-            sfm_frozen_intrinsics_sha256=None,
-            sfm_frozen_images_sha256=None,
             colmap_camera_model_policy="camera_info_distortion_model_v1",
             colmap_single_shared_camera=True,
             colmap_intrinsics_serialization="significant_digits",
@@ -429,7 +287,6 @@ def resolve_ap01_method_contract(
                 "maximum_registered_images_first_lexicographic_tie"
             ),
             scale_execution_policy="fresh_metric_scale_estimation",
-            scale_frozen_metric_sha256=None,
             scale_observation_construction_policy=(
                 "quality_ranked_per_marker_before_pairing_v1"
             ),
@@ -496,18 +353,6 @@ def resolve_ap01_method_contract(
             relay_fallback_fraction=None,
             final_pose_serialization_policy="native_full_precision_v1",
             final_pose_serialization_decimal_places=None,
-            reproduction_validation_policy="none",
-            reproduction_expected_registered_images=None,
-            reproduction_expected_total_moving_images=None,
-            reproduction_expected_scale_m_per_colmap_unit=None,
-            reproduction_scale_absolute_tolerance=None,
-            reproduction_expected_candidate_counts=(),
-            reproduction_expected_selections=(),
-            reproduction_expected_camera_inventory=(),
-            reproduction_locked_final_pose_path=None,
-            reproduction_locked_final_pose_sha256=None,
-            reproduction_translation_tolerance_m=None,
-            reproduction_rotation_matrix_tolerance=None,
         )
     choices = ", ".join(AP01_CONTRACT_NAMES)
     raise ValueError(f"Unknown AP01 method contract '{name}'; choose {choices}")

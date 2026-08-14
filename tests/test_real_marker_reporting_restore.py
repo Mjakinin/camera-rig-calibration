@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from camera_rig_calibration.real_marker_reporting_policy import (
+from camera_rig_calibration.policies.real_marker_reporting_policy import (
     _authoritative_anchor,
     _run_authoritative_marker_consistency,
 )

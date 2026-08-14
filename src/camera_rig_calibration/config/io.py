@@ -167,34 +167,22 @@ def _user_config_payload(config: RigConfig) -> dict[str, Any]:
     enabled = methods.get("enabled", []) if isinstance(methods, dict) else []
     if isinstance(methods, dict):
         ap01 = methods.get("ap01")
-        if (
-            isinstance(ap01, dict)
-            and ap01.get("method_contract") == "baseline_v1"
-            and not ap01.get("historical_reproduction", False)
-        ):
-            ap01.pop("historical_reproduction", None)
-            if ap01.get("advanced_strategy") == "legacy_main_v1":
-                ap01.pop("advanced_strategy", None)
-                for key in (
-                    "top_moving_per_marker",
-                    "scale_top_per_marker",
-                    "direct_quality_gate",
-                    "relay_quality_gate",
-                    "direct_relay_consistency",
-                ):
-                    ap01.pop(key, None)
+        if isinstance(ap01, dict) and ap01.get("method_contract") == "baseline_v1":
+            for key in (
+                "top_moving_per_marker",
+                "scale_top_per_marker",
+                "direct_quality_gate",
+                "relay_quality_gate",
+                "direct_relay_consistency",
+            ):
+                ap01.pop(key, None)
         ap02 = methods.get("ap02")
-        if (
-            isinstance(ap02, dict)
-            and ap02.get("method_contract") == "baseline_v1"
-            and not ap02.get("historical_reproduction", False)
-        ):
-            ap02.pop("historical_reproduction", None)
+        if isinstance(ap02, dict) and ap02.get("method_contract") == "baseline_v1":
             for key, default in (
-                ("frame_selection_strategy", "legacy_smart_v1"),
-                ("initialization_strategy", "legacy_maximum_bottleneck_v1"),
-                ("graph_edge_weight_strategy", "legacy_observation_quality_v1"),
-                ("reprojection_model", "legacy_pinhole_v1"),
+                ("frame_selection_strategy", "smart_v1"),
+                ("initialization_strategy", "maximum_frontier_v1"),
+                ("graph_edge_weight_strategy", "geometric_observation_quality_v1"),
+                ("reprojection_model", "pinhole_v1"),
             ):
                 if ap02.get(key) == default:
                     ap02.pop(key, None)
@@ -203,15 +191,15 @@ def _user_config_payload(config: RigConfig) -> dict[str, Any]:
             baseline_scale_input = (
                 ap03.get(
                     "scale_input_policy",
-                    "legacy_registered_image_redetection_v1",
+                    "registered_image_redetection_v1",
                 )
-                == "legacy_registered_image_redetection_v1"
+                == "registered_image_redetection_v1"
             )
             for key, default in (
-                ("feature_limit_policy", "legacy_colmap_defaults_v1"),
+                ("feature_limit_policy", "colmap_defaults_v1"),
                 (
                     "scale_input_policy",
-                    "legacy_registered_image_redetection_v1",
+                    "registered_image_redetection_v1",
                 ),
             ):
                 if ap03.get(key) == default:
@@ -228,15 +216,15 @@ def _user_config_payload(config: RigConfig) -> dict[str, Any]:
             payload.pop("colmap", None)
         elif method_id == "ap01":
             ap01 = methods.get("ap01", {})
-            if ap01.get("advanced_strategy", "legacy_main_v1") == "legacy_main_v1":
+            if ap01.get("method_contract", "baseline_v1") == "baseline_v1":
                 for key in tuple(colmap):
                     if key not in {"executable", "reuse"}:
                         colmap.pop(key, None)
         elif method_id == "ap03":
             ap03 = methods.get("ap03", {})
             if ap03.get(
-                "feature_limit_policy", "legacy_colmap_defaults_v1"
-            ) == "legacy_colmap_defaults_v1":
+                "feature_limit_policy", "colmap_defaults_v1"
+            ) == "colmap_defaults_v1":
                 for key in (
                     "maximum_image_size",
                     "maximum_features",

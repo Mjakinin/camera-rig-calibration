@@ -406,19 +406,19 @@ def _format_setting_value(value: object) -> str:
 
 
 _PUBLIC_POLICY_NAMES = {
-    "legacy_main_v1": "baseline Direct/Relay",
-    "wizard_robustness_v1": "robust consensus",
-    "legacy_smart_v1": "smart frame budgets",
+    "baseline_v1": "baseline Direct/Relay",
+    "recommended_wizard_v1": "robust consensus",
+    "smart_v1": "smart frame budgets",
     "wizard_graph_preserving_v1": "graph-preserving preselection",
-    "legacy_maximum_bottleneck_v1": "maximum-bottleneck tree",
+    "maximum_frontier_v1": "maximum-frontier tree",
     "wizard_maximum_bottleneck_v2": "path-aware maximum-bottleneck tree",
-    "legacy_observation_quality_v1": "geometric observation quality",
+    "geometric_observation_quality_v1": "geometric observation quality",
     "wizard_selection_score_v2": "shared selection score",
-    "legacy_pinhole_v1": "pinhole",
+    "pinhole_v1": "pinhole",
     "distortion_aware_v1": "distortion-aware",
-    "legacy_colmap_defaults_v1": "COLMAP defaults",
+    "colmap_defaults_v1": "COLMAP defaults",
     "wizard_explicit_limits_v1": "explicit feature limits",
-    "legacy_registered_image_redetection_v1": "registered-image detection",
+    "registered_image_redetection_v1": "registered-image detection",
     "wizard_filtered_observations_v1": "filtered registered-image detection",
 }
 

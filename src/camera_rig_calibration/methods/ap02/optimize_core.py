@@ -20,8 +20,8 @@ from .common import (
     pose_row,
     pose_fields,
 )
-from .frame_selection import select_legacy_smart_moving_observations
-from .initialize import main_observation_score
+from .frame_selection import select_smart_moving_observations
+from .initialize import observation_score
 
 OBS_CSV = AP02_ROOT / "02_aruco_observations" / "ap02_all_aruco_observations.csv"
 INIT_ROOT = AP02_ROOT / "05_graph_initialization"
@@ -265,7 +265,7 @@ def run_ba(
     ap02_root=AP02_ROOT,
     observations_csv=OBS_CSV,
     initialization_root=INIT_ROOT,
-    moving_frame_selection_policy="legacy_smart_at_ba_boundary_v1",
+    moving_frame_selection_policy="smart_at_ba_boundary_v1",
     reference_marker_maximum_frames=None,
     top_per_marker=8,
     top_per_marker_pair=4,
@@ -296,9 +296,9 @@ def run_ba(
             if row.get("observer_type") == "moving"
         ]
         if moving_frame_selection_policy == (
-            "legacy_smart_at_ba_boundary_v1"
+            "smart_at_ba_boundary_v1"
         ):
-            selection = select_legacy_smart_moving_observations(
+            selection = select_smart_moving_observations(
                 moving_obs,
                 reference_marker_id=ref_marker_id,
                 reference_marker_maximum_frames=(
@@ -307,7 +307,7 @@ def run_ba(
                 top_per_marker=top_per_marker,
                 top_per_marker_pair=top_per_marker_pair,
                 maximum_total_frames=maximum_total_frames,
-                observation_score=main_observation_score,
+                observation_score=observation_score,
             )
             selected_moving = list(selection.selected_rows)
             observations = [*static_obs, *selected_moving]

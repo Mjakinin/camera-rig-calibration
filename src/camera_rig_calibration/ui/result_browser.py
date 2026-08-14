@@ -29,9 +29,6 @@ def _is_internal_evidence_result(entry: object) -> bool:
     return any(
         token in text
         for token in (
-            "route2_main_parity_v1",
-            "main_route2_parity",
-            "main_parity",
             "pre_fix",
             "post_fix",
         )
@@ -114,6 +111,7 @@ def show_results(repository_root: Path, console: Console) -> None:
     methods.add_column("Anchor export")
     methods.add_column("Runtime")
     methods.add_column("Coverage")
+    methods.add_column("6DOF")
     methods.add_column("Primary")
     methods.add_column("Result path", overflow="fold")
     methods.add_column("Configuration / warning", overflow="fold")
@@ -134,6 +132,11 @@ def show_results(repository_root: Path, console: Console) -> None:
             str(row.get("anchor_export_status") or "-"),
             f"{float(runtime):.1f}s" if runtime is not None else "-",
             str(row.get("static_camera_count") or "-"),
+            (
+                f"{row.get('canonical_pose_count')} poses"
+                if row.get("canonical_result_status") == "available"
+                else str(row.get("canonical_result_status") or "native_only")
+            ),
             str(row.get("primary_result") or "-"),
             str(result_path),
             "; ".join(
@@ -227,6 +230,33 @@ def show_results(repository_root: Path, console: Console) -> None:
         console.print("This row is a failed attempt; see FAILURE.txt there.")
         return
     console.print(result_txt.read_text(encoding="utf-8"), markup=False)
+    canonical_path = selected_path / "canonical_method_result.json"
+    if canonical_path.is_file():
+        canonical = json.loads(canonical_path.read_text(encoding="utf-8"))
+        pose_table = Table(title="Canonical static-camera 6DOF poses")
+        pose_table.add_column("Camera")
+        pose_table.add_column("Reference")
+        pose_table.add_column("Translation [m]")
+        pose_table.add_column("RPY [rad]")
+        pose_table.add_column("Quaternion xyzw")
+        for pose in canonical.get("camera_poses", []):
+            pose_table.add_row(
+                str(pose.get("camera_id", "-")),
+                str(pose.get("reference_frame", "-")),
+                ", ".join(
+                    f"{float(value):.6g}"
+                    for value in pose.get("translation_m", [])
+                ),
+                ", ".join(
+                    f"{float(value):.6g}"
+                    for value in pose.get("roll_pitch_yaw_rad", [])
+                ),
+                ", ".join(
+                    f"{float(value):.6g}"
+                    for value in pose.get("quaternion_xyzw", [])
+                ),
+            )
+        console.print(pose_table)
     console.print(
         f"Diagnostics: {selected_path / 'diagnostics'}\n"
         f"Complete logs: {selected_path / 'logs'}\n"
@@ -236,4 +266,3 @@ def show_results(repository_root: Path, console: Console) -> None:
 
 
 __all__ = ["_is_internal_evidence_result", "show_results"]
-

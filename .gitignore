@@ -1,9 +1,8 @@
+# Python, tests, packaging, and local environments
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
 *.log
 .pytest_cache/
-# Keep tests/ versioned; ignore only generated test and coverage output.
 .coverage
 .coverage.*
 coverage.xml
@@ -14,124 +13,59 @@ test-results/
 dist/
 .venv/
 .rigcal-venv/
-workspace/
-datasets/
+
+# Local editor and operating-system files
 .DS_Store
 
-# Bus real-data generated caches/logs
-results/bus_real_data/**/.ap01_compat_cache/
-results/bus_real_data/**/_pipeline_logs/
-run/bus_real_data/**/__pycache__/
+# User input and regenerable runtime state
+data_local/*
+!data_local/README.md
+workspace/*
+!workspace/README.md
 
-results/bus_real_data/_visible_full_pipeline_logs/
-results/bus_real_data/_overnight_pipeline_logs/
+# Published raw data and large diagnostics stay local. Compact, deliberately
+# tracked reference-result files remain tracked even when a parent rule matches.
+results/real_vehicle/**
+results/simulation/**/inputs/
+results/simulation/**/raw_images/
+results/simulation/**/observations/
+results/**/backup_before_rerun/
+results/**/_backups/
+results/**/_pipeline_logs/
+results/**/preview/
+results/**/previews/
+results/**/*_preview/
+results/bus_real_data/
+results/real_vehicle_data/
 
-# ROS build artifacts
+# Intrinsics image evidence is generated locally; profile metadata and reports
+# may be added deliberately.
+config/intrinsics/**/selected_frames/
+config/intrinsics/**/diagnostics/debug_selected/
+config/intrinsics/**/diagnostics/undistorted_samples/
+
+# ROS/Gazebo build products
 build/
 install/
 log/
 
-# Generated ablation images / annotations
-results/bus_real_data/ablation/*/images/
-results/bus_real_data/ablation/aruco_annotated*/
-results/bus_real_data/ablation/**/images/
-
-# Local mesh conversion artifacts / backups
-src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.dae
-src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.stl
-src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.bak
-src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.before_dae
-src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.obj_backup
-src/calib_lab/bus_real_data/worlds/ablation/
-src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera_ablation_light.sdf
-
-# Ablation generated images after folder restructuring
-results/bus_real_data/ablation/**/images/
-results/bus_real_data/ablation/**/aruco_annotated*/
-results/bus_real_data/ablation/**/exposure_preview/
-results/bus_real_data/ablation/plots/
-results/**/backup_before_rerun/
-results/**/_backups/
-
-# Legacy FOV intermediate/summary outputs
-results/bus_real_data/ablation/moving_cam/fov/01_shared_observations/
-results/bus_real_data/ablation/moving_cam/fov/99_summary/
-
-# Local real-vehicle raw data (keep the landing-zone instructions only)
-data_local/*
-!data_local/README.md
-
-# New rigcal runs are local research artifacts. Compact configs can be exported
-# deliberately; captured/prepared frames and method workspaces must not be staged.
-results/*/INPUT_DATA/
-results/*/runs/
-
-# Publish compact scientific result trees, never captured/prepared inputs.
-results/simulation/**/inputs/
-results/simulation/**/raw_images/
-results/simulation/**/observations/
-results/real_vehicle/**
-!results/real_vehicle/video/
-!results/real_vehicle/video/**
-!results/real_vehicle/frames/
-!results/real_vehicle/frames/**
-!results/real_vehicle/rosbag/
-!results/real_vehicle/rosbag/**
-!results/real_vehicle/prepared/
-!results/real_vehicle/prepared/**
-!results/real_vehicle/_intrinsics/
-!results/real_vehicle/_intrinsics/**/
-!results/real_vehicle/_intrinsics/**/*.json
-!results/real_vehicle/_intrinsics/**/*.yaml
-!results/real_vehicle/_intrinsics/**/*.txt
-results/real_vehicle/**/inputs/
-results/real_vehicle/**/raw_images/
-results/real_vehicle/**/observations/
-results/real_vehicle/_intrinsics/**/selected_frames/
-results/real_vehicle/_intrinsics/**/diagnostics/
-
-# Real-data generated caches/logs
-results/real_vehicle_data/**/_pipeline_logs/
-run/real_vehicle_data/**/__pycache__/
-
-# Transient simulation backups and selection scratch
-results/bus_real_data/.backup_shared_before_route_ablation_*/
-results/bus_real_data/_runtime_backups/
-results/bus_real_data/99_FINAL_RESULTS_FOR_REPORT.before_*/
-results/bus_real_data/00_shared_baseline/**/*.before_route2_*/
-results/bus_real_data/method_selection/
-
-# Preview-only artifacts
-**/preview/
-**/previews/
-**/*_preview/
-
-# Pre-rigcal result trees were migrated into the compact schema-v5 structure.
-# Keep local legacy sources readable when present, but never add them again.
-results/bus_real_data/
-results/real_vehicle_data/
-
-# Calibration runtime backups and long logs.
-results/**/_pipeline_logs/
-results/**/*.log
-
-# Detailed row-level parity traces are reproducible generated diagnostics. Keep
-# compact parity summaries in Git, not multi-megabyte candidate dumps/diffs.
-parity/**/AP01_CANDIDATES.jsonl
-parity/**/AP01_CANDIDATE_DIFF.csv
-
-# ============================================================
-# LFS-free repository payload policy
-# ============================================================
-
-# The 160.7 MB simulation OBJ is materialized from the tracked 31.2 MB gzip
-# archive on the first rigcal start. Never add the generated OBJ to Git.
+# The large bus OBJ is reconstructed from the tracked gzip archive on first
+# start. Alternative mesh conversions and local backups are not source assets.
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.obj
 !src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.obj.gz
-
-# Unused alternative bus geometry representations.
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/dae/
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/gltf/
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/beintelli_erklarbus.glb
 src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus.stl
-src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.obj_material_backup
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.dae
+src/calib_lab/bus_real_data/models/beintelli_bus/meshes/obj/beintelli_erklarbus_centered.stl
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.*backup
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.bak
+src/calib_lab/bus_real_data/models/beintelli_bus/model.sdf.before_dae
+
+# Generated bus-world variants and visualization output
+src/calib_lab/bus_real_data/worlds/ablation/
+src/calib_lab/bus_real_data/worlds/bus_real_data_moving_camera_ablation_light.sdf
+**/preview/
+**/previews/
+**/*_preview/

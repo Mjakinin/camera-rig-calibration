@@ -134,10 +134,10 @@ def marker_area_from_corners(row: dict[str, str]) -> float:
     )
 
 
-def legacy_detection_quality(
+def baseline_detection_quality(
     row: dict[str, str], width: float = 1280.0, height: float = 720.0
 ) -> tuple[float, dict[str, float]]:
-    """Legacy Main's exact area/(distance^2*(1+center_norm)) score."""
+    """Return area/(distance^2*(1+center_norm)) for baseline ranking."""
 
     distance = safe_float(row, "distance_m", 99.0)
     area = marker_area_from_corners(row)

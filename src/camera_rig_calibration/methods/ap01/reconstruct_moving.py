@@ -7,7 +7,6 @@ from camera_rig_calibration.pipeline import StageResult, run_stage
 from . import core
 from ._shared import cameras, parser
 from .contracts import resolve_ap01_method_contract
-from .frozen_intermediate import materialize_frozen_sfm
 
 
 def run(
@@ -52,35 +51,22 @@ def run(
     )
 
     def action() -> dict[str, Path | int]:
-        if contract.sfm_execution_policy == "frozen_historical_reproduction":
-            images, _ = materialize_frozen_sfm(
-                dataset=dataset,
-                moving_camera_id=moving_camera_id,
-                stage_root=stage_root,
-                contract=contract,
-            )
-        elif contract.sfm_execution_policy == "fresh_colmap":
-            info = core.load_camera_info(camera_info_path)
-            images = core.run_colmap(
-                image_dir=moving,
-                camera_info=info,
-                out_dir=stage_root,
-                matcher=matcher,
-                use_gpu=int(use_gpu),
-                max_image_size=maximum_image_size,
-                max_features=maximum_features,
-                sequential_overlap=sequential_overlap,
-                loop_detection=int(loop_detection),
-                mapper_min_matches=mapper_minimum_matches,
-                colmap_executable=colmap_executable,
-                reuse=reuse,
-                contract=contract,
-            )
-        else:
-            raise ValueError(
-                "Unknown AP01 SfM execution policy: "
-                f"{contract.sfm_execution_policy}"
-            )
+        info = core.load_camera_info(camera_info_path)
+        images = core.run_colmap(
+            image_dir=moving,
+            camera_info=info,
+            out_dir=stage_root,
+            matcher=matcher,
+            use_gpu=int(use_gpu),
+            max_image_size=maximum_image_size,
+            max_features=maximum_features,
+            sequential_overlap=sequential_overlap,
+            loop_detection=int(loop_detection),
+            mapper_min_matches=mapper_minimum_matches,
+            colmap_executable=colmap_executable,
+            reuse=reuse,
+            contract=contract,
+        )
         poses = core.parse_colmap_poses(images)
         return {"images_txt": images, "registered_images": len(poses)}
 

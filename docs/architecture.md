@@ -3,8 +3,8 @@
 ## One pipeline, one package
 
 All executable capture, preparation, observation, calibration, evaluation and
-reporting code lives under `src/camera_rig_calibration`. `run/rigcal.py` is a
-thin source-checkout launcher.
+reporting code lives under `src/camera_rig_calibration`. The installed
+`rigcal` command and `python -m camera_rig_calibration` use the same entrypoint.
 
 The central pipeline order is:
 
@@ -61,9 +61,13 @@ grouped by responsibility:
 - `evaluation/reporting.py` re-exports core I/O, configuration, quality,
   method, real-data and simulation reporting modules;
 - `publication.py` re-exports dataset, method, inventory and transactional
-  publication modules;
+  modules from `publication_services/`;
+- `method_sdk/` owns method metadata, Pydantic extension contracts, canonical
+  6DOF result validation and adapters for native AP artifacts;
+- `experiments.py` is a compatibility facade over input identity, method
+  identity and manifest processing in `experiment_services/`;
 - `observations.py` re-exports candidate construction, ranking, resolution and
-  configuration freezing;
+  configuration freezing from `observation_services/`;
 - `input/intrinsics_calibration.py` and `input/preparation.py` retain their
   established entry points while delegating to focused workflow modules;
 - AP01 `core.py` and AP02 `initialize.py` remain scientific compatibility
@@ -76,9 +80,17 @@ and tests may therefore patch the established import paths without creating
 cycles between implementation modules.
 
 Every productive Python module below `src/camera_rig_calibration/` is limited
-to 999 lines by `tools/check_source_layout.py`; there are no active-package
-legacy exceptions. New modules should normally stay below 850 lines and split
+to 999 lines by `tools/check_source_layout.py`; there are no per-file
+exceptions. New modules should normally stay below 850 lines and split
 earlier when they acquire a second independent responsibility.
+
+Method-independent publication consumes
+`rigcal_canonical_method_result_v1`. This keeps solver-specific artifacts and
+coordinate conversion inside each method adapter while the public results UI,
+comparison inventory and pose visualization operate on one validated 6DOF
+contract. Simple extension parameters are rendered from Pydantic fields by
+`ui/auto_form.py`; complex methods may add an editor without changing the
+wizard facade.
 
 ## Queue and batch model
 

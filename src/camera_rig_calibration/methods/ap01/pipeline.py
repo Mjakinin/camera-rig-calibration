@@ -11,6 +11,8 @@ from pydantic import BaseModel
 from ...components.common import calibration_requirements, read_method_status
 from ...config.models import AP01Settings
 from ...contracts import CommandSpec, RequirementResult, RunContext
+from ...method_sdk.builtin_results import ap01_result
+from ...method_sdk.contracts import MethodInputRequirements
 from .contracts import (
     ap01_execution_contract_name,
     resolve_ap01_method_contract,
@@ -23,6 +25,14 @@ class AP01Method:
 
     id: str = "ap01"
     display_name: str = "AP01"
+    algorithm_version: str = "ap01_explicit_method_contract_v2"
+    run_manifest_algorithm_version: str = "ap01_baseline_hierarchical_v1"
+    artifact_directory: str = "02_AP01"
+    primary_pose_path: str = (
+        "03_static_extrinsics/AP01_STATIC_CAMERA_POSES_ROOT_REFERENCE.csv"
+    )
+    result_contract_required: bool = True
+    input_requirements: MethodInputRequirements = MethodInputRequirements()
     config_model: type[BaseModel] = AP01Settings
 
     def requirements(self, context: RunContext) -> RequirementResult:
@@ -44,11 +54,7 @@ class AP01Method:
         output = context.run_directory / "02_AP01"
         config = context.config
         execution_contract_name = ap01_execution_contract_name(
-            config.methods.ap01.method_contract,
-            historical_reproduction=(
-                config.methods.ap01.historical_reproduction
-            ),
-            advanced_strategy=config.methods.ap01.advanced_strategy,
+            config.methods.ap01.method_contract
         )
         contract = resolve_ap01_method_contract(
             execution_contract_name,
@@ -202,20 +208,6 @@ class AP01Method:
                 ("ap01_solve_extrinsics",),
             ),
         ]
-        if contract.reproduction_validation_policy != "none":
-            stages.append(
-                (
-                    "ap01_validate_reproduction",
-                    "AP01: validate locked historical reproduction",
-                    [
-                        *python_module,
-                        "camera_rig_calibration.methods.ap01.validate_reproduction",
-                        *arguments,
-                    ],
-                    output / "06_reproduction_validation",
-                    ("ap01_report",),
-                )
-            )
         if {
             "01_moving_colmap",
             "02_metric_scale",
@@ -256,3 +248,8 @@ class AP01Method:
 
     def collect(self, context: RunContext) -> dict[str, Any]:
         return read_method_status(context.run_directory / "02_AP01")
+
+    def canonical_result(
+        self, context: RunContext, status: dict[str, Any]
+    ):
+        return ap01_result(context, status)

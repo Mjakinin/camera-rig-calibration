@@ -16,6 +16,11 @@ from ..anchor_export.geometry import (
     pose_payload,
     validate_transform,
 )
+from .canonical_scene import (
+    CanonicalSceneDependencies,
+    append_canonical_variants,
+    create_canonical_native_scene,
+)
 
 
 SCENE_CONTRACT = "rigcal_rviz_scene_v2"
@@ -91,7 +96,7 @@ def _method_variants(experiment_root: Path) -> list[dict[str, Any]]:
                 "payload": payload,
             }
         )
-    return variants
+    return append_canonical_variants(experiment_root, variants, _read_json)
 
 
 def _within(path: Path, parent: Path) -> bool:
@@ -404,6 +409,9 @@ def _rviz_config(
     *,
     ground_truth_available: bool,
 ) -> str:
+    has_ap03_multi = any(
+        variant["method"] == "ap03_multi" for variant in variants
+    )
     displays = [
         _rviz_display(
             name="AP03 Multi COLMAP context",
@@ -425,9 +433,13 @@ def _rviz_config(
                 enabled=True,
             )
         )
-    for variant in variants:
+    for index, variant in enumerate(variants):
         name = f"{variant['method']}/{variant['label']}"
-        enabled = variant["method"] == "ap03_multi"
+        enabled = (
+            variant["method"] == "ap03_multi"
+            or not has_ap03_multi
+            and index == 0
+        )
         displays.extend(
             [
                 _rviz_display(
@@ -567,6 +579,29 @@ def ensure_visualization_artifacts(
     variants = _method_variants(experiment_root)
     source, source_warnings = _ap03_source(experiment_root, variants)
     if source is None:
+        native = create_canonical_native_scene(
+            experiment_root,
+            output,
+            variants,
+            CanonicalSceneDependencies(
+                scene_contract=SCENE_CONTRACT,
+                write_ply=_write_ply,
+                camera_info=_camera_info,
+                intrinsics=_intrinsics,
+                frustum=_frustum,
+                topic=_topic,
+                write_json=_write_json,
+                atomic_text=_atomic_text,
+                rviz_config=lambda frame, items, ground_truth: _rviz_config(
+                    frame,
+                    items,
+                    ground_truth_available=ground_truth,
+                ),
+                update_result_status=_update_result_status,
+            ),
+        )
+        if native is not None:
+            return native
         return _unavailable(
             experiment_root,
             output,

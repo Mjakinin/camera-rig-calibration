@@ -119,13 +119,12 @@ def _method_job_summary(job: MethodQueueJob) -> str:
     if job.method_id == "ap01":
         value = job.methods.ap01
         summary = (
-            f"baseline={value.method_contract}, "
-            f"strategy={_public_policy_name(value.advanced_strategy)}, "
+            f"strategy={_public_policy_name(value.method_contract)}, "
             f"root={selection_text('root_camera', value.root_camera)}, "
             f"direct={value.direct_target_camera}, "
             f"ArUco={job.markers.detection_mode}, {quality_text}"
         )
-        if value.advanced_strategy == "wizard_robustness_v1":
+        if value.method_contract == "recommended_wizard_v1":
             summary += (
                 f", matcher={job.colmap.matcher}, "
                 f"compute={job.colmap.compute_mode}, "
@@ -776,7 +775,18 @@ def _prompt_component_options(display_name: str, model_class: type) -> dict:
     try:
         defaults = model_class().model_dump(mode="python")
     except ValidationError:
-        defaults = {}
+        from .auto_form import prompt_initial_options
+
+        while True:
+            try:
+                return prompt_initial_options(
+                    model_class,
+                    lambda label: typer.prompt(
+                        f"{display_name}: {label}"
+                    ),
+                )
+            except (ValidationError, ValueError, yaml.YAMLError) as exc:
+                typer.echo(f"Invalid options: {exc}")
     default_text = yaml.safe_dump(defaults, default_flow_style=True).strip()
     while True:
         value = typer.prompt(

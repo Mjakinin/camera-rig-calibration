@@ -18,13 +18,13 @@ from camera_rig_calibration.config.models import (
 from camera_rig_calibration.contracts import RunContext
 from camera_rig_calibration.methods.ap02.pipeline import AP02Method
 from camera_rig_calibration.methods.ap03.pipeline import AP03Method
-from camera_rig_calibration.product_policy import _DATASET_CONTEXT, install_product_policy
-from camera_rig_calibration.reporting_authority_policy import (
+from camera_rig_calibration.policies.product_policy import _DATASET_CONTEXT, install_product_policy
+from camera_rig_calibration.policies.reporting_authority_policy import (
     install_reporting_authority_policy,
 )
-from camera_rig_calibration.submission_bindings import install_submission_bindings
-from camera_rig_calibration.submission_policy import install_submission_policy
-from camera_rig_calibration.ui_display_policy import install_ui_display_policy
+from camera_rig_calibration.policies.submission_bindings import install_submission_bindings
+from camera_rig_calibration.policies.submission_policy import install_submission_policy
+from camera_rig_calibration.policies.ui_display_policy import install_ui_display_policy
 
 
 install_product_policy()
@@ -38,9 +38,9 @@ from camera_rig_calibration import (  # noqa: E402
     preflight,
     queueing,
     runtime,
-    submission_policy,
     wizard,
 )
+from camera_rig_calibration.policies import submission_policy  # noqa: E402
 
 
 def _value(argv: tuple[str, ...], option: str) -> str:

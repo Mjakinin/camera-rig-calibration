@@ -161,7 +161,7 @@ queues:
 ```
 
 Every referenced file remains a normal schema-v5 one-experiment queue. Local
-canonical inputs are reused. A missing historical simulation input is captured
+canonical inputs are reused. A missing published simulation input is captured
 once for that experiment, then shared by every method row. Batch execution
 writes `batch_state.json` and continues after an independent experiment error.
 
@@ -445,15 +445,32 @@ invalidating PnP observations and dependent methods.
 
 ## Simulation
 
-`simulation.enabled: true` requires `dataset.scene_type: simulation`, the
-built-in bus SDF and a Route-1/Route-2 JSON. `world_id` must be `bus`; foreign
-world IDs are rejected. The large BeIntelli OBJ is not a Git LFS dependency:
+`simulation.enabled: true` requires `dataset.scene_type: simulation` and the
+built-in bus SDF. `world_id` must be `bus`; foreign world IDs are rejected.
+Routes are either the built-in `route1`/`route2` files or validated JSON files
+automatically discovered below `data_local/simulation_routes/`. Nested folders
+produce stable IDs such as `lab__sweep`. The route requires at least two
+ordered frames with unique non-negative `frame` values and finite metric
+`x/y/z` plus radian `roll/pitch/yaw`; `segment` is optional.
+
+`target_route_frames` may request deterministic interpolation. A resolved run
+records the source route hash, complete pose sequence and captured-frame hashes.
+Changing route or world content changes experiment identity and invalidates
+capture plus downstream stages. The large BeIntelli OBJ is not a Git LFS dependency:
 the repository tracks `beintelli_erklarbus.obj.gz`, and the first `rigcal`
 invocation verifies and atomically materializes the ignored OBJ beside it.
 The config also declares the built-in image/CameraInfo topics. The wizard
 starts from the committed Route-2 baseline, queues existing bus experiments
 by comma list/`all`, and can derive mixed parameter rows from baseline,
-historical or already queued experiments.
+published or already queued experiments.
+
+The typed `SimulationWorldProfile` has exactly one executable entry: the
+reviewed bus world. `simulation.world` is an internally resolved provenance
+path, not a user extension field. Capture rejects every SDF outside the exact
+maintained bus/lighting set before Gazebo starts. Future marker-layout changes
+must be implemented as validated bus-world parameters that compose a generated
+copy; arbitrary SDF execution and automatic topic/plugin inference remain
+disabled.
 
 ## Duplicate and result behavior
 

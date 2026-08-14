@@ -49,8 +49,8 @@ from .initialize_graph import (
     deterministic_breadth_first_tree,
     edge_quality,
     filter_mode,
-    main_compat_widest_path_tree,
-    main_observation_score,
+    maximum_frontier_tree,
+    observation_score,
     marker_node,
     maximum_bottleneck_tree,
     observation_pnp_rmse,
@@ -94,19 +94,19 @@ def main() -> None:
     parser.add_argument(
         "--initialization-algorithm",
         choices=(
-            "legacy_maximum_bottleneck_v1",
+            "maximum_frontier_v1",
             "wizard_maximum_bottleneck_v2",
             "unweighted_bfs_diagnostic",
         ),
-        default="legacy_maximum_bottleneck_v1",
+        default="maximum_frontier_v1",
     )
     parser.add_argument(
         "--edge-weight-policy",
         choices=(
-            "legacy_observation_quality_v1",
+            "geometric_observation_quality_v1",
             "wizard_selection_score_v2",
         ),
-        default="legacy_observation_quality_v1",
+        default="geometric_observation_quality_v1",
     )
 
     args = parser.parse_args()
@@ -125,22 +125,22 @@ def main() -> None:
         selected_rows,
         preserve_input_order=(
             args.initialization_algorithm
-            == "legacy_maximum_bottleneck_v1"
+            == "maximum_frontier_v1"
         ),
     )
 
     start = marker_node(args.ref_marker_id)
 
     bfs_parent = deterministic_breadth_first_tree(adjacency, start)
-    legacy_parent, legacy_metrics = main_compat_widest_path_tree(
+    baseline_parent, baseline_metrics = maximum_frontier_tree(
         adjacency, start, edge_weight_policy=args.edge_weight_policy
     )
     v2_parent, v2_metrics = maximum_bottleneck_tree(
         adjacency, start, edge_weight_policy=args.edge_weight_policy
     )
-    if args.initialization_algorithm == "legacy_maximum_bottleneck_v1":
-        parent, path_metrics = legacy_parent, legacy_metrics
-        productive_algorithm = "legacy_maximum_bottleneck_v1"
+    if args.initialization_algorithm == "maximum_frontier_v1":
+        parent, path_metrics = baseline_parent, baseline_metrics
+        productive_algorithm = "maximum_frontier_v1"
     elif args.initialization_algorithm == "wizard_maximum_bottleneck_v2":
         parent, path_metrics = v2_parent, v2_metrics
         productive_algorithm = "wizard_maximum_bottleneck_v2"
@@ -455,7 +455,7 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    parity_rows: list[dict[str, object]] = []
+    score_comparison_rows: list[dict[str, object]] = []
     for key, rows in itertools.groupby(
         sorted(
             mode_rows,
@@ -479,29 +479,31 @@ def main() -> None:
                 str(row.get("image_path", "")),
             ),
         )
-        main_order = sorted(
+        geometric_order = sorted(
             group,
             key=lambda row: (
-                -main_observation_score(row),
+                -observation_score(row),
                 observation_pnp_rmse(row),
                 str(row.get("frame_id", "")),
                 str(row.get("image_path", "")),
             ),
         )
-        parity_rows.append(
+        score_comparison_rows.append(
             {
                 "observer_id": key[0],
                 "marker_id": key[1],
                 "same_top_observation": bool(
                     current_order
-                    and main_order
-                    and current_order[0] is main_order[0]
+                    and geometric_order
+                    and current_order[0] is geometric_order[0]
                 ),
                 "selection_score_top_frame": (
                     current_order[0].get("frame_id") if current_order else None
                 ),
-                "main_score_top_frame": (
-                    main_order[0].get("frame_id") if main_order else None
+                "geometric_score_top_frame": (
+                    geometric_order[0].get("frame_id")
+                    if geometric_order
+                    else None
                 ),
                 "selection_score": (
                     edge_quality(
@@ -510,29 +512,30 @@ def main() -> None:
                     if current_order
                     else None
                 ),
-                "main_observation_score": (
-                    main_observation_score(main_order[0])
-                    if main_order
+                "geometric_observation_score": (
+                    observation_score(geometric_order[0])
+                    if geometric_order
                     else None
                 ),
             }
         )
-    parity = {
+    comparison = {
         "schema_version": 5,
         "algorithm_version": productive_algorithm,
         "reference_marker_id": args.ref_marker_id,
         "mode": args.mode,
         "productive_uses_ground_truth": False,
-        "observation_score_parity": {
-            "pair_count": len(parity_rows),
+        "observation_score_comparison": {
+            "pair_count": len(score_comparison_rows),
             "same_top_count": sum(
-                bool(row["same_top_observation"]) for row in parity_rows
+                bool(row["same_top_observation"])
+                for row in score_comparison_rows
             ),
-            "pairs": parity_rows,
+            "pairs": score_comparison_rows,
         },
         "camera_paths": {
             camera_id: {
-                "main_compatible": productive_by_camera.get(camera_id),
+                "selected_strategy": productive_by_camera.get(camera_id),
                 "maximum_bottleneck_v2": v2_by_camera.get(camera_id),
                 "unweighted_first_hit_bfs_diagnostic": bfs_by_camera.get(
                     camera_id
@@ -544,8 +547,8 @@ def main() -> None:
             )
         },
     }
-    (out / "AP02_MAIN_COMPAT_INITIALIZATION_PARITY.json").write_text(
-        json.dumps(parity, indent=2, allow_nan=False) + "\n",
+    (out / "AP02_INITIALIZATION_COMPARISON.json").write_text(
+        json.dumps(comparison, indent=2, allow_nan=False) + "\n",
         encoding="utf-8",
     )
 
@@ -600,7 +603,7 @@ def main() -> None:
     )
 
     report = [
-        "AP02 main-compatible widest-path pose graph initialization",
+        "AP02 maximum-frontier pose graph initialization",
         "==========================================================",
         "",
         f"Mode: {args.mode}",
@@ -636,7 +639,7 @@ def main() -> None:
         "",
         "Interpretation:",
         (
-            "- Productive BA poses use the validated main-compatible maximum "
+            "- Productive BA poses use the deterministic maximum-"
             "frontier tree from the configured reference marker."
         ),
         (

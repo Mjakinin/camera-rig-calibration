@@ -73,7 +73,7 @@ def _file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _frozen_observation_contract(
+def _published_observation_contract(
     experiment: Path,
     config: RigConfig,
 ) -> dict[str, Any]:
@@ -94,7 +94,7 @@ def _frozen_observation_contract(
     ]
     if missing:
         raise RuntimeError(
-            "Prepared rerun requires the frozen published observations; "
+            "Prepared rerun requires the published observations; "
             "missing: " + ", ".join(missing)
         )
     detection = json.loads(detection_path.read_text(encoding="utf-8"))
@@ -218,16 +218,11 @@ def _resolved_rerun_config(
     method: str,
     variant: str,
     ap01_method_contract: str | None = None,
-    ap02_historical_reproduction: bool = False,
     ap03_method_contract: str | None = None,
 ) -> tuple[RigConfig, RigConfig]:
     if ap01_method_contract is not None and method != "ap01":
         raise ValueError(
             "--ap01-method-contract is valid only with --method ap01"
-        )
-    if ap02_historical_reproduction and method != "ap02":
-        raise ValueError(
-            "--ap02-historical-reproduction is valid only with --method ap02"
         )
     if ap03_method_contract is not None and method != "ap03":
         raise ValueError(
@@ -242,12 +237,6 @@ def _resolved_rerun_config(
                 "ap01": methods.ap01.model_copy(
                     update={
                         "method_contract": contract_name,
-                        "historical_reproduction": False,
-                        "advanced_strategy": (
-                            "wizard_robustness_v1"
-                            if contract_name == "recommended_wizard_v1"
-                            else "legacy_main_v1"
-                        ),
                     },
                     deep=True,
                 )
@@ -270,19 +259,16 @@ def _resolved_rerun_config(
                 "ap02": methods.ap02.model_copy(
                     update={
                         "method_contract": "baseline_v1",
-                        "historical_reproduction": (
-                            ap02_historical_reproduction
-                        ),
                         "reference_marker_selection_mode": "baseline",
                         "reference_marker_id": 14,
-                        "frame_selection_strategy": "legacy_smart_v1",
+                        "frame_selection_strategy": "smart_v1",
                         "initialization_strategy": (
-                            "legacy_maximum_bottleneck_v1"
+                            "maximum_frontier_v1"
                         ),
                         "graph_edge_weight_strategy": (
-                            "legacy_observation_quality_v1"
+                            "geometric_observation_quality_v1"
                         ),
-                        "reprojection_model": "legacy_pinhole_v1",
+                        "reprojection_model": "pinhole_v1",
                         "reference_marker_maximum_frames": None,
                         "top_per_marker": 8,
                         "top_per_marker_pair": 4,
@@ -408,7 +394,6 @@ def prepare_single_method_rerun(
     reuse_prepared_input: bool,
     reuse_matching_intermediates: bool,
     ap01_method_contract: str | None = None,
-    ap02_historical_reproduction: bool = False,
     ap03_method_contract: str | None = None,
 ) -> PreparedRerun:
     if method not in {"ap01", "ap02", "ap03"}:
@@ -430,10 +415,9 @@ def prepare_single_method_rerun(
         method,
         variant,
         ap01_method_contract=ap01_method_contract,
-        ap02_historical_reproduction=ap02_historical_reproduction,
         ap03_method_contract=ap03_method_contract,
     )
-    observation_contract = _frozen_observation_contract(
+    observation_contract = _published_observation_contract(
         experiment_root, config
     )
     identity = build_dataset_identity(experiment_root)
@@ -552,7 +536,6 @@ def run_single_method_rerun(
     reuse_matching_intermediates: bool,
     reconcile_after: bool,
     ap01_method_contract: str | None = None,
-    ap02_historical_reproduction: bool = False,
     ap03_method_contract: str | None = None,
     console: Console | None = None,
 ) -> dict[str, dict[str, Any]]:
@@ -564,7 +547,6 @@ def run_single_method_rerun(
         reuse_prepared_input=reuse_prepared_input,
         reuse_matching_intermediates=reuse_matching_intermediates,
         ap01_method_contract=ap01_method_contract,
-        ap02_historical_reproduction=ap02_historical_reproduction,
         ap03_method_contract=ap03_method_contract,
     )
     entry_id = prepared.queue.entries[0].id
@@ -583,18 +565,13 @@ def run_single_method_rerun(
             entry_id: {
                 "supersedes_attempt": supersedes,
                 "dataset_identity": prepared.dataset_identity,
-                "reuse_frozen_observations": True,
-                "frozen_observation_contract": (
+                "reuse_published_observations": True,
+                "published_observation_contract": (
                     prepared.observation_contract
                 ),
                 "capture_repeated": False,
                 "detection_repeated": False,
                 "rerun_requested_at": _now(),
-                "ap02_historical_reproduction": (
-                    prepared.config.methods.ap02.historical_reproduction
-                    if method == "ap02"
-                    else False
-                ),
             }
         },
         explicit_method_rerun=True,

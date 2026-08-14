@@ -1,7 +1,0 @@
-{
-  "contract": "rigcal_aruco_detector_v2",
-  "mode": "baseline",
-  "dictionary": "DICT_4X4_50",
-  "opencv_version": "4.13.0",
-  "parameters": "opencv_defaults"
-}

@@ -4,7 +4,7 @@ import csv
 import json
 from pathlib import Path
 
-from camera_rig_calibration.common_anchor_authority_policy import (
+from camera_rig_calibration.policies.common_anchor_authority_policy import (
     install_common_anchor_authority_policy,
 )
 from camera_rig_calibration.config import save_config
@@ -17,13 +17,13 @@ from camera_rig_calibration.config.models import (
     RigConfig,
     StaticCameraSettings,
 )
-from camera_rig_calibration.marker_preference_policy import install_marker_preference_policy
-from camera_rig_calibration.product_policy import install_product_policy
-from camera_rig_calibration.result_output_policy import (
+from camera_rig_calibration.policies.marker_preference_policy import install_marker_preference_policy
+from camera_rig_calibration.policies.product_policy import install_product_policy
+from camera_rig_calibration.policies.result_output_policy import (
     _sixdof_text,
     install_result_output_policy,
 )
-from camera_rig_calibration.submission_policy import install_submission_policy
+from camera_rig_calibration.policies.submission_policy import install_submission_policy
 
 
 install_product_policy()

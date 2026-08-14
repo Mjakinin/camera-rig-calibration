@@ -78,7 +78,7 @@ def run(
                     str(observations_root / "shared_all_aruco_observations.csv"),
                 ]
             )
-        elif scale_input_policy != "legacy_registered_image_redetection_v1":
+        elif scale_input_policy != "registered_image_redetection_v1":
             raise ValueError(f"Unknown AP03 scale-input policy: {scale_input_policy}")
         if maximum_observations_per_marker is not None:
             command.extend(

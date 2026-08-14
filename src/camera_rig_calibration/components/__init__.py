@@ -19,7 +19,7 @@ def register_builtin_components() -> None:
 
 
 def __getattr__(name: str):
-    """Resolve the historical public component exports on first access."""
+    """Resolve the established public component exports on first access."""
     if name == "AP01Method":
         from ..methods.ap01.pipeline import AP01Method
 

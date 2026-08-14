@@ -47,7 +47,7 @@ def colmap_camera_model(
     fx, fy, cx, cy = float(K[0, 0]), float(K[1, 1]), float(K[0, 2]), float(K[1, 2])
     model = info["distortion_model"].strip().lower()
     d = list(float(v) for v in info["D"])
-    if contract.colmap_camera_model_policy == "legacy_shared_pinhole_v1":
+    if contract.colmap_camera_model_policy == "baseline_shared_pinhole_v1":
         values = [fx, fy, cx, cy]
         return "PINHOLE", ",".join(
             f"{value:.{contract.colmap_intrinsics_precision}f}"

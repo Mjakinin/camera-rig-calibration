@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from camera_rig_calibration.ap01_common_anchor_policy import (
+from camera_rig_calibration.policies.ap01_common_anchor_policy import (
     install_ap01_common_anchor_policy,
 )
 from camera_rig_calibration.anchor_export import adapters

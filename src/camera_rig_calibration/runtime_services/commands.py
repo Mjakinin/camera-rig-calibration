@@ -327,10 +327,8 @@ class CommandMixin:
         assert self.run_directory is not None
         argv = (
             sys.executable,
-            str(
-                self.repository_root
-                / "src/camera_rig_calibration/observation_detection.py"
-            ),
+            "-m",
+            "camera_rig_calibration.observation_services.detection",
             "--dataset",
             str(dataset_root / "raw_images"),
             "--out",
