@@ -82,5 +82,3 @@ def write_contact_sheet(
 
     sheet = np.vstack(row_images)
     cv2.imwrite(str(destination), sheet)
-
-

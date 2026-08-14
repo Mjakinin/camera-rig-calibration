@@ -434,5 +434,3 @@ def resolve_selections(
         marker_ids,
         payload,
     )
-
-

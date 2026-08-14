@@ -370,5 +370,3 @@ def robust_scale(
         },
     }
     return scale, stats, pairs
-
-

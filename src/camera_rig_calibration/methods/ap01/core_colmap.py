@@ -313,5 +313,3 @@ def run_colmap(
         encoding="utf-8",
     )
     return destination / "images.txt"
-
-

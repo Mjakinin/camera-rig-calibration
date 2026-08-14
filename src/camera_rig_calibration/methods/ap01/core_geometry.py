@@ -162,5 +162,3 @@ def legacy_detection_quality(
         "quality_image_width_px": float(width),
         "quality_image_height_px": float(height),
     }
-
-

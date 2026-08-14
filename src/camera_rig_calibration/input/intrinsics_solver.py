@@ -305,5 +305,3 @@ def calibrate_with_outlier_filter(
             f"frame={detections[removed_index]['frame_index']}",
             f"rmse={worst_error:.4f}px",
         )
-
-

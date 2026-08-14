@@ -284,5 +284,3 @@ def _camera_path_diagnostics(
             }
         )
     return rows
-
-

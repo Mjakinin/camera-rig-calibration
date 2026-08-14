@@ -297,5 +297,3 @@ def select_diverse(
         selected,
         key=lambda index: detections[index]["frame_index"],
     )
-
-

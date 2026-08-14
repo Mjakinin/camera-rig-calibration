@@ -128,5 +128,3 @@ def load_camera_info(path: Path) -> dict:
         "distortion_model": str(data.get("distortion_model", "plumb_bob")),
         "source": str(path),
     }
-
-

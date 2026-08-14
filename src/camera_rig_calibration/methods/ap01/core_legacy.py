@@ -311,5 +311,3 @@ def aggregate_legacy_relay_candidates(
         "fallback_top_half_by_quality": fallback,
         "ground_truth_used": False,
     }
-
-

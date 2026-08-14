@@ -380,5 +380,3 @@ def _marker_choice(
             f"Configured {purpose} marker {selected} is not compatible with that stage"
         )
     return selected
-
-

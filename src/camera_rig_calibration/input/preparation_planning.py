@@ -728,4 +728,3 @@ def build_preparation_plan(config: RigConfig, repository_root: Path) -> Preparat
         source_hashes,
         prepared_input=False,
     )
-

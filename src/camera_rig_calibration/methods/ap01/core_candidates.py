@@ -549,5 +549,3 @@ def relay_candidates(
                         "T": transform,
                     })
     return result
-
-

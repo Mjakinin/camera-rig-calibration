@@ -257,5 +257,3 @@ def ap03_candidate_rank(candidate: dict[str, Any]) -> tuple[Any, ...]:
         _lower_is_better(candidate["moving_median_pnp_reprojection_rmse_px"]),
         _higher_is_better(candidate["moving_median_marker_area_ratio"]),
     )
-
-

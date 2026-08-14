@@ -484,5 +484,3 @@ def main_observation_score(row: dict[str, str]) -> float:
         * (1.0 / ((1.0 + rmse) ** 2))
         * min(1.0, max(0.20, margin / 40.0))
     )
-
-
