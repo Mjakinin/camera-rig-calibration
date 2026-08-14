@@ -25,6 +25,7 @@ from .rviz_manifest_policy import install_rviz_manifest_policy
 from .rviz_method_selection_policy import install_rviz_method_selection_policy
 from .submission_bindings import install_submission_bindings
 from .submission_policy import install_submission_policy
+from .submission_quality_policy import install_submission_quality_policy
 from .ui_display_policy import install_ui_display_policy
 
 
@@ -58,6 +59,9 @@ def install_product_stack() -> None:
     install_ap03_camera_model_sensitivity_policy()
     install_ap02_convergence_reporting_policy()
     install_result_output_policy()
+    # Keep completed diagnostic artifacts distinct from scientifically valid,
+    # deployment-eligible calibrations throughout publication and export.
+    install_submission_quality_policy()
     install_real_partial_evaluation_policy()
     install_ap02_partial_reference_reporting_policy()
     install_real_marker_reporting_policy()

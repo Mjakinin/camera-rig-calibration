@@ -16,6 +16,7 @@ INSTALLERS = (
     "install_ap03_camera_model_sensitivity_policy",
     "install_ap02_convergence_reporting_policy",
     "install_result_output_policy",
+    "install_submission_quality_policy",
     "install_real_partial_evaluation_policy",
     "install_ap02_partial_reference_reporting_policy",
     "install_real_marker_reporting_policy",
