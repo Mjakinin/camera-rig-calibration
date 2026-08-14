@@ -10,14 +10,19 @@ compares their primary results on one common anchor.
 Python 3.10–3.13 is supported.
 
 ```bash
-python3 -m pip install -e ".[scientific]"
+python3 -m pip install -e ".[scientific,standalone]"
 rigcal
 ```
+
+The `standalone` extra installs the OpenCV ArUco runtime used outside a ROS
+environment. COLMAP and FFmpeg/ffprobe remain external executables; the menu's
+**Check installation** entry reports which optional workflow prerequisites are
+available.
 
 For development:
 
 ```bash
-python3 -m pip install -e ".[scientific,dev]"
+python3 -m pip install -e ".[scientific,standalone,dev]"
 python3 -m compileall -q src run tests
 pytest -q
 ```

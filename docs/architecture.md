@@ -23,6 +23,24 @@ The central pipeline order is:
 Numbers are terminal/documentation order only. Persistent folders are named by
 their scientific role.
 
+## UI composition and extension boundary
+
+`wizard.py` remains the stable navigation and product-policy facade. Focused UI
+services live below `src/camera_rig_calibration/ui/`:
+
+- `method_settings.py` declares the editable parameters and their help text;
+- `method_editor.py` owns interactive editing of one method queue row;
+- `run_management.py` owns resume, interrupt and incomplete-run handling;
+- `result_browser.py` owns result discovery and visualization dispatch;
+- `storage_cleanup.py` and `intrinsics.py` own their respective maintenance
+  screens.
+
+The facade injects navigation and policy hooks into those services, so existing
+CLI entry points remain stable. New UI screens should be added as focused
+modules here and exposed through a thin facade function. New calibration
+methods still enter through the registries described in `extensions.md`; the UI
+does not duplicate scientific implementations.
+
 ## Queue and batch model
 
 A strict schema-v5 queue contains one experiment and one or more independent

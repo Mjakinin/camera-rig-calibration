@@ -88,15 +88,19 @@ anchor-export or visualization metadata.
 ## Maintainability boundary
 
 The active package is registry-based and extension points are documented in
-`docs/extensions.md`. `run/rigcal.py` is intentionally a thin launcher.
+`docs/extensions.md`. `run/rigcal.py` is intentionally a thin launcher. The
+first behavior-preserving UI split is complete: method settings/editing, result
+browsing, run management, storage cleanup and intrinsics management now live in
+focused modules below `src/camera_rig_calibration/ui/`; `wizard.py` retains the
+stable navigation and product-policy facade.
 
-Some mature orchestration modules (`wizard.py`, `publication.py` and
-`evaluation/reporting.py`) are larger than ideal because they accumulated the
-final product workflow and compatibility/reporting logic. Splitting those files
-immediately before submission would create a high regression risk without
-changing the scientific result. Treat that refactor as post-submission technical
-debt. New scientific algorithms should not be added to those modules; they
-belong in dedicated method components/contracts.
+The mature orchestration/reporting modules `wizard.py`, `queueing.py`,
+`runtime.py` and `evaluation/reporting.py` remain larger than the preferred
+2,000-line ceiling. Their current sizes are explicit migration budgets enforced
+by `tools/check_source_layout.py`: they may shrink, but must not grow. Continue
+splitting them only along tested responsibility boundaries. New UI panels,
+scientific algorithms and reporting formats belong in dedicated modules rather
+than these compatibility facades.
 
 Likewise, large files under `parity/` are frozen audit evidence rather than the
 runtime application architecture. Do not delete them merely to reduce line

@@ -29,8 +29,8 @@ jobs:
       - name: Install rigcal and test dependencies
         run: python -m pip install -e ".[dev,scientific,standalone]"
 
+      - name: Compile the maintained Python source tree
+        run: python -m compileall -q src run tests
+
       - name: Test rigcal contracts without running calibration methods
         run: pytest -m "not slow and not requires_colmap and not requires_ros"
-
-      - name: Compile the maintained Python source tree
-        run: python -m compileall -q src/camera_rig_calibration run/rigcal.py

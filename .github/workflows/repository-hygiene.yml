@@ -18,3 +18,6 @@ jobs:
 
       - name: Enforce LFS-free tracked-file size policy
         run: python tools/check_repository_hygiene.py
+
+      - name: Prevent oversized source-module growth
+        run: python tools/check_source_layout.py
