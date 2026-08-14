@@ -5,10 +5,20 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from .ap02_native import discover_ap02_native_scenes, ensure_ap02_native_scene
-from .fallback_scene import ensure_fallback_visualization_artifacts
 from .scene import ensure_visualization_artifacts
 from .session import launch_visualization_directory
+
+
+def ensure_fallback_visualization_artifacts(
+    experiment_root: Path,
+) -> dict[str, Any]:
+    """Build a non-AP03 fallback scene without loading it during package import."""
+
+    from .fallback_scene import (
+        ensure_fallback_visualization_artifacts as build_fallback,
+    )
+
+    return build_fallback(experiment_root)
 
 
 def launch_isolated_rviz(
@@ -52,6 +62,8 @@ def launch_isolated_rviz(
             repository_root,
             scene_label="canonical_6dof",
         )
+
+    from .ap02_native import discover_ap02_native_scenes, ensure_ap02_native_scene
 
     native_scenes = discover_ap02_native_scenes(experiment_root)
     if native_scenes:
