@@ -106,7 +106,7 @@ def _ap01_colmap_source(
             result_root
             / "diagnostics"
             / "method"
-            / "01_moving_colmap"
+            / "moving_colmap"
             / "sparse_txt_best"
         )
         points_path = colmap_root / "points3D.txt"
@@ -115,7 +115,7 @@ def _ap01_colmap_source(
             result_root
             / "diagnostics"
             / "method"
-            / "02_metric_scale"
+            / "metric_scale"
             / "metric_scale.txt"
         )
         observations_path = (
