@@ -63,8 +63,8 @@ def test_pose_only_ap02_uses_anchor_as_origin_without_colmap(tmp_path: Path) -> 
 def test_ap01_colmap_fallback_is_scaled_and_aligned_to_anchor(tmp_path: Path) -> None:
     experiment = tmp_path / "experiment"
     result = experiment / "methods" / "ap01" / "baseline"
-    colmap = result / "diagnostics" / "method" / "01_moving_colmap" / "sparse_txt_best"
-    scale_root = result / "diagnostics" / "method" / "02_metric_scale"
+    colmap = result / "diagnostics" / "method" / "moving_colmap" / "sparse_txt_best"
+    scale_root = result / "diagnostics" / "method" / "metric_scale"
     preflight = result / "diagnostics" / "preflight"
     colmap.mkdir(parents=True)
     scale_root.mkdir(parents=True)
