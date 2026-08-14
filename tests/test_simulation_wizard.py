@@ -37,7 +37,6 @@ from camera_rig_calibration.wizard import (
     _edit_method_job,
     _edit_simulation_parameters,
     _method_queue,
-    _method_job_label,
     _new_method_job,
     _show_method_queue,
     _simulation_experiment_id,
@@ -302,7 +301,9 @@ def test_queue_distinguishes_auto_and_manual_reference_jobs() -> None:
 
     output = stream.getvalue()
     assert automatic.label.startswith("combined_nfev_60")
-    assert manual.label == _method_job_label(manual, "new_dataset")
+    assert manual.label == wizard_module._method_job_label(
+        manual, "new_dataset"
+    )
     assert manual.label.endswith("__ref_manual")
     assert "ref=manual after preflight" in output
     assert output.count("independent") == 2
@@ -520,7 +521,9 @@ def test_default_method_selection_builds_three_independent_product_jobs(
     jobs = _method_queue(console)
 
     assert [job.method_id for job in jobs] == ["ap01", "ap02", "ap03"]
-    assert all(job.label == _method_job_label(job) for job in jobs)
+    assert all(
+        job.label == wizard_module._method_job_label(job) for job in jobs
+    )
     assert all(
         job.observation_quality.maximum_pnp_reprojection_error_px == 25.0
         for job in jobs
@@ -546,7 +549,9 @@ def test_method_multiselect_preserves_duplicate_rows(monkeypatch) -> None:
         "ap03",
         "ap03",
     ]
-    assert all(job.label == _method_job_label(job) for job in jobs)
+    assert all(
+        job.label == wizard_module._method_job_label(job) for job in jobs
+    )
     assert jobs[2].label == jobs[3].label
 
 
