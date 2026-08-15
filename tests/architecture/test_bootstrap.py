@@ -31,6 +31,7 @@ INSTALLERS = (
     "install_submission_bindings",
     "install_ui_display_policy",
     "install_dataset_context_policy",
+    "install_simulation_ui_consistency_policy",
     "install_result_view_policy",
 )
 
