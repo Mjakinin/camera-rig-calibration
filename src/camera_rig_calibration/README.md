@@ -1,23 +1,28 @@
 # Python package layout
 
-Files at this package root are stable commands, public facades, or small shared
-contracts. New implementation code should not be added here by default.
+The package root is intentionally structural: productive Python code lives in
+focused packages, not in loose root modules. Only `__init__.py` and
+`__main__.py` are allowed as root-level Python files.
 
+Canonical ownership:
+
+- product entry points and startup checks: `application/`;
+- shared contracts and registries: `core/`;
+- dataset discovery, inventory and identity: `dataset/`;
+- input preparation and intrinsics profiles: `input/`;
 - calibration algorithms: `methods/<method-id>/`;
-- new external methods: `method_sdk/` contract plus their own method package;
-- terminal UI: `ui/`;
-- input/capture: `input/` and `dataset/`;
-- dataset identity: `dataset/identity.py`;
-- observation pipeline: `observation_services/`;
-- queue/runtime/preflight: their corresponding `*_services/` package;
-- runtime progress: `runtime_services/progress.py`;
-- storage cleanup/filesystem/assets: `storage_services/`;
-- evaluation/publication/visualization: their named packages;
-- result indexing/comparison output: `publication_services/results.py`;
+- observation selection/detection/quality: `observation_services/`;
+- queue, runtime and preflight orchestration: their `*_services/` packages;
+- storage layout, cleanup, filesystem and packaged assets: `storage_services/`;
+- publication and result indexing: `publication_services/`;
+- terminal interaction: `ui/`;
+- visualization: `visualization/`;
 - cross-cutting product composition: `policies/`.
 
-The small root facades preserve installed CLI and historical import paths while
-delegating to these packages. Compatibility facades should contain no scientific
-or storage implementation logic. Python modules are never numbered: their
-dependency and execution order is explicit in coordinators, not their filenames.
-See `docs/repository_structure.md` and `docs/architecture.md` for the full map.
+Public service surfaces use `api.py` where a subsystem needs a composed API.
+Historical imports such as `camera_rig_calibration.runtime` are supported from
+the single `compat/` layer; compatibility must not require physical facade
+files in the package root.
+
+`tools/check_source_layout.py` enforces both the module-size budget and the
+root-module rule in CI.

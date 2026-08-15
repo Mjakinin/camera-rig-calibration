@@ -1,5 +1,3 @@
-from .product_cli import main
+from .application.product_cli import main
 
-
-if __name__ == "__main__":
-    main()
+raise SystemExit(main())

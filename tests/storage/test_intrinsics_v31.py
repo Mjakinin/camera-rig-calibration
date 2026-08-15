@@ -18,10 +18,11 @@ from camera_rig_calibration.intrinsics_profiles import (
     discover_intrinsic_profiles,
     profile_fingerprint,
 )
+from conftest import REPOSITORY_ROOT
 
 
 ENGINE_PATH = (
-    Path(__file__).resolve().parents[1]
+    REPOSITORY_ROOT
     / "src"
     / "camera_rig_calibration"
     / "input"
