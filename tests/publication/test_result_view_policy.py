@@ -8,7 +8,7 @@ from camera_rig_calibration.policies.result_view_policy import install_result_vi
 
 install_result_view_policy()
 
-from camera_rig_calibration import wizard  # noqa: E402
+from camera_rig_calibration.ui import result_browser  # noqa: E402
 
 
 def test_completed_result_view_skips_expensive_reconciliation(tmp_path: Path) -> None:
@@ -19,7 +19,12 @@ def test_completed_result_view_skips_expensive_reconciliation(tmp_path: Path) ->
         json.dumps({"status": "done"}), encoding="utf-8"
     )
 
-    payload = wizard.reconcile_existing_experiment(
+    assert getattr(
+        result_browser.reconcile_existing_experiment,
+        "_rigcal_fast_result_view",
+        False,
+    )
+    payload = result_browser.reconcile_existing_experiment(
         experiment,
         dataset_root=experiment,
         category="real_vehicle",
