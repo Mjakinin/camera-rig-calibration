@@ -1,4 +1,4 @@
-"""Compatibility bindings between modular UI flows and the wizard facade."""
+"""Late-bound hooks used by modular UI flows and product policies."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ Hook = Callable[..., Any]
 
 @dataclass(frozen=True)
 class WizardBindings:
-    """Product-policy hooks resolved after the bootstrap stack is installed."""
+    """Product-policy hooks resolved from the canonical wizard module."""
 
     choice: Hook
     prompt_index: Hook
@@ -38,8 +38,8 @@ class WizardBindings:
 
 
 def current_wizard_bindings() -> WizardBindings:
-    """Read hooks from the facade so installed policies remain authoritative."""
-    from .. import wizard
+    """Read hooks from ``ui.wizard`` after product policies are installed."""
+    from . import wizard
 
     return WizardBindings(
         choice=wizard._choice,
