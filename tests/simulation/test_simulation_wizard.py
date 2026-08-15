@@ -322,7 +322,7 @@ def test_queue_distinguishes_auto_and_manual_reference_jobs() -> None:
         manual, "new_dataset"
     )
     assert manual.label.endswith("__ref_manual")
-    assert "ref=manual after preflight" in output
+    assert "ref=manual after preflight" in wizard_module._method_job_summary(manual)
     assert output.count("independent") == 2
     assert "exact duplicate of row 2; skipped after first" in output
 
@@ -345,7 +345,8 @@ def test_ap03_deferred_single_choice_survives_multi_auto_choice(
         response_values.insert(0, "1")
     responses = iter(response_values)
     monkeypatch.setattr(
-        typer, "prompt", lambda *args, **kwargs: next(responses)
+        typer,
+        "prompt", lambda *args, **kwargs: next(responses)
     )
     monkeypatch.setattr(typer, "confirm", lambda *args, **kwargs: False)
     console = Console(file=StringIO(), force_terminal=False, width=220)
