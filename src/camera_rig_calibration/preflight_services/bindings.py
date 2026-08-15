@@ -26,7 +26,7 @@ class PreflightDependencies:
 
     @classmethod
     def current(cls) -> "PreflightDependencies":
-        from .. import preflight
+        from . import api as preflight
 
         return cls(
             register_builtin_components=preflight.register_builtin_components,
