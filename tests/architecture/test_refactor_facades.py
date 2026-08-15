@@ -26,7 +26,7 @@ from camera_rig_calibration.methods.ap01.core_scale import robust_scale
 from camera_rig_calibration.methods.ap02 import initialize as ap02_initialize
 from camera_rig_calibration.methods.ap02.initialize_graph import build_graph
 from camera_rig_calibration.observation_core import ResolvedSelections
-from camera_rig_calibration.preflight_services import api as preflight_api
+from camera_rig_calibration.observation_services import api as observation_api
 from camera_rig_calibration.preflight_services.bindings import PreflightDependencies
 from camera_rig_calibration.preflight_services.core import PreflightJob
 from camera_rig_calibration.publication_services import dataset as publication_dataset_impl
@@ -77,8 +77,7 @@ def test_late_bindings_follow_canonical_module_monkey_patches(monkeypatch) -> No
 
     monkeypatch.setattr(wizard_impl, "_choice", hook)
     monkeypatch.setattr(queue_api, "PipelineOrchestrator", orchestrator)
-    monkeypatch.setattr(runtime_api, "resolve_selections", hook)
-    monkeypatch.setattr(preflight_api, "resolve_selections", hook)
+    monkeypatch.setattr(observation_api, "resolve_selections", hook)
     monkeypatch.setattr(ap01_core, "run_colmap", hook)
 
     assert current_wizard_bindings().choice is hook
