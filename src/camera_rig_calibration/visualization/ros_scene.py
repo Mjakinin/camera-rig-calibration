@@ -57,6 +57,22 @@ def _color(key: str) -> tuple[float, float, float]:
     return palette[index % len(palette)]
 
 
+def _ground_truth_anchor_segment(
+    camera: dict[str, Any],
+) -> tuple[tuple[float, float, float], tuple[float, float, float]]:
+    """Return the common-anchor origin and a GT camera translation."""
+
+    matrix = camera["matrix"]
+    return (
+        (0.0, 0.0, 0.0),
+        (
+            float(matrix[0][3]),
+            float(matrix[1][3]),
+            float(matrix[2][3]),
+        ),
+    )
+
+
 def run(visualization: Path) -> None:
     # ROS imports remain deliberately local: normal rigcal use and scene
     # generation do not require a sourced ROS 2 environment.
@@ -174,16 +190,11 @@ def run(visualization: Path) -> None:
         for camera_index, (camera_id, camera) in enumerate(
             sorted(ground_truth.items())
         ):
-            origin = camera["matrix"]
-            position = [
-                float(origin[0][3]),
-                float(origin[1][3]),
-                float(origin[2][3]),
-            ]
+            anchor_origin, position = _ground_truth_anchor_segment(camera)
             marker = Marker()
             marker.header.frame_id = fixed_frame
             marker.ns = "ground_truth"
-            marker.id = camera_index * 2
+            marker.id = camera_index * 3
             marker.type = Marker.SPHERE
             marker.action = Marker.ADD
             marker.pose.position.x = position[0]
@@ -199,7 +210,7 @@ def run(visualization: Path) -> None:
             label_marker = Marker()
             label_marker.header.frame_id = fixed_frame
             label_marker.ns = "ground_truth_labels"
-            label_marker.id = camera_index * 2 + 1
+            label_marker.id = camera_index * 3 + 1
             label_marker.type = Marker.TEXT_VIEW_FACING
             label_marker.action = Marker.ADD
             label_marker.pose.position.x = position[0]
@@ -213,6 +224,26 @@ def run(visualization: Path) -> None:
             label_marker.color.a = 1.0
             label_marker.text = f"GT/{camera_id}"
             gt_markers.append(label_marker)
+            anchor_edge = Marker()
+            anchor_edge.header.frame_id = fixed_frame
+            anchor_edge.ns = "ground_truth_anchor_edges"
+            anchor_edge.id = camera_index * 3 + 2
+            anchor_edge.type = Marker.LINE_LIST
+            anchor_edge.action = Marker.ADD
+            anchor_edge.scale.x = 0.006
+            anchor_edge.color.r = 1.0
+            anchor_edge.color.g = 1.0
+            anchor_edge.color.b = 1.0
+            anchor_edge.color.a = 0.55
+            anchor_edge.points = [
+                Point(
+                    x=anchor_origin[0],
+                    y=anchor_origin[1],
+                    z=anchor_origin[2],
+                ),
+                Point(x=position[0], y=position[1], z=position[2]),
+            ]
+            gt_markers.append(anchor_edge)
         marker_arrays[gt_topic] = MarkerArray(markers=gt_markers)
 
     for variant in poses["variants"]:
