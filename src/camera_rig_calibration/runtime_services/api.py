@@ -20,20 +20,20 @@ from typing import Any, Callable, TypeVar
 from rich.console import Console
 from rich.table import Table
 
-from .components import register_builtin_components
-from .config import config_fingerprint, load_config, save_config
-from .config.models import RigConfig, effective_observation_quality
-from .contracts import CommandSpec, RunContext
-from .dataset.manifest import AutoSelection, load_dataset_manifest, save_dataset_manifest
-from .dataset.validation import validate_dataset
-from .input.preparation import build_preparation_plan, finalize_dataset
-from .input.topics import resolve_rosbag_source
-from .intrinsics_profiles import resolve_intrinsic_profile
-from .methods.common.aruco_utils import (
+from ..components import register_builtin_components
+from ..config import config_fingerprint, load_config, save_config
+from ..config.models import RigConfig, effective_observation_quality
+from ..core.contracts import CommandSpec, RunContext
+from ..dataset.manifest import AutoSelection, load_dataset_manifest, save_dataset_manifest
+from ..dataset.validation import validate_dataset
+from ..input.preparation import build_preparation_plan, finalize_dataset
+from ..input.topics import resolve_rosbag_source
+from ..input.profiles import resolve_intrinsic_profile
+from ..methods.common.aruco_utils import (
     DETECTOR_CONTRACT,
     effective_detector_config,
 )
-from .experiments import (
+from ..experiment_services.api import (
     colmap_artifact_fingerprint,
     evaluation_fingerprint,
     experiment_paths,
@@ -43,19 +43,19 @@ from .experiments import (
     method_result_label,
     write_experiment_manifest,
 )
-from .observations import (
+from ..observation_services.api import (
     ResolvedSelections,
     freeze_selections,
     resolve_selections,
 )
-from .observation_quality import ObservationQualityError, filter_observations
+from ..observation_services.quality import ObservationQualityError, filter_observations
 from .progress import ProgressClock, progress_text, terminal_lines
-from .pipeline import StageContract, validate_stage_dag
-from .registry import calibration_methods, evaluators, input_adapters
-from .results import write_comparison
+from ..pipeline import StageContract, validate_stage_dag
+from ..core.registry import calibration_methods, evaluators, input_adapters
+from ..publication_services.results import write_comparison
 
 
-from .runtime_services.common import (
+from .common import (
     T,
     COMMAND_HEARTBEAT_SECONDS,
     BASE_RUN_DIRECTORIES,
@@ -71,11 +71,11 @@ from .runtime_services.common import (
     planned_stages,
     observation_id,
 )
-from .runtime_services.environment import EnvironmentMixin
-from .runtime_services.observations import ObservationMixin
-from .runtime_services.artifacts import ArtifactMixin
-from .runtime_services.commands import CommandMixin
-from .runtime_services.execution import ExecutionMixin
+from .environment import EnvironmentMixin
+from .observations import ObservationMixin
+from .artifacts import ArtifactMixin
+from .commands import CommandMixin
+from .execution import ExecutionMixin
 
 
 class PipelineOrchestrator(
