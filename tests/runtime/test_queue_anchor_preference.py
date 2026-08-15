@@ -3,6 +3,8 @@ from __future__ import annotations
 import csv
 from pathlib import Path
 
+import pytest
+
 from camera_rig_calibration.policies.common_anchor_authority_policy import (
     install_common_anchor_authority_policy,
 )
@@ -21,6 +23,7 @@ from camera_rig_calibration.policies.queue_anchor_preference_policy import (
     install_queue_anchor_preference_policy,
 )
 from camera_rig_calibration.policies.real_partial_evaluation_policy import (
+    _install_nonblocking_preflight,
     install_real_partial_evaluation_policy,
 )
 from camera_rig_calibration.policies.real_vehicle_marker_zero_policy import (
@@ -44,6 +47,12 @@ install_real_partial_evaluation_policy()
 install_submission_bindings()
 
 from camera_rig_calibration import preflight  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def _reassert_final_real_evaluation_preflight() -> None:
+    """Make this policy contract independent of pytest collection order."""
+    _install_nonblocking_preflight()
 
 
 FIELDS = [
