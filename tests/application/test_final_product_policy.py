@@ -13,6 +13,9 @@ from camera_rig_calibration.policies.product_policy import (
     _refresh_derived_tree,
     install_product_policy,
 )
+from camera_rig_calibration.policies.real_partial_evaluation_policy import (
+    install_real_partial_evaluation_policy,
+)
 from camera_rig_calibration.policies.real_vehicle_marker_zero_policy import (
     install_real_vehicle_marker_zero_policy,
 )
@@ -29,6 +32,7 @@ install_reporting_authority_policy()
 install_submission_policy()
 install_marker_preference_policy()
 install_real_vehicle_marker_zero_policy()
+install_real_partial_evaluation_policy()
 install_submission_bindings()
 install_ui_display_policy()
 
