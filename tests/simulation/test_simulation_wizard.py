@@ -47,7 +47,7 @@ from camera_rig_calibration.wizard import (
 )
 
 
-REPOSITORY = Path(__file__).resolve().parents[1]
+REPOSITORY = Path(__file__).resolve().parents[2]
 
 
 def _prepared_simulation_dataset(root: Path) -> Path:
