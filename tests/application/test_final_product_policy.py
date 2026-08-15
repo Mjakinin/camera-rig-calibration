@@ -91,7 +91,8 @@ def test_real_vehicle_ui_explains_strict_zero_and_absence_only_fallback() -> Non
         for _, _, label, current, baseline, description in wizard._setting_rows(real_ap02)
     ).lower()
     assert "marker 0 required if observed" in real_text
-    assert "only when marker 0 has zero accepted observations" in real_text
+    assert "auto fallback only if absent" in real_text
+    assert "not observable instead of failing the method" in real_text
 
     token = _DATASET_CONTEXT.set("simulation")
     try:
