@@ -24,6 +24,9 @@ from ..policies.result_output_policy import install_result_output_policy
 from ..policies.result_view_policy import install_result_view_policy
 from ..policies.rviz_manifest_policy import install_rviz_manifest_policy
 from ..policies.rviz_method_selection_policy import install_rviz_method_selection_policy
+from ..policies.simulation_ui_consistency_policy import (
+    install_simulation_ui_consistency_policy,
+)
 from ..policies.submission_bindings import install_submission_bindings
 from ..policies.submission_policy import install_submission_policy
 from ..policies.submission_quality_policy import install_submission_quality_policy
@@ -81,6 +84,7 @@ def install_product_stack() -> None:
     install_submission_bindings()
     install_ui_display_policy()
     install_dataset_context_policy()
+    install_simulation_ui_consistency_policy()
     install_result_view_policy()
 
     _INSTALLED = True
