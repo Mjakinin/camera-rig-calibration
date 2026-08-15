@@ -21,9 +21,12 @@ def install_result_view_policy() -> None:
     if _INSTALLED:
         return
 
-    from .. import wizard
+    # ``show_results`` is defined in ui.result_browser and resolves this global
+    # from that module at call time.  Patching the compatibility ``wizard``
+    # facade does not affect the function's globals after the UI refactor.
+    from ..ui import result_browser
 
-    original = wizard.reconcile_existing_experiment
+    original = result_browser.reconcile_existing_experiment
     if getattr(original, "_rigcal_fast_result_view", False):
         _INSTALLED = True
         return
@@ -49,5 +52,5 @@ def install_result_view_policy() -> None:
         )
 
     reconcile_for_view._rigcal_fast_result_view = True  # type: ignore[attr-defined]
-    wizard.reconcile_existing_experiment = reconcile_for_view
+    result_browser.reconcile_existing_experiment = reconcile_for_view
     _INSTALLED = True
