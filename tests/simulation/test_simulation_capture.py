@@ -16,7 +16,7 @@ from camera_rig_calibration.input.simulation_profiles import (
 )
 
 
-REPOSITORY = Path(__file__).resolve().parents[1]
+REPOSITORY = Path(__file__).resolve().parents[2]
 
 
 def _write_bus_world(path: Path) -> None:
