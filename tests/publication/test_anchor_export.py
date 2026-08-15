@@ -513,12 +513,13 @@ def test_simulation_anchor_gt_is_direct_posthoc_comparison() -> None:
         "ap02",
         "baseline",
         {
+            "anchor_marker_id": 7,
             "cameras": [
                 {
                     "camera_id": "front",
                     "matrix": pose_payload(estimated)["matrix"],
                 }
-            ]
+            ],
         },
         anchor_marker_id=7,
         gt_cameras={"front": world_camera},
