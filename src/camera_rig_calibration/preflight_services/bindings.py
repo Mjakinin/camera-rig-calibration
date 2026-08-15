@@ -27,6 +27,7 @@ class PreflightDependencies:
     @classmethod
     def current(cls) -> "PreflightDependencies":
         from . import api as preflight
+        from ..observation_services import api as observations
 
         return cls(
             register_builtin_components=preflight.register_builtin_components,
@@ -35,7 +36,7 @@ class PreflightDependencies:
             write_json=preflight._write_json,
             write_ap02_graph_diagnosis=preflight._write_ap02_graph_diagnosis,
             filter_observations=preflight.filter_observations,
-            resolve_selections=preflight.resolve_selections,
+            resolve_selections=observations.resolve_selections,
             graph_components=preflight.graph_components,
             diagnose_ap02_graph=preflight.diagnose_ap02_graph,
             select_ap02_frames=preflight.select_ap02_frames,
