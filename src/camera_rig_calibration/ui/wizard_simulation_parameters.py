@@ -151,11 +151,18 @@ def _edit_simulation_parameters(
     available_routes: dict[str, Path] | None = None,
     lighting_profiles: Iterable[str] | None = None,
 ) -> tuple[dict[str, object], Path, dict[str, object]]:
-    capture: dict[str, object] = {
+    capture_defaults: dict[str, object] = {
         "settle_seconds": 0.35,
         "post_pose_skip": 5,
         "frame_timeout_seconds": 3.0,
         "startup_timeout_seconds": 60.0,
+    }
+    # Existing experiment parameter vectors already contain capture timings.
+    # Keep those values as the editor's current state, but remove them from the
+    # ordinary parameter mapping so the resolved vector lists each setting once.
+    capture: dict[str, object] = {
+        key: parameters.pop(key, default)
+        for key, default in capture_defaults.items()
     }
     defaults = {
         **parameters,
