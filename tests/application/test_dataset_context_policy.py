@@ -2,12 +2,29 @@ from __future__ import annotations
 
 import typer
 
-from camera_rig_calibration.application.bootstrap import install_product_stack
 from camera_rig_calibration.components import register_builtin_components
-from camera_rig_calibration.policies.product_policy import _DATASET_CONTEXT
+from camera_rig_calibration.policies.dataset_context_policy import (
+    install_dataset_context_policy,
+)
+from camera_rig_calibration.policies.marker_preference_policy import (
+    install_marker_preference_policy,
+)
+from camera_rig_calibration.policies.product_policy import (
+    _DATASET_CONTEXT,
+    install_product_policy,
+)
+from camera_rig_calibration.policies.submission_policy import (
+    install_submission_policy,
+)
 
 
-install_product_stack()
+# Keep this policy test isolated from unrelated product layers. Installing the
+# complete bootstrap stack here would also install AP03 sensitivity/UI wrappers
+# globally during pytest collection and make later tests order-dependent.
+install_product_policy()
+install_submission_policy()
+install_marker_preference_policy()
+install_dataset_context_policy()
 
 from camera_rig_calibration import wizard  # noqa: E402
 
