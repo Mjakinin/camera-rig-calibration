@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import camera_rig_calibration.bootstrap as bootstrap
+from camera_rig_calibration.application import bootstrap
 
 
 INSTALLERS = (
