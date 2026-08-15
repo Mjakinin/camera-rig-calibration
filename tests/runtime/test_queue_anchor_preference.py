@@ -20,6 +20,9 @@ from camera_rig_calibration.policies.product_policy import install_product_polic
 from camera_rig_calibration.policies.queue_anchor_preference_policy import (
     install_queue_anchor_preference_policy,
 )
+from camera_rig_calibration.policies.real_partial_evaluation_policy import (
+    install_real_partial_evaluation_policy,
+)
 from camera_rig_calibration.policies.real_vehicle_marker_zero_policy import (
     install_real_vehicle_marker_zero_policy,
 )
@@ -37,6 +40,7 @@ install_marker_preference_policy()
 install_common_anchor_authority_policy()
 install_real_vehicle_marker_zero_policy()
 install_queue_anchor_preference_policy()
+install_real_partial_evaluation_policy()
 install_submission_bindings()
 
 from camera_rig_calibration import preflight  # noqa: E402
@@ -238,10 +242,12 @@ def test_real_vehicle_zero_stays_common_anchor_without_ap01_root_visibility(
         assert job.selections.evaluation_anchor_marker_id == 0
         policy = job.selections.payload["real_vehicle_marker_zero_policy"]
         assert policy["marker_zero_observed"] is True
-        assert policy["fallback_allowed"] is False
+        assert policy["calibration_gating"] is False
+        assert policy["common_evaluation_requested"] is True
+        assert policy["unobservable_method_results_are_reported_not_failed"] is True
 
 
-def test_real_vehicle_observed_but_insufficient_zero_fails_instead_of_fallback(
+def test_real_vehicle_observed_but_insufficient_zero_is_reported_without_blocking_calibration(
     tmp_path: Path,
 ) -> None:
     dataset = tmp_path / "dataset"
@@ -259,11 +265,28 @@ def test_real_vehicle_observed_but_insufficient_zero_fails_instead_of_fallback(
         output_directory=tmp_path / "preflight",
         repository_root=tmp_path,
     )
-    assert result.ready is False
-    assert result.common_evaluation_anchor_marker_id is None
-    assert all(job.status == "FAILED_PREFLIGHT" for job in result.jobs)
+
+    assert result.ready is True
+    assert result.status == "READY_WITH_WARNINGS"
+    assert result.common_evaluation_anchor_marker_id == 0
+    assert all(job.status != "FAILED_PREFLIGHT" for job in result.jobs)
+    assert all(not job.errors for job in result.jobs)
     assert any(
-        "Automatic fallback is prohibited while marker 0 is observed" in error
+        "evaluation remains enabled and does not gate calibration" in warning
         for job in result.jobs
-        for error in job.errors
+        for warning in job.warnings
     )
+    assert any(
+        "Non-blocking evaluation preflight removed evaluation-only readiness errors"
+        in detail
+        for job in result.jobs
+        for detail in job.details
+    )
+    for job in result.jobs:
+        assert job.selections is not None
+        assert job.selections.evaluation_anchor_marker_id == 0
+        policy = job.selections.payload["real_vehicle_marker_zero_policy"]
+        assert policy["marker_zero_observed"] is True
+        assert policy["calibration_gating"] is False
+        assert policy["common_evaluation_requested"] is True
+        assert policy["unobservable_method_results_are_reported_not_failed"] is True
