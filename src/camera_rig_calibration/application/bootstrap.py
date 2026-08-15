@@ -33,12 +33,30 @@ from ..policies.ui_display_policy import install_ui_display_policy
 _INSTALLED = False
 
 
+def _resolve_wizard_policy_target() -> None:
+    """Resolve the legacy wizard alias before private hook policies are applied.
+
+    The compatibility proxy forwards public attribute assignments to its target,
+    but private hook names such as ``_new_method_job`` are proxy-local.  Product
+    policies intentionally wrap those private hooks, while the modular UI reads
+    them from the canonical ``ui.wizard`` module through late bindings.  Touching
+    one private hook forces the alias to resolve and rebinds the package-level
+    historical name to the canonical module before any policy writes occur.
+    """
+
+    from .. import wizard
+
+    _ = wizard._new_method_job
+
+
 def install_product_stack() -> None:
     """Install the maintained product-facing policy stack exactly once."""
 
     global _INSTALLED
     if _INSTALLED:
         return
+
+    _resolve_wizard_policy_target()
 
     install_product_policy()
     install_real_ap02_budget_policy()
