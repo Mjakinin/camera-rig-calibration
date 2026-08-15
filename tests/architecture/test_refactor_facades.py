@@ -78,13 +78,18 @@ def test_late_bindings_follow_canonical_module_monkey_patches(monkeypatch) -> No
     monkeypatch.setattr(wizard_impl, "_choice", hook)
     monkeypatch.setattr(queue_api, "PipelineOrchestrator", orchestrator)
     monkeypatch.setattr(runtime_api, "resolve_selections", hook)
-    monkeypatch.setattr(reporting, "_read_json", hook)
     monkeypatch.setattr(preflight_api, "resolve_selections", hook)
     monkeypatch.setattr(ap01_core, "run_colmap", hook)
 
     assert current_wizard_bindings().choice is hook
     assert current_queue_bindings().pipeline_orchestrator is orchestrator
     assert current_runtime_bindings().resolve_selections is hook
-    assert current_reporting_bindings().read_json is hook
     assert PreflightDependencies.current().resolve_selections is hook
     assert AP01CoreBindings.current().run_colmap is hook
+
+
+def test_reporting_bindings_follow_installed_reporting_authority() -> None:
+    """Reporting bindings expose the currently installed authoritative reader."""
+    bindings = current_reporting_bindings()
+
+    assert bindings.read_json is reporting._read_json
