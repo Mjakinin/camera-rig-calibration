@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 
-REPOSITORY = Path(__file__).resolve().parents[1]
+REPOSITORY = Path(__file__).resolve().parents[2]
 
 
 def _geometry_module():
