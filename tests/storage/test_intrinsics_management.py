@@ -123,7 +123,7 @@ def test_unknown_hidden_field_is_ignored_and_profile_is_visible(
 
 
 def test_repository_intrinsics_use_managed_fingerprint_layout() -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
 
     profiles = {
         profile.profile_id: profile
