@@ -16,12 +16,13 @@ class RuntimeBindings:
 
 def current_runtime_bindings() -> RuntimeBindings:
     from . import api as runtime
+    from ..observation_services import api as observations
 
     return RuntimeBindings(
         command_heartbeat_seconds=runtime.COMMAND_HEARTBEAT_SECONDS,
         colmap_artifact_fingerprint=runtime.colmap_artifact_fingerprint,
-        resolve_selections=runtime.resolve_selections,
-        freeze_selections=runtime.freeze_selections,
+        resolve_selections=observations.resolve_selections,
+        freeze_selections=observations.freeze_selections,
     )
 
 
