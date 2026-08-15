@@ -21,7 +21,7 @@ class QueueBindings:
 
 
 def current_queue_bindings() -> QueueBindings:
-    from .. import queueing
+    from . import api as queueing
 
     return QueueBindings(
         pipeline_orchestrator=queueing.PipelineOrchestrator,
