@@ -9,6 +9,7 @@ from camera_rig_calibration.components import register_builtin_components
 from camera_rig_calibration.policies.marker_preference_policy import install_marker_preference_policy
 from camera_rig_calibration.policies.product_policy import (
     _DATASET_CONTEXT,
+    _install_reporting_policy,
     _refresh_derived_tree,
     install_product_policy,
 )
@@ -125,6 +126,11 @@ def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
 
 
 def test_reporting_contract_accepts_preferred_14_fallback_baseline() -> None:
+    # Policy tests are collected alongside modules that install additional
+    # reporting wrappers. Re-assert the product layer at execution time so this
+    # contract does not depend on pytest's module collection order.
+    _install_reporting_policy()
+
     contract = reporting._baseline_contract(
         category="simulation",
         method_payloads=[
