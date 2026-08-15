@@ -89,7 +89,7 @@ def _direct_config(tmp_path: Path) -> RigConfig:
 
 
 def test_input_content_gets_an_immutable_reusable_cache(tmp_path: Path) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     config = _direct_config(tmp_path)
     first = build_preparation_plan(config, repository)
     manifest = finalize_dataset(config, first)
@@ -120,7 +120,7 @@ def test_input_content_gets_an_immutable_reusable_cache(tmp_path: Path) -> None:
 def test_authoritative_prepared_dataset_reuses_original_manifest_fingerprint(
     tmp_path: Path,
 ) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     source_config = _direct_config(tmp_path)
     source_plan = build_preparation_plan(source_config, repository)
     source_manifest = finalize_dataset(source_config, source_plan)
@@ -161,7 +161,7 @@ def test_authoritative_prepared_dataset_reuses_original_manifest_fingerprint(
 def test_checkerboard_image_folder_is_a_reproducible_intrinsics_source(
     tmp_path: Path,
 ) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     config = _direct_config(tmp_path)
     checkerboard = tmp_path / "source/intrinsics_images"
     checkerboard.mkdir()
@@ -194,7 +194,7 @@ def test_checkerboard_image_folder_is_a_reproducible_intrinsics_source(
 def test_static_video_materializes_deterministic_middle_frame(
     tmp_path: Path,
 ) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     config = _direct_config(tmp_path)
     video = tmp_path / "source/static_v2/outside-left.avi"
     video.parent.mkdir()
@@ -234,7 +234,7 @@ def test_static_video_materializes_deterministic_middle_frame(
 def test_alternate_moving_intrinsics_reuse_the_same_acquisition_frames(
     tmp_path: Path,
 ) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     first_config = _direct_config(tmp_path)
     first = build_preparation_plan(first_config, repository)
     first_manifest = finalize_dataset(first_config, first)
@@ -278,7 +278,7 @@ def test_alternate_moving_intrinsics_reuse_the_same_acquisition_frames(
 def test_prepared_frames_can_be_composed_with_new_intrinsics_without_overwrite(
     tmp_path: Path,
 ) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     source_config = _direct_config(tmp_path)
     source_plan = build_preparation_plan(source_config, repository)
     finalize_dataset(source_config, source_plan)
@@ -330,7 +330,7 @@ def test_prepared_frames_can_be_composed_with_new_intrinsics_without_overwrite(
 
 
 def test_simulation_preparation_plans_a_new_isolated_capture(tmp_path: Path) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     world = tmp_path / "fixture.sdf"
     route = tmp_path / "route.json"
     world.write_text('<sdf version="1.8"><world name="fixture"/></sdf>')
@@ -384,7 +384,7 @@ def test_simulation_preparation_plans_a_new_isolated_capture(tmp_path: Path) -> 
 def test_simulation_mapping_preserves_explicit_camera_intrinsics(
     tmp_path: Path,
 ) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     world = tmp_path / "fixture.sdf"
     route = tmp_path / "route.json"
     static_info = tmp_path / "static.json"
@@ -458,7 +458,7 @@ def test_simulation_mapping_preserves_explicit_camera_intrinsics(
 def test_simulation_capture_id_forces_a_distinct_input_cache(
     tmp_path: Path,
 ) -> None:
-    repository = Path(__file__).resolve().parents[1]
+    repository = Path(__file__).resolve().parents[2]
     world = tmp_path / "fixture.sdf"
     route = tmp_path / "route.json"
     world.write_text(
