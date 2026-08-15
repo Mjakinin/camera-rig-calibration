@@ -1,4 +1,4 @@
-"""Late-bound compatibility hooks for runtime product policies."""
+"""Late-bound hooks for runtime product policies."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ class RuntimeBindings:
 
 
 def current_runtime_bindings() -> RuntimeBindings:
-    from .. import runtime
+    from . import api as runtime
 
     return RuntimeBindings(
         command_heartbeat_seconds=runtime.COMMAND_HEARTBEAT_SECONDS,
