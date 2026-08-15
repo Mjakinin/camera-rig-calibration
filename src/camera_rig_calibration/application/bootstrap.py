@@ -10,6 +10,7 @@ from ..policies.ap03_camera_model_sensitivity_policy import (
     install_ap03_camera_model_sensitivity_policy,
 )
 from ..policies.common_anchor_authority_policy import install_common_anchor_authority_policy
+from ..policies.dataset_context_policy import install_dataset_context_policy
 from ..policies.final_reporting_frontdoor_policy import install_final_reporting_frontdoor_policy
 from ..policies.marker_preference_policy import install_marker_preference_policy
 from ..policies.product_policy import install_product_policy
@@ -61,6 +62,7 @@ def install_product_stack() -> None:
     install_rviz_method_selection_policy()
     install_submission_bindings()
     install_ui_display_policy()
+    install_dataset_context_policy()
     install_result_view_policy()
 
     _INSTALLED = True
