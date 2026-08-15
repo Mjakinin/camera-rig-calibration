@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import subprocess
+import sys
+import textwrap
+
 from camera_rig_calibration.application import bootstrap
 
 
@@ -53,3 +57,37 @@ def test_product_stack_preserves_install_order_and_is_idempotent(monkeypatch) ->
 
     assert calls == ["_resolve_wizard_policy_target", *INSTALLERS]
     assert bootstrap._INSTALLED is True
+
+
+def test_product_stack_defaults_reach_canonical_wizard_bindings() -> None:
+    script = textwrap.dedent(
+        """
+        from camera_rig_calibration.application.bootstrap import install_product_stack
+        from camera_rig_calibration.components import register_builtin_components
+        from camera_rig_calibration.policies.product_policy import _DATASET_CONTEXT
+        from camera_rig_calibration.ui.wizard_bindings import current_wizard_bindings
+
+        register_builtin_components()
+        install_product_stack()
+        hooks = current_wizard_bindings()
+
+        token = _DATASET_CONTEXT.set("simulation")
+        try:
+            ap01 = hooks.new_method_job("ap01", prompt_for_single_marker=False)
+            ap02 = hooks.new_method_job("ap02", prompt_for_single_marker=False)
+            assert ap01.methods.ap01.root_camera == "cam_edge_3"
+            assert ap02.methods.ap02.reference_marker_id == 14
+            assert ap02.evaluation.anchor_marker_id == 14
+        finally:
+            _DATASET_CONTEXT.reset(token)
+
+        token = _DATASET_CONTEXT.set("real_vehicle")
+        try:
+            ap02 = hooks.new_method_job("ap02", prompt_for_single_marker=False)
+            assert ap02.methods.ap02.reference_marker_id == 0
+            assert ap02.evaluation.anchor_marker_id == 0
+        finally:
+            _DATASET_CONTEXT.reset(token)
+        """
+    )
+    subprocess.run([sys.executable, "-c", script], check=True)
