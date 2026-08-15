@@ -26,6 +26,7 @@ INSTALLERS = (
     "install_rviz_method_selection_policy",
     "install_submission_bindings",
     "install_ui_display_policy",
+    "install_dataset_context_policy",
     "install_result_view_policy",
 )
 
@@ -33,6 +34,11 @@ INSTALLERS = (
 def test_product_stack_preserves_install_order_and_is_idempotent(monkeypatch) -> None:
     calls: list[str] = []
 
+    monkeypatch.setattr(
+        bootstrap,
+        "_resolve_wizard_policy_target",
+        lambda: calls.append("_resolve_wizard_policy_target"),
+    )
     for name in INSTALLERS:
         monkeypatch.setattr(
             bootstrap,
@@ -45,5 +51,5 @@ def test_product_stack_preserves_install_order_and_is_idempotent(monkeypatch) ->
     bootstrap.install_product_stack()
     bootstrap.install_product_stack()
 
-    assert calls == list(INSTALLERS)
+    assert calls == ["_resolve_wizard_policy_target", *INSTALLERS]
     assert bootstrap._INSTALLED is True
