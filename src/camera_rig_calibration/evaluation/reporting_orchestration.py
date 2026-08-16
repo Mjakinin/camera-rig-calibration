@@ -2,59 +2,27 @@
 
 from __future__ import annotations
 
-import csv
-import hashlib
-import json
-import math
-import shutil
-import subprocess
-import sys
-from dataclasses import dataclass
-from datetime import datetime, timezone
-from itertools import combinations
 from pathlib import Path
-from typing import Any, Iterable
-
-import numpy as np
-import yaml
+from typing import Any
 
 from ..anchor_export import ensure_experiment_anchor_exports
-from ..anchor_export.geometry import rotation_to_quaternion
+from ..anchor_export.aggregate import (
+    build_experiment_anchor_aggregate,
+    experiment_anchor_aggregate_text,
+)
 from ..visualization.scene import ensure_visualization_artifacts
 from .ap03_derived import ensure_ap03_derived_results
-from .simulation_ground_truth import (
-    ensure_simulation_ground_truth,
-    resolve_simulation_ground_truth,
-)
-
-from ..methods.common.geometry import (
-    R_to_rpy_deg,
-    R_to_rvec,
-    invT,
-    make_T,
-    rot_error_deg,
-    rpy_to_R,
-    rvec_to_R,
-)
-
-from .reporting_core import (
-    _now,
-    _read_json,
-    _write_json,
-    _write_text,
-)
-from .reporting_method import (
-    refresh_method_reports,
-)
-from .reporting_real import (
-    _real_results_text,
-)
+from .simulation_ground_truth import resolve_simulation_ground_truth
+from .reporting_core import _now, _read_json, _write_json, _write_text
+from .reporting_method import refresh_method_reports
+from .reporting_real import _real_results_text
 from .reporting_simulation import (
     _refresh_factor_reports,
     _simulation_results,
     _write_route2_baseline_comparison,
 )
 from .reporting_bindings import current_reporting_bindings
+
 
 def write_scientific_experiment_reports(
     experiment_root: Path,
@@ -179,6 +147,28 @@ def write_scientific_experiment_reports(
         text, payload = _real_results_text(
             experiment_root, method_payloads, dataset_root
         )
+
+    # The per-method anchor exports above are authoritative.  Rebuild the
+    # experiment-level compatibility/front-door files on every report pass so
+    # an older AP02/AP03 subset can never remain visible after new variants are
+    # published (notably AP03 Single and later AP02 settings).
+    anchor_aggregate = build_experiment_anchor_aggregate(experiment_root)
+    payload["common_anchor_6dof_export"] = {
+        "contract": anchor_aggregate.get("contract"),
+        "anchor_marker_id": anchor_aggregate.get("anchor_marker_id"),
+        "variant_count": len(anchor_aggregate.get("variants", [])),
+        "camera_row_count": len(anchor_aggregate.get("rows", [])),
+        "json": "CAMERA_EXTRINSICS_COMMON_ANCHOR.json",
+        "csv": "CAMERA_EXTRINSICS_COMMON_ANCHOR.csv",
+        "yaml": "CAMERA_EXTRINSICS_COMMON_ANCHOR.yaml",
+    }
+    text = (
+        text.rstrip()
+        + "\n\n"
+        + experiment_anchor_aggregate_text(anchor_aggregate).rstrip()
+        + "\n"
+    )
+
     baseline_comparison = (
         _write_route2_baseline_comparison(experiment_root, payload)
         if category == "simulation"
@@ -226,6 +216,7 @@ def write_scientific_experiment_reports(
         _refresh_factor_reports(experiment_root, payload)
     return payload
 
+
 __all__ = [
-    'write_scientific_experiment_reports',
+    "write_scientific_experiment_reports",
 ]
