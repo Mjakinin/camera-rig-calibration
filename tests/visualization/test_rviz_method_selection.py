@@ -1,17 +1,44 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
 import typer
 
 from camera_rig_calibration.ui.result_browser import (
+    _available_rviz_methods,
     _parse_rviz_method_selection,
 )
 from camera_rig_calibration.visualization import _set_rviz_visible_methods
 
 
 AVAILABLE = ("ap01", "ap02", "ap03_multi", "ap03_single")
+
+
+def _write_anchor_variant(root: Path, method: str) -> None:
+    path = root / "methods" / method / "baseline" / "camera_extrinsics_anchor.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(
+            {
+                "method": method,
+                "label": "baseline",
+                "anchor_export_status": {"available": True},
+                "cameras": [{"camera_id": "cam0"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_rviz_discovery_offers_single_and_multi_but_not_shared_ap03_container(
+    tmp_path: Path,
+) -> None:
+    for method in ("ap01", "ap02", "ap03", "ap03_multi", "ap03_single"):
+        _write_anchor_variant(tmp_path, method)
+
+    assert _available_rviz_methods(tmp_path) == AVAILABLE
 
 
 def test_rviz_selection_all_and_ap03_alias() -> None:
