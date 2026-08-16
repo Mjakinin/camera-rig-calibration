@@ -41,7 +41,7 @@ from .core import (
 from .dataset import (
     _publish_dataset,
 )
-from .evaluation import publish_evaluation_tree
+from .evaluation_publication import publish_evaluation_tree
 from .inventory import (
     _native_calibration_hashes,
     _write_inventory_reports,
