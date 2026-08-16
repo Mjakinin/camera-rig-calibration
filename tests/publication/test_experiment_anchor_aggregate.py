@@ -56,7 +56,7 @@ def _write_variant(
     )
 
 
-def test_common_anchor_aggregate_contains_every_published_variant(
+def test_common_anchor_aggregate_contains_public_variants_only(
     tmp_path: Path,
 ) -> None:
     _write_variant(
@@ -64,6 +64,12 @@ def test_common_anchor_aggregate_contains_every_published_variant(
         method="ap02",
         label="combined_nfev_2__ref_mode_auto",
         x_offset=2.0,
+    )
+    _write_variant(
+        tmp_path,
+        method="ap03",
+        label="baseline",
+        x_offset=2.5,
     )
     _write_variant(
         tmp_path,
@@ -89,6 +95,7 @@ def test_common_anchor_aggregate_contains_every_published_variant(
         ("ap03_single", "baseline"),
         ("ap03_multi", "baseline"),
     }
+    assert ("ap03", "baseline") not in variant_keys
     assert len(payload["rows"]) == 6
     assert payload["rows"] == payload["all_published_variant_rows"]
     assert payload["anchor_marker_id"] == 14
@@ -109,6 +116,34 @@ def test_common_anchor_aggregate_contains_every_published_variant(
     assert "ap02/combined_nfev_2__ref_mode_auto:" in text
     assert "ap03_single/baseline:" in text
     assert "ap03_multi/baseline:" in text
+    assert "\nap03/baseline:" not in text
+
+
+def test_common_anchor_aggregate_keeps_ap03_container_without_both_scale_variants(
+    tmp_path: Path,
+) -> None:
+    _write_variant(
+        tmp_path,
+        method="ap03",
+        label="baseline",
+        x_offset=2.5,
+    )
+    _write_variant(
+        tmp_path,
+        method="ap03_single",
+        label="baseline",
+        x_offset=3.0,
+    )
+
+    payload = build_experiment_anchor_aggregate(tmp_path)
+
+    assert {
+        (item["method"], item["label"])
+        for item in payload["variants"]
+    } == {
+        ("ap03", "baseline"),
+        ("ap03_single", "baseline"),
+    }
 
 
 def test_common_anchor_aggregate_replaces_stale_subset(tmp_path: Path) -> None:
