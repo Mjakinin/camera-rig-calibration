@@ -26,14 +26,15 @@ class ReportingBindings:
 
 def current_reporting_bindings() -> ReportingBindings:
     from . import reporting
+    from . import reporting_semantics
 
     return ReportingBindings(
         read_json=reporting._read_json,
         write_json=reporting._write_json,
-        baseline_contract=reporting._baseline_contract,
+        baseline_contract=reporting_semantics.baseline_contract,
         anchor_camera_gt_rows=reporting._anchor_camera_gt_rows,
         method_report_text=reporting._method_report_text,
-        refresh_method_reports=reporting.refresh_method_reports,
+        refresh_method_reports=reporting_semantics.refresh_method_reports,
         real_results_text=reporting._real_results_text,
         simulation_results=reporting._simulation_results,
         repository_root=reporting._repository_root,
