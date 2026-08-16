@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from camera_rig_calibration.publication_services.evaluation import (
+from camera_rig_calibration.publication_services.evaluation_publication import (
     publish_evaluation_tree,
 )
 
