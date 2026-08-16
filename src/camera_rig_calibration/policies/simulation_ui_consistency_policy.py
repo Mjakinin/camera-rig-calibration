@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Iterable
 
 import typer
+from rich.panel import Panel
 
 from ..dataset.discovery import safe_id
 
@@ -16,6 +17,14 @@ _CAPTURE_KEYS = (
     "frame_timeout_seconds",
     "startup_timeout_seconds",
 )
+_SIMULATION_EDITOR_CAPABILITIES = {
+    "route",
+    "density",
+    "resolution",
+    "fov",
+    "lighting",
+    "motion_blur",
+}
 
 
 def _fresh_capture_experiment_id(
@@ -65,6 +74,7 @@ def install_simulation_ui_consistency_policy() -> None:
         wizard_review,
         wizard_saved_flow,
         wizard_simulation,
+        wizard_simulation_parameters,
     )
 
     original_prompt_index = wizard_prompts._prompt_index
@@ -118,6 +128,119 @@ def install_simulation_ui_consistency_policy() -> None:
     if getattr(wizard_simulation, "_prompt_index", None) is original_prompt_index:
         wizard_simulation._prompt_index = prompt_index
     wizard._prompt_index = prompt_index
+
+    original_edit_simulation_parameters = (
+        wizard_simulation_parameters._edit_simulation_parameters
+    )
+
+    def edit_simulation_parameters(
+        repository_root: Path,
+        console,
+        parameters: dict[str, object],
+        route: Path,
+        *,
+        world_name: str = "Bus",
+        capabilities: Iterable[str] | None = None,
+        available_routes: dict[str, Path] | None = None,
+        lighting_profiles: Iterable[str] | None = None,
+    ):
+        """Separate scientific experiment factors from capture safeguards."""
+
+        enabled = set(capabilities or _SIMULATION_EDITOR_CAPABILITIES)
+        enabled.discard("capture")
+        resolved, resolved_route, capture = original_edit_simulation_parameters(
+            repository_root,
+            console,
+            parameters,
+            route,
+            world_name=world_name,
+            capabilities=enabled,
+            available_routes=available_routes,
+            lighting_profiles=lighting_profiles,
+        )
+
+        def capture_text() -> str:
+            return (
+                "Technical acquisition safeguards; these are not experiment factors.\n"
+                "Every planned route pose still produces one saved image. "
+                "post_pose_skip only discards transient sensor-stream frames "
+                "immediately after a pose change.\n\n"
+                f"settle_seconds={capture['settle_seconds']} s, "
+                f"post_pose_skip={capture['post_pose_skip']}, "
+                f"frame_timeout_seconds={capture['frame_timeout_seconds']} s, "
+                f"startup_timeout_seconds={capture['startup_timeout_seconds']} s"
+            )
+
+        console.print(
+            Panel(
+                capture_text(),
+                title="Advanced capture reliability settings",
+            )
+        )
+        if typer.confirm(
+            "Open advanced capture reliability settings?", default=False
+        ):
+            while True:
+                settle = typer.prompt(
+                    "Settle time after each route pose [s]",
+                    default=float(capture["settle_seconds"]),
+                    type=float,
+                )
+                post_pose_skip = typer.prompt(
+                    "Transient sensor-stream frames discarded after each pose",
+                    default=int(capture["post_pose_skip"]),
+                    type=int,
+                )
+                frame_timeout = typer.prompt(
+                    "Frame timeout per route pose [s]",
+                    default=float(capture["frame_timeout_seconds"]),
+                    type=float,
+                )
+                startup_timeout = typer.prompt(
+                    "Gazebo/ROS startup timeout [s]",
+                    default=float(capture["startup_timeout_seconds"]),
+                    type=float,
+                )
+                if settle < 0:
+                    wizard_prompts._show_input_error(
+                        "Settle time must be non-negative."
+                    )
+                    continue
+                if post_pose_skip < 0:
+                    wizard_prompts._show_input_error(
+                        "Discarded sensor-stream frames must be non-negative."
+                    )
+                    continue
+                if frame_timeout <= 0 or startup_timeout <= 0:
+                    wizard_prompts._show_input_error(
+                        "Capture timeouts must be positive."
+                    )
+                    continue
+                capture = {
+                    "settle_seconds": settle,
+                    "post_pose_skip": post_pose_skip,
+                    "frame_timeout_seconds": frame_timeout,
+                    "startup_timeout_seconds": startup_timeout,
+                }
+                console.print(
+                    Panel(
+                        capture_text(),
+                        title="Resolved advanced capture reliability settings",
+                    )
+                )
+                break
+        return resolved, resolved_route, capture
+
+    edit_simulation_parameters._rigcal_simulation_ui_consistency = True  # type: ignore[attr-defined]
+    wizard_simulation_parameters._edit_simulation_parameters = (
+        edit_simulation_parameters
+    )
+    if (
+        getattr(wizard_simulation, "_edit_simulation_parameters", None)
+        is original_edit_simulation_parameters
+    ):
+        wizard_simulation._edit_simulation_parameters = edit_simulation_parameters
+    wizard._edit_simulation_parameters = edit_simulation_parameters
 
     original_job_from_parameters = wizard_simulation._simulation_job_from_parameters
 
