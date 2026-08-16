@@ -5,16 +5,15 @@ _INSTALLED = False
 
 
 def install_real_ap02_budget_policy() -> None:
-    """Set the final AP02 BA safety budget for newly created real-vehicle jobs.
+    """Keep new Real Vehicle AP02 jobs on the canonical editable 80/80 budget.
 
     This changes only the product default used when the Wizard creates a new
     Real Vehicle method job. It does not rewrite explicit user configs and it
     does not change the frozen Simulation baseline/ablation contract.
 
-    Static-only BA keeps the proven 80-evaluation ceiling. Combined BA gets a
-    160-evaluation ceiling so ftol/xtol/gtol can terminate normally instead of
-    the 80-evaluation cap becoming the stopping criterion on larger real-data
-    problems.
+    Both static-only and combined BA therefore start at the canonical
+    80-function-evaluation ceiling while remaining fully user-editable in the
+    method settings UI.
     """
     global _INSTALLED
     if _INSTALLED:
@@ -34,7 +33,7 @@ def install_real_ap02_budget_policy() -> None:
             ap02 = job.methods.ap02.model_copy(
                 update={
                     "static_only_ba_max_function_evaluations": 80,
-                    "combined_ba_max_function_evaluations": 160,
+                    "combined_ba_max_function_evaluations": 80,
                 }
             )
             job.methods = job.methods.model_copy(
