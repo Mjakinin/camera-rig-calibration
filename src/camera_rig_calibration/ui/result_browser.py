@@ -35,6 +35,73 @@ def _is_internal_evidence_result(entry: object) -> bool:
     )
 
 
+def _available_rviz_methods(experiment_root: Path) -> tuple[str, ...]:
+    """Return published camera-pose methods eligible for RViz selection."""
+    methods: set[str] = set()
+    for path in sorted(
+        (experiment_root / "methods").glob(
+            "*/*/camera_extrinsics_anchor.json"
+        )
+    ):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        status = payload.get("anchor_export_status", {})
+        cameras = payload.get("cameras", [])
+        if isinstance(status, dict) and not status.get("available", cameras):
+            continue
+        method = str(payload.get("method") or path.parents[1].name)
+        # AP03 is the shared COLMAP/provenance container. The selectable
+        # scientific pose estimates are AP03 Single and AP03 Multi.
+        if method == "ap03":
+            continue
+        methods.add(method)
+    return tuple(sorted(methods))
+
+
+def _parse_rviz_method_selection(
+    raw: str,
+    available_methods: tuple[str, ...],
+) -> set[str]:
+    """Parse comma-separated RViz method IDs; ``ap03`` selects both scales."""
+    available = {method.lower(): method for method in available_methods}
+    value = raw.strip().lower()
+    if not value or value == "all":
+        return set(available_methods)
+    selected: set[str] = set()
+    unknown: list[str] = []
+    for token in (item.strip().lower() for item in value.split(",")):
+        if not token:
+            continue
+        if token == "all":
+            return set(available_methods)
+        if token == "ap03":
+            ap03_variants = {
+                method
+                for key, method in available.items()
+                if key in {"ap03_single", "ap03_multi"}
+            }
+            if ap03_variants:
+                selected.update(ap03_variants)
+                continue
+        method = available.get(token)
+        if method is None:
+            unknown.append(token)
+        else:
+            selected.add(method)
+    if unknown:
+        raise typer.BadParameter(
+            "Unknown RViz method(s): "
+            + ", ".join(unknown)
+            + ". Available: "
+            + ", ".join(available_methods)
+        )
+    if not selected:
+        raise typer.BadParameter("Select at least one RViz method or use 'all'.")
+    return selected
+
+
 def show_results(repository_root: Path, console: Console) -> None:
     entries = [
         entry
@@ -180,8 +247,32 @@ def show_results(repository_root: Path, console: Console) -> None:
     if choice == "0":
         return
     if choice == "5":
+        available_methods = _available_rviz_methods(entry.path)
+        if not available_methods:
+            console.print(
+                Panel(
+                    "No common-anchor method pose layer is available.",
+                    title="RViz visualization unavailable",
+                    border_style="yellow",
+                )
+            )
+            return
+        console.print(
+            "Available RViz method layers: " + ", ".join(available_methods)
+        )
+        raw_methods = typer.prompt(
+            "Methods to show (comma-separated; ap03 = Single+Multi; all = all)",
+            default="all",
+        )
+        visible_methods = _parse_rviz_method_selection(
+            str(raw_methods), available_methods
+        )
         try:
-            session = launch_isolated_rviz(entry.path, repository_root)
+            session = launch_isolated_rviz(
+                entry.path,
+                repository_root,
+                visible_methods=visible_methods,
+            )
         except RuntimeError as exc:
             console.print(
                 Panel(
@@ -197,6 +288,7 @@ def show_results(repository_root: Path, console: Console) -> None:
                     f"Session: {session['session_id']}\n"
                     f"ROS_DOMAIN_ID: {session['ros_domain_id']}\n"
                     f"PID: {session['pid']}\n"
+                    f"Visible methods: {', '.join(sorted(visible_methods))}\n"
                     f"Log: {session['log']}\n\n"
                     "RViz runs independently in the background. You can open "
                     "another result without closing this window."
@@ -264,5 +356,9 @@ def show_results(repository_root: Path, console: Console) -> None:
     )
 
 
-
-__all__ = ["_is_internal_evidence_result", "show_results"]
+__all__ = [
+    "_is_internal_evidence_result",
+    "_available_rviz_methods",
+    "_parse_rviz_method_selection",
+    "show_results",
+]
