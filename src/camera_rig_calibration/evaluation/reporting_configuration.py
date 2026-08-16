@@ -20,6 +20,7 @@ import yaml
 
 from ..anchor_export import ensure_experiment_anchor_exports
 from ..anchor_export.geometry import rotation_to_quaternion
+from ..config.models import AP02Settings
 from ..visualization.scene import ensure_visualization_artifacts
 from .ap03_derived import ensure_ap03_derived_results
 from .simulation_ground_truth import (
@@ -330,6 +331,8 @@ def _baseline_contract(
     """Evaluate the auditable Route-2 CPU baseline contract."""
 
     anchor = evaluation_anchor.get("selected")
+    ap02_defaults = AP02Settings()
+
     def integer(value: Any) -> int:
         try:
             return int(value)
@@ -386,14 +389,14 @@ def _baseline_contract(
                         or config.get("reference_marker_id")
                     )
                     == 14,
-                    "static_nfev_50": integer(
+                    "static_nfev_default": integer(
                         config.get("static_max_nfev") or 0
                     )
-                    == 50,
-                    "combined_nfev_50": integer(
+                    == ap02_defaults.static_only_ba_max_function_evaluations,
+                    "combined_nfev_default": integer(
                         config.get("combined_max_nfev") or 0
                     )
-                    == 50,
+                    == ap02_defaults.combined_ba_max_function_evaluations,
                     "maximum_bottleneck_initialization": config.get(
                         "initialization_algorithm"
                     )
@@ -435,7 +438,7 @@ def _baseline_contract(
             }
         )
     return {
-        "contract": "route2_cpu_ref14_50x50_v1",
+        "contract": "route2_cpu_ref14_ap02_defaults_v2",
         "category": category,
         "evaluation_anchor_marker_id": anchor,
         "variants": variants,
