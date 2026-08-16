@@ -1,0 +1,71 @@
+{
+  "evaluation_path": "evaluations",
+  "experiment": "fov_120deg__light_low_1x__blur_k21_0deg",
+  "generated_at": "2026-08-15T17:38:55+00:00",
+  "human_report": "RESULTS.txt",
+  "layout_version": 2,
+  "methods": [
+    {
+      "artifact_status": "failed",
+      "config_summary": {},
+      "label": "direct_target_camera_auto",
+      "method": "ap01",
+      "metrics": {},
+      "primary_result": null,
+      "quality_status": "not_available",
+      "result_path": "attempts/ap01/direct_target_camera_auto/fov_120deg__light_low_1x__blur_k21_0deg__ap01__baseline__01",
+      "runtime_seconds": null,
+      "static_camera_count": null,
+      "status": "failed",
+      "warning": "Input or observation-quality preflight rejected this job.",
+      "warnings": [
+        "Input or observation-quality preflight rejected this job."
+      ]
+    },
+    {
+      "artifact_status": "failed",
+      "config_summary": {},
+      "label": "direct_target_camera_cam_edge_3__root_cam_edge_1",
+      "method": "ap01",
+      "metrics": {},
+      "primary_result": null,
+      "quality_status": "not_available",
+      "result_path": "attempts/ap01/direct_target_camera_cam_edge_3__root_cam_edge_1/20260815_181548_baseline_210c06d5",
+      "runtime_seconds": null,
+      "static_camera_count": null,
+      "status": "failed",
+      "warning": "The method failed; complete evidence is retained in this attempt.",
+      "warnings": [
+        "The method failed; complete evidence is retained in this attempt."
+      ]
+    },
+    {
+      "artifact_status": "failed",
+      "config_summary": {},
+      "label": "root_cam_edge_3",
+      "method": "ap01",
+      "metrics": {},
+      "primary_result": null,
+      "quality_status": "not_available",
+      "result_path": "attempts/ap01/root_cam_edge_3/20260816_102029_root_cam_edge_3_7a02cd7a",
+      "runtime_seconds": null,
+      "static_camera_count": null,
+      "status": "failed",
+      "warning": "The method failed; complete evidence is retained in this attempt.",
+      "warnings": [
+        "The method failed; complete evidence is retained in this attempt."
+      ]
+    }
+  ],
+  "quality_status": "ok",
+  "schema_version": 5,
+  "status": "failed",
+  "visualization": {
+    "available": false,
+    "contract": "rigcal_rviz_scene_v2",
+    "reason": "RViz requires the exact declared AP03 Multi best-model points3D file, Multi scale, and matching anchor export. No alternative model and no new COLMAP run are used.",
+    "schema_version": 2,
+    "status": "UNAVAILABLE_NO_AP03_RECONSTRUCTION",
+    "warnings": []
+  }
+}

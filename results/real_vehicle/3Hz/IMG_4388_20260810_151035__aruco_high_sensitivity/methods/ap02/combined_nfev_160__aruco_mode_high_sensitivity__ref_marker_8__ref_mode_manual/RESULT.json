@@ -105,6 +105,8 @@
     "top_per_marker_pair": 4
   },
   "cross_component_extrinsics": "not_observable",
+  "deployment_eligible": false,
+  "deployment_eligible_cameras": [],
   "detail_artifacts": [
     "diagnostics/method/aruco_observations/ap02_frame_selection.json",
     "diagnostics/method/component_diagnostics/component_02/graph_ba/with_moving/ap02_optimization_history.csv",

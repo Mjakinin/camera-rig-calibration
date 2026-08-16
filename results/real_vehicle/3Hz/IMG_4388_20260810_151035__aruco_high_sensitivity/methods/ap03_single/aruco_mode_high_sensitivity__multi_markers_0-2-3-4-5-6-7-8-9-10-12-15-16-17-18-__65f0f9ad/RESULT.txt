@@ -5,11 +5,11 @@ Method / variant: ap03_single / aruco_mode_high_sensitivity__multi_markers_0-2-3
 Execution status: completed_shared_colmap
 Solver status: not_applicable
 Artifact status: available
-Calibration status: available
+Calibration status: rejected_by_quality_gate
 Quality status: poor_scale_dispersion
 Evaluation status: available
 Anchor export status: PARTIAL_CAMERA_COVERAGE
-RViz visualization status: OK
+RViz visualization status: not_generated
 Primary result: single
 Runtime: 11979.0 s
 Reference frame: COLMAP gauge with metric marker scale

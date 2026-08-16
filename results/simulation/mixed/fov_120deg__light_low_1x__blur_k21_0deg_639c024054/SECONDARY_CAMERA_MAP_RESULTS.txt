@@ -1,0 +1,4 @@
+SECONDARY STATIC-CAMERA MAP VS GROUND TRUTH
+======================================================================================================================
+
+Experiment: fov_120deg__light_low_1x__blur_k21_0deg_639c024054

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-08-15T22:19:14+00:00",
+  "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+  "python_executable": "/usr/bin/python3",
+  "platform": "Linux-7.0.0-29-generic-x86_64-with-glibc2.35",
+  "working_directory": "/workspaces/project",
+  "git_commit": "89257e227b3036e8ba9f366cef7ed1b3566f49a6",
+  "git_branch": "refactor/final-structure-polish",
+  "scientific_packages": {
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "cv2": "4.11.0"
+  },
+  "colmap": "/usr/bin/colmap"
+}

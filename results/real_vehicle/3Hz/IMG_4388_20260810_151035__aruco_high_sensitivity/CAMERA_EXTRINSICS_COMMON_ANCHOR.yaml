@@ -22,8 +22,8 @@ rows:
   qy: 0.6018986907816336
   qz: -0.7109922550773122
   qw: 0.19542035595108503
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - &id002
   method: ap03_multi
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
@@ -40,8 +40,8 @@ rows:
   qy: -0.5649710851314269
   qz: 0.6528300373431097
   qw: 0.3606968126736879
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - &id003
   method: ap03_multi
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
@@ -58,8 +58,8 @@ rows:
   qy: 0.6849152222371228
   qz: -0.2130231754058331
   qw: 0.10564964228695436
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - &id004
   method: ap03_multi
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
@@ -76,8 +76,8 @@ rows:
   qy: -0.6769494947130962
   qz: -0.06456373434416753
   qw: 0.15041342097499283
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - &id005
   method: ap03_multi
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
@@ -94,8 +94,8 @@ rows:
   qy: 0.3603713272494895
   qz: -0.06657251921510585
   qw: 0.48152823163201963
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - &id006
   method: ap03_multi
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
@@ -112,8 +112,8 @@ rows:
   qy: 0.724836330012799
   qz: -0.6873931194160879
   qw: 0.021768445113128115
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - &id007
   method: ap03_multi
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
@@ -130,8 +130,8 @@ rows:
   qy: -0.4898810339913725
   qz: 0.3929976337448466
   qw: 0.11802685933825857
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - &id008
   method: ap03_multi
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
@@ -148,8 +148,8 @@ rows:
   qy: 0.8481216085127412
   qz: -0.5251897847379112
   qw: 0.015080495665821269
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 all_published_variant_rows:
 - *id001
 - *id002
@@ -174,8 +174,8 @@ all_published_variant_rows:
   qy: 0.6018986907816342
   qz: -0.7109922550773116
   qw: 0.19542035595108323
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - method: ap03_single
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
   anchor_marker_id: 0
@@ -191,8 +191,8 @@ all_published_variant_rows:
   qy: -0.5649710851314259
   qz: 0.6528300373431105
   qw: 0.3606968126736895
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - method: ap03_single
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
   anchor_marker_id: 0
@@ -208,8 +208,8 @@ all_published_variant_rows:
   qy: 0.6849152222371233
   qz: -0.21302317540583143
   qw: 0.10564964228695253
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - method: ap03_single
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
   anchor_marker_id: 0
@@ -225,8 +225,8 @@ all_published_variant_rows:
   qy: -0.6769494947130956
   qz: -0.06456373434416571
   qw: 0.15041342097499452
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - method: ap03_single
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
   anchor_marker_id: 0
@@ -242,8 +242,8 @@ all_published_variant_rows:
   qy: 0.36037132724949106
   qz: -0.06657251921510408
   qw: 0.48152823163201863
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - method: ap03_single
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
   anchor_marker_id: 0
@@ -259,8 +259,8 @@ all_published_variant_rows:
   qy: 0.7248363300127991
   qz: -0.6873931194160878
   qw: 0.021768445113125992
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - method: ap03_single
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
   anchor_marker_id: 0
@@ -276,8 +276,8 @@ all_published_variant_rows:
   qy: -0.4898810339913719
   qz: 0.39299763374484853
   qw: 0.1180268593382599
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion
 - method: ap03_single
   label: aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad
   anchor_marker_id: 0
@@ -293,5 +293,5 @@ all_published_variant_rows:
   qy: 0.8481216085127412
   qz: -0.5251897847379111
   qw: 0.015080495665818911
-  deployment_eligible: true
-  quality_status: accepted
+  deployment_eligible: false
+  quality_status: poor_scale_dispersion

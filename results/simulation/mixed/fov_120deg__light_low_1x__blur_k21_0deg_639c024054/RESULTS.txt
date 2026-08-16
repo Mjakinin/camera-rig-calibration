@@ -1,0 +1,53 @@
+SIMULATION CALIBRATION RESULTS — CAMERA-TO-CAMERA VS GROUND TRUTH
+==========================================================================================================================================
+
+Experiment: fov_120deg__light_low_1x__blur_k21_0deg_639c024054
+Simulation parameters: frame_timeout_seconds=3.0, lighting=low, lighting_scale=1.0, motion_blur_angle_deg=0.0, motion_blur_kernel=21, moving_height=720, moving_hfov_deg=120.0, moving_width=1280, post_pose_skip=5, route=route2, route_sampling_strategy=original_route_poses, route_sha256=27bf673ecb28c2706aac4a47f3a4c7bead824bbf09cc8efd2155ff05bc0a24bb, settle_seconds=0.35, startup_timeout_seconds=60.0, target_route_frames=189, world_sha256=f33b020b9b1bc4dd64802674f02e091a7717e787d58ce2ef82d5863eaca165fd
+Common evaluation anchor: marker None (configured auto; frozen during preflight)
+Anchor reason: evaluation disabled explicitly
+
+BASELINE CONTRACT
+------------------------------------------------------------------------------------------------------------------------------------------
+Contract: route2_cpu_ref14_50x50_v1
+Overall: NOT A COMPLETE BASELINE CONTRACT
+Method | Variant | Status | Failed checks / evidence
+-------+---------+--------+-------------------------
+
+METHOD / VARIANT SUMMARY
+------------------------------------------------------------------------------------------------------------------------------------------
+Method | Variant | Artifact | Quality | Pairs | mean t [cm] | mean r [deg] | max t [cm] | max r [deg] | Key configuration
+-------+---------+----------+---------+-------+-------------+--------------+------------+-------------+------------------
+
+SCALE COMPARISON
+------------------------------------------------------------------------------------------------------------------------------------------
+No successful method scale result is available.
+
+DETAILED CAMERA-PAIR RESULTS
+------------------------------------------------------------------------------------------------------------------------------------------
+
+METHOD REPORTS AND DETAIL ARTIFACTS
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+DIRECT COMMON-ANCHOR CAMERA POSES VS GROUND TRUTH
+------------------------------------------------------------------------------------------------------------------------------------------
+Unavailable: the frozen anchor or a method-specific anchor export is missing.
+Detailed values: evaluations/anchor_camera_gt.csv
+
+COMMON-ANCHOR STATIC-CAMERA 6DOF EXPORTS
+------------------------------------------------------------------------------------------------------------------------------------------
+Reference frame: evaluation_anchor_marker_None
+Translation: metres; roll/pitch/yaw: radians; optical-camera convention x right, y down, z forward.
+These are method outputs expressed in the common evaluation/export anchor frame; no GT alignment is applied.
+
+No common-anchor 6DoF camera export is available.
+Machine-readable exports:
+- CAMERA_EXTRINSICS_COMMON_ANCHOR.yaml
+- CAMERA_EXTRINSICS_COMMON_ANCHOR.json
+- CAMERA_EXTRINSICS_COMMON_ANCHOR.csv
+
+RVIZ VISUALIZATION
+------------------------------------------------------------------------
+Status: UNAVAILABLE_NO_AP03_RECONSTRUCTION
+Manifest: visualization/visualization_manifest.json
+Reason: RViz requires the exact declared AP03 Multi best-model points3D file, Multi scale, and matching anchor export. No alternative model and no new COLMAP run are used.

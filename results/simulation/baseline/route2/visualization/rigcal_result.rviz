@@ -1,0 +1,33 @@
+Panels:
+  - Class: rviz_common/Displays
+Visualization Manager:
+  Global Options:
+    Fixed Frame: evaluation_anchor_marker_14
+    Background Color: 35; 35; 35
+  Displays:
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Anchor / local origin
+      Enabled: true
+      Topic:
+        Value: /rigcal/scene/anchor
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Ground truth cameras
+      Enabled: true
+      Topic:
+        Value: /rigcal/ground_truth/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/combined_nfev_1__ref_mode_auto__static_nfev_1
+      Enabled: true
+      Topic:
+        Value: /rigcal/methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/cameras
+    - Class: rviz_default_plugins/MarkerArray
+      Name: ap02/combined_nfev_1__ref_mode_auto__static_nfev_1 anchor edges
+      Enabled: false
+      Topic:
+        Value: /rigcal/methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/anchor_edges
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+Window Geometry:
+  Width: 1400
+  Height: 900

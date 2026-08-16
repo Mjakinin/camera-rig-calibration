@@ -1,0 +1,91 @@
+{
+  "anchor_camera_ground_truth": {
+    "anchor_marker_id": null,
+    "path": "evaluations/anchor_camera_gt.csv",
+    "rows": [],
+    "summaries": []
+  },
+  "baseline_contract": {
+    "category": "simulation",
+    "contract": "route2_cpu_ref14_50x50_v1",
+    "evaluation_anchor_marker_id": null,
+    "passes": false,
+    "variants": []
+  },
+  "category": "simulation",
+  "common_anchor_camera_6dof": {
+    "all_published_variant_rows": [],
+    "anchor_marker_id": null,
+    "parent_frame": null,
+    "rotation_unit": "rad",
+    "rows": [],
+    "rpy_convention": "R = Rz(yaw) @ Ry(pitch) @ Rx(roll)",
+    "schema_version": 1,
+    "transform_convention": "T_anchor_camera; p_anchor = T_anchor_camera @ p_camera",
+    "translation_unit": "m"
+  },
+  "experiment": "fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+  "generated_at": "2026-08-15T17:38:55+00:00",
+  "ground_truth": {
+    "camera_transform_convention": "T_world_camera_optical maps OpenCV camera coordinates to world",
+    "marker_transform_convention": "T_world_marker_opencv maps OpenCV ArUco coordinates to world",
+    "snapshot_origin": "backfilled_from_published_world_snapshot",
+    "world_sha256": "0a2490d955112055cddd36d94d04cce43f96d0aeb1c92884f0f1e997081c9bed",
+    "world_snapshot": "world_snapshot.sdf"
+  },
+  "human_report": "RESULTS.txt",
+  "layout_version": 2,
+  "methods": [],
+  "primary_camera_pairwise": {
+    "rows": [],
+    "summaries": []
+  },
+  "scale_comparison": [],
+  "schema_version": 5,
+  "secondary_ap02_marker_map": {
+    "path": "SECONDARY_AP02_MARKER_MAP_RESULTS.txt",
+    "variants": []
+  },
+  "secondary_camera_map": {
+    "path": "SECONDARY_CAMERA_MAP_RESULTS.txt",
+    "rows": []
+  },
+  "simulation_parameters": {
+    "frame_timeout_seconds": 3.0,
+    "lighting": "low",
+    "lighting_scale": 1.0,
+    "motion_blur_angle_deg": 0.0,
+    "motion_blur_kernel": 21,
+    "moving_height": 720,
+    "moving_hfov_deg": 120.0,
+    "moving_width": 1280,
+    "post_pose_skip": 5,
+    "route": "route2",
+    "route_sampling_strategy": "original_route_poses",
+    "route_sha256": "27bf673ecb28c2706aac4a47f3a4c7bead824bbf09cc8efd2155ff05bc0a24bb",
+    "settle_seconds": 0.35,
+    "startup_timeout_seconds": 60.0,
+    "target_route_frames": 189,
+    "world_sha256": "f33b020b9b1bc4dd64802674f02e091a7717e787d58ce2ef82d5863eaca165fd"
+  },
+  "status": "available",
+  "storage": {
+    "canonical_id": "fov_120deg__light_low_1x__blur_k21_0deg",
+    "category": "simulation",
+    "dataset_root": "/workspaces/project/results/simulation/mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+    "factor": "mixed",
+    "layout_version": 2,
+    "relative_path": "mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+    "result_root": "/workspaces/project/results/simulation/mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+    "schema_version": 5,
+    "value": "fov_120deg__light_low_1x__blur_k21_0deg_639c024054"
+  },
+  "visualization": {
+    "available": false,
+    "contract": "rigcal_rviz_scene_v2",
+    "reason": "RViz requires the exact declared AP03 Multi best-model points3D file, Multi scale, and matching anchor export. No alternative model and no new COLMAP run are used.",
+    "schema_version": 2,
+    "status": "UNAVAILABLE_NO_AP03_RECONSTRUCTION",
+    "warnings": []
+  }
+}

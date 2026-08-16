@@ -1,0 +1,25 @@
+{
+  "schema_version": 5,
+  "reference_marker_id": 14,
+  "static_only": {
+    "reached_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "reached_camera_count": 4,
+    "reached_marker_count": 20
+  },
+  "combined": {
+    "reached_cameras": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "reached_camera_count": 4,
+    "reached_marker_count": 20
+  },
+  "component_manifest": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02/02_aruco_observations/component_manifest.json"
+}

@@ -1,0 +1,11 @@
+{
+  "all_published_variant_rows": [],
+  "anchor_marker_id": null,
+  "parent_frame": null,
+  "rotation_unit": "rad",
+  "rows": [],
+  "rpy_convention": "R = Rz(yaw) @ Ry(pitch) @ Rx(roll)",
+  "schema_version": 1,
+  "transform_convention": "T_anchor_camera; p_anchor = T_anchor_camera @ p_camera",
+  "translation_unit": "m"
+}

@@ -1,0 +1,12 @@
+RIGCAL TEMPORARY METHOD WORKSPACE
+=================
+
+This directory is an internal, resumable workspace. Its numbered sub-stages describe execution order and are never exposed as the public result layout.
+
+After validation, publication exports:
+  RESULT.txt/json and camera_extrinsics.csv
+  diagnostics/ (preflight, method and evaluation internals)
+  logs/ (complete child-process output)
+  provenance/ (configs, commands, environment and timings)
+
+Canonical dataset: /workspaces/project/workspace/temporary_runs/simulation_batch_20260815_221856__fov_120deg__light_low_1x__blur_k21_0deg/dataset

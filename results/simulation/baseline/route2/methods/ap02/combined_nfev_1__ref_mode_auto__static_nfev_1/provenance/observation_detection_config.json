@@ -1,0 +1,21 @@
+{
+  "schema_version": 5,
+  "layout_version": 2,
+  "input_id": "input_0ffd7d57d0b8",
+  "observation_id": "detection_8c9e36dd6f9e",
+  "markers": {
+    "dictionary": "DICT_4X4_50",
+    "length_m": 0.17,
+    "accepted_ids": "all_detected",
+    "detection_mode": "baseline"
+  },
+  "effective_detector": {
+    "contract": "rigcal_aruco_detector_v2",
+    "mode": "baseline",
+    "dictionary": "DICT_4X4_50",
+    "opencv_version": "4.11.0",
+    "parameters": "opencv_defaults"
+  },
+  "detector_contract": "rigcal_aruco_detector_v2",
+  "observation_input_contract": "raw_detection_with_dimensions_and_area_ratio_v2"
+}

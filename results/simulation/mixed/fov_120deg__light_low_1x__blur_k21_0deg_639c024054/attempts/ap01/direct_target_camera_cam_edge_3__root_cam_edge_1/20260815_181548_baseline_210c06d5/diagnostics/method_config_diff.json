@@ -1,0 +1,14 @@
+{
+  "direct_target_camera": {
+    "baseline": "cam_edge_1",
+    "value": "cam_edge_3"
+  },
+  "root_camera": {
+    "baseline": "auto",
+    "value": "cam_edge_1"
+  },
+  "colmap.executable": {
+    "baseline": "auto",
+    "value": "/usr/bin/colmap"
+  }
+}

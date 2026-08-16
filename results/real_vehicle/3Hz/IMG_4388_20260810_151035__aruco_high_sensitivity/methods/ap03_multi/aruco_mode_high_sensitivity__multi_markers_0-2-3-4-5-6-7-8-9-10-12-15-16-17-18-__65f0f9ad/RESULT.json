@@ -18,7 +18,7 @@
     "camera_front_right",
     "camera_front_wide"
   ],
-  "calibration_status": "available",
+  "calibration_status": "rejected_by_quality_gate",
   "camera_extrinsics": "camera_extrinsics.csv",
   "camera_extrinsics_anchor": "camera_extrinsics_anchor.csv",
   "camera_extrinsics_anchor_json": "camera_extrinsics_anchor.json",
@@ -54,6 +54,8 @@
     "scale_reprojection_threshold_px": 5.0,
     "single_scale_marker_id": 0
   },
+  "deployment_eligible": false,
+  "deployment_eligible_cameras": [],
   "derived_fingerprint": "63b421ad05de60d6afb698e2deee9df920d81fd96b51c350eacf4e3bf4eab222",
   "derived_results": [
     "../../ap03_single/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",
@@ -413,6 +415,7 @@
   "queue_id": "IMG_4388_20260810_151035_queue",
   "reference_frame": "COLMAP gauge with metric marker scale",
   "runtime_seconds": 11979.034852191005,
+  "scale_quality_status": "poor_scale_dispersion",
   "schema_version": 5,
   "scientific_role": "ap03_multi_scale_result",
   "shared_colmap_container": "methods/ap03/aruco_mode_high_sensitivity__multi_markers_0-2-3-4-5-6-7-8-9-10-12-15-16-17-18-__65f0f9ad",

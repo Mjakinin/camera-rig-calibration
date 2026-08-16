@@ -1,0 +1,1401 @@
+{
+  "schema_version": 5,
+  "run_id": "20260815_185544_root_cam_edge_3_62a43172",
+  "execution_id": "20260815_185544_root_cam_edge_3_62a43172",
+  "experiment_id": "fov_120deg__light_low_1x__blur_k21_0deg",
+  "canonical_experiment_root": "/workspaces/project/results/simulation/mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+  "transaction_root": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260815_185526__fov_120deg__light_low_1x__blur_k21_0deg",
+  "result_category": "simulation",
+  "dataset_id": "fov_120deg__light_low_1x__blur_k21_0deg",
+  "scene_type": "simulation",
+  "status": "failed",
+  "created_at": "2026-08-15T18:55:44+00:00",
+  "updated_at": "2026-08-15T19:05:02+00:00",
+  "config_sha256": "2327f583f650d3f5568957a624fa2817b595dfaa97c6ec76e68c65e926e58c78",
+  "requested_config_sha256": "62a43172e928d78010efa954c84d7e6753ad4cee42f48cd0b13ad29b7317fa57",
+  "enabled_methods": [
+    "ap01"
+  ],
+  "observation_input_contract": "observation_quality_v2",
+  "execution_mode": "complete",
+  "selection_mode": "explicit",
+  "evaluation_deferred_to_queue": true,
+  "runner_pid": null,
+  "simulation_parameters": {
+    "route": "route2",
+    "moving_width": 1280,
+    "moving_height": 720,
+    "moving_hfov_deg": 120.0,
+    "lighting": "low",
+    "lighting_scale": 1.0,
+    "motion_blur_kernel": 21,
+    "motion_blur_angle_deg": 0.0,
+    "target_route_frames": 189,
+    "route_sampling_strategy": "original_route_poses",
+    "settle_seconds": 0.35,
+    "post_pose_skip": 5,
+    "frame_timeout_seconds": 3.0,
+    "startup_timeout_seconds": 60.0
+  },
+  "stages": [
+    {
+      "id": "prepare_inputs",
+      "display_name": "Prepare canonical inputs and provenance",
+      "status": "completed",
+      "started_at": "2026-08-15T18:55:44+00:00",
+      "finished_at": "2026-08-15T18:55:44+00:00",
+      "runtime_seconds": 0.2441362619993015
+    },
+    {
+      "id": "validate_dataset",
+      "display_name": "Validate the canonical dataset",
+      "status": "completed",
+      "started_at": "2026-08-15T18:55:44+00:00",
+      "finished_at": "2026-08-15T18:55:44+00:00",
+      "runtime_seconds": 0.026988522999090492
+    },
+    {
+      "id": "detect_markers",
+      "display_name": "Detect shared ArUco observations and debug images",
+      "status": "completed",
+      "started_at": "2026-08-15T18:55:44+00:00",
+      "finished_at": "2026-08-15T18:55:44+00:00",
+      "runtime_seconds": 0.005105320000438951
+    },
+    {
+      "id": "observation_quality",
+      "display_name": "Apply immutable checks and job-specific observation quality",
+      "status": "completed",
+      "started_at": "2026-08-15T18:55:44+00:00",
+      "finished_at": "2026-08-15T18:55:44+00:00",
+      "runtime_seconds": 0.03942099000050803
+    },
+    {
+      "id": "analyze_selections",
+      "display_name": "Analyze root-camera and method-marker candidates",
+      "status": "completed",
+      "started_at": "2026-08-15T18:55:44+00:00",
+      "finished_at": "2026-08-15T18:55:44+00:00",
+      "runtime_seconds": 0.04927374099861481
+    },
+    {
+      "id": "method_ap01",
+      "display_name": "AP01",
+      "status": "failed",
+      "started_at": "2026-08-15T18:55:44+00:00",
+      "finished_at": "2026-08-15T19:05:02+00:00",
+      "runtime_seconds": 557.6558325469996,
+      "error": "RuntimeError: AP01: estimate metric scale exited with code 1; log: /workspaces/project/workspace/temporary_runs/simulation_batch_20260815_185526__fov_120deg__light_low_1x__blur_k21_0deg/jobs/fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01/20260815_185544_root_cam_edge_3_62a43172/logs/ap01_estimate_scale.log"
+    },
+    {
+      "id": "comparison",
+      "display_name": "Normalize and compare method results",
+      "status": "pending"
+    },
+    {
+      "id": "finalize",
+      "display_name": "Write final report",
+      "status": "pending"
+    }
+  ],
+  "explicit_method_rerun": false,
+  "resolved_config_sha256": "2327f583f650d3f5568957a624fa2817b595dfaa97c6ec76e68c65e926e58c78",
+  "moving_intrinsics": {
+    "profile": null,
+    "path": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260815_185526__fov_120deg__light_low_1x__blur_k21_0deg/dataset/raw_images/camera_info/moving_calib_camera.json",
+    "sha256": "cd2a57df1d43daa586c72dd549eb1f824c7ce9f4260b48cca47f116bc351017f",
+    "width": 1280,
+    "height": 720,
+    "distortion_model": "plumb_bob"
+  },
+  "input_id": "input_d299574ad661",
+  "experiment_root": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260815_185526__fov_120deg__light_low_1x__blur_k21_0deg/results",
+  "dataset_identity": {
+    "contract_version": "rigcal_dataset_identity_v1",
+    "scene_type": "simulation",
+    "static_camera_ids": [
+      "cam_edge_0",
+      "cam_edge_1",
+      "cam_edge_3",
+      "cam_edge_5"
+    ],
+    "moving_camera_id": "moving_calib_camera",
+    "marker_dictionary": "DICT_4X4_50",
+    "marker_length_m": 0.17,
+    "sampling_hz": null,
+    "capture_parameters": {
+      "route": "route2",
+      "moving_width": 1280,
+      "moving_height": 720,
+      "moving_hfov_deg": 120.0,
+      "lighting": "low",
+      "lighting_scale": 1.0,
+      "motion_blur_kernel": 21,
+      "motion_blur_angle_deg": 0.0,
+      "target_route_frames": 189,
+      "route_sampling_strategy": "original_route_poses"
+    },
+    "manifest_source_hashes": {
+      "resolved_moving_intrinsics": "cd2a57df1d43daa586c72dd549eb1f824c7ce9f4260b48cca47f116bc351017f",
+      "simulation_route": "27bf673ecb28c2706aac4a47f3a4c7bead824bbf09cc8efd2155ff05bc0a24bb",
+      "simulation_world": "f33b020b9b1bc4dd64802674f02e091a7717e787d58ce2ef82d5863eaca165fd"
+    },
+    "content_files": [
+      {
+        "path": "metadata/simulation/capture_metadata.json",
+        "sha256": "45b478f62ed1826e7aa5b441e72f265e3a013cb0d8111c6e5c4fd27fc2a626fa",
+        "size_bytes": 114846
+      },
+      {
+        "path": "metadata/simulation/route_commanded.csv",
+        "sha256": "8ab78fcafe6d05db101def7569f624af7ef95f4f8637b30aa7a39bc754c2ef7c",
+        "size_bytes": 72653
+      },
+      {
+        "path": "metadata/simulation/world_snapshot.sdf",
+        "sha256": "0a2490d955112055cddd36d94d04cce43f96d0aeb1c92884f0f1e997081c9bed",
+        "size_bytes": 19663
+      },
+      {
+        "path": "metadata/simulation_capture.json",
+        "sha256": "88e54976153d1569acacb992e42c5ea3ce4cce1b61ecfe92bbb6b16bfc8cdd53",
+        "size_bytes": 2516
+      },
+      {
+        "path": "raw_images/camera_info/cam_edge_0.json",
+        "sha256": "715b443f7f1582d8eedc7207637931e033f3f1d83585bc4bc50c76d2470eeea7",
+        "size_bytes": 1007
+      },
+      {
+        "path": "raw_images/camera_info/cam_edge_1.json",
+        "sha256": "6880c25b9a12a7891a68239e8e36f5d252f2a2b9f42c329428806131f2d5e411",
+        "size_bytes": 1007
+      },
+      {
+        "path": "raw_images/camera_info/cam_edge_3.json",
+        "sha256": "6de5fba14c2b284716d70a4a8311f10dafa0305af26fd349d36faaa13b3ab602",
+        "size_bytes": 1011
+      },
+      {
+        "path": "raw_images/camera_info/cam_edge_5.json",
+        "sha256": "9ba92dcd3d59cbee19375048dea434dc2b2c2348ed3bd19e89a83171da96e4ba",
+        "size_bytes": 1011
+      },
+      {
+        "path": "raw_images/camera_info/moving_calib_camera.json",
+        "sha256": "cd2a57df1d43daa586c72dd549eb1f824c7ce9f4260b48cca47f116bc351017f",
+        "size_bytes": 1020
+      },
+      {
+        "path": "raw_images/moving/frame_0000.png",
+        "sha256": "bee347749df3943511945fbafe07e8bcf7f0cc1236f0b3f93f8f54a18bc73354",
+        "size_bytes": 271031
+      },
+      {
+        "path": "raw_images/moving/frame_0001.png",
+        "sha256": "8f90915fef9c2eb6e41d50355414c6e66dabb989ac8717ceeea1dc460c7111e4",
+        "size_bytes": 263604
+      },
+      {
+        "path": "raw_images/moving/frame_0002.png",
+        "sha256": "a9042914bfd186a62ecbdf9db5947fe11c2619ecb7d19a870d47808d9c037f1e",
+        "size_bytes": 254455
+      },
+      {
+        "path": "raw_images/moving/frame_0003.png",
+        "sha256": "c8925494a73edf6c73dfb6a8faa8f7891a9be9ae9497aa3ee32d5a9c3f82d7fb",
+        "size_bytes": 239657
+      },
+      {
+        "path": "raw_images/moving/frame_0004.png",
+        "sha256": "56875d66ff793b95b6b6664f7384fb1d3e061c1f826f7b15595162bbceb80e27",
+        "size_bytes": 236901
+      },
+      {
+        "path": "raw_images/moving/frame_0005.png",
+        "sha256": "e68f293bb3359f2803965d7d2bfd0dcb628b67e87c6b59e248ab1816bec6b7a1",
+        "size_bytes": 234109
+      },
+      {
+        "path": "raw_images/moving/frame_0006.png",
+        "sha256": "5d79b524f20a6bfd4c97d8d3c3850e8452ee73e436e4619264a0d5a3fc868f89",
+        "size_bytes": 235018
+      },
+      {
+        "path": "raw_images/moving/frame_0007.png",
+        "sha256": "cc806cbe85fc58de1368e057f4f00ff05f9d702323bd50cb076da809253a7cd6",
+        "size_bytes": 250288
+      },
+      {
+        "path": "raw_images/moving/frame_0008.png",
+        "sha256": "a6ac47e16bf4788d0a876106146da4a5b78adbb738232d3e485267f9d67e033e",
+        "size_bytes": 254210
+      },
+      {
+        "path": "raw_images/moving/frame_0009.png",
+        "sha256": "c31c62d6928df355df7fa11ebde79ffb273e2acbd3cfa325a3303873f5e09661",
+        "size_bytes": 267078
+      },
+      {
+        "path": "raw_images/moving/frame_0010.png",
+        "sha256": "1993dcb031c8ae013f4aca8fea3ae42f9859b1a7fa1bd2dfcd7747c21c8467f6",
+        "size_bytes": 288760
+      },
+      {
+        "path": "raw_images/moving/frame_0011.png",
+        "sha256": "6acdca11a9a5d6a70ef2e0ad79498d8a79c7982039c4e862c9467cf01b4203bb",
+        "size_bytes": 290995
+      },
+      {
+        "path": "raw_images/moving/frame_0012.png",
+        "sha256": "34d66ff9d8f6bc48c66f2035e549c096efda70baa6e012c85f41c6df8eeff210",
+        "size_bytes": 304257
+      },
+      {
+        "path": "raw_images/moving/frame_0013.png",
+        "sha256": "10ffaf0fbc3da1453fd50d3ab858629093c6b3e03fb625a8ac14e1805eb1f79e",
+        "size_bytes": 307747
+      },
+      {
+        "path": "raw_images/moving/frame_0014.png",
+        "sha256": "002c9c868ed0d30e6066a396755d76b3c843c07ed1181a42554fcd1ea0005150",
+        "size_bytes": 311745
+      },
+      {
+        "path": "raw_images/moving/frame_0015.png",
+        "sha256": "44c5f30db1d82cc93567cc05c215c8f41bf17db0f87b87cdd08edfa41777b190",
+        "size_bytes": 321664
+      },
+      {
+        "path": "raw_images/moving/frame_0016.png",
+        "sha256": "bfa7fecae3e6a909849059c5213a334eb702f4517076db7386e7d10dfedadbd1",
+        "size_bytes": 320586
+      },
+      {
+        "path": "raw_images/moving/frame_0017.png",
+        "sha256": "77287fbe412119de091fa9bd69b152d1c5460d8de2556d998548116a7fc86e33",
+        "size_bytes": 319002
+      },
+      {
+        "path": "raw_images/moving/frame_0018.png",
+        "sha256": "a70bd58ed82036263a70f68f9bf8ffd1764344e05116460faf8de1b749664cf7",
+        "size_bytes": 322080
+      },
+      {
+        "path": "raw_images/moving/frame_0019.png",
+        "sha256": "193667f9c1de51d7ebd1911bb3e75d6e75a7348bad3b4612753ba328dedbb7e6",
+        "size_bytes": 311602
+      },
+      {
+        "path": "raw_images/moving/frame_0020.png",
+        "sha256": "4bc574feb877fd0493ef82994422087c7fece3f27a053e52e4db465b48f17f62",
+        "size_bytes": 302262
+      },
+      {
+        "path": "raw_images/moving/frame_0021.png",
+        "sha256": "151aa41291d5556274a08af10e9c33f33fc7fd91e1eceada99e28ae568dc6d92",
+        "size_bytes": 281310
+      },
+      {
+        "path": "raw_images/moving/frame_0022.png",
+        "sha256": "23aad4ea450fc55cdf8489d6f5282993404490b0394ef15f58bf91b65ce353e1",
+        "size_bytes": 269345
+      },
+      {
+        "path": "raw_images/moving/frame_0023.png",
+        "sha256": "fb58ad24ab473134273f33973e78bfe8183452757c56923d01ca7b49464eee0a",
+        "size_bytes": 269646
+      },
+      {
+        "path": "raw_images/moving/frame_0024.png",
+        "sha256": "bcc18bfd8c122e79078571228b89954f2e32696c7b60ac4cde5801ad7823b3ad",
+        "size_bytes": 287146
+      },
+      {
+        "path": "raw_images/moving/frame_0025.png",
+        "sha256": "28935754525aeba5cdf62667c8a19c00a87f00addfa27d12aac1ceff09baf3d1",
+        "size_bytes": 299983
+      },
+      {
+        "path": "raw_images/moving/frame_0026.png",
+        "sha256": "0916bb88a4dc809559a968d6653114bc6fbdeebb823b89db88fbbf1719218c30",
+        "size_bytes": 290871
+      },
+      {
+        "path": "raw_images/moving/frame_0027.png",
+        "sha256": "55fafa4cfe2e7b5faf08002a88c46e342fb3d2de2bd429c6bec528523231bb84",
+        "size_bytes": 291143
+      },
+      {
+        "path": "raw_images/moving/frame_0028.png",
+        "sha256": "bb60c6b6cc871cb42af80c8bc6d3461c46a98995aafbb56a41c46b93c05aa73c",
+        "size_bytes": 288759
+      },
+      {
+        "path": "raw_images/moving/frame_0029.png",
+        "sha256": "3ba8a35c419db260af4032cd2c78357f76254a1e4c04b05e2db66342b9cf3a38",
+        "size_bytes": 294082
+      },
+      {
+        "path": "raw_images/moving/frame_0030.png",
+        "sha256": "a37cc486e8ab5aab3c7dfc7253f01702a87e4cf28cc1e1a556cda609e5ce2748",
+        "size_bytes": 295998
+      },
+      {
+        "path": "raw_images/moving/frame_0031.png",
+        "sha256": "2c79462e8185b6f460a037eb33e7d4610ab7d92a35146d6ddff45414d898c6f7",
+        "size_bytes": 278831
+      },
+      {
+        "path": "raw_images/moving/frame_0032.png",
+        "sha256": "0657ba71289c5a12eae808f99241695c6ef67667f694027f9d12484c03630dcb",
+        "size_bytes": 273129
+      },
+      {
+        "path": "raw_images/moving/frame_0033.png",
+        "sha256": "2f81a630aeb479dce6b74cd2be02ed18f990f44023d8a580137a1a2204a2d17b",
+        "size_bytes": 256241
+      },
+      {
+        "path": "raw_images/moving/frame_0034.png",
+        "sha256": "9110e97e4085182f5af0b1ad444a04c2df86c695a888fd09e7e65e5ea37faa05",
+        "size_bytes": 252315
+      },
+      {
+        "path": "raw_images/moving/frame_0035.png",
+        "sha256": "5f3d24e5b7ac6f618a03849eb097c4c962aa896d58de16bd7e0ca25eee992256",
+        "size_bytes": 243894
+      },
+      {
+        "path": "raw_images/moving/frame_0036.png",
+        "sha256": "108204945b3ed3693ecf561940a3fb6a5b34b9a9bc83e97b12867b4ba60ae045",
+        "size_bytes": 250040
+      },
+      {
+        "path": "raw_images/moving/frame_0037.png",
+        "sha256": "a1f6dffb7ca7feee5be155f127001e585b0d38270c79bcdcb4e5330753b48240",
+        "size_bytes": 250768
+      },
+      {
+        "path": "raw_images/moving/frame_0038.png",
+        "sha256": "6d40c98e6f225095106af53d9f93ae88c3a6721dd853f0e83da25785ebabff5e",
+        "size_bytes": 253654
+      },
+      {
+        "path": "raw_images/moving/frame_0039.png",
+        "sha256": "d452ddcf6b8bfb47fdf0f3807a6ba814c982567a8aa06b00f4d999c788f97e9a",
+        "size_bytes": 259287
+      },
+      {
+        "path": "raw_images/moving/frame_0040.png",
+        "sha256": "55da07a4c28722015c82f51a8ae75d520cc08fd80b2d984bb3b26865ca254049",
+        "size_bytes": 262899
+      },
+      {
+        "path": "raw_images/moving/frame_0041.png",
+        "sha256": "b437e2d9c35f81d077db1ac7a8b226b6d692138d0ad47e96da72ad85623cbea1",
+        "size_bytes": 260287
+      },
+      {
+        "path": "raw_images/moving/frame_0042.png",
+        "sha256": "12512a354b4bece4a42a5e2003ad9130d5940f1cc44ed9e748013eb439ed3511",
+        "size_bytes": 261988
+      },
+      {
+        "path": "raw_images/moving/frame_0043.png",
+        "sha256": "2a31d7f4cf3d2d6ffeebc424e128fd3da18a65860373d57c418b98bfb1d297e0",
+        "size_bytes": 268191
+      },
+      {
+        "path": "raw_images/moving/frame_0044.png",
+        "sha256": "dddd76fa372fff6b9ca42a419def35ae794aa222a5772957388434be79f379b1",
+        "size_bytes": 277952
+      },
+      {
+        "path": "raw_images/moving/frame_0045.png",
+        "sha256": "bf66cb21441a73b692734ee7f03db0e5ae17e54df04e86f629aec13bd21220ff",
+        "size_bytes": 285323
+      },
+      {
+        "path": "raw_images/moving/frame_0046.png",
+        "sha256": "8037c227eef92f4e87f5391136d632acfc0463e23e21a298ce036f4ce7b64b9b",
+        "size_bytes": 286543
+      },
+      {
+        "path": "raw_images/moving/frame_0047.png",
+        "sha256": "4a41516e3d76a00ffcb8713a4b0f0031fdccf5bf0df93a8671570242d4cca153",
+        "size_bytes": 284598
+      },
+      {
+        "path": "raw_images/moving/frame_0048.png",
+        "sha256": "2b3e69a7e89a476a9b1b1d30ddc59d2b3ac254c39b5f6f56a394998f0032f724",
+        "size_bytes": 284776
+      },
+      {
+        "path": "raw_images/moving/frame_0049.png",
+        "sha256": "f3bcd2c1f6f72721b36a2088797bccd981b76175c8a35f73b3490bf1267f6189",
+        "size_bytes": 282736
+      },
+      {
+        "path": "raw_images/moving/frame_0050.png",
+        "sha256": "7e7f93782d613942248f86b5195a0068f5d3e73daeee8b81ba7cedfc3f9d1003",
+        "size_bytes": 281748
+      },
+      {
+        "path": "raw_images/moving/frame_0051.png",
+        "sha256": "7fecde82183aefbde8ea03e2736007d066e61d126710f05bcb55cf1d9da3053a",
+        "size_bytes": 272918
+      },
+      {
+        "path": "raw_images/moving/frame_0052.png",
+        "sha256": "6049c6f97ecd9e8d3104bf90a8ce68432990af2c7da0f6cc5b4462d404849498",
+        "size_bytes": 271590
+      },
+      {
+        "path": "raw_images/moving/frame_0053.png",
+        "sha256": "87c31365a9ffd6ea49969cd973d9c2e139cad86e0aaa96f985c199091827ab26",
+        "size_bytes": 272111
+      },
+      {
+        "path": "raw_images/moving/frame_0054.png",
+        "sha256": "62a0351d72dcc675b2a4b9574d64ada76899d2e1239130dfbf7454ff8338c620",
+        "size_bytes": 266184
+      },
+      {
+        "path": "raw_images/moving/frame_0055.png",
+        "sha256": "85d42e4cfa2f7dd43e92355ec88c4eb6aad4904e468d083553d5dafeae73719b",
+        "size_bytes": 252777
+      },
+      {
+        "path": "raw_images/moving/frame_0056.png",
+        "sha256": "4424f095aba0087b63fb4411dfeaad72410a5fab3c3dd5b6cb9f33d9395dd805",
+        "size_bytes": 244052
+      },
+      {
+        "path": "raw_images/moving/frame_0057.png",
+        "sha256": "0b89ecbec2a3237d57fdb195a34b6ad4e71102fb6b25c71ca423a1bbd201b047",
+        "size_bytes": 253214
+      },
+      {
+        "path": "raw_images/moving/frame_0058.png",
+        "sha256": "f4da5b3a93e3cbe67692234d7cb0d58c7d31bd28b0ecfc7c27b3b752da29c57a",
+        "size_bytes": 272212
+      },
+      {
+        "path": "raw_images/moving/frame_0059.png",
+        "sha256": "fc8858e8375465777e83948771b2fd039bc16e19b946ffe108ed600973e19bc8",
+        "size_bytes": 291259
+      },
+      {
+        "path": "raw_images/moving/frame_0060.png",
+        "sha256": "bda156835d3f6d6b56f548ff2d8b765d702b2b5ec5a7d84a4515784eadd21590",
+        "size_bytes": 301243
+      },
+      {
+        "path": "raw_images/moving/frame_0061.png",
+        "sha256": "e182a0b38aad7024fff8cad0d5b560189b8b9dd2a2d072b8c812f6ffce6dcc1c",
+        "size_bytes": 303584
+      },
+      {
+        "path": "raw_images/moving/frame_0062.png",
+        "sha256": "4946b1fd4464c88a2569d2d01f89358b1f8caa2fd1ac51de857cea3b2fc1819d",
+        "size_bytes": 286268
+      },
+      {
+        "path": "raw_images/moving/frame_0063.png",
+        "sha256": "37288b60a9bce576a77198eb0b7da7555466f726198b6cbfde911c18222c5266",
+        "size_bytes": 275084
+      },
+      {
+        "path": "raw_images/moving/frame_0064.png",
+        "sha256": "7076a423672f9a05ad3941e3c523cc06aa1c177640f1d40cee3a1f3f2feceeb7",
+        "size_bytes": 284104
+      },
+      {
+        "path": "raw_images/moving/frame_0065.png",
+        "sha256": "6d8917a449e649a837f38ada8803d9575f9d210c265230a80b85fdd75c524cc2",
+        "size_bytes": 295501
+      },
+      {
+        "path": "raw_images/moving/frame_0066.png",
+        "sha256": "4ca2d45d95229da0e84b615e34c8f8d30af152c6085c49d2322573436a106525",
+        "size_bytes": 305672
+      },
+      {
+        "path": "raw_images/moving/frame_0067.png",
+        "sha256": "f8b87aa4159b785668c7af7dbc61d20a68313fefe2b547c18c9052070e43c64f",
+        "size_bytes": 302856
+      },
+      {
+        "path": "raw_images/moving/frame_0068.png",
+        "sha256": "85472093ed3214c95b5c2c804655531befc1fe7d929921bd41f8c5e0226a9ec1",
+        "size_bytes": 299582
+      },
+      {
+        "path": "raw_images/moving/frame_0069.png",
+        "sha256": "4e55429d60911293e7ab1d9e4a8ceee591393853140359a2c5caa171444ddefb",
+        "size_bytes": 311294
+      },
+      {
+        "path": "raw_images/moving/frame_0070.png",
+        "sha256": "fd2d631427fe27d9c95951c9781f615eb45743104bde95cc9c62afa21681c9d5",
+        "size_bytes": 319969
+      },
+      {
+        "path": "raw_images/moving/frame_0071.png",
+        "sha256": "bf1ef75756af5e85037965273b22b229fe4a852de88aceb96dc56733645fd8ed",
+        "size_bytes": 321914
+      },
+      {
+        "path": "raw_images/moving/frame_0072.png",
+        "sha256": "0873283b55a45809eda31593e4a6181759f89ea26c14bd70ad78f7b58dee49f1",
+        "size_bytes": 330665
+      },
+      {
+        "path": "raw_images/moving/frame_0073.png",
+        "sha256": "914e34a38fa0c6f33eb5c133f953cca937d69e5df80e2d61e953a7c8207fff5a",
+        "size_bytes": 341371
+      },
+      {
+        "path": "raw_images/moving/frame_0074.png",
+        "sha256": "06c2116cf7d7f4a72a969942a36735e5de82bdf5c7de199de44f857fed65eee8",
+        "size_bytes": 349169
+      },
+      {
+        "path": "raw_images/moving/frame_0075.png",
+        "sha256": "ece57666c0ed3895b3af3869d9bff29d486087abc1da0e72d2c3caca188c3f2f",
+        "size_bytes": 354368
+      },
+      {
+        "path": "raw_images/moving/frame_0076.png",
+        "sha256": "66d8485bef86323116c5db712837913cb2b5e8638c91f9e8b7990c2db6283d75",
+        "size_bytes": 351890
+      },
+      {
+        "path": "raw_images/moving/frame_0077.png",
+        "sha256": "657911cbc466fbfe1c4232bb4145762daf3baf85c77eac5e949b9967f3460343",
+        "size_bytes": 355051
+      },
+      {
+        "path": "raw_images/moving/frame_0078.png",
+        "sha256": "bb69432e8649c2562aafde2503a7ff2ddfa5c04b8ccf16b2ea1ff7396cbe2c57",
+        "size_bytes": 341579
+      },
+      {
+        "path": "raw_images/moving/frame_0079.png",
+        "sha256": "7555318e34543c9847b2392a48dd9c212682362aeeccddd6188388126ad81d11",
+        "size_bytes": 307081
+      },
+      {
+        "path": "raw_images/moving/frame_0080.png",
+        "sha256": "1acca33856da2289c59f36a846eb457917204b09f29d294f196de1fbb671b8bb",
+        "size_bytes": 300902
+      },
+      {
+        "path": "raw_images/moving/frame_0081.png",
+        "sha256": "f6506c33147fc77d3ff11b4e9556c77708bcc85a4e39f37066218f54fe09c58e",
+        "size_bytes": 311357
+      },
+      {
+        "path": "raw_images/moving/frame_0082.png",
+        "sha256": "c7e69e4bcb68058747e5808d0164cb62c07dfdc094b8a860881ac801e7769446",
+        "size_bytes": 313646
+      },
+      {
+        "path": "raw_images/moving/frame_0083.png",
+        "sha256": "3cd7686426d838f07c11d25b45594acb758a048fd3ea3e892c8dc275e4806189",
+        "size_bytes": 297031
+      },
+      {
+        "path": "raw_images/moving/frame_0084.png",
+        "sha256": "a2e704e81d2fc7f37cf10853ce0e5cd6d1dc3bcf02cd8304a67bdf5b69ce4802",
+        "size_bytes": 288406
+      },
+      {
+        "path": "raw_images/moving/frame_0085.png",
+        "sha256": "a4477fceaa24556560420211462a9a2e45e62a62ab1f3e32f98cd82728c74143",
+        "size_bytes": 302448
+      },
+      {
+        "path": "raw_images/moving/frame_0086.png",
+        "sha256": "292059812be1fb20bb3587be62940887328a070c3835977b2942661d97091366",
+        "size_bytes": 318322
+      },
+      {
+        "path": "raw_images/moving/frame_0087.png",
+        "sha256": "53dfcf9ce13ee471e372f7db03b9b991d0e9cad06b6267dcae98f0da57df9924",
+        "size_bytes": 306270
+      },
+      {
+        "path": "raw_images/moving/frame_0088.png",
+        "sha256": "7cbba8a944f15a17806dbb78c02bb60dc9e9a017cb02d62166fdd0275e477dbc",
+        "size_bytes": 277789
+      },
+      {
+        "path": "raw_images/moving/frame_0089.png",
+        "sha256": "a5a845499705798b0ba4fc8c2b87420cfc28ee41196f11a58641da36ed550cb2",
+        "size_bytes": 260856
+      },
+      {
+        "path": "raw_images/moving/frame_0090.png",
+        "sha256": "5e164375a4dbb2ff84df21298c0cb120e6487aa4df95b848b8327263e5451bf1",
+        "size_bytes": 259211
+      },
+      {
+        "path": "raw_images/moving/frame_0091.png",
+        "sha256": "5c029a1aec7ff2c55ec1df8cbc0c401634c192ccbfff2f46a41dd52185117ccd",
+        "size_bytes": 249024
+      },
+      {
+        "path": "raw_images/moving/frame_0092.png",
+        "sha256": "d693bf2cf3a529b084cf4757ddd19fc6229e4e4485b3748f7542c9772204fb51",
+        "size_bytes": 238081
+      },
+      {
+        "path": "raw_images/moving/frame_0093.png",
+        "sha256": "851648377dc0759737a84ad46c44ad322b895c9b4c50f5df2d0205f8aba00ebc",
+        "size_bytes": 222456
+      },
+      {
+        "path": "raw_images/moving/frame_0094.png",
+        "sha256": "5087687bd739ca2578a769c50e14c8d52d5aba3c3a0ac4e51b1c7d2374a535c1",
+        "size_bytes": 196279
+      },
+      {
+        "path": "raw_images/moving/frame_0095.png",
+        "sha256": "61809e6ca4f8d6fb23ac61544e4176e6ccd0af4aad6befcd97307f7a195546f2",
+        "size_bytes": 178477
+      },
+      {
+        "path": "raw_images/moving/frame_0096.png",
+        "sha256": "04be0ec97b357613f738a1d7bd46dddd2062533cd1b61995229b9816a2e990e1",
+        "size_bytes": 168058
+      },
+      {
+        "path": "raw_images/moving/frame_0097.png",
+        "sha256": "ffdbbbfb72076a44b63ca98b1dd54516ebd97686fb4130714db0f22332737ec5",
+        "size_bytes": 182711
+      },
+      {
+        "path": "raw_images/moving/frame_0098.png",
+        "sha256": "6cdd05e4b632cef6f6c9d19bbd9f08065d0bbd67e399b0728fb2662de83eee62",
+        "size_bytes": 193394
+      },
+      {
+        "path": "raw_images/moving/frame_0099.png",
+        "sha256": "f802df48b38cb93c818bb9f7776e27107d4d16dca007157b2443b8d60155cf0b",
+        "size_bytes": 206957
+      },
+      {
+        "path": "raw_images/moving/frame_0100.png",
+        "sha256": "a8ef68679164bc662b5cf6505d08eda4cc70a811c5380534275b495f415981e4",
+        "size_bytes": 222464
+      },
+      {
+        "path": "raw_images/moving/frame_0101.png",
+        "sha256": "6efb844d3236089da01ac5231683d7968144984f23dd2b7374a9b2d5a0654817",
+        "size_bytes": 229706
+      },
+      {
+        "path": "raw_images/moving/frame_0102.png",
+        "sha256": "d8ab28a96b5b3d6a61d2bf7ca384161cb9642ac613469d0549db36da687171fe",
+        "size_bytes": 222988
+      },
+      {
+        "path": "raw_images/moving/frame_0103.png",
+        "sha256": "fe83751c9ac6ae2aa2e6664d072f0cea96cfdef7ca2cad2d2f1358480c75ff9e",
+        "size_bytes": 228566
+      },
+      {
+        "path": "raw_images/moving/frame_0104.png",
+        "sha256": "f9e4b81327427768201d6a2dd2cd25f719a1b8a0c0d50c87b8d872ecbe4ae4f9",
+        "size_bytes": 221937
+      },
+      {
+        "path": "raw_images/moving/frame_0105.png",
+        "sha256": "7d2cd5c297591d6ea4f8cace4ceec2523e1f8f608247a207db99c42804bc6c10",
+        "size_bytes": 235873
+      },
+      {
+        "path": "raw_images/moving/frame_0106.png",
+        "sha256": "84a602959c9667632943ab5e62104d0f26b9e275ef01b13c72fe5c1d122da19d",
+        "size_bytes": 250891
+      },
+      {
+        "path": "raw_images/moving/frame_0107.png",
+        "sha256": "db7611807d942761bc489ae7b2cd662679da116ad83e3ec2c5bed2008820b89b",
+        "size_bytes": 261679
+      },
+      {
+        "path": "raw_images/moving/frame_0108.png",
+        "sha256": "3fcb44a36efffcb980d1b3ee42c6e2ab20bac37f53a842ff7ab45cd5c8305558",
+        "size_bytes": 261308
+      },
+      {
+        "path": "raw_images/moving/frame_0109.png",
+        "sha256": "b922daa50a631bfbcf1e3576ae1880f92c2aa31f233606a05b1877b969e43f59",
+        "size_bytes": 266774
+      },
+      {
+        "path": "raw_images/moving/frame_0110.png",
+        "sha256": "ab318b30ae09eae56baf9482a784202518af03753a4aa91c94a8389f2fdddeed",
+        "size_bytes": 281087
+      },
+      {
+        "path": "raw_images/moving/frame_0111.png",
+        "sha256": "520a415dac01bf6156204372de76cb021d0543959b9e7655d151999eccb49ade",
+        "size_bytes": 293593
+      },
+      {
+        "path": "raw_images/moving/frame_0112.png",
+        "sha256": "2d5802ff4ff0c45b9c96a0f516ed7959107aa19f423a0ce4ba5d3500f6929993",
+        "size_bytes": 300226
+      },
+      {
+        "path": "raw_images/moving/frame_0113.png",
+        "sha256": "a7125039084555fd33cb40fe95004562c9e22220bd0101c76b70469c21270aa9",
+        "size_bytes": 307920
+      },
+      {
+        "path": "raw_images/moving/frame_0114.png",
+        "sha256": "fce134c6cccb296aaaabc3c4f38619ee065f054c12c4a0171c56e8f145700949",
+        "size_bytes": 310757
+      },
+      {
+        "path": "raw_images/moving/frame_0115.png",
+        "sha256": "91984b4b0fe33f45db00b1d1a5da75913c3b0f4140cc9853fb6d6f72ffa3ee18",
+        "size_bytes": 317755
+      },
+      {
+        "path": "raw_images/moving/frame_0116.png",
+        "sha256": "a2ba5d63e5fa26169784ed29221e7392706664413756e031446a87dad0c7ef95",
+        "size_bytes": 334350
+      },
+      {
+        "path": "raw_images/moving/frame_0117.png",
+        "sha256": "fdd64d06fac5c74834fb23b5090090fc9ab33c1256f5b079cabf4948f085fbec",
+        "size_bytes": 343339
+      },
+      {
+        "path": "raw_images/moving/frame_0118.png",
+        "sha256": "b522f6a81aa0fcb68cf2b17cacf11f79848d1290e4d0eb4ea1382fb3555cba14",
+        "size_bytes": 341464
+      },
+      {
+        "path": "raw_images/moving/frame_0119.png",
+        "sha256": "1f663389739d1b13fc85d8f438a9561ac8fa0b4cb66f0b3da97f3d06710d87b0",
+        "size_bytes": 336181
+      },
+      {
+        "path": "raw_images/moving/frame_0120.png",
+        "sha256": "d0d62dae127f39ecc8c8576263c9d05038d5cc8e195b41f41c76e1d1a565de65",
+        "size_bytes": 325182
+      },
+      {
+        "path": "raw_images/moving/frame_0121.png",
+        "sha256": "342dd1e290b30026a9427a7e37c228b252d130660353ce28b158b088d75c8394",
+        "size_bytes": 316328
+      },
+      {
+        "path": "raw_images/moving/frame_0122.png",
+        "sha256": "5f732bddccbd36644e1fd34bb709895ec62cf0bd4906a7daa31092480e289fd0",
+        "size_bytes": 312681
+      },
+      {
+        "path": "raw_images/moving/frame_0123.png",
+        "sha256": "2cbe842d1a4487bda9af76888a030f9ff06b48a1b5cc2dff41b54426133f0312",
+        "size_bytes": 310373
+      },
+      {
+        "path": "raw_images/moving/frame_0124.png",
+        "sha256": "05783a9c08903f79d999d331eeed553a06dca12cdc25ee3519aabc9139489fde",
+        "size_bytes": 329445
+      },
+      {
+        "path": "raw_images/moving/frame_0125.png",
+        "sha256": "6971c232acaa65b6505dd656eb7373a120a34dcf4d065d7cafc2370778f5df0a",
+        "size_bytes": 339106
+      },
+      {
+        "path": "raw_images/moving/frame_0126.png",
+        "sha256": "64ba13ecdc322abf2147ea41bbf92d5e4b178df6aab2024f12818c01a4da65bb",
+        "size_bytes": 337001
+      },
+      {
+        "path": "raw_images/moving/frame_0127.png",
+        "sha256": "49c0ae1aaa4dd977d7fc93dc5828eeeac6dca009ee8c55bbe028042f81cc923b",
+        "size_bytes": 333496
+      },
+      {
+        "path": "raw_images/moving/frame_0128.png",
+        "sha256": "2389517394184fa366687c60909cbe13f838e4acbc66944317d5995b0624cbcb",
+        "size_bytes": 339132
+      },
+      {
+        "path": "raw_images/moving/frame_0129.png",
+        "sha256": "5c6fd4ac8b89f64f2e033a94434883c1f0807d0da17c491f2bc57a374869e4f7",
+        "size_bytes": 329982
+      },
+      {
+        "path": "raw_images/moving/frame_0130.png",
+        "sha256": "aa74e54082207f252c5a43ca8ca203e46550846f869a3bb66238210254746b76",
+        "size_bytes": 331494
+      },
+      {
+        "path": "raw_images/moving/frame_0131.png",
+        "sha256": "d39d8d53de21535d9e7d987f0de70508b41c5e1762fd984af6ec11c1d4860b34",
+        "size_bytes": 332722
+      },
+      {
+        "path": "raw_images/moving/frame_0132.png",
+        "sha256": "9397c0746e662c9e634062d7b9c9935615f4c9e8005c426637421ae25467f460",
+        "size_bytes": 335464
+      },
+      {
+        "path": "raw_images/moving/frame_0133.png",
+        "sha256": "588f26a52599f7d4de0a0fd91e309c45ffd1a7131acc8e93bc6eb9ea6065ac55",
+        "size_bytes": 314219
+      },
+      {
+        "path": "raw_images/moving/frame_0134.png",
+        "sha256": "61b67bae1fba83bf1e2caf12c59f6b7a1d2661f99fc3290009082777873a1a83",
+        "size_bytes": 294727
+      },
+      {
+        "path": "raw_images/moving/frame_0135.png",
+        "sha256": "af70a92ba983a12b080dee4dcc9205d44c454895a16b6a141d246a3486c55c62",
+        "size_bytes": 294043
+      },
+      {
+        "path": "raw_images/moving/frame_0136.png",
+        "sha256": "af4c029f70917cba88fd1ab9d6422a1985ecd5ff72a8e5628b22238734a3b0ce",
+        "size_bytes": 288480
+      },
+      {
+        "path": "raw_images/moving/frame_0137.png",
+        "sha256": "a2b3c76f2eb0d1fe91dbaae989083998f533000f148123df0197e6e0632fd26f",
+        "size_bytes": 280246
+      },
+      {
+        "path": "raw_images/moving/frame_0138.png",
+        "sha256": "bb4b8d1e5ad8739ddddb3abef44224f1a967ae6d0e954923ee4a5364799e2b41",
+        "size_bytes": 263989
+      },
+      {
+        "path": "raw_images/moving/frame_0139.png",
+        "sha256": "bfc2d265437f5817f84750a8e2d67c3daab0d8977d4d6dc6ad507d1190d932fd",
+        "size_bytes": 261570
+      },
+      {
+        "path": "raw_images/moving/frame_0140.png",
+        "sha256": "10ee7a92efa118de0cc36d09efa8a729e31fe3b0a76935ccbe2758f8fbbf3a90",
+        "size_bytes": 249894
+      },
+      {
+        "path": "raw_images/moving/frame_0141.png",
+        "sha256": "cd5cff1dffa15e314d322029972503f202f9152e1cda0de102af69576b1e1b70",
+        "size_bytes": 234346
+      },
+      {
+        "path": "raw_images/moving/frame_0142.png",
+        "sha256": "a509e39ad968aba93a7a3ed74af15e8fbe2d564b530392975465076c79c343eb",
+        "size_bytes": 235533
+      },
+      {
+        "path": "raw_images/moving/frame_0143.png",
+        "sha256": "ebcdc0bbe2beeb3eb73181299ddc228373da5caa7e4168d1a8db33fbee84d1a6",
+        "size_bytes": 244892
+      },
+      {
+        "path": "raw_images/moving/frame_0144.png",
+        "sha256": "27def764500c4b8271f5daaf19048903efcbc1dd7ddbc819465e1438eaaae0b2",
+        "size_bytes": 248774
+      },
+      {
+        "path": "raw_images/moving/frame_0145.png",
+        "sha256": "1f4f3ad6ade50bc7bd68f8c986330ed1f5124f1af207e4bf0a8a1c7705af1335",
+        "size_bytes": 266851
+      },
+      {
+        "path": "raw_images/moving/frame_0146.png",
+        "sha256": "e9ab054e17473eefe04783fd9a467f58a384d7cd676e5c2a5b3e84bb17b08dc5",
+        "size_bytes": 290909
+      },
+      {
+        "path": "raw_images/moving/frame_0147.png",
+        "sha256": "48416cf333c9a1cf310587fa03895847dd1888e8e633d0f858d1a92dc1547336",
+        "size_bytes": 290770
+      },
+      {
+        "path": "raw_images/moving/frame_0148.png",
+        "sha256": "ffdce7f08d82437309d3cddcb7c44bcd9197b76ec070d4ff05792010d155b7d0",
+        "size_bytes": 270064
+      },
+      {
+        "path": "raw_images/moving/frame_0149.png",
+        "sha256": "f9b115007fc6e049b1a3ddaff4dc787e36b496af849444f74286ca159f4f5103",
+        "size_bytes": 261323
+      },
+      {
+        "path": "raw_images/moving/frame_0150.png",
+        "sha256": "bac8d05712003b063f82e33c20b058098d90aa724890b4a52c52b1bbbf9e5070",
+        "size_bytes": 254154
+      },
+      {
+        "path": "raw_images/moving/frame_0151.png",
+        "sha256": "4614b641e60cef9f635d9ebdfdc2faec30c36153a2673e71bd30a8e5d0c7c4d9",
+        "size_bytes": 252255
+      },
+      {
+        "path": "raw_images/moving/frame_0152.png",
+        "sha256": "da23976c1721ca9d27a892bde5ed07a88acfdd631de00dec4e965b1734eb1ce6",
+        "size_bytes": 251124
+      },
+      {
+        "path": "raw_images/moving/frame_0153.png",
+        "sha256": "132bcf75f8574a934b659fa93f75b7ec136e62fa73a51081cabe2fed33d33a75",
+        "size_bytes": 242821
+      },
+      {
+        "path": "raw_images/moving/frame_0154.png",
+        "sha256": "85e5af5fdc37b762adf140aa7f1cd311784df7b44156c1448c0e0b601e93c262",
+        "size_bytes": 233153
+      },
+      {
+        "path": "raw_images/moving/frame_0155.png",
+        "sha256": "6b2e36facdbcb064099c6b0f31703a0c81d408236cfc7977dc7ae024e22c0e58",
+        "size_bytes": 239170
+      },
+      {
+        "path": "raw_images/moving/frame_0156.png",
+        "sha256": "f848aa6551bdffbb51b4c3a00d83304ca45ed975fa937079f05f0c709a619c56",
+        "size_bytes": 245889
+      },
+      {
+        "path": "raw_images/moving/frame_0157.png",
+        "sha256": "103b62fdc450b09be8589310770b89e2730715f3f4531eff4ff54f83ef4761be",
+        "size_bytes": 250683
+      },
+      {
+        "path": "raw_images/moving/frame_0158.png",
+        "sha256": "eb9fd43bae54edfb692874b0fc7bfd801b3426d996c26b54a4afbad22f6ea63e",
+        "size_bytes": 234038
+      },
+      {
+        "path": "raw_images/moving/frame_0159.png",
+        "sha256": "2d9ab246cb0c10b6bda8deef99cc414328e2879bc98734ce9d541c766f67f6a0",
+        "size_bytes": 235342
+      },
+      {
+        "path": "raw_images/moving/frame_0160.png",
+        "sha256": "8660a8f785d2f8a1b0c7ef94eb6768054f14e1779637c944562e7631c1b788d4",
+        "size_bytes": 243998
+      },
+      {
+        "path": "raw_images/moving/frame_0161.png",
+        "sha256": "4229838d480ac5400227f38093790972e818b510f8d8533e9277be773c38ffc0",
+        "size_bytes": 228193
+      },
+      {
+        "path": "raw_images/moving/frame_0162.png",
+        "sha256": "bc63b8e7dbd2c3d6e6a36ed72ced23b1400942b24944477e6e7986807b9c8897",
+        "size_bytes": 219453
+      },
+      {
+        "path": "raw_images/moving/frame_0163.png",
+        "sha256": "36f3eecbfc0279b8c5e069ef2ba717d14ef79813632a88c919d87b000da6c850",
+        "size_bytes": 232132
+      },
+      {
+        "path": "raw_images/moving/frame_0164.png",
+        "sha256": "c0a8c4c3b73a58cab8af21b615b88292d92d820041001cb7e00cc5f7847c92f7",
+        "size_bytes": 220682
+      },
+      {
+        "path": "raw_images/moving/frame_0165.png",
+        "sha256": "48f0892b2150547628794ceebe5608b3fa0f00ccd0da1ec03b422c1e6eaadc41",
+        "size_bytes": 239515
+      },
+      {
+        "path": "raw_images/moving/frame_0166.png",
+        "sha256": "5120a835027d60168b9b6ffe196c3fd6b8eca181eca54ddca7a85fd90cdd8181",
+        "size_bytes": 249842
+      },
+      {
+        "path": "raw_images/moving/frame_0167.png",
+        "sha256": "6acd728aec9131305db8c9e5cd9ff4d9a74ab3c3e7d9d5b9be233ff210cbd769",
+        "size_bytes": 235447
+      },
+      {
+        "path": "raw_images/moving/frame_0168.png",
+        "sha256": "6d645e9888e6c2d9d6bc979b0b07791c92dfe98ba0b3cff7a01c95c76b194eea",
+        "size_bytes": 233206
+      },
+      {
+        "path": "raw_images/moving/frame_0169.png",
+        "sha256": "b560e62fe0f8cb72f9c01e71f6a0fb58987ee2377a6c0bf5a04419f5c2575c35",
+        "size_bytes": 217321
+      },
+      {
+        "path": "raw_images/moving/frame_0170.png",
+        "sha256": "943fadbc7a2e3f38f1f4a6a1967f71143611d49cf88f6a2979ee6e17471c626b",
+        "size_bytes": 217128
+      },
+      {
+        "path": "raw_images/moving/frame_0171.png",
+        "sha256": "839b6f65f57c500d5535e4bc3d4d875eb4273467f3a7f097cd9236432dd89e6a",
+        "size_bytes": 205387
+      },
+      {
+        "path": "raw_images/moving/frame_0172.png",
+        "sha256": "77b6fa10c69c880aaab4197b86f536239e9d12fad3a552a2c4b48a524b9344c7",
+        "size_bytes": 208657
+      },
+      {
+        "path": "raw_images/moving/frame_0173.png",
+        "sha256": "f45c3ebf4b16e406cb2c6f351b4632b6a29160952c192dcbbe01041426ec89d6",
+        "size_bytes": 202903
+      },
+      {
+        "path": "raw_images/moving/frame_0174.png",
+        "sha256": "55e350e5d957af3ef6c33b4ae90aa0b65c1349e79df370b750a327ba5632f893",
+        "size_bytes": 200680
+      },
+      {
+        "path": "raw_images/moving/frame_0175.png",
+        "sha256": "85c0fe55c987f695df716db9b3a2d287184a8eb754e10908ca07a94ad430c24a",
+        "size_bytes": 205689
+      },
+      {
+        "path": "raw_images/moving/frame_0176.png",
+        "sha256": "0ce87273dbab649b52498270d1bee34355ab4dde86372409e2c7b1e6cf898791",
+        "size_bytes": 214470
+      },
+      {
+        "path": "raw_images/moving/frame_0177.png",
+        "sha256": "1ffd31c92ca3a9b41dc5eb4b955803e76ab873e1df5ca6dae18371dde47e1fc5",
+        "size_bytes": 211305
+      },
+      {
+        "path": "raw_images/moving/frame_0178.png",
+        "sha256": "a233f86a0f1cbcd920007758615546cea24330d64dd5b8d362abec5c3340592b",
+        "size_bytes": 194182
+      },
+      {
+        "path": "raw_images/moving/frame_0179.png",
+        "sha256": "6ec19b7cc27c520b9e769d6f79a0f564cfd1c2b4b792a34df07062f671339f21",
+        "size_bytes": 199376
+      },
+      {
+        "path": "raw_images/moving/frame_0180.png",
+        "sha256": "1fc4000b9526230a98197c013d06ff05326dff5b03a2237acc3d1e6151beba0b",
+        "size_bytes": 199427
+      },
+      {
+        "path": "raw_images/moving/frame_0181.png",
+        "sha256": "33825179cb8f6a7fa8dd5d343968bddc5a7eaeddf95ad66e73ddfc7c5a4568d8",
+        "size_bytes": 190121
+      },
+      {
+        "path": "raw_images/moving/frame_0182.png",
+        "sha256": "5683f4d6e62ced827e87642f89747d9983d0862814c1948297dca704ecf750c6",
+        "size_bytes": 193991
+      },
+      {
+        "path": "raw_images/moving/frame_0183.png",
+        "sha256": "2106bc4fce41b6ca337a9203c8af3b210028abca1846f53683b72880583023f1",
+        "size_bytes": 203381
+      },
+      {
+        "path": "raw_images/moving/frame_0184.png",
+        "sha256": "5f4e3d9ac6b0f12ca0044cb3bc1fd83ded02c5aac1f612bcddd0c3da27646153",
+        "size_bytes": 200869
+      },
+      {
+        "path": "raw_images/moving/frame_0185.png",
+        "sha256": "37c20007ae46d3ca30d72299f77ca1fa526e52dd364f685dea0b21d6231adf34",
+        "size_bytes": 190770
+      },
+      {
+        "path": "raw_images/moving/frame_0186.png",
+        "sha256": "9cbde36fbc2e919eb51a19e3d2006193a58f3306f1793395bd5bf12cac86490f",
+        "size_bytes": 181694
+      },
+      {
+        "path": "raw_images/moving/frame_0187.png",
+        "sha256": "aab4ab81b1b3372baa9d307106cdb905b6e5120a3afb464956caaef233b6745e",
+        "size_bytes": 182656
+      },
+      {
+        "path": "raw_images/moving/frame_0188.png",
+        "sha256": "4ac1203390790dc1a9739e660a850d5cd0ce2904aab23db893e15585c76f826e",
+        "size_bytes": 198739
+      },
+      {
+        "path": "raw_images/static/cam_edge_0.png",
+        "sha256": "246fda8d0c024853f13345254f6ad5aa698ed087008eeffe941a63b704274eb1",
+        "size_bytes": 145751
+      },
+      {
+        "path": "raw_images/static/cam_edge_1.png",
+        "sha256": "aea9a29b14f50fa459bd2bf758832b0609f152cfd30890dabc3a98d01c87abf6",
+        "size_bytes": 200009
+      },
+      {
+        "path": "raw_images/static/cam_edge_3.png",
+        "sha256": "a46e7f8d492e619725016bbfceb1a4ea295b7d820d95c4517306498af762b972",
+        "size_bytes": 269411
+      },
+      {
+        "path": "raw_images/static/cam_edge_5.png",
+        "sha256": "4ad3eff6702e1f96caebdf2adfa57b2fa59c6fcb41a3f3934e9680d6f53ab7f7",
+        "size_bytes": 222759
+      }
+    ],
+    "fingerprint": "1c2fdf424867753751f398064f2e71acbe95735e69aaecf57e9c81f9e59c1e58",
+    "file_count": 202
+  },
+  "algorithm_version": "ap01_baseline_hierarchical_v1",
+  "observation_id": "detection_8c9e36dd6f9e",
+  "observations_root": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260815_185526__fov_120deg__light_low_1x__blur_k21_0deg/dataset/observations",
+  "published_observations_reused": false,
+  "dataset_observation_evidence_reused": true,
+  "colmap_resolution": {
+    "requested_executable": "auto",
+    "resolved_executable": "/usr/bin/colmap",
+    "version": "COLMAP 3.7 -- Structure-from-Motion and Multi-View Stereo",
+    "configured_compute_mode": "cpu_baseline",
+    "resolved_compute_mode": "cpu_baseline",
+    "requested_gpu_mode": "false",
+    "resolved_gpu_mode": "false",
+    "gpu_probe_available": false,
+    "matcher": "exhaustive",
+    "maximum_image_size": 1600,
+    "maximum_features": 4096,
+    "configured_ap03_maximum_image_size": 2400,
+    "configured_ap03_maximum_features": 8192,
+    "ap03_feature_limit_policy": null,
+    "mapper_minimum_matches": 8,
+    "intrinsics_refinement": {
+      "focal_length": false,
+      "principal_point": false,
+      "extra_parameters": false
+    }
+  },
+  "resolved_selections": {
+    "ap01_root_camera": "cam_edge_3",
+    "ap02_reference_marker_id": 14,
+    "ap02_reference_marker_selection_mode": "auto",
+    "ap02_reference_marker_reason": "preferred marker 14 passed automatic AP02 support; preference frozen",
+    "ap02_reference_marker_evidence": {
+      "id": 14,
+      "static_cameras": [
+        "cam_edge_1",
+        "cam_edge_3"
+      ],
+      "static_camera_count": 2,
+      "static_graph_reachable_cameras": [
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_3",
+        "cam_edge_5"
+      ],
+      "static_graph_reachable_count": 4,
+      "combined_graph_reachable_static_cameras": [
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_3",
+        "cam_edge_5"
+      ],
+      "combined_graph_reachable_static_count": 4,
+      "combined_graph_reachable_marker_count": 20,
+      "combined_graph_reachable_marker_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "combined_graph_reachable_moving_frames": 20,
+      "moving_frames": 0,
+      "accepted_observations": 2,
+      "median_pnp_reprojection_rmse_px": 0.1536369420341659,
+      "median_marker_area_px2": 693.5,
+      "median_marker_area_ratio": 0.0007524956597222222,
+      "median_selection_score": 0.4825377294164519,
+      "moving_median_pnp_reprojection_rmse_px": null,
+      "moving_median_marker_area_px2": null,
+      "moving_median_marker_area_ratio": null,
+      "moving_median_selection_score": null,
+      "median_score_area": 0.2741936150680173,
+      "median_score_reprojection": 0.8669115346414715,
+      "median_score_border": 0.4708333333333333,
+      "median_score_distance": 0.1862015633013683,
+      "ap02_compatible": true,
+      "ap02_partial_compatible": true,
+      "ap02_static_only_partial": false,
+      "ap03_compatible": false,
+      "automatic_candidate": true,
+      "compatible": true,
+      "diagnostic_partial": false,
+      "recommended": false
+    },
+    "ap03_single_scale_marker_id": 1,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "evaluation_anchor_marker_id": 1
+  },
+  "effective_observation_quality": {
+    "minimum_marker_area_ratio": 8e-06,
+    "maximum_pnp_reprojection_error_px": 25.0,
+    "require_positive_depth": true,
+    "maximum_marker_distance_m": "disabled"
+  },
+  "observation_quality_sources": {
+    "minimum_marker_area_ratio": "global",
+    "maximum_pnp_reprojection_error_px": "global",
+    "require_positive_depth": "global",
+    "maximum_marker_distance_m": "global"
+  },
+  "automatic_recommendations": {
+    "ap01_root_camera": "cam_edge_1",
+    "ap02_reference_marker_id": 7,
+    "ap03_single_scale_marker_id": 1,
+    "ap03_multi_marker_ids": [
+      1,
+      11,
+      12,
+      16,
+      17
+    ],
+    "evaluation_anchor_marker_id": 1
+  },
+  "final_decisions": {
+    "ap01_root_camera": "cam_edge_3",
+    "ap02_reference_marker_id": 14,
+    "ap02_reference_marker_selection_mode": "auto",
+    "ap02_reference_marker_reason": "preferred marker 14 passed automatic AP02 support; preference frozen",
+    "ap02_reference_marker_evidence": {
+      "id": 14,
+      "static_cameras": [
+        "cam_edge_1",
+        "cam_edge_3"
+      ],
+      "static_camera_count": 2,
+      "static_graph_reachable_cameras": [
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_3",
+        "cam_edge_5"
+      ],
+      "static_graph_reachable_count": 4,
+      "combined_graph_reachable_static_cameras": [
+        "cam_edge_0",
+        "cam_edge_1",
+        "cam_edge_3",
+        "cam_edge_5"
+      ],
+      "combined_graph_reachable_static_count": 4,
+      "combined_graph_reachable_marker_count": 20,
+      "combined_graph_reachable_marker_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "combined_graph_reachable_moving_frames": 20,
+      "moving_frames": 0,
+      "accepted_observations": 2,
+      "median_pnp_reprojection_rmse_px": 0.1536369420341659,
+      "median_marker_area_px2": 693.5,
+      "median_marker_area_ratio": 0.0007524956597222222,
+      "median_selection_score": 0.4825377294164519,
+      "moving_median_pnp_reprojection_rmse_px": null,
+      "moving_median_marker_area_px2": null,
+      "moving_median_marker_area_ratio": null,
+      "moving_median_selection_score": null,
+      "median_score_area": 0.2741936150680173,
+      "median_score_reprojection": 0.8669115346414715,
+      "median_score_border": 0.4708333333333333,
+      "median_score_distance": 0.1862015633013683,
+      "ap02_compatible": true,
+      "ap02_partial_compatible": true,
+      "ap02_static_only_partial": false,
+      "ap03_compatible": false,
+      "automatic_candidate": true,
+      "compatible": true,
+      "diagnostic_partial": false,
+      "recommended": false
+    },
+    "ap03_single_scale_marker_id": 1,
+    "ap03_multi_marker_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "evaluation_anchor_marker_id": 1
+  },
+  "method_id": "ap01",
+  "method_fingerprint": "e2ead7610f180ff7f968097a956b9b692e65eab74c8560102805b4c0ef9a458c",
+  "variant": "root_cam_edge_3",
+  "variant_target": "/workspaces/project/results/simulation/mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054/methods/ap01/root_cam_edge_3",
+  "error": "RuntimeError: AP01: estimate metric scale exited with code 1; log: /workspaces/project/workspace/temporary_runs/simulation_batch_20260815_185526__fov_120deg__light_low_1x__blur_k21_0deg/jobs/fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01/20260815_185544_root_cam_edge_3_62a43172/logs/ap01_estimate_scale.log"
+}

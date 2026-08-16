@@ -1,0 +1,117 @@
+SIMULATION CALIBRATION RESULTS — CAMERA-TO-CAMERA VS GROUND TRUTH
+==========================================================================================================================================
+
+Experiment: route2
+Simulation parameters: frame_timeout_seconds=3.0, lighting=baseline, lighting_scale=1.0, motion_blur_angle_deg=0.0, motion_blur_kernel=0, moving_height=720, moving_hfov_deg=69.1, moving_width=1280, post_pose_skip=5, route=route2, route_sampling_strategy=original_route_poses, route_sha256=27bf673ecb28c2706aac4a47f3a4c7bead824bbf09cc8efd2155ff05bc0a24bb, settle_seconds=0.35, startup_timeout_seconds=60.0, target_route_frames=189, world_sha256=0544fd33378a2622cbe471e4bb10b1b4313540b5f870df3ca0a541591a8d1afb
+Common evaluation anchor: marker 14 (configured 14; frozen during preflight)
+Anchor reason: published common evaluation is authoritative for final reporting; the original preflight recommendation remains preserved in the source selection artifact
+
+BASELINE CONTRACT
+------------------------------------------------------------------------------------------------------------------------------------------
+Contract: route2_cpu_ref14_50x50_v1
+Overall: NOT A COMPLETE BASELINE CONTRACT
+Method | Variant                                       | Status       | Failed checks / evidence
+-------+-----------------------------------------------+--------------+---------------------------------
+ap02   | combined_nfev_1__ref_mode_auto__static_nfev_1 | NOT BASELINE | static_nfev_50, combined_nfev_50
+
+METHOD / VARIANT SUMMARY
+------------------------------------------------------------------------------------------------------------------------------------------
+Method | Variant                                       | Artifact  | Quality                   | Pairs | mean t [cm] | mean r [deg] | max t [cm] | max r [deg] | Key configuration
+-------+-----------------------------------------------+-----------+---------------------------+-------+-------------+--------------+------------+-------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ap02   | combined_nfev_1__ref_mode_auto__static_nfev_1 | available | warning_high_reprojection | 6     | 26.862      | 2.512        | 50.038     | 3.430       | aruco_detection_mode=baseline, baseline_version=baseline_v1, combined_max_nfev=1, evaluation_anchor_marker_id=14, initialization_algorithm=maximum_bottleneck, initialization_diagnostic=unweighted_first_hit_bfs, loss=soft_l1, loss_scale_px=3.0, quality_area_ratio=0.000008, quality_max_distance_m=disabled, quality_pnp_rmse_px=25.0, quality_positive_depth=true, reference_marker_id=14, reference_marker_selection_mode=auto, resolved_reference_marker_id=14, static_max_nfev=1, top_per_marker=8, top_per_marker_pair=4
+
+SCALE COMPARISON
+------------------------------------------------------------------------------------------------------------------------------------------
+Method | Variant                                       | Scale mechanism        | Scale [m/COLMAP unit] | Used/total | Relative std
+-------+-----------------------------------------------+------------------------+-----------------------+------------+-------------
+ap02   | combined_nfev_1__ref_mode_auto__static_nfev_1 | metric marker-graph BA | n/a (already metric)  | -          | -
+
+DETAILED CAMERA-PAIR RESULTS
+------------------------------------------------------------------------------------------------------------------------------------------
+
+ap02 / combined_nfev_1__ref_mode_auto__static_nfev_1
+Pair                  | t err [cm] | r err [deg] | GT base [m] | Est base [m] | base err [cm] | dir err [deg]
+----------------------+------------+-------------+-------------+--------------+---------------+--------------
+cam_edge_0-cam_edge_1 | 19.337     | 3.430       | 5.069       | 5.062        | 0.720         | 2.186
+cam_edge_0-cam_edge_3 | 18.554     | 2.734       | 3.819       | 3.710        | 10.890        | 2.287
+cam_edge_0-cam_edge_5 | 50.038     | 3.262       | 5.668       | 6.001        | 33.332        | 3.667
+cam_edge_1-cam_edge_3 | 10.419     | 2.534       | 2.172       | 2.133        | 3.947         | 2.567
+cam_edge_1-cam_edge_5 | 25.953     | 0.523       | 9.834       | 10.077       | 24.278        | 0.528
+cam_edge_3-cam_edge_5 | 36.874     | 2.590       | 9.286       | 9.458        | 17.231        | 1.993
+
+METHOD REPORTS AND DETAIL ARTIFACTS
+------------------------------------------------------------------------------------------------------------------------------------------
+- methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/RESULT.txt
+  - methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/diagnostics/method/aruco_observations/ap02_frame_selection.json
+  - methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/diagnostics/method/graph_ba/static_only/ap02_optimization_history.csv
+  - methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/diagnostics/method/graph_ba/with_moving/ap02_optimization_history.csv
+  - methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/diagnostics/method/graph_ba/with_moving/ap02_optimization_summary.json
+  - methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/diagnostics/reporting/AP02_CONVERGENCE_SUMMARY.json
+  - methods/ap02/combined_nfev_1__ref_mode_auto__static_nfev_1/diagnostics/reporting/AP02_CONVERGENCE_CHECKPOINTS.csv
+
+
+DIRECT COMMON-ANCHOR CAMERA POSES VS GROUND TRUTH
+------------------------------------------------------------------------------------------------------------------------------------------
+Method | Variant                                       | Cameras | mean translation [cm] | max translation [cm] | mean rotation [deg] | max rotation [deg]
+-------+-----------------------------------------------+---------+-----------------------+----------------------+---------------------+-------------------
+ap02   | combined_nfev_1__ref_mode_auto__static_nfev_1 | 4       | 20.619                | 38.971               | 2.303               | 2.901
+Detailed values: evaluations/anchor_camera_gt.csv
+
+COMMON-ANCHOR STATIC-CAMERA 6DOF EXPORTS
+------------------------------------------------------------------------------------------------------------------------------------------
+Reference frame: evaluation_anchor_marker_14
+Translation: metres; roll/pitch/yaw: radians; optical-camera convention x right, y down, z forward.
+These are method outputs expressed in the common evaluation/export anchor frame; no GT alignment is applied.
+
+ap02/combined_nfev_1__ref_mode_auto__static_nfev_1:
+  cam_edge_0:
+    x: 0.536028947
+    y: -1.744786612
+    z: 2.083176858
+    roll: -1.960006022
+    pitch: -0.011148404
+    yaw: -0.040103138
+  cam_edge_1:
+    x: -4.037935472
+    y: 0.414298092
+    z: 2.28392646
+    roll: -1.874403451
+    pitch: -0.004241214
+    yaw: -1.968461365
+  cam_edge_3:
+    x: -3.164399705
+    y: -1.530978362
+    z: 2.247785198
+    roll: -1.959501239
+    pitch: 0.037933779
+    yaw: -1.05243244
+  cam_edge_5:
+    x: 6.031311177
+    y: 0.665282627
+    z: 1.991331974
+    roll: -1.883241384
+    pitch: 0.060417236
+    yaw: 2.018668156
+
+Machine-readable exports:
+- CAMERA_EXTRINSICS_COMMON_ANCHOR.yaml
+- CAMERA_EXTRINSICS_COMMON_ANCHOR.json
+- CAMERA_EXTRINSICS_COMMON_ANCHOR.csv
+
+AP02 OPTIMIZATION CONVERGENCE
+----------------------------------------------------------------------------------------------------------------------
+Trace diagnostic only; no calibration is rerun. Tail comparisons use best-observed robust cost up to the recorded solver_nfev.
+static_only: termination=function_evaluation_limit_reached, nfev=1/1, cost=1240.4918 -> 1240.4918, RMSE=8.9295 -> 8.9295 px, optimality=29054.1961
+  solver message: The maximum number of function evaluations is exceeded.
+with_moving: termination=function_evaluation_limit_reached, nfev=1/1, cost=65961.1834 -> 65961.1834, RMSE=18.7985 -> 18.7985 px, optimality=102200.9164
+  solver message: The maximum number of function evaluations is exceeded.
+Detailed machine-readable diagnostics:
+- diagnostics/reporting/AP02_CONVERGENCE_SUMMARY.json
+- diagnostics/reporting/AP02_CONVERGENCE_CHECKPOINTS.csv
+Ground truth used: no
+
+RVIZ VISUALIZATION
+------------------------------------------------------------------------
+Status: UNAVAILABLE_NO_AP03_RECONSTRUCTION
+Manifest: visualization/visualization_manifest.json
+Reason: RViz requires the exact declared AP03 Multi best-model points3D file, Multi scale, and matching anchor export. No alternative model and no new COLMAP run are used.

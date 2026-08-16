@@ -1,0 +1,16 @@
+{
+  "attempt": "attempts/ap01/root_cam_edge_3/20260816_102029_root_cam_edge_3_7a02cd7a",
+  "cause_code": "method_failed",
+  "current_in_comparison": true,
+  "evidence": "RuntimeError: Too few AP01 metric-scale pairs: 5",
+  "explanation": "The method failed; complete evidence is retained in this attempt.",
+  "label": "root_cam_edge_3",
+  "layout_version": 2,
+  "method": "ap01",
+  "original_error": "failed: RuntimeError: AP01: estimate metric scale exited with code 1; log: /workspaces/project/workspace/temporary_runs/simulation_batch_20260816_102013__fov_120deg__light_low_1x__blur_k21_0deg/jobs/fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01/20260816_102029_root_cam_edge_3_7a02cd7a/logs/ap01_estimate_scale.log",
+  "schema_version": 5,
+  "scientific_validity": "incomplete/non-authoritative",
+  "stage": "method_estimation",
+  "status": "failed",
+  "superseded": false
+}

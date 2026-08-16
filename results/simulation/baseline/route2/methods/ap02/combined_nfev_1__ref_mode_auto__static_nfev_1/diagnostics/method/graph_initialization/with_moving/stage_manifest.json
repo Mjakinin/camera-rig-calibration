@@ -1,0 +1,22 @@
+{
+  "completed_at": "2026-08-14T21:25:57.910+00:00",
+  "inputs": {
+    "observations": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02/02_aruco_observations/ap02_all_aruco_observations.csv"
+  },
+  "outputs": {
+    "marker_poses": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02/05_graph_initialization/with_moving/initial_marker_poses_ref_marker.csv",
+    "moving_poses": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02/05_graph_initialization/with_moving/initial_moving_frame_poses_ref_marker.csv",
+    "static_poses": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02/05_graph_initialization/with_moving/initial_static_camera_poses_ref_marker.csv"
+  },
+  "parameters": {
+    "edge_weight_policy": "geometric_observation_quality_v1",
+    "initialization_algorithm": "maximum_frontier_v1",
+    "mode": "with_moving",
+    "reference_marker_id": 14
+  },
+  "runtime_seconds": 0.8624371719997725,
+  "schema_version": 5,
+  "stage_id": "ap02.initialize.with_moving",
+  "started_at": "2026-08-14T21:25:57.047+00:00",
+  "status": "COMPLETED"
+}

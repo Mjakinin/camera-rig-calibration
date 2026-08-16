@@ -1,0 +1,61 @@
+{
+  "category": "simulation",
+  "created_at": "2026-08-15T17:38:43+00:00",
+  "experiment_fingerprint": "da76d9ed0a02eafe74b2c64aec0562bd13579e65a0068ed1d8448111300c2122",
+  "id": "fov_120deg__light_low_1x__blur_k21_0deg",
+  "input_fingerprint": "input_d299574ad661",
+  "layout_version": 2,
+  "moving_camera": {
+    "id": "moving_calib_camera"
+  },
+  "scene_type": "simulation",
+  "schema_version": 5,
+  "simulation_parameters": {
+    "frame_timeout_seconds": 3.0,
+    "lighting": "low",
+    "lighting_scale": 1.0,
+    "motion_blur_angle_deg": 0.0,
+    "motion_blur_kernel": 21,
+    "moving_height": 720,
+    "moving_hfov_deg": 120.0,
+    "moving_width": 1280,
+    "post_pose_skip": 5,
+    "route": "route2",
+    "route_sampling_strategy": "original_route_poses",
+    "route_sha256": "27bf673ecb28c2706aac4a47f3a4c7bead824bbf09cc8efd2155ff05bc0a24bb",
+    "settle_seconds": 0.35,
+    "startup_timeout_seconds": 60.0,
+    "target_route_frames": 189,
+    "world_sha256": "f33b020b9b1bc4dd64802674f02e091a7717e787d58ce2ef82d5863eaca165fd"
+  },
+  "source_kind": "prepared",
+  "static_cameras": [
+    {
+      "id": "cam_edge_0",
+      "label": null
+    },
+    {
+      "id": "cam_edge_1",
+      "label": null
+    },
+    {
+      "id": "cam_edge_3",
+      "label": null
+    },
+    {
+      "id": "cam_edge_5",
+      "label": null
+    }
+  ],
+  "storage": {
+    "canonical_id": "fov_120deg__light_low_1x__blur_k21_0deg",
+    "category": "simulation",
+    "dataset_root": "/workspaces/project/results/simulation/mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+    "factor": "mixed",
+    "layout_version": 2,
+    "relative_path": "mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+    "result_root": "/workspaces/project/results/simulation/mixed/fov_120deg__light_low_1x__blur_k21_0deg_639c024054",
+    "schema_version": 5,
+    "value": "fov_120deg__light_low_1x__blur_k21_0deg_639c024054"
+  }
+}

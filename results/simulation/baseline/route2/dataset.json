@@ -1,0 +1,61 @@
+{
+  "category": "simulation",
+  "created_at": "2026-08-14T21:23:00+00:00",
+  "experiment_fingerprint": "edf84707c07cd9207ec8fe0a19eafb24ee57d3a08698934987254ad97a0b9827",
+  "id": "route2",
+  "input_fingerprint": "input_0ffd7d57d0b8",
+  "layout_version": 2,
+  "moving_camera": {
+    "id": "moving_calib_camera"
+  },
+  "scene_type": "simulation",
+  "schema_version": 5,
+  "simulation_parameters": {
+    "frame_timeout_seconds": 3.0,
+    "lighting": "baseline",
+    "lighting_scale": 1.0,
+    "motion_blur_angle_deg": 0.0,
+    "motion_blur_kernel": 0,
+    "moving_height": 720,
+    "moving_hfov_deg": 69.1,
+    "moving_width": 1280,
+    "post_pose_skip": 5,
+    "route": "route2",
+    "route_sampling_strategy": "original_route_poses",
+    "route_sha256": "27bf673ecb28c2706aac4a47f3a4c7bead824bbf09cc8efd2155ff05bc0a24bb",
+    "settle_seconds": 0.35,
+    "startup_timeout_seconds": 60.0,
+    "target_route_frames": 189,
+    "world_sha256": "0544fd33378a2622cbe471e4bb10b1b4313540b5f870df3ca0a541591a8d1afb"
+  },
+  "source_kind": "prepared",
+  "static_cameras": [
+    {
+      "id": "cam_edge_0",
+      "label": null
+    },
+    {
+      "id": "cam_edge_1",
+      "label": null
+    },
+    {
+      "id": "cam_edge_3",
+      "label": null
+    },
+    {
+      "id": "cam_edge_5",
+      "label": null
+    }
+  ],
+  "storage": {
+    "canonical_id": "route2",
+    "category": "simulation",
+    "dataset_root": "/workspaces/project/results/simulation/baseline/route2",
+    "factor": "baseline",
+    "layout_version": 2,
+    "relative_path": "baseline/route2",
+    "result_root": "/workspaces/project/results/simulation/baseline/route2",
+    "schema_version": 5,
+    "value": "route2"
+  }
+}

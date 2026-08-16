@@ -84,7 +84,7 @@ Camera-pair observability: within-component=9, cross-component/unobservable=27
 Each component keeps its own local marker frame. Components are never artificially aligned.
 Component    | Role       | Execution         | Local ref | Cameras                                                                    | Markers                       | Moving | Quality   | Artifact                  
 -------------+------------+-------------------+-----------+----------------------------------------------------------------------------+-------------------------------+--------+-----------+---------------------------
-component_01 | primary    | primary_component | 2         | camera_back_left,camera_center_left,camera_center_right,camera_front_right | 2,3,4,5,6,8,12,15,16,18,20,37 | 91     | -         | ../07_graph_ba/with_moving
+component_01 | primary    | primary_component | 8         | camera_back_left,camera_center_left,camera_center_right,camera_front_right | 2,3,4,5,6,8,12,15,16,18,20,37 | 91     | -         | ../07_graph_ba/with_moving
 component_02 | diagnostic | available         | 7         | camera_back_center,camera_front_narrow,camera_front_wide                   | 7,9,10,17                     | 65     | converged | component_02              
 component_03 | diagnostic | not_calibratable  | 0         | camera_front_left                                                          | 0,19                          | 25     | -         | -                         
 component_04 | diagnostic | not_calibratable  | 26        | -                                                                          | 26                            | 1      | -         | -
@@ -106,7 +106,7 @@ AP02 LOCAL COMPONENT CAMERA POSES
 These are valid only inside the listed component/local marker frame.
 Cross-component transforms are NOT observable and are not synthesized.
 
-component_01 | execution=primary_component | local frame=marker_2
+component_01 | execution=primary_component | local frame=marker_8
     camera_back_left: x_m=4.472571m, y_m=-5.471860m, z_m=3.040541m; roll=-85.877456deg, pitch=1.013620deg, yaw=68.831961deg
     camera_center_left: x_m=2.304020m, y_m=-0.094897m, z_m=4.179680m; roll=-146.424576deg, pitch=-6.482655deg, yaw=90.448406deg
     camera_center_right: x_m=2.369309m, y_m=-0.155558m, z_m=4.010506m; roll=144.619362deg, pitch=2.666673deg, yaw=-94.568013deg

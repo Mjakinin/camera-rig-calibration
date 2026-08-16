@@ -1,0 +1,111 @@
+{
+  "prepare_inputs": 0.2472439209998356,
+  "_structured": {
+    "prepare_inputs": {
+      "event": "stage_completed",
+      "job_id": "fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "prepare_inputs",
+      "stage_name": "Prepare canonical inputs and provenance",
+      "stage_index": 1,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.24726914200005012,
+      "job_elapsed_seconds": 0.30612225699997,
+      "queue_elapsed_seconds": 13.410241869999936,
+      "batch_elapsed_seconds": 13.493185697999934,
+      "log": null,
+      "counts": {}
+    },
+    "validate_dataset": {
+      "event": "stage_completed",
+      "job_id": "fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "validate_dataset",
+      "stage_name": "Validate the canonical dataset",
+      "stage_index": 2,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.02795739299995148,
+      "job_elapsed_seconds": 0.5659168919999047,
+      "queue_elapsed_seconds": 13.67003650499987,
+      "batch_elapsed_seconds": 13.752980332999869,
+      "log": null,
+      "counts": {}
+    },
+    "detect_markers": {
+      "event": "stage_completed",
+      "job_id": "fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "detect_markers",
+      "stage_name": "Detect shared ArUco observations and debug images",
+      "stage_index": 3,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.007034919000034279,
+      "job_elapsed_seconds": 0.5771537900000112,
+      "queue_elapsed_seconds": 13.681273402999977,
+      "batch_elapsed_seconds": 13.764217230999975,
+      "log": null,
+      "counts": {}
+    },
+    "observation_quality": {
+      "event": "stage_completed",
+      "job_id": "fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "observation_quality",
+      "stage_name": "Apply immutable checks and job-specific observation quality",
+      "stage_index": 4,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.03421274400011498,
+      "job_elapsed_seconds": 0.6164490070000284,
+      "queue_elapsed_seconds": 13.720568619999995,
+      "batch_elapsed_seconds": 13.803512447999992,
+      "log": null,
+      "counts": {}
+    },
+    "analyze_selections": {
+      "event": "stage_completed",
+      "job_id": "fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "analyze_selections",
+      "stage_name": "Analyze root-camera and method-marker candidates",
+      "stage_index": 5,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 0.04815765900002589,
+      "job_elapsed_seconds": 0.6689836699999887,
+      "queue_elapsed_seconds": 13.773103282999955,
+      "batch_elapsed_seconds": 13.856047110999953,
+      "log": null,
+      "counts": {}
+    },
+    "method_ap01": {
+      "event": "stage_failed",
+      "job_id": "fov_120deg__light_low_1x__blur_k21_0deg__ap01__root_cam_edge_3__01",
+      "job_index": 1,
+      "job_count": 1,
+      "stage_id": "method_ap01",
+      "stage_name": "AP01",
+      "stage_index": 6,
+      "stage_count": 8,
+      "stage_elapsed_seconds": 536.5736035180003,
+      "job_elapsed_seconds": 537.4105342490002,
+      "queue_elapsed_seconds": 550.5146538620002,
+      "batch_elapsed_seconds": 550.5975976900002,
+      "log": null,
+      "counts": {}
+    }
+  },
+  "validate_dataset": 0.027919785999984015,
+  "detect_markers": 0.006999629999882018,
+  "observation_quality": 0.034174435999830166,
+  "analyze_selections": 0.04806463900013114,
+  "_sub_stages": {
+    "ap01_reconstruct_moving": {
+      "ap01.reconstruct_moving": 534.949
+    }
+  },
+  "method_ap01": 536.5735491209998
+}

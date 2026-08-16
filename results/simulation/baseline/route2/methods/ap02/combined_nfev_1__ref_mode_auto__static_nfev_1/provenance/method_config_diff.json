@@ -1,0 +1,14 @@
+{
+  "reference_marker_selection_mode": {
+    "baseline": "baseline",
+    "value": "auto"
+  },
+  "static_only_ba_max_function_evaluations": {
+    "baseline": 80,
+    "value": 1
+  },
+  "combined_ba_max_function_evaluations": {
+    "baseline": 80,
+    "value": 1
+  }
+}

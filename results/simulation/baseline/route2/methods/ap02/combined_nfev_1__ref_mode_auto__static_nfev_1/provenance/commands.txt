@@ -1,0 +1,21 @@
+# ap02_build_graph: AP02: build unweighted observation graph
+/usr/bin/python3 -m camera_rig_calibration.methods.ap02.build_graph --observations-root /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/preflight/observations --out /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02 --cameras cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 --ref-marker-id 14 --graph-observation-policy quality_valid_all_observations_v1 --method-contract-sha256 7db5e917a2418122bdea6e8e6eae48b9315da37e1aca1cd39dc29288f6e2efce --top-per-marker 8 --top-per-marker-pair 4
+
+# ap02_component_diagnostics: AP02: calibrate disconnected components (diagnostic)
+/usr/bin/python3 -m camera_rig_calibration.methods.ap02.component_diagnostics --out /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02 --max-nfev 1 --robust-loss soft_l1 --robust-loss-scale-px 3.0
+
+# ap02_static_initialization: AP02: static-only initialization (diagnostic)
+/usr/bin/python3 -m camera_rig_calibration.methods.ap02.initialize_stage --out /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02 --ref-marker-id 14 --mode static_only --initialization-algorithm maximum_frontier_v1 --edge-weight-policy geometric_observation_quality_v1
+
+# ap02_static_ba: AP02: static-only bundle adjustment (diagnostic)
+/usr/bin/python3 -m camera_rig_calibration.methods.ap02.optimize_stage --out /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02 --ref-marker-id 14 --mode static_only --max-nfev 1 --robust-loss soft_l1 --robust-loss-scale-px 3.0 --reprojection-model pinhole_v1 --moving-frame-selection-policy smart_at_ba_boundary_v1 --top-per-marker 8 --top-per-marker-pair 4
+
+# ap02_combined_initialization: AP02: combined initialization (primary)
+/usr/bin/python3 -m camera_rig_calibration.methods.ap02.initialize_stage --out /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02 --ref-marker-id 14 --mode with_moving --initialization-algorithm maximum_frontier_v1 --edge-weight-policy geometric_observation_quality_v1
+
+# ap02_combined_ba: AP02: combined bundle adjustment (primary)
+/usr/bin/python3 -m camera_rig_calibration.methods.ap02.optimize_stage --out /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02 --ref-marker-id 14 --mode with_moving --max-nfev 1 --robust-loss soft_l1 --robust-loss-scale-px 3.0 --reprojection-model pinhole_v1 --moving-frame-selection-policy smart_at_ba_boundary_v1 --top-per-marker 8 --top-per-marker-pair 4
+
+# ap02_report: AP02: write diagnostic and primary report
+/usr/bin/python3 -m camera_rig_calibration.methods.ap02.report --out /workspaces/project/workspace/temporary_runs/simulation_batch_20260814_212535__route2/jobs/route2__ap02__combined_nfev_1__static_nfev_1__01/20260814_212551_combined_nfev_1__static_nfev_1_ab3981bb/03_AP02 --cameras cam_edge_0,cam_edge_1,cam_edge_3,cam_edge_5 --ref-marker-id 14
+

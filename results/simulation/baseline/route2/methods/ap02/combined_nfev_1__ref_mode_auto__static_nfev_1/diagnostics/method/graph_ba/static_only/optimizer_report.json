@@ -1,0 +1,15 @@
+{
+  "mode": "static_only",
+  "success": false,
+  "status": 0,
+  "message": "The maximum number of function evaluations is exceeded.",
+  "nfev": 1,
+  "maximum_function_evaluations": 1,
+  "initial_cost": 1240.491751771769,
+  "final_cost": 1240.4917517717693,
+  "loss": "soft_l1",
+  "loss_scale_px": 3.0,
+  "runtime_seconds": 0.5964507289972971,
+  "final_reprojection_rmse_px": 8.92950798794151,
+  "optimality": 29054.196130664805
+}

@@ -1,0 +1,537 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.9">
+  <world name="bus_real_data_camera_layout">
+    <plugin filename="ignition-gazebo-physics-system" name="ignition::gazebo::systems::Physics" />
+    <plugin filename="ignition-gazebo-user-commands-system" name="ignition::gazebo::systems::UserCommands" />
+    <plugin filename="ignition-gazebo-scene-broadcaster-system" name="ignition::gazebo::systems::SceneBroadcaster" />
+    <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <physics name="default_physics" type="ignored">
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <scene>
+      <ambient>0.025000 0.026000 0.032000 1.000000</ambient>
+      <background>0.480000 0.520000 0.600000 1.000000</background>
+      <shadows>true</shadows>
+    </scene>
+    <include>
+      <uri>model://beintelli_bus</uri>
+      <name>beintelli_bus</name>
+      <pose>-1.8927 25.7211 4.0344 1.5708 0 0</pose>
+    </include>
+    <model name="cam_edge_0">
+      <static>true</static>
+      <pose>0.58780793 -1.23455526 2.48732830 -0.02832886 0.39717862 1.54540010</pose>
+      <link name="cam_edge_0_link">
+        <visual name="cam_edge_0_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="cam_edge_0_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_0/image</topic>
+          <camera>
+            <horizontal_fov>1.2064567910</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+    <model name="cam_edge_1">
+      <static>true</static>
+      <pose>-3.97416732 0.97508650 2.53154268 0.01397153 0.28558128 -0.42471064</pose>
+      <link name="cam_edge_1_link">
+        <visual name="cam_edge_1_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="cam_edge_1_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_1/image</topic>
+          <camera>
+            <horizontal_fov>1.2058954091</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+    <model name="cam_edge_3">
+      <static>true</static>
+      <pose>-3.22735583 -1.06321426 2.45421090 0.03640120 0.33821970 0.53742790</pose>
+      <link name="cam_edge_3_link">
+        <visual name="cam_edge_3_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="cam_edge_3_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_3/image</topic>
+          <camera>
+            <horizontal_fov>1.2156537552</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+    <model name="cam_edge_5">
+      <static>true</static>
+      <pose>5.85885887 0.84841954 2.53876157 0.07529451 0.33545337 -2.70003495</pose>
+      <link name="cam_edge_5_link">
+        <visual name="cam_edge_5_visual">
+          <geometry>
+            <box>
+              <size>0.10 0.06 0.06</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.1 0.1 1.0 1</ambient>
+            <diffuse>0.1 0.1 1.0 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="cam_edge_5_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/cam_edge_5/image</topic>
+          <camera>
+            <horizontal_fov>1.2083025268</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+    <include>
+      <uri>model://a4_aruco_marker_000</uri>
+      <name>marker_000</name>
+      <pose>-2.550000 0.480000 1.180000 -0.40000000 0.00000000 1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_001</uri>
+      <name>marker_001</name>
+      <pose>-2.250000 -0.525000 1.630000 -1.57079633 0.00000000 -1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_002</uri>
+      <name>marker_002</name>
+      <pose>-1.100000 -0.525000 1.100000 -0.40000000 0.00000000 -1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_003</uri>
+      <name>marker_003</name>
+      <pose>0.100000 1.210000 0.800000 0.00000000 0.00000000 0.00000000</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_004</uri>
+      <name>marker_004</name>
+      <pose>0.700000 1.210000 2.000000 0.00000000 0.00000000 0.00000000</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_005</uri>
+      <name>marker_005</name>
+      <pose>1.900000 -0.980000 1.100000 -0.40000000 -0.00000000 -1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_006</uri>
+      <name>marker_006</name>
+      <pose>1.970000 0.500000 1.370000 -0.40000000 -0.00000000 -1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_007</uri>
+      <name>marker_007</name>
+      <pose>1.970000 0.935000 1.370000 -0.40000000 -0.00000000 -1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_008</uri>
+      <name>marker_008</name>
+      <pose>2.650000 -0.525000 1.410000 -0.40000000 -0.00000000 -1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_009</uri>
+      <name>marker_009</name>
+      <pose>3.020000 0.480000 1.420000 -0.40000000 0.00000000 1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_010</uri>
+      <name>marker_010</name>
+      <pose>3.020000 -0.980000 1.420000 -0.40000000 0.00000000 1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_011</uri>
+      <name>marker_011</name>
+      <pose>4.000000 0.000000 1.530000 -1.57079633 0.00000000 1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_012</uri>
+      <name>marker_012</name>
+      <pose>4.040000 -0.980000 1.420000 -0.40000000 0.00000000 3.14159265</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_013</uri>
+      <name>marker_013</name>
+      <pose>4.050000 0.730000 1.270000 -1.57079633 0.00000000 1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_014</uri>
+      <name>aruco_ref_floor_14</name>
+      <pose>0.000000 0.500000 0.400000 -1.57079633 0.00000000 0.00000000</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_016</uri>
+      <name>marker_016</name>
+      <pose>-0.950000 -0.500000 1.280000 0.00000000 0.00000000 1.57079633</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_017</uri>
+      <name>marker_017</name>
+      <pose>1.500000 -1.200000 1.900000 0.00000000 0.00000000 3.14159265</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_018</uri>
+      <name>marker_018</name>
+      <pose>-0.200000 -1.200000 1.450000 0.00000000 0.00000000 3.14159265</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_019</uri>
+      <name>marker_019</name>
+      <pose>-1.290000 1.090000 1.500000 0.00000000 0.00000000 0.00000000</pose>
+    </include>
+    <include>
+      <uri>model://a4_aruco_marker_020</uri>
+      <name>marker_020</name>
+      <pose>5.670000 -0.850000 1.750000 -0.20000000 0.00000000 -1.57079633</pose>
+    </include>
+    <model name="moving_calib_camera">
+      <static>true</static>
+      <pose>-6.000000 0.000000 2.200000 0.000000 0.000000 0.000000</pose>
+      <link name="moving_calib_camera_link">
+        <visual name="moving_calib_camera_visual">
+          <geometry>
+            <box>
+              <size>0.12 0.07 0.07</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1.0 0.2 0.1 1</ambient>
+            <diffuse>1.0 0.2 0.1 1</diffuse>
+          </material>
+        </visual>
+        <sensor name="moving_calib_camera_sensor" type="camera">
+          <always_on>true</always_on>
+          <update_rate>15</update_rate>
+          <topic>/bus_real_data/moving_calib_camera/image</topic>
+          <camera>
+            <horizontal_fov>2.094395102393</horizontal_fov>
+            <image>
+              <width>1280</width>
+              <height>720</height>
+              <format>R8G8B8</format>
+            </image>
+            <clip>
+              <near>0.05</near>
+              <far>100.0</far>
+            </clip>
+          </camera>
+        </sensor>
+      </link>
+    </model>
+    <model name="bus_ceiling_led_panels">
+      <static>true</static>
+      <link name="ceiling_led_panel_link">
+        <visual name="ceiling_led_strip_0">
+          <pose>0.600000 -0.450000 2.700000 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>10.400000 0.140000 0.025000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.045000 0.046000 0.050000 1.000000</ambient>
+            <diffuse>0.045000 0.046000 0.050000 1.000000</diffuse>
+            <specular>0.100000 0.100000 0.090000 1.000000</specular>
+            <emissive>0.045000 0.046000 0.050000 1.000000</emissive>
+          </material>
+        </visual>
+        <visual name="ceiling_led_strip_1">
+          <pose>0.600000 0.450000 2.700000 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>10.400000 0.140000 0.025000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.045000 0.046000 0.050000 1.000000</ambient>
+            <diffuse>0.045000 0.046000 0.050000 1.000000</diffuse>
+            <specular>0.100000 0.100000 0.090000 1.000000</specular>
+            <emissive>0.045000 0.046000 0.050000 1.000000</emissive>
+          </material>
+        </visual>
+        <visual name="door_ceiling_led_panel">
+          <pose>0.400000 0.800000 2.700000 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.720000 0.340000 0.025000</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.040500 0.041400 0.045000 1.000000</ambient>
+            <diffuse>0.040500 0.041400 0.045000 1.000000</diffuse>
+            <specular>0.100000 0.100000 0.090000 1.000000</specular>
+            <emissive>0.040500 0.041400 0.045000 1.000000</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <light name="ceiling_strip_point_00" type="point">
+      <pose>-4.200000 -0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_01" type="point">
+      <pose>-2.600000 -0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_02" type="point">
+      <pose>-1.000000 -0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_03" type="point">
+      <pose>0.600000 -0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_04" type="point">
+      <pose>2.200000 -0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_05" type="point">
+      <pose>3.800000 -0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_06" type="point">
+      <pose>5.400000 -0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_07" type="point">
+      <pose>-4.200000 0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_08" type="point">
+      <pose>-2.600000 0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_09" type="point">
+      <pose>-1.000000 0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_10" type="point">
+      <pose>0.600000 0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_11" type="point">
+      <pose>2.200000 0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_12" type="point">
+      <pose>3.800000 0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="ceiling_strip_point_13" type="point">
+      <pose>5.400000 0.450000 2.610000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.035000 0.036000 0.040000 1.000000</diffuse>
+      <specular>0.003000 0.003000 0.004000 1.000000</specular>
+      <attenuation>
+        <range>4.600000</range>
+        <constant>0.880000</constant>
+        <linear>0.095000</linear>
+        <quadratic>0.022000</quadratic>
+      </attenuation>
+    </light>
+    <light name="door_ceiling_point" type="point">
+      <pose>0.400000 0.800000 2.580000 0 0 0</pose>
+      <cast_shadows>false</cast_shadows>
+      <visualize>false</visualize>
+      <diffuse>0.025200 0.025920 0.028800 1.000000</diffuse>
+      <specular>0.001650 0.001650 0.002200 1.000000</specular>
+      <attenuation>
+        <range>3.200000</range>
+        <constant>0.780000</constant>
+        <linear>0.105000</linear>
+        <quadratic>0.027000</quadratic>
+      </attenuation>
+    </light>
+  </world>
+</sdf>
