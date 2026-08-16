@@ -60,7 +60,12 @@ def install_simulation_ui_consistency_policy() -> None:
         return
 
     from .. import wizard
-    from ..ui import wizard_prompts, wizard_saved_flow, wizard_simulation
+    from ..ui import (
+        wizard_prompts,
+        wizard_review,
+        wizard_saved_flow,
+        wizard_simulation,
+    )
 
     original_prompt_index = wizard_prompts._prompt_index
 
@@ -184,6 +189,13 @@ def install_simulation_ui_consistency_policy() -> None:
 
     show_summary._rigcal_simulation_ui_consistency = True  # type: ignore[attr-defined]
     wizard_saved_flow.show_summary = show_summary
+    # wizard_review imported show_summary as a concrete function object before
+    # this policy is installed. The single-run simulation batch path goes
+    # through wizard_review.show_queue_summary(), so update that stale binding
+    # as well; otherwise the real wizard still renders '?' timing values while
+    # direct wizard.show_summary() tests pass.
+    if getattr(wizard_review, "show_summary", None) is original_show_summary:
+        wizard_review.show_summary = show_summary
     wizard.show_summary = show_summary
 
     _INSTALLED = True
