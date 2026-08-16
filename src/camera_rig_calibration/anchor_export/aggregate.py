@@ -54,18 +54,34 @@ def _legacy_row(camera: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _is_shared_ap03_container(path: Path, methods_root: Path) -> bool:
+    """Hide AP03's shared COLMAP container when both public scale results exist."""
+    if path.parents[1].name != "ap03":
+        return False
+    label = path.parent.name
+    return (
+        methods_root / "ap03_single" / label / "camera_extrinsics_anchor.json"
+    ).is_file() and (
+        methods_root / "ap03_multi" / label / "camera_extrinsics_anchor.json"
+    ).is_file()
+
+
 def build_experiment_anchor_aggregate(experiment_root: Path) -> dict[str, Any]:
-    """Rebuild the experiment-wide compatibility export from every variant.
+    """Rebuild the experiment-wide compatibility export from public variants.
 
     Per-method ``camera_extrinsics_anchor.*`` files are authoritative.  The
     experiment-level files are a deterministic aggregate/front door and must
-    never retain a stale subset from an earlier reporting pass.
+    never retain a stale subset from an earlier reporting pass.  AP03's shared
+    COLMAP/provenance container remains on disk but is not presented as a third
+    scientific result when AP03 Single and AP03 Multi are both available.
     """
     rows: list[dict[str, Any]] = []
     variants: list[dict[str, Any]] = []
     methods_root = experiment_root / "methods"
     if methods_root.is_dir():
         for path in sorted(methods_root.glob("*/*/camera_extrinsics_anchor.json")):
+            if _is_shared_ap03_container(path, methods_root):
+                continue
             payload = _read_json(path)
             method = str(payload.get("method") or path.parents[1].name)
             label = str(payload.get("label") or path.parent.name)
