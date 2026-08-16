@@ -24,6 +24,42 @@ from .reporting_simulation import (
 from .reporting_bindings import current_reporting_bindings
 
 
+_COMMON_ANCHOR_6DOF_HEADING = "COMMON-ANCHOR STATIC-CAMERA 6DOF EXPORTS"
+
+
+def _is_report_section_header(lines: list[str], index: int) -> bool:
+    if index + 1 >= len(lines):
+        return False
+    title = lines[index].strip()
+    underline = lines[index + 1].strip()
+    return bool(
+        title
+        and title == title.upper()
+        and len(underline) >= 8
+        and set(underline) in ({"-"}, {"="})
+    )
+
+
+def _without_common_anchor_6dof_sections(text: str) -> str:
+    """Remove compatibility 6DOF blocks before adding the canonical one."""
+    lines = text.splitlines()
+    kept: list[str] = []
+    index = 0
+    while index < len(lines):
+        if lines[index].strip() != _COMMON_ANCHOR_6DOF_HEADING:
+            kept.append(lines[index])
+            index += 1
+            continue
+        index += 1
+        if index < len(lines):
+            underline = lines[index].strip()
+            if len(underline) >= 8 and set(underline) == {"-"}:
+                index += 1
+        while index < len(lines) and not _is_report_section_header(lines, index):
+            index += 1
+    return "\n".join(kept).rstrip()
+
+
 def write_scientific_experiment_reports(
     experiment_root: Path,
     *,
@@ -151,7 +187,9 @@ def write_scientific_experiment_reports(
     # The per-method anchor exports above are authoritative.  Rebuild the
     # experiment-level compatibility/front-door files on every report pass so
     # an older AP02/AP03 subset can never remain visible after new variants are
-    # published (notably AP03 Single and later AP02 settings).
+    # published (notably AP03 Single and later AP02 settings).  Remove any
+    # compatibility copy already injected by an older reporting path first so
+    # RESULTS.txt contains exactly one canonical 6DOF section.
     anchor_aggregate = build_experiment_anchor_aggregate(experiment_root)
     payload["common_anchor_6dof_export"] = {
         "contract": anchor_aggregate.get("contract"),
@@ -162,6 +200,7 @@ def write_scientific_experiment_reports(
         "csv": "CAMERA_EXTRINSICS_COMMON_ANCHOR.csv",
         "yaml": "CAMERA_EXTRINSICS_COMMON_ANCHOR.yaml",
     }
+    text = _without_common_anchor_6dof_sections(text)
     text = (
         text.rstrip()
         + "\n\n"
@@ -218,5 +257,6 @@ def write_scientific_experiment_reports(
 
 
 __all__ = [
+    "_without_common_anchor_6dof_sections",
     "write_scientific_experiment_reports",
 ]
