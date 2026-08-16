@@ -104,4 +104,4 @@ Do **not** manually delete individual files from the middle of a published exper
 
 Use the application's **Cleanup storage** workflow for managed cleanup, or archive/delete an entire experiment deliberately after preserving the front-door results you need.
 
-Only intentionally selected compact reference artifacts are expected to be tracked by Git; large raw/regenerable data can remain local.
+Generated experiment contents are intentionally ignored by Git in the submission repository. Only this README is tracked; local runs still use the complete structure described above.

@@ -1,8 +1,0 @@
-INCOMPLETE / NON-AUTHORITATIVE CALIBRATION ATTEMPT
-================================================================
-
-Method: ap01
-Variant: direct_target_camera_auto
-Cause: preflight_failed
-Explanation: Input or observation-quality preflight rejected this job.
-Evidence: failed_preflight: ['Evaluation anchor 0 is not compatible with every enabled method after its effective quality filter.']

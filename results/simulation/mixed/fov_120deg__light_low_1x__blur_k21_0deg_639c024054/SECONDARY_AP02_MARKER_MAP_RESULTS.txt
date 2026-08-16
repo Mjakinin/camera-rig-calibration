@@ -1,4 +1,0 @@
-SECONDARY AP02 MARKER-MAP RESULTS
-=================================
-
-Unavailable: no successful AP02 result exists.

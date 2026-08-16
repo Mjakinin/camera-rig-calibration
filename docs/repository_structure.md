@@ -10,7 +10,7 @@ ignored by Git.
 | `data_local/` | Local landing zone for images, video, ROS bags, and optional route JSON files | Only its instructions; user data stays local |
 | `docs/` | Architecture, configuration, extension, Method-SDK, and storage documentation | Yes |
 | `examples/` | Small runnable UI/CLI configuration examples | Yes |
-| `results/` | Canonical published experiments and their compact scientific front door | Yes, for deliberately selected reference results |
+| `results/` | Locally generated published experiments and scientific outputs | README only; generated results stay local |
 | `src/camera_rig_calibration/` | Installable Python application | Yes |
 | `src/calib_lab/` | Reviewed ROS/Gazebo bus-world package, marker layout, routes, and numbered asset generators | Yes |
 | `tests/` | Behavior, scientific-contract, UI/CLI, and architecture tests | Yes |

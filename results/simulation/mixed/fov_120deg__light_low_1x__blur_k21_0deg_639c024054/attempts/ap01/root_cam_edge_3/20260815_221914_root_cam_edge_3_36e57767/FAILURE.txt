@@ -1,8 +1,0 @@
-INCOMPLETE / NON-AUTHORITATIVE CALIBRATION ATTEMPT
-================================================================
-
-Method: ap01
-Variant: root_cam_edge_3
-Cause: method_failed
-Explanation: The method failed; complete evidence is retained in this attempt.
-Evidence: RuntimeError: Too few AP01 metric-scale pairs: 7

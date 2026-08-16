@@ -15,6 +15,7 @@ dist/
 .rigcal-venv/
 
 # Local editor and operating-system files
+.vscode/
 .DS_Store
 
 # User input and regenerable runtime state
@@ -23,20 +24,9 @@ data_local/*
 workspace/*
 !workspace/README.md
 
-# Published raw data and large diagnostics stay local. Compact, deliberately
-# tracked reference-result files remain tracked even when a parent rule matches.
-results/real_vehicle/**
-results/simulation/**/inputs/
-results/simulation/**/raw_images/
-results/simulation/**/observations/
-results/**/backup_before_rerun/
-results/**/_backups/
-results/**/_pipeline_logs/
-results/**/preview/
-results/**/previews/
-results/**/*_preview/
-results/bus_real_data/
-results/real_vehicle_data/
+# Generated experiment results stay local
+results/*
+!results/README.md
 
 # Intrinsics image evidence is generated locally; profile metadata and reports
 # may be added deliberately.

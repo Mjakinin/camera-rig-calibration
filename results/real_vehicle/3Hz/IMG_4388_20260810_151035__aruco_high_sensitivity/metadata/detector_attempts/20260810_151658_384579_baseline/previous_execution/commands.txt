@@ -1,9 +1,0 @@
-# prepare_mcap: Extract selected camera inputs from MCAP
-/usr/bin/python3 -m camera_rig_calibration.input.mcap --mcap /workspaces/project/data_local/exterior/rosbag2_2026_07_28-14_08_25/rosbag2_2026_07_28-14_08_25_0.mcap --dataset /workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/input_working/_acquisitions/c8793baa12e2 --mapping /workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/input_working/_acquisitions/c8793baa12e2/metadata/mcap_topic_mapping.json
-
-# prepare_moving_frames: Extract moving-camera video frames
-/usr/bin/python3 /workspaces/project/src/camera_rig_calibration/input/video.py --video /workspaces/project/data_local/exterior/IMG_4388.mov --dataset /workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/input_working/_acquisitions/c8793baa12e2 --target-fps 3.0 --start-s 0.0 --overwrite
-
-# detect_markers: Shared ArUco detection
-/usr/bin/python3 /workspaces/project/src/camera_rig_calibration/observation_detection.py --dataset /workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/input_working/IMG_4388_20260810_151035/a646c20026b5/raw_images --out /workspaces/project/workspace/temporary_runs/IMG_4388_20260810_151035_queue/jobs/queue_preflight/20260810_151249_queue_preflight_6ac4124a/01_OBSERVATIONS --cameras camera_back_center,camera_back_left,camera_back_right,camera_center_left,camera_center_right,camera_front_left,camera_front_narrow,camera_front_right,camera_front_wide --moving-camera-id moving_calib_camera --marker-length-m 0.17 --dictionary DICT_4X4_50 --detection-mode baseline --allowed-marker-ids auto --minimum-area-px2 0
-

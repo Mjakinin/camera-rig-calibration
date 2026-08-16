@@ -1,7 +1,0 @@
-{
-  "dataset_root": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260815_184025__fov_120deg__light_low_1x__blur_k21_0deg/dataset",
-  "prepared_source_root": "/workspaces/project/workspace/temporary_runs/simulation_batch_20260815_184025__fov_120deg__light_low_1x__blur_k21_0deg/dataset",
-  "prepared_input": true,
-  "layout_version": 2,
-  "input_id": "input_d299574ad661"
-}
