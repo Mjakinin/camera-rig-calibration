@@ -33,7 +33,6 @@ from ..storage_layout import storage_manifest
 
 
 from .core import (
-    _materialize_tree,
     _now,
     _read_json,
     _refresh_dataset_descriptor,
@@ -42,6 +41,7 @@ from .core import (
 from .dataset import (
     _publish_dataset,
 )
+from .evaluation import publish_evaluation_tree
 from .inventory import (
     _native_calibration_hashes,
     _write_inventory_reports,
@@ -238,7 +238,7 @@ def publish_queue_transaction(
                 }
             )
 
-    _materialize_tree(
+    publish_evaluation_tree(
         transaction / "results" / "evaluations", paths.root / "evaluations"
     )
     write_experiment_reports(
