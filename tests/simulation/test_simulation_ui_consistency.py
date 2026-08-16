@@ -128,6 +128,7 @@ def test_product_stack_applies_consistency_to_real_wizard_paths() -> None:
         install_product_stack()
 
         import camera_rig_calibration.wizard as wizard
+        import camera_rig_calibration.ui.wizard_review as wizard_review
         import camera_rig_calibration.ui.wizard_simulation as simulation_ui
 
         seen = {}
@@ -211,6 +212,22 @@ def test_product_stack_applies_consistency_to_real_wizard_paths() -> None:
         assert "skip=5" in rendered
         assert "timeouts=3.0/60.0 s" in rendered
         assert "settle=?" not in rendered
+
+        queue_output = StringIO()
+        outcome = SimpleNamespace(
+            config=config,
+            path=Path("sim.yaml"),
+            runs=(SimpleNamespace(config=config, path=Path("sim.yaml")),),
+        )
+        wizard_review.show_queue_summary(
+            outcome,
+            Console(file=queue_output, force_terminal=False, width=220),
+        )
+        queue_rendered = queue_output.getvalue()
+        assert "settle=0.35 s" in queue_rendered
+        assert "skip=5" in queue_rendered
+        assert "timeouts=3.0/60.0 s" in queue_rendered
+        assert "settle=?" not in queue_rendered
         """
     )
     subprocess.run(
