@@ -1,23 +1,47 @@
 # rigcal — Camera Rig Calibration
 
-`rigcal` is a reproducible university tool for calibrating a static camera rig
-with a moving calibration camera. It supports real recordings and the built-in
-Gazebo bus world, runs AP01/AP02/AP03 as independent method variants, and
-compares their primary results on one common anchor.
+<p align="center">
+  <strong>Extrinsic calibration of distributed static camera rigs using one moving calibration camera.</strong><br/>
+  Simulation and real-world workflows · AP01 / AP02 / AP03 · reproducible results and RViz inspection
+</p>
 
-## Install and start
+<p align="center">
+  <img src="docs/images/overview/rigcal_overview_gallery.jpg" alt="rigcal overview: real bus interior, simulation, RViz calibration result, and real bus exterior" width="100%" />
+</p>
 
-Python 3.10–3.13 is supported.
+<p align="center">
+  <sub>Real-world bus interior · reviewed bus simulation · RViz result visualization · real-world bus exterior</sub>
+</p>
+
+`rigcal` is a reproducible university project for estimating the **extrinsic calibration** of a distributed static camera rig. A moving calibration camera is carried through the scene and creates geometric links between static cameras that may have little or no direct field-of-view overlap.
+
+The project was developed in the context of the **Technische Universität Berlin** module **Application of Robotics and Autonomous Systems**. It provides one workflow for simulation, real recordings, three calibration approaches, diagnostics, publication of scientific artifacts, cross-method comparison, and RViz visualization.
+
+> **Paper/report:** work in progress. See the [paper placeholder](docs/paper/README.md). The repository is the software artifact; the manuscript is not yet a finished publication.
+
+## Quick start
+
+### 1. Install
+
+Python **3.10–3.13** is supported.
 
 ```bash
 python3 -m pip install -e ".[scientific,standalone]"
+```
+
+Start the application with:
+
+```bash
 rigcal
 ```
 
-The `standalone` extra installs the OpenCV ArUco runtime used outside a ROS
-environment. COLMAP and FFmpeg/ffprobe remain external executables; the menu's
-**Check installation** entry reports which optional workflow prerequisites are
-available.
+or from a source checkout:
+
+```bash
+python -m camera_rig_calibration
+```
+
+The `standalone` extra provides the OpenCV ArUco runtime outside a ROS environment. Depending on the selected workflow, external tools such as **COLMAP**, **FFmpeg/ffprobe**, **ROS 2 / Gazebo**, and **RViz 2** may also be required. Run **Check installation** from the main menu before a long experiment.
 
 For development:
 
@@ -27,7 +51,7 @@ python3 -m compileall -q src tests
 pytest -q
 ```
 
-The menu provides:
+### 2. Main menu
 
 ```text
 1. Start a new calibration
@@ -39,151 +63,148 @@ The menu provides:
 0. Exit
 ```
 
-The wizard discovers inputs under `data_local`, published/prepared experiments
-under `results`, managed intrinsics under `config/intrinsics`, the built-in bus
-simulation assets, and validated local routes below
-`data_local/simulation_routes`. It does not prompt for arbitrary world paths.
-
-The purpose of every root and source directory is listed in the
-[repository structure](docs/repository_structure.md); the scientific artifact
-tree is explained directly in [results/README.md](results/README.md).
-
-## Input conventions
-
-Put a real acquisition below `data_local/<experiment>/`. It may contain:
-
-- static images or static-camera videos;
-- a moving-camera video or extracted moving frames;
-- camera-info JSON/YAML files;
-- a checkerboard video or checkerboard image folder;
-- a ROS bag (`.mcap` or `.db3`).
-
-Recommended role folders are `static/`, `moving_frames/`, `camera_info/`,
-`intrinsics/`, and `checkerboard/`. Role words can be part of a longer name,
-such as `static_v2` or `iphone_intrinsics_v3`.
-
-Moving frames and moving-camera intrinsics are independent selections. Managed
-profiles are immutable and stored as:
-
-```text
-config/intrinsics/<profile-id>/<profile-hash>/
-  intrinsics.json
-  profile.yaml
-  reports and source records
-```
-
-The two repository profiles are:
-
-- `iphone_05x_4k@d5444b68272f`
-- `iphone_1x_4k_3840x2160@3ed2f8d6f7fe`
-
-## Simulation
-
-The stable release supports only the reviewed bus Gazebo world. Its declared
-Route-1/Route-2 assets and valid JSON files below
-`data_local/simulation_routes/` are available as moving-camera routes. The
-experiment queue can:
-
-- add the Route-2 baseline;
-- add several existing simulation experiments;
-- derive new combinations from the baseline or another queued experiment;
-- combine route, density, resolution, FOV, lighting, motion blur and capture
-  parameters.
-
-A local route needs at least two ordered, uniquely numbered frames with
-`frame`, optional `segment`, metric `x/y/z`, and radian
-`roll/pitch/yaw`. Invalid or non-finite routes fail before Gazebo starts. The
-optional frame count deterministically interpolates the route. Route hash,
-resolved pose sequence and captured frames are recorded in run metadata.
-Arbitrary SDF worlds are intentionally not executable in this release.
-
-Route, density, resolution, FOV and blur affect the moving camera. Lighting
-affects the whole world. `pct` means percent.
-
-One method queue is applied to every selected experiment, forming
-`experiments × method variants`. Capture and ArUco observation generation run
-once per experiment.
-
-## Method queue
-
-The default choices are:
-
-```text
-1. AP01 — Direct / Relay marker-based calibration (baseline_v1)
-2. AP02 — Graph initialization + bundle adjustment (baseline_v1)
-3. AP03 — SfM / multi-camera calibration (baseline_v1)
-```
-
-Repeated selections are preserved. For example `1,2,3,3` produces four
-editable queue rows. Public names are generated from deviations to baseline,
-for example `baseline`, `combined_nfev_60` or
-`matcher_sequential__overlap_13`. An exact duplicate is identified and skipped.
-
-AP02 Combined and AP03 Multi are primary results. AP02 Static-only and AP03
-Single remain visible diagnostics and are not counted as separate methods in
-the scientific comparison.
-
-Additional registered `CalibrationMethod` components appear automatically.
-AP01–AP03 keep their dedicated editors; extension methods receive UI fields
-from their strict Pydantic configuration model and retain a validated YAML
-fallback. Their canonical 6DOF result is consumed by publication, comparison,
-the results browser and pose visualization without AP-specific UI branches.
-See the [Method SDK](docs/method_sdk.md).
-
-Observation quality has one queue-wide baseline and optional overrides per
-method row. The default area threshold is the resolution-neutral marker/image
-ratio `0.000008`; PnP RMSE, positive depth and maximum distance are separate
-filters. In the editor, `inherit` uses the queue baseline and an explicit
-value affects only that method variant. Optional selection limits use `null`
-for unlimited and reject `0`.
-
-All three approaches make deterministic selections and write their candidates,
-quality metrics and tie-breakers to CSV/JSON diagnostics.
-
-### AP01 — Direct / Relay marker-based calibration
-
-AP01 uses synchronized static-camera marker observations plus the moving-camera
-sequence. It estimates a Direct transform where a static camera shares marker
-support with the root camera and uses the moving-camera trajectory as a Relay
-for the remaining cameras. Useful controls include the root camera, Direct
-target, observation quality, and the optional robust-consensus strategy. It
-publishes static-camera poses, all available unordered camera pairs, quality
-diagnostics and runtime provenance.
-
-### AP02 — Graph initialization + bundle adjustment
-
-AP02 builds a marker/camera observation graph, initializes poses from a
-reference marker, and refines the joint problem with bundle adjustment. Useful
-controls include the reference marker, frame budgets, graph initialization,
-reprojection model, solver budget, robust loss and loss scale. Combined BA is
-the primary result; static-only BA remains a diagnostic.
-
-### AP03 — SfM / multi-camera calibration
-
-AP03 jointly registers one image per static camera and the moving-camera frames
-in COLMAP, estimates metric scale from the configured marker set, and exports
-the registered static-camera poses. Useful controls include matching, compute
-mode, mapper support, feature-limit policy, scale inputs, marker area, scale
-RANSAC and marker selection. Multi-marker scale is primary; Single is a shared
-diagnostic.
-
-The common evaluation anchor is selected and frozen once during preflight. No
-method may silently substitute another anchor, and ground truth is never used
-to calibrate the rig.
-
-From the Wizard, choose **Start a new calibration**, select prepared or
-simulation input, add AP01/AP02/AP03 to the method queue, edit advanced options
-if needed, and review the final queue. From the CLI, validate or run the saved
-configuration without changing it:
+For normal use, the Wizard is the recommended entry point. Saved queue/configuration files can also be validated or executed non-interactively:
 
 ```bash
 rigcal --config workspace/<dataset>/queue/queue.yaml --dry-run
 rigcal --config workspace/<dataset>/queue/queue.yaml --yes
 ```
 
+## What is estimated?
+
+The goal is the **6-DoF extrinsic pose** of every static camera: its translation and rotation relative to a shared reference frame.
+
+The moving camera does not become part of the final static rig. Instead, its observations and trajectory provide intermediate geometric connections between viewpoints. Depending on the selected method, those connections are obtained from fiducial markers, an observation graph with bundle adjustment, or a joint Structure-from-Motion reconstruction.
+
+Camera intrinsics are treated separately and remain fixed during the extrinsic-calibration run. In simulation, known Ground Truth is used **only after calibration for evaluation**. It is never used to influence the calibration itself.
+
+## Two typical workflows
+
+### A. Simulation
+
+The stable simulation path uses the reviewed bus Gazebo world and validated moving-camera routes.
+
+```text
+rigcal
+  → Start a new calibration
+  → Simulation
+  → choose/derive an experiment
+  → add AP01, AP02 and/or AP03
+  → review settings
+  → run
+  → View results
+```
+
+A baseline run can be executed without changing advanced settings. For controlled experiments, the Wizard can derive variants that change parameters such as:
+
+- moving-camera route;
+- frame density / capture sampling;
+- image resolution;
+- field of view;
+- lighting;
+- motion blur;
+- capture parameters.
+
+Route, density, resolution, FOV and blur affect the moving camera; lighting affects the world. Capture and shared ArUco observation generation are performed once per simulation experiment and reused by its queued method variants.
+
+The reviewed Route-1/Route-2 assets and validated local routes are discovered automatically. Local route files live below `data_local/simulation_routes/`.
+
+### B. Real-world data
+
+For a real acquisition, create one experiment directory below `data_local/`:
+
+```text
+data_local/<experiment_name>/
+```
+
+`rigcal` scans the experiment recursively, so exact filenames and nesting are flexible. Recommended role folders are:
+
+```text
+static/
+moving_frames/
+camera_info/
+intrinsics/
+checkerboard/
+```
+
+Typical inputs include:
+
+- static-camera images or videos;
+- a moving-camera video or extracted frames;
+- camera-info JSON/YAML files;
+- a checkerboard video or checkerboard image folder;
+- a ROS bag (`.mcap` or `.db3`).
+
+Then:
+
+```text
+copy data into data_local/<experiment_name>/
+  → rigcal
+  → Start a new calibration
+  → Real data
+  → confirm detected input roles and intrinsics
+  → choose AP01/AP02/AP03
+  → run
+  → View results
+```
+
+Moving-camera frames and moving-camera intrinsics are independent selections. Reusable managed intrinsics profiles live below `config/intrinsics/`. See [`data_local/README.md`](data_local/README.md) for a practical input example.
+
+## Calibration methods
+
+The Wizard exposes three reviewed approaches. They solve the same final problem but use different geometric evidence.
+
+### AP01 — Direct / Relay marker-based calibration
+
+AP01 combines synchronized static-camera marker observations with the moving-camera sequence.
+
+When a static camera shares suitable marker support with the selected root camera, AP01 can estimate a **Direct** relationship. Cameras without sufficient direct support can be connected through the moving-camera trajectory using **Relay** transformations.
+
+This makes AP01 comparatively easy to inspect: the result can be traced through explicit marker-supported transformation chains. Useful advanced controls include the root camera, Direct target, observation-quality settings, and optional robust-consensus behavior.
+
+### AP02 — Graph initialization + bundle adjustment
+
+AP02 represents static cameras, moving frames, and fiducial markers as an **observation graph**. It initializes the observable geometry from a reference marker and then refines it with bundle adjustment.
+
+The graph is also an observability diagnostic: disconnected components cannot support a unique cross-component transform. AP02 therefore exposes partial/disconnected geometry instead of silently inventing unsupported rig poses.
+
+The **Combined** bundle-adjustment result is the primary AP02 result; the static-only stage remains available as a diagnostic. Advanced controls include reference-marker selection, frame budgets, initialization strategy, reprojection model, solver budget, robust loss, and observation-quality overrides.
+
+### AP03 — SfM / multi-camera calibration
+
+AP03 jointly registers one image per static camera together with the moving-camera frames in **COLMAP** using natural image features. The SfM reconstruction is initially defined only up to scale; detected markers with known physical size are then used to recover and validate metric scale.
+
+The **Multi-marker** result is the primary AP03 result. The Single-marker variant remains a shared diagnostic. Advanced controls include matcher strategy, compute mode, mapper support, feature-limit policy, marker/scale selection, reprojection thresholds, and scale RANSAC settings.
+
+## Common comparison and evaluation anchor
+
+Each method may use its own internal reference choices, but published cross-method results are expressed on one **common evaluation anchor** selected and frozen during preflight.
+
+This anchor is intentionally independent of AP02's internal reference marker. A method that cannot provide a valid export on the selected anchor is reported as unavailable for that comparison; the application does not silently substitute another marker.
+
+For simulation, Ground Truth is evaluated only after the calibration outputs exist. For real-world data without independent pose Ground Truth, the application reports coverage and method-specific geometric consistency diagnostics instead of claiming absolute pose accuracy.
+
+## Baselines, advanced settings and ablation studies
+
+You do not need to modify advanced settings for a normal calibration. The default path is intentionally suitable for a baseline run.
+
+For experiments and ablation studies, the same Wizard can queue repeated methods with different parameters. Scientific duplicates are detected and skipped; meaningful deviations receive deterministic public labels such as a changed solver budget or matcher configuration.
+
+Examples of parameters that can be studied include:
+
+| Scope | Examples |
+|---|---|
+| Simulation | route, frame density, resolution, FOV, lighting, motion blur, capture settings |
+| AP01 | root camera, Direct/Relay controls, consensus and observation-quality settings |
+| AP02 | reference marker, frame budgets, graph initialization, BA budget, robust loss, reprojection settings |
+| AP03 | matcher, compute mode, feature limits, mapper settings, scale markers and scale-validation parameters |
+| Shared | ArUco detection/quality filters, common evaluation-anchor selection |
+
+Every execution records requested and resolved configuration, commands, environment information, manifests, timings, diagnostics, and result fingerprints. See [`docs/configuration.md`](docs/configuration.md) for the exact schema and advanced configuration contract.
+
 ## Pipeline
 
-The terminal shows this central order:
+The central pipeline is:
 
 ```text
 1 Capture or import
@@ -192,165 +213,81 @@ The terminal shows this central order:
   → 4 Detect ArUco markers and write debug images
   → 5 Check observation quality and select references
   → 6 Run one calibration method and its internal substages
-  → 7 Evaluate every primary method on a common anchor
+  → 7 Evaluate primary methods on the common anchor
   → 8 Build the cross-method comparison
   → 9 Atomically publish the experiment and summary
 ```
 
-Video extraction, Gazebo capture and ArUco detection report
-`current/expected frames`, percentage and elapsed time. Method, experiment and
-batch times are shown separately. Full COLMAP and optimizer output remains in
-log files; the terminal shows only useful progress, warnings and summaries.
+A completed method never modifies the canonical input dataset. Failed attempts are retained as diagnostic evidence and do not overwrite a valid published result.
 
-## Storage layout
+## Results and RViz
 
-Real source kinds (`video`, `frames`, `rosbag`, `prepared`) remain metadata and
-do not create path levels:
-
-```text
-results/real_vehicle/<rate>Hz/<experiment>/
-results/real_vehicle/native_rate/<experiment>/
-```
-
-Simulation retains its factor grouping:
-
-```text
-results/simulation/<factor>/<value>/
-```
-
-An experiment owns exactly one immutable dataset:
-
-```text
-dataset.json
-raw_images/
-  static/
-  moving/
-  camera_info/
-observations/
-  shared_static_aruco_observations.csv
-  shared_moving_aruco_observations.csv
-  shared_all_aruco_observations.csv
-  quality and selection reports
-  debug_images/
-metadata/
-methods/
-evaluations/
-attempts/
-```
-
-A byte-identical repeat reuses the dataset. Different content under the same
-experiment ID is rejected and requires a new ID. Calibration methods never
-modify the canonical dataset.
-
-The result front door is:
+Published experiments live below `results/`. The quickest human-readable entry point is:
 
 ```text
 RESULTS.txt
+```
+
+Important machine-readable front-door files are:
+
+```text
 RESULTS.json
 SUMMARY.json
 COMPARISON.csv
 COMPARISON.json
-methods/<method>/<label>/
-  RESULT.txt
-  RESULT.json
-  canonical_method_result.json
-  camera_poses_6dof.csv
-  camera_extrinsics.csv
-  camera_extrinsics_anchor.csv
-  camera_extrinsics_anchor.json
-  camera_extrinsics_anchor.yaml
-  pairwise_camera_extrinsics.csv
-  diagnostics/
-  logs/
-  provenance/
-evaluations/
-attempts/
-visualization/
 ```
 
-For simulation experiments the same folder additionally contains
-`SECONDARY_CAMERA_MAP_RESULTS.txt` and
-`SECONDARY_AP02_MARKER_MAP_RESULTS.txt`. `RESULTS.txt` is always the readable
-front door; `SUMMARY.json` is the inventory index and `COMPARISON.csv/json`
-remain machine-readable.
+Per-method outputs live under:
 
-There are no separate `datasets`, `video/prepared`, `inputs/<hash>`,
-`executions`, `current`, `00_INPUT` or `99_FINAL_RESULTS` levels in public
-storage.
+```text
+methods/<method>/<label>/
+```
 
-`camera_extrinsics.csv` records the reference frame and transform convention.
-The three `camera_extrinsics_anchor.*` files provide the same primary camera
-estimates as 6-DoF poses in the one common evaluation-marker frame. AP02's
-internal reference marker remains a separate method setting. The common anchor
-is selected automatically from repeat-supported observations or manually once
-after preflight from every actually detected marker ID. A warned manual marker
-is allowed without a hidden fallback; unsupported method exports are reported
-as unavailable.
+and include canonical 6-DoF camera poses, anchor-relative exports, pairwise extrinsics, diagnostics, logs, and provenance.
 
-`View results` can derive missing anchor exports from already published
-artifacts without rerunning AP01--AP03. When a scaled AP03 Multi sparse model is
-available, it also prepares `visualization/` and can open an isolated RViz 2
-session. Each RViz window receives its own `ROS_DOMAIN_ID`, so several
-experiments can remain open without mixing TF or marker topics. The displayed
-point cloud is explicitly AP03/COLMAP context; all method poses keep separate
-namespaces.
+Use:
 
-`diagnostics` retains all scientifically important intermediate artifacts;
-`logs` contains complete process output; `provenance` contains requested and
-resolved configs, config diff, commands, environment, manifest and timings.
+```text
+rigcal
+  → View results
+```
 
-An identical completed method/input fingerprint is skipped. Different
-calibration-affecting settings receive a different automatic label.
+to browse the same published results. When suitable visualization artifacts are available, the result browser can prepare/open an isolated RViz 2 session. The point cloud shown there is AP03/COLMAP context; method camera poses remain in separate namespaces.
 
-## Results and failures
+Read [`results/README.md`](results/README.md) before manually archiving or deleting published experiments.
 
-After every queue and batch, rigcal prints one table containing experiment,
-method label, status, method/experiment/batch runtime, key metrics, canonical
-result path and comparison path. Temporary workspace paths are not reported as
-successful results.
+## Repository map
 
-`View results` reads only layout-v2 experiment summaries. It opens the
-experiment-wide `RESULTS.txt`, shows all variants, runtime, camera coverage,
-quality warnings and canonical paths, and can display a selected method
-`RESULT.txt`. For simulation it also offers the direct GT and secondary
-camera-/marker-map reports.
+```text
+config/       managed configuration assets and reusable intrinsics profiles
+data_local/   local real-world inputs and validated local simulation routes
+docs/         architecture, configuration, extension and project documentation
+results/      published experiments, scientific outputs and visualizations
+src/          active Python implementation and reviewed simulation assets
+tests/        automated software and publication-contract tests
+tools/        repository/source-layout validation utilities
+workspace/    temporary runs, queues, caches and resumable transactions
+```
 
-Result status is:
+Useful documentation:
 
-- `available`: one or more successful methods and no failed attempt;
-- `partial`: successful methods plus failed attempts;
-- `failed`: failed attempts only.
+- [Documentation index](docs/README.md)
+- [Architecture](docs/architecture.md)
+- [Configuration reference](docs/configuration.md)
+- [Repository structure](docs/repository_structure.md)
+- [Method SDK](docs/method_sdk.md)
+- [Extension guide](docs/extensions.md)
+- [Real-data input guide](data_local/README.md)
+- [Results layout](results/README.md)
 
-Failed work is stored under `attempts/` as incomplete/non-authoritative and
-never replaces a valid method result. Concise cause codes include COLMAP sparse
-model failure, preflight, timeout, configuration and optimizer failures.
+## Paper / project report
 
-## Resume and cleanup
+An accompanying paper/report is currently **work in progress**. The repository intentionally links to a placeholder rather than presenting an unfinished manuscript as a final publication.
 
-Interrupted, selection-waiting and publication-failed work remains under
-`workspace/temporary_runs`. Terminal successful/failed queues close
-automatically.
+See: **[Paper / report — work in progress](docs/paper/README.md)**
 
-`Cleanup storage` reviews three independent permanent-deletion groups in this
-order: published `results` (including their embedded datasets), reusable
-preparation caches, then temporary workspace runs/queues/batches.
-Each group defaults to “no”; selected groups require a final typed `DELETE`
-confirmation and are verified after deletion. Cleanup is blocked while another
-rigcal process is active. `data_local` and `config/intrinsics` are never
-selected or queried by this action.
+When the manuscript is ready, the final PDF can be placed at `docs/paper/paper.pdf` and linked directly from this section.
 
-The public code is package-first:
+## Project context
 
-- `src/camera_rig_calibration/`: all active implementation;
-- `src/calib_lab/`: reviewed Gazebo assets;
-- `data_local/`: user recordings;
-- `results/`: complete experiments with immutable inputs and scientific outputs;
-- `workspace/`: temporary runs and internal reusable caches;
-- `tests/`: software fixtures and contracts.
-
-Start the installed CLI with `rigcal` or, from a source checkout, with
-`python -m camera_rig_calibration`.
-
-See [architecture](docs/architecture.md),
-[configuration](docs/configuration.md), and the
-[extension guide](docs/extensions.md).
+This repository was developed as a reproducible software artifact for the TU Berlin module **Application of Robotics and Autonomous Systems**. Its focus is not only obtaining camera poses, but also making calibration inputs, parameter choices, observability limitations, diagnostics, failures, and published outputs traceable.

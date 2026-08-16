@@ -1,45 +1,107 @@
-# Results layout
+# Published results (`results`)
 
-Each experiment directory is both the immutable scientific input record and
-the published calibration result. This is intentional: a result cannot be
-interpreted or reproduced without knowing exactly which images, intrinsics,
-observations, route, and detector settings produced it.
+`results/` contains the **published scientific artifact** of completed experiments.
 
-Start with these files; the UI's **View results** screen reads the same front
-door:
+An experiment directory intentionally keeps the immutable calibration input record together with the published method outputs. A calibration result is not reproducible without knowing which images, intrinsics, observations, detector settings, route, and resolved configuration produced it.
 
-- `RESULTS.txt` / `RESULTS.json`: human- and machine-readable experiment result;
-- `SUMMARY.json`: indexed experiment and method inventory;
-- `COMPARISON.csv` / `COMPARISON.json`: common-anchor method comparison;
-- `methods/<method>/<label>/RESULT.txt`: one method variant;
-- `methods/<method>/<label>/camera_poses_6dof.csv`: canonical static-camera
-  6DOF poses.
+## Start here
 
-The remaining folders are structured evidence, not additional competing
-results:
+For most users, the front door is:
 
-| Folder | Contents | Why it exists |
+```text
+RESULTS.txt
+```
+
+The main machine-readable files are:
+
+- `RESULTS.json` — experiment result;
+- `SUMMARY.json` — experiment/method inventory;
+- `COMPARISON.csv` / `COMPARISON.json` — common-anchor comparison.
+
+A method variant has its own readable result below:
+
+```text
+methods/<method>/<label>/RESULT.txt
+```
+
+and canonical static-camera poses below:
+
+```text
+methods/<method>/<label>/camera_poses_6dof.csv
+```
+
+The application uses the same files when you choose:
+
+```text
+rigcal
+  → View results
+```
+
+## Experiment layout
+
+A published experiment normally contains:
+
+| Folder | Contents | Purpose |
 |---|---|---|
-| `raw_images/` | Canonical static and moving images plus camera information | Immutable calibration input and reproducibility |
-| `observations/` | ArUco tables, accepted/rejected rows, selections, and annotated debug images | Detection and selection audit |
-| `metadata/` | Source, preparation, identity, detector configuration, and retry records | Provenance and resumability |
-| `methods/` | One directory per method and parameter label | Native output, canonical 6DOF result, diagnostics, logs, provenance |
-| `evaluations/` | Common-anchor and real/simulation quality reports | Fair method-independent comparison |
-| `attempts/` | Compact records of successful or failed executions | Resume and failure diagnosis without presenting failures as results |
-| `visualization/` | Generated pose-only RViz session | Inspection, not calibration input |
+| `raw_images/` | canonical static/moving images and camera information | immutable calibration input |
+| `observations/` | ArUco tables, accepted/rejected rows, selections, debug images | detection/selection audit |
+| `metadata/` | source, identity, detector configuration, retry records | provenance and resumability |
+| `methods/` | one directory per method and parameter label | canonical outputs, diagnostics, logs, provenance |
+| `evaluations/` | common-anchor and real/simulation quality reports | method-independent comparison |
+| `attempts/` | successful/failed execution records | failure diagnosis without replacing valid results |
+| `visualization/` | generated RViz/pose visualization artifacts | inspection only |
 
-Large local trees are expected for a full audit profile. Most space comes from
-annotated detection images, detector-attempt snapshots, COLMAP reconstruction
-data, and the separately undistorted AP03 image set. AP03's COLMAP input images
-are hard-linked to `raw_images/` when the filesystem supports it: they appear
-in both logical locations but do not consume a second set of disk blocks. The
-undistorted images are genuinely new data and therefore do consume space.
+Per-method directories may additionally contain:
 
-The three local 3 Hz real-vehicle experiments currently occupy roughly
-2.1–2.4 GiB each with complete diagnostics. Only deliberately selected compact
-reference artifacts are tracked by Git; raw images and large regenerable
-diagnostics remain local. Do not manually delete individual files inside a
-published experiment, because that would break its completeness contract. Use
-the application's **Cleanup storage** screen for temporary workspace/cache
-data, or archive/delete an entire experiment as one unit after preserving the
-front-door results you need.
+```text
+RESULT.json
+canonical_method_result.json
+camera_extrinsics.csv
+camera_extrinsics_anchor.csv
+camera_extrinsics_anchor.json
+camera_extrinsics_anchor.yaml
+pairwise_camera_extrinsics.csv
+diagnostics/
+logs/
+provenance/
+```
+
+Simulation experiments may also publish dedicated Ground-Truth/secondary reports.
+
+## Result status
+
+The public result state distinguishes:
+
+- `available` — one or more successful methods and no failed attempt;
+- `partial` — successful methods plus failed attempts;
+- `failed` — failed attempts only.
+
+A failed attempt is diagnostic evidence. It does **not** replace an already valid method result.
+
+## Common anchor and comparison
+
+Primary method results are exported onto one frozen common evaluation-marker frame when supported. AP02's internal reference marker is a separate setting.
+
+The common comparison exists to make AP01/AP02/AP03 outputs easier to inspect in a consistent frame. Ground Truth, when available in simulation, is used for evaluation only and is not fed back into calibration.
+
+## RViz
+
+`View results` can derive missing anchor exports from published artifacts without rerunning the calibration methods. When a suitable scaled AP03 Multi sparse model is available, it can also prepare `visualization/` and open an isolated RViz 2 session.
+
+Visualization is an inspection layer, not calibration input.
+
+## Storage and cleanup
+
+A complete audit profile can be large. Typical space consumers are:
+
+- annotated detection images;
+- detector-attempt snapshots;
+- COLMAP reconstruction data;
+- undistorted AP03 images;
+- full diagnostics and logs.
+
+Do **not** manually delete individual files from the middle of a published experiment: that breaks the experiment's completeness/reproducibility contract.
+
+Use the application's **Cleanup storage** workflow for managed cleanup, or archive/delete an entire experiment deliberately after preserving the front-door results you need.
+
+Only intentionally selected compact reference artifacts are expected to be tracked by Git; large raw/regenerable data can remain local.
