@@ -304,12 +304,20 @@ def _install_wizard_marker_defaults() -> None:
         category = _DATASET_CONTEXT.get()
         preferred = _preferred_marker_for_category(category)
 
-        ap02 = job.methods.ap02.model_copy(
-            update={
-                "reference_marker_selection_mode": "auto",
-                "reference_marker_id": preferred,
-            }
-        )
+        if category == "simulation":
+            ap02 = job.methods.ap02.model_copy(
+                update={
+                    "reference_marker_selection_mode": "baseline",
+                    "reference_marker_id": 14,
+                }
+            )
+        else:
+            ap02 = job.methods.ap02.model_copy(
+                update={
+                    "reference_marker_selection_mode": "auto",
+                    "reference_marker_id": preferred,
+                }
+            )
         ap03_update: dict[str, Any] = {
             "single": job.methods.ap03.single.model_copy(
                 update={"scale_marker_id": preferred}
@@ -324,48 +332,20 @@ def _install_wizard_marker_defaults() -> None:
         job.methods = job.methods.model_copy(
             update={"ap02": ap02, "ap03": ap03}, deep=True
         )
-        job.evaluation = job.evaluation.model_copy(
-            update={
-                "anchor_marker_id": preferred,
-                "anchor_selection_mode": "auto",
-            }
-        )
-        # The integer values above are category preferences, not strict explicit
-        # selections. Keep preflight free to fall back automatically.
-        job.selection = job.selection.model_copy(update={"mode": "auto"})
+        if category != "simulation":
+            job.evaluation = job.evaluation.model_copy(
+                update={
+                    "anchor_marker_id": preferred,
+                    "anchor_selection_mode": "auto",
+                }
+            )
+            # The integer values above are category preferences, not strict explicit
+            # selections. Keep preflight free to fall back automatically.
+            job.selection = job.selection.model_copy(update={"mode": "auto"})
         wizard._refresh_method_job_label(job)
         return job
 
     wizard._new_method_job = new_method_job
-
-    original_method_job_label = wizard._method_job_label
-
-    def method_job_label(job, context_key=None):
-        # Simulation auto+14 is the canonical baseline contract even though its
-        # fallback semantics are safer than the old hard failure. Normalize only
-        # the label calculation; the saved configuration remains fully explicit.
-        if _DATASET_CONTEXT.get() != "simulation" or job.method_id != "ap02":
-            return original_method_job_label(job, context_key)
-        normalized = copy.deepcopy(job)
-        ap02 = normalized.methods.ap02
-        if (
-            ap02.reference_marker_selection_mode == "auto"
-            and ap02.reference_marker_id == 14
-        ):
-            normalized.methods = normalized.methods.model_copy(
-                update={
-                    "ap02": ap02.model_copy(
-                        update={
-                            "reference_marker_selection_mode": "baseline",
-                            "reference_marker_id": 14,
-                        }
-                    )
-                },
-                deep=True,
-            )
-        return original_method_job_label(normalized, context_key)
-
-    wizard._method_job_label = method_job_label
 
     original_setting_rows = wizard._setting_rows
 
@@ -376,30 +356,61 @@ def _install_wizard_marker_defaults() -> None:
         rendered = []
         for key, group, label, current, baseline, description in rows:
             if key == "evaluation_anchor":
-                if (
-                    job.evaluation.anchor_selection_mode == "auto"
-                    and job.evaluation.anchor_marker_id == preferred
-                ):
-                    current = f"preferred marker {preferred} -> auto fallback"
-                baseline = f"preferred marker {preferred} -> auto fallback"
-                description = (
-                    f"Category default prefers marker {preferred}. If it lacks common repeat-supported evidence, preflight falls back to the deterministic automatic marker. Editing this row to Auto requests pure automatic ranking; Manual shows detected candidates after preflight."
-                )
+                if category == "simulation":
+                    if (
+                        job.evaluation.anchor_selection_mode == "explicit"
+                        and job.evaluation.anchor_marker_id == 14
+                    ):
+                        current = "marker 14 (explicit baseline anchor)"
+                    baseline = "marker 14 (explicit baseline anchor)"
+                    description = (
+                        "Simulation baseline anchors evaluation to canonical marker 14 without fallback. "
+                        "Auto requests pure deterministic ranking; Manual lets you choose a detected marker after preflight."
+                    )
+                else:
+                    if (
+                        job.evaluation.anchor_selection_mode == "auto"
+                        and job.evaluation.anchor_marker_id == preferred
+                    ):
+                        current = f"preferred marker {preferred} -> auto fallback"
+                    baseline = f"preferred marker {preferred} -> auto fallback"
+                    description = (
+                        f"Category default prefers marker {preferred}. If it lacks common repeat-supported evidence, preflight falls back to the deterministic automatic marker. Editing this row to Auto requests pure automatic ranking; Manual shows detected candidates after preflight."
+                    )
             elif key == "ap02_reference_mode":
-                baseline = "auto (category preference with fallback)"
-                description = (
-                    f"Default prefers marker {preferred} and falls back automatically if it is unavailable or incompatible. Auto requests pure deterministic ranking; Manual lets you choose a detected marker after preflight. Baseline keeps the strict built-in simulation contract."
-                )
+                if category == "simulation":
+                    baseline = "baseline (canonical marker 14)"
+                    description = (
+                        "Simulation baseline uses canonical marker 14 without fallback. "
+                        "Auto requests pure deterministic ranking; "
+                        "Manual lets you choose a detected marker after preflight."
+                    )
+                else:
+                    baseline = "auto (category preference with fallback)"
+                    description = (
+                        f"Default prefers marker {preferred} and falls back automatically if it is unavailable or incompatible. Auto requests pure deterministic ranking; Manual lets you choose a detected marker after preflight. Baseline keeps the strict built-in simulation contract."
+                    )
             elif key == "ap02_reference_display":
-                if (
-                    job.methods.ap02.reference_marker_selection_mode == "auto"
-                    and job.methods.ap02.reference_marker_id == preferred
-                ):
-                    current = f"marker {preferred} preferred; auto fallback"
-                baseline = f"marker {preferred} preferred; auto fallback"
-                description = (
-                    "Read-only requested preference. The resolved marker and whether fallback was used are frozen in SELECTION_CANDIDATES.json."
-                )
+                if category == "simulation":
+                    if (
+                        job.methods.ap02.reference_marker_selection_mode == "baseline"
+                        and job.methods.ap02.reference_marker_id == 14
+                    ):
+                        current = "canonical marker 14 (strict baseline, no fallback)"
+                    baseline = "canonical marker 14 (strict baseline, no fallback)"
+                    description = (
+                        "Read-only requested reference marker. Built-in simulation baseline uses canonical marker 14 without fallback."
+                    )
+                else:
+                    if (
+                        job.methods.ap02.reference_marker_selection_mode == "auto"
+                        and job.methods.ap02.reference_marker_id == preferred
+                    ):
+                        current = f"marker {preferred} preferred; auto fallback"
+                    baseline = f"marker {preferred} preferred; auto fallback"
+                    description = (
+                        "Read-only requested preference. The resolved marker and whether fallback was used are frozen in SELECTION_CANDIDATES.json."
+                    )
             elif key == "single_marker":
                 if job.methods.ap03.single.scale_marker_id == preferred:
                     current = f"marker {preferred} preferred; auto fallback"
@@ -490,56 +501,6 @@ def _install_wizard_marker_defaults() -> None:
     wizard._MARKER_PREFERENCE_POLICY_INSTALLED = True
 
 
-def _install_reporting_preference_contract() -> None:
-    from ..evaluation import reporting
-
-    original = reporting._baseline_contract
-    if getattr(original, "_rigcal_marker_preference", False):
-        return
-
-    def baseline_contract(*, category, method_payloads, evaluation_anchor):
-        contract = original(
-            category=category,
-            method_payloads=method_payloads,
-            evaluation_anchor=evaluation_anchor,
-        )
-        payloads = {
-            (str(item.get("method", "")), str(item.get("label", ""))): item
-            for item in method_payloads
-        }
-        for variant in contract.get("variants", []):
-            if str(variant.get("method")) != "ap02":
-                continue
-            payload = payloads.get(
-                (str(variant.get("method", "")), str(variant.get("label", ""))),
-                {},
-            )
-            summary = payload.get("config_summary", {})
-            checks = variant.get("checks", {})
-            mode_ok = (
-                summary.get("reference_marker_selection_mode") == "baseline"
-                or (
-                    summary.get("reference_marker_selection_mode") == "auto"
-                    and summary.get("reference_marker_id") == 14
-                )
-            )
-            resolved_ok = str(
-                summary.get("resolved_reference_marker_id")
-                or summary.get("reference_marker_id")
-            ) == "14"
-            checks.pop("reference_mode_baseline", None)
-            checks["reference_preference_14_with_auto_fallback"] = bool(mode_ok)
-            checks["reference_marker_14"] = bool(resolved_ok)
-            variant["passes"] = all(bool(value) for value in checks.values())
-        contract["passes"] = bool(contract.get("variants")) and all(
-            bool(item.get("passes")) for item in contract.get("variants", [])
-        )
-        return contract
-
-    baseline_contract._rigcal_marker_preference = True  # type: ignore[attr-defined]
-    reporting._baseline_contract = baseline_contract
-
-
 def install_marker_preference_policy() -> None:
     """Install category marker preferences while preserving explicit/manual choices."""
 
@@ -548,7 +509,6 @@ def install_marker_preference_policy() -> None:
         return
     _install_selection_preference_policy()
     _install_wizard_marker_defaults()
-    _install_reporting_preference_contract()
     _INSTALLED = True
 
 

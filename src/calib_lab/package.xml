@@ -3,8 +3,8 @@
 <package format="3">
   <name>calib_lab</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="root@todo.todo">root</maintainer>
+  <description>Simulation assets and ROS 2 / RViz nodes for camera-rig calibration</description>
+  <maintainer email="maxim.mjakinin@gmail.com">Maxim Mjakinin</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

@@ -71,10 +71,8 @@ methods:
     scale_top_per_marker: 30
   ap02:
     method_contract: baseline_v1
-    # Auto + integer is the documented category preference. Marker 14 is used
-    # when it has automatic-quality support; otherwise preflight falls back to
-    # the deterministic AP02 recommendation instead of aborting the queue.
-    reference_marker_selection_mode: auto
+    # Canonical scientific Route-2 baseline uses fixed marker 14 without fallback.
+    reference_marker_selection_mode: baseline
     reference_marker_id: 14
     frame_selection_strategy: smart_v1
     initialization_strategy: maximum_frontier_v1
@@ -111,6 +109,6 @@ observation_quality:
   maximum_marker_distance_m: disabled
 evaluation:
   enabled: true
-  # Auto + integer means preferred common anchor with deterministic auto fallback.
+  # Canonical scientific Route-2 baseline uses explicit common evaluation anchor 14.
   anchor_marker_id: 14
-  anchor_selection_mode: auto
+  anchor_selection_mode: explicit

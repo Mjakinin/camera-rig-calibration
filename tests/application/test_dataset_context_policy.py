@@ -18,9 +18,12 @@ from camera_rig_calibration.policies.submission_policy import (
 )
 
 
+from camera_rig_calibration.application.bootstrap import _resolve_wizard_policy_target
+
 # Keep this policy test isolated from unrelated product layers. Installing the
 # complete bootstrap stack here would also install AP03 sensitivity/UI wrappers
 # globally during pytest collection and make later tests order-dependent.
+_resolve_wizard_policy_target()
 install_product_policy()
 install_submission_policy()
 install_marker_preference_policy()
@@ -65,6 +68,7 @@ def test_simulation_input_choice_applies_editable_simulation_defaults(
         ap02 = _job("ap02")
 
         assert ap01.methods.ap01.root_camera == "cam_edge_3"
+        assert ap02.methods.ap02.reference_marker_selection_mode == "baseline"
         assert ap02.methods.ap02.reference_marker_id == 14
         assert ap02.evaluation.anchor_marker_id == 14
 

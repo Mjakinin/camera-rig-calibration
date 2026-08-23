@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from camera_rig_calibration.components import register_builtin_components
+from camera_rig_calibration.application.bootstrap import _resolve_wizard_policy_target
 from camera_rig_calibration.policies.marker_preference_policy import install_marker_preference_policy
 from camera_rig_calibration.policies.product_policy import (
     _DATASET_CONTEXT,
@@ -27,6 +28,7 @@ from camera_rig_calibration.policies.submission_policy import install_submission
 from camera_rig_calibration.policies.ui_display_policy import install_ui_display_policy
 
 
+_resolve_wizard_policy_target()
 install_product_policy()
 install_reporting_authority_policy()
 install_submission_policy()
@@ -35,7 +37,6 @@ install_real_vehicle_marker_zero_policy()
 install_real_partial_evaluation_policy()
 install_submission_bindings()
 install_ui_display_policy()
-
 from camera_rig_calibration import wizard  # noqa: E402
 from camera_rig_calibration.evaluation import ap03_derived, reporting  # noqa: E402
 
@@ -54,7 +55,7 @@ def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
         assert ap01.methods.ap01.method_contract == "baseline_v1"
         assert ap01.methods.ap01.root_camera == "cam_edge_3"
         assert ap01.methods.ap01.direct_target_camera == "auto"
-        assert ap02.methods.ap02.reference_marker_selection_mode == "auto"
+        assert ap02.methods.ap02.reference_marker_selection_mode == "baseline"
         assert ap02.methods.ap02.reference_marker_id == 14
         assert ap02.methods.ap02.static_only_ba_max_function_evaluations == 80
         assert ap02.methods.ap02.combined_ba_max_function_evaluations == 80
@@ -63,8 +64,7 @@ def test_simulation_baseline_defaults_are_frozen_and_visible() -> None:
         assert ap03.methods.ap03.multi.marker_ids == list(range(15))
         for job in (ap01, ap02, ap03):
             assert job.evaluation.anchor_marker_id == 14
-            assert job.evaluation.anchor_selection_mode == "auto"
-            assert job.selection.mode == "auto"
+            assert job.evaluation.anchor_selection_mode == "explicit"
     finally:
         _DATASET_CONTEXT.reset(token)
 
@@ -107,8 +107,10 @@ def test_real_vehicle_ui_explains_strict_zero_and_absence_only_fallback() -> Non
         ).lower()
     finally:
         _DATASET_CONTEXT.reset(token)
-    assert "preferred marker 14" in sim_text
-    assert "fallback" in sim_text
+    assert "canonical marker 14" in sim_text
+    assert "without fallback" in sim_text
+    assert "explicit baseline anchor" in sim_text
+    assert "auto fallback" not in sim_text
 
 
 def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
@@ -130,13 +132,49 @@ def test_ap02_ui_describes_explicit_limits_not_smart_selection() -> None:
     assert "algorithm variant" in text
 
 
-def test_reporting_contract_accepts_preferred_14_fallback_baseline() -> None:
+def test_reporting_contract_requires_strict_baseline_and_rejects_auto() -> None:
     # Policy tests are collected alongside modules that install additional
     # reporting wrappers. Re-assert the product layer at execution time so this
     # contract does not depend on pytest's module collection order.
     _install_reporting_policy()
 
-    contract = reporting._baseline_contract(
+    strict_contract = reporting._baseline_contract(
+        category="simulation",
+        method_payloads=[
+            {
+                "method": "ap02",
+                "label": "baseline",
+                "config_summary": {
+                    "reference_marker_id": 14,
+                    "resolved_reference_marker_id": 14,
+                    "reference_marker_selection_mode": "baseline",
+                    "static_max_nfev": 80,
+                    "combined_max_nfev": 80,
+                    "initialization_algorithm": "maximum_bottleneck",
+                },
+            },
+            {
+                "method": "ap01",
+                "label": "old_diagnostic_variant",
+                "config_summary": {"root_camera": "cam_edge_1"},
+            },
+        ],
+        evaluation_anchor={"selected": 14},
+    )
+    assert strict_contract["contract"] == "route2_cpu_ref14_80x80_v1"
+    assert [(item["method"], item["label"]) for item in strict_contract["variants"]] == [
+        ("ap02", "baseline")
+    ]
+    checks = strict_contract["variants"][0]["checks"]
+    assert "static_nfev_50" not in checks
+    assert "combined_nfev_50" not in checks
+    assert checks["static_nfev_80"] is True
+    assert checks["combined_nfev_80"] is True
+    assert checks["reference_mode_baseline"] is True
+    assert checks["reference_marker_14"] is True
+    assert strict_contract["passes"] is True
+
+    auto_contract = reporting._baseline_contract(
         category="simulation",
         method_payloads=[
             {
@@ -151,25 +189,11 @@ def test_reporting_contract_accepts_preferred_14_fallback_baseline() -> None:
                     "initialization_algorithm": "maximum_bottleneck",
                 },
             },
-            {
-                "method": "ap01",
-                "label": "old_diagnostic_variant",
-                "config_summary": {"root_camera": "cam_edge_1"},
-            },
         ],
         evaluation_anchor={"selected": 14},
     )
-    assert contract["contract"] == "route2_cpu_ref14_80x80_v1"
-    assert [(item["method"], item["label"]) for item in contract["variants"]] == [
-        ("ap02", "baseline")
-    ]
-    checks = contract["variants"][0]["checks"]
-    assert "static_nfev_50" not in checks
-    assert "combined_nfev_50" not in checks
-    assert checks["static_nfev_80"] is True
-    assert checks["combined_nfev_80"] is True
-    assert checks["reference_preference_14_with_auto_fallback"] is True
-    assert checks["reference_marker_14"] is True
+    assert auto_contract["variants"][0]["checks"]["reference_mode_baseline"] is False
+    assert auto_contract["passes"] is False
 
 
 def test_published_common_evaluation_is_reporting_authority(tmp_path: Path) -> None:

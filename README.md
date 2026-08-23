@@ -25,8 +25,36 @@ The project was developed in the context of the **Technische Universität Berlin
 
 Python **3.10–3.13** is supported.
 
+Clone the repository (a shallow clone of `main` is recommended):
+
 ```bash
-python3 -m pip install -e ".[scientific,standalone]"
+git clone --depth 1 --single-branch --branch main \
+  https://github.com/Mjakinin/camera-rig-calibration.git
+
+cd camera-rig-calibration
+```
+
+This is the recommended clone for users who only need the current submitted project state, downloading only the latest `main` snapshot instead of large historical Git history and unrelated branches. (Contributors who explicitly need repository history can unshallow or fetch it later.)
+
+Create and activate a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+```
+
+For Ubuntu/Debian, install the system dependency **FFmpeg** (provides `ffprobe` for video-based workflows):
+
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+Install the package:
+
+```bash
+python -m pip install -e ".[scientific,standalone]"
 ```
 
 Start the application with:
@@ -41,15 +69,22 @@ or from a source checkout:
 python -m camera_rig_calibration
 ```
 
-The `standalone` extra provides the OpenCV ArUco runtime outside a ROS environment. Depending on the selected workflow, external tools such as **COLMAP**, **FFmpeg/ffprobe**, **ROS 2 / Gazebo**, and **RViz 2** may also be required. Run **Check installation** from the main menu before a long experiment.
+The `standalone` extra supplies OpenCV ArUco support outside a ROS environment. Depending on the selected workflow, external tools such as **COLMAP** (required only for workflows that use COLMAP), **FFmpeg/ffprobe** (system dependency), and **ROS 2 / Gazebo / RViz 2** are workflow-dependent external dependencies. Run **Check installation** from the main menu before a long experiment.
 
-For development:
+### Development and Testing
+
+For development and running the test suite:
 
 ```bash
-python3 -m pip install -e ".[scientific,standalone,dev]"
-python3 -m compileall -q src tests
+python -m pip install -e ".[scientific,standalone,dev]"
+python -m compileall -q src tests
 pytest -q
 ```
+
+> **ROS 2 troubleshooting note:** If running in a ROS 2 (e.g. Humble) environment, globally installed ROS pytest plugins can interfere with the project's pytest environment. To avoid auto-loading them, run:
+> ```bash
+> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q
+> ```
 
 ### 2. Main menu
 
@@ -183,6 +218,17 @@ Each method may use its own internal reference choices, but published cross-meth
 This anchor is intentionally independent of AP02's internal reference marker. A method that cannot provide a valid export on the selected anchor is reported as unavailable for that comparison; the application does not silently substitute another marker.
 
 For simulation, Ground Truth is evaluated only after the calibration outputs exist. For real-world data without independent pose Ground Truth, the application reports coverage and method-specific geometric consistency diagnostics instead of claiming absolute pose accuracy.
+
+### Baseline & Reference-Marker Semantics
+
+- **Simulation Route-2 scientific baseline:**
+  - AP02 reference marker = `14` (`reference_marker_selection_mode: baseline`).
+  - Common evaluation anchor = marker `14` (`anchor_selection_mode: explicit`).
+  - This exact configuration is strictly validated and reported as the scientific baseline.
+  - If simulation marker `14` is unavailable, preflight raises an error and does **not** silently fall back while still claiming baseline status. The user may deliberately choose *Auto* or *Manual/Explicit* selection during preflight to continue calibration; such runs remain fully valid but are reported as non-baseline variants.
+- **Real-vehicle workflow:**
+  - Marker `0` is the category-preferred reference when supported by observations.
+  - If marker `0` is unavailable, deterministic automatic fallback or deliberate manual selection is available to prevent unneeded preflight failures on flexible real-world data.
 
 ## Baselines, advanced settings and ablation studies
 

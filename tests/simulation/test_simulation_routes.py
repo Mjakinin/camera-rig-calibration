@@ -87,7 +87,7 @@ def test_unknown_route_contract_is_rejected(tmp_path: Path) -> None:
 def test_discovery_rejects_colliding_stable_route_ids(tmp_path: Path) -> None:
     root = tmp_path / "data_local/simulation_routes"
     _route(root / "a b.json")
-    _route(root / "a?b.json")
+    _route(root / "a@b.json")
 
     with pytest.raises(ValueError, match="Duplicate local simulation route ID"):
         discover_local_simulation_routes(tmp_path)
