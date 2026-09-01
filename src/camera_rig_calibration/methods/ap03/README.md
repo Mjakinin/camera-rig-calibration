@@ -79,12 +79,12 @@ NumPy's population standard deviation (`ddof=0`) is used. A low value means that
 
 This quantity is a consistency diagnostic, not an independent camera-pose accuracy measurement. In particular, a low scale dispersion does not by itself prove that the recovered camera geometry is correct.
 
-The software may use configurable warning or quality-policy thresholds around scale dispersion. These are operational diagnostics and are not universal calibration-accuracy limits established by the experiments.
+The current reporting-quality policy classifies a relative scale standard deviation above `0.10` (10%) as `poor_scale_dispersion`. This is an operational software-quality threshold used for warnings/classification; it is not a universal calibration-accuracy limit established by the experiments.
 
 ## Baseline marker semantics
 
-Under the reviewed baseline configuration, Multi uses markers `0`–`14` as its scale set and is the primary AP03 output. Single uses one configured marker (marker `14` in the simulation baseline) and remains a diagnostic result. Marker sets, minimum detection area, observation-selection policy and related scale settings can be changed explicitly through the configuration system.
+For the reviewed Route-2 simulation baseline, Multi uses markers `0`–`14` as its scale set and is the primary AP03 output. Single uses configured marker `14` and remains a diagnostic result. These marker choices describe that reviewed simulation baseline; marker sets, minimum detection area, observation-selection policy and related scale settings remain explicitly configurable for other runs.
 
-The baseline scale stage re-detects markers in the registered images, requires a minimum marker area of `100 px^2`, and derives scale from the reconstructed marker segments described above. Exact requested and resolved settings for an execution are recorded by the normal configuration/provenance pipeline.
+The reviewed Route-2 baseline scale stage re-detects markers in the registered images, requires a minimum marker area of `100 px^2`, and derives scale from the reconstructed marker segments described above. Requested and resolved settings for each execution are recorded by the normal configuration/provenance pipeline in that run's generated result artifacts.
 
 See [`../../../../docs/evaluation.md`](../../../../docs/evaluation.md) for the evaluation-level interpretation of AP03 scale consistency together with the other reported metrics.
