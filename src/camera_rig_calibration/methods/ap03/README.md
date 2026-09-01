@@ -27,8 +27,11 @@ For each complete marker, six geometric segments are evaluated:
 
 For segment `k`, with known metric length `l_k` and reconstructed corner positions `X_(k,a)` and `X_(k,b)` in COLMAP units, the scale candidate is
 
-```text
-s_k = l_k / ||X_(k,a) - X_(k,b)||_2
+```math
+s_k
+=
+\frac{\ell_k}
+{\left\lVert \mathbf{X}_{k,a}-\mathbf{X}_{k,b}\right\rVert_2}
 ```
 
 with units of metres per COLMAP unit.
@@ -37,17 +40,25 @@ with units of metres per COLMAP unit.
 
 The implementation first computes the median and median absolute deviation (MAD) of the finite positive scale candidates. A candidate is retained when its absolute deviation from the raw median is no larger than
 
-```text
-max(3 * MAD, 0.10 * median)
+```math
+\left|s_k-m\right|
+\le
+\max\!\left(3\,\operatorname{MAD},\;0.10\,m\right)
 ```
+
+where `m` is the raw median of the finite positive scale candidates.
 
 If fewer than four candidates survive this filter, the implementation falls back to all finite positive candidates rather than returning a scale from fewer than four observations.
 
 The recovered global metric scale is the median of the retained candidates:
 
-```text
-s_hat = median(retained s_k)
+```math
+\hat{s}
+=
+\operatorname{median}\!\left(\{s_k\}_{k\in\mathcal{I}}\right)
 ```
+
+where `I` denotes the retained candidate set.
 
 The recovered scale is applied to COLMAP camera translations only. Camera orientations are unchanged, and the reconstruction remains in the native COLMAP gauge apart from the metric translation scale.
 
@@ -55,8 +66,13 @@ The recovered scale is applied to COLMAP camera translations only. Camera orient
 
 AP03 reports the dispersion of the retained scale candidates relative to the recovered median scale:
 
-```text
-scale_RStd[%] = 100 * std(retained s_k, ddof=0) / s_hat
+```math
+\operatorname{RStd}[\%]
+=
+100\,
+\frac{
+\operatorname{std}\!\left(\{s_k\}_{k\in\mathcal{I}},\,\mathrm{ddof}=0\right)
+}{\hat{s}}
 ```
 
 NumPy's population standard deviation (`ddof=0`) is used. A low value means that the retained marker measurements support a common metric scale; a large value indicates inconsistent reconstructed scale.
