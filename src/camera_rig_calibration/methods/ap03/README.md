@@ -43,7 +43,7 @@ The implementation first computes the median and median absolute deviation (MAD)
 ```math
 \left|s_k-m\right|
 \le
-\max\!\left(3\,\operatorname{MAD},\;0.10\,m\right)
+\max\!\left(3\,\mathrm{MAD},\;0.10\,m\right)
 ```
 
 where `m` is the raw median of the finite positive scale candidates.
@@ -55,7 +55,7 @@ The recovered global metric scale is the median of the retained candidates:
 ```math
 \hat{s}
 =
-\operatorname{median}\!\left(\{s_k\}_{k\in\mathcal{I}}\right)
+\mathrm{median}\!\left(\{s_k\}_{k\in\mathcal{I}}\right)
 ```
 
 where `I` denotes the retained candidate set.
@@ -67,11 +67,11 @@ The recovered scale is applied to COLMAP camera translations only. Camera orient
 AP03 reports the dispersion of the retained scale candidates relative to the recovered median scale:
 
 ```math
-\operatorname{RStd}[\%]
+\mathrm{RStd}[\%]
 =
 100\,
 \frac{
-\operatorname{std}\!\left(\{s_k\}_{k\in\mathcal{I}},\,\mathrm{ddof}=0\right)
+\mathrm{std}\!\left(\{s_k\}_{k\in\mathcal{I}},\,\mathrm{ddof}=0\right)
 }{\hat{s}}
 ```
 
