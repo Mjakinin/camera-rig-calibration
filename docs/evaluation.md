@@ -28,7 +28,7 @@ as `gt_baseline_m`, together with the corresponding rotation error `rotation_err
 
 ### Relative translation error used for the nominal comparison
 
-For the nominal comparison, each pairwise translation error is normalized by that pair's Ground-Truth baseline before averaging:
+For the nominal comparison in the manuscript, each stored pairwise translation error is normalized by that pair's Ground-Truth baseline before averaging:
 
 ```math
 e_t^{\mathrm{rel}}[\%]
@@ -43,7 +43,7 @@ e_t^{\mathrm{rel}}[\%]
 }
 ```
 
-Because `translation_error_cm = 100 * ||t_est - t_gt||_2`, the same quantity can be computed numerically from the stored reporter fields as
+Because `translation_error_cm = 100 * ||t_est - t_gt||_2`, the same numerical percentage is derived directly from the stored reporter fields as
 
 ```math
 e_t^{\mathrm{rel}}[\%]
@@ -52,7 +52,7 @@ e_t^{\mathrm{rel}}[\%]
      {\mathrm{gt\_baseline\_m}}
 ```
 
-The reported nominal value is the arithmetic mean of the per-pair relative errors. With four recovered static cameras, six unordered camera pairs are evaluated.
+The manuscript's nominal value is the arithmetic mean of these derived per-pair relative errors. The reporter stores the underlying pairwise quantities (`translation_error_cm` and `gt_baseline_m`); the percentage is a comparison-level aggregation derived from them. With four recovered static cameras, six unordered camera pairs are evaluated.
 
 This is deliberately different from dividing the mean translation error by the mean baseline length. Normalization is performed per pair first and the normalized values are then averaged.
 
