@@ -21,8 +21,11 @@ implementation forms a metric translation magnitude from their marker-based
 PnP poses and the corresponding translation magnitude in the COLMAP
 reconstruction. One scale candidate is
 
-```text
-s_ij = ||t_metric(i,j)||_2 / ||t_colmap(i,j)||_2
+```math
+s_{ij}
+=
+\frac{\left\lVert \mathbf{t}^{\mathrm{metric}}_{ij}\right\rVert_2}
+     {\left\lVert \mathbf{t}^{\mathrm{COLMAP}}_{ij}\right\rVert_2}
 ```
 
 with units of metres per COLMAP unit. Candidate construction and robust
@@ -50,10 +53,12 @@ relation:
   registered moving frame `j`. The scaled COLMAP motion between those frames
   bridges the two static-camera observations:
 
-  ```text
-  T_root_target = T_root_moving_i
-                  * T_moving_i_moving_j
-                  * inv(T_target_moving_j)
+  ```math
+  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{target}}
+  =
+  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{moving},i}
+  \mathbf{T}_{\mathrm{moving},i\leftarrow\mathrm{moving},j}
+  \mathbf{T}_{\mathrm{target}\leftarrow\mathrm{moving},j}^{-1}
   ```
 
   The markers at the two ends of the relay do not have to be the same marker.
