@@ -17,8 +17,6 @@
 
 The project was developed in the context of the **Technische Universität Berlin** module **Application of Robotics and Autonomous Systems**. It provides one workflow for simulation, real recordings, three calibration approaches, diagnostics, publication of scientific artifacts, cross-method comparison, and RViz visualization.
 
-> **Paper/report:** work in progress. See the [paper placeholder](docs/paper/README.md). The repository is the software artifact; the manuscript is not yet a finished publication.
-
 ## Quick start
 
 ### 1. Install
@@ -325,14 +323,6 @@ Useful documentation:
 - [Extension guide](docs/extensions.md)
 - [Real-data input guide](data_local/README.md)
 - [Results layout](results/README.md)
-
-## Paper / project report
-
-An accompanying paper/report is currently **work in progress**. The repository intentionally links to a placeholder rather than presenting an unfinished manuscript as a final publication.
-
-See: **[Paper / report — work in progress](docs/paper/README.md)**
-
-When the manuscript is ready, the final PDF can be placed at `docs/paper/paper.pdf` and linked directly from this section.
 
 ## Project context
 
