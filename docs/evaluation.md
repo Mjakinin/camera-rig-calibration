@@ -6,32 +6,50 @@ This document defines the evaluation quantities used by `rigcal` and the scienti
 
 For every pair of recovered static cameras `(i, j)`, the evaluator forms the relative estimated and Ground-Truth transforms in the same pair direction. With relative translation vectors `t_est` and `t_gt`, the absolute translation error is
 
-```text
-e_t_cm = 100 * ||t_est - t_gt||_2
+```math
+e_t^{\mathrm{cm}}
+=
+100\,\left\lVert
+\mathbf{t}_{\mathrm{est}}-\mathbf{t}_{\mathrm{GT}}
+\right\rVert_2
 ```
 
 where the transforms are represented in metres and the factor `100` converts the result to centimetres.
 
 The implementation writes this value as `translation_error_cm`. It also stores the Ground-Truth pair baseline
 
-```text
-gt_baseline_m = ||t_gt||_2
+```math
+b_{\mathrm{GT}}
+=
+\left\lVert \mathbf{t}_{\mathrm{GT}} \right\rVert_2
 ```
 
-and the corresponding rotation error `rotation_error_deg`.
+as `gt_baseline_m`, together with the corresponding rotation error `rotation_error_deg`.
 
 ### Relative translation error used for the nominal comparison
 
 For the nominal comparison, each pairwise translation error is normalized by that pair's Ground-Truth baseline before averaging:
 
-```text
-e_t_rel_percent = 100 * ||t_est - t_gt||_2 / ||t_gt||_2
+```math
+e_t^{\mathrm{rel}}[\%]
+=
+100\,
+\frac{
+\left\lVert
+\mathbf{t}_{\mathrm{est}}-\mathbf{t}_{\mathrm{GT}}
+\right\rVert_2
+}{
+\left\lVert \mathbf{t}_{\mathrm{GT}} \right\rVert_2
+}
 ```
 
 Because `translation_error_cm = 100 * ||t_est - t_gt||_2`, the same quantity can be computed numerically from the stored reporter fields as
 
-```text
-e_t_rel_percent = translation_error_cm / gt_baseline_m
+```math
+e_t^{\mathrm{rel}}[\%]
+=
+\frac{\texttt{translation\_error\_cm}}
+     {\texttt{gt\_baseline\_m}}
 ```
 
 The reported nominal value is the arithmetic mean of the per-pair relative errors. With four recovered static cameras, six unordered camera pairs are evaluated.
@@ -44,9 +62,19 @@ The robustness plots use the mean unnormalized pairwise translation error in cen
 
 For relative rotations `R_est` and `R_gt`, the evaluator uses the angular distance on SO(3):
 
-```text
-Delta_R = R_gt^T * R_est
-rotation_error_deg = (180 / pi) * acos((trace(Delta_R) - 1) / 2)
+```math
+\Delta\mathbf{R}
+=
+\mathbf{R}_{\mathrm{GT}}^{\mathsf T}\mathbf{R}_{\mathrm{est}}
+```
+
+```math
+e_R[\mathrm{deg}]
+=
+\frac{180}{\pi}
+\arccos\!\left(
+\frac{\operatorname{tr}(\Delta\mathbf{R})-1}{2}
+\right)
 ```
 
 The reported simulation rotation value is the mean over all evaluable static-camera pairs.
@@ -57,14 +85,22 @@ Real recordings do not provide independent Ground-Truth static-camera poses. The
 
 Marker corners are triangulated from accepted moving-camera observations using the recovered moving-camera poses. The reconstructed 3D corners are then projected into static-camera images for which the same marker is observed. For each evaluated corner, the image-space reprojection distance is
 
-```text
-e_n = ||u_hat_n - u_n||_2
+```math
+e_n
+=
+\left\lVert
+\hat{\mathbf{u}}_n-\mathbf{u}_n
+\right\rVert_2
 ```
 
 and the cross-camera RMSE is
 
-```text
-cross_camera_rmse_px = sqrt(mean(e_n^2))
+```math
+\operatorname{RMSE}_{\mathrm{cross}}[\mathrm{px}]
+=
+\sqrt{
+\frac{1}{N}\sum_{n=1}^{N} e_n^2
+}
 ```
 
 where `u_n` is the observed static-image corner and `u_hat_n` is the corresponding projection from the reconstructed geometry.
@@ -87,14 +123,21 @@ AP03 reconstructs camera geometry with COLMAP up to an unknown global scale and 
 
 If the retained candidates are `s_k`, the recovered global scale is
 
-```text
-s_hat = median(s_k)
+```math
+\hat{s}
+=
+\operatorname{median}\!\left(\{s_k\}_{k\in\mathcal{I}}\right)
 ```
 
 and the implementation reports
 
-```text
-scale_rstd_percent = 100 * std(s_k, ddof=0) / s_hat
+```math
+\mathrm{RStd}[\%]
+=
+100\,
+\frac{
+\operatorname{std}\!\left(\{s_k\}_{k\in\mathcal{I}},\,\mathrm{ddof}=0\right)
+}{\hat{s}}
 ```
 
 Only retained scale candidates are included. NumPy's population standard deviation (`ddof=0`) is used.
