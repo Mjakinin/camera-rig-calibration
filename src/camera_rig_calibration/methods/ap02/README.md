@@ -28,16 +28,20 @@ fixed and is not included as an optimization variable.
 The bundle-adjustment objective is built from the detected 2D marker corners.
 For each accepted observation, the known marker corner coordinates are
 transformed through the current marker and observer poses and projected into
-the image. For one corner, the implemented residual is simply
+the image. For one corner, the implemented residual is
 
-```text
-r = u_projected - u_observed
-```
+$$
+\mathbf{r}_n
+=
+\hat{\mathbf{u}}_n-\mathbf{u}_n,
+$$
 
-where both quantities are 2D image coordinates. The optimizer stacks the two
-residual components from all valid marker corners and minimizes them with
-SciPy's robust `soft_l1` least-squares loss. Camera intrinsics and marker
-geometry are treated as fixed inputs during this optimization.
+where $\mathbf{u}_n\in\mathbb{R}^2$ is the observed image coordinate and
+$\hat{\mathbf{u}}_n\in\mathbb{R}^2$ is the corresponding projection predicted
+by the current marker and observer poses. The optimizer stacks both residual
+components from all valid marker corners and minimizes them with SciPy's robust
+`soft_l1` least-squares loss. Camera intrinsics and marker geometry are treated
+as fixed inputs during this optimization.
 
 The primary `with_moving` result includes the selected moving-camera frames and
 is what AP02 publishes as its main calibration result. The `static_only` stage
