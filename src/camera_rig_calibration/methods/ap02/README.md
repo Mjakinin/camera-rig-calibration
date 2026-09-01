@@ -13,7 +13,36 @@ reprojection remain available through explicit advanced settings.
 
 Every run derives its observation graph from the selected dataset.
 
-Execution order:
+## Method semantics
+
+Each accepted ArUco observation connects an observer to a marker. An observer
+is either a static camera or a retained moving-camera frame. Shared marker
+observations therefore create paths through which otherwise separated camera
+regions can become geometrically related.
+
+A selected reference marker defines the coordinate frame. AP02 initializes the
+observable graph and then jointly refines the poses of static cameras, retained
+moving-camera frames and all non-reference markers. The reference marker is
+fixed and is not included as an optimization variable.
+
+The bundle-adjustment objective is built from the detected 2D marker corners.
+For each accepted observation, the known marker corner coordinates are
+transformed through the current marker and observer poses and projected into
+the image. The resulting projected-minus-observed 2D corner differences form
+the optimization residuals. Camera intrinsics and marker geometry are treated
+as fixed inputs during this optimization.
+
+The primary `with_moving` result includes the selected moving-camera frames and
+is what AP02 publishes as its main calibration result. The `static_only` stage
+is retained as a diagnostic.
+
+Graph connectivity is also part of the result interpretation. If accepted
+observations form disconnected components, each component has its own
+independent coordinate gauge. AP02 can calibrate sufficiently supported
+components separately, but it does not invent a transformation between
+components that are not connected by observations.
+
+## Execution order
 
 1. `build_graph.py` — construct the accepted observation graph
 2. `initialize_stage.py` / `initialize.py` — initialize static-only and
@@ -24,9 +53,11 @@ Execution order:
    components without joining their gauges
 5. `report.py` — publish the combined primary result and diagnostics
 
-Supporting files:
+## Supporting files
 
 - `pipeline.py` declares stage dependencies and diagnostic/primary roles.
 - `common.py` contains AP02-specific CSV, pose and projection helpers.
+- `optimize_core.py` defines the pose parameterization, marker-corner
+  reprojection residuals and robust least-squares optimization.
 
 No transformation is invented between disconnected graph components.
