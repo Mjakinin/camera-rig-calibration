@@ -21,7 +21,7 @@ The project was developed in the context of the **Technische Universität Berlin
 
 ### 1. Install
 
-Python **3.10–3.13** is supported.
+Python **3.10–3.13** is supported. Python 3.14 is not currently supported by the project dependency constraints.
 
 Clone the repository (a shallow clone of `main` is recommended):
 
@@ -34,13 +34,32 @@ cd camera-rig-calibration
 
 This is the recommended clone for users who only need the current submitted project state, downloading only the latest `main` snapshot instead of large historical Git history and unrelated branches. (Contributors who explicitly need repository history can unshallow or fetch it later.)
 
-Create and activate a virtual environment:
+Create and activate a virtual environment with any installed Python **3.10–3.13** interpreter. First check the interpreter version:
+
+```bash
+python3 --version
+```
+
+If it reports a supported version, create the environment normally:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+python --version
 python -m pip install --upgrade pip
 ```
+
+If the system `python3` is Python 3.14 or another unsupported version, use a separate supported interpreter. One convenient option is `uv`:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+~/.local/bin/uv python install 3.13
+~/.local/bin/uv venv --python 3.13 --seed .venv
+source .venv/bin/activate
+python --version
+```
+
+The final `python --version` must report Python 3.10–3.13 before installing `rigcal`.
 
 For Ubuntu/Debian, install the system dependency **FFmpeg** (provides `ffprobe` for video-based workflows):
 
@@ -306,7 +325,7 @@ Read [`results/README.md`](results/README.md) before manually archiving or delet
 config/       managed configuration assets and reusable intrinsics profiles
 data_local/   local real-world inputs and validated local simulation routes
 docs/         architecture, configuration, extension and project documentation
-results/      published experiments, scientific outputs and visualizations
+results/      generated local experiments, scientific outputs and visualizations; only the layout documentation is tracked in Git
 src/          active Python implementation and reviewed simulation assets
 tests/        automated software and publication-contract tests
 tools/        repository/source-layout validation utilities
