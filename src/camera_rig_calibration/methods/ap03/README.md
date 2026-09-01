@@ -71,4 +71,4 @@ Under the reviewed baseline configuration, Multi uses markers `0`–`14` as its 
 
 The baseline scale stage re-detects markers in the registered images, requires a minimum marker area of `100 px^2`, and derives scale from the reconstructed marker segments described above. Exact requested and resolved settings for an execution are recorded by the normal configuration/provenance pipeline.
 
-See [`../../../docs/evaluation.md`](../../../docs/evaluation.md) for the evaluation-level interpretation of AP03 scale consistency together with the other reported metrics.
+See [`../../../../docs/evaluation.md`](../../../../docs/evaluation.md) for the evaluation-level interpretation of AP03 scale consistency together with the other reported metrics.
