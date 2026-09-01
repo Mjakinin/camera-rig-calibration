@@ -48,8 +48,8 @@ Because `translation_error_cm = 100 * ||t_est - t_gt||_2`, the same quantity can
 ```math
 e_t^{\mathrm{rel}}[\%]
 =
-\frac{\texttt{translation\_error\_cm}}
-     {\texttt{gt\_baseline\_m}}
+\frac{\mathrm{translation\_error\_cm}}
+     {\mathrm{gt\_baseline\_m}}
 ```
 
 The reported nominal value is the arithmetic mean of the per-pair relative errors. With four recovered static cameras, six unordered camera pairs are evaluated.
@@ -63,7 +63,7 @@ The robustness plots use the mean unnormalized pairwise translation error in cen
 For relative rotations `R_est` and `R_gt`, the evaluator uses the angular distance on SO(3):
 
 ```math
-\Delta\mathbf{R}
+\Delta \mathbf{R}
 =
 \mathbf{R}_{\mathrm{GT}}^{\mathsf T}\mathbf{R}_{\mathrm{est}}
 ```
@@ -73,7 +73,7 @@ e_R[\mathrm{deg}]
 =
 \frac{180}{\pi}
 \arccos\!\left(
-\frac{\operatorname{tr}(\Delta\mathbf{R})-1}{2}
+\frac{\mathrm{tr}(\Delta\mathbf{R})-1}{2}
 \right)
 ```
 
@@ -96,7 +96,7 @@ e_n
 and the cross-camera RMSE is
 
 ```math
-\operatorname{RMSE}_{\mathrm{cross}}[\mathrm{px}]
+\mathrm{RMSE}_{\mathrm{cross}}[\mathrm{px}]
 =
 \sqrt{
 \frac{1}{N}\sum_{n=1}^{N} e_n^2
@@ -126,7 +126,7 @@ If the retained candidates are `s_k`, the recovered global scale is
 ```math
 \hat{s}
 =
-\operatorname{median}\!\left(\{s_k\}_{k\in\mathcal{I}}\right)
+\mathrm{median}\!\left(\{s_k\}_{k\in\mathcal{I}}\right)
 ```
 
 and the implementation reports
@@ -136,7 +136,7 @@ and the implementation reports
 =
 100\,
 \frac{
-\operatorname{std}\!\left(\{s_k\}_{k\in\mathcal{I}},\,\mathrm{ddof}=0\right)
+\mathrm{std}\!\left(\{s_k\}_{k\in\mathcal{I}},\,\mathrm{ddof}=0\right)
 }{\hat{s}}
 ```
 
