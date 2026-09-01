@@ -23,31 +23,40 @@ For the scale stage, AP03 detects configured ArUco markers in registered images 
 For each complete marker, six geometric segments are evaluated:
 
 - four edges with known physical length equal to the marker side length;
-- two diagonals with known physical length `sqrt(2)` times the marker side length.
+- two diagonals with known physical length $\sqrt{2}$ times the marker side length.
 
-For segment `k`, with known metric length `l_k` and reconstructed corner positions `X_(k,a)` and `X_(k,b)` in COLMAP units, the scale candidate is
+For segment $k$, with known metric length $\ell_k$ and reconstructed corner positions $\mathbf{X}_{k,a}$ and $\mathbf{X}_{k,b}$ in COLMAP units, the scale candidate is
 
-```text
-s_k = l_k / ||X_(k,a) - X_(k,b)||_2
-```
+$$
+s_k
+=
+\frac{\ell_k}
+{\left\lVert \mathbf{X}_{k,a}-\mathbf{X}_{k,b}\right\rVert_2}.
+$$
 
-with units of metres per COLMAP unit.
+The candidate has units of metres per COLMAP unit.
 
 ### Robust aggregation
 
-The implementation first computes the median and median absolute deviation (MAD) of the finite positive scale candidates. A candidate is retained when its absolute deviation from the raw median is no larger than
+Let $m$ denote the raw median of all finite positive scale candidates and let
+$\operatorname{MAD}$ denote their median absolute deviation. The implementation
+retains a candidate $s_k$ when
 
-```text
-max(3 * MAD, 0.10 * median)
-```
+$$
+\left|s_k-m\right|
+\le
+\max\!\left(3\,\operatorname{MAD},\;0.10\,m\right).
+$$
 
 If fewer than four candidates survive this filter, the implementation falls back to all finite positive candidates rather than returning a scale from fewer than four observations.
 
-The recovered global metric scale is the median of the retained candidates:
+If $\mathcal{I}$ denotes the retained candidate set, the recovered global metric scale is
 
-```text
-s_hat = median(retained s_k)
-```
+$$
+\hat{s}
+=
+\operatorname{median}\!\left(\{s_k\}_{k\in\mathcal{I}}\right).
+$$
 
 The recovered scale is applied to COLMAP camera translations only. Camera orientations are unchanged, and the reconstruction remains in the native COLMAP gauge apart from the metric translation scale.
 
@@ -55,9 +64,14 @@ The recovered scale is applied to COLMAP camera translations only. Camera orient
 
 AP03 reports the dispersion of the retained scale candidates relative to the recovered median scale:
 
-```text
-scale_RStd[%] = 100 * std(retained s_k, ddof=0) / s_hat
-```
+$$
+\operatorname{RStd}[\%]
+=
+100\,
+\frac{
+\operatorname{std}\!\left(\{s_k\}_{k\in\mathcal{I}},\,\mathrm{ddof}=0\right)
+}{\hat{s}}.
+$$
 
 NumPy's population standard deviation (`ddof=0`) is used. A low value means that the retained marker measurements support a common metric scale; a large value indicates inconsistent reconstructed scale.
 
