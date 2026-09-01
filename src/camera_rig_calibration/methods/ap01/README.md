@@ -16,50 +16,42 @@ inter-frame motion estimates. These are compared with the corresponding COLMAP
 motion and robustly aggregated to obtain a scale for the moving-camera
 trajectory.
 
-For two registered moving frames $i$ and $j$ that observe the same marker, the
+For two registered moving frames `i` and `j` that observe the same marker, the
 implementation forms a metric translation magnitude from their marker-based
 PnP poses and the corresponding translation magnitude in the COLMAP
 reconstruction. One scale candidate is
 
-$$
-s_{ij}
-=
-\frac{\left\lVert \mathbf{t}^{\mathrm{metric}}_{ij}\right\rVert_2}
-     {\left\lVert \mathbf{t}^{\mathrm{COLMAP}}_{ij}\right\rVert_2}.
-$$
+```text
+s_ij = ||t_metric(i,j)||_2 / ||t_colmap(i,j)||_2
+```
 
-The candidate has units of metres per COLMAP unit. Candidate construction and
-robust filtering are defined by the selected AP01 method contract. After
-filtering, the final moving-trajectory scale is the median of the retained scale
+with units of metres per COLMAP unit. Candidate construction and robust
+filtering are defined by the selected AP01 method contract. After filtering,
+the final moving-trajectory scale is the median of the retained scale
 candidates. Ground Truth is not involved in this scale estimate.
 
 Static-camera poses are expressed relative to a selected root camera. The
-notation $\mathbf{T}_{A\leftarrow B}$ denotes a transform that maps coordinates
-from frame $B$ into frame $A$. Two kinds of transform candidates can provide
-the root-to-target relation:
+notation `T_A_B` below denotes a transform that maps coordinates from frame `B`
+into frame `A`. Two kinds of transform candidates can provide the root-to-target
+relation:
 
 - **Direct:** the root camera and a target static camera observe the same marker.
   The implemented relation is
 
-  $$
-  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{target}}
-  =
-  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{marker}}
-  \mathbf{T}_{\mathrm{target}\leftarrow\mathrm{marker}}^{-1}.
-  $$
+  ```text
+  T_root_target = T_root_marker * inv(T_target_marker)
+  ```
 
 - **Relay:** a marker observation links the root camera to one registered moving
-  frame $i$ and another marker observation links the target camera to another
-  registered moving frame $j$. The scaled COLMAP motion between those frames
+  frame `i` and another marker observation links the target camera to another
+  registered moving frame `j`. The scaled COLMAP motion between those frames
   bridges the two static-camera observations:
 
-  $$
-  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{target}}
-  =
-  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{moving},i}
-  \mathbf{T}_{\mathrm{moving},i\leftarrow\mathrm{moving},j}
-  \mathbf{T}_{\mathrm{target}\leftarrow\mathrm{moving},j}^{-1}.
-  $$
+  ```text
+  T_root_target = T_root_moving_i
+                  * T_moving_i_moving_j
+                  * inv(T_target_moving_j)
+  ```
 
   The markers at the two ends of the relay do not have to be the same marker.
 
