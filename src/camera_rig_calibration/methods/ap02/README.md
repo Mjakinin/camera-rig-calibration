@@ -4,12 +4,14 @@ AP02 constructs a camera/frame/marker observation graph, initializes poses and
 optimizes the combined static + moving graph. The combined result is primary;
 static-only and disconnected-component runs are diagnostics.
 
-The canonical `baseline_v1` uses marker 14, geometric edge weights,
-maximum-frontier initialization on every quality-valid graph observation,
-smart 8/4 moving-frame selection at the BA boundary, deterministic
-parameter/residual order, pinhole reprojection and `soft_l1` loss with
-`f_scale=3`. More configurable graph selection and distortion-aware
-reprojection remain available through explicit advanced settings.
+For the reviewed Route-2 simulation baseline, the resolved AP02 settings use
+marker 14 as the reference marker, geometric edge weights, maximum-frontier
+initialization on every quality-valid graph observation, smart 8/4 moving-frame
+selection at the BA boundary, deterministic parameter/residual order, pinhole
+reprojection, and `soft_l1` loss with `f_scale=3`. These are baseline settings,
+not hard-coded requirements: reference-marker selection, graph/frame selection,
+reprojection behavior, solver budget, and robust-loss settings remain
+configurable through the explicit configuration system.
 
 Every run derives its observation graph from the selected dataset.
 
