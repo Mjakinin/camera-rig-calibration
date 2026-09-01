@@ -79,7 +79,7 @@ NumPy's population standard deviation (`ddof=0`) is used. A low value means that
 
 This quantity is a consistency diagnostic, not an independent camera-pose accuracy measurement. In particular, a low scale dispersion does not by itself prove that the recovered camera geometry is correct.
 
-The current reporting-quality policy classifies a relative scale standard deviation above `0.10` (10%) as `poor_scale_dispersion`. This is an operational software-quality threshold used for warnings/classification; it is not a universal calibration-accuracy limit established by the experiments.
+The current reporting-quality policy marks relative scale standard deviation above `0.05` (5%) as `warning_scale_dispersion` and above `0.10` (10%) as `poor_scale_dispersion`. These are operational software-quality thresholds used for warnings/classification; they are not universal calibration-accuracy limits established by the experiments.
 
 ## Baseline marker semantics
 
