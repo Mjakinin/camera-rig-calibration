@@ -38,8 +38,11 @@ relation:
 - **Direct:** the root camera and a target static camera observe the same marker.
   The implemented relation is
 
-  ```text
-  T_root_target = T_root_marker * inv(T_target_marker)
+  ```math
+  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{target}}
+  =
+  \mathbf{T}_{\mathrm{root}\leftarrow\mathrm{marker}}
+  \mathbf{T}_{\mathrm{target}\leftarrow\mathrm{marker}}^{-1}
   ```
 
 - **Relay:** a marker observation links the root camera to one registered moving
