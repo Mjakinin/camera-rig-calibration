@@ -30,8 +30,10 @@ For each accepted observation, the known marker corner coordinates are
 transformed through the current marker and observer poses and projected into
 the image. For one corner, the implemented residual is simply
 
-```text
-r = u_projected - u_observed
+```math
+\mathbf{r}_n
+=
+\hat{\mathbf{u}}_n-\mathbf{u}_n
 ```
 
 where both quantities are 2D image coordinates. The optimizer stacks the two
