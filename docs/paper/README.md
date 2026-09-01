@@ -1,31 +1,18 @@
-# Paper / project report — work in progress
+# Scientific reproducibility notes
 
-The accompanying paper/report for this project is currently **in preparation**.
+This directory collects study-facing reproducibility notes for `rigcal`. It does not duplicate large raw recordings, generated COLMAP reconstructions, or other bulky experiment data.
 
-**Working title**
+The repository separates the scientific definitions from implementation details so that each can be inspected at the appropriate level:
 
-> *Extrinsic Calibration of Distributed Multi-Camera Rigs Using a Moving Camera and Fiducial Markers*
+- [`../evaluation.md`](../evaluation.md) defines the reported simulation and real-data evaluation metrics.
+- [`../configuration.md`](../configuration.md) documents requested/resolved configuration handling and advanced settings.
+- [`../../results/README.md`](../../results/README.md) documents the generated result layout and provenance files.
+- [`../../src/camera_rig_calibration/methods/ap01/README.md`](../../src/camera_rig_calibration/methods/ap01/README.md) documents AP01.
+- [`../../src/camera_rig_calibration/methods/ap02/README.md`](../../src/camera_rig_calibration/methods/ap02/README.md) documents AP02.
+- [`../../src/camera_rig_calibration/methods/ap03/README.md`](../../src/camera_rig_calibration/methods/ap03/README.md) documents AP03.
 
-The work is associated with the Technische Universität Berlin module **Application of Robotics and Autonomous Systems**.
+## Reproducibility principle
 
-## Current status
+A scientific result should be traceable to the calibration method, the resolved configuration used for that execution, the machine-readable result files, and the corresponding diagnostics/provenance. Ground Truth used for simulation evaluation remains post-hoc evaluation data and is not an input to the calibration methods.
 
-This page is intentionally a placeholder. The software repository and its published experiment artifacts can already be reviewed independently, but the manuscript should not yet be treated as a finished or frozen publication.
-
-When the report is ready, place the final PDF here as:
-
-```text
-docs/paper/paper.pdf
-```
-
-and replace the root README placeholder with a direct link:
-
-```md
-[Open the paper (PDF)](docs/paper/paper.pdf)
-```
-
-Until then, use this status page as the stable clickable target.
-
-## Reproducibility note
-
-The manuscript is evolving while the software artifact is being finalized. Quantitative claims, experiment snapshots, and exact parameter values in a draft should therefore be checked against the corresponding published `results/` provenance before being treated as final evidence.
+Large raw recordings and reconstruction intermediates are intentionally kept separate from this documentation. Compact archived study artifacts should preserve the resolved configurations and numerical outputs needed to audit reported tables and plots without requiring the full raw-data footprint.

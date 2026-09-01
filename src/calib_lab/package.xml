@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>Simulation assets and ROS 2 / RViz nodes for camera-rig calibration</description>
   <maintainer email="maxim.mjakinin@gmail.com">Maxim Mjakinin</maintainer>
-  <license>TODO: License declaration</license>
+  <license>All rights reserved</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

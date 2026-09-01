@@ -27,7 +27,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "rigcal=camera_rig_calibration.product_cli:main"
+            "rigcal=camera_rig_calibration.application.product_cli:main"
         ]
     },
 )
